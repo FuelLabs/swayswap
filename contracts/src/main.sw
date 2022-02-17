@@ -132,8 +132,7 @@ abi Exchange {
 
 /// Storage delimited
 const S_DEPOSITS: b256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
-const S_BALANCES: b256 = 0x0000000000000000000000000000000000000000000000000000000000000001;
-const S_TOTAL_SUPPLY: b256 = 0x0000000000000000000000000000000000000000000000000000000000000002;
+const S_TOTAL_SUPPLY: b256 = 0x0000000000000000000000000000000000000000000000000000000000000001;
 
 ////////////////////////////////////////
 // Helper functions
@@ -143,11 +142,6 @@ const S_TOTAL_SUPPLY: b256 = 0x0000000000000000000000000000000000000000000000000
 fn key_deposits(a: Address, asset_id: b256) -> b256 {
     let inner = hash_pair(a.into(), asset_id, HashMethod::Sha256);
     hash_pair(S_DEPOSITS, inner, HashMethod::Sha256)
-}
-
-/// Compute the storage slot for an address's balance.
-fn key_balances(delim: b256, a: Address) -> b256 {
-    hash_pair(S_BALANCES, a.into(), HashMethod::Sha256)
 }
 
 /// Pricing function for converting between ETH and Tokens.
