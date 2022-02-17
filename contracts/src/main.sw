@@ -91,11 +91,6 @@ struct RemoveLiquidityParams {
     deadline: u64,
 }
 
-struct RemoveLiquidityReturn {
-    eth_amount: u64,
-    token_amount: u64,
-}
-
 struct SwapWithMinimumParams {
     min: u64,
     deadline: u64,
