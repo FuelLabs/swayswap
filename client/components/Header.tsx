@@ -5,8 +5,14 @@ import Image from 'next/image'
 // import { HiOutlineDotsVertical } from 'react-icons/hi'
 // import ethLogo from '../assets/eth.png'
 import fuelLogo from '../assets/fuel-logo-512x512.png'
-import { TransactionContext } from '../context/TransactionContext'
 import { useRouter } from 'next/router'
+import { WalletContext } from '../context/WalletContext'
+
+export enum Routes {
+    'wallet' = '/wallet',
+    'assets' = '/assets',
+    'swap' = '/swap'
+}
 
 const style = {
     wrapper: `p-4 w-screen flex justify-between items-center`,
@@ -16,7 +22,7 @@ const style = {
     navItem: `px-4 py-2 m-1 flex items-center text-lg font-semibold text-[0.9rem] cursor-pointer rounded-3xl`,
     activeNavItem: `bg-[#20242A]`,
     buttonsContainer: `flex w-1/4 justify-end items-center`,
-    button: `flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semi-bold cursor-pointer`,
+    button: `flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semi-bold`,
     buttonPadding: `p-2`,
     buttonTextContainer: `h-8 flex items-center`,
     buttonIconContainer: `flex items-center justify-center w-8 h-8`,
@@ -25,14 +31,13 @@ const style = {
 }
 
 const Header = () => {
-    const {connectWallet, currentAccount} = useContext(TransactionContext)
-    const [userName, setUserName] = useState();
     const router = useRouter();
+    // @ts-ignore
+    const exists = Object.values(Routes).includes(router.pathname);
 
-    useEffect(() => {
-        if (!currentAccount) return
-        // setUserName(`${currentAccount.slice(0, 5)}...${currentAccount.slice(38, 42)}`)
-    }, [currentAccount])
+    console.log(router.pathname);
+    const { getWallet } = useContext(WalletContext);
+    const wallet = getWallet?.();
 
     return (
         <div className={style.wrapper}>
@@ -40,20 +45,28 @@ const Header = () => {
                 <Image src={fuelLogo} alt="uniswap" height={40} width={40} />
             </div>
             <div className={style.nav}>
-                <div className={style.navItemsContainer}>
-                    <div 
-                    onClick={() => router.push('/wallet')}
-                    className={`${style.navItem} ${router.pathname === '/wallet' && style.activeNavItem}`}
-                    >Wallet</div>
+                {exists && (
+                    <div className={style.navItemsContainer}>
+                        <div
+                        onClick={() => router.push(Routes.assets)}
+                        className={`${style.navItem} ${router.pathname === Routes.assets && style.activeNavItem}`}
+                        >Assets</div>
 
-                    <div
-                    onClick={() => router.push('/swap')}
-                    className={`${style.navItem} ${router.pathname === '/swap' && style.activeNavItem}`}
-                    >Swap</div>
-                </div>
+                        <div
+                        onClick={() => router.push(Routes.swap)}
+                        className={`${style.navItem} ${router.pathname === Routes.swap && style.activeNavItem}`}
+                        >Swap</div>
+                    </div>
+                )}
             </div>
 
-            <div className={style.buttonsContainer} />
+            <div className={style.buttonsContainer}>
+                {wallet && (
+                    <div className={`${style.button} ${style.buttonPadding}`}>
+                        <div className={style.buttonTextContainer} >{wallet?.address.slice(0, 8)}...{wallet?.address.slice(-5)}</div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
