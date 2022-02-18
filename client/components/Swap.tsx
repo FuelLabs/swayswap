@@ -24,15 +24,15 @@ const style = {
 
 const Swap = () => {
     // destructuring transaction context
-    const { formData, handleChange, sendTransaction } = useContext(TransactionContext)
+    // const { formData, handleChange, sendTransaction } = useContext(TransactionContext)
 
     const handleSubmit = async (e: any) => {
-        const { addressTo, amount } = formData
-        e.preventDefault()
+        // const { addressTo, amount } = formData
+        // e.preventDefault()
 
-        if (!addressTo || !amount) return
+        // if (!addressTo || !amount) return
 
-        sendTransaction()
+        // sendTransaction()
     }
 
   return (
@@ -51,7 +51,7 @@ const Swap = () => {
                     className={style.transferPropInput}
                     placeholder="0.0"
                     pattern="^[0-9]*[.,]?[0-9]*$"
-                    onChange={(e) => handleChange(e, 'amount')}
+                    // onChange={(e) => handleChange(e, 'amount')}
                 />
 
                 <div className={style.currencySelector}>
@@ -70,7 +70,7 @@ const Swap = () => {
                     type="text"
                     className={style.transferPropInput}
                     placeholder="0x..."
-                    onChange={(e) => handleChange(e, 'addressTo')}
+                    // onChange={(e) => handleChange(e, 'addressTo')}
                 />
                 <div className={style.currencySelector}></div>
             </div>

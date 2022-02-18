@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import { TransactionProvider } from '../context/TransactionContext'
+import { WalletProvider } from '../context/WalletContext'
 import Header from '../components/Header'
 
 const style = {
@@ -8,12 +8,12 @@ const style = {
 
 function App({ Component, pageProps }: any) {
   return (
-    <TransactionProvider>
+    <WalletProvider>
       <div className={style.wrapper}>
       <Header {...pageProps} />
       <Component {...pageProps} />
       </div>
-    </TransactionProvider>
+    </WalletProvider>
   )
 }
 
