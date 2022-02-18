@@ -1,23 +1,19 @@
-import { useContext } from 'react'
-import Image from 'next/image'
-import { RiSettings3Fill } from 'react-icons/ri'
-import { AiOutlineDown } from 'react-icons/ai'
+import { useContext, useEffect, useState } from 'react'
+import Image from 'next/image';
 import { FaFaucet } from 'react-icons/fa';
-import ethLogo from '../assets/eth.png'
-import { useRouter } from 'next/router';
+import ethLogo from '../assets/eth.png';
+import { WalletContext } from '../context/WalletContext';
+import { Coin, CoinStatus } from 'fuels';
+import { CoinETH } from '../lib/constants';
 
-const coinsData = [
+const coinList = [
     {
         name: 'ETH',
-        amount: '0.5',
-        logo: ethLogo
-    },
-    {
-        name: 'DAI',
-        amount: '1000',
+        color: CoinETH,
+        amount: 0,
         logo: ethLogo
     }
-]
+];
 
 const style = {
     wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -34,53 +30,75 @@ const style = {
     faucetButton: `hover:bg-[#41444F] cursor-pointer p-1 rounded-xl`
 }
 
+const transformCoinsToAssets = (coins: Coin[]) => {
+    return coinList.map(coinItem => {
+        const total = coins.reduce((total, coin) => {
+            if (coin.color === coinItem.color) {
+                if (coin.status === CoinStatus.Unspent) {
+                    return total += coin.amount.toNumber();
+                } else if (coin.status === CoinStatus.Spent) {
+                    return total -= coin.amount.toNumber();
+                }
+            }
+            return total;
+        }, 0);
+        return {
+            ...coinItem,
+            amount: total
+        }
+    }); 
+}
+
 const Swap = () => {
-    const router = useRouter();
-    // destructuring transaction context
-    // const { formData, handleChange, sendTransaction } = useContext(TransactionContext)
+    const [coins, setCoins] = useState<Coin[]>([]);
+    const { faucet, getCoins, getWallet } = useContext(WalletContext);
+    const wallet = getWallet();
 
-    const handleSubmit = async (e: any) => {
-        // const { addressTo, amount } = formData
-        // e.preventDefault()
-
-        // if (!addressTo || !amount) return
-
-        // sendTransaction()
+    const loadCoins = () => {
+        getCoins().then(coins => {
+            setCoins(coins);
+        });
     }
 
-    const handleClickFaucet = () => {
-        console.log('faucet');
+    useEffect(() => {
+        if (wallet?.address) loadCoins();
+    }, [wallet?.address]);
+
+    const handleClickFaucet = async () => {
+        await faucet();
+        loadCoins();
     }
 
-  return (
-    <div className={style.wrapper}>
-        <div className={style.content}>
-            <div className={style.formHeader}>
-                <div>Assets</div>
-                <div className={style.faucetButton} onClick={handleClickFaucet}>
-                    <FaFaucet />
-                </div>
-            </div>
-
-            {coinsData.map(coinData => (
-                <div className={style.transferPropContainer}>
-                    <div className={style.transferPropInput}>
-                        <span>{coinData.amount}</span>
+    return (
+        <div className={style.wrapper}>
+            <div className={style.content}>
+                <div className={style.formHeader}>
+                    <div>Assets</div>
+                    <div className={style.faucetButton} onClick={handleClickFaucet}>
+                        {/* TODO: Add loading state */}
+                        <FaFaucet />
                     </div>
+                </div>
 
-                    <div className={style.currencySelector}>
-                        <div className={style.currencySelectorContent}>
-                            <div className={style.currencySelectorIcon}>
-                                <Image src={coinData.logo} alt={coinData.name} height={20} width={20} />
+                {transformCoinsToAssets(coins).map(coinData => (
+                    <div className={style.transferPropContainer} key={coinData.color}>
+                        <div className={style.transferPropInput}>
+                            <span>{coinData.amount}</span>
+                        </div>
+
+                        <div className={style.currencySelector}>
+                            <div className={style.currencySelectorContent}>
+                                <div className={style.currencySelectorIcon}>
+                                    <Image src={coinData.logo} alt={coinData.name} height={20} width={20} />
+                                </div>
+                                <div className={style.currencySelectorTicker}>{coinData.name}</div>
                             </div>
-                            <div className={style.currencySelectorTicker}>{coinData.name}</div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default Swap

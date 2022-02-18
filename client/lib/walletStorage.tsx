@@ -1,6 +1,6 @@
 import { LocalStorageKey } from "./constants";
 
-export function getWallet<T>() {
+export function loadWallet<T>() {
     if (typeof localStorage !== "undefined") {
         if (localStorage.getItem(LocalStorageKey)) {
             return JSON.parse(localStorage.getItem(LocalStorageKey) || '') as T;
