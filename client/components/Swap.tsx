@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { RiSettings3Fill } from 'react-icons/ri'
 import { AiOutlineDown } from 'react-icons/ai'
 import ethLogo from '../assets/eth.png'
-import { TransactionContext } from '../context/TransactionContext'
 
 const style = {
     wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,

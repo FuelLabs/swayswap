@@ -5,12 +5,12 @@ import Image from 'next/image'
 // import { HiOutlineDotsVertical } from 'react-icons/hi'
 // import ethLogo from '../assets/eth.png'
 import fuelLogo from '../assets/fuel-logo-512x512.png'
-import { TransactionContext } from '../context/TransactionContext'
 import { useRouter } from 'next/router'
 import { WalletContext } from '../context/WalletContext'
 
 export enum Routes {
     'wallet' = '/wallet',
+    'assets' = '/assets',
     'swap' = '/swap'
 }
 
@@ -48,9 +48,9 @@ const Header = () => {
                 {exists && (
                     <div className={style.navItemsContainer}>
                         <div
-                        onClick={() => router.push(Routes.wallet)}
-                        className={`${style.navItem} ${router.pathname === Routes.wallet && style.activeNavItem}`}
-                        >Wallet</div>
+                        onClick={() => router.push(Routes.assets)}
+                        className={`${style.navItem} ${router.pathname === Routes.assets && style.activeNavItem}`}
+                        >Assets</div>
 
                         <div
                         onClick={() => router.push(Routes.swap)}

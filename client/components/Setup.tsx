@@ -25,13 +25,13 @@ export const Setup = () => {
     const wallet = getWallet();
 
     if (wallet) {
-      router.push('/swap');
+      router.push('/assets');
       return null;
     }
 
     const handleWalletCreation = () => {
       createWallet();
-      router.push('/swap');
+      router.push('/assets');
     }
 
     return (
