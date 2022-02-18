@@ -42,7 +42,7 @@ const Header = () => {
     return (
         <div className={style.wrapper}>
             <div className={style.headerLogo}>
-                <Image src={fuelLogo} alt="uniswap" height={40} width={40} />
+                <Image src={fuelLogo} alt="swayswap" height={40} width={40} />
             </div>
             <div className={style.nav}>
                 {exists && (

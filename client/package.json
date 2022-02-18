@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.5.0",
     "ethers": "^5.5.4",
     "fuels": "^0.0.0-master-ed80835",
     "next": "^12.1.0",
