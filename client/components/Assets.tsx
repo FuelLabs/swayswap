@@ -1,19 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import Image from 'next/image';
 import { FaFaucet } from 'react-icons/fa';
-import ethLogo from '../assets/eth.png';
 import { WalletContext } from '../context/WalletContext';
 import { Coin, CoinStatus } from 'fuels';
 import { CoinETH } from '../lib/constants';
 
-const coinList = [
-    {
-        name: 'ETH',
-        color: CoinETH,
-        amount: 0,
-        logo: ethLogo
-    }
-];
+const coinList = require('../lib/assets.json');
 
 const style = {
     wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
