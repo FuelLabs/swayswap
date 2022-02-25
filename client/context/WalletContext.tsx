@@ -1,12 +1,14 @@
-import React, { PropsWithChildren } from 'react';
-import { Wallet, TransactionType, ScriptTransactionRequest, OutputType, InputType, TransactionResult, Coin } from 'fuels';
+import React, { PropsWithChildren, useEffect } from 'react';
+import { Provider, Wallet, TransactionType, ScriptTransactionRequest, OutputType, InputType, TransactionResult, Coin } from 'fuels';
 import { saveWallet, loadWallet } from '../lib/walletStorage';
-import { CoinETH, GraphqlURL } from '../lib/constants';
+import { CoinETH, ContractID, GraphqlURL } from '../lib/constants';
 import { hexlify } from 'ethers/lib/utils';
+import { SwayswapAbi__factory } from '../types/fuels-contracts';
 
 interface WalletProviderContext {
     sendTransaction: (data: any) => void;
     createWallet: () => void;
+    addLiquidity: () => void;
     getWallet: () => Wallet | null;
     getCoins: () => Promise<Coin[]>;
     faucet: () => Promise<TransactionResult>;
@@ -27,6 +29,27 @@ export const WalletProvider = ({children}: PropsWithChildren<{}>) => {
         return new Wallet(privateKey, GraphqlURL);
     };
 
+    const addLiquidity = async () => {
+        const provider = new Provider(GraphqlURL);
+        const contract = SwayswapAbi__factory.connect(ContractID, provider);
+        const depositResp = await contract.functions.deposit(0, 1000000000, CoinETH, {});
+        // const depositResp = await contract.functions.deposit(10000, 1000000000, CoinETH, {});
+        // const resp = await contract.functions.add_liquidity(10000, 1000000000, CoinETH, {
+        //     min_liquidity: 0,
+        //     max_tokens: 1000000000,
+        //     deadline: 1676850311938
+        // });
+        console.log(depositResp);
+    }
+
+    useEffect(() => {
+        // Enable to call add liquidity from the browser console
+        if (typeof window !== "undefined") {
+            // @ts-ignore
+            window?.addLiquidity = addLiquidity;
+        }
+    }, []);
+
     return (
         <WalletContext.Provider value={{
             createWallet: () => {
@@ -37,6 +60,7 @@ export const WalletProvider = ({children}: PropsWithChildren<{}>) => {
                 return wallet;
             },
             getWallet,
+            addLiquidity,
             faucet: async () => {
                 const wallet = getWallet() as Wallet;
                 const transactionRequest: ScriptTransactionRequest = {

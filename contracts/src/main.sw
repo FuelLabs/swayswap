@@ -79,6 +79,9 @@ struct WithdrawParams {
     asset_id: ContractId,
 }
 
+struct DepositParams {
+}
+
 struct AddLiquidityParams {
     min_liquidity: u64,
     max_tokens: u64,
@@ -108,7 +111,7 @@ struct SwapWithMaximumParams {
 
 abi Exchange {
     /// Deposit coins for later adding to liquidity pool.
-    fn deposit(gas_: u64, amount_: u64, asset_id_: b256, params: ());
+    fn deposit(gas_: u64, amount_: u64, asset_id_: b256, params: DepositParams);
     /// Withdraw coins that have not been added to a liquidity pool yet.
     fn withdraw(gas_: u64, amount_: u64, asset_id_: b256, params: WithdrawParams);
     /// Deposit ETH and Tokens at current ratio to mint SWAYSWAP tokens.
@@ -161,7 +164,7 @@ fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64)
 // ////////////////////////////////////////
 
 impl Exchange for Contract {
-    fn deposit(gas_: u64, amount_: u64, asset_id_: b256, params: ()) {
+    fn deposit(gas_: u64, amount_: u64, asset_id_: b256, params: DepositParams) {
         assert(msg_asset_id() == ETH_ID || msg_asset_id() == TOKEN_ID);
 
         // TODO replace

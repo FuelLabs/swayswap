@@ -1,276 +1,112 @@
 [
   {
-    "type": "function",
     "inputs": [
-      {
-        "name": "gas_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "amount_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "asset_id_",
-        "type": "b256",
-        "components": null
-      },
-      {
-        "name": "params",
-        "type": "()",
-        "components": null
-      }
+      { "components": null, "name": "gas_", "type": "u64" },
+      { "components": null, "name": "amount_", "type": "u64" },
+      { "components": null, "name": "asset_id_", "type": "b256" },
+      { "components": [], "name": "params", "type": "struct DepositParams" }
     ],
     "name": "deposit",
-    "outputs": [
-      {
-        "name": "",
-        "type": "()",
-        "components": null
-      }
-    ]
+    "outputs": [{ "components": null, "name": "", "type": "()" }],
+    "type": "function"
   },
   {
-    "type": "function",
     "inputs": [
+      { "components": null, "name": "gas_", "type": "u64" },
+      { "components": null, "name": "amount_", "type": "u64" },
+      { "components": null, "name": "asset_id_", "type": "b256" },
       {
-        "name": "gas_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "amount_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "asset_id_",
-        "type": "b256",
-        "components": null
-      },
-      {
-        "name": "params",
-        "type": "struct WithdrawParams",
         "components": [
+          { "components": null, "name": "amount", "type": "u64" },
           {
-            "name": "amount",
-            "type": "u64",
-            "components": null
-          },
-          {
-            "name": "asset_id",
-            "type": "struct ContractId",
             "components": [
-              {
-                "name": "value",
-                "type": "b256",
-                "components": null
-              }
-            ]
+              { "components": null, "name": "value", "type": "b256" }
+            ],
+            "name": "asset_id",
+            "type": "struct ContractId"
           }
-        ]
+        ],
+        "name": "params",
+        "type": "struct WithdrawParams"
       }
     ],
     "name": "withdraw",
-    "outputs": [
-      {
-        "name": "",
-        "type": "()",
-        "components": null
-      }
-    ]
+    "outputs": [{ "components": null, "name": "", "type": "()" }],
+    "type": "function"
   },
   {
-    "type": "function",
     "inputs": [
+      { "components": null, "name": "gas_", "type": "u64" },
+      { "components": null, "name": "amount_", "type": "u64" },
+      { "components": null, "name": "asset_id_", "type": "b256" },
       {
-        "name": "gas_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "amount_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "asset_id_",
-        "type": "b256",
-        "components": null
-      },
-      {
-        "name": "params",
-        "type": "struct AddLiquidityParams",
         "components": [
-          {
-            "name": "min_liquidity",
-            "type": "u64",
-            "components": null
-          },
-          {
-            "name": "max_tokens",
-            "type": "u64",
-            "components": null
-          },
-          {
-            "name": "deadline",
-            "type": "u64",
-            "components": null
-          }
-        ]
+          { "components": null, "name": "min_liquidity", "type": "u64" },
+          { "components": null, "name": "max_tokens", "type": "u64" },
+          { "components": null, "name": "deadline", "type": "u64" }
+        ],
+        "name": "params",
+        "type": "struct AddLiquidityParams"
       }
     ],
     "name": "add_liquidity",
-    "outputs": [
-      {
-        "name": "",
-        "type": "u64",
-        "components": null
-      }
-    ]
+    "outputs": [{ "components": null, "name": "", "type": "u64" }],
+    "type": "function"
   },
   {
-    "type": "function",
     "inputs": [
+      { "components": null, "name": "gas_", "type": "u64" },
+      { "components": null, "name": "amount_", "type": "u64" },
+      { "components": null, "name": "asset_id_", "type": "b256" },
       {
-        "name": "gas_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "amount_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "asset_id_",
-        "type": "b256",
-        "components": null
-      },
-      {
-        "name": "params",
-        "type": "struct RemoveLiquidityParams",
         "components": [
-          {
-            "name": "min_eth",
-            "type": "u64",
-            "components": null
-          },
-          {
-            "name": "min_tokens",
-            "type": "u64",
-            "components": null
-          },
-          {
-            "name": "deadline",
-            "type": "u64",
-            "components": null
-          }
-        ]
+          { "components": null, "name": "min_eth", "type": "u64" },
+          { "components": null, "name": "min_tokens", "type": "u64" },
+          { "components": null, "name": "deadline", "type": "u64" }
+        ],
+        "name": "params",
+        "type": "struct RemoveLiquidityParams"
       }
     ],
     "name": "remove_liquidity",
-    "outputs": [
-      {
-        "name": "",
-        "type": "(u64, u64)",
-        "components": null
-      }
-    ]
+    "outputs": [{ "components": null, "name": "", "type": "(u64, u64)" }],
+    "type": "function"
   },
   {
-    "type": "function",
     "inputs": [
+      { "components": null, "name": "gas_", "type": "u64" },
+      { "components": null, "name": "amount_", "type": "u64" },
+      { "components": null, "name": "asset_id_", "type": "b256" },
       {
-        "name": "gas_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "amount_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "asset_id_",
-        "type": "b256",
-        "components": null
-      },
-      {
-        "name": "params",
-        "type": "struct SwapWithMinimumParams",
         "components": [
-          {
-            "name": "min",
-            "type": "u64",
-            "components": null
-          },
-          {
-            "name": "deadline",
-            "type": "u64",
-            "components": null
-          }
-        ]
+          { "components": null, "name": "min", "type": "u64" },
+          { "components": null, "name": "deadline", "type": "u64" }
+        ],
+        "name": "params",
+        "type": "struct SwapWithMinimumParams"
       }
     ],
     "name": "swap_with_minimum",
-    "outputs": [
-      {
-        "name": "",
-        "type": "u64",
-        "components": null
-      }
-    ]
+    "outputs": [{ "components": null, "name": "", "type": "u64" }],
+    "type": "function"
   },
   {
-    "type": "function",
     "inputs": [
+      { "components": null, "name": "gas_", "type": "u64" },
+      { "components": null, "name": "amount_", "type": "u64" },
+      { "components": null, "name": "asset_id_", "type": "b256" },
       {
-        "name": "gas_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "amount_",
-        "type": "u64",
-        "components": null
-      },
-      {
-        "name": "asset_id_",
-        "type": "b256",
-        "components": null
-      },
-      {
-        "name": "params",
-        "type": "struct SwapWithMaximumParams",
         "components": [
-          {
-            "name": "amount",
-            "type": "u64",
-            "components": null
-          },
-          {
-            "name": "max",
-            "type": "u64",
-            "components": null
-          },
-          {
-            "name": "deadline",
-            "type": "u64",
-            "components": null
-          }
-        ]
+          { "components": null, "name": "amount", "type": "u64" },
+          { "components": null, "name": "max", "type": "u64" },
+          { "components": null, "name": "deadline", "type": "u64" }
+        ],
+        "name": "params",
+        "type": "struct SwapWithMaximumParams"
       }
     ],
     "name": "swap_with_maximum",
-    "outputs": [
-      {
-        "name": "",
-        "type": "u64",
-        "components": null
-      }
-    ]
+    "outputs": [{ "components": null, "name": "", "type": "u64" }],
+    "type": "function"
   }
 ]
