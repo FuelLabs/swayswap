@@ -144,7 +144,7 @@ fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -
     assert(input_reserve > 0 && output_reserve > 0);
     let input_amount_with_fee: u64 = input_amount * 997;
     let numerator: u64 = input_amount_with_fee * output_reserve;
-    let denominator: u64 = (input_reserve * 1000) * input_amount_with_fee;
+    let denominator: u64 = (input_reserve * 1000) + input_amount_with_fee;
     numerator / denominator
 }
 
