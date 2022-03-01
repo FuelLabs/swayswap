@@ -82,20 +82,12 @@ const Swap = () => {
                     <div className="relative inline-block w-full">
                         <div>
                         <select className={`${style.currencySelectorMenuButton}`} onChange={(e) => setCurrentlySelectedCoin(e.target.value)}>
-                            <div className={style.currencySelectorIcon}>
-                                <Image src={ethLogo} alt="eth" height={20} width={20} />
-                            </div>
-                            ETH
+                            
                             {assets.map(x =>(
-                                <option value={x.name}>
-                                    {({ active }) => (
-                                    <button
-                                        className={`${
-                                        active ? 'bg-[#58c09b] text-white' : 'text-white'
-                                        } ${style.currencySelectorItem}`}>
-                                        <Image src={x.img} alt={x.name} height={20} width={20} />
-                                    </button>
-                                    )}
+                                <option 
+                                selected={currentlySelectedCoin === x.name} 
+                                value={x.name}>
+                                    {x.name}
                                 </option>
                             ))}
                         </select>  
