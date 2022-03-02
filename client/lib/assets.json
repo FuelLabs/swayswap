@@ -3,13 +3,13 @@
         "name": "ETH",
         "color": "CoinETH",
         "amount": 0,
-        "img": "https://i.imgur.com/mC6aU4s.png"
+        "img": "/public/assets/eth.svg"
     },
     {
         "name": "DAI",
         "color": "CoinDAI",
         "amount": 0,
-        "img": "https://i.imgur.com/DRC4jp6.png"
+        "img": "/public/assets/dai.svg"
     }
     
 ]
