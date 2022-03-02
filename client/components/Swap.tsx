@@ -1,5 +1,9 @@
 import { useContext, Fragment, useState, useEffect } from 'react'
 import { RiSettings3Fill } from 'react-icons/ri'
+import { Menu, Transition } from '@headlessui/react'
+import Image from 'next/image'
+import assets from  '../lib/assets.json'
+
 
 const style = {
     wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -13,6 +17,11 @@ const style = {
     currencySelector: `flex w-1/4`,
     currencySelectorMenuButton: `inline-flex justify-around w-full px-4 py-2 text-sm font-medium text-white 
     bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`,
+    currencySelectorMenuItems: `absolute w-full mt-2 bg-[#191B1F] divide-gray-100 
+    rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`,
+    currencySelectorIcon: `flex items-center`,
+    currencySelectorItem: `flex justify-around rounded-md w-full px-2 py-2 text-sm`,
+    menuWrapper: `px-1 py-1`,
     
     confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169]`,
@@ -29,8 +38,9 @@ const Swap = () => {
 
         // sendTransaction()
     }
-    const assets = require('../lib/assets.json');
+    
     const [currentlySelectedCoin, setCurrentlySelectedCoin] = useState("ETH");
+    const currentCoin = assets.find(s => s.name === currentlySelectedCoin) || assets[0];
     
   return (
     <div className={style.wrapper}>
@@ -51,19 +61,46 @@ const Swap = () => {
                     // onChange={(e) => handleChange(e, 'amount')}
                 />
 
-                {/* coin selector */}
-                <div className={style.currencySelector}>
-                    <div className="relative inline-block w-full">
-                        <select className={`${style.currencySelectorMenuButton}`} onChange={(e) => setCurrentlySelectedCoin(e.target.value)}>
-                            {assets.map(x => (
-                                <option
-                                selected={currentlySelectedCoin === x.name} 
-                                value={x.name}>
-                                    {x.name} <img src={x.img} />
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                 {/* coin selector */}
+                 <div className={style.currencySelector}>
+                    <Menu as="div" className="relative inline-block w-full">
+                        <div>
+                            <Menu.Button className={`${style.currencySelectorMenuButton}`}>
+                                <div className={style.currencySelectorIcon}>
+                                    <Image src={currentCoin.img} alt="eth" height={20} width={20} />
+                                </div>
+                                {currentCoin.name}
+                            </Menu.Button>
+                        </div>
+                        <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                        >
+                            <Menu.Items className={style.currencySelectorMenuItems}>
+                                <div className={style.menuWrapper}>
+                                    {assets.map(x => (
+                                        <Menu.Item key={x.color}>
+                                            {({ active }) => (
+                                            <button
+                                                onClick={() => setCurrentlySelectedCoin(x.name)}
+                                                className={`${
+                                                active ? 'bg-[#2D2F36] text-white' : 'text-white'
+                                                } ${style.currencySelectorItem}`}>
+                                                <Image src={x.img} alt="eth" height={20} width={20} />
+                                                {x.name}
+                                            </button>
+                                            )}
+                                        </Menu.Item>
+                                    ))}
+                                </div>
+                            </Menu.Items>
+                        </Transition>
+                    </Menu>
                 </div>
             </div>
 
