@@ -3,9 +3,7 @@ import Image from 'next/image';
 import { FaFaucet } from 'react-icons/fa';
 import { WalletContext } from '../context/WalletContext';
 import { Coin, CoinStatus } from 'fuels';
-import { CoinETH } from '../lib/constants';
-
-const coinList = require('../lib/assets.json');
+import coinList from '../lib/assets.json';
 
 const style = {
     wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -81,7 +79,7 @@ const Swap = () => {
                         <div className={style.currencySelector}>
                             <div className={style.currencySelectorContent}>
                                 <div className={style.currencySelectorIcon}>
-                                    <Image src={coinData.logo} alt={coinData.name} height={20} width={20} />
+                                    <Image src={coinData.img} alt={coinData.name} height={20} width={20} />
                                 </div>
                                 <div className={style.currencySelectorTicker}>{coinData.name}</div>
                             </div>
