@@ -1,0 +1,15 @@
+[
+    {
+        "name": "ETH",
+        "color": "CoinETH",
+        "amount": 0,
+        "img": "/assets/eth.svg"
+    },
+    {
+        "name": "DAI",
+        "color": "CoinDAI",
+        "amount": 0,
+        "img": "/assets/dai.svg"
+    }
+    
+]
