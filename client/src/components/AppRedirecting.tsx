@@ -1,16 +1,16 @@
-import { useRouter } from "next/router";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { WalletContext } from "../context/WalletContext";
 
 export function AppRedirecting() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { getWallet } = useContext(WalletContext);
   const wallet = getWallet();
 
   if (wallet) {
-    router.push('/swap');
+    navigate("/swap");
   } else {
-    router.push('/setup');
+    navigate("/setup");
   }
 
   return null;
