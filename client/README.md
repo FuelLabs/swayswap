@@ -1,4 +1,3 @@
-![Fuels Wallet SDK logo](./docs/assets/fuels-wallet-logo.png)
 ## SwaySwap
 
 SwaySwap is a decentralized sway application.
