@@ -1457,10 +1457,10 @@
     "@ethersproject/properties" "^5.5.0"
     "@ethersproject/strings" "^5.5.0"
 
-"@fuel-ts/abi-coder@0.0.0-master-ed80835":
-  version "0.0.0-master-ed80835"
-  resolved "https://registry.yarnpkg.com/@fuel-ts/abi-coder/-/abi-coder-0.0.0-master-ed80835.tgz#6f53ebd5e0ae11be5be486e1ef2cc46797eb8e49"
-  integrity sha512-aBD4VQUbap1Cfgn5Y95qBdtssInI7f2oFjgqMmxn0xEowwTrouuFCGwaK0oojxC/62HjQLD27jdNrbLNvm8ZTw==
+"@fuel-ts/abi-coder@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/abi-coder/-/abi-coder-0.0.0-master-d9ca47b.tgz#09f2ef02a74cffce566506bd524d62f72d739cd6"
+  integrity sha512-Z+xS5xePCYR2P6CRS1hQMV8xyO5VBprOlio6jCY+21YD7W49Mao6sBQftHmtSI39jrfbAfrgn4FwoRdw5VtRGA==
   dependencies:
     "@ethersproject/abi" "^5.4.1"
     "@ethersproject/bignumber" "^5.4.2"
@@ -1469,71 +1469,91 @@
     "@ethersproject/sha2" "^5.4.0"
     "@ethersproject/strings" "^5.4.0"
 
-"@fuel-ts/contract@0.0.0-master-ed80835":
-  version "0.0.0-master-ed80835"
-  resolved "https://registry.yarnpkg.com/@fuel-ts/contract/-/contract-0.0.0-master-ed80835.tgz#d759b24613d9cf10c5ad480cdc17114725453b5b"
-  integrity sha512-AeRpktAFvyUjR6Uj9PUSWocdMmgpCuZJWFYoRI/1PlO3baJ7/U/0KVJsyKAhNZjYhHiTKZZCw2tPo0AJi8ScpQ==
+"@fuel-ts/contract@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/contract/-/contract-0.0.0-master-d9ca47b.tgz#f7b23197ff7e6b031b371484254f37eded2fdbde"
+  integrity sha512-D78e1baYCUJfHpd0MULmI7xK63DNyZ/6/684zOETxDlySb5mFaAM2fqK8v/4aIx/rgpxEnON14QhQaC5RzRolA==
   dependencies:
     "@ethersproject/bignumber" "^5.5.0"
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/logger" "^5.5.0"
-    "@fuel-ts/abi-coder" "0.0.0-master-ed80835"
-    "@fuel-ts/providers" "0.0.0-master-ed80835"
-    "@fuel-ts/transactions" "0.0.0-master-ed80835"
+    "@fuel-ts/abi-coder" "0.0.0-master-d9ca47b"
+    "@fuel-ts/providers" "0.0.0-master-d9ca47b"
+    "@fuel-ts/transactions" "0.0.0-master-d9ca47b"
 
-"@fuel-ts/merkle-shared@0.0.0-master-ed80835":
-  version "0.0.0-master-ed80835"
-  resolved "https://registry.yarnpkg.com/@fuel-ts/merkle-shared/-/merkle-shared-0.0.0-master-ed80835.tgz#8f3552d86c670881d8ec0e8b2fcec12c448baac1"
-  integrity sha512-9p/pUJ31V64NCs89GASUvbmVzX/zyJnNpl5cu0Tjsl09Rig0G3y+4S40F1VGF9uh9HMIJjRh3Mzqj5IPo3x5JQ==
+"@fuel-ts/hasher@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/hasher/-/hasher-0.0.0-master-d9ca47b.tgz#55a389dfa47ebf7292d0c65719bd24077d01abe2"
+  integrity sha512-cbfb8k0mfvdTSlrpooE7fGEOcNdYHBUb+HsoKGhKsDKavRgmoQ+6rjYGIoyWjF4mE7x+CIodsy/uwBHg2Vencw==
+  dependencies:
+    "@ethersproject/bignumber" "^5.5.0"
+    "@ethersproject/bytes" "^5.5.0"
+    "@ethersproject/sha2" "^5.5.0"
+    "@fuel-ts/providers" "0.0.0-master-d9ca47b"
+    "@fuel-ts/transactions" "0.0.0-master-d9ca47b"
+    lodash.clonedeep "^4.5.0"
+
+"@fuel-ts/merkle-shared@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/merkle-shared/-/merkle-shared-0.0.0-master-d9ca47b.tgz#9dbf3004602844d8a7c72c6b6f1d6409c6b8da68"
+  integrity sha512-zsE5V6qjLvEpHyDpXG72h4OXnkK4mMDohD6hSsHARJLWyX4tPP9erdeI4axr+h+yp/De2ScmFGCE7UWoVmzPpw==
   dependencies:
     "@ethersproject/bignumber" "^5.4.2"
     "@ethersproject/bytes" "^5.4.0"
     "@ethersproject/sha2" "^5.4.0"
 
-"@fuel-ts/merkle@0.0.0-master-ed80835":
-  version "0.0.0-master-ed80835"
-  resolved "https://registry.yarnpkg.com/@fuel-ts/merkle/-/merkle-0.0.0-master-ed80835.tgz#eb8f1c7bcb81c6b87992b8f81a35010a818cfaeb"
-  integrity sha512-Uj/NH+PHP0ybNmH8ODyWG+oamLAxvfrjIB2HPPSOMm5cR48a60TbD5eFlpF7J0oatnYEcout5ZD4jHQzipwb5A==
+"@fuel-ts/merkle@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/merkle/-/merkle-0.0.0-master-d9ca47b.tgz#63bd691f91cef5ef83567a28b2a18eb4a6cee2ea"
+  integrity sha512-9+KjfrvcufHSPfNcvrKR6w58NUTroJevWZO30ts94H+xXnmPD7xAeNi5jOO4niklMgC7iaNbYp9XyYwxwxtCHw==
   dependencies:
-    "@fuel-ts/merkle-shared" "0.0.0-master-ed80835"
+    "@fuel-ts/merkle-shared" "0.0.0-master-d9ca47b"
 
-"@fuel-ts/providers@0.0.0-master-ed80835":
-  version "0.0.0-master-ed80835"
-  resolved "https://registry.yarnpkg.com/@fuel-ts/providers/-/providers-0.0.0-master-ed80835.tgz#e83c86dfa2065bc300cd4fec09f711becc2e6f4b"
-  integrity sha512-kz7LL3vTiiu098BhAACKgmRd4KaNFk+OXPzSqFaC1HismHNaAi/hsBp0S9Hd969587Ht7k9phdlp+qRIAPjRyQ==
+"@fuel-ts/providers@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/providers/-/providers-0.0.0-master-d9ca47b.tgz#8629d5ef1c11268e7bb4de18de3410f6d7b914f6"
+  integrity sha512-I0YJUS8bjgGWo6pnlzzX+qL2ER/FZAY6G9ACxOEc4Q+DEFy1eol/gwNOrLqHLrPl1wvYfKE/s+iA1XwWZx2LtA==
   dependencies:
     "@ethersproject/bignumber" "^5.4.2"
     "@ethersproject/bytes" "^5.4.0"
     "@ethersproject/networks" "^5.5.0"
     "@ethersproject/sha2" "^5.5.0"
-    "@fuel-ts/abi-coder" "0.0.0-master-ed80835"
-    "@fuel-ts/merkle" "0.0.0-master-ed80835"
-    "@fuel-ts/transactions" "0.0.0-master-ed80835"
+    "@fuel-ts/abi-coder" "0.0.0-master-d9ca47b"
+    "@fuel-ts/merkle" "0.0.0-master-d9ca47b"
+    "@fuel-ts/transactions" "0.0.0-master-d9ca47b"
     graphql "^15.6.1"
     graphql-request "^3.6.1"
     graphql-tag "^2.12.6"
 
-"@fuel-ts/transactions@0.0.0-master-ed80835":
-  version "0.0.0-master-ed80835"
-  resolved "https://registry.yarnpkg.com/@fuel-ts/transactions/-/transactions-0.0.0-master-ed80835.tgz#9b389cd240078487dfdc529fbb9ffdd06c26cb26"
-  integrity sha512-NhBY9nmQLZfE3Y5rn2vcHDNSpYO2rw1olWLr+ifegTl7rKR3/qAIO6+wOaHuOoM3tvY6Uytj/pt8dHNKwnTQJA==
+"@fuel-ts/signer@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/signer/-/signer-0.0.0-master-d9ca47b.tgz#ec30d141ec120190248fa8bde6e9c986b1695a74"
+  integrity sha512-OxzEfh9cm51yIp7YZwCm4ZzAGCkcyM+RJpK/++qR5SX0nPDJS1z5RVC05qUKyv88CNgm5KyscCH2I4dSxHk8BA==
   dependencies:
-    "@ethersproject/bignumber" "^5.4.2"
-    "@ethersproject/bytes" "^5.4.0"
-    "@fuel-ts/abi-coder" "0.0.0-master-ed80835"
-
-"@fuel-ts/wallet@0.0.0-master-ed80835":
-  version "0.0.0-master-ed80835"
-  resolved "https://registry.yarnpkg.com/@fuel-ts/wallet/-/wallet-0.0.0-master-ed80835.tgz#42ba0c144a0b87d9491cf6244ef4537459603beb"
-  integrity sha512-RRWTwHjWB9MtOCCQr7v4Oo7KoTaczZDVnqyUZ4mudgtpfRvdPnQeoyGmIiyNQV588x3tJUzQcvgx7cYiUGgGKQ==
-  dependencies:
-    "@ethersproject/bignumber" "^5.5.0"
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/random" "5.5.1"
     "@ethersproject/sha2" "^5.5.0"
-    "@fuel-ts/providers" "0.0.0-master-ed80835"
-    "@fuel-ts/transactions" "0.0.0-master-ed80835"
+    "@fuel-ts/hasher" "0.0.0-master-d9ca47b"
     elliptic "^6.5.4"
+
+"@fuel-ts/transactions@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/transactions/-/transactions-0.0.0-master-d9ca47b.tgz#c6cc1a42847134dbefd4512d22308e11f668d733"
+  integrity sha512-rOmJ+HnOH6y/SrpXm3lR7xMJfEWr4Z0fRY4CPGapdrRetmj0r04Pzdr4Ovafihu7CnHDOI/6BSdJJaW5o90VFA==
+  dependencies:
+    "@ethersproject/bignumber" "^5.4.2"
+    "@ethersproject/bytes" "^5.4.0"
+    "@fuel-ts/abi-coder" "0.0.0-master-d9ca47b"
+
+"@fuel-ts/wallet@0.0.0-master-d9ca47b":
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/wallet/-/wallet-0.0.0-master-d9ca47b.tgz#d546366418f54cb6c8e6936993856ed1ff937651"
+  integrity sha512-k7Y1gdCUN9aKvYog2GJlhBIJt4kYXMQKcOoNfehBhLrg0MOW6vwNNFMYl0eKuY1nGVYaM0LkZTi49E1rbuGndg==
+  dependencies:
+    "@ethersproject/bytes" "^5.5.0"
+    "@fuel-ts/hasher" "0.0.0-master-d9ca47b"
+    "@fuel-ts/providers" "0.0.0-master-d9ca47b"
+    "@fuel-ts/signer" "0.0.0-master-d9ca47b"
     lodash.clonedeep "^4.5.0"
 
 "@headlessui/react@^1.5.0":
@@ -4779,16 +4799,16 @@ fsevents@^2.3.2, fsevents@~2.3.2:
   resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
-fuels@0.0.0-master-ed80835:
-  version "0.0.0-master-ed80835"
-  resolved "https://registry.yarnpkg.com/fuels/-/fuels-0.0.0-master-ed80835.tgz#673456faf429acde74f6e4f8a6660d11e7c0ad82"
-  integrity sha512-eSmnjy3OAix7LO3jKMWeW4pysVPXzYcD3s5yVmTtEpwIDOrr/fzJiuM44d3OrTu0saIS14h6Tle1u4IBSA0g5g==
+fuels@0.0.0-master-d9ca47b:
+  version "0.0.0-master-d9ca47b"
+  resolved "https://registry.yarnpkg.com/fuels/-/fuels-0.0.0-master-d9ca47b.tgz#64a66bd4b7bd0e3133ba12f6a9fe660b1688da24"
+  integrity sha512-JCmWNGvsjJAVpbuft6cz3o32ipl4yfJjGtjrxYFJIWwShiNEI7p78EzMEQfic/20MmuwmKGnx1t6dYtmlSYfXw==
   dependencies:
-    "@fuel-ts/abi-coder" "0.0.0-master-ed80835"
-    "@fuel-ts/contract" "0.0.0-master-ed80835"
-    "@fuel-ts/providers" "0.0.0-master-ed80835"
-    "@fuel-ts/transactions" "0.0.0-master-ed80835"
-    "@fuel-ts/wallet" "0.0.0-master-ed80835"
+    "@fuel-ts/abi-coder" "0.0.0-master-d9ca47b"
+    "@fuel-ts/contract" "0.0.0-master-d9ca47b"
+    "@fuel-ts/providers" "0.0.0-master-d9ca47b"
+    "@fuel-ts/transactions" "0.0.0-master-d9ca47b"
+    "@fuel-ts/wallet" "0.0.0-master-d9ca47b"
 
 function-bind@^1.1.1:
   version "1.1.1"
