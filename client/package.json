@@ -26,6 +26,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "yarn create404",
+    "create404": "cp ./build/index.html ./build/404.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

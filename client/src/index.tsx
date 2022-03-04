@@ -6,9 +6,11 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { WalletProvider } from "src/context/WalletContext";
 
+const { PUBLIC_URL } = process.env;
+
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={PUBLIC_URL}>
       <WalletProvider>
         <App />
       </WalletProvider>
