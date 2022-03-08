@@ -3,6 +3,8 @@ import { FaFaucet } from "react-icons/fa";
 import { WalletContext } from "../context/WalletContext";
 import { Coin, CoinStatus } from "fuels";
 import coinList from "../lib/assets.json";
+import { BigNumber } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -22,15 +24,15 @@ const style = {
 const transformCoinsToAssets = (coins: Coin[]) => {
   return coinList.map((coinItem) => {
     const total = coins.reduce((total, coin) => {
-      if (coin.color === coinItem.color) {
+      if (coin.assetId === coinItem.assetId) {
         if (coin.status === CoinStatus.Unspent) {
-          return (total += coin.amount.toNumber());
+          return total.add(coin.amount);
         } else if (coin.status === CoinStatus.Spent) {
-          return (total -= coin.amount.toNumber());
+          return total.sub(coin.amount);
         }
       }
       return total;
-    }, 0);
+    }, BigNumber.from(0));
     return {
       ...coinItem,
       amount: total,
@@ -70,9 +72,9 @@ export const Assets = () => {
         </div>
 
         {transformCoinsToAssets(coins).map((coinData) => (
-          <div className={style.transferPropContainer} key={coinData.color}>
+          <div className={style.transferPropContainer} key={coinData.assetId}>
             <div className={style.transferPropInput}>
-              <span>{coinData.amount}</span>
+              <span>{formatUnits(coinData.amount, 9)}</span>
             </div>
 
             <div className={style.currencySelector}>
