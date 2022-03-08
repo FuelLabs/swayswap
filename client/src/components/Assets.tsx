@@ -4,7 +4,7 @@ import { WalletContext } from "../context/WalletContext";
 import { Coin, CoinStatus } from "fuels";
 import coinList from "../lib/assets.json";
 import { BigNumber } from "ethers";
-import { formatEther } from "ethers/lib/utils";
+import { formatUnits } from "ethers/lib/utils";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -74,7 +74,7 @@ export const Assets = () => {
         {transformCoinsToAssets(coins).map((coinData) => (
           <div className={style.transferPropContainer} key={coinData.assetId}>
             <div className={style.transferPropInput}>
-              <span>{formatEther(coinData.amount)}</span>
+              <span>{formatUnits(coinData.amount, 9)}</span>
             </div>
 
             <div className={style.currencySelector}>

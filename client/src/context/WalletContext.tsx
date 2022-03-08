@@ -65,7 +65,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
                 type: InputType.Coin,
                 id: "0x000000000000000000000000000000000000000000000000000000000000000000",
                 assetId: CoinETH,
-                amount: parseUnits("0.5", "ether"),
+                amount: parseUnits("0.5", 9),
                 owner:
                   "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
                 witnessIndex: 0,
@@ -76,7 +76,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
                 type: OutputType.Coin,
                 to: wallet.address,
                 assetId: CoinETH,
-                amount: parseUnits("0.5", "ether"),
+                amount: parseUnits("0.5", 9),
               },
             ],
           };
