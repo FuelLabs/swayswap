@@ -13,7 +13,7 @@
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "ethers": "^5.5.4",
-    "fuels": "0.0.0-master-d9ca47b",
+    "fuels": "^0.0.0-master-b156dcf",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -24,6 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "postinstall": "sh ./scripts/postinstall.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "postbuild": "yarn create404",

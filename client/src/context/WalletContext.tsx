@@ -9,8 +9,10 @@ import {
   Coin,
 } from "fuels";
 import { saveWallet, loadWallet } from "../lib/walletStorage";
-import { CoinETH, GraphqlURL } from "../lib/constants";
-import { hexlify } from "ethers/lib/utils";
+import { CoinETH } from "../lib/constants";
+import { hexlify, parseUnits } from "ethers/lib/utils";
+
+const { REACT_APP_FUEL_PROVIDER_URL } = process.env;
 
 interface WalletProviderContext {
   sendTransaction: (data: any) => void;
@@ -35,7 +37,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
 
     if (!privateKey) return null;
 
-    return new Wallet(privateKey, GraphqlURL);
+    return new Wallet(privateKey, REACT_APP_FUEL_PROVIDER_URL);
   };
 
   return (
@@ -43,7 +45,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
       value={{
         createWallet: () => {
           const wallet = Wallet.generate({
-            provider: GraphqlURL,
+            provider: REACT_APP_FUEL_PROVIDER_URL,
           });
           saveWallet(wallet.privateKey);
           return wallet;
@@ -62,8 +64,8 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
               {
                 type: InputType.Coin,
                 id: "0x000000000000000000000000000000000000000000000000000000000000000000",
-                color: CoinETH,
-                amount: 1,
+                assetId: CoinETH,
+                amount: parseUnits("0.5", "ether"),
                 owner:
                   "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
                 witnessIndex: 0,
@@ -73,8 +75,8 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
               {
                 type: OutputType.Coin,
                 to: wallet.address,
-                color: CoinETH,
-                amount: 1,
+                assetId: CoinETH,
+                amount: parseUnits("0.5", "ether"),
               },
             ],
           };

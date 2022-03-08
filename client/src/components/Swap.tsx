@@ -1,4 +1,4 @@
-import { useContext, Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
 import { Menu, Transition } from "@headlessui/react";
 import assets from "../lib/assets.json";
@@ -84,7 +84,7 @@ export const Swap = () => {
                 <Menu.Items className={style.currencySelectorMenuItems}>
                   <div className={style.menuWrapper}>
                     {assets.map((x) => (
-                      <Menu.Item key={x.color}>
+                      <Menu.Item key={x.assetId}>
                         {({ active }) => (
                           <button
                             onClick={() => setCurrentlySelectedCoin(x.name)}

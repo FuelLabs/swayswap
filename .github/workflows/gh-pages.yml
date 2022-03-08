@@ -30,6 +30,7 @@ jobs:
         env:
           CI: false
           PUBLIC_URL: "/${{ github.event.repository.name }}"
+          REACT_APP_FUEL_PROVIDER_URL: "https://node.swayswap.io/graphql"
         run: |
           yarn install --frozen-lockfile
           yarn build
