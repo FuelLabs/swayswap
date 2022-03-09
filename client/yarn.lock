@@ -1117,7 +1117,7 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@ethersproject/abi@5.5.0", "@ethersproject/abi@^5.5.0":
+"@ethersproject/abi@5.5.0", "@ethersproject/abi@^5.4.1", "@ethersproject/abi@^5.5.0":
   version "5.5.0"
   resolved "https://registry.npmjs.org/@ethersproject/abi/-/abi-5.5.0.tgz"
   integrity sha512-loW7I4AohP5KycATvc0MgujU6JyCHPqHdeoo9z3Nr9xEiNioxa65ccdm1+fsoJhkuhdRtfcL8cfyGamz2AxZ5w==
@@ -1182,7 +1182,7 @@
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/properties" "^5.5.0"
 
-"@ethersproject/bignumber@5.5.0", "@ethersproject/bignumber@^5.5.0":
+"@ethersproject/bignumber@5.5.0", "@ethersproject/bignumber@^5.4.2", "@ethersproject/bignumber@^5.5.0":
   version "5.5.0"
   resolved "https://registry.npmjs.org/@ethersproject/bignumber/-/bignumber-5.5.0.tgz"
   integrity sha512-6Xytlwvy6Rn3U3gKEc1vP7nR92frHkv6wtVr95LFR3jREXiCPzdWxKQ1cx4JGQBXxcguAwjA8murlYN2TSiEbg==
@@ -1191,7 +1191,7 @@
     "@ethersproject/logger" "^5.5.0"
     bn.js "^4.11.9"
 
-"@ethersproject/bytes@5.5.0", "@ethersproject/bytes@^5.5.0":
+"@ethersproject/bytes@5.5.0", "@ethersproject/bytes@^5.4.0", "@ethersproject/bytes@^5.5.0":
   version "5.5.0"
   resolved "https://registry.npmjs.org/@ethersproject/bytes/-/bytes-5.5.0.tgz"
   integrity sha512-ABvc7BHWhZU9PNM/tANm/Qx4ostPGadAuQzWTr3doklZOhDlmcBqclrQe/ZXUIj3K8wC28oYeuRa+A37tX9kog==
@@ -1280,7 +1280,7 @@
     "@ethersproject/bytes" "^5.5.0"
     js-sha3 "0.8.0"
 
-"@ethersproject/logger@5.5.0", "@ethersproject/logger@^5.5.0":
+"@ethersproject/logger@5.5.0", "@ethersproject/logger@^5.4.1", "@ethersproject/logger@^5.5.0":
   version "5.5.0"
   resolved "https://registry.npmjs.org/@ethersproject/logger/-/logger-5.5.0.tgz"
   integrity sha512-rIY/6WPm7T8n3qS2vuHTUBPdXHl+rGxWxW5okDfo9J4Z0+gRRZT0msvUdIJkE4/HS29GUMziwGaaKO2bWONBrg==
@@ -1332,7 +1332,7 @@
     bech32 "1.1.4"
     ws "7.4.6"
 
-"@ethersproject/random@5.5.1", "@ethersproject/random@^5.5.0":
+"@ethersproject/random@5.5.1", "@ethersproject/random@^5.5.0", "@ethersproject/random@^5.5.1":
   version "5.5.1"
   resolved "https://registry.npmjs.org/@ethersproject/random/-/random-5.5.1.tgz"
   integrity sha512-YaU2dQ7DuhL5Au7KbcQLHxcRHfgyNgvFV4sQOo0HrtW3Zkrc9ctWNz8wXQ4uCSfSDsqX2vcjhroxU5RQRV0nqA==
@@ -1348,7 +1348,7 @@
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/logger" "^5.5.0"
 
-"@ethersproject/sha2@5.5.0", "@ethersproject/sha2@^5.5.0":
+"@ethersproject/sha2@5.5.0", "@ethersproject/sha2@^5.4.0", "@ethersproject/sha2@^5.5.0":
   version "5.5.0"
   resolved "https://registry.npmjs.org/@ethersproject/sha2/-/sha2-5.5.0.tgz"
   integrity sha512-B5UBoglbCiHamRVPLA110J+2uqsifpZaTmid2/7W5rbtYVz6gus6/hSDieIU/6gaKIDcOj12WnOdiymEUHIAOA==
@@ -1381,7 +1381,7 @@
     "@ethersproject/sha2" "^5.5.0"
     "@ethersproject/strings" "^5.5.0"
 
-"@ethersproject/strings@5.5.0", "@ethersproject/strings@^5.5.0":
+"@ethersproject/strings@5.5.0", "@ethersproject/strings@^5.4.0", "@ethersproject/strings@^5.5.0":
   version "5.5.0"
   resolved "https://registry.npmjs.org/@ethersproject/strings/-/strings-5.5.0.tgz"
   integrity sha512-9fy3TtF5LrX/wTrBaT8FGE6TDJyVjOvXynXJz5MT5azq+E6D92zuKNx7i29sWW2FjVOaWjAsiZ1ZWznuduTIIQ==
@@ -1456,6 +1456,107 @@
     "@ethersproject/logger" "^5.5.0"
     "@ethersproject/properties" "^5.5.0"
     "@ethersproject/strings" "^5.5.0"
+
+"@fuel-ts/abi-coder@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/abi-coder/-/abi-coder-0.0.0-master-8de80f9.tgz#f22fe51f021cf5681e1c7d522dc5b553fa81def7"
+  integrity sha512-n8n4S7o+5A6+lVIFo5H1CNyEr1OSqweOt7sjsPvobK15qmKW/e7Mnwe36KvCryuT5chphM/PUc6wp3Rz6UWhNQ==
+  dependencies:
+    "@ethersproject/abi" "^5.4.1"
+    "@ethersproject/bignumber" "^5.4.2"
+    "@ethersproject/bytes" "^5.4.0"
+    "@ethersproject/logger" "^5.4.1"
+    "@ethersproject/sha2" "^5.4.0"
+    "@ethersproject/strings" "^5.4.0"
+
+"@fuel-ts/contract@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/contract/-/contract-0.0.0-master-8de80f9.tgz#35c8344358f04b2794365f6389c06eba73a62994"
+  integrity sha512-AVt5BP/SMU8bzX4Ng3ThVM2ZKMfiwGvvRTlqbM3KT5c+iyeLCPmox/kYnBBW5gIyGMJmFTzjI21D9INPxnrBcA==
+  dependencies:
+    "@ethersproject/bignumber" "^5.5.0"
+    "@ethersproject/bytes" "^5.5.0"
+    "@ethersproject/logger" "^5.5.0"
+    "@ethersproject/random" "^5.5.1"
+    "@fuel-ts/abi-coder" "0.0.0-master-8de80f9"
+    "@fuel-ts/providers" "0.0.0-master-8de80f9"
+    "@fuel-ts/transactions" "0.0.0-master-8de80f9"
+
+"@fuel-ts/hasher@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/hasher/-/hasher-0.0.0-master-8de80f9.tgz#a9283551eb8df759df9d0925be5332f23c27eadf"
+  integrity sha512-c6ZJkDF0xfKh6YXIr2ZEpWAhTx5R9p5JxSyDCYkOA+4aLzweAEVPb2jar7GMSYJ/TGJrkNeWqXrqdcXPIc3UWQ==
+  dependencies:
+    "@ethersproject/bignumber" "^5.5.0"
+    "@ethersproject/bytes" "^5.5.0"
+    "@ethersproject/sha2" "^5.5.0"
+    "@fuel-ts/providers" "0.0.0-master-8de80f9"
+    "@fuel-ts/transactions" "0.0.0-master-8de80f9"
+    lodash.clonedeep "^4.5.0"
+
+"@fuel-ts/merkle-shared@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/merkle-shared/-/merkle-shared-0.0.0-master-8de80f9.tgz#647172a1a719d8119f79d17f9aee07e10b4c2278"
+  integrity sha512-ATdpsmU0rY8VCOGxalVt3dSoKwRr5S1RNVSEJY0HZ2iYha8rmYsUDiKHj3hjP/gTC+vztWVp4KX4GAxCiVK5IA==
+  dependencies:
+    "@ethersproject/bignumber" "^5.4.2"
+    "@ethersproject/bytes" "^5.4.0"
+    "@ethersproject/sha2" "^5.4.0"
+
+"@fuel-ts/merkle@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/merkle/-/merkle-0.0.0-master-8de80f9.tgz#c19d13d77f78f2295461b051dd284a24e4963f82"
+  integrity sha512-4Xc5kwlzygFmSjDSjt98COIjYKnPhIwXJ40m9seK9yuMdX2Jtd9OxhGAtftrXSqd2FVieCU8grhZhy3GFH2eRg==
+  dependencies:
+    "@fuel-ts/merkle-shared" "0.0.0-master-8de80f9"
+
+"@fuel-ts/providers@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/providers/-/providers-0.0.0-master-8de80f9.tgz#f170e228983e188bb905af23f288d01b6c52d163"
+  integrity sha512-jhZPEspRuAwdKYfTd94IL+eUKdbvOTJCbmoGc54tck9ReGedtvL3wVLq1U0GCKyfWr1iKzV0NZV7HpxBOin8eQ==
+  dependencies:
+    "@ethersproject/bignumber" "^5.4.2"
+    "@ethersproject/bytes" "^5.4.0"
+    "@ethersproject/networks" "^5.5.0"
+    "@ethersproject/random" "^5.5.1"
+    "@ethersproject/sha2" "^5.5.0"
+    "@fuel-ts/abi-coder" "0.0.0-master-8de80f9"
+    "@fuel-ts/merkle" "0.0.0-master-8de80f9"
+    "@fuel-ts/transactions" "0.0.0-master-8de80f9"
+    graphql "^15.6.1"
+    graphql-request "^3.6.1"
+    graphql-tag "^2.12.6"
+
+"@fuel-ts/signer@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/signer/-/signer-0.0.0-master-8de80f9.tgz#5b7ec5847079909435d91b68452ef5e792be074d"
+  integrity sha512-crGL5I0v/g3KFgCVqoqEGf/BRcFHfOiuVau9zL7PW1wOLpExbEQkv3sBrk6rWM1UAVTWBfbvvkEdKtkEoHzqOA==
+  dependencies:
+    "@ethersproject/bytes" "^5.5.0"
+    "@ethersproject/random" "5.5.1"
+    "@ethersproject/sha2" "^5.5.0"
+    "@fuel-ts/hasher" "0.0.0-master-8de80f9"
+    elliptic "^6.5.4"
+
+"@fuel-ts/transactions@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/transactions/-/transactions-0.0.0-master-8de80f9.tgz#4723a0e0f38f935ccb3328a31ccdbb1d59120b58"
+  integrity sha512-2b67ghfJmo9XNTNRzjUlQ2gMQR+w14XrZ/Tkf24BdmHJqGlIszndYBadWzneULAwpsXc5eYjeX4qYvMkoWkViw==
+  dependencies:
+    "@ethersproject/bignumber" "^5.4.2"
+    "@ethersproject/bytes" "^5.4.0"
+    "@fuel-ts/abi-coder" "0.0.0-master-8de80f9"
+
+"@fuel-ts/wallet@0.0.0-master-8de80f9":
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/@fuel-ts/wallet/-/wallet-0.0.0-master-8de80f9.tgz#db55f1b401a723ed4554df7707d45d31eb023fbe"
+  integrity sha512-CZFYE3lfJBFHe8dfFWDdaUuUzWkzSIS+DJEe28nz3WT3JWAnWgg8Tz8oQXVcv0qJzzjBNw6sMAVS3O/TKxe0pA==
+  dependencies:
+    "@ethersproject/bytes" "^5.5.0"
+    "@fuel-ts/hasher" "0.0.0-master-8de80f9"
+    "@fuel-ts/providers" "0.0.0-master-8de80f9"
+    "@fuel-ts/signer" "0.0.0-master-8de80f9"
+    lodash.clonedeep "^4.5.0"
 
 "@headlessui/react@^1.5.0":
   version "1.5.0"
@@ -3410,6 +3511,13 @@ cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+cross-fetch@^3.0.6:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
+  integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
+  dependencies:
+    node-fetch "2.6.7"
+
 cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"
@@ -3948,7 +4056,7 @@ electron-to-chromium@^1.4.17:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.67.tgz"
   integrity sha512-A6a2jEPLueEDfb7kvh7/E94RKKnIb01qL+4I7RFxtajmo+G9F5Ei7HgY5PRbQ4RDrh6DGDW66P0hD5XI2nRAcg==
 
-elliptic@6.5.4:
+elliptic@6.5.4, elliptic@^6.5.4:
   version "6.5.4"
   resolved "https://registry.npmjs.org/elliptic/-/elliptic-6.5.4.tgz"
   integrity sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==
@@ -4460,6 +4568,11 @@ express@^4.17.1:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
+extract-files@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/extract-files/-/extract-files-9.0.0.tgz#8a7744f2437f81f5ed3250ed9f1550de902fe54a"
+  integrity sha512-CvdFfHkC95B4bBBk36hcEmvdR2awOdhhVUYH6S/zrVj3477zven/fJMYg7121h4T1xHZC+tetUpubpAhxwI7hQ==
+
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz"
@@ -4688,10 +4801,16 @@ fsevents@^2.3.2, fsevents@~2.3.2:
   resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
-fuels@^0.0.0-master-b156dcf:
-  version "0.0.0-test"
-  resolved "https://registry.npmjs.org/fuels/-/fuels-0.0.0-test.tgz"
-  integrity sha512-EsrQUqpJjgE7eJAaiPvZDd94DqOCGsSgwf/NeNe4rdT8RwoXCIc4O4JZ34STbn34HsdA4rqWl7tNvuQFrKH2tA==
+fuels@^0.0.0-master-8de80f9:
+  version "0.0.0-master-8de80f9"
+  resolved "https://registry.yarnpkg.com/fuels/-/fuels-0.0.0-master-8de80f9.tgz#55121209f1e5365bbb7f0976e0468cf04268daa3"
+  integrity sha512-WziQn9c6JL9IAhpUVGl4gyM1hJDKvMAtfaXqBn2/MkAUyOk9oIPLA3ZLi/ei9RLZDu71pg2pZT1p+GTpr0OReg==
+  dependencies:
+    "@fuel-ts/abi-coder" "0.0.0-master-8de80f9"
+    "@fuel-ts/contract" "0.0.0-master-8de80f9"
+    "@fuel-ts/providers" "0.0.0-master-8de80f9"
+    "@fuel-ts/transactions" "0.0.0-master-8de80f9"
+    "@fuel-ts/wallet" "0.0.0-master-8de80f9"
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -4820,6 +4939,27 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4, 
   version "4.2.9"
   resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.9.tgz"
   integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
+
+graphql-request@^3.6.1:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-3.7.0.tgz#c7406e537084f8b9788541e3e6704340ca13055b"
+  integrity sha512-dw5PxHCgBneN2DDNqpWu8QkbbJ07oOziy8z+bK/TAXufsOLaETuVO4GkXrbs0WjhdKhBMN3BkpN/RIvUHkmNUQ==
+  dependencies:
+    cross-fetch "^3.0.6"
+    extract-files "^9.0.0"
+    form-data "^3.0.0"
+
+graphql-tag@^2.12.6:
+  version "2.12.6"
+  resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.12.6.tgz#d441a569c1d2537ef10ca3d1633b48725329b5f1"
+  integrity sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==
+  dependencies:
+    tslib "^2.1.0"
+
+graphql@^15.6.1:
+  version "15.8.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.8.0.tgz#33410e96b012fa3bdb1091cc99a94769db212b38"
+  integrity sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==
 
 gzip-size@^6.0.0:
   version "6.0.0"
@@ -6087,6 +6227,11 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
 lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
@@ -6339,6 +6484,13 @@ no-case@^3.0.4:
   dependencies:
     lower-case "^2.0.2"
     tslib "^2.0.3"
+
+node-fetch@2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+  dependencies:
+    whatwg-url "^5.0.0"
 
 node-forge@^1.2.0:
   version "1.2.1"
@@ -8519,6 +8671,11 @@ tr46@^2.1.0:
   dependencies:
     punycode "^2.1.1"
 
+tr46@~0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+  integrity sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=
+
 tryer@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/tryer/-/tryer-1.0.1.tgz"
@@ -8539,7 +8696,7 @@ tslib@^1.8.1:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.3:
+tslib@^2.0.3, tslib@^2.1.0:
   version "2.3.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
@@ -8767,6 +8924,11 @@ web-vitals@^2.1.4:
   resolved "https://registry.npmjs.org/web-vitals/-/web-vitals-2.1.4.tgz"
   integrity sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==
 
+webidl-conversions@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
+  integrity sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=
+
 webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-4.0.2.tgz"
@@ -8918,6 +9080,14 @@ whatwg-mimetype@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/whatwg-mimetype/-/whatwg-mimetype-2.3.0.tgz"
   integrity sha512-M4yMwr6mAnQz76TbJm914+gPpB/nCwvZbJU28cUD6dR004SAxDLOOSUaB1JDRqLtaOV/vi0IC5lEAGFgrjGv/g==
+
+whatwg-url@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  integrity sha1-lmRU6HZUYuN2RNNib2dCzotwll0=
+  dependencies:
+    tr46 "~0.0.3"
+    webidl-conversions "^3.0.0"
 
 whatwg-url@^7.0.0:
   version "7.1.0"
