@@ -13,7 +13,7 @@
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "ethers": "^5.5.4",
-    "fuels": "^0.0.0-master-b156dcf",
+    "fuels": "^0.0.0-master-8de80f9",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
