@@ -5,6 +5,9 @@ import { Coin, CoinStatus } from "fuels";
 import coinList from "../lib/assets.json";
 import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
+import urlJoin from "url-join";
+
+const { PUBLIC_URL } = process.env;
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -81,7 +84,7 @@ export const Assets = () => {
               <div className={style.currencySelectorContent}>
                 <div className={style.currencySelectorIcon}>
                   <img
-                    src={coinData.img}
+                    src={urlJoin(PUBLIC_URL, coinData.img)}
                     alt={coinData.name}
                     height={20}
                     width={20}

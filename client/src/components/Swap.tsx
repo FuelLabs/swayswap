@@ -2,6 +2,9 @@ import { Fragment, useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
 import { Menu, Transition } from "@headlessui/react";
 import assets from "../lib/assets.json";
+import urlJoin from "url-join";
+
+const { PUBLIC_URL } = process.env;
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -63,7 +66,7 @@ export const Swap = () => {
                 <Menu.Button className={`${style.currencySelectorMenuButton}`}>
                   <div className={style.currencySelectorIcon}>
                     <img
-                      src={currentCoin.img}
+                      src={urlJoin(PUBLIC_URL, currentCoin.img)}
                       alt="eth"
                       height={20}
                       width={20}
