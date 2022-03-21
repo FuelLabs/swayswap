@@ -135,13 +135,12 @@ impl Exchange for Contract {
     }
 
     fn withdraw(amount: u64, asset_id: ContractId) {
-        let asset_id = asset_id.into();
-        assert(asset_id == ETH_ID || asset_id == TOKEN_ID);
+        assert(asset_id.into() == ETH_ID || asset_id.into() == TOKEN_ID);
 
         // TODO replace
         // let sender = msg_sender().unwrap();
         let sender = ~Address::from(0x0000000000000000000000000000000000000000000000000000000000000000);
-        let key = key_deposits(sender, asset_id);
+        let key = key_deposits(sender, asset_id.into());
 
         let deposited_amount = get::<u64>(key);
         assert(deposited_amount >= amount);
