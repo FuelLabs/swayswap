@@ -178,8 +178,8 @@ impl Exchange for Contract {
         if total_liquidity > 0 {
             assert(min_liquidity > 0);
 
-            let eth_reserve = this_balance(ETH_ID) - eth_amount;
-            let token_reserve = this_balance(TOKEN_ID);
+            let eth_reserve = this_balance(~ContractId::from(ETH_ID)) - eth_amount;
+            let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
             let token_amount = eth_amount * token_reserve / eth_reserve + 1;
             let liquidity_minted = eth_amount * total_liquidity / eth_reserve;
 
@@ -195,7 +195,7 @@ impl Exchange for Contract {
             assert(eth_amount > MINIMUM_LIQUIDITY);
 
             let token_amount = max_tokens;
-            let initial_liquidity = this_balance(ETH_ID);
+            let initial_liquidity = this_balance(~ContractId::from(ETH_ID));
 
             mint(initial_liquidity);
             store(S_TOTAL_SUPPLY, initial_liquidity);
@@ -221,8 +221,8 @@ impl Exchange for Contract {
         let total_liquidity = get::<u64>(S_TOTAL_SUPPLY);
         assert(total_liquidity > 0);
 
-        let eth_reserve = this_balance(ETH_ID);
-        let token_reserve = this_balance(TOKEN_ID);
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
 
         let eth_amount = msg_amount() * eth_reserve / total_liquidity;
         let token_amount = msg_amount() * token_reserve / total_liquidity;
@@ -247,8 +247,8 @@ impl Exchange for Contract {
         // let sender = msg_sender().unwrap();
         let sender = ~Address::from(0x0000000000000000000000000000000000000000000000000000000000000000);
 
-        let eth_reserve = this_balance(ETH_ID);
-        let token_reserve = this_balance(TOKEN_ID);
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
 
         let mut bought = 0;
         if ((msg_asset_id()).into() == ETH_ID) {
@@ -275,8 +275,8 @@ impl Exchange for Contract {
         // let sender = msg_sender().unwrap();
         let sender = ~Address::from(0x0000000000000000000000000000000000000000000000000000000000000000);
 
-        let eth_reserve = this_balance(ETH_ID);
-        let token_reserve = this_balance(TOKEN_ID);
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
 
         let mut sold = 0;
         if ((msg_asset_id()).into() == ETH_ID) {
