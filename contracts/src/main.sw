@@ -148,7 +148,7 @@ impl Exchange for Contract {
         let new_amount = deposited_amount - amount;
         store(key, new_amount);
 
-        transfer_to_output(amount, contract_id(), sender);
+        transfer_to_output(amount, asset_id, sender);
     }
 
     fn add_liquidity(min_liquidity: u64, max_tokens: u64, deadline: u64) -> u64 {
@@ -168,8 +168,7 @@ impl Exchange for Contract {
         let eth_amount = get::<u64>(eth_amount_key);
         store(eth_amount_key, 0);
         let token_amount_key = key_deposits(sender, TOKEN_ID);
-        let token_amount = get::<u64>(token_amount_key);
-        store(token_amount_key, 0);
+        let current_token_amount = get::<u64>(token_amount_key);
 
         // TODO do we also need to assert the token amount > 0?
         assert(eth_amount > 0);
@@ -190,16 +189,21 @@ impl Exchange for Contract {
 
             transfer_to_output(liquidity_minted, contract_id(), sender);
 
+            store(token_amount_key, current_token_amount - token_amount);
+
             minted = liquidity_minted;
         } else {
             assert(eth_amount > MINIMUM_LIQUIDITY);
-
+            
+            let token_amount = max_tokens;
             let initial_liquidity = this_balance(~ContractId::from(ETH_ID));
 
             mint(initial_liquidity);
             store(S_TOTAL_SUPPLY, initial_liquidity);
 
             transfer_to_output(initial_liquidity, contract_id(), sender);
+
+            store(token_amount_key, current_token_amount - token_amount);
 
             minted = initial_liquidity;
         };
