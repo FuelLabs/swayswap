@@ -1,6 +1,6 @@
 contract;
 
-use std::{address::*, block::*, chain::*, context::*, contract_id::ContractId, hash::*, storage::*, token::*};
+use std::{address::*, block::*, chain::*, context::{call_frames::*, *}, contract_id::ContractId, hash::*, storage::*, token::*};
 
 ////////////////////////////////////////
 // Constants
@@ -183,7 +183,7 @@ impl Exchange for Contract {
             let token_amount = eth_amount * token_reserve / eth_reserve + 1;
             let liquidity_minted = eth_amount * total_liquidity / eth_reserve;
 
-            assert(max_tokens >= token_reserve && liquidity_minted >= min_liquidity);
+            assert(max_tokens >= token_amount && liquidity_minted >= min_liquidity);
 
             mint(liquidity_minted);
             store(S_TOTAL_SUPPLY, total_liquidity + liquidity_minted);
@@ -194,7 +194,6 @@ impl Exchange for Contract {
         } else {
             assert(eth_amount > MINIMUM_LIQUIDITY);
 
-            let token_amount = max_tokens;
             let initial_liquidity = this_balance(~ContractId::from(ETH_ID));
 
             mint(initial_liquidity);
