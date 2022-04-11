@@ -3391,6 +3391,11 @@ cjs-module-lexer@^1.0.0:
   resolved "https://registry.npmjs.org/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
 
+classnames@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
+  integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
+
 clean-css@^5.2.2:
   version "5.2.4"
   resolved "https://registry.npmjs.org/clean-css/-/clean-css-5.2.4.tgz"
@@ -7811,6 +7816,13 @@ react-is@^17.0.1:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+
+react-number-format@^4.9.1:
+  version "4.9.1"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.9.1.tgz#62b3450b43c911f9227e770a8ea9fa606696e52e"
+  integrity sha512-v49XqXv7SpwYZKGkghNJjoDUr6lIUozlPLrObcxre7GfcLx7qD4TCvArn3GozN/Y4FVbLyEYCwJoBCiChdBh5A==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-refresh@^0.11.0:
   version "0.11.0"
