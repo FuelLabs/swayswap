@@ -13,7 +13,7 @@
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "ethers": "^5.5.4",
-    "fuels": "^0.0.0-master-8de80f9",
+    "fuels": "^0.0.0-master-5ce88dc",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -25,6 +25,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "build-typechain": "typechain --target fuels ../contracts/swayswap_contract/out/debug/swayswap_contract-abi.json --out-dir ./src/types/fuels-contracts",
     "postinstall": "sh ./scripts/postinstall.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -57,6 +58,8 @@
     "eslint": "^8.4.1",
     "postcss": "^8.4.7",
     "prettier-plugin-tailwindcss": "^0.1.8",
-    "tailwindcss": "^3.0.23"
+    "tailwindcss": "^3.0.23",
+    "typechain": "^8.0.0",
+    "typechain-target-fuels": "^0.5.0"
   }
 }
