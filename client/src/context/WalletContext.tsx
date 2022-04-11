@@ -53,33 +53,20 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
         getWallet,
         faucet: async () => {
           const wallet = getWallet() as Wallet;
-          const transactionRequest: ScriptTransactionRequest = {
-            type: TransactionType.Script,
+          const transactionRequest = new ScriptTransactionRequest({
             gasPrice: 0,
             gasLimit: "0x0F4240",
             script: "0x24400000",
-            scriptData: genBytes32(),
-            bytePrice: 0,
-            inputs: [
-              {
-                type: InputType.Coin,
-                id: "0x000000000000000000000000000000000000000000000000000000000000000000",
-                assetId: CoinETH,
-                amount: parseUnits("0.5", 9),
-                owner:
-                  "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
-                witnessIndex: 0,
-              },
-            ],
-            outputs: [
-              {
-                type: OutputType.Coin,
-                to: wallet.address,
-                assetId: CoinETH,
-                amount: parseUnits("0.5", 9),
-              },
-            ],
-          };
+            scriptData: genBytes32()
+          });
+          // @ts-ignore
+          transactionRequest.addCoin({
+            id: "0x000000000000000000000000000000000000000000000000000000000000000000",
+            assetId: CoinETH,
+            amount: parseUnits(".5", 9),
+            owner: "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
+          });
+          transactionRequest.addCoinOutput(wallet.address, parseUnits(".5", 9), CoinETH);
           const submit = await wallet.sendTransaction(transactionRequest);
 
           return submit.wait();
