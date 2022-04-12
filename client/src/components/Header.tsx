@@ -2,12 +2,7 @@ import { useContext } from "react";
 import fuelLogo from "src/assets/fuel-logo-512x512.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { WalletContext } from "src/context/WalletContext";
-
-export enum Routes {
-  "wallet" = "/wallet",
-  "assets" = "/assets",
-  "swap" = "/swap",
-}
+import { Routes } from "src/types/routes";
 
 const style = {
   wrapper: `p-4 w-screen flex justify-between items-center`,
@@ -46,6 +41,15 @@ const Header = () => {
               Assets
             </div>
 
+            <div
+              onClick={() => navigate(Routes.pool)}
+              className={`${style.navItem} ${
+                location.pathname === Routes.pool && style.activeNavItem
+              }`}
+            >
+              Pool
+            </div>
+          
             <div
               onClick={() => navigate(Routes.swap)}
               className={`${style.navItem} ${

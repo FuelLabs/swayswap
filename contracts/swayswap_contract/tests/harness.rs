@@ -122,7 +122,7 @@ async fn swayswap() {
         .unwrap();
     assert_eq!(coins[0].amount, 50u64.into());
 
-    // Depost some native assets
+    // Deposit some native assets
     swayswap_instance
         .deposit()
         .call_params(CallParameters::new(Some(50), None))
@@ -130,7 +130,7 @@ async fn swayswap() {
         .await
         .unwrap();
 
-    // deposit some alt tokens into the Swayswap contract
+    // deposit some alt tokens into the SwaySwap contract
     swayswap_instance
         .deposit()
         .call_params(CallParameters::new(

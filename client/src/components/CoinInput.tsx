@@ -26,7 +26,7 @@ const style = {
 export type Coin = {
   name: string;
   assetId: string;
-  amount: number;
+  amount?: number;
   img: string;
 };
 
@@ -135,9 +135,11 @@ export function CoinInput({
   amount,
   coin,
   coins,
+  disabled,
   onChangeAmount,
   onChangeCoin,
 }: {
+  disabled?: boolean,
   amount?: number | string | null;
   coin?: Coin | null;
   coins?: Coin[];
@@ -150,6 +152,7 @@ export function CoinInput({
         <NumberFormat
           placeholder="0.0"
           value={amount}
+          displayType={disabled ? 'text' : 'input'}
           onValueChange={(e) => onChangeAmount?.(e.value)}
           className={style.transferPropInput}
           thousandSeparator={false}
