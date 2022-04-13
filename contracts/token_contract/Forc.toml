@@ -6,4 +6,4 @@ name = "token_contract"
 
 [dependencies]
 std = { git = "https://github.com/FuelLabs/sway", branch = "master" }
-token_abi = { path = "../src/token_abi" }
+token_abi = { path = "../token_abi" }
