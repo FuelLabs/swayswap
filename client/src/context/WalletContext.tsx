@@ -19,7 +19,6 @@ interface WalletProviderContext {
   faucet: () => Promise<TransactionResult>;
 }
 
-// TODO: remove ether needed
 const genBytes32 = () =>
   hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 

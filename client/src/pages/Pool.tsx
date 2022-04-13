@@ -73,19 +73,20 @@ export const Pool = () => {
       wallet
     );
 
-    // TODO: If possible combine all transactions on the same execution
+    // TODO: Combine all transactions on single tx leverage by scripts
+    // https://github.com/FuelLabs/swayswap-demo/issues/42
     setIsLoading(true);
-    // Deposit cons from
+    // Deposit coins from
     setStage(1);
     await contract.functions.deposit({
-        assetId: coinFrom.assetId,
-        amount: parseUnits(fromAmount, 9)
+      assetId: coinFrom.assetId,
+      amount: parseUnits(fromAmount, 9)
     });
-    // Deposit cons to
+    // Deposit coins to
     setStage(2);
     await contract.functions.deposit({
-        assetId: coinTo.assetId,
-        amount: parseUnits(toAmount, 9),
+      assetId: coinTo.assetId,
+      amount: parseUnits(toAmount, 9),
     });
     // Create liquidity pool
     setStage(3);

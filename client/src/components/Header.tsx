@@ -64,8 +64,8 @@ const Header = () => {
         {wallet && (
           <div className={`${style.button} ${style.buttonPadding}`}>
             <div className={style.buttonTextContainer}>
-              {/* TODO: On hover we should show the address */}
-              {/* TODO: On click/press should copy wallet address */}
+              {/* TODO: On hover we should show the address https://github.com/FuelLabs/swayswap-demo/issues/38 */}
+              {/* TODO: On click/press should copy wallet address https://github.com/FuelLabs/swayswap-demo/issues/37 */}
               {wallet?.address.slice(0, 8)}...{wallet?.address.slice(-5)}
             </div>
           </div>

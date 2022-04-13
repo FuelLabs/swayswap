@@ -10,6 +10,7 @@ const CoinsMetadata: Array<Coin> = [
     "name": "DAI",
     // TODO: Remove this when adding dynamic token insertion
     // Make temporarily easy to change token contract id
+    // https://github.com/FuelLabs/swayswap-demo/issues/33
     "assetId": process.env.REACT_APP_TOKEN_ID,
     "img": "/icons/dai.svg"
   }

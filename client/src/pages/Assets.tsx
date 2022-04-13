@@ -23,6 +23,7 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
     return {
       // TODO: Create default Coin Metadata when token didn't have registered data
       // Another options could be querying from the contract
+      // https://github.com/FuelLabs/swayswap-demo/issues/33
       name: coinMetadata?.name || '404',
       img: coinMetadata?.img || '/icons/other.svg',
       assetId: coin.assetId,
