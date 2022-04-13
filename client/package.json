@@ -27,7 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "build-typechain": "typechain --target fuels ../contracts/swayswap_contract/out/debug/swayswap_contract-abi.json --out-dir ./src/types/fuels-contracts",
+    "build-contracts": "sh ./scripts/build-contracts.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",

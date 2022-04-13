@@ -4,42 +4,22 @@ import { Wallet } from "fuels";
 import { useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useWallet } from "src/context/WalletContext";
-import { SwayswapContractAbi__factory } from "src/types/fuels-contracts";
-import assets from "../lib/assets.json";
-import { Coin, CoinInput } from "./CoinInput";
-import { Spinner } from "./Spinner";
+import { SwayswapContractAbi__factory } from "src/types/contracts";
+import assets from "src/lib/CoinsMetadata";
+import { Coin, CoinInput } from "src/components/CoinInput";
+import { Spinner } from "src/components/Spinner";
+
+const { REACT_APP_CONTRACT_ID } = process.env;
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
   content: `bg-[#191B1F] w-[40rem] rounded-2xl p-4`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  transferPropContainer: `bg-[#20242A] my-3 rounded-2xl p-4 text-3xl border border-[#20242A] 
-    flex justify-between`,
-  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none w-full text-2xl`,
-
-  // coin selector
-  currencySelector: `flex w-1/4`,
-  currencySelectorMenuButton: `inline-flex justify-around w-full px-4 py-2 text-sm font-medium text-white 
-    bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`,
-  currencySelectorMenuItems: `absolute w-full mt-2 bg-[#191B1F] divide-gray-100 
-    rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`,
-  currencySelectorIcon: `flex items-center`,
-  currencySelectorItem: `flex justify-around rounded-md w-full px-2 py-2 text-sm`,
-  currencySelectorContent: `w-full h-min flex justify-between items-center bg-[#2D2F36] 
-    rounded-2xl text-xl font-medium p-2 mt-[-0.2rem]`,
-  currencySelectorTicker: `mx-2`,
-  menuWrapper: `px-1 py-1`,
-
   confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
-  switchDirection: `flex items-center justify-center -my-3`,
 };
 
-const { REACT_APP_CONTRACT_ID } = process.env;
-
 function PoolLoader({
-  coinFrom,
-  coinTo,
   loading,
   step,
   steps,
@@ -54,6 +34,7 @@ function PoolLoader({
     <ul className="w-full rounded-lg border border-[#2b3039] text-gray-900">
       {steps.map((stepText, index) => (
         <li
+          key={index}
           className={classNames(
             "space-between flex w-full items-center border-b border-[#2b3039] px-6 py-2 text-white",
             {
@@ -92,17 +73,21 @@ export const Pool = () => {
       wallet
     );
 
+    // TODO: If possible combine all transactions on the same execution
     setIsLoading(true);
+    // Deposit cons from
     setStage(1);
     await contract.functions.deposit({
         assetId: coinFrom.assetId,
         amount: parseUnits(fromAmount, 9)
     });
+    // Deposit cons to
     setStage(2);
     await contract.functions.deposit({
         assetId: coinTo.assetId,
-        amount: parseUnits(toAmount, 9)
+        amount: parseUnits(toAmount, 9),
     });
+    // Create liquidity pool
     setStage(3);
     await contract.functions.add_liquidity(1, parseUnits(toAmount, 9), 1000);
   };

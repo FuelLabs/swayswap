@@ -1,16 +1,12 @@
 import React, { PropsWithChildren, useContext } from "react";
 import {
   Wallet,
-  TransactionType,
   ScriptTransactionRequest,
-  OutputType,
-  InputType,
   TransactionResult,
-  Coin,
   CoinQuantity,
 } from "fuels";
-import { saveWallet, loadWallet } from "../lib/walletStorage";
-import { CoinETH, DaiETH } from "../lib/constants";
+import { saveWallet, loadWallet } from "src/lib/walletStorage";
+import { CoinETH } from "src/lib/constants";
 import { hexlify, parseUnits } from "ethers/lib/utils";
 
 const { REACT_APP_FUEL_PROVIDER_URL } = process.env;
@@ -67,15 +63,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
             amount: parseUnits(".5", 9),
             owner: "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
           });
-          // @ts-ignore
-          transactionRequest.addCoin({
-            id: "0x000000000000000000000000000000000000000000000000000000000000000000",
-            assetId: DaiETH,
-            amount: parseUnits(".5", 9),
-            owner: "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
-          });
           transactionRequest.addCoinOutput(wallet.address, parseUnits(".5", 9), CoinETH);
-          transactionRequest.addCoinOutput(wallet.address, parseUnits(".5", 9), DaiETH);
           const submit = await wallet.sendTransaction(transactionRequest);
 
           return submit.wait();

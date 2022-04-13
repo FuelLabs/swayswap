@@ -1,0 +1,2 @@
+typechain --target fuels ../contracts/swayswap_contract/out/debug/swayswap_contract-abi.json --out-dir ./src/types/contracts
+typechain --target fuels ../contracts/token_contract/out/debug/token_contract-abi.json --out-dir ./src/types/contracts

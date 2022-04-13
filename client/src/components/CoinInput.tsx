@@ -23,11 +23,10 @@ const style = {
   menuWrapper: `px-1 py-1`,
 };
 
-export type Coin = {
-  name: string;
+export interface Coin {
   assetId: string;
-  amount?: number;
-  img: string;
+  name?: string;
+  img?: string;
 };
 
 export function CoinSelector({
@@ -71,7 +70,7 @@ export function CoinSelector({
                 "hover:bg-opacity-30": hasCoins,
               })}
             >
-              {selected && (
+              {selected && selected.img && (
                 <img
                   src={urlJoin(PUBLIC_URL, selected.img)}
                   alt="eth"
@@ -107,7 +106,7 @@ export function CoinSelector({
                         })}
                         onClick={() => handleSelect(coin)}
                       >
-                        {coin && (
+                        {coin && coin.img && (
                           <img
                             src={urlJoin(PUBLIC_URL, coin.img)}
                             alt="eth"
