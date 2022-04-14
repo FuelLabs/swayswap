@@ -74,7 +74,7 @@ async fn swayswap() {
     let token_instance = TestToken::new(token_contract_id.to_string(), provider, wallet.clone());
 
     // Mint some alt tokens
-    token_instance.mint_coins(10000).call().await.unwrap();
+    token_instance.mint_coins(10000, 1).call().await.unwrap();
 
     // Check the balance of the contract of its own asset
     let target = testtoken_mod::ContractId {
@@ -122,7 +122,7 @@ async fn swayswap() {
         .unwrap();
     assert_eq!(coins[0].amount, 50u64.into());
 
-    // Depost some native assets
+    // Deposit some native assets
     swayswap_instance
         .deposit()
         .call_params(CallParameters::new(Some(50), None))
@@ -130,7 +130,7 @@ async fn swayswap() {
         .await
         .unwrap();
 
-    // deposit some alt tokens into the Swayswap contract
+    // deposit some alt tokens into the SwaySwap contract
     swayswap_instance
         .deposit()
         .call_params(CallParameters::new(

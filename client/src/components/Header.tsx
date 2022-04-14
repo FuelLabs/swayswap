@@ -2,12 +2,7 @@ import { useContext } from "react";
 import fuelLogo from "src/assets/fuel-logo-512x512.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { WalletContext } from "src/context/WalletContext";
-
-export enum Routes {
-  "wallet" = "/wallet",
-  "assets" = "/assets",
-  "swap" = "/swap",
-}
+import { Pages } from "src/types/pages";
 
 const style = {
   wrapper: `p-4 w-screen flex justify-between items-center`,
@@ -25,7 +20,7 @@ const style = {
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const exists = Object.values(Routes).includes(location.pathname as Routes);
+  const exists = Object.values(Pages).includes(location.pathname as Pages);
   const { getWallet } = useContext(WalletContext);
   const wallet = getWallet?.();
 
@@ -38,21 +33,28 @@ const Header = () => {
         {exists && (
           <div className={style.navItemsContainer}>
             <div
-              onClick={() => navigate(Routes.assets)}
+              onClick={() => navigate(Pages.assets)}
               className={`${style.navItem} ${
-                location.pathname === Routes.assets && style.activeNavItem
+                location.pathname === Pages.assets && style.activeNavItem
               }`}
             >
               Assets
             </div>
-
             <div
-              onClick={() => navigate(Routes.swap)}
+              onClick={() => navigate(Pages.swap)}
               className={`${style.navItem} ${
-                location.pathname === Routes.swap && style.activeNavItem
+                location.pathname === Pages.swap && style.activeNavItem
               }`}
             >
               Swap
+            </div>
+            <div
+              onClick={() => navigate(Pages.pool)}
+              className={`${style.navItem} ${
+                location.pathname === Pages.pool && style.activeNavItem
+              }`}
+            >
+              Pool
             </div>
           </div>
         )}
@@ -62,6 +64,8 @@ const Header = () => {
         {wallet && (
           <div className={`${style.button} ${style.buttonPadding}`}>
             <div className={style.buttonTextContainer}>
+              {/* TODO: On hover we should show the address https://github.com/FuelLabs/swayswap-demo/issues/38 */}
+              {/* TODO: On click/press should copy wallet address https://github.com/FuelLabs/swayswap-demo/issues/37 */}
               {wallet?.address.slice(0, 8)}...{wallet?.address.slice(-5)}
             </div>
           </div>

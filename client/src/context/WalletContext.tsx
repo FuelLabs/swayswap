@@ -1,15 +1,12 @@
 import React, { PropsWithChildren, useContext } from "react";
 import {
   Wallet,
-  TransactionType,
   ScriptTransactionRequest,
-  OutputType,
-  InputType,
   TransactionResult,
-  Coin,
+  CoinQuantity,
 } from "fuels";
-import { saveWallet, loadWallet } from "../lib/walletStorage";
-import { CoinETH } from "../lib/constants";
+import { saveWallet, loadWallet } from "src/lib/walletStorage";
+import { CoinETH } from "src/lib/constants";
 import { hexlify, parseUnits } from "ethers/lib/utils";
 
 const { REACT_APP_FUEL_PROVIDER_URL } = process.env;
@@ -18,11 +15,10 @@ interface WalletProviderContext {
   sendTransaction: (data: any) => void;
   createWallet: () => void;
   getWallet: () => Wallet | null;
-  getCoins: () => Promise<Coin[]>;
+  getCoins: () => Promise<CoinQuantity[]>;
   faucet: () => Promise<TransactionResult>;
 }
 
-// TODO: remove ether needed
 const genBytes32 = () =>
   hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
@@ -74,7 +70,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
         getCoins: async () => {
           const wallet = getWallet() as Wallet;
 
-          const coins = await wallet.provider.getCoins(wallet.address);
+          const coins = await wallet.getBalances();
 
           return coins;
         },
