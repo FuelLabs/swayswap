@@ -13,7 +13,7 @@ const ETH_ID = 0x000000000000000000000000000000000000000000000000000000000000000
 
 /// Contract ID of the token on the other side of the pool.
 /// Modify at compile time for different pool.
-const TOKEN_ID = 0xea03f497f8a85eba06be23cf49bc0e5d82fd0511711573761b448e98d152ba0c;
+const TOKEN_ID = 0x27d920c88f5c2a50ec248f546ea06a3ab0e238aa807fdfac4ee1c612e04657b3;
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
@@ -24,7 +24,10 @@ const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
 
 /// Storage delimited
 const S_DEPOSITS: b256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
-const S_TOTAL_SUPPLY: b256 = 0x0000000000000000000000000000000000000000000000000000000000000001;
+
+storage {
+    lp_token_supply: u64,
+}
 
 ////////////////////////////////////////
 // Helper functions
@@ -111,7 +114,7 @@ impl Exchange for Contract {
 
         let sender = get_msg_sender_address_or_panic();
 
-        let total_liquidity = get::<u64>(S_TOTAL_SUPPLY);
+        let total_liquidity = storage.lp_token_supply;
 
         let eth_amount_key = key_deposits(sender, ETH_ID);
         let eth_amount = get::<u64>(eth_amount_key);
@@ -135,7 +138,7 @@ impl Exchange for Contract {
             assert(current_token_amount >= token_amount);
 
             mint(liquidity_minted);
-            store(S_TOTAL_SUPPLY, total_liquidity + liquidity_minted);
+            storage.lp_token_supply = total_liquidity + liquidity_minted;
 
             transfer_to_output(liquidity_minted, contract_id(), sender);
 
@@ -150,7 +153,7 @@ impl Exchange for Contract {
             assert(current_token_amount >= token_amount);
 
             mint(initial_liquidity);
-            store(S_TOTAL_SUPPLY, initial_liquidity);
+            storage.lp_token_supply = initial_liquidity;
 
             transfer_to_output(initial_liquidity, contract_id(), sender);
 
@@ -170,7 +173,7 @@ impl Exchange for Contract {
 
         let sender = get_msg_sender_address_or_panic();
 
-        let total_liquidity = get::<u64>(S_TOTAL_SUPPLY);
+        let total_liquidity = storage.lp_token_supply;
         assert(total_liquidity > 0);
 
         let eth_reserve = this_balance(~ContractId::from(ETH_ID));
@@ -182,7 +185,7 @@ impl Exchange for Contract {
         assert((eth_amount >= min_eth) && (token_amount >= min_tokens));
 
         burn(msg_amount());
-        store(S_TOTAL_SUPPLY, total_liquidity - msg_amount());
+        storage.lp_token_supply = total_liquidity - msg_amount();
 
         transfer_to_output(eth_amount, ~ContractId::from(ETH_ID), sender);
         transfer_to_output(token_amount, ~ContractId::from(TOKEN_ID), sender);

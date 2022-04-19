@@ -17,11 +17,6 @@ const _abi = [
         type: "u64",
         components: null,
       },
-      {
-        name: "a",
-        type: "u32",
-        components: null,
-      },
     ],
     name: "mint_coins",
     outputs: [
@@ -38,11 +33,6 @@ const _abi = [
       {
         name: "burn_amount",
         type: "u64",
-        components: null,
-      },
-      {
-        name: "a",
-        type: "u32",
         components: null,
       },
     ],

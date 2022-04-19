@@ -4,11 +4,11 @@ use std::{address::Address, context::balance_of, contract_id::ContractId, token:
 use token_abi::Token;
 
 impl Token for Contract {
-    fn mint_coins(mint_amount: u64, a: u32) {
+    fn mint_coins(mint_amount: u64) {
         mint(mint_amount);
     }
 
-    fn burn_coins(burn_amount: u64, a: u32) {
+    fn burn_coins(burn_amount: u64) {
         burn(burn_amount);
     }
 
