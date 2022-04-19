@@ -35,10 +35,7 @@ export function MintToken() {
 
     try {
       setMinting(true);
-      // TODO: remove second parameter from `mint_coins`.
-      // This is a workaround to a temp problem on the compiler
-      // https://github.com/FuelLabs/swayswap-demo/issues/39
-      await contract.functions.mint_coins(parseUnits(".5", 9), 1);
+      await contract.functions.mint_coins(parseUnits(".5", 9));
       
       // TODO: Improve feedback for the user
       // Navigate to assets page to show new cons

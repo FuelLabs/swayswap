@@ -14,8 +14,8 @@ import type {
 
 interface TokenContractAbiInterface extends Interface {
   functions: {
-    "mint_coins(u64,u32)": FunctionFragment;
-    "burn_coins(u64,u32)": FunctionFragment;
+    "mint_coins(u64)": FunctionFragment;
+    "burn_coins(u64)": FunctionFragment;
     "force_transfer_coins(u64,struct ContractId,struct ContractId)": FunctionFragment;
     "transfer_coins_to_output(u64,struct ContractId,struct Address)": FunctionFragment;
     "get_balance(struct ContractId,struct ContractId)": FunctionFragment;
@@ -23,11 +23,11 @@ interface TokenContractAbiInterface extends Interface {
 
   encodeFunctionData(
     functionFragment: "mint_coins",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "burn_coins",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "force_transfer_coins",
@@ -69,25 +69,21 @@ export class TokenContractAbi extends Contract {
   functions: {
     mint_coins(
       mint_amount: BigNumberish,
-      a: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<any>;
 
-    "mint_coins(u64,u32)"(
+    "mint_coins(u64)"(
       mint_amount: BigNumberish,
-      a: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<any>;
 
     burn_coins(
       burn_amount: BigNumberish,
-      a: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<any>;
 
-    "burn_coins(u64,u32)"(
+    "burn_coins(u64)"(
       burn_amount: BigNumberish,
-      a: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<any>;
 
@@ -134,25 +130,21 @@ export class TokenContractAbi extends Contract {
 
   mint_coins(
     mint_amount: BigNumberish,
-    a: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<any>;
 
-  "mint_coins(u64,u32)"(
+  "mint_coins(u64)"(
     mint_amount: BigNumberish,
-    a: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<any>;
 
   burn_coins(
     burn_amount: BigNumberish,
-    a: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<any>;
 
-  "burn_coins(u64,u32)"(
+  "burn_coins(u64)"(
     burn_amount: BigNumberish,
-    a: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<any>;
 
