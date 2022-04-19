@@ -7,6 +7,7 @@ import { TextInput } from "src/components/TextInput";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { parseUnits } from "ethers/lib/utils";
+import { objectId } from "src/lib/utils";
 
 const { REACT_APP_TOKEN_ID } = process.env;
 
@@ -28,15 +29,22 @@ export function MintToken() {
 
   const handleMinCoins = async () => {
     const wallet = getWallet() as Wallet;
-    const contract = TokenContractAbi__factory.connect(
+    const token = TokenContractAbi__factory.connect(
       REACT_APP_TOKEN_ID,
       wallet
     );
+    const amount = parseUnits(".5", 9);
 
     try {
       setMinting(true);
-      await contract.functions.mint_coins(parseUnits(".5", 9));
-      
+      // TODO: remove second parameter from `mint_coins`.
+      // This is a workaround to a temp problem on the compiler
+      // https://github.com/FuelLabs/swayswap-demo/issues/39
+      await token.functions.mint_coins(amount);
+      // Transfer the just minted coins to the output
+      await token.functions.transfer_coins_to_output(amount, objectId(REACT_APP_TOKEN_ID), objectId(wallet.address), {
+        variableOutputs: 1,
+      });
       // TODO: Improve feedback for the user
       // Navigate to assets page to show new cons
       // https://github.com/FuelLabs/swayswap-demo/issues/40

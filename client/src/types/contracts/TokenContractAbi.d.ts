@@ -10,7 +10,12 @@ import type {
   Overrides,
   BigNumberish,
   BytesLike,
+  BigNumber,
 } from "fuels";
+
+export type ContractIdStruct = { value: string };
+
+export type AddressStruct = { value: string };
 
 interface TokenContractAbiInterface extends Interface {
   functions: {
@@ -31,15 +36,15 @@ interface TokenContractAbiInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "force_transfer_coins",
-    values: [BigNumberish, any, any]
+    values: [BigNumberish, ContractIdStruct, ContractIdStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "transfer_coins_to_output",
-    values: [BigNumberish, any, any]
+    values: [BigNumberish, ContractIdStruct, AddressStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "get_balance",
-    values: [any, any]
+    values: [ContractIdStruct, ContractIdStruct]
   ): string;
 
   decodeFunctionData(
@@ -70,121 +75,121 @@ export class TokenContractAbi extends Contract {
     mint_coins(
       mint_amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     "mint_coins(u64)"(
       mint_amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     burn_coins(
       burn_amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     "burn_coins(u64)"(
       burn_amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     force_transfer_coins(
       coins: BigNumberish,
-      asset_id: any,
-      target: any,
+      asset_id: ContractIdStruct,
+      target: ContractIdStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     "force_transfer_coins(u64,struct ContractId,struct ContractId)"(
       coins: BigNumberish,
-      asset_id: any,
-      target: any,
+      asset_id: ContractIdStruct,
+      target: ContractIdStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     transfer_coins_to_output(
       coins: BigNumberish,
-      asset_id: any,
-      recipient: any,
+      asset_id: ContractIdStruct,
+      recipient: AddressStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     "transfer_coins_to_output(u64,struct ContractId,struct Address)"(
       coins: BigNumberish,
-      asset_id: any,
-      recipient: any,
+      asset_id: ContractIdStruct,
+      recipient: AddressStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     get_balance(
-      target: any,
-      asset_id: any,
+      target: ContractIdStruct,
+      asset_id: ContractIdStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<BigNumber>;
 
     "get_balance(struct ContractId,struct ContractId)"(
-      target: any,
-      asset_id: any,
+      target: ContractIdStruct,
+      asset_id: ContractIdStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<BigNumber>;
   };
 
   mint_coins(
     mint_amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   "mint_coins(u64)"(
     mint_amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   burn_coins(
     burn_amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   "burn_coins(u64)"(
     burn_amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   force_transfer_coins(
     coins: BigNumberish,
-    asset_id: any,
-    target: any,
+    asset_id: ContractIdStruct,
+    target: ContractIdStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   "force_transfer_coins(u64,struct ContractId,struct ContractId)"(
     coins: BigNumberish,
-    asset_id: any,
-    target: any,
+    asset_id: ContractIdStruct,
+    target: ContractIdStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   transfer_coins_to_output(
     coins: BigNumberish,
-    asset_id: any,
-    recipient: any,
+    asset_id: ContractIdStruct,
+    recipient: AddressStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   "transfer_coins_to_output(u64,struct ContractId,struct Address)"(
     coins: BigNumberish,
-    asset_id: any,
-    recipient: any,
+    asset_id: ContractIdStruct,
+    recipient: AddressStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   get_balance(
-    target: any,
-    asset_id: any,
+    target: ContractIdStruct,
+    asset_id: ContractIdStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<BigNumber>;
 
   "get_balance(struct ContractId,struct ContractId)"(
-    target: any,
-    asset_id: any,
+    target: ContractIdStruct,
+    asset_id: ContractIdStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<BigNumber>;
 }

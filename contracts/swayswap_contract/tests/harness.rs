@@ -99,10 +99,13 @@ async fn swayswap() {
     let address = testtoken_mod::Address {
         value: address.into(),
     };
-    token_instance
+    let t = token_instance
         .transfer_coins_to_output(50, token_asset_id.clone(), address.clone())
-        .append_variable_outputs(1)
-        .call()
+        .append_variable_outputs(1);
+
+    println!("{:?}", t);
+        
+    t.call()
         .await
         .unwrap();
 

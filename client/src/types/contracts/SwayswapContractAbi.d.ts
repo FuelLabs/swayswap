@@ -10,7 +10,15 @@ import type {
   Overrides,
   BigNumberish,
   BytesLike,
+  BigNumber,
 } from "fuels";
+
+export type ContractIdStruct = { value: string };
+
+export type RemoveLiquidityReturnStruct = {
+  eth_amount: BigNumberish;
+  token_amount: BigNumberish;
+};
 
 interface SwayswapContractAbiInterface extends Interface {
   functions: {
@@ -25,7 +33,7 @@ interface SwayswapContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "withdraw",
-    values: [BigNumberish, any]
+    values: [BigNumberish, ContractIdStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "add_liquidity",
@@ -75,146 +83,146 @@ export class SwayswapContractAbi extends Contract {
   functions: {
     deposit(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     "deposit()"(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     withdraw(
       amount: BigNumberish,
-      asset_id: any,
+      asset_id: ContractIdStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     "withdraw(u64,struct ContractId)"(
       amount: BigNumberish,
-      asset_id: any,
+      asset_id: ContractIdStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<void>;
 
     add_liquidity(
       min_liquidity: BigNumberish,
       max_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<BigNumber>;
 
     "add_liquidity(u64,u64,u64)"(
       min_liquidity: BigNumberish,
       max_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<BigNumber>;
 
     remove_liquidity(
       min_eth: BigNumberish,
       min_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<RemoveLiquidityReturnStruct>;
 
     "remove_liquidity(u64,u64,u64)"(
       min_eth: BigNumberish,
       min_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<RemoveLiquidityReturnStruct>;
 
     swap_with_minimum(
       min: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<BigNumber>;
 
     "swap_with_minimum(u64,u64)"(
       min: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<BigNumber>;
 
     swap_with_maximum(
       amount: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<BigNumber>;
 
     "swap_with_maximum(u64,u64)"(
       amount: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<any>;
+    ): Promise<BigNumber>;
   };
 
   deposit(
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   "deposit()"(
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   withdraw(
     amount: BigNumberish,
-    asset_id: any,
+    asset_id: ContractIdStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   "withdraw(u64,struct ContractId)"(
     amount: BigNumberish,
-    asset_id: any,
+    asset_id: ContractIdStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<void>;
 
   add_liquidity(
     min_liquidity: BigNumberish,
     max_tokens: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<BigNumber>;
 
   "add_liquidity(u64,u64,u64)"(
     min_liquidity: BigNumberish,
     max_tokens: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<BigNumber>;
 
   remove_liquidity(
     min_eth: BigNumberish,
     min_tokens: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<RemoveLiquidityReturnStruct>;
 
   "remove_liquidity(u64,u64,u64)"(
     min_eth: BigNumberish,
     min_tokens: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<RemoveLiquidityReturnStruct>;
 
   swap_with_minimum(
     min: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<BigNumber>;
 
   "swap_with_minimum(u64,u64)"(
     min: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<BigNumber>;
 
   swap_with_maximum(
     amount: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<BigNumber>;
 
   "swap_with_maximum(u64,u64)"(
     amount: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<any>;
+  ): Promise<BigNumber>;
 }
