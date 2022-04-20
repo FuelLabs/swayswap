@@ -37,9 +37,6 @@ export function MintToken() {
 
     try {
       setMinting(true);
-      // TODO: remove second parameter from `mint_coins`.
-      // This is a workaround to a temp problem on the compiler
-      // https://github.com/FuelLabs/swayswap-demo/issues/39
       await token.functions.mint_coins(amount);
       // Transfer the just minted coins to the output
       await token.functions.transfer_coins_to_output(amount, objectId(REACT_APP_TOKEN_ID), objectId(wallet.address), {
