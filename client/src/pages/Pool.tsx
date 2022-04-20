@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { parseUnits } from "ethers/lib/utils";
-import { Wallet } from "fuels";
+import { inputify, Wallet } from "fuels";
 import { useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useWallet } from "src/context/WalletContext";
@@ -8,6 +8,7 @@ import { SwayswapContractAbi__factory } from "src/types/contracts";
 import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
+import { CoinETH } from "src/lib/constants";
 
 const { REACT_APP_CONTRACT_ID } = process.env;
 
@@ -77,20 +78,41 @@ export const Pool = () => {
     // https://github.com/FuelLabs/swayswap-demo/issues/42
     setIsLoading(true);
     // Deposit coins from
-    setStage(1);
-    await contract.functions.deposit({
-      assetId: coinFrom.assetId,
-      amount: parseUnits(fromAmount, 9)
-    });
+    {
+      setStage(1);
+      const amount = parseUnits(fromAmount, 9);
+      const coins = await wallet.getCoinsToSpend([[amount, coinFrom.assetId]]);
+      await contract.functions.deposit({
+        assetId: coinFrom.assetId,
+        amount,
+        transformRequest: async (request) => {
+          request.addCoins(coins);
+          return request;
+        },
+      });
+    }
     // Deposit coins to
-    setStage(2);
-    await contract.functions.deposit({
-      assetId: coinTo.assetId,
-      amount: parseUnits(toAmount, 9),
-    });
+    {
+      setStage(2);
+      const amount = parseUnits(toAmount, 9);
+      const coins = await wallet.getCoinsToSpend([[amount, coinTo.assetId]]);
+      await contract.functions.deposit({
+        assetId: coinTo.assetId,
+        amount,
+        transformRequest: async (request) => {
+          request.addCoins(coins);
+          return request;
+        },
+      });
+    }
     // Create liquidity pool
     setStage(3);
-    await contract.functions.add_liquidity(1, parseUnits(toAmount, 9), 1000);
+    await contract.functions.add_liquidity(1, parseUnits(toAmount, 9), 1000, {
+      variableOutputs: 1,
+    });
+    // We are done, reset
+    setStage(0);
+    setIsLoading(false);
   };
 
   return (
