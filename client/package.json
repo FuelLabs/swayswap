@@ -27,6 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "deploy-contracts": "sh ./scripts/deploy-contracts.sh",
     "build-contracts": "sh ./scripts/build-contracts.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "start": "react-scripts start",
