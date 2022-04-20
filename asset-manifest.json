@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/swayswap-demo/static/css/main.f6967260.css",
-    "main.js": "/swayswap-demo/static/js/main.8fbd4622.js",
-    "static/js/787.c2c7b857.chunk.js": "/swayswap-demo/static/js/787.c2c7b857.chunk.js",
-    "index.html": "/swayswap-demo/index.html",
-    "main.f6967260.css.map": "/swayswap-demo/static/css/main.f6967260.css.map",
-    "main.8fbd4622.js.map": "/swayswap-demo/static/js/main.8fbd4622.js.map",
-    "787.c2c7b857.chunk.js.map": "/swayswap-demo/static/js/787.c2c7b857.chunk.js.map"
+    "main.css": "/swayswap/static/css/main.f6967260.css",
+    "main.js": "/swayswap/static/js/main.52ab3582.js",
+    "static/js/787.c2c7b857.chunk.js": "/swayswap/static/js/787.c2c7b857.chunk.js",
+    "index.html": "/swayswap/index.html",
+    "main.f6967260.css.map": "/swayswap/static/css/main.f6967260.css.map",
+    "main.52ab3582.js.map": "/swayswap/static/js/main.52ab3582.js.map",
+    "787.c2c7b857.chunk.js.map": "/swayswap/static/js/787.c2c7b857.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f6967260.css",
-    "static/js/main.8fbd4622.js"
+    "static/js/main.52ab3582.js"
   ]
 }
