@@ -59,7 +59,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
           transactionRequest.addCoin({
             id: "0x000000000000000000000000000000000000000000000000000000000000000000",
             assetId: CoinETH,
-            amount: parseUnits(".5", 9),
+            amount: parseUnits(".2", 9),
             owner: "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
           });
           transactionRequest.addCoinOutput(wallet.address, parseUnits(".5", 9), CoinETH);
