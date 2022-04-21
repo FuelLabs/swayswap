@@ -59,8 +59,8 @@ export async function deployContract(contextLog: string, binaryPath: string, abi
 
 (async function () {
     try {
-        const contract = await deployContract('SwaySwap', tokenPath, TokenContractAbi__factory.abi);
-        const token = await deployContract('Token', contractPath, SwayswapContractAbi__factory.abi);
+        const contract = await deployContract('SwaySwap', contractPath, SwayswapContractAbi__factory.abi);
+        const token = await deployContract('Token', tokenPath, TokenContractAbi__factory.abi);
 
         console.log('SwaySwap Contract Id', contract.id);
         console.log('Token Contract Id', token.id);
