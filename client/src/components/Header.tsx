@@ -9,7 +9,7 @@ const style = {
   headerLogo: `flex w-1/4 items-center justify-start`,
   nav: `flex-1 flex justify-center items-center`,
   navItemsContainer: `flex bg-[#191B1F] rounded-3xl`,
-  navItem: `px-4 py-2 m-1 flex items-center text-lg font-semibold text-[0.9rem] cursor-pointer rounded-3xl`,
+  navItem: `px-4 py-2 m-1 flex items-center text-lg font-semibold text-[0.9rem] cursor-pointer rounded-3xl focus:outline focus:outline-2 focus:outline-[#006842]`,
   activeNavItem: `bg-[#20242A]`,
   buttonsContainer: `flex w-1/4 justify-end items-center`,
   button: `flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semi-bold`,

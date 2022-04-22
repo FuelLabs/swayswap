@@ -10,8 +10,8 @@ const style = {
   content: `bg-[#191B1F] w-[40rem] rounded-2xl p-4`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
   confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
-    justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
-  switchDirection: `flex items-center justify-center -my-3`,
+    justify-center cursor-pointer border border-[#58c09b] focus:outline focus:outline-4 focus:outline-[#006842] mt-8`,
+  switchDirection: `flex items-center justify-center -my-3`
 };
 
 // Mock before implementing

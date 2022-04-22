@@ -11,7 +11,7 @@ import urlJoin from "url-join";
 const { PUBLIC_URL } = process.env;
 
 const style = {
-  transferPropContainer: `bg-[#20242A] rounded-2xl p-4 text-3xl border border-[#20242A] 
+  transferPropContainer: `bg-[#20242A] rounded-2xl p-4 text-3xl border border-[#20242A] focus-within:outline focus-within:outline-2 focus-within:outline-[#006842]
       flex justify-between`,
   transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none w-full text-2xl`,
   // coin selector
@@ -64,7 +64,7 @@ export function CoinSelector({
         <div>
           <Menu.Button
             className={classNames({
-              "cursor-default": !hasCoins,
+              "cursor-default focus:outline focus:outline-2 focus:outline-[#58c09b]/70 rounded-2xl": !hasCoins,
             })}
           >
             <div
