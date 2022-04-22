@@ -1,4 +1,4 @@
-import { AiOutlineArrowDown } from "react-icons/ai";
+import { RiArrowUpDownLine } from "react-icons/ri";
 
 const style = {
   confirmButton: `rounded-2xl font-semibold p-1 border border-[#20242A] bg-[#191B1F] border-4 rounded-2xl cursor-pointer`,
@@ -7,7 +7,7 @@ const style = {
 export function InvertButton({ onClick }: { onClick: () => void }) {
   return (
     <div onClick={onClick} className={style.confirmButton}>
-      <AiOutlineArrowDown size={32} />
+      <RiArrowUpDownLine size={32} />
     </div>
   );
 }
