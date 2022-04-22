@@ -72,7 +72,7 @@ export const Assets = () => {
                 <Spinner />
               </div>
             ) : (
-              <div className={style.faucetButton} onClick={handleClickFaucet}>
+              <div className={style.faucetButton} onClick={handleClickFaucet} onKeyPress={handleClickFaucet} tabIndex={0}>
                 <FaFaucet />
               </div>
             )}

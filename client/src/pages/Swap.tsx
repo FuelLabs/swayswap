@@ -51,7 +51,7 @@ export const Swap = () => {
       <div className={style.content}>
         <div className={style.formHeader}>
           <h1>Swap</h1>
-          <div>
+          <div tabIndex={0} className={style.swapSettings}>
             <RiSettings3Fill />
           </div>
         </div>
@@ -84,7 +84,7 @@ export const Swap = () => {
             onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}
           />
         </div>
-        <div onClick={(e) => handleSubmit(e)} className={style.confirmButton}>
+        <div onClick={(e) => handleSubmit(e)} onKeyDown={(e) => handleSubmit(e)} className={style.confirmButton} tabIndex={0}>
           Confirm
         </div>
       </div>

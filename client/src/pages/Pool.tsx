@@ -178,7 +178,9 @@ export const Pool = () => {
             </div>
             <div
               onClick={(e) => provideLiquidity()}
+              onKeyPress={(e) => provideLiquidity()}
               className={style.confirmButton}
+              tabIndex={0}
             >
               Confirm
             </div>

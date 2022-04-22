@@ -6,7 +6,7 @@ const style = {
 
 export function InvertButton({ onClick }: { onClick: () => void }) {
   return (
-    <div onClick={onClick} className={style.confirmButton}>
+    <div onClick={onClick} onKeyPress={onClick} className={style.confirmButton} tabIndex={0}>
       <RiArrowUpDownLine size={32} />
     </div>
   );
