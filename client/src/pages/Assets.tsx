@@ -11,7 +11,7 @@ const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
   content: `bg-[#191B1F] w-[40rem] rounded-2xl p-4`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl mb-8`,
-  faucetButton: `hover:bg-[#41444F] cursor-pointer p-1 rounded-xl flex justify-center`,
+  faucetButton: `hover:bg-[#41444F] cursor-pointer p-1 rounded-xl flex justify-center focus:outline focus:outline-4 focus:outline-[#006842]`,
 };
 
 type Asset = Coin & { amount: BigNumber };

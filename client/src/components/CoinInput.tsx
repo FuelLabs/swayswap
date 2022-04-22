@@ -64,7 +64,7 @@ export function CoinSelector({
         <div>
           <Menu.Button
             className={classNames({
-              "cursor-default focus:outline focus:outline-2 focus:outline-[#58c09b]/70 rounded-2xl": !hasCoins,
+              "cursor-pointer focus:outline focus:outline-2 focus:outline-[#58c09b]/70 rounded-2xl": !hasCoins,
             })}
           >
             <div
