@@ -33,23 +33,29 @@ const Header = () => {
         {exists && (
           <div className={style.navItemsContainer}>
             <div
+              tabIndex={0}
               onClick={() => navigate(Pages.assets)}
+              onKeyPress={() => navigate(Pages.assets)}
               className={`${style.navItem} ${
                 location.pathname === Pages.assets && style.activeNavItem
               }`}
-            >
+              >
               Assets
             </div>
             <div
+              tabIndex={0}
               onClick={() => navigate(Pages.swap)}
+              onKeyPress={() => navigate(Pages.swap)}
               className={`${style.navItem} ${
                 location.pathname === Pages.swap && style.activeNavItem
               }`}
-            >
+              >
               Swap
             </div>
             <div
+              tabIndex={0}
               onClick={() => navigate(Pages.pool)}
+              onKeyPress={() => navigate(Pages.pool)}
               className={`${style.navItem} ${
                 location.pathname === Pages.pool && style.activeNavItem
               }`}
