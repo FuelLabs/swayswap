@@ -13,6 +13,14 @@ const CoinsMetadata: Array<Coin> = [
     // https://github.com/FuelLabs/swayswap-demo/issues/33
     "assetId": process.env.REACT_APP_TOKEN_ID,
     "img": "/icons/dai.svg"
+  },
+  {
+    "name": "SWAY",
+    // TODO: Remove this when adding dynamic token insertion
+    // Make temporarily easy to change token contract id
+    // https://github.com/FuelLabs/swayswap-demo/issues/33
+    "assetId": process.env.REACT_APP_CONTRACT_ID,
+    "img": "/icons/sway.svg"
   }
 ]
  

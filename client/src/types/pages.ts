@@ -4,4 +4,5 @@ export enum Pages {
     "setup" = "/setup",
     "assets" = "/assets",
     "mintToken" = "/mint",
+    "removeLiquidity" = "/remove-liquidity",
 }  

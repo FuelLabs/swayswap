@@ -72,6 +72,7 @@ export function CoinSelector({
             >
               {selected && selected.img && (
                 <img
+                  className="rounded-full border-none"
                   src={urlJoin(PUBLIC_URL, selected.img)}
                   alt="eth"
                   height={24}
@@ -107,12 +108,17 @@ export function CoinSelector({
                         onClick={() => handleSelect(coin)}
                       >
                         {coin && coin.img && (
-                          <img
-                            src={urlJoin(PUBLIC_URL, coin.img)}
-                            alt="eth"
-                            height={24}
-                            width={24}
-                          />
+                          <div className="flex flex-wrap justify-center">
+                            <div className="w-6/12 sm:w-4/12 px-4">
+                              <img
+                                className="shadow-lg rounded max-w-full h-auto align-middle border-none"
+                                src={urlJoin(PUBLIC_URL, coin.img)}
+                                alt="eth"
+                                height={24}
+                                width={24}
+                              />
+                            </div>
+                          </div>
                         )}
                         <div className={style.currencySelectorTicker}>
                           {coin?.name}
