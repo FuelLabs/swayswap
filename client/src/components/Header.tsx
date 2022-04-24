@@ -56,6 +56,16 @@ const Header = () => {
             >
               Pool
             </div>
+            {/* TODO: Change in a way that only shows remove liquidity if use has SWAY tokens */}
+            {/* https://github.com/FuelLabs/swayswap/issues/56 */}
+            <div
+              onClick={() => navigate(Pages.removeLiquidity)}
+              className={`${style.navItem} ${
+                location.pathname === Pages.removeLiquidity && style.activeNavItem
+              }`}
+            >
+              Remove
+            </div>
           </div>
         )}
       </div>

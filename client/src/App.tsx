@@ -8,6 +8,7 @@ import { Pool } from "src/pages/Pool";
 import { MintToken } from "src/pages/MintToken";
 import { RequireWallet } from "./components/RequireWallet";
 import { MainLayout } from "./layouts/MainLayout";
+import { RemoveLiquidity } from "./pages/RemoveLiquidity";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path={Pages.swap} element={<RequireWallet children={<Swap />} />} />
         <Route path={Pages.pool} element={<RequireWallet children={<Pool />} />} />
         <Route path={Pages.mintToken} element={<RequireWallet children={<MintToken />} />} />
+        <Route path={Pages.removeLiquidity} element={<RequireWallet children={<RemoveLiquidity />} />} />
       </Route>
     </Router>
   );

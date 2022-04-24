@@ -33,7 +33,7 @@ export function MintToken() {
       REACT_APP_TOKEN_ID,
       wallet
     );
-    const amount = parseUnits(".5", 9);
+    const amount = parseUnits("1", 9);
 
     try {
       setMinting(true);

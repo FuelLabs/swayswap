@@ -1489,10 +1489,10 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.0"
 
-"@fuel-ts/abi-coder@0.0.0-master-f320686":
-  "integrity" "sha512-t0uVYu7MBk/tkTuNjj7kdPIRjx+h3NYnhMbs/Ea519XHQyE8KdrXR6nlre/NEiPK0DtqMI0/5+YYapuWaSJj3Q=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/abi-coder/-/abi-coder-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/abi-coder@0.0.0-master-0bbed84":
+  "integrity" "sha512-TAxfY02xS1vSrbNDNyuO9tIDQJCsXWyERACPjy64UubCMFK+If9e0wGvcRpy7afOZKsDSrh3vvLzU5ErK+BPtg=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/abi-coder/-/abi-coder-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/abi" "^5.4.1"
     "@ethersproject/bignumber" "^5.4.2"
@@ -1501,144 +1501,144 @@
     "@ethersproject/sha2" "^5.4.0"
     "@ethersproject/strings" "^5.4.0"
 
-"@fuel-ts/constants@0.0.0-master-f320686":
-  "integrity" "sha512-R4DeVO6YNfnqnpXIcFXx4+nq00CA1xiaMKNJiQpBFqC7f4BPR1PxrgEbHITOABtt9smQYcGD4fjUWfz/J7Tz8A=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/constants/-/constants-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/constants@0.0.0-master-0bbed84":
+  "integrity" "sha512-yxeU+OFiqRADHj2UE+EVqtyicRXAcrbf8SQtp96RPKfafBbH9K7wBlJgsxIVp3eMGAL7K1uPznZn6485Er3IOg=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/constants/-/constants-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
 
-"@fuel-ts/contract@0.0.0-master-f320686":
-  "integrity" "sha512-RiqLfzLEdFIumWbc1Z6SIPO4ZDrxJJZZS2Q2zsodaLb5J7axx3WxnLn5OnLghrQ6xGLELK1wacVUkKl839wnhQ=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/contract/-/contract-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/contract@0.0.0-master-0bbed84":
+  "integrity" "sha512-VIuMo/2ONdYZO4R3apWU59gdbWPd4QiHiJBMFm1+fHTXUpPlGBe26nX1PJXBGaMbCfoH1zkZwyOFqxG4elpFNg=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/contract/-/contract-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bignumber" "^5.5.0"
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/logger" "^5.5.0"
     "@ethersproject/random" "^5.5.1"
     "@ethersproject/sha2" "^5.6.0"
-    "@fuel-ts/abi-coder" "0.0.0-master-f320686"
-    "@fuel-ts/constants" "0.0.0-master-f320686"
-    "@fuel-ts/interfaces" "0.0.0-master-f320686"
-    "@fuel-ts/merkle" "0.0.0-master-f320686"
-    "@fuel-ts/providers" "0.0.0-master-f320686"
-    "@fuel-ts/wallet" "0.0.0-master-f320686"
+    "@fuel-ts/abi-coder" "0.0.0-master-0bbed84"
+    "@fuel-ts/constants" "0.0.0-master-0bbed84"
+    "@fuel-ts/interfaces" "0.0.0-master-0bbed84"
+    "@fuel-ts/merkle" "0.0.0-master-0bbed84"
+    "@fuel-ts/providers" "0.0.0-master-0bbed84"
+    "@fuel-ts/wallet" "0.0.0-master-0bbed84"
 
-"@fuel-ts/hasher@0.0.0-master-f320686":
-  "integrity" "sha512-P94bLKGKzMlHb0mEuBZEDmPQUOGo10TPJIMstyOo9qaaK3eVUoteucNImRmupo+I12Is4hmzbbJhpg4O6HIOZQ=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/hasher/-/hasher-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/hasher@0.0.0-master-0bbed84":
+  "integrity" "sha512-h52U7m1mzW0iQxg0iWvzUAajRL8dONh8EgOoM0LBBR2M9paZld3sMfJ6fNUbWktxVTUrY7cgUCaVFkK+C3m6VQ=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/hasher/-/hasher-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bignumber" "^5.5.0"
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/sha2" "^5.5.0"
-    "@fuel-ts/constants" "0.0.0-master-f320686"
-    "@fuel-ts/providers" "0.0.0-master-f320686"
+    "@fuel-ts/constants" "0.0.0-master-0bbed84"
+    "@fuel-ts/providers" "0.0.0-master-0bbed84"
     "lodash.clonedeep" "^4.5.0"
 
-"@fuel-ts/hdwallet@0.0.0-master-f320686":
-  "integrity" "sha512-ihaVSolON3osUwWiG3UcaxHl2g3sRxNrASix6azSw5gGMhYWH9keAHQThP24BoDO3+FBF1YAjlltpGAxHYG/gQ=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/hdwallet/-/hdwallet-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/hdwallet@0.0.0-master-0bbed84":
+  "integrity" "sha512-ySEtkNDEe7V+eWSr5k78gVc/vK+p0TlTZVIkWYTyfBdAKw1ClA1eLMcl73Kv9iU01qjFxdE+EUIzWjrAMTGulA=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/hdwallet/-/hdwallet-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/basex" "^5.5.0"
     "@ethersproject/bignumber" "^5.5.0"
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/sha2" "^5.5.0"
-    "@fuel-ts/mnemonic" "0.0.0-master-f320686"
-    "@fuel-ts/signer" "0.0.0-master-f320686"
+    "@fuel-ts/mnemonic" "0.0.0-master-0bbed84"
+    "@fuel-ts/signer" "0.0.0-master-0bbed84"
 
-"@fuel-ts/interfaces@0.0.0-master-f320686":
-  "integrity" "sha512-EPkYOOwXNAnhzeD5CX7ZHBpwbad8ooGwqKSAl5EAjA6cZDLscZSBvCH7cc55H4VZUsW0r7E437+DPnj72cL63w=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/interfaces/-/interfaces-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/interfaces@0.0.0-master-0bbed84":
+  "integrity" "sha512-luoSRa2Tkb548w3mtDR4UYR6QHuxYlmgtKBL5oOaoOH9CzgmoAUPo+dARSSPxmaIft6OAlkqeJuw4vzx7aofbQ=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/interfaces/-/interfaces-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bignumber" "^5.6.0"
     "@ethersproject/bytes" "^5.6.0"
 
-"@fuel-ts/merkle-shared@0.0.0-master-f320686":
-  "integrity" "sha512-jRKru8itBla9gV3TtN6PCWJjh+kEmH4bo7uhH05kqobeoOpoMnVLXRNGoVYlfeQ/G2/fN1klZgCh3DweQJWMNg=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/merkle-shared/-/merkle-shared-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/merkle-shared@0.0.0-master-0bbed84":
+  "integrity" "sha512-xdNMPkmb3BKjVIrwqPN+blG4Bryep4N9x/ZoMQ0TqNawNFsI7QBH5vhJr06m51FAC7gXP2Anopn0L6kUHBk5rg=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/merkle-shared/-/merkle-shared-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bignumber" "^5.4.2"
     "@ethersproject/bytes" "^5.4.0"
     "@ethersproject/sha2" "^5.4.0"
 
-"@fuel-ts/merkle@0.0.0-master-f320686":
-  "integrity" "sha512-E0wIbJ4FNJBA+aq6WjvDEwGNk+26jvQLKFy7d55L5q04FUGHZFQTxKFUFw5u9lOJegwFySIrwWPM/Pf7jPlXIg=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/merkle/-/merkle-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/merkle@0.0.0-master-0bbed84":
+  "integrity" "sha512-lvDfJbu6oIgvxLNJOdzSv1NzJe7Y9KUH+LIB3qz+0ii4FIT3Hl4dMvrSVjzY3SEp5RgEFjDrfOwHvZEC3FxTdQ=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/merkle/-/merkle-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
-    "@fuel-ts/merkle-shared" "0.0.0-master-f320686"
+    "@fuel-ts/merkle-shared" "0.0.0-master-0bbed84"
 
-"@fuel-ts/mnemonic@0.0.0-master-f320686":
-  "integrity" "sha512-FxvB/2XQMSG6rnjlpCRXit0XP70A4nU/OEDUE1jYXADPg2XjYg5Q8Blpl3/Yc4in73X/88CiPjqas1mnY4sulg=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/mnemonic/-/mnemonic-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/mnemonic@0.0.0-master-0bbed84":
+  "integrity" "sha512-WHUHwrtPq6rO8PNXE0Fu8aL4Uq2bEdvwJL96p4Qk8zVyH1jYhYONlUIV0um7awnnfpfNuD/ry6NKFFIiprRW3A=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/mnemonic/-/mnemonic-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/basex" "^5.5.0"
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/pbkdf2" "^5.5.0"
     "@ethersproject/random" "^5.5.1"
     "@ethersproject/sha2" "^5.5.0"
-    "@fuel-ts/wordlists" "0.0.0-master-f320686"
+    "@fuel-ts/wordlists" "0.0.0-master-0bbed84"
 
-"@fuel-ts/providers@0.0.0-master-f320686":
-  "integrity" "sha512-twirnXo/BTT60t5s+FrINjreR84RAisiw2ZFmdywmKkkqfsJP9hhs44kK5XYmo3zJ+Mq4u1y0LoBL2b8HY5CRA=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/providers/-/providers-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/providers@0.0.0-master-0bbed84":
+  "integrity" "sha512-BzXmFfP+mAFe9sn6tVKV+xpg6FNgj7jd1VhklIAb5ItI/SxwedAh14qHf6Cec74XjaCLhBScKAb9rdmACzsdvw=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/providers/-/providers-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bignumber" "^5.4.2"
     "@ethersproject/bytes" "^5.4.0"
     "@ethersproject/networks" "^5.5.0"
     "@ethersproject/random" "^5.5.1"
     "@ethersproject/sha2" "^5.5.0"
-    "@fuel-ts/constants" "0.0.0-master-f320686"
-    "@fuel-ts/interfaces" "0.0.0-master-f320686"
-    "@fuel-ts/transactions" "0.0.0-master-f320686"
+    "@fuel-ts/constants" "0.0.0-master-0bbed84"
+    "@fuel-ts/interfaces" "0.0.0-master-0bbed84"
+    "@fuel-ts/transactions" "0.0.0-master-0bbed84"
     "graphql" "^15.6.1"
     "graphql-request" "^3.6.1"
     "graphql-tag" "^2.12.6"
 
-"@fuel-ts/signer@0.0.0-master-f320686":
-  "integrity" "sha512-wBtzWkNo9mxPaMjTmoodndzBkB5HOv99IoZXbefo/n3LhAFzDXIo7fh6E5LFZO0sZRD1UVaMWcStRIHTCZlMqQ=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/signer/-/signer-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/signer@0.0.0-master-0bbed84":
+  "integrity" "sha512-WOJqWMOwX+vGudBlsiyCSTEbA676INErZzS+zP7N+s161HQCfxfSK/JxXMqO+nnvU0WW/mvUWreM10oGmFePAA=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/signer/-/signer-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/random" "5.5.1"
     "@ethersproject/sha2" "^5.5.0"
-    "@fuel-ts/hasher" "0.0.0-master-f320686"
+    "@fuel-ts/hasher" "0.0.0-master-0bbed84"
     "elliptic" "^6.5.4"
 
-"@fuel-ts/transactions@0.0.0-master-f320686":
-  "integrity" "sha512-nFykN9IP4kOpgHtjuKZVZ5idpHAlvH0Tjp2ASFeOTOjCrPEUIemV9L6Lhm+VFyryxbwYsH6+9U0XnfSFnyfZLQ=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/transactions/-/transactions-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/transactions@0.0.0-master-0bbed84":
+  "integrity" "sha512-QvBu0WHo8Fl4lz6onvFO1UR3nIVhKP2z+Ufrmj+39XR0pQgaN85d1o+NvFGbKpR8WlPQxeDl2qE0d7FQnAV3CA=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/transactions/-/transactions-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bignumber" "^5.4.2"
     "@ethersproject/bytes" "^5.4.0"
-    "@fuel-ts/abi-coder" "0.0.0-master-f320686"
-    "@fuel-ts/constants" "0.0.0-master-f320686"
+    "@fuel-ts/abi-coder" "0.0.0-master-0bbed84"
+    "@fuel-ts/constants" "0.0.0-master-0bbed84"
 
-"@fuel-ts/wallet@0.0.0-master-f320686":
-  "integrity" "sha512-Qq6rrIXRSP6S7Q64LRLxjx6gN3JfAXs3kD0xbGfrSySInKX73uwCl2ZAUVkpLiYwsz9e7cs45zcRPwoZnGwMmA=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/wallet/-/wallet-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/wallet@0.0.0-master-0bbed84":
+  "integrity" "sha512-Zuhy7Rnnn9Gy3sJeejA4PdfTyWYEfEb6Y4v8kZ3mNjY+hvnZLDSdovSr7RvduSnPaFh2fjNcQhqFKD4U67iIOQ=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/wallet/-/wallet-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bytes" "^5.5.0"
-    "@fuel-ts/constants" "0.0.0-master-f320686"
-    "@fuel-ts/hasher" "0.0.0-master-f320686"
-    "@fuel-ts/hdwallet" "0.0.0-master-f320686"
-    "@fuel-ts/interfaces" "0.0.0-master-f320686"
-    "@fuel-ts/mnemonic" "0.0.0-master-f320686"
-    "@fuel-ts/providers" "0.0.0-master-f320686"
-    "@fuel-ts/signer" "0.0.0-master-f320686"
+    "@fuel-ts/constants" "0.0.0-master-0bbed84"
+    "@fuel-ts/hasher" "0.0.0-master-0bbed84"
+    "@fuel-ts/hdwallet" "0.0.0-master-0bbed84"
+    "@fuel-ts/interfaces" "0.0.0-master-0bbed84"
+    "@fuel-ts/mnemonic" "0.0.0-master-0bbed84"
+    "@fuel-ts/providers" "0.0.0-master-0bbed84"
+    "@fuel-ts/signer" "0.0.0-master-0bbed84"
 
-"@fuel-ts/wordlists@0.0.0-master-f320686":
-  "integrity" "sha512-ax2lSR/yjvCVpNuW+BL9UkirfQqq4H9T/r6AZq0pewygNpmC96BdOAN8qNRJnEDbF6W6A6ks+x5tzYO9IJYWgQ=="
-  "resolved" "https://registry.npmjs.org/@fuel-ts/wordlists/-/wordlists-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"@fuel-ts/wordlists@0.0.0-master-0bbed84":
+  "integrity" "sha512-cciNLin2bmR42bIbJP0/5bc8qawjk8w6UZ17J+THq0KPxySg34Xk7dAKttD7Xo9QeApu4v3VC9ql8zmKfoTZZw=="
+  "resolved" "https://registry.npmjs.org/@fuel-ts/wordlists/-/wordlists-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
 
 "@headlessui/react@^1.5.0":
   "integrity" "sha512-aaRnYxBb3MU2FNJf3Ut9RMTUqqU3as0aI1lQhgo2n9Fa67wRu14iOGqx93xB+uMNVfNwZ5B3y/Ndm7qZGuFeMQ=="
@@ -4987,19 +4987,19 @@
   "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
   "version" "2.3.2"
 
-"fuels@^0.0.0-master-f320686":
-  "integrity" "sha512-zQH/dBtNOHxLYW3lSH6pxcCKRVPEA84rLpIfPpMO+ezzCWKX6vlpp1Nu5BurJ4LS/+WlWZ4ned/EcOt0t5XM7A=="
-  "resolved" "https://registry.npmjs.org/fuels/-/fuels-0.0.0-master-f320686.tgz"
-  "version" "0.0.0-master-f320686"
+"fuels@^0.0.0-master-0bbed84":
+  "integrity" "sha512-JbKuwpEKQSAzdbJ6xXhGZa+qZucy96AOKr6st0H5QZpM5wrq86sgzHXh09UnoNKW9IqvlEkD7jZjMk39hzGSuw=="
+  "resolved" "https://registry.npmjs.org/fuels/-/fuels-0.0.0-master-0bbed84.tgz"
+  "version" "0.0.0-master-0bbed84"
   dependencies:
     "@ethersproject/bignumber" "^5.6.0"
     "@ethersproject/bytes" "^5.6.0"
-    "@fuel-ts/abi-coder" "0.0.0-master-f320686"
-    "@fuel-ts/constants" "0.0.0-master-f320686"
-    "@fuel-ts/contract" "0.0.0-master-f320686"
-    "@fuel-ts/providers" "0.0.0-master-f320686"
-    "@fuel-ts/transactions" "0.0.0-master-f320686"
-    "@fuel-ts/wallet" "0.0.0-master-f320686"
+    "@fuel-ts/abi-coder" "0.0.0-master-0bbed84"
+    "@fuel-ts/constants" "0.0.0-master-0bbed84"
+    "@fuel-ts/contract" "0.0.0-master-0bbed84"
+    "@fuel-ts/providers" "0.0.0-master-0bbed84"
+    "@fuel-ts/transactions" "0.0.0-master-0bbed84"
+    "@fuel-ts/wallet" "0.0.0-master-0bbed84"
 
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
