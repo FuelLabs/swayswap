@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { parseUnits } from "ethers/lib/utils";
-import { inputify, Wallet } from "fuels";
+import { InputType, Wallet } from "fuels";
 import { useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useWallet } from "src/context/WalletContext";
@@ -8,7 +8,8 @@ import { SwayswapContractAbi__factory } from "src/types/contracts";
 import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
-import { CoinETH } from "src/lib/constants";
+import { useNavigate } from "react-router-dom";
+import { Pages } from "src/types/pages";
 
 const { REACT_APP_CONTRACT_ID } = process.env;
 
@@ -56,6 +57,7 @@ function PoolLoader({
 
 export const Pool = () => {
   const { getWallet } = useWallet();
+  const navigate = useNavigate();
   const getOtherCoins = (coins: Coin[]) =>
     assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
@@ -81,11 +83,15 @@ export const Pool = () => {
     {
       setStage(1);
       const amount = parseUnits(fromAmount, 9);
-      const coins = await wallet.getCoinsToSpend([[amount, coinFrom.assetId]]);
       await contract.functions.deposit({
         assetId: coinFrom.assetId,
         amount,
         transformRequest: async (request) => {
+          // TODO: Remove after solving issues with duplicate inputs
+          request.inputs = request.inputs.filter(i => {
+            return !(i.type === InputType.Coin && i.assetId === coinFrom.assetId);
+          });
+          const coins = await wallet.getCoinsToSpend([[amount, coinFrom.assetId]]);
           request.addCoins(coins);
           return request;
         },
@@ -113,6 +119,9 @@ export const Pool = () => {
     // We are done, reset
     setStage(0);
     setIsLoading(false);
+    // TODO: Improve feedback after add liquidity
+    // 
+    navigate(Pages.assets);
   };
 
   return (
