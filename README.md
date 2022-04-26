@@ -10,13 +10,9 @@
     
 </div>
 
-<br>
-
 ## About the Project
 
 About the project
-
-<br>
 
 ## How to Install
 
@@ -50,6 +46,7 @@ npm run start
 
 #### Building the Client
 
+```sh
 npm run build
 ```
 
