@@ -1,17 +1,13 @@
-<h1 align="center">⚡️ SwaySwap</h1>
-
-<p align="center">Short description</p>
-
-<div align="center">
-    
+# ⚡️ SwaySwap
 [![License](https://img.shields.io/github/license/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
 [![Issues Open](https://img.shields.io/github/issues/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
 [![Github Forks](https://img.shields.io/github/forks/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
 [![Github Stars](https://img.shields.io/github/stars/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
 
-![SwaySwap Interface](cover.png)
+Short description
     
-</div>
+
+![SwaySwap Interface](cover.png)
 
 ## About the Project
 
@@ -22,7 +18,6 @@ About the project
 1. [Set up your environment](#set-up-env-variables)
 2. [Running the client](#running-the-client)
 
-<br>
 
 ### Set up ENV Variables
 
