@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/swayswap/static/css/main.487f5514.css",
-    "main.js": "/swayswap/static/js/main.0b09cdd9.js",
+    "main.js": "/swayswap/static/js/main.a211c96f.js",
     "static/js/787.c2c7b857.chunk.js": "/swayswap/static/js/787.c2c7b857.chunk.js",
     "index.html": "/swayswap/index.html",
     "main.487f5514.css.map": "/swayswap/static/css/main.487f5514.css.map",
-    "main.0b09cdd9.js.map": "/swayswap/static/js/main.0b09cdd9.js.map",
+    "main.a211c96f.js.map": "/swayswap/static/js/main.a211c96f.js.map",
     "787.c2c7b857.chunk.js.map": "/swayswap/static/js/787.c2c7b857.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.487f5514.css",
-    "static/js/main.0b09cdd9.js"
+    "static/js/main.a211c96f.js"
   ]
 }
