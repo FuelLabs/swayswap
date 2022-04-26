@@ -13,3 +13,5 @@ echo "Build Token contract"
 forc build -p $TOKEN_CONTRACT
 echo "Build Types for contract"
 npx typechain --target fuels --out-dir=./src/types/contracts '../contracts/**/out/debug/**.json'
+echo "Prettify codes"
+npm run prettier-format
