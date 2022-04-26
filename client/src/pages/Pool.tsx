@@ -88,6 +88,7 @@ export const Pool = () => {
         amount,
         transformRequest: async (request) => {
           // TODO: Remove after solving issues with duplicate inputs
+          // https://github.com/FuelLabs/fuels-ts/issues/229
           request.inputs = request.inputs.filter(i => {
             return !(i.type === InputType.Coin && i.assetId === coinFrom.assetId);
           });
