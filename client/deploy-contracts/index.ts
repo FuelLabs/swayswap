@@ -4,7 +4,7 @@
 
 // TODO: Remove this file after `forc` enabled deploy a contract to a custom url
 // https://github.com/FuelLabs/sway/issues/1308
-import { hexlify, parseUnits, randomBytes } from 'ethers/lib/utils';
+import { parseUnits, randomBytes } from 'ethers/lib/utils';
 import {
   ContractFactory,
   NativeAssetId,

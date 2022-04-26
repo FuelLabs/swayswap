@@ -7,9 +7,8 @@ import {
 } from "fuels";
 import { saveWallet, loadWallet } from "src/lib/walletStorage";
 import { CoinETH } from "src/lib/constants";
-import { parseUnits, randomBytes } from "ethers/lib/utils";
-
-const { REACT_APP_FUEL_PROVIDER_URL } = process.env;
+import { randomBytes } from "ethers/lib/utils";
+import { FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "src/config";
 
 interface WalletProviderContext {
   sendTransaction: (data: any) => void;
@@ -30,7 +29,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
 
     if (!privateKey) return null;
 
-    return new Wallet(privateKey, REACT_APP_FUEL_PROVIDER_URL);
+    return new Wallet(privateKey, FUEL_PROVIDER_URL);
   };
 
   return (
@@ -38,7 +37,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
       value={{
         createWallet: () => {
           const wallet = Wallet.generate({
-            provider: REACT_APP_FUEL_PROVIDER_URL,
+            provider: FUEL_PROVIDER_URL,
           });
           saveWallet(wallet.privateKey);
           return wallet;
@@ -56,13 +55,13 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
           transactionRequest.addCoin({
             id: "0x000000000000000000000000000000000000000000000000000000000000000000",
             assetId: CoinETH,
-            amount: parseUnits(".5", 9),
+            amount: FAUCET_AMOUNT,
             owner:
               "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
           });
           transactionRequest.addCoinOutput(
             wallet.address,
-            parseUnits(".5", 9),
+            FAUCET_AMOUNT,
             CoinETH
           );
           const submit = await wallet.sendTransaction(transactionRequest);

@@ -9,8 +9,7 @@ import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-
-const { REACT_APP_CONTRACT_ID } = process.env;
+import { CONTRACT_ID } from "src/config";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -77,10 +76,7 @@ export const Pool = () => {
     }
 
     const wallet = getWallet() as Wallet;
-    const contract = SwayswapContractAbi__factory.connect(
-      REACT_APP_CONTRACT_ID,
-      wallet
-    );
+    const contract = SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
 
     // TODO: Combine all transactions on single tx leverage by scripts
     // https://github.com/FuelLabs/swayswap-demo/issues/42

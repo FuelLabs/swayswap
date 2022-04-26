@@ -6,10 +6,9 @@ import { useWallet } from "src/context/WalletContext";
 import { TextInput } from "src/components/TextInput";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-import { parseUnits } from "ethers/lib/utils";
 import { objectId } from "src/lib/utils";
-
-const { REACT_APP_TOKEN_ID } = process.env;
+import { MINT_AMOUNT, TOKEN_ID } from "src/config";
+import { formatUnits } from "ethers/lib/utils";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -21,14 +20,14 @@ const style = {
 
 export function MintToken() {
   const { getWallet } = useWallet();
-  const [asset, setAsset] = useState(REACT_APP_TOKEN_ID);
+  const [asset, setAsset] = useState(TOKEN_ID);
   const [isMinting, setMinting] = useState(true);
   const navigate = useNavigate();
 
   const handleMinCoins = async () => {
     const wallet = getWallet() as Wallet;
-    const token = TokenContractAbi__factory.connect(REACT_APP_TOKEN_ID, wallet);
-    const amount = parseUnits("1", 9);
+    const token = TokenContractAbi__factory.connect(TOKEN_ID, wallet);
+    const amount = MINT_AMOUNT;
 
     try {
       setMinting(true);
@@ -36,7 +35,7 @@ export function MintToken() {
       // Transfer the just minted coins to the output
       await token.functions.transfer_coins_to_output(
         amount,
-        objectId(REACT_APP_TOKEN_ID),
+        objectId(TOKEN_ID),
         objectId(wallet.address),
         {
           variableOutputs: 1,
@@ -74,7 +73,9 @@ export function MintToken() {
           onClick={(e) => isMinting && handleMinCoins()}
           className={style.confirmButton}
         >
-          {isMinting ? `Mint 1 token` : `Minting 1 token`}
+          {isMinting
+            ? `Mint ${formatUnits(MINT_AMOUNT, 9)} tokens`
+            : `Minting ${formatUnits(MINT_AMOUNT, 9)} tokens...`}
         </div>
       </div>
     </div>
