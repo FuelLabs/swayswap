@@ -1,7 +1,7 @@
 const style = {
   transferPropContainer: `bg-[#20242A] rounded-2xl p-4 text-3xl border border-[#20242A] 
         flex justify-between`,
-  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none w-full text-xl`
+  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none w-full text-xl`,
 };
 
 export function TextInput({

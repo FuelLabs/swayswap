@@ -17,16 +17,16 @@ const style = {
 type Asset = Coin & { amount: BigNumber };
 const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
   return coins.map((coin) => {
-    const coinMetadata = CoinsMetadata.find(c => c.assetId === coin.assetId);
+    const coinMetadata = CoinsMetadata.find((c) => c.assetId === coin.assetId);
 
     return {
       // TODO: Create default Coin Metadata when token didn't have registered data
       // Another options could be querying from the contract
       // https://github.com/FuelLabs/swayswap-demo/issues/33
-      name: coinMetadata?.name || '404',
-      img: coinMetadata?.img || '/icons/other.svg',
+      name: coinMetadata?.name || "404",
+      img: coinMetadata?.img || "/icons/other.svg",
       assetId: coin.assetId,
-      amount: coin.amount || 0
+      amount: coin.amount || 0,
     };
   });
 };
@@ -58,7 +58,7 @@ export const Assets = () => {
 
   useEffect(() => {
     if (wallet?.address) loadCoins();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet?.address]);
 
   return (
@@ -66,9 +66,9 @@ export const Assets = () => {
       <div className={style.content}>
         <div className={style.formHeader}>
           <div>Assets</div>
-          <div className="p-1 rounded-xl flex justify-center w-10">
+          <div className="flex w-10 justify-center rounded-xl p-1">
             {isLoading ? (
-              <div className="p-1 rounded-xl flex justify-center">
+              <div className="flex justify-center rounded-xl p-1">
                 <Spinner />
               </div>
             ) : (
@@ -89,7 +89,7 @@ export const Assets = () => {
                 coins={coin ? [coin] : []}
               />
             </div>
-          )
+          );
         })}
       </div>
     </div>

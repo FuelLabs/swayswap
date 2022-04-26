@@ -11,7 +11,7 @@ import type {
   BigNumberish,
   BytesLike,
   BigNumber,
-} from "fuels";
+} from 'fuels';
 
 export type ContractIdStruct = { value: string };
 
@@ -22,72 +22,50 @@ export type RemoveLiquidityReturnStruct = {
 
 interface SwayswapContractAbiInterface extends Interface {
   functions: {
-    "deposit()": FunctionFragment;
-    "withdraw(u64,struct ContractId)": FunctionFragment;
-    "add_liquidity(u64,u64,u64)": FunctionFragment;
-    "remove_liquidity(u64,u64,u64)": FunctionFragment;
-    "swap_with_minimum(u64,u64)": FunctionFragment;
-    "swap_with_maximum(u64,u64)": FunctionFragment;
+    'deposit()': FunctionFragment;
+    'withdraw(u64,struct ContractId)': FunctionFragment;
+    'add_liquidity(u64,u64,u64)': FunctionFragment;
+    'remove_liquidity(u64,u64,u64)': FunctionFragment;
+    'swap_with_minimum(u64,u64)': FunctionFragment;
+    'swap_with_maximum(u64,u64)': FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'deposit', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "withdraw",
+    functionFragment: 'withdraw',
     values: [BigNumberish, ContractIdStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "add_liquidity",
+    functionFragment: 'add_liquidity',
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "remove_liquidity",
+    functionFragment: 'remove_liquidity',
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "swap_with_minimum",
+    functionFragment: 'swap_with_minimum',
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "swap_with_maximum",
+    functionFragment: 'swap_with_maximum',
     values: [BigNumberish, BigNumberish]
   ): string;
 
-  decodeFunctionData(
-    functionFragment: "deposit",
-    data: BytesLike
-  ): DecodedValue;
-  decodeFunctionData(
-    functionFragment: "withdraw",
-    data: BytesLike
-  ): DecodedValue;
-  decodeFunctionData(
-    functionFragment: "add_liquidity",
-    data: BytesLike
-  ): DecodedValue;
-  decodeFunctionData(
-    functionFragment: "remove_liquidity",
-    data: BytesLike
-  ): DecodedValue;
-  decodeFunctionData(
-    functionFragment: "swap_with_minimum",
-    data: BytesLike
-  ): DecodedValue;
-  decodeFunctionData(
-    functionFragment: "swap_with_maximum",
-    data: BytesLike
-  ): DecodedValue;
+  decodeFunctionData(functionFragment: 'deposit', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'withdraw', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'add_liquidity', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'remove_liquidity', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'swap_with_minimum', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'swap_with_maximum', data: BytesLike): DecodedValue;
 }
 
 export class SwayswapContractAbi extends Contract {
   interface: SwayswapContractAbiInterface;
   functions: {
-    deposit(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 
-    "deposit()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    'deposit()'(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 
     withdraw(
       amount: BigNumberish,
@@ -95,7 +73,7 @@ export class SwayswapContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
-    "withdraw(u64,struct ContractId)"(
+    'withdraw(u64,struct ContractId)'(
       amount: BigNumberish,
       asset_id: ContractIdStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -108,7 +86,7 @@ export class SwayswapContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "add_liquidity(u64,u64,u64)"(
+    'add_liquidity(u64,u64,u64)'(
       min_liquidity: BigNumberish,
       max_tokens: BigNumberish,
       deadline: BigNumberish,
@@ -122,7 +100,7 @@ export class SwayswapContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<RemoveLiquidityReturnStruct>;
 
-    "remove_liquidity(u64,u64,u64)"(
+    'remove_liquidity(u64,u64,u64)'(
       min_eth: BigNumberish,
       min_tokens: BigNumberish,
       deadline: BigNumberish,
@@ -135,7 +113,7 @@ export class SwayswapContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "swap_with_minimum(u64,u64)"(
+    'swap_with_minimum(u64,u64)'(
       min: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -147,20 +125,16 @@ export class SwayswapContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "swap_with_maximum(u64,u64)"(
+    'swap_with_maximum(u64,u64)'(
       amount: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
-  deposit(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
+  deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 
-  "deposit()"(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
+  'deposit()'(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 
   withdraw(
     amount: BigNumberish,
@@ -168,7 +142,7 @@ export class SwayswapContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 
-  "withdraw(u64,struct ContractId)"(
+  'withdraw(u64,struct ContractId)'(
     amount: BigNumberish,
     asset_id: ContractIdStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -181,7 +155,7 @@ export class SwayswapContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
-  "add_liquidity(u64,u64,u64)"(
+  'add_liquidity(u64,u64,u64)'(
     min_liquidity: BigNumberish,
     max_tokens: BigNumberish,
     deadline: BigNumberish,
@@ -195,7 +169,7 @@ export class SwayswapContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<RemoveLiquidityReturnStruct>;
 
-  "remove_liquidity(u64,u64,u64)"(
+  'remove_liquidity(u64,u64,u64)'(
     min_eth: BigNumberish,
     min_tokens: BigNumberish,
     deadline: BigNumberish,
@@ -208,7 +182,7 @@ export class SwayswapContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
-  "swap_with_minimum(u64,u64)"(
+  'swap_with_minimum(u64,u64)'(
     min: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -220,7 +194,7 @@ export class SwayswapContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
-  "swap_with_maximum(u64,u64)"(
+  'swap_with_maximum(u64,u64)'(
     amount: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }

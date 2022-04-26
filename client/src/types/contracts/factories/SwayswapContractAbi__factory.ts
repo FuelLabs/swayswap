@@ -2,115 +2,112 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Provider, Wallet } from "fuels";
-import { Interface, Contract } from "fuels";
-import type {
-  SwayswapContractAbi,
-  SwayswapContractAbiInterface,
-} from "../SwayswapContractAbi";
+import type { Provider, Wallet } from 'fuels';
+import { Interface, Contract } from 'fuels';
+import type { SwayswapContractAbi, SwayswapContractAbiInterface } from '../SwayswapContractAbi';
 const _abi = [
   {
-    type: "function",
+    type: 'function',
     inputs: [],
-    name: "deposit",
+    name: 'deposit',
     outputs: [
       {
-        name: "",
-        type: "()",
+        name: '',
+        type: '()',
         components: null,
       },
     ],
   },
   {
-    type: "function",
+    type: 'function',
     inputs: [
       {
-        name: "amount",
-        type: "u64",
+        name: 'amount',
+        type: 'u64',
         components: null,
       },
       {
-        name: "asset_id",
-        type: "struct ContractId",
+        name: 'asset_id',
+        type: 'struct ContractId',
         components: [
           {
-            name: "value",
-            type: "b256",
+            name: 'value',
+            type: 'b256',
             components: null,
           },
         ],
       },
     ],
-    name: "withdraw",
+    name: 'withdraw',
     outputs: [
       {
-        name: "",
-        type: "()",
+        name: '',
+        type: '()',
         components: null,
       },
     ],
   },
   {
-    type: "function",
+    type: 'function',
     inputs: [
       {
-        name: "min_liquidity",
-        type: "u64",
+        name: 'min_liquidity',
+        type: 'u64',
         components: null,
       },
       {
-        name: "max_tokens",
-        type: "u64",
+        name: 'max_tokens',
+        type: 'u64',
         components: null,
       },
       {
-        name: "deadline",
-        type: "u64",
+        name: 'deadline',
+        type: 'u64',
         components: null,
       },
     ],
-    name: "add_liquidity",
+    name: 'add_liquidity',
     outputs: [
       {
-        name: "",
-        type: "u64",
+        name: '',
+        type: 'u64',
         components: null,
       },
     ],
   },
   {
-    type: "function",
+    type: 'function',
     inputs: [
       {
-        name: "min_eth",
-        type: "u64",
+        name: 'min_eth',
+        type: 'u64',
         components: null,
       },
       {
-        name: "min_tokens",
-        type: "u64",
+        name: 'min_tokens',
+        type: 'u64',
         components: null,
       },
       {
-        name: "deadline",
-        type: "u64",
+        name: 'deadline',
+        type: 'u64',
         components: null,
       },
     ],
-    name: "remove_liquidity",
+    name: 'remove_liquidity',
     outputs: [
       {
-        name: "",
-        type: "struct RemoveLiquidityReturn",
+        name: '',
+        type: 'struct RemoveLiquidityReturn',
         components: [
           {
-            name: "eth_amount",
-            type: "u64",
+            name: 'eth_amount',
+            type: 'u64',
             components: null,
           },
           {
-            name: "token_amount",
-            type: "u64",
+            name: 'token_amount',
+            type: 'u64',
             components: null,
           },
         ],
@@ -118,47 +115,47 @@ const _abi = [
     ],
   },
   {
-    type: "function",
+    type: 'function',
     inputs: [
       {
-        name: "min",
-        type: "u64",
+        name: 'min',
+        type: 'u64',
         components: null,
       },
       {
-        name: "deadline",
-        type: "u64",
+        name: 'deadline',
+        type: 'u64',
         components: null,
       },
     ],
-    name: "swap_with_minimum",
+    name: 'swap_with_minimum',
     outputs: [
       {
-        name: "",
-        type: "u64",
+        name: '',
+        type: 'u64',
         components: null,
       },
     ],
   },
   {
-    type: "function",
+    type: 'function',
     inputs: [
       {
-        name: "amount",
-        type: "u64",
+        name: 'amount',
+        type: 'u64',
         components: null,
       },
       {
-        name: "deadline",
-        type: "u64",
+        name: 'deadline',
+        type: 'u64',
         components: null,
       },
     ],
-    name: "swap_with_maximum",
+    name: 'swap_with_maximum',
     outputs: [
       {
-        name: "",
-        type: "u64",
+        name: '',
+        type: 'u64',
         components: null,
       },
     ],
@@ -170,10 +167,7 @@ export class SwayswapContractAbi__factory {
   static createInterface(): SwayswapContractAbiInterface {
     return new Interface(_abi) as SwayswapContractAbiInterface;
   }
-  static connect(
-    id: string,
-    walletOrProvider: Wallet | Provider
-  ): SwayswapContractAbi {
+  static connect(id: string, walletOrProvider: Wallet | Provider): SwayswapContractAbi {
     return new Contract(id, _abi, walletOrProvider) as SwayswapContractAbi;
   }
 }

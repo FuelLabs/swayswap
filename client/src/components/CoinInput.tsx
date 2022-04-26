@@ -29,7 +29,7 @@ export interface Coin {
   assetId: string;
   name?: string;
   img?: string;
-};
+}
 
 export function CoinSelector({
   value,
@@ -111,9 +111,9 @@ export function CoinSelector({
                       >
                         {coin && coin.img && (
                           <div className="flex flex-wrap justify-center">
-                            <div className="w-6/12 sm:w-4/12 px-4">
+                            <div className="w-6/12 px-4 sm:w-4/12">
                               <img
-                                className="shadow-lg rounded max-w-full h-auto align-middle border-none"
+                                className="h-auto max-w-full rounded border-none align-middle shadow-lg"
                                 src={urlJoin(PUBLIC_URL, coin.img)}
                                 alt="eth"
                                 height={24}
@@ -146,7 +146,7 @@ export function CoinInput({
   onChangeAmount,
   onChangeCoin,
 }: {
-  disabled?: boolean,
+  disabled?: boolean;
   amount?: BigNumber | null;
   coin?: Coin | null;
   coins?: Coin[];
@@ -159,7 +159,7 @@ export function CoinInput({
         <NumberFormat
           placeholder="0.0"
           value={amount && formatUnits(amount, 9)}
-          displayType={disabled ? 'text' : 'input'}
+          displayType={disabled ? "text" : "input"}
           onValueChange={(e) => onChangeAmount?.(parseUnits(e.value, 9))}
           className={style.transferPropInput}
           thousandSeparator={false}

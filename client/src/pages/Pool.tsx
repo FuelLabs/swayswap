@@ -46,8 +46,8 @@ function PoolLoader({
           )}
         >
           <div className="flex-1">{stepText}</div>
-          {(step === index && loading) && <Spinner />}
-          {(step > index) && <RiCheckFill />}
+          {step === index && loading && <Spinner />}
+          {step > index && <RiCheckFill />}
         </li>
       ))}
     </ul>
@@ -95,10 +95,14 @@ export const Pool = () => {
         transformRequest: async (request) => {
           // TODO: Remove after solving issues with duplicate inputs
           // https://github.com/FuelLabs/fuels-ts/issues/229
-          request.inputs = request.inputs.filter(i => {
-            return !(i.type === InputType.Coin && i.assetId === coinFrom.assetId);
+          request.inputs = request.inputs.filter((i) => {
+            return !(
+              i.type === InputType.Coin && i.assetId === coinFrom.assetId
+            );
           });
-          const coins = await wallet.getCoinsToSpend([[amount, coinFrom.assetId]]);
+          const coins = await wallet.getCoinsToSpend([
+            [amount, coinFrom.assetId],
+          ]);
           request.addCoins(coins);
           return request;
         },
@@ -127,7 +131,7 @@ export const Pool = () => {
     setStage(0);
     setIsLoading(false);
     // TODO: Improve feedback after add liquidity
-    // 
+    //
     navigate(Pages.assets);
   };
 
@@ -138,7 +142,7 @@ export const Pool = () => {
           <h1>Pool</h1>
         </div>
         {isLoading ? (
-          <div className="flex justify-center mt-6 mb-8">
+          <div className="mt-6 mb-8 flex justify-center">
             <PoolLoader
               steps={[
                 `Deposit: ${coinFrom.name}`,
