@@ -1,4 +1,5 @@
 import { Coin } from 'src/components/CoinInput';
+import { CONTRACT_ID, TOKEN_ID } from 'src/config';
 
 const CoinsMetadata: Array<Coin> = [
   {
@@ -11,7 +12,7 @@ const CoinsMetadata: Array<Coin> = [
     // TODO: Remove this when adding dynamic token insertion
     // Make temporarily easy to change token contract id
     // https://github.com/FuelLabs/swayswap-demo/issues/33
-    assetId: process.env.REACT_APP_TOKEN_ID,
+    assetId: TOKEN_ID,
     img: '/icons/dai.svg',
   },
   {
@@ -19,7 +20,7 @@ const CoinsMetadata: Array<Coin> = [
     // TODO: Remove this when adding dynamic token insertion
     // Make temporarily easy to change token contract id
     // https://github.com/FuelLabs/swayswap-demo/issues/33
-    assetId: process.env.REACT_APP_CONTRACT_ID,
+    assetId: CONTRACT_ID,
     img: '/icons/sway.svg',
   },
 ];
