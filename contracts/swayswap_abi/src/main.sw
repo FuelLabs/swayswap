@@ -7,6 +7,11 @@ pub struct RemoveLiquidityReturn {
     token_amount: u64,
 }
 
+pub struct PoolInfo {
+    eth_reserve: u64,
+    token_reserve: u64,
+}
+
 abi Exchange {
     /// Deposit coins for later adding to liquidity pool.
     fn deposit();
@@ -20,4 +25,6 @@ abi Exchange {
     fn swap_with_minimum(min: u64, deadline: u64) -> u64;
     /// Swap ETH <-> Tokens and tranfers to sender.
     fn swap_with_maximum(amount: u64, deadline: u64) -> u64;
+    /// Get information on the liquidity pool.
+    fn get_info() -> PoolInfo;
 }

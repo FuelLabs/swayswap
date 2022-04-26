@@ -160,6 +160,29 @@ const _abi = [
       },
     ],
   },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'get_info',
+    outputs: [
+      {
+        name: '',
+        type: 'struct PoolInfo',
+        components: [
+          {
+            name: 'eth_reserve',
+            type: 'u64',
+            components: null,
+          },
+          {
+            name: 'token_reserve',
+            type: 'u64',
+            components: null,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export class SwayswapContractAbi__factory {
