@@ -4,7 +4,10 @@
 
 <div align="center">
     
-[![Open Source](https://badgen.net/badge/icon/Open%20Source%20?icon=github&label&color=black)](https://github.com/FuelLabs/swayswap)
+[![License](https://img.shields.io/github/license/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
+[![Issues Open](https://img.shields.io/github/issues/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
+[![Github Forks](https://img.shields.io/github/forks/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
+[![Github Stars](https://img.shields.io/github/stars/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
 
 ![SwaySwap Interface](cover.png)
     
