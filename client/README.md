@@ -5,11 +5,13 @@ SwaySwap is a decentralized sway application.
 ## Contributing
 
 ### Setup
-``shell
+
+```shell
 yarn install
-``
+```
 
 ### Development
+
 ```shell
 yarn start
 ```
@@ -21,11 +23,13 @@ The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
 ### Build
+
 ```shell
 yarn build
 ```
 
 ### Test
+
 ```shell
 yarn test
 ```
