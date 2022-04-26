@@ -1,11 +1,11 @@
-import { parseUnits, formatUnits } from "ethers/lib/utils";
+import { formatUnits } from "ethers/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { useWallet } from "src/context/WalletContext";
 import { SwayswapContractAbi__factory } from "src/types/contracts";
 import coins from "src/lib/CoinsMetadata";
 import { CoinInput } from "src/components/CoinInput";
 import { useNavigate } from "react-router-dom";
-import { Wallet } from "fuels";
+import { BigNumber, Wallet } from "fuels";
 import { Pages } from "src/types/pages";
 
 const { REACT_APP_CONTRACT_ID } = process.env;
@@ -21,8 +21,8 @@ const style = {
 
 export const RemoveLiquidity = () => {
   const liquidityToken = coins.find(c => c.assetId === process.env.REACT_APP_CONTRACT_ID);
-  const [amount, setAmount] = useState('0');
-  const [balance, setBalance] = useState('0');
+  const [amount, setAmount] = useState(null as BigNumber | null);
+  const [balance, setBalance] = useState(null as BigNumber | null);
   const [isLoading, setLoading] = useState(false);
   const { getWallet, getCoins } = useWallet();
   const navigate = useNavigate();
@@ -34,9 +34,12 @@ export const RemoveLiquidity = () => {
   }, [getCoins]);
 
   const removeLiquidity = async () => {
+    if (!amount) {
+      throw new Error('"amount" is required')
+    }
     setLoading(true);
     const liquidityToken = await retrieveLiquidityToken();
-    if (amount > String(liquidityToken?.amount.toNumber() || 0)) {
+    if (amount?.gt(liquidityToken?.amount ?? 0)) {
       alert('Amount is bigger them the current balance!');
     }
     try {
@@ -45,7 +48,7 @@ export const RemoveLiquidity = () => {
         REACT_APP_CONTRACT_ID,
         wallet
       );
-      const amountValue = parseUnits(amount, 9);
+      const amountValue = amount;
       const coins = await wallet.getCoinsToSpend([[amountValue, REACT_APP_CONTRACT_ID]]);
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
@@ -68,7 +71,7 @@ export const RemoveLiquidity = () => {
   useEffect(() => {
     const init = async () => {
       const liquidityToken = await retrieveLiquidityToken();
-      setBalance(String(liquidityToken?.amount.toNumber() || 0));
+      setBalance(liquidityToken?.amount ?? BigNumber.from(0));
     }
     init();
   }, [retrieveLiquidityToken]);
@@ -88,17 +91,17 @@ export const RemoveLiquidity = () => {
             <CoinInput
               coin={liquidityToken}
               amount={amount}
-              onChangeAmount={(amount) => setAmount(amount || "")}
+              onChangeAmount={(amount) => setAmount(amount)}
             />
             <div className="mt-3 ml-4 text-slate-400 underline decoration-1 cursor-pointer"
-              onClick={() =>  setAmount(formatUnits(balance, 9))}>
-              Max amount: {formatUnits(balance, 9)}
+              onClick={() =>  setAmount(balance)}>
+              Max amount: {balance ? formatUnits(balance, 9): '...'}
             </div>
           </div>
           <button
             onClick={(e) => removeLiquidity()}
             className={style.confirmButton}
-            disabled={amount > balance || isLoading}
+            disabled={!amount || ! balance || amount.gt(balance) || isLoading}
           >
             {isLoading ? 'Removing...' : 'Remove liquidity'}
           </button>

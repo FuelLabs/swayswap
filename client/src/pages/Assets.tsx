@@ -3,7 +3,6 @@ import { FaFaucet } from "react-icons/fa";
 import { WalletContext } from "src/context/WalletContext";
 import { CoinQuantity } from "fuels";
 import { BigNumber } from "ethers";
-import { formatUnits } from "ethers/lib/utils";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import CoinsMetadata from "src/lib/CoinsMetadata";
 import { Spinner } from "src/components/Spinner";
@@ -86,7 +85,7 @@ export const Assets = () => {
               <CoinInput
                 coin={coin}
                 disabled={true}
-                amount={formatUnits(coin.amount, 9)}
+                amount={coin.amount}
                 coins={coin ? [coin] : []}
               />
             </div>

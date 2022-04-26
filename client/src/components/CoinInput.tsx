@@ -1,5 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { BigNumber } from "fuels";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { Fragment, useState } from "react";
@@ -145,10 +147,10 @@ export function CoinInput({
   onChangeCoin,
 }: {
   disabled?: boolean,
-  amount?: number | string | null;
+  amount?: BigNumber | null;
   coin?: Coin | null;
   coins?: Coin[];
-  onChangeAmount?: (value: string | null) => void;
+  onChangeAmount?: (value: BigNumber | null) => void;
   onChangeCoin?: (value: Coin) => void;
 }) {
   return (
@@ -156,9 +158,9 @@ export function CoinInput({
       <div className="flex-1">
         <NumberFormat
           placeholder="0.0"
-          value={amount}
+          value={amount && formatUnits(amount, 9)}
           displayType={disabled ? 'text' : 'input'}
-          onValueChange={(e) => onChangeAmount?.(e.value)}
+          onValueChange={(e) => onChangeAmount?.(parseUnits(e.value, 9))}
           className={style.transferPropInput}
           thousandSeparator={false}
         />

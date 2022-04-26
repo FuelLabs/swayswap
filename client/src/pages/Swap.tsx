@@ -3,6 +3,7 @@ import { RiSettings3Fill } from "react-icons/ri";
 import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
+import { BigNumber } from "fuels";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -27,16 +28,16 @@ export const Swap = () => {
   }
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([assets[0], assets[1]]);
   const getOtherCoins = (coins: Coin[]) => assets.filter(({ assetId }) => !coins.find(c => c.assetId === assetId));
-  const [fromAmount, setFromAmount] = useState('');
-  const [toAmount, setToAmount] = useState('');
+  const [fromAmount, setFromAmount] = useState(null as  BigNumber | null);
+  const [toAmount, setToAmount] = useState(null as  BigNumber | null);
 
-  const setAmountField = (amount: string, field: 'from' | 'to') => {
+  const setAmountField = (amount: BigNumber | null, field: 'from' | 'to') => {
     if (field === 'from') {
       setFromAmount(amount);
-      setToAmount(String(Number(amount) * getRate(coinFrom, coinTo)));
+      setToAmount(amount?.mul(getRate(coinFrom, coinTo)) ?? null);
     } else {
       setToAmount(amount);
-      setFromAmount(String(Number(amount) / getRate(coinFrom, coinTo)));
+      setFromAmount(amount?.div(getRate(coinFrom, coinTo)) ?? null);
     }
   }
 
@@ -54,7 +55,7 @@ export const Swap = () => {
           <CoinInput
             coin={coinFrom}
             amount={fromAmount}
-            onChangeAmount={amount => setAmountField(amount || '', 'from')}
+            onChangeAmount={amount => setAmountField(amount, 'from')}
             coins={getOtherCoins([coinFrom, coinTo])}
             onChangeCoin={(coin: Coin) => setCoins([coin, coinTo])}
           />
@@ -74,7 +75,7 @@ export const Swap = () => {
           <CoinInput
             coin={coinTo}
             amount={toAmount}
-            onChangeAmount={amount => setAmountField(amount || '', 'to')}
+            onChangeAmount={amount => setAmountField(amount, 'to')}
             coins={getOtherCoins([coinFrom, coinTo])}
             onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}
           />
