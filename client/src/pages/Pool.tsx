@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { BigNumber, InputType, Wallet } from "fuels";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useWallet } from "src/context/WalletContext";
 import { SwayswapContractAbi__factory } from "src/types/contracts";
@@ -10,6 +10,8 @@ import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { CONTRACT_ID } from "src/config";
+import { PoolInfoStruct } from "src/types/contracts/SwayswapContractAbi";
+import { formatUnits } from "ethers/lib/utils";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -66,6 +68,18 @@ export const Pool = () => {
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
   const [stage, setStage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [poolInfo, setPoolInfo] = useState(null as PoolInfoStruct | null);
+
+  useEffect(() => {
+    const wallet = getWallet() as Wallet;
+    const contract = SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
+
+    (async () => {
+      const pi = await contract.callStatic.get_info();
+      console.log(pi);
+      setPoolInfo(pi);
+    })();
+  }, [getWallet]);
 
   const provideLiquidity = async () => {
     if (!fromAmount) {
@@ -172,6 +186,32 @@ export const Pool = () => {
                 onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}
               />
             </div>
+            {poolInfo ? (
+              <div
+                className="mt-3 ml-4 text-slate-400 decoration-1"
+                style={{
+                  fontFamily: "monospace",
+                }}
+              >
+                Reserves
+                <br />
+                ETH: {formatUnits(poolInfo.eth_reserve, 9).toString()}
+                <br />
+                DAI: {formatUnits(poolInfo.token_reserve, 9).toString()}
+                <br />
+                ETH/DAI:{" "}
+                {BigNumber.from(1000)
+                  .mul(poolInfo.eth_reserve)
+                  .div(poolInfo.token_reserve)
+                  .toNumber() / 1000}
+                <br />
+                DAI/ETH:{" "}
+                {BigNumber.from(1000)
+                  .mul(poolInfo.token_reserve)
+                  .div(poolInfo.eth_reserve)
+                  .toNumber() / 1000}
+              </div>
+            ) : null}
             <div
               onClick={(e) => provideLiquidity()}
               className={style.confirmButton}

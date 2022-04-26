@@ -2,7 +2,7 @@ contract;
 
 use std::{address::*, assert::assert, block::*, chain::auth::*, context::{*, call_frames::*}, contract_id::ContractId, hash::*, panic::panic, storage::*, token::*};
 use std::result::*;
-use swayswap_abi::{Exchange, RemoveLiquidityReturn};
+use swayswap_abi::{Exchange, RemoveLiquidityReturn, PoolInfo};
 
 ////////////////////////////////////////
 // Constants
@@ -254,5 +254,14 @@ impl Exchange for Contract {
         };
 
         sold
+    }
+
+    fn get_info() -> PoolInfo {
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
+        PoolInfo {
+            eth_reserve: eth_reserve,
+            token_reserve: token_reserve,
+        }
     }
 }
