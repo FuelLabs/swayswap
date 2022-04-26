@@ -7,7 +7,7 @@ import {
 } from "fuels";
 import { saveWallet, loadWallet } from "src/lib/walletStorage";
 import { CoinETH } from "src/lib/constants";
-import { hexlify, parseUnits } from "ethers/lib/utils";
+import { parseUnits, randomBytes } from "ethers/lib/utils";
 
 const { REACT_APP_FUEL_PROVIDER_URL } = process.env;
 
@@ -18,9 +18,6 @@ interface WalletProviderContext {
   getCoins: () => Promise<CoinQuantity[]>;
   faucet: () => Promise<TransactionResult>;
 }
-
-const genBytes32 = () =>
-  hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 // @ts-ignore
 export const WalletContext = React.createContext<WalletProviderContext>();
@@ -53,7 +50,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
             gasPrice: 0,
             gasLimit: "0x0F4240",
             script: "0x24400000",
-            scriptData: genBytes32(),
+            scriptData: randomBytes(32),
           });
           // @ts-ignore
           transactionRequest.addCoin({

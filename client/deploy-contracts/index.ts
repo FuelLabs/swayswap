@@ -4,7 +4,7 @@
 
 // TODO: Remove this file after `forc` enabled deploy a contract to a custom url
 // https://github.com/FuelLabs/sway/issues/1308
-import { hexlify, parseUnits } from 'ethers/lib/utils';
+import { hexlify, parseUnits, randomBytes } from 'ethers/lib/utils';
 import {
   ContractFactory,
   NativeAssetId,
@@ -27,14 +27,12 @@ const contractPath = path.join(
 );
 const providerUrl = process.env.REACT_APP_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
 
-const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
-
 export const seedWallet = async (wallet: Wallet) => {
   const transactionRequest = new ScriptTransactionRequest({
     gasPrice: 0,
     gasLimit: '0x0F4240',
     script: '0x24400000',
-    scriptData: genBytes32(),
+    scriptData: randomBytes(32),
   });
   // @ts-ignore
   transactionRequest.addCoin({
