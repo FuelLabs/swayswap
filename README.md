@@ -31,26 +31,25 @@ About the project
 
 #### Go to the `client` folder
 
-```
+```sh
 cd client
 ```
 
 #### Install Dependencies
 
-```
+```sh
 npm install
 ```
 
 
 #### Start the Project
 
-```
+```sh
 npm run start
 ```
 
 #### Building the Client
 
-```
 npm run build
 ```
 
