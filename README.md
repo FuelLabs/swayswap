@@ -6,48 +6,26 @@
 
 Short description
     
-
 ![SwaySwap Interface](cover.png)
 
 ## About the Project
 
 About the project
 
-## How to Install
+## Getting Started
 
 1. [Set up your environment](#set-up-env-variables)
-2. [Running the client](#running-the-client)
-
+2. [Running the client](./client/README.md)
 
 ### Set up ENV Variables
 
-### Running the Client
-
-#### Go to the `client` folder
-
-```sh
-cd client
-```
-
-#### Install Dependencies
-
-```sh
-npm install
-```
-
-
-#### Start the Project
-
-```sh
-npm run start
-```
-
-#### Building the Client
-
-```sh
-npm run build
-```
+<!-- 
+	TO-DO: Add infos about .env on the root README.md
+	https://github.com/FuelLabs/swayswap/issues/62 
+-->
 
 ## Contributing
 
 ## License
+
+The primary license for this repo is `Apache 2.0`, see [`LICENSE`](./LICENSE).
