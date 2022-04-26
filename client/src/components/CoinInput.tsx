@@ -1,5 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { BigNumber } from "fuels";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { Fragment, useState } from "react";
@@ -27,7 +29,7 @@ export interface Coin {
   assetId: string;
   name?: string;
   img?: string;
-};
+}
 
 export function CoinSelector({
   value,
@@ -109,9 +111,9 @@ export function CoinSelector({
                       >
                         {coin && coin.img && (
                           <div className="flex flex-wrap justify-center">
-                            <div className="w-6/12 sm:w-4/12 px-4">
+                            <div className="w-6/12 px-4 sm:w-4/12">
                               <img
-                                className="shadow-lg rounded max-w-full h-auto align-middle border-none"
+                                className="h-auto max-w-full rounded border-none align-middle shadow-lg"
                                 src={urlJoin(PUBLIC_URL, coin.img)}
                                 alt="eth"
                                 height={24}
@@ -144,11 +146,11 @@ export function CoinInput({
   onChangeAmount,
   onChangeCoin,
 }: {
-  disabled?: boolean,
-  amount?: number | string | null;
+  disabled?: boolean;
+  amount?: BigNumber | null;
   coin?: Coin | null;
   coins?: Coin[];
-  onChangeAmount?: (value: string | null) => void;
+  onChangeAmount?: (value: BigNumber | null) => void;
   onChangeCoin?: (value: Coin) => void;
 }) {
   return (
@@ -156,9 +158,9 @@ export function CoinInput({
       <div className="flex-1">
         <NumberFormat
           placeholder="0.0"
-          value={amount}
-          displayType={disabled ? 'text' : 'input'}
-          onValueChange={(e) => onChangeAmount?.(e.value)}
+          value={amount && formatUnits(amount, 9)}
+          displayType={disabled ? "text" : "input"}
+          onValueChange={(e) => onChangeAmount?.(parseUnits(e.value, 9))}
           className={style.transferPropInput}
           thousandSeparator={false}
         />

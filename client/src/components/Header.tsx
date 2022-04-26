@@ -61,7 +61,8 @@ const Header = () => {
             <div
               onClick={() => navigate(Pages.removeLiquidity)}
               className={`${style.navItem} ${
-                location.pathname === Pages.removeLiquidity && style.activeNavItem
+                location.pathname === Pages.removeLiquidity &&
+                style.activeNavItem
               }`}
             >
               Remove

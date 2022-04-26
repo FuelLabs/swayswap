@@ -23,10 +23,22 @@ function App() {
           path={Pages.assets}
           element={<RequireWallet children={<Assets />} />}
         />
-        <Route path={Pages.swap} element={<RequireWallet children={<Swap />} />} />
-        <Route path={Pages.pool} element={<RequireWallet children={<Pool />} />} />
-        <Route path={Pages.mintToken} element={<RequireWallet children={<MintToken />} />} />
-        <Route path={Pages.removeLiquidity} element={<RequireWallet children={<RemoveLiquidity />} />} />
+        <Route
+          path={Pages.swap}
+          element={<RequireWallet children={<Swap />} />}
+        />
+        <Route
+          path={Pages.pool}
+          element={<RequireWallet children={<Pool />} />}
+        />
+        <Route
+          path={Pages.mintToken}
+          element={<RequireWallet children={<MintToken />} />}
+        />
+        <Route
+          path={Pages.removeLiquidity}
+          element={<RequireWallet children={<RemoveLiquidity />} />}
+        />
       </Route>
     </Router>
   );

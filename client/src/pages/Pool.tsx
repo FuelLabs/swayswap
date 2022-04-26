@@ -1,6 +1,5 @@
 import classNames from "classnames";
-import { parseUnits } from "ethers/lib/utils";
-import { InputType, Wallet } from "fuels";
+import { BigNumber, InputType, Wallet } from "fuels";
 import { useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useWallet } from "src/context/WalletContext";
@@ -47,8 +46,8 @@ function PoolLoader({
           )}
         >
           <div className="flex-1">{stepText}</div>
-          {(step === index && loading) && <Spinner />}
-          {(step > index) && <RiCheckFill />}
+          {step === index && loading && <Spinner />}
+          {step > index && <RiCheckFill />}
         </li>
       ))}
     </ul>
@@ -64,12 +63,19 @@ export const Pool = () => {
     assets[0],
     assets[1],
   ]);
-  const [fromAmount, setFromAmount] = useState("");
-  const [toAmount, setToAmount] = useState("");
+  const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
+  const [toAmount, setToAmount] = useState(null as BigNumber | null);
   const [stage, setStage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const provideLiquidity = async () => {
+    if (!fromAmount) {
+      throw new Error('"fromAmount" is required');
+    }
+    if (!toAmount) {
+      throw new Error('"toAmount" is required');
+    }
+
     const wallet = getWallet() as Wallet;
     const contract = SwayswapContractAbi__factory.connect(
       REACT_APP_CONTRACT_ID,
@@ -82,17 +88,21 @@ export const Pool = () => {
     // Deposit coins from
     {
       setStage(1);
-      const amount = parseUnits(fromAmount, 9);
+      const amount = fromAmount;
       await contract.functions.deposit({
         assetId: coinFrom.assetId,
         amount,
         transformRequest: async (request) => {
           // TODO: Remove after solving issues with duplicate inputs
           // https://github.com/FuelLabs/fuels-ts/issues/229
-          request.inputs = request.inputs.filter(i => {
-            return !(i.type === InputType.Coin && i.assetId === coinFrom.assetId);
+          request.inputs = request.inputs.filter((i) => {
+            return !(
+              i.type === InputType.Coin && i.assetId === coinFrom.assetId
+            );
           });
-          const coins = await wallet.getCoinsToSpend([[amount, coinFrom.assetId]]);
+          const coins = await wallet.getCoinsToSpend([
+            [amount, coinFrom.assetId],
+          ]);
           request.addCoins(coins);
           return request;
         },
@@ -101,7 +111,7 @@ export const Pool = () => {
     // Deposit coins to
     {
       setStage(2);
-      const amount = parseUnits(toAmount, 9);
+      const amount = toAmount;
       const coins = await wallet.getCoinsToSpend([[amount, coinTo.assetId]]);
       await contract.functions.deposit({
         assetId: coinTo.assetId,
@@ -114,14 +124,14 @@ export const Pool = () => {
     }
     // Create liquidity pool
     setStage(3);
-    await contract.functions.add_liquidity(1, parseUnits(toAmount, 9), 1000, {
+    await contract.functions.add_liquidity(1, toAmount, 1000, {
       variableOutputs: 1,
     });
     // We are done, reset
     setStage(0);
     setIsLoading(false);
     // TODO: Improve feedback after add liquidity
-    // 
+    //
     navigate(Pages.assets);
   };
 
@@ -132,7 +142,7 @@ export const Pool = () => {
           <h1>Pool</h1>
         </div>
         {isLoading ? (
-          <div className="flex justify-center mt-6 mb-8">
+          <div className="mt-6 mb-8 flex justify-center">
             <PoolLoader
               steps={[
                 `Deposit: ${coinFrom.name}`,
@@ -152,7 +162,7 @@ export const Pool = () => {
               <CoinInput
                 coin={coinFrom}
                 amount={fromAmount}
-                onChangeAmount={(amount) => setFromAmount(amount || "")}
+                onChangeAmount={(amount) => setFromAmount(amount)}
                 coins={getOtherCoins([coinFrom, coinTo])}
                 onChangeCoin={(coin: Coin) => setCoins([coin, coinTo])}
               />
@@ -161,7 +171,7 @@ export const Pool = () => {
               <CoinInput
                 coin={coinTo}
                 amount={toAmount}
-                onChangeAmount={(amount) => setToAmount(amount || "")}
+                onChangeAmount={(amount) => setToAmount(amount)}
                 coins={getOtherCoins([coinFrom, coinTo])}
                 onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}
               />
