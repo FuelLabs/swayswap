@@ -8,6 +8,48 @@ import type { SwayswapContractAbi, SwayswapContractAbiInterface } from '../Sways
 const _abi = [
   {
     type: 'function',
+    inputs: [
+      {
+        name: 'token',
+        type: 'struct ContractId',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+            components: null,
+          },
+        ],
+      },
+    ],
+    name: 'set_token',
+    outputs: [
+      {
+        name: '',
+        type: '()',
+        components: null,
+      },
+    ],
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'get_token',
+    outputs: [
+      {
+        name: '',
+        type: 'struct ContractId',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+            components: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
     inputs: [],
     name: 'deposit',
     outputs: [

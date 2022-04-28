@@ -27,6 +27,8 @@ export type PoolInfoStruct = {
 
 interface SwayswapContractAbiInterface extends Interface {
   functions: {
+    'set_token(struct ContractId)': FunctionFragment;
+    'get_token()': FunctionFragment;
     'deposit()': FunctionFragment;
     'withdraw(u64,struct ContractId)': FunctionFragment;
     'add_liquidity(u64,u64,u64)': FunctionFragment;
@@ -38,6 +40,8 @@ interface SwayswapContractAbiInterface extends Interface {
     'swap_with_maximum_forward_amount(u64)': FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: 'set_token', values: [ContractIdStruct]): string;
+  encodeFunctionData(functionFragment: 'get_token', values?: undefined): string;
   encodeFunctionData(functionFragment: 'deposit', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'withdraw',
@@ -69,6 +73,8 @@ interface SwayswapContractAbiInterface extends Interface {
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionData(functionFragment: 'set_token', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'get_token', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'deposit', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'withdraw', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'add_liquidity', data: BytesLike): DecodedValue;
@@ -89,6 +95,24 @@ interface SwayswapContractAbiInterface extends Interface {
 export class SwayswapContractAbi extends Contract {
   interface: SwayswapContractAbiInterface;
   functions: {
+    set_token(
+      token: ContractIdStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    'set_token(struct ContractId)'(
+      token: ContractIdStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    get_token(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractIdStruct>;
+
+    'get_token()'(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractIdStruct>;
+
     deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 
     'deposit()'(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
@@ -183,6 +207,22 @@ export class SwayswapContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
+
+  set_token(
+    token: ContractIdStruct,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<void>;
+
+  'set_token(struct ContractId)'(
+    token: ContractIdStruct,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<void>;
+
+  get_token(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractIdStruct>;
+
+  'get_token()'(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractIdStruct>;
 
   deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 

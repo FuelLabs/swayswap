@@ -4,7 +4,7 @@ import { useWallet, useAppContext } from "src/context/AppContext";
 import { CoinQuantity } from "fuels";
 import { BigNumber } from "ethers";
 import { Coin, CoinInput } from "src/components/CoinInput";
-import CoinsMetadata from "src/lib/CoinsMetadata";
+import { tokens } from "src/lib/SwaySwapMetadata";
 import { Spinner } from "src/components/Spinner";
 
 const style = {
@@ -17,7 +17,7 @@ const style = {
 type Asset = Coin & { amount: BigNumber };
 const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
   return coins.map((coin) => {
-    const coinMetadata = CoinsMetadata.find((c) => c.assetId === coin.assetId);
+    const coinMetadata = tokens.find((c) => c.assetId === coin.assetId);
 
     return {
       // TODO: Create default Coin Metadata when token didn't have registered data
@@ -86,7 +86,7 @@ export default function AssetsPage() {
                 coin={coin}
                 disabled={true}
                 amount={coin.amount}
-                coins={coin ? [coin] : []}
+                coins={[]}
               />
             </div>
           );

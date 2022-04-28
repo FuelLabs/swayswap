@@ -9,6 +9,7 @@ import NumberFormat from "react-number-format";
 import urlJoin from "url-join";
 
 const { PUBLIC_URL } = process.env;
+const COIN_IMG_OTHER = urlJoin(PUBLIC_URL, 'icons/other.svg');
 
 const style = {
   transferPropContainer: `bg-[#20242A] rounded-2xl p-4 text-3xl border border-[#20242A] 
@@ -16,9 +17,10 @@ const style = {
   transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none w-full text-2xl`,
   // coin selector
   currencySelector: `flex1`,
-  currencySelectorMenuItems: `absolute w-full mt-2 bg-[#191B1F] divide-gray-100 
+  currencySelectorMenuItems: `absolute min-w-[200] mt-2 bg-[#191B1F] divide-gray-100 
       rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10`,
-  currencySelectorItem: `flex justify-around rounded-md w-full px-2 py-2 text-sm cursor-pointer`,
+  currencySelectorItem: `w-full h-min flex justify-between items-center 
+      rounded-md text-lg font-medium p-2 mt-[-0.2rem] focus:outline-none cursor-pointer`,
   currencySelectorContent: `w-full h-min flex justify-between items-center bg-[#2D2F36] 
       rounded-2xl text-xl font-medium p-2 mt-[-0.2rem] focus:outline-none`,
   currencySelectorTicker: `mx-2`,
@@ -29,6 +31,54 @@ export interface Coin {
   assetId: string;
   name?: string;
   img?: string;
+}
+
+function CoinImage (props: { src: string, alt?: string }) {
+  // Set the pre-load image that should be always available
+  const [source, setSource] = useState<string>(COIN_IMG_OTHER);
+
+  // When image src is update reset to the loader image
+  useEffect(() => {
+    if (props.src !== source) {
+      setSource(COIN_IMG_OTHER);
+    }
+  }, [props.src, setSource, source]);
+
+  return (
+    <>
+      <img
+        className="hidden"
+        alt={`loader img of ${props.alt}`}
+        src={props.src}
+        onLoad={() => {
+          setSource(props.src);
+        }}
+      />
+      <img
+        className="rounded-full border-none overflow-hidden"
+        src={source}
+        alt={props.alt}
+        height={24}
+        width={24}
+      />
+    </>
+  )
+}
+
+function CoinItem (props: { coin: Coin }) {
+  return (
+    <>
+      {props.coin && props.coin.img && (
+        <CoinImage
+          src={urlJoin(PUBLIC_URL, props.coin.img)}
+          alt={props.coin.name}
+        />
+      )}
+      <div className={style.currencySelectorTicker}>
+        {props.coin?.name}
+      </div>
+    </>
+  )
 }
 
 export function CoinSelector({
@@ -72,22 +122,15 @@ export function CoinSelector({
                 "hover:bg-opacity-30": hasCoins,
               })}
             >
-              {selected && selected.img && (
-                <img
-                  className="rounded-full border-none"
-                  src={urlJoin(PUBLIC_URL, selected.img)}
-                  alt="eth"
-                  height={24}
-                  width={24}
+              {selected && (
+                <CoinItem
+                  coin={selected}
                 />
               )}
-              <div className={style.currencySelectorTicker}>
-                {selected?.name}
-              </div>
             </div>
           </Menu.Button>
         </div>
-        {hasCoins && (
+        {!!coins?.length && (
           <Transition
             as={Fragment}
             enter="transition ease-out duration-100"
@@ -99,7 +142,7 @@ export function CoinSelector({
           >
             <Menu.Items className={style.currencySelectorMenuItems}>
               <div className={style.menuWrapper}>
-                {coins.map((coin) => (
+                {(coins || []).map((coin) => (
                   <Menu.Item key={coin.assetId}>
                     {({ active }) => (
                       <div
@@ -109,22 +152,10 @@ export function CoinSelector({
                         })}
                         onClick={() => handleSelect(coin)}
                       >
-                        {coin && coin.img && (
-                          <div className="flex flex-wrap justify-center">
-                            <div className="w-6/12 px-4 sm:w-4/12">
-                              <img
-                                className="h-auto max-w-full rounded border-none align-middle shadow-lg"
-                                src={urlJoin(PUBLIC_URL, coin.img)}
-                                alt="eth"
-                                height={24}
-                                width={24}
-                              />
-                            </div>
-                          </div>
-                        )}
-                        <div className={style.currencySelectorTicker}>
-                          {coin?.name}
-                        </div>
+                        <CoinItem
+                          key={coin.assetId}
+                          coin={coin}
+                        />
                       </div>
                     )}
                   </Menu.Item>

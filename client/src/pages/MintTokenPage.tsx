@@ -2,12 +2,15 @@ import { useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
 import { TokenContractAbi__factory } from "src/types/contracts";
 import { useWallet } from "src/context/AppContext";
-import { TextInput } from "src/components/TextInput";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { objectId } from "src/lib/utils";
-import { MINT_AMOUNT, TOKEN_ID } from "src/config";
-import { formatUnits } from "ethers/lib/utils";
+import { MINT_AMOUNT } from "src/config";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { Coin, CoinInput } from "src/components/CoinInput";
+import { filterCoin, tokens } from "src/lib/SwaySwapMetadata";
+import { CoinETH } from "src/lib/constants";
+import { Wallet } from "fuels";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -17,23 +20,24 @@ const style = {
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
 };
 
-export default function MintTokenPage() {
-  const wallet = useWallet()!;
-  const [asset, setAsset] = useState(TOKEN_ID);
+export function MintTokenPage() {
+  const amount = parseUnits("1", 9);
+  const _tokens = tokens.filter((t: Coin) => t.assetId !== CoinETH);
+  const wallet = useWallet() as Wallet;
+  const [token, setToken] = useState<Coin>(_tokens[0]);
   const [isMinting, setMinting] = useState(true);
   const navigate = useNavigate();
 
   const handleMinCoins = async () => {
-    const token = TokenContractAbi__factory.connect(TOKEN_ID, wallet);
-    const amount = MINT_AMOUNT;
+    const tokenContract = TokenContractAbi__factory.connect(token.assetId, wallet);
 
     try {
       setMinting(true);
-      await token.functions.mint_coins(amount);
+      await tokenContract.functions.mint_coins(amount);
       // Transfer the just minted coins to the output
-      await token.functions.transfer_coins_to_output(
+      await tokenContract.functions.transfer_coins_to_output(
         amount,
-        objectId(TOKEN_ID),
+        objectId(token.assetId),
         objectId(wallet.address),
         {
           variableOutputs: 1,
@@ -60,12 +64,15 @@ export default function MintTokenPage() {
         </div>
         <div className="mt-8">
           <label className="mx-2 mb-2 flex text-[#B2B9D2]">
-            Paste the the token contractId
+            Amount
           </label>
-          {/* TODO: Add validation of contract id, querying from the the core */}
-          {/* TODO: Add validation to match a valid address */}
-          {/* https://github.com/FuelLabs/swayswap-demo/issues/41 */}
-          <TextInput value={asset} placeholder={""} onChange={setAsset} />
+          <CoinInput
+            coin={token}
+            amount={amount}
+            disabled={true}
+            coins={filterCoin(_tokens, token)}
+            onChangeCoin={setToken}
+          />
         </div>
         <div
           onClick={(e) => isMinting && handleMinCoins()}
