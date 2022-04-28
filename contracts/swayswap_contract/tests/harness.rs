@@ -73,6 +73,23 @@ async fn swayswap() {
             .unwrap();
     let token_instance = TestToken::new(token_contract_id.to_string(), provider, wallet.clone());
 
+    // Token Asset Id
+    let token_asset_id = testswayswap_mod::ContractId {
+        value: token_contract_id.into(),
+    };
+
+    // Set token name
+    let result = swayswap_instance.set_token(token_asset_id.clone()).call().await;
+    // TODO: test if result ok
+
+    // Should fail
+    let result = swayswap_instance.set_token(token_asset_id.clone()).call().await;
+    // TODO: test if fail
+
+    let result = swayswap_instance.get_token().call().await.unwrap();
+    // Check if contract has the token_id 
+    assert_eq!(result.value, token_asset_id.clone());
+
     // Mint some alt tokens
     token_instance.mint_coins(10000).call().await.unwrap();
 
