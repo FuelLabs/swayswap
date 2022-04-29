@@ -31,7 +31,7 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
   });
 };
 
-export const Assets = () => {
+export const AssetsPage = () => {
   const [coins, setCoins] = useState<CoinQuantity[]>([]);
   const { faucet, getCoins, getWallet } = useContext(WalletContext);
   const wallet = getWallet();

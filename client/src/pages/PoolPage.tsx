@@ -55,7 +55,7 @@ function PoolLoader({
   );
 }
 
-export const Pool = () => {
+export const PoolPage = () => {
   const { getWallet } = useWallet();
   const navigate = useNavigate();
   const getOtherCoins = (coins: Coin[]) =>

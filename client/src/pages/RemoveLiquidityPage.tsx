@@ -18,7 +18,7 @@ const style = {
     disabled:bg-[#a0bbb1]`,
 };
 
-export const RemoveLiquidity = () => {
+export const RemoveLiquidityPage = () => {
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
   const [amount, setAmount] = useState(null as BigNumber | null);
   const [balance, setBalance] = useState(null as BigNumber | null);

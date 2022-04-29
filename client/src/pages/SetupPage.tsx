@@ -9,7 +9,7 @@ const style = {
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169]`,
 };
 
-export const Setup = () => {
+export const SetupPage = () => {
   const navigate = useNavigate();
   const { createWallet } = useContext(WalletContext);
 

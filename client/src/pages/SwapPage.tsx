@@ -48,7 +48,7 @@ const getSwapWithMinimumMinValue = async (
   return forwardAmount;
 };
 
-export const Swap = () => {
+export const SwapPage = () => {
   const { getWallet } = useWallet();
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
