@@ -5,10 +5,11 @@ import {
   TransactionResult,
   CoinQuantity,
 } from "fuels";
-import { saveWallet, loadWallet } from "src/lib/walletStorage";
 import { CoinETH } from "src/lib/constants";
 import { randomBytes } from "ethers/lib/utils";
 import { FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "src/config";
+import { atom, useRecoilState } from "recoil";
+import { persistEffect } from "src/lib/recoilEffects";
 
 interface WalletProviderContext {
   sendTransaction: (data: any) => void;
@@ -18,15 +19,21 @@ interface WalletProviderContext {
   faucet: () => Promise<TransactionResult>;
 }
 
+const walletPrivateKeyState = atom<string | null>({
+  key: "privateKey",
+  default: null,
+  effects_UNSTABLE: [persistEffect],
+});
+
 // @ts-ignore
 export const WalletContext = React.createContext<WalletProviderContext>();
 
 export const useWallet = () => useContext(WalletContext);
 
 export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
-  const getWallet = () => {
-    const privateKey = loadWallet<string>();
+  const [privateKey, setPrivateKey] = useRecoilState(walletPrivateKeyState);
 
+  const getWallet = () => {
     if (!privateKey) return null;
 
     return new Wallet(privateKey, FUEL_PROVIDER_URL);
@@ -39,7 +46,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
           const wallet = Wallet.generate({
             provider: FUEL_PROVIDER_URL,
           });
-          saveWallet(wallet.privateKey);
+          setPrivateKey(wallet.privateKey);
           return wallet;
         },
         getWallet,
