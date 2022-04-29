@@ -6,7 +6,7 @@
 
 Short description
     
-![SwaySwap Interface](cover.png)
+<!-- ![SwaySwap Interface](cover.png) -->
 
 ## About the Project
 
@@ -14,8 +14,8 @@ About the project
 
 ## Getting Started
 
-1. [Set up your environment](#set-up-env-variables)
-2. [Running the client](./client/README.md)
+<!-- 1. [Set up your environment](#set-up-env-variables) -->
+1. [Running the client](./client/README.md)
 
 ### Set up ENV Variables
 
