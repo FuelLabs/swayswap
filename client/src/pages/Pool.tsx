@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { CONTRACT_ID } from "src/config";
 import { PoolInfoStruct } from "src/types/contracts/SwayswapContractAbi";
+import { formatUnits } from "ethers/lib/utils";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -194,9 +195,21 @@ export const Pool = () => {
               >
                 Reserves
                 <br />
-                ETH: {poolInfo.eth_reserve.toString()}
+                ETH: {formatUnits(poolInfo.eth_reserve, 9).toString()}
                 <br />
-                DAI: {poolInfo.token_reserve.toString()}
+                DAI: {formatUnits(poolInfo.token_reserve, 9).toString()}
+                <br />
+                ETH/DAI:{" "}
+                {BigNumber.from(1000)
+                  .mul(poolInfo.eth_reserve)
+                  .div(poolInfo.token_reserve)
+                  .toNumber() / 1000}
+                <br />
+                DAI/ETH:{" "}
+                {BigNumber.from(1000)
+                  .mul(poolInfo.token_reserve)
+                  .div(poolInfo.eth_reserve)
+                  .toNumber() / 1000}
               </div>
             ) : null}
             <div
