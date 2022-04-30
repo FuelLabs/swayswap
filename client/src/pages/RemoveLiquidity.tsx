@@ -47,18 +47,11 @@ export const RemoveLiquidity = () => {
         CONTRACT_ID,
         wallet
       );
-      const amountValue = amount;
-      const coins = await wallet.getCoinsToSpend([[amountValue, CONTRACT_ID]]);
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
       await swayswap.functions.remove_liquidity(1, 1, 1000, {
-        assetId: CONTRACT_ID,
-        amount: amountValue,
+        forward: [amount, CONTRACT_ID],
         variableOutputs: 2,
-        transformRequest: async (request) => {
-          request.addCoins(coins);
-          return request;
-        },
       });
       navigate(Pages.assets);
     } catch (err: any) {

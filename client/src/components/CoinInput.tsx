@@ -145,6 +145,7 @@ export function CoinInput({
   disabled,
   onChangeAmount,
   onChangeCoin,
+  onInput,
 }: {
   disabled?: boolean;
   amount?: BigNumber | null;
@@ -152,6 +153,7 @@ export function CoinInput({
   coins?: Coin[];
   onChangeAmount?: (value: BigNumber | null) => void;
   onChangeCoin?: (value: Coin) => void;
+  onInput?: (...args: any) => void;
 }) {
   return (
     <div className={style.transferPropContainer}>
@@ -163,6 +165,7 @@ export function CoinInput({
           onValueChange={(e) => onChangeAmount?.(parseUnits(e.value, 9))}
           className={style.transferPropInput}
           thousandSeparator={false}
+          onInput={onInput}
         />
       </div>
       <CoinSelector coins={coins} value={coin} onChange={onChangeCoin} />

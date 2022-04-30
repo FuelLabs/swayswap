@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { BigNumber, InputType, Wallet } from "fuels";
+import { BigNumber, Wallet } from "fuels";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useWallet } from "src/context/WalletContext";
@@ -76,7 +76,6 @@ export const Pool = () => {
 
     (async () => {
       const pi = await contract.callStatic.get_info();
-      console.log(pi);
       setPoolInfo(pi);
     })();
   }, [getWallet]);
@@ -96,42 +95,15 @@ export const Pool = () => {
     // https://github.com/FuelLabs/swayswap-demo/issues/42
     setIsLoading(true);
     // Deposit coins from
-    {
-      setStage(1);
-      const amount = fromAmount;
-      await contract.functions.deposit({
-        assetId: coinFrom.assetId,
-        amount,
-        transformRequest: async (request) => {
-          // TODO: Remove after solving issues with duplicate inputs
-          // https://github.com/FuelLabs/fuels-ts/issues/229
-          request.inputs = request.inputs.filter((i) => {
-            return !(
-              i.type === InputType.Coin && i.assetId === coinFrom.assetId
-            );
-          });
-          const coins = await wallet.getCoinsToSpend([
-            [amount, coinFrom.assetId],
-          ]);
-          request.addCoins(coins);
-          return request;
-        },
-      });
-    }
+    setStage(1);
+    await contract.functions.deposit({
+      forward: [fromAmount, coinFrom.assetId],
+    });
     // Deposit coins to
-    {
-      setStage(2);
-      const amount = toAmount;
-      const coins = await wallet.getCoinsToSpend([[amount, coinTo.assetId]]);
-      await contract.functions.deposit({
-        assetId: coinTo.assetId,
-        amount,
-        transformRequest: async (request) => {
-          request.addCoins(coins);
-          return request;
-        },
-      });
-    }
+    setStage(2);
+    await contract.functions.deposit({
+      forward: [toAmount, coinTo.assetId],
+    });
     // Create liquidity pool
     setStage(3);
     await contract.functions.add_liquidity(1, toAmount, 1000, {

@@ -183,6 +183,42 @@ const _abi = [
       },
     ],
   },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'amount_to_receive',
+        type: 'u64',
+        components: null,
+      },
+    ],
+    name: 'swap_with_minimum_forward_amount',
+    outputs: [
+      {
+        name: '',
+        type: 'u64',
+        components: null,
+      },
+    ],
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'amount_to_receive',
+        type: 'u64',
+        components: null,
+      },
+    ],
+    name: 'swap_with_maximum_forward_amount',
+    outputs: [
+      {
+        name: '',
+        type: 'u64',
+        components: null,
+      },
+    ],
+  },
 ];
 
 export class SwayswapContractAbi__factory {

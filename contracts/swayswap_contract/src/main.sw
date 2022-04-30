@@ -51,7 +51,7 @@ fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -
 /// Pricing function for converting between ETH and Tokens.
 fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64) -> u64 {
     assert(input_reserve > 0 && output_reserve > 0);
-    let numerator: u64 = input_reserve * output_reserve * 1000;
+    let numerator: u64 = input_reserve * output_amount * 1000;
     let denominator: u64 = (output_reserve - output_amount) * 997;
     numerator / denominator + 1
 }
@@ -252,7 +252,6 @@ impl Exchange for Contract {
             transfer_to_output(amount, ~ContractId::from(ETH_ID), sender);
             sold = tokens_sold;
         };
-
         sold
     }
 
@@ -263,5 +262,29 @@ impl Exchange for Contract {
             eth_reserve: eth_reserve,
             token_reserve: token_reserve,
         }
+    }
+
+    fn swap_with_minimum_forward_amount(amount_to_receive: u64) -> u64 {
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
+        let mut sold = 0;
+        if ((msg_asset_id()).into() == ETH_ID) {
+            sold = get_input_price(amount_to_receive, eth_reserve, token_reserve);
+        } else {
+            sold = get_input_price(amount_to_receive, token_reserve, eth_reserve);
+        };
+        sold
+    }
+
+    fn swap_with_maximum_forward_amount(amount_to_receive: u64) -> u64 {
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
+        let mut sold = 0;
+        if ((msg_asset_id()).into() == ETH_ID) {
+            sold = get_output_price(amount_to_receive, eth_reserve, token_reserve);
+        } else {
+            sold = get_output_price(amount_to_receive, token_reserve, eth_reserve);
+        };
+        sold
     }
 }
