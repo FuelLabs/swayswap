@@ -10,6 +10,8 @@ import {
 } from "src/types/contracts";
 import { BigNumber, Wallet } from "fuels";
 import { CONTRACT_ID } from "src/config";
+import { Pages } from "src/types/pages";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -56,6 +58,7 @@ export const Swap = () => {
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
   const [mode, setMode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: any) => {
     if (!fromAmount) {
@@ -93,6 +96,10 @@ export const Swap = () => {
     } else {
       throw new Error(`Invalid mode "${mode}"`);
     }
+
+    // TODO: Improve feedback after swap
+    //
+    navigate(Pages.assets);
   };
 
   const setAmountField = (amount: BigNumber | null, field: "from" | "to") => {
