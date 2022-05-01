@@ -170,18 +170,23 @@ export const Pool = () => {
                 ETH: {formatUnits(poolInfo.eth_reserve, 9).toString()}
                 <br />
                 DAI: {formatUnits(poolInfo.token_reserve, 9).toString()}
-                <br />
-                ETH/DAI:{" "}
-                {BigNumber.from(1000)
-                  .mul(poolInfo.eth_reserve)
-                  .div(poolInfo.token_reserve)
-                  .toNumber() / 1000}
-                <br />
-                DAI/ETH:{" "}
-                {BigNumber.from(1000)
-                  .mul(poolInfo.token_reserve)
-                  .div(poolInfo.eth_reserve)
-                  .toNumber() / 1000}
+                {BigNumber.from(poolInfo.eth_reserve).gt(0) &&
+                BigNumber.from(poolInfo.token_reserve).gt(0) ? (
+                  <>
+                    <br />
+                    ETH/DAI:{" "}
+                    {BigNumber.from(1000)
+                      .mul(poolInfo.eth_reserve)
+                      .div(poolInfo.token_reserve)
+                      .toNumber() / 1000}
+                    <br />
+                    DAI/ETH:{" "}
+                    {BigNumber.from(1000)
+                      .mul(poolInfo.token_reserve)
+                      .div(poolInfo.eth_reserve)
+                      .toNumber() / 1000}
+                  </>
+                ) : null}
               </div>
             ) : null}
             <div
