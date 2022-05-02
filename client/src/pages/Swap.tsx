@@ -34,15 +34,17 @@ const getSwapWithMaximumForwardAmount = async (
   return forwardAmount;
 };
 
-const getSwapWithMinimumForwardAmount = async (
+const getSwapWithMinimumMinValue = async (
   contract: SwayswapContractAbi,
   assetId: string,
   amount: BigNumber
 ) => {
-  const forwardAmount =
-    await contract.callStatic.swap_with_minimum_forward_amount(amount, {
+  const forwardAmount = await contract.callStatic.swap_with_minimum_min_value(
+    amount,
+    {
       forward: [1, assetId],
-    });
+    }
+  );
   return forwardAmount;
 };
 
@@ -84,12 +86,12 @@ export const Swap = () => {
         variableOutputs: 1,
       });
     } else if (mode === "with_minimum") {
-      const forwardAmount = await getSwapWithMinimumForwardAmount(
+      const minValue = await getSwapWithMinimumMinValue(
         contract,
         coinFrom.assetId,
         fromAmount
       );
-      await contract.functions.swap_with_minimum(forwardAmount, deadline, {
+      await contract.functions.swap_with_minimum(minValue, deadline, {
         forward: [fromAmount, coinFrom.assetId],
         variableOutputs: 1,
       });
@@ -115,13 +117,13 @@ export const Swap = () => {
             wallet
           );
 
-          const forwardAmount = await getSwapWithMinimumForwardAmount(
+          const minValue = await getSwapWithMinimumMinValue(
             contract,
             coinFrom.assetId,
             amount
           );
 
-          setToAmount(forwardAmount);
+          setToAmount(minValue);
         })().finally(() => setIsLoading(false));
       }
     } else if (field === "to" && mode !== "with_minimum") {

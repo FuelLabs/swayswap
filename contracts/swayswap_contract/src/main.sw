@@ -264,14 +264,14 @@ impl Exchange for Contract {
         }
     }
 
-    fn swap_with_minimum_forward_amount(amount_to_receive: u64) -> u64 {
+    fn swap_with_minimum_min_value(amount_to_forward: u64) -> u64 {
         let eth_reserve = this_balance(~ContractId::from(ETH_ID));
         let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
         let mut sold = 0;
         if ((msg_asset_id()).into() == ETH_ID) {
-            sold = get_input_price(amount_to_receive, eth_reserve, token_reserve);
+            sold = get_input_price(amount_to_forward, eth_reserve, token_reserve);
         } else {
-            sold = get_input_price(amount_to_receive, token_reserve, eth_reserve);
+            sold = get_input_price(amount_to_forward, token_reserve, eth_reserve);
         };
         sold
     }

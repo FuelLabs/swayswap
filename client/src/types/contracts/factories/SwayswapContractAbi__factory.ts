@@ -187,12 +187,12 @@ const _abi = [
     type: 'function',
     inputs: [
       {
-        name: 'amount_to_receive',
+        name: 'amount_to_forward',
         type: 'u64',
         components: null,
       },
     ],
-    name: 'swap_with_minimum_forward_amount',
+    name: 'swap_with_minimum_min_value',
     outputs: [
       {
         name: '',

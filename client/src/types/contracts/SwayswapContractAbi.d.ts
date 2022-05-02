@@ -34,7 +34,7 @@ interface SwayswapContractAbiInterface extends Interface {
     'swap_with_minimum(u64,u64)': FunctionFragment;
     'swap_with_maximum(u64,u64)': FunctionFragment;
     'get_info()': FunctionFragment;
-    'swap_with_minimum_forward_amount(u64)': FunctionFragment;
+    'swap_with_minimum_min_value(u64)': FunctionFragment;
     'swap_with_maximum_forward_amount(u64)': FunctionFragment;
   };
 
@@ -61,7 +61,7 @@ interface SwayswapContractAbiInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: 'get_info', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'swap_with_minimum_forward_amount',
+    functionFragment: 'swap_with_minimum_min_value',
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -77,7 +77,7 @@ interface SwayswapContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'swap_with_maximum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_info', data: BytesLike): DecodedValue;
   decodeFunctionData(
-    functionFragment: 'swap_with_minimum_forward_amount',
+    functionFragment: 'swap_with_minimum_min_value',
     data: BytesLike
   ): DecodedValue;
   decodeFunctionData(
@@ -163,13 +163,13 @@ export class SwayswapContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PoolInfoStruct>;
 
-    swap_with_minimum_forward_amount(
-      amount_to_receive: BigNumberish,
+    swap_with_minimum_min_value(
+      amount_to_forward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    'swap_with_minimum_forward_amount(u64)'(
-      amount_to_receive: BigNumberish,
+    'swap_with_minimum_min_value(u64)'(
+      amount_to_forward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -258,13 +258,13 @@ export class SwayswapContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<PoolInfoStruct>;
 
-  swap_with_minimum_forward_amount(
-    amount_to_receive: BigNumberish,
+  swap_with_minimum_min_value(
+    amount_to_forward: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
-  'swap_with_minimum_forward_amount(u64)'(
-    amount_to_receive: BigNumberish,
+  'swap_with_minimum_min_value(u64)'(
+    amount_to_forward: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
