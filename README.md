@@ -17,14 +17,17 @@ About the project
 <!-- 1. [Set up your environment](#set-up-env-variables) -->
 1. [Running the client](./client/README.md)
 
-### Set up ENV Variables
-
 <!-- 
+### Set up ENV Variables
 	TO-DO: Add infos about .env on the root README.md
 	https://github.com/FuelLabs/swayswap/issues/62 
 -->
 
+<!-- 
 ## Contributing
+
+TODO: https://github.com/FuelLabs/swayswap/issues/54
+-->
 
 ## License
 
