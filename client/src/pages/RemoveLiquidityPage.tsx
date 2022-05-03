@@ -1,11 +1,11 @@
 import { formatUnits } from "ethers/lib/utils";
 import { useCallback, useEffect, useState } from "react";
-import { useWallet } from "src/context/WalletContext";
+import { useWallet } from "src/context/AppContext";
 import { SwayswapContractAbi__factory } from "src/types/contracts";
 import coins from "src/lib/CoinsMetadata";
 import { CoinInput } from "src/components/CoinInput";
 import { useNavigate } from "react-router-dom";
-import { BigNumber, Wallet } from "fuels";
+import { BigNumber } from "fuels";
 import { Pages } from "src/types/pages";
 import { CONTRACT_ID } from "src/config";
 
@@ -18,19 +18,19 @@ const style = {
     disabled:bg-[#a0bbb1]`,
 };
 
-export const RemoveLiquidity = () => {
+export default function RemoveLiquidityPage() {
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
   const [amount, setAmount] = useState(null as BigNumber | null);
   const [balance, setBalance] = useState(null as BigNumber | null);
   const [isLoading, setLoading] = useState(false);
-  const { getWallet, getCoins } = useWallet();
+  const wallet = useWallet()!;
   const navigate = useNavigate();
 
   const retrieveLiquidityToken = useCallback(async () => {
-    const coins = await getCoins();
+    const coins = await wallet.getBalances();
     const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
     return liquidityToken;
-  }, [getCoins]);
+  }, [wallet]);
 
   const removeLiquidity = async () => {
     if (!amount) {
@@ -42,7 +42,6 @@ export const RemoveLiquidity = () => {
       alert("Amount is bigger them the current balance!");
     }
     try {
-      const wallet = getWallet() as Wallet;
       const swayswap = SwayswapContractAbi__factory.connect(
         CONTRACT_ID,
         wallet
@@ -101,4 +100,4 @@ export const RemoveLiquidity = () => {
       </div>
     </div>
   );
-};
+}

@@ -1,8 +1,7 @@
-import { Wallet } from "fuels";
 import { useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
 import { TokenContractAbi__factory } from "src/types/contracts";
-import { useWallet } from "src/context/WalletContext";
+import { useWallet } from "src/context/AppContext";
 import { TextInput } from "src/components/TextInput";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
@@ -18,14 +17,13 @@ const style = {
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
 };
 
-export function MintToken() {
-  const { getWallet } = useWallet();
+export default function MintTokenPage() {
+  const wallet = useWallet()!;
   const [asset, setAsset] = useState(TOKEN_ID);
   const [isMinting, setMinting] = useState(true);
   const navigate = useNavigate();
 
   const handleMinCoins = async () => {
-    const wallet = getWallet() as Wallet;
     const token = TokenContractAbi__factory.connect(TOKEN_ID, wallet);
     const amount = MINT_AMOUNT;
 

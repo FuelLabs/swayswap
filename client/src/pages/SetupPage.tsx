@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { WalletContext } from "src/context/WalletContext";
+import { useAppContext } from "src/context/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const style = {
@@ -9,9 +8,9 @@ const style = {
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169]`,
 };
 
-export const Setup = () => {
+export default function SetupPage() {
   const navigate = useNavigate();
-  const { createWallet } = useContext(WalletContext);
+  const { createWallet } = useAppContext();
 
   const handleWalletCreation = () => {
     createWallet();
@@ -27,4 +26,4 @@ export const Setup = () => {
       </div>
     </div>
   );
-};
+}
