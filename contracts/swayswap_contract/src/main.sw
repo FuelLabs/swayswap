@@ -2,7 +2,7 @@ contract;
 
 use std::{address::*, assert::assert, block::*, chain::auth::*, context::{*, call_frames::*}, contract_id::ContractId, hash::*, panic::panic, storage::*, token::*};
 use std::result::*;
-use swayswap_abi::{Exchange, RemoveLiquidityReturn};
+use swayswap_abi::{Exchange, RemoveLiquidityReturn, PoolInfo};
 
 ////////////////////////////////////////
 // Constants
@@ -13,7 +13,7 @@ const ETH_ID = 0x000000000000000000000000000000000000000000000000000000000000000
 
 /// Contract ID of the token on the other side of the pool.
 /// Modify at compile time for different pool.
-const TOKEN_ID = 0x27d920c88f5c2a50ec248f546ea06a3ab0e238aa807fdfac4ee1c612e04657b3;
+const TOKEN_ID = 0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c59e0;
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
@@ -51,7 +51,7 @@ fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -
 /// Pricing function for converting between ETH and Tokens.
 fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64) -> u64 {
     assert(input_reserve > 0 && output_reserve > 0);
-    let numerator: u64 = input_reserve * output_reserve * 1000;
+    let numerator: u64 = input_reserve * output_amount * 1000;
     let denominator: u64 = (output_reserve - output_amount) * 997;
     numerator / denominator + 1
 }
@@ -252,7 +252,39 @@ impl Exchange for Contract {
             transfer_to_output(amount, ~ContractId::from(ETH_ID), sender);
             sold = tokens_sold;
         };
+        sold
+    }
 
+    fn get_info() -> PoolInfo {
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
+        PoolInfo {
+            eth_reserve: eth_reserve,
+            token_reserve: token_reserve,
+        }
+    }
+
+    fn swap_with_minimum_min_value(amount_to_forward: u64) -> u64 {
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
+        let mut sold = 0;
+        if ((msg_asset_id()).into() == ETH_ID) {
+            sold = get_input_price(amount_to_forward, eth_reserve, token_reserve);
+        } else {
+            sold = get_input_price(amount_to_forward, token_reserve, eth_reserve);
+        };
+        sold
+    }
+
+    fn swap_with_maximum_forward_amount(amount_to_receive: u64) -> u64 {
+        let eth_reserve = this_balance(~ContractId::from(ETH_ID));
+        let token_reserve = this_balance(~ContractId::from(TOKEN_ID));
+        let mut sold = 0;
+        if ((msg_asset_id()).into() == ETH_ID) {
+            sold = get_output_price(amount_to_receive, eth_reserve, token_reserve);
+        } else {
+            sold = get_output_price(amount_to_receive, token_reserve, eth_reserve);
+        };
         sold
     }
 }

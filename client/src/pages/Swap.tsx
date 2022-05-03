@@ -3,7 +3,15 @@ import { RiSettings3Fill } from "react-icons/ri";
 import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
-import { BigNumber } from "fuels";
+import { useWallet } from "src/context/WalletContext";
+import {
+  SwayswapContractAbi,
+  SwayswapContractAbi__factory,
+} from "src/types/contracts";
+import { BigNumber, Wallet } from "fuels";
+import { CONTRACT_ID } from "src/config";
+import { Pages } from "src/types/pages";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -14,18 +22,34 @@ const style = {
   switchDirection: `flex items-center justify-center -my-3`,
 };
 
-// Mock before implementing
-const getRate = (from: Coin, to: Coin) => {
-  if (to.assetId === assets[0].assetId) {
-    return 0.25;
-  }
-  return 4;
+const getSwapWithMaximumForwardAmount = async (
+  contract: SwayswapContractAbi,
+  assetId: string,
+  amount: BigNumber
+) => {
+  const forwardAmount =
+    await contract.callStatic.swap_with_maximum_forward_amount(amount, {
+      forward: [1, assetId],
+    });
+  return forwardAmount;
+};
+
+const getSwapWithMinimumMinValue = async (
+  contract: SwayswapContractAbi,
+  assetId: string,
+  amount: BigNumber
+) => {
+  const forwardAmount = await contract.callStatic.swap_with_minimum_min_value(
+    amount,
+    {
+      forward: [1, assetId],
+    }
+  );
+  return forwardAmount;
 };
 
 export const Swap = () => {
-  const handleSubmit = (e: any) => {
-    console.log(e);
-  };
+  const { getWallet } = useWallet();
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],
@@ -34,14 +58,95 @@ export const Swap = () => {
     assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
   const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
+  const [mode, setMode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: any) => {
+    if (!fromAmount) {
+      throw new Error('"fromAmount" is required');
+    }
+    if (!toAmount) {
+      throw new Error('"toAmount" is required');
+    }
+
+    const wallet = getWallet() as Wallet;
+    const contract = SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
+
+    const deadline = 1000;
+
+    if (mode === "with_maximum") {
+      const forwardAmount = await getSwapWithMaximumForwardAmount(
+        contract,
+        coinFrom.assetId,
+        toAmount
+      );
+      await contract.functions.swap_with_maximum(toAmount, deadline, {
+        forward: [forwardAmount, coinFrom.assetId],
+        variableOutputs: 1,
+      });
+    } else if (mode === "with_minimum") {
+      const minValue = await getSwapWithMinimumMinValue(
+        contract,
+        coinFrom.assetId,
+        fromAmount
+      );
+      await contract.functions.swap_with_minimum(minValue, deadline, {
+        forward: [fromAmount, coinFrom.assetId],
+        variableOutputs: 1,
+      });
+    } else {
+      throw new Error(`Invalid mode "${mode}"`);
+    }
+
+    // TODO: Improve feedback after swap
+    //
+    navigate(Pages.assets);
+  };
 
   const setAmountField = (amount: BigNumber | null, field: "from" | "to") => {
-    if (field === "from") {
+    if (field === "from" && mode !== "with_maximum") {
       setFromAmount(amount);
-      setToAmount(amount?.mul(getRate(coinFrom, coinTo)) ?? null);
-    } else {
+
+      if (amount) {
+        setIsLoading(true);
+        (async () => {
+          const wallet = getWallet() as Wallet;
+          const contract = SwayswapContractAbi__factory.connect(
+            CONTRACT_ID,
+            wallet
+          );
+
+          const minValue = await getSwapWithMinimumMinValue(
+            contract,
+            coinFrom.assetId,
+            amount
+          );
+
+          setToAmount(minValue);
+        })().finally(() => setIsLoading(false));
+      }
+    } else if (field === "to" && mode !== "with_minimum") {
       setToAmount(amount);
-      setFromAmount(amount?.div(getRate(coinFrom, coinTo)) ?? null);
+
+      if (amount) {
+        setIsLoading(true);
+        (async () => {
+          const wallet = getWallet() as Wallet;
+          const contract = SwayswapContractAbi__factory.connect(
+            CONTRACT_ID,
+            wallet
+          );
+
+          const forwardAmount = await getSwapWithMaximumForwardAmount(
+            contract,
+            coinFrom.assetId,
+            amount
+          );
+
+          setFromAmount(forwardAmount);
+        })().finally(() => setIsLoading(false));
+      }
     }
   };
 
@@ -59,6 +164,7 @@ export const Swap = () => {
           <CoinInput
             coin={coinFrom}
             amount={fromAmount}
+            onInput={() => setMode("with_minimum")}
             onChangeAmount={(amount) => setAmountField(amount, "from")}
             coins={getOtherCoins([coinFrom, coinTo])}
             onChangeCoin={(coin: Coin) => setCoins([coin, coinTo])}
@@ -78,6 +184,7 @@ export const Swap = () => {
           <CoinInput
             coin={coinTo}
             amount={toAmount}
+            onInput={() => setMode("with_maximum")}
             onChangeAmount={(amount) => setAmountField(amount, "to")}
             coins={getOtherCoins([coinFrom, coinTo])}
             onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}

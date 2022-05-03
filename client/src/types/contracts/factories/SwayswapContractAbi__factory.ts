@@ -160,6 +160,65 @@ const _abi = [
       },
     ],
   },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'get_info',
+    outputs: [
+      {
+        name: '',
+        type: 'struct PoolInfo',
+        components: [
+          {
+            name: 'eth_reserve',
+            type: 'u64',
+            components: null,
+          },
+          {
+            name: 'token_reserve',
+            type: 'u64',
+            components: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'amount_to_forward',
+        type: 'u64',
+        components: null,
+      },
+    ],
+    name: 'swap_with_minimum_min_value',
+    outputs: [
+      {
+        name: '',
+        type: 'u64',
+        components: null,
+      },
+    ],
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'amount_to_receive',
+        type: 'u64',
+        components: null,
+      },
+    ],
+    name: 'swap_with_maximum_forward_amount',
+    outputs: [
+      {
+        name: '',
+        type: 'u64',
+        components: null,
+      },
+    ],
+  },
 ];
 
 export class SwayswapContractAbi__factory {

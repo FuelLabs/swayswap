@@ -7,8 +7,7 @@ import { CoinInput } from "src/components/CoinInput";
 import { useNavigate } from "react-router-dom";
 import { BigNumber, Wallet } from "fuels";
 import { Pages } from "src/types/pages";
-
-const { REACT_APP_CONTRACT_ID } = process.env;
+import { CONTRACT_ID } from "src/config";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -20,9 +19,7 @@ const style = {
 };
 
 export const RemoveLiquidity = () => {
-  const liquidityToken = coins.find(
-    (c) => c.assetId === process.env.REACT_APP_CONTRACT_ID
-  );
+  const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
   const [amount, setAmount] = useState(null as BigNumber | null);
   const [balance, setBalance] = useState(null as BigNumber | null);
   const [isLoading, setLoading] = useState(false);
@@ -31,9 +28,7 @@ export const RemoveLiquidity = () => {
 
   const retrieveLiquidityToken = useCallback(async () => {
     const coins = await getCoins();
-    const liquidityToken = coins.find(
-      (c) => c.assetId === process.env.REACT_APP_CONTRACT_ID
-    );
+    const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
     return liquidityToken;
   }, [getCoins]);
 
@@ -49,23 +44,14 @@ export const RemoveLiquidity = () => {
     try {
       const wallet = getWallet() as Wallet;
       const swayswap = SwayswapContractAbi__factory.connect(
-        REACT_APP_CONTRACT_ID,
+        CONTRACT_ID,
         wallet
       );
-      const amountValue = amount;
-      const coins = await wallet.getCoinsToSpend([
-        [amountValue, REACT_APP_CONTRACT_ID],
-      ]);
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
       await swayswap.functions.remove_liquidity(1, 1, 1000, {
-        assetId: REACT_APP_CONTRACT_ID,
-        amount: amountValue,
+        forward: [amount, CONTRACT_ID],
         variableOutputs: 2,
-        transformRequest: async (request) => {
-          request.addCoins(coins);
-          return request;
-        },
       });
       navigate(Pages.assets);
     } catch (err: any) {

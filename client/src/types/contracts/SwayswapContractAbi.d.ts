@@ -20,6 +20,11 @@ export type RemoveLiquidityReturnStruct = {
   token_amount: BigNumberish;
 };
 
+export type PoolInfoStruct = {
+  eth_reserve: BigNumberish;
+  token_reserve: BigNumberish;
+};
+
 interface SwayswapContractAbiInterface extends Interface {
   functions: {
     'deposit()': FunctionFragment;
@@ -28,6 +33,9 @@ interface SwayswapContractAbiInterface extends Interface {
     'remove_liquidity(u64,u64,u64)': FunctionFragment;
     'swap_with_minimum(u64,u64)': FunctionFragment;
     'swap_with_maximum(u64,u64)': FunctionFragment;
+    'get_info()': FunctionFragment;
+    'swap_with_minimum_min_value(u64)': FunctionFragment;
+    'swap_with_maximum_forward_amount(u64)': FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: 'deposit', values?: undefined): string;
@@ -51,6 +59,15 @@ interface SwayswapContractAbiInterface extends Interface {
     functionFragment: 'swap_with_maximum',
     values: [BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: 'get_info', values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'swap_with_minimum_min_value',
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: 'swap_with_maximum_forward_amount',
+    values: [BigNumberish]
+  ): string;
 
   decodeFunctionData(functionFragment: 'deposit', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'withdraw', data: BytesLike): DecodedValue;
@@ -58,6 +75,15 @@ interface SwayswapContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'remove_liquidity', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'swap_with_minimum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'swap_with_maximum', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'get_info', data: BytesLike): DecodedValue;
+  decodeFunctionData(
+    functionFragment: 'swap_with_minimum_min_value',
+    data: BytesLike
+  ): DecodedValue;
+  decodeFunctionData(
+    functionFragment: 'swap_with_maximum_forward_amount',
+    data: BytesLike
+  ): DecodedValue;
 }
 
 export class SwayswapContractAbi extends Contract {
@@ -130,6 +156,32 @@ export class SwayswapContractAbi extends Contract {
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfoStruct>;
+
+    'get_info()'(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PoolInfoStruct>;
+
+    swap_with_minimum_min_value(
+      amount_to_forward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    'swap_with_minimum_min_value(u64)'(
+      amount_to_forward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    swap_with_maximum_forward_amount(
+      amount_to_receive: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    'swap_with_maximum_forward_amount(u64)'(
+      amount_to_receive: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
@@ -197,6 +249,32 @@ export class SwayswapContractAbi extends Contract {
   'swap_with_maximum(u64,u64)'(
     amount: BigNumberish,
     deadline: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<BigNumber>;
+
+  get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfoStruct>;
+
+  'get_info()'(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<PoolInfoStruct>;
+
+  swap_with_minimum_min_value(
+    amount_to_forward: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<BigNumber>;
+
+  'swap_with_minimum_min_value(u64)'(
+    amount_to_forward: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<BigNumber>;
+
+  swap_with_maximum_forward_amount(
+    amount_to_receive: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<BigNumber>;
+
+  'swap_with_maximum_forward_amount(u64)'(
+    amount_to_receive: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 }
