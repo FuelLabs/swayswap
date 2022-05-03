@@ -1,13 +1,15 @@
+import { lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { SetupPage } from "src/pages/SetupPage";
-import { SwapPage } from "src/pages/SwapPage";
-import { AssetsPage } from "src/pages/AssetsPage";
-import { Pages } from "src/types/pages";
-import { PoolPage } from "src/pages/PoolPage";
-import { MintTokenPage } from "src/pages/MintTokenPage";
 import { RequireWallet } from "./components/RequireWallet";
 import { MainLayout } from "./layouts/MainLayout";
-import { RemoveLiquidityPage } from "./pages/RemoveLiquidityPage";
+import { Pages } from "./types/pages";
+
+const SetupPage = lazy(() => import("src/pages/SetupPage"));
+const SwapPage = lazy(() => import("src/pages/SwapPage"));
+const AssetsPage = lazy(() => import("src/pages/AssetsPage"));
+const PoolPage = lazy(() => import("src/pages/PoolPage"));
+const MintTokenPage = lazy(() => import("src/pages/MintTokenPage"));
+const RemoveLiquidityPage = lazy(() => import("./pages/RemoveLiquidityPage"));
 
 export default function AppRoutes() {
   return (

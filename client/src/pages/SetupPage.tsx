@@ -8,7 +8,7 @@ const style = {
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169]`,
 };
 
-export const SetupPage = () => {
+export default function SetupPage() {
   const navigate = useNavigate();
   const { createWallet } = useAppContext();
 
@@ -26,4 +26,4 @@ export const SetupPage = () => {
       </div>
     </div>
   );
-};
+}

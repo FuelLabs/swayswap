@@ -44,7 +44,7 @@ const getSwapWithMinimumMinValue = async (
   return minValue;
 };
 
-export const SwapPage = () => {
+export default function SwapPage() {
   const contract = useContract()!;
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
@@ -177,4 +177,4 @@ export const SwapPage = () => {
       </div>
     </div>
   );
-};
+}

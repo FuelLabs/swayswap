@@ -53,7 +53,7 @@ function PoolLoader({
   );
 }
 
-export const PoolPage = () => {
+export default function PoolPage() {
   const contract = useContract()!;
   const navigate = useNavigate();
   const getOtherCoins = (coins: Coin[]) =>
@@ -192,4 +192,4 @@ export const PoolPage = () => {
       </div>
     </div>
   );
-};
+}

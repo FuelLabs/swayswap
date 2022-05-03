@@ -17,7 +17,7 @@ const style = {
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
 };
 
-export function MintTokenPage() {
+export default function MintTokenPage() {
   const wallet = useWallet()!;
   const [asset, setAsset] = useState(TOKEN_ID);
   const [isMinting, setMinting] = useState(true);
