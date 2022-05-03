@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
-import { WalletProvider } from "src/context/WalletContext";
+import { AppContextProvider } from "src/context/AppContext";
 
 import AppRoutes from "./AppRoutes";
 
@@ -10,9 +10,9 @@ export default function App() {
   return (
     <RecoilRoot>
       <BrowserRouter basename={PUBLIC_URL}>
-        <WalletProvider>
+        <AppContextProvider>
           <AppRoutes />
-        </WalletProvider>
+        </AppContextProvider>
       </BrowserRouter>
     </RecoilRoot>
   );

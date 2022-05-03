@@ -1,15 +1,13 @@
 import classNames from "classnames";
-import { BigNumber, Wallet } from "fuels";
+import { BigNumber } from "fuels";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
-import { useWallet } from "src/context/WalletContext";
-import { SwayswapContractAbi__factory } from "src/types/contracts";
+import { useContract } from "src/context/AppContext";
 import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-import { CONTRACT_ID } from "src/config";
 import { PoolInfoStruct } from "src/types/contracts/SwayswapContractAbi";
 import { formatUnits } from "ethers/lib/utils";
 
@@ -56,7 +54,7 @@ function PoolLoader({
 }
 
 export const PoolPage = () => {
-  const { getWallet } = useWallet();
+  const contract = useContract()!;
   const navigate = useNavigate();
   const getOtherCoins = (coins: Coin[]) =>
     assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
@@ -71,14 +69,11 @@ export const PoolPage = () => {
   const [poolInfo, setPoolInfo] = useState(null as PoolInfoStruct | null);
 
   useEffect(() => {
-    const wallet = getWallet() as Wallet;
-    const contract = SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
-
     (async () => {
       const pi = await contract.callStatic.get_info();
       setPoolInfo(pi);
     })();
-  }, [getWallet]);
+  }, [contract]);
 
   const provideLiquidity = async () => {
     if (!fromAmount) {
@@ -87,9 +82,6 @@ export const PoolPage = () => {
     if (!toAmount) {
       throw new Error('"toAmount" is required');
     }
-
-    const wallet = getWallet() as Wallet;
-    const contract = SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
 
     // TODO: Combine all transactions on single tx leverage by scripts
     // https://github.com/FuelLabs/swayswap-demo/issues/42

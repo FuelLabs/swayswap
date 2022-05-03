@@ -1,7 +1,6 @@
-import { useContext } from "react";
 import fuelLogo from "src/assets/fuel-logo-512x512.png";
 import { useLocation, useNavigate } from "react-router-dom";
-import { WalletContext } from "src/context/WalletContext";
+import { useWallet } from "src/context/AppContext";
 import { Pages } from "src/types/pages";
 
 const style = {
@@ -21,8 +20,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const exists = Object.values(Pages).includes(location.pathname as Pages);
-  const { getWallet } = useContext(WalletContext);
-  const wallet = getWallet?.();
+  const wallet = useWallet();
 
   return (
     <div className={style.wrapper}>

@@ -3,15 +3,11 @@ import { RiSettings3Fill } from "react-icons/ri";
 import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
-import { useWallet } from "src/context/WalletContext";
-import {
-  SwayswapContractAbi,
-  SwayswapContractAbi__factory,
-} from "src/types/contracts";
-import { BigNumber, Wallet } from "fuels";
-import { CONTRACT_ID } from "src/config";
-import { Pages } from "src/types/pages";
+import { useContract } from "src/context/AppContext";
+import { SwayswapContractAbi } from "src/types/contracts";
+import { BigNumber } from "fuels";
 import { useNavigate } from "react-router-dom";
+import { Pages } from "src/types/pages";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -39,17 +35,17 @@ const getSwapWithMinimumMinValue = async (
   assetId: string,
   amount: BigNumber
 ) => {
-  const forwardAmount = await contract.callStatic.swap_with_minimum_min_value(
+  const minValue = await contract.callStatic.swap_with_minimum_min_value(
     amount,
     {
       forward: [1, assetId],
     }
   );
-  return forwardAmount;
+  return minValue;
 };
 
 export const SwapPage = () => {
-  const { getWallet } = useWallet();
+  const contract = useContract()!;
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],
@@ -69,9 +65,6 @@ export const SwapPage = () => {
     if (!toAmount) {
       throw new Error('"toAmount" is required');
     }
-
-    const wallet = getWallet() as Wallet;
-    const contract = SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
 
     const deadline = 1000;
 
@@ -111,12 +104,6 @@ export const SwapPage = () => {
       if (amount) {
         setIsLoading(true);
         (async () => {
-          const wallet = getWallet() as Wallet;
-          const contract = SwayswapContractAbi__factory.connect(
-            CONTRACT_ID,
-            wallet
-          );
-
           const minValue = await getSwapWithMinimumMinValue(
             contract,
             coinFrom.assetId,
@@ -132,12 +119,6 @@ export const SwapPage = () => {
       if (amount) {
         setIsLoading(true);
         (async () => {
-          const wallet = getWallet() as Wallet;
-          const contract = SwayswapContractAbi__factory.connect(
-            CONTRACT_ID,
-            wallet
-          );
-
           const forwardAmount = await getSwapWithMaximumForwardAmount(
             contract,
             coinFrom.assetId,

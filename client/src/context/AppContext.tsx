@@ -1,21 +1,19 @@
-import React, { PropsWithChildren, useContext } from "react";
-import {
-  Wallet,
-  ScriptTransactionRequest,
-  TransactionResult,
-  CoinQuantity,
-} from "fuels";
+import React, { PropsWithChildren, useContext, useMemo } from "react";
+import { Wallet, ScriptTransactionRequest, TransactionResult } from "fuels";
 import { CoinETH } from "src/lib/constants";
 import { randomBytes } from "ethers/lib/utils";
-import { FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "src/config";
+import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "src/config";
 import { atom, useRecoilState } from "recoil";
 import { persistEffect } from "src/lib/recoilEffects";
+import {
+  SwayswapContractAbi,
+  SwayswapContractAbi__factory,
+} from "src/types/contracts";
 
-interface WalletProviderContext {
-  sendTransaction: (data: any) => void;
+interface AppContextValue {
+  wallet: Wallet | null;
+  contract: SwayswapContractAbi | null;
   createWallet: () => void;
-  getWallet: () => Wallet | null;
-  getCoins: () => Promise<CoinQuantity[]>;
   faucet: () => Promise<TransactionResult>;
 }
 
@@ -25,23 +23,38 @@ const walletPrivateKeyState = atom<string | null>({
   effects_UNSTABLE: [persistEffect],
 });
 
-// @ts-ignore
-export const WalletContext = React.createContext<WalletProviderContext>();
+export const AppContext = React.createContext<AppContextValue | null>(null);
 
-export const useWallet = () => useContext(WalletContext);
+export const useAppContext = () => useContext(AppContext)!;
 
-export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
+export const useWallet = () => {
+  const { wallet } = useContext(AppContext)!;
+  return wallet;
+};
+
+export const useContract = () => {
+  const { contract } = useContext(AppContext)!;
+  return contract;
+};
+
+export const AppContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [privateKey, setPrivateKey] = useRecoilState(walletPrivateKeyState);
 
-  const getWallet = () => {
+  const wallet = useMemo(() => {
     if (!privateKey) return null;
-
     return new Wallet(privateKey, FUEL_PROVIDER_URL);
-  };
+  }, [privateKey]);
+
+  const contract = useMemo(() => {
+    if (!wallet) return null;
+    return SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
+  }, [wallet]);
 
   return (
-    <WalletContext.Provider
+    <AppContext.Provider
       value={{
+        wallet,
+        contract,
         createWallet: () => {
           const wallet = Wallet.generate({
             provider: FUEL_PROVIDER_URL,
@@ -49,9 +62,7 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
           setPrivateKey(wallet.privateKey);
           return wallet;
         },
-        getWallet,
         faucet: async () => {
-          const wallet = getWallet() as Wallet;
           const transactionRequest = new ScriptTransactionRequest({
             gasPrice: 0,
             gasLimit: "0x0F4240",
@@ -67,27 +78,17 @@ export const WalletProvider = ({ children }: PropsWithChildren<{}>) => {
               "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
           });
           transactionRequest.addCoinOutput(
-            wallet.address,
+            wallet!.address,
             FAUCET_AMOUNT,
             CoinETH
           );
-          const submit = await wallet.sendTransaction(transactionRequest);
+          const submit = await wallet!.sendTransaction(transactionRequest);
 
           return submit.wait();
-        },
-        getCoins: async () => {
-          const wallet = getWallet() as Wallet;
-
-          const coins = await wallet.getBalances();
-
-          return coins;
-        },
-        sendTransaction: (data: any) => {
-          console.log("Transaction sent", data);
         },
       }}
     >
       {children}
-    </WalletContext.Provider>
+    </AppContext.Provider>
   );
 };

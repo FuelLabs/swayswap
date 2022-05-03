@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaFaucet } from "react-icons/fa";
-import { WalletContext } from "src/context/WalletContext";
+import { useWallet, useAppContext } from "src/context/AppContext";
 import { CoinQuantity } from "fuels";
 import { BigNumber } from "ethers";
 import { Coin, CoinInput } from "src/components/CoinInput";
@@ -33,13 +33,13 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
 
 export const AssetsPage = () => {
   const [coins, setCoins] = useState<CoinQuantity[]>([]);
-  const { faucet, getCoins, getWallet } = useContext(WalletContext);
-  const wallet = getWallet();
+  const { faucet } = useAppContext();
+  const wallet = useWallet();
   const [isLoading, setLoading] = useState(false);
 
   // Load balances
   const loadCoins = async () => {
-    return getCoins().then((coins) => {
+    return wallet!.getBalances().then((coins) => {
       setCoins(coins);
     });
   };
