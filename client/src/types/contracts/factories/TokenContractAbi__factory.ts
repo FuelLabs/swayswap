@@ -8,6 +8,29 @@ import type { TokenContractAbi, TokenContractAbiInterface } from '../TokenContra
 const _abi = [
   {
     type: 'function',
+    inputs: [],
+    name: 'info',
+    outputs: [
+      {
+        name: '',
+        type: 'struct TokenInfo',
+        components: [
+          {
+            name: 'name',
+            type: 'b256',
+            components: null,
+          },
+          {
+            name: 'symbol',
+            type: 'b256',
+            components: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
     inputs: [
       {
         name: 'mint_amount',

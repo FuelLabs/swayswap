@@ -2,7 +2,13 @@ library token_abi;
 
 use std::{address::Address, contract_id::ContractId, token::*};
 
+pub struct TokenInfo {
+    name: b256,
+    symbol: b256,
+}
+
 abi Token {
+    fn info() -> TokenInfo;
     fn mint_coins(mint_amount: u64);
     fn burn_coins(burn_amount: u64);
     fn force_transfer_coins(coins: u64, asset_id: ContractId, target: ContractId);

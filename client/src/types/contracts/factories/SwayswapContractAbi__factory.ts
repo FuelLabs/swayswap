@@ -10,48 +10,17 @@ const _abi = [
     type: 'function',
     inputs: [
       {
-        name: 'token',
-        type: 'struct ContractId',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-          },
-        ],
+        name: 'token_id',
+        type: 'b256',
+        components: null,
       },
-    ],
-    name: 'set_token',
-    outputs: [
       {
-        name: '',
-        type: '()',
+        name: 'exchange_id',
+        type: 'b256',
         components: null,
       },
     ],
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'get_token',
-    outputs: [
-      {
-        name: '',
-        type: 'struct ContractId',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'deposit',
+    name: 'add_exchange_contract',
     outputs: [
       {
         name: '',
@@ -64,199 +33,16 @@ const _abi = [
     type: 'function',
     inputs: [
       {
-        name: 'amount',
-        type: 'u64',
+        name: 'token_id',
+        type: 'b256',
         components: null,
       },
-      {
-        name: 'asset_id',
-        type: 'struct ContractId',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-          },
-        ],
-      },
     ],
-    name: 'withdraw',
+    name: 'get_exchange_contract',
     outputs: [
       {
         name: '',
-        type: '()',
-        components: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: 'min_liquidity',
-        type: 'u64',
-        components: null,
-      },
-      {
-        name: 'max_tokens',
-        type: 'u64',
-        components: null,
-      },
-      {
-        name: 'deadline',
-        type: 'u64',
-        components: null,
-      },
-    ],
-    name: 'add_liquidity',
-    outputs: [
-      {
-        name: '',
-        type: 'u64',
-        components: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: 'min_eth',
-        type: 'u64',
-        components: null,
-      },
-      {
-        name: 'min_tokens',
-        type: 'u64',
-        components: null,
-      },
-      {
-        name: 'deadline',
-        type: 'u64',
-        components: null,
-      },
-    ],
-    name: 'remove_liquidity',
-    outputs: [
-      {
-        name: '',
-        type: 'struct RemoveLiquidityReturn',
-        components: [
-          {
-            name: 'eth_amount',
-            type: 'u64',
-            components: null,
-          },
-          {
-            name: 'token_amount',
-            type: 'u64',
-            components: null,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: 'min',
-        type: 'u64',
-        components: null,
-      },
-      {
-        name: 'deadline',
-        type: 'u64',
-        components: null,
-      },
-    ],
-    name: 'swap_with_minimum',
-    outputs: [
-      {
-        name: '',
-        type: 'u64',
-        components: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: 'amount',
-        type: 'u64',
-        components: null,
-      },
-      {
-        name: 'deadline',
-        type: 'u64',
-        components: null,
-      },
-    ],
-    name: 'swap_with_maximum',
-    outputs: [
-      {
-        name: '',
-        type: 'u64',
-        components: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'get_info',
-    outputs: [
-      {
-        name: '',
-        type: 'struct PoolInfo',
-        components: [
-          {
-            name: 'eth_reserve',
-            type: 'u64',
-            components: null,
-          },
-          {
-            name: 'token_reserve',
-            type: 'u64',
-            components: null,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: 'amount_to_forward',
-        type: 'u64',
-        components: null,
-      },
-    ],
-    name: 'swap_with_minimum_min_value',
-    outputs: [
-      {
-        name: '',
-        type: 'u64',
-        components: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: 'amount_to_receive',
-        type: 'u64',
-        components: null,
-      },
-    ],
-    name: 'swap_with_maximum_forward_amount',
-    outputs: [
-      {
-        name: '',
-        type: 'u64',
+        type: 'b256',
         components: null,
       },
     ],

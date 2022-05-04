@@ -13,10 +13,6 @@ pub struct PoolInfo {
 }
 
 abi Exchange {
-    /// Set token id of the contract, this can be call only once
-    fn set_token(token: ContractId);
-    // Return token set on the contract
-    fn get_token() -> ContractId;
     /// Deposit coins for later adding to liquidity pool.
     fn deposit();
     /// Withdraw coins that have not been added to a liquidity pool yet.

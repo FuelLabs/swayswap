@@ -1,9 +1,30 @@
 contract;
 
 use std::{address::Address, context::balance_of, contract_id::ContractId, token::*};
-use token_abi::Token;
+use token_abi::{Token, TokenInfo};
+
+/// Symbol
+const TOKEN_SYMBOL = 0x0000000000000000000000000000000000000000000000000000000000000000;
+/// Name
+const TOKEN_NAME = 0x0000000000000000000000000000000000000000000000000000000000000001;
+
+fn get_storage(key: b256) -> b256 {
+    asm(r1: key, r2) {
+        move r2 sp;
+        cfei i32;
+        srwq r2 r1;
+        r2: b256
+    }
+}
 
 impl Token for Contract {
+    fn info() -> TokenInfo {
+        TokenInfo {
+            name: get_storage(TOKEN_NAME),
+            symbol: get_storage(TOKEN_SYMBOL),
+        }
+    }
+
     fn mint_coins(mint_amount: u64) {
         mint(mint_amount);
     }

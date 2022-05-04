@@ -13,12 +13,15 @@ import type {
   BigNumber,
 } from 'fuels';
 
+export type TokenInfoStruct = { name: string; symbol: string };
+
 export type ContractIdStruct = { value: string };
 
 export type AddressStruct = { value: string };
 
 interface TokenContractAbiInterface extends Interface {
   functions: {
+    'info()': FunctionFragment;
     'mint_coins(u64)': FunctionFragment;
     'burn_coins(u64)': FunctionFragment;
     'force_transfer_coins(u64,struct ContractId,struct ContractId)': FunctionFragment;
@@ -26,6 +29,7 @@ interface TokenContractAbiInterface extends Interface {
     'get_balance(struct ContractId,struct ContractId)': FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: 'info', values?: undefined): string;
   encodeFunctionData(functionFragment: 'mint_coins', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'burn_coins', values: [BigNumberish]): string;
   encodeFunctionData(
@@ -41,6 +45,7 @@ interface TokenContractAbiInterface extends Interface {
     values: [ContractIdStruct, ContractIdStruct]
   ): string;
 
+  decodeFunctionData(functionFragment: 'info', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'mint_coins', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'burn_coins', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'force_transfer_coins', data: BytesLike): DecodedValue;
@@ -51,6 +56,10 @@ interface TokenContractAbiInterface extends Interface {
 export class TokenContractAbi extends Contract {
   interface: TokenContractAbiInterface;
   functions: {
+    info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<TokenInfoStruct>;
+
+    'info()'(overrides?: Overrides & { from?: string | Promise<string> }): Promise<TokenInfoStruct>;
+
     mint_coins(
       mint_amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -111,6 +120,10 @@ export class TokenContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
+
+  info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<TokenInfoStruct>;
+
+  'info()'(overrides?: Overrides & { from?: string | Promise<string> }): Promise<TokenInfoStruct>;
 
   mint_coins(
     mint_amount: BigNumberish,
