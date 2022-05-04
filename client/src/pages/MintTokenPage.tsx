@@ -20,7 +20,7 @@ const style = {
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
 };
 
-export function MintTokenPage() {
+export default function MintTokenPage() {
   const amount = parseUnits("1", 9);
   const _tokens = tokens.filter((t: Coin) => t.assetId !== CoinETH);
   const wallet = useWallet() as Wallet;
