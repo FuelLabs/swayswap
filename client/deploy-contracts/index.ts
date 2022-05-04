@@ -1,58 +1,83 @@
-import fs from 'fs';
-import { hexZeroPad } from 'fuels';
-import { NativeAssetId } from 'fuels';
-import { hexlify } from 'fuels';
-import { BigNumber } from 'fuels';
+/**
+ * Deploy contract to SwaySwap node.
+ */
+
+// TODO: Remove this file after `forc` enabled deploy a contract to a custom url
+// https://github.com/FuelLabs/sway/issues/1308
+import { parseUnits, randomBytes } from 'ethers/lib/utils';
+import {
+  ContractFactory,
+  NativeAssetId,
+  ScriptTransactionRequest,
+  Wallet,
+  ZeroBytes32,
+} from 'fuels';
 import path from 'path';
-import { deploySwapContract, deployToken } from './deployContract';
-import { data } from './tokens.json';
+import fs from 'fs';
+// @ts-ignore
+import { SwayswapContractAbi__factory, TokenContractAbi__factory } from '../src/types/contracts';
 
-interface Coin {
-    assetId: string;
-    name: string;
-    img: string;
-}
+const tokenPath = path.join(
+  __dirname,
+  '../../contracts/token_contract/out/debug/token_contract.bin'
+);
+const contractPath = path.join(
+  __dirname,
+  '../../contracts/swayswap_contract/out/debug/swayswap_contract.bin'
+);
+const providerUrl = process.env.REACT_APP_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
 
-interface SwapContract {
-    swapId: string;
-    tokenSource: string;
-    tokenTo: string;
+export const seedWallet = async (wallet: Wallet) => {
+  const transactionRequest = new ScriptTransactionRequest({
+    gasPrice: 0,
+    gasLimit: '0x0F4240',
+    script: '0x24400000',
+    scriptData: randomBytes(32),
+  });
+  // @ts-ignore
+  transactionRequest.addCoin({
+    id: '0x000000000000000000000000000000000000000000000000000000000000000000',
+    assetId: NativeAssetId,
+    amount: parseUnits('.5', 9),
+    owner: '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e',
+  });
+  transactionRequest.addCoinOutput(wallet.address, parseUnits('.5', 9), NativeAssetId);
+  const submit = await wallet.sendTransaction(transactionRequest);
+
+  return submit.wait();
+};
+
+export async function deployContract(contextLog: string, binaryPath: string, abi: any) {
+  console.log(contextLog, 'Create wallet...');
+  console.log(contextLog, 'connected to', providerUrl);
+  const wallet = Wallet.generate({ provider: providerUrl });
+
+  console.log(contextLog, 'Funding wallet with some coins');
+  await seedWallet(wallet);
+
+  // Deploy
+  console.log(contextLog, 'Load contract binary...');
+  const bytecode = fs.readFileSync(binaryPath);
+  console.log(contextLog, 'Deploy contract...');
+  const factory = new ContractFactory(bytecode, abi, wallet);
+  const contract = await factory.deployContract([], ZeroBytes32);
+
+  console.log(contextLog, 'Contract deployed...');
+  return contract;
 }
 
 (async function () {
-    let index = BigNumber.from('0x0000000000000000000000000000000000000000000000000000000000000000');
-    const metadata: {
-        tokens: Array<Coin>,
-        swapContracts: Array<SwapContract>
-    } = { 
-        swapContracts: [],
-        tokens: [{
-            name: 'ETH',
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            img: '/icons/ETH.svg',
-        }]
-    };
-    
-    for (let i = 0; i < data.length; i++) {
-        index = index.add(1);
-        const coin = data[i];
-        const salt = hexZeroPad(hexlify(index), 32);
-        const token_id = await deployToken(coin.ticker, salt);
+  try {
+    const contract = await deployContract(
+      'SwaySwap',
+      contractPath,
+      SwayswapContractAbi__factory.abi
+    );
+    const token = await deployContract('Token', tokenPath, TokenContractAbi__factory.abi);
 
-        metadata.tokens.push({
-            name: coin.ticker,
-            img: `/icons/${coin.ticker}.svg`,
-            assetId: token_id
-        });
-
-        const swap_id = await deploySwapContract(token_id, salt);
-
-        metadata.swapContracts.push({
-            tokenSource: NativeAssetId,
-            tokenTo: token_id,
-            swapId: swap_id
-        });
-    }
-
-    fs.writeFileSync(path.join(__dirname, '../src/metadata.json'), JSON.stringify(metadata, null, 2));
+    console.log('SwaySwap Contract Id', contract.id);
+    console.log('Token Contract Id', token.id);
+  } catch (err) {
+    console.error(err);
+  }
 })();
