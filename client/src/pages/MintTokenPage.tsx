@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { objectId } from "src/lib/utils";
 import { MINT_AMOUNT } from "src/config";
-import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { formatUnits } from "ethers/lib/utils";
 import { Coin, CoinInput } from "src/components/CoinInput";
-import { filterCoin, tokens } from "src/lib/SwaySwapMetadata";
+import { filterCoin } from "src/lib/SwaySwapMetadata";
+import coins from "src/lib/CoinsMetadata";
 import { CoinETH } from "src/lib/constants";
 import { Wallet } from "fuels";
 
@@ -21,15 +22,18 @@ const style = {
 };
 
 export default function MintTokenPage() {
-  const amount = parseUnits("1", 9);
-  const _tokens = tokens.filter((t: Coin) => t.assetId !== CoinETH);
+  const amount = MINT_AMOUNT;
+  const tokens = coins.filter((t: Coin) => t.assetId !== CoinETH);
   const wallet = useWallet() as Wallet;
-  const [token, setToken] = useState<Coin>(_tokens[0]);
+  const [token, setToken] = useState<Coin>(tokens[0]);
   const [isMinting, setMinting] = useState(true);
   const navigate = useNavigate();
 
   const handleMinCoins = async () => {
-    const tokenContract = TokenContractAbi__factory.connect(token.assetId, wallet);
+    const tokenContract = TokenContractAbi__factory.connect(
+      token.assetId,
+      wallet
+    );
 
     try {
       setMinting(true);
@@ -63,14 +67,12 @@ export default function MintTokenPage() {
           </div>
         </div>
         <div className="mt-8">
-          <label className="mx-2 mb-2 flex text-[#B2B9D2]">
-            Amount
-          </label>
+          <label className="mx-2 mb-2 flex text-[#B2B9D2]">Amount</label>
           <CoinInput
             coin={token}
             amount={amount}
             disabled={true}
-            coins={filterCoin(_tokens, token)}
+            coins={filterCoin(tokens, token)}
             onChangeCoin={setToken}
           />
         </div>
@@ -79,8 +81,8 @@ export default function MintTokenPage() {
           className={style.confirmButton}
         >
           {isMinting
-            ? `Mint ${formatUnits(MINT_AMOUNT, 9)} tokens`
-            : `Minting ${formatUnits(MINT_AMOUNT, 9)} tokens...`}
+            ? `Mint ${formatUnits(amount, 9)} tokens`
+            : `Minting ${formatUnits(amount, 9)} tokens...`}
         </div>
       </div>
     </div>

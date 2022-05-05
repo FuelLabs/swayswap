@@ -3,12 +3,15 @@ import { BigNumber } from "fuels";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useContract } from "src/context/AppContext";
-import { tokens, filterCoin, getSwappableCoins, getSwapContract } from "src/lib/SwaySwapMetadata";
+import {
+  tokens,
+  // filterCoin
+} from "src/lib/SwaySwapMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-import { PoolInfoStruct } from "src/types/contracts/SwayswapContractAbi";
+import { PoolInfoStruct } from "src/types/contracts/ExchangeContractAbi";
 import { formatUnits } from "ethers/lib/utils";
 
 const style = {
@@ -109,7 +112,7 @@ export default function PoolPage() {
     //
     navigate(Pages.assets);
   };
-  const swapContract = getSwapContract(coinFrom, coinTo);
+  // const swapContract = getSwapContract(coinFrom, coinTo);
 
   return (
     <div className={style.wrapper}>
@@ -139,7 +142,7 @@ export default function PoolPage() {
                 coin={coinFrom}
                 amount={fromAmount}
                 onChangeAmount={(amount) => setFromAmount(amount)}
-                coins={filterCoin(getSwappableCoins(coinTo), coinFrom)}
+                // coins={filterCoin(getSwappableCoins(coinTo), coinFrom)}
                 onChangeCoin={(coin: Coin) => setCoins([coin, coinTo])}
               />
             </div>
@@ -148,7 +151,7 @@ export default function PoolPage() {
                 coin={coinTo}
                 amount={toAmount}
                 onChangeAmount={(amount) => setToAmount(amount)}
-                coins={filterCoin(getSwappableCoins(coinFrom), coinTo)}
+                // coins={filterCoin(getSwappableCoins(coinFrom), coinTo)}
                 onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}
               />
             </div>
@@ -186,7 +189,10 @@ export default function PoolPage() {
             <button
               onClick={(e) => provideLiquidity()}
               className={style.confirmButton}
-              disabled={!swapContract || !toAmount?.toNumber() || !fromAmount?.toNumber()}
+              disabled={
+                // !swapContract ||
+                !toAmount?.toNumber() || !fromAmount?.toNumber()
+              }
             >
               Confirm
             </button>

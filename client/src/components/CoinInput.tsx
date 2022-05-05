@@ -9,7 +9,7 @@ import NumberFormat from "react-number-format";
 import urlJoin from "url-join";
 
 const { PUBLIC_URL } = process.env;
-const COIN_IMG_OTHER = urlJoin(PUBLIC_URL, 'icons/other.svg');
+const COIN_IMG_OTHER = urlJoin(PUBLIC_URL, "icons/other.svg");
 
 const style = {
   transferPropContainer: `bg-[#20242A] rounded-2xl p-4 text-3xl border border-[#20242A] 
@@ -33,7 +33,7 @@ export interface Coin {
   img?: string;
 }
 
-function CoinImage (props: { src: string, alt?: string }) {
+function CoinImage(props: { src: string; alt?: string }) {
   // Set the pre-load image that should be always available
   const [source, setSource] = useState<string>(COIN_IMG_OTHER);
 
@@ -55,17 +55,17 @@ function CoinImage (props: { src: string, alt?: string }) {
         }}
       />
       <img
-        className="rounded-full border-none overflow-hidden"
+        className="overflow-hidden rounded-full border-none"
         src={source}
         alt={props.alt}
         height={24}
         width={24}
       />
     </>
-  )
+  );
 }
 
-function CoinItem (props: { coin: Coin }) {
+function CoinItem(props: { coin: Coin }) {
   return (
     <>
       {props.coin && props.coin.img && (
@@ -74,11 +74,9 @@ function CoinItem (props: { coin: Coin }) {
           alt={props.coin.name}
         />
       )}
-      <div className={style.currencySelectorTicker}>
-        {props.coin?.name}
-      </div>
+      <div className={style.currencySelectorTicker}>{props.coin?.name}</div>
     </>
-  )
+  );
 }
 
 export function CoinSelector({
@@ -122,11 +120,7 @@ export function CoinSelector({
                 "hover:bg-opacity-30": hasCoins,
               })}
             >
-              {selected && (
-                <CoinItem
-                  coin={selected}
-                />
-              )}
+              {selected && <CoinItem coin={selected} />}
             </div>
           </Menu.Button>
         </div>
@@ -152,10 +146,7 @@ export function CoinSelector({
                         })}
                         onClick={() => handleSelect(coin)}
                       >
-                        <CoinItem
-                          key={coin.assetId}
-                          coin={coin}
-                        />
+                        <CoinItem key={coin.assetId} coin={coin} />
                       </div>
                     )}
                   </Menu.Item>

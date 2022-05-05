@@ -4,7 +4,7 @@ import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
 import { useContract } from "src/context/AppContext";
-import { SwayswapContractAbi } from "src/types/contracts";
+import { ExchangeContractAbi } from "src/types/contracts";
 import { BigNumber } from "fuels";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
@@ -19,7 +19,7 @@ const style = {
 };
 
 const getSwapWithMaximumForwardAmount = async (
-  contract: SwayswapContractAbi,
+  contract: ExchangeContractAbi,
   assetId: string,
   amount: BigNumber
 ) => {
@@ -31,7 +31,7 @@ const getSwapWithMaximumForwardAmount = async (
 };
 
 const getSwapWithMinimumMinValue = async (
-  contract: SwayswapContractAbi,
+  contract: ExchangeContractAbi,
   assetId: string,
   amount: BigNumber
 ) => {

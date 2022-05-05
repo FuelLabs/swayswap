@@ -6,13 +6,13 @@ import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "src/config";
 import { atom, useRecoilState } from "recoil";
 import { persistEffect } from "src/lib/recoilEffects";
 import {
-  SwayswapContractAbi,
-  SwayswapContractAbi__factory,
+  ExchangeContractAbi__factory,
+  ExchangeContractAbi,
 } from "src/types/contracts";
 
 interface AppContextValue {
   wallet: Wallet | null;
-  contract: SwayswapContractAbi | null;
+  contract: ExchangeContractAbi | null;
   createWallet: () => void;
   faucet: () => Promise<TransactionResult>;
 }
@@ -47,7 +47,7 @@ export const AppContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const contract = useMemo(() => {
     if (!wallet) return null;
-    return SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
+    return ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
   }, [wallet]);
 
   return (

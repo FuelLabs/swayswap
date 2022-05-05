@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
-import { tokens, filterCoin, getSwappableCoins } from "src/lib/SwaySwapMetadata";
+import {
+  tokens,
+  // filterCoin,
+  // getSwappableCoins,
+} from "src/lib/SwaySwapMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
 import { BigNumber } from "fuels";
@@ -60,7 +64,8 @@ export const Swap = () => {
             coin={coinFrom}
             amount={fromAmount}
             onChangeAmount={(amount) => setAmountField(amount, "from")}
-            coins={filterCoin(getSwappableCoins(coinTo), coinFrom)}
+            coins={[]}
+            // coins={filterCoin(getSwappableCoins(coinTo), coinFrom)}
             onChangeCoin={(coin: Coin) => setCoins([coin, coinTo])}
           />
         </div>
@@ -79,13 +84,15 @@ export const Swap = () => {
             coin={coinTo}
             amount={toAmount}
             onChangeAmount={(amount) => setAmountField(amount, "to")}
-            coins={filterCoin(getSwappableCoins(coinFrom), coinTo)}
+            coins={[]}
+            // coins={filterCoin(getSwappableCoins(coinFrom), coinTo)}
             onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}
           />
         </div>
         <button
           className={style.confirmButton}
-          onClick={(e) => handleSubmit(e)}>
+          onClick={(e) => handleSubmit(e)}
+        >
           Confirm
         </button>
       </div>
