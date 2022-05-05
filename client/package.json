@@ -14,7 +14,7 @@
     "@types/react-dom": "^18.0.3",
     "classnames": "^2.3.1",
     "ethers": "^5.5.4",
-    "fuels": "^0.0.0-master-0177b66",
+    "fuels": "^0.0.0-master-b2d3e5c",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-icons": "^4.3.1",
@@ -30,6 +30,7 @@
   "scripts": {
     "deploy-contracts": "sh ./scripts/deploy-contracts.sh",
     "build-contracts": "sh ./scripts/build-contracts.sh",
+    "deploy-tokens": "sh ./scripts/deploy-tokens.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",

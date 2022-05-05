@@ -1,0 +1,32 @@
+[
+    {
+        "name": "ETH",
+        "assetId": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "img": "/icons/eth.svg"
+    },
+    {
+        "name": "DAI",
+        "assetId": "0x65cead247d4e61fd2b39000ed460a0eb309349cec6412f4e11f1fb4c88b3d85a",
+        "img": "/icons/dai.svg"
+    },
+    {
+        "name": "AAA",
+        "assetId": "0x2e955dafcfdc5957bfe3f8904e0afaca383f860521f197e3266b4e8017e3f2b0",
+        "img": "/icons/sway.svg"
+    },
+    {
+        "name": "BBB",
+        "assetId": "0x95412b354157c27b2d81dbbd25b74b2d335bb3b2a4680f19be0495eb649408b7",
+        "img": "/icons/sway.svg"
+    },
+    {
+        "name": "CCC",
+        "assetId": "0xcdff13885ec6e088e358afbc9119440a69d0ed4873af4d2ec55dfe3178588b2a",
+        "img": "/icons/sway.svg"
+    },
+    {
+        "name": "DDD",
+        "assetId": "0x6ff852c46a679f584ed0a7be75eb6f663a1a692bc7cd50b6b9eafa82f48b9688",
+        "img": "/icons/sway.svg"
+    }
+]

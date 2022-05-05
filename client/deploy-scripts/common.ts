@@ -1,30 +1,19 @@
-/**
- * Deploy contract to SwaySwap node.
- */
-
-// TODO: Remove this file after `forc` enabled deploy a contract to a custom url
-// https://github.com/FuelLabs/sway/issues/1308
 import { parseUnits, randomBytes } from 'ethers/lib/utils';
 import {
+  Contract,
   ContractFactory,
   NativeAssetId,
   ScriptTransactionRequest,
   Wallet,
   ZeroBytes32,
+  BytesLike,
+  hexlify,
+  Provider
 } from 'fuels';
-import path from 'path';
 import fs from 'fs';
-// @ts-ignore
-import { SwayswapContractAbi__factory, TokenContractAbi__factory } from '../src/types/contracts';
+import path from 'path';
+import { TextEncoder } from 'util';
 
-const tokenPath = path.join(
-  __dirname,
-  '../../contracts/token_contract/out/debug/token_contract.bin'
-);
-const contractPath = path.join(
-  __dirname,
-  '../../contracts/swayswap_contract/out/debug/swayswap_contract.bin'
-);
 const providerUrl = process.env.REACT_APP_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
 
 export const seedWallet = async (wallet: Wallet) => {
@@ -47,37 +36,47 @@ export const seedWallet = async (wallet: Wallet) => {
   return submit.wait();
 };
 
-export async function deployContract(contextLog: string, binaryPath: string, abi: any) {
-  console.log(contextLog, 'Create wallet...');
-  console.log(contextLog, 'connected to', providerUrl);
+export async function createWallet() {
+  console.log('Create wallet...');
+  console.log('connected to', providerUrl);
   const wallet = Wallet.generate({ provider: providerUrl });
-
-  console.log(contextLog, 'Funding wallet with some coins');
+  console.log('Funding wallet with some coins');
   await seedWallet(wallet);
 
+  return wallet;
+}
+
+export async function deployContract(contextLog: string, wallet: Wallet, binaryPath: string, abi: any, storageSlots: [BytesLike, BytesLike][] = []) {
   // Deploy
   console.log(contextLog, 'Load contract binary...');
   const bytecode = fs.readFileSync(binaryPath);
   console.log(contextLog, 'Deploy contract...');
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract([], ZeroBytes32);
+  const contract = await factory.deployContract(storageSlots, ZeroBytes32);
 
   console.log(contextLog, 'Contract deployed...');
   return contract;
 }
 
-(async function () {
-  try {
-    const contract = await deployContract(
-      'SwaySwap',
-      contractPath,
-      SwayswapContractAbi__factory.abi
-    );
-    const token = await deployContract('Token', tokenPath, TokenContractAbi__factory.abi);
+export async function contractExists(contractId: string): Promise<boolean> {
+  const provider = new Provider(providerUrl);
+  const contract = await provider.getContract(contractId);
+  
+  return !!contract;
+}
 
-    console.log('SwaySwap Contract Id', contract.id);
-    console.log('Token Contract Id', token.id);
-  } catch (err) {
-    console.error(err);
-  }
-})();
+export function getBinPath(contractName: string) {
+  return path.join(
+    __dirname,
+    `../../contracts/${contractName}/out/debug/${contractName}.bin`
+  );
+}
+
+export function encodeTextToB256(text: string) {
+  const bytes = new Uint8Array(32);
+  const textEncoder = new TextEncoder();
+
+  bytes.set(textEncoder.encode(text));
+
+  return hexlify(bytes);
+}

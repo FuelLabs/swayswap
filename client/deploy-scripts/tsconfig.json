@@ -10,5 +10,5 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["./index.ts"]
+  "include": ["./*.ts"]
 }
