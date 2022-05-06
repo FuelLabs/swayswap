@@ -1,15 +1,35 @@
 {
   "files": {
     "main.css": "/swayswap/static/css/main.c0cd698f.css",
-    "main.js": "/swayswap/static/js/main.eb01fd32.js",
+    "main.js": "/swayswap/static/js/main.97630b89.js",
+    "static/js/345.8f159355.chunk.js": "/swayswap/static/js/345.8f159355.chunk.js",
+    "static/js/889.244435dd.chunk.js": "/swayswap/static/js/889.244435dd.chunk.js",
+    "static/js/691.f89fc5ca.chunk.js": "/swayswap/static/js/691.f89fc5ca.chunk.js",
+    "static/js/286.3941f8e0.chunk.js": "/swayswap/static/js/286.3941f8e0.chunk.js",
+    "static/js/682.922e438c.chunk.js": "/swayswap/static/js/682.922e438c.chunk.js",
+    "static/js/887.5409bf3d.chunk.js": "/swayswap/static/js/887.5409bf3d.chunk.js",
     "static/js/787.c2c7b857.chunk.js": "/swayswap/static/js/787.c2c7b857.chunk.js",
+    "static/js/115.b8571535.chunk.js": "/swayswap/static/js/115.b8571535.chunk.js",
+    "static/js/425.94908ccb.chunk.js": "/swayswap/static/js/425.94908ccb.chunk.js",
+    "static/js/355.dbfa8a7e.chunk.js": "/swayswap/static/js/355.dbfa8a7e.chunk.js",
+    "static/js/820.20e3b120.chunk.js": "/swayswap/static/js/820.20e3b120.chunk.js",
     "index.html": "/swayswap/index.html",
     "main.c0cd698f.css.map": "/swayswap/static/css/main.c0cd698f.css.map",
-    "main.eb01fd32.js.map": "/swayswap/static/js/main.eb01fd32.js.map",
-    "787.c2c7b857.chunk.js.map": "/swayswap/static/js/787.c2c7b857.chunk.js.map"
+    "main.97630b89.js.map": "/swayswap/static/js/main.97630b89.js.map",
+    "345.8f159355.chunk.js.map": "/swayswap/static/js/345.8f159355.chunk.js.map",
+    "889.244435dd.chunk.js.map": "/swayswap/static/js/889.244435dd.chunk.js.map",
+    "691.f89fc5ca.chunk.js.map": "/swayswap/static/js/691.f89fc5ca.chunk.js.map",
+    "286.3941f8e0.chunk.js.map": "/swayswap/static/js/286.3941f8e0.chunk.js.map",
+    "682.922e438c.chunk.js.map": "/swayswap/static/js/682.922e438c.chunk.js.map",
+    "887.5409bf3d.chunk.js.map": "/swayswap/static/js/887.5409bf3d.chunk.js.map",
+    "787.c2c7b857.chunk.js.map": "/swayswap/static/js/787.c2c7b857.chunk.js.map",
+    "115.b8571535.chunk.js.map": "/swayswap/static/js/115.b8571535.chunk.js.map",
+    "425.94908ccb.chunk.js.map": "/swayswap/static/js/425.94908ccb.chunk.js.map",
+    "355.dbfa8a7e.chunk.js.map": "/swayswap/static/js/355.dbfa8a7e.chunk.js.map",
+    "820.20e3b120.chunk.js.map": "/swayswap/static/js/820.20e3b120.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c0cd698f.css",
-    "static/js/main.eb01fd32.js"
+    "static/js/main.97630b89.js"
   ]
 }
