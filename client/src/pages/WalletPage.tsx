@@ -7,6 +7,8 @@ import CoinsMetadata from "src/lib/CoinsMetadata";
 import { Spinner } from "src/components/Spinner";
 import { useQuery, useMutation } from "react-query";
 import { sleep } from "src/lib/utils";
+import { Link } from "react-router-dom";
+import { Pages } from "src/types/pages";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -31,6 +33,8 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
     };
   });
 };
+
+const useOldFaucet = false;
 
 export default function WalletPage() {
   const { faucet } = useAppContext();
@@ -57,17 +61,25 @@ export default function WalletPage() {
         <div className={style.formHeader}>
           <div>Assets</div>
           <div className="flex w-10 justify-center rounded-xl p-1">
-            {faucetMutation.isLoading ? (
-              <div className="flex justify-center rounded-xl p-1">
-                <Spinner />
-              </div>
-            ) : (
-              <div
-                className={style.faucetButton}
-                onClick={() => faucetMutation.mutate()}
-              >
+            {!useOldFaucet ? (
+              <Link to={Pages.faucet} className={style.faucetButton}>
                 <FaFaucet />
-              </div>
+              </Link>
+            ) : (
+              <>
+                {faucetMutation.isLoading ? (
+                  <div className="flex justify-center rounded-xl p-1">
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div
+                    className={style.faucetButton}
+                    onClick={() => faucetMutation.mutate()}
+                  >
+                    <FaFaucet />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

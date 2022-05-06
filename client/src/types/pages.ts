@@ -5,4 +5,5 @@ export enum Pages {
   'wallet' = '/wallet',
   'mintToken' = '/mint',
   'removeLiquidity' = '/remove-liquidity',
+  'faucet' = '/faucet',
 }
