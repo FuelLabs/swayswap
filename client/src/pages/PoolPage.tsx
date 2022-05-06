@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { BigNumber, ContractFactory, Wallet, ZeroBytes32 } from "fuels";
+import { arrayify, BigNumber, ContractFactory, Wallet, ZeroBytes32 } from "fuels";
 import { useEffect, useState, useCallback } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useExchangeContract, useSwaySwapContract, useWallet } from "src/context/AppContext";
@@ -87,11 +87,11 @@ export default function PoolPage() {
   });
   const [exchangeId, setExchangeId] = useState('');
   const exchangeContract = useExchangeContract(exchangeId)!;
+  const tokenName = coinTo.name ?? '';
 
   const setExchangeContractId = useCallback(async () => {
     setExchangeId('');
     const result = await swaySwapContract.callStatic.get_exchange_contract(coinTo.assetId);
-    console.log('result', result);
     // If exchange contract id is different
     // of 0 them set exchange contract id
     if (result !== ZeroBytes32) {
@@ -115,7 +115,7 @@ export default function PoolPage() {
         });
       }
     })();
-  }, []);
+  }, [exchangeId]);
 
   const addLiquidity = async (tokenId: string) => {
     const contractId = await swaySwapContract.callStatic.get_exchange_contract(tokenId);
@@ -215,18 +215,18 @@ export default function PoolPage() {
                 <br />
                 ETH: {formatUnits(poolInfo.eth_reserve, 9).toString()}
                 <br />
-                DAI: {formatUnits(poolInfo.token_reserve, 9).toString()}
+                {tokenName}: {formatUnits(poolInfo.token_reserve, 9).toString()}
                 {BigNumber.from(poolInfo.eth_reserve).gt(0) &&
                 BigNumber.from(poolInfo.token_reserve).gt(0) ? (
                   <>
                     <br />
-                    ETH/DAI:{" "}
+                    ETH/{tokenName}:{" "}
                     {BigNumber.from(1000)
                       .mul(poolInfo.eth_reserve)
                       .div(poolInfo.token_reserve)
                       .toNumber() / 1000}
                     <br />
-                    DAI/ETH:{" "}
+                    {tokenName}/ETH:{" "}
                     {BigNumber.from(1000)
                       .mul(poolInfo.token_reserve)
                       .div(poolInfo.eth_reserve)
