@@ -173,7 +173,7 @@ export function CoinInput({
   amount?: BigNumber | null;
   coin?: Coin | null;
   coins?: Coin[];
-  onChangeAmount?: (value: BigNumber | null) => void;
+  onChangeAmount?: (value: BigNumber) => void;
   onChangeCoin?: (value: Coin) => void;
   onInput?: (...args: any) => void;
 }) {
@@ -184,7 +184,7 @@ export function CoinInput({
           placeholder="0.0"
           value={amount && formatUnits(amount, 9)}
           displayType={disabled ? "text" : "input"}
-          onValueChange={(e) => onChangeAmount?.(parseUnits(e.value, 9))}
+          onValueChange={(e) => onChangeAmount?.(parseUnits(e.value ?? 0, 9))}
           className={style.transferPropInput}
           thousandSeparator={false}
           onInput={onInput}

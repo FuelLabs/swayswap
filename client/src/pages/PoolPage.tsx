@@ -1,11 +1,12 @@
 import classNames from "classnames";
-import { BigNumber } from "fuels";
-import { useEffect, useState } from "react";
+import { BigNumber, ContractFactory, Wallet, ZeroBytes32 } from "fuels";
+import { useEffect, useState, useCallback } from "react";
 import { RiCheckFill } from "react-icons/ri";
-import { useContract } from "src/context/AppContext";
+import { useExchangeContract, useSwaySwapContract, useWallet } from "src/context/AppContext";
 import {
-  tokens,
-  // filterCoin
+  assets,
+  NativeAsset,
+  filterAssets
 } from "src/lib/SwaySwapMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
@@ -13,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { PoolInfoStruct } from "src/types/contracts/ExchangeContractAbi";
 import { formatUnits } from "ethers/lib/utils";
+import { EXCHANGE_CONTRACT_ID } from "src/config";
+import { ExchangeContractAbi__factory } from "src/types/contracts";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -57,62 +60,109 @@ function PoolLoader({
   );
 }
 
-export default function PoolPage() {
-  const contract = useContract()!;
-  const navigate = useNavigate();
-  const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
-    tokens[0],
-    tokens[1],
+const createExchangeContract = async (wallet: Wallet, tokenId: string) => {
+  const { bytecode } = (await wallet.provider.getContract(EXCHANGE_CONTRACT_ID))!;
+  const contractFactory = new ContractFactory(bytecode, ExchangeContractAbi__factory.abi, wallet);
+  const contract = await contractFactory.deployContract([
+    [
+      '0x0000000000000000000000000000000000000000000000000000000000000001',
+      tokenId
+    ]
   ]);
-  const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
-  const [toAmount, setToAmount] = useState(null as BigNumber | null);
+  return contract;
+}
+
+export default function PoolPage() {
+  const wallet = useWallet()!;
+  const swaySwapContract = useSwaySwapContract()!;
+  const navigate = useNavigate();
+  const [coinTo, setCoinTo] = useState<Coin>(assets[1]);
+  const [fromAmount, setFromAmount] = useState<BigNumber>(BigNumber.from(0));
+  const [toAmount, setToAmount] = useState<BigNumber>(BigNumber.from(0));
   const [stage, setStage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [poolInfo, setPoolInfo] = useState(null as PoolInfoStruct | null);
+  const [poolInfo, setPoolInfo] = useState<PoolInfoStruct>({
+    eth_reserve: BigNumber.from(0),
+    token_reserve: BigNumber.from(0)
+  });
+  const [exchangeId, setExchangeId] = useState('');
+  const exchangeContract = useExchangeContract(exchangeId)!;
+
+  const setExchangeContractId = useCallback(async () => {
+    setExchangeId('');
+    const result = await swaySwapContract.callStatic.get_exchange_contract(coinTo.assetId);
+    console.log('result', result);
+    // If exchange contract id is different
+    // of 0 them set exchange contract id
+    if (result !== ZeroBytes32) {
+      setExchangeId(result);
+    }
+  }, [swaySwapContract, setExchangeId, coinTo.assetId]);
+
+  useEffect(() => {
+    setExchangeContractId();
+  }, [setExchangeContractId]);
 
   useEffect(() => {
     (async () => {
-      const pi = await contract.callStatic.get_info();
-      setPoolInfo(pi);
+      if (exchangeId) {
+        const pi = await exchangeContract.callStatic.get_info();
+        setPoolInfo(pi);
+      } else {
+        setPoolInfo({
+          eth_reserve: BigNumber.from(0),
+          token_reserve: BigNumber.from(0)
+        });
+      }
     })();
-  }, [contract]);
+  }, []);
 
-  const provideLiquidity = async () => {
-    // const swapContract = getSwapContract(coinFrom, coinTo);
-
-    if (!fromAmount) {
-      throw new Error('"fromAmount" is required');
-    }
-    if (!toAmount) {
-      throw new Error('"toAmount" is required');
-    }
-
+  const addLiquidity = async (tokenId: string) => {
+    const contractId = await swaySwapContract.callStatic.get_exchange_contract(tokenId);
+    const exchangeContract = ExchangeContractAbi__factory.connect(contractId, wallet);
     // TODO: Combine all transactions on single tx leverage by scripts
     // https://github.com/FuelLabs/swayswap-demo/issues/42
     setIsLoading(true);
     // Deposit coins from
     setStage(1);
-    await contract.functions.deposit({
-      forward: [fromAmount, coinFrom.assetId],
+    await exchangeContract.functions.deposit({
+      forward: [fromAmount, NativeAsset.assetId],
     });
     // Deposit coins to
     setStage(2);
-    await contract.functions.deposit({
+    await exchangeContract.functions.deposit({
       forward: [toAmount, coinTo.assetId],
     });
     // Create liquidity pool
     setStage(3);
-    await contract.functions.add_liquidity(1, toAmount, 1000, {
+    await exchangeContract.functions.add_liquidity(1, toAmount, 1000, {
       variableOutputs: 1,
     });
     // We are done, reset
     setStage(0);
+  };
+
+  const provideLiquidity = async () => {
+    // Change state to loading
+    setIsLoading(true);
+    const tokenId = coinTo.assetId;
+    // If contract didn't exists create e new contract exchange
+    const contractId = await swaySwapContract.callStatic.get_exchange_contract(tokenId);
+    if (contractId === ZeroBytes32) {
+      // Create a exchange contract token
+      const exchangeContract = await createExchangeContract(wallet, tokenId);
+      // Register exchange contract on swayswap
+      await swaySwapContract.functions.add_exchange_contract(tokenId, exchangeContract.id);
+      // Get new id from the swayswap contract
+      await setExchangeContractId();
+      // Create pool of liquidity
+    }
+    await addLiquidity(tokenId);
+    // Set state loading to false
     setIsLoading(false);
     // TODO: Improve feedback after add liquidity
-    //
     navigate(Pages.assets);
   };
-  // const swapContract = getSwapContract(coinFrom, coinTo);
 
   return (
     <div className={style.wrapper}>
@@ -124,14 +174,14 @@ export default function PoolPage() {
           <div className="mt-6 mb-8 flex justify-center">
             <PoolLoader
               steps={[
-                `Deposit: ${coinFrom.name}`,
+                `Deposit: ${NativeAsset.name}`,
                 `Deposit: ${coinTo.name}`,
                 `Provide liquidity`,
                 `Done`,
               ]}
               step={stage}
               loading={isLoading}
-              coinFrom={coinFrom}
+              coinFrom={NativeAsset}
               coinTo={coinTo}
             />
           </div>
@@ -139,11 +189,10 @@ export default function PoolPage() {
           <>
             <div className="mt-6 mb-4">
               <CoinInput
-                coin={coinFrom}
+                coin={NativeAsset}
                 amount={fromAmount}
                 onChangeAmount={(amount) => setFromAmount(amount)}
-                // coins={filterCoin(getSwappableCoins(coinTo), coinFrom)}
-                onChangeCoin={(coin: Coin) => setCoins([coin, coinTo])}
+                coins={[]}
               />
             </div>
             <div className="mb-10">
@@ -151,8 +200,8 @@ export default function PoolPage() {
                 coin={coinTo}
                 amount={toAmount}
                 onChangeAmount={(amount) => setToAmount(amount)}
-                // coins={filterCoin(getSwappableCoins(coinFrom), coinTo)}
-                onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}
+                coins={filterAssets(assets, [coinTo, NativeAsset])}
+                onChangeCoin={(coin: Coin) => setCoinTo(coin)}
               />
             </div>
             {poolInfo ? (

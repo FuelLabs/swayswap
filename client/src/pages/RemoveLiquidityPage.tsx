@@ -2,12 +2,12 @@ import { formatUnits } from "ethers/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { useWallet } from "src/context/AppContext";
 import { ExchangeContractAbi__factory } from "src/types/contracts";
-import coins from "src/lib/CoinsMetadata";
+import { assets } from "src/lib/SwaySwapMetadata";
 import { CoinInput } from "src/components/CoinInput";
 import { useNavigate } from "react-router-dom";
 import { BigNumber } from "fuels";
 import { Pages } from "src/types/pages";
-import { CONTRACT_ID } from "src/config";
+import { EXCHANGE_CONTRACT_ID } from "src/config";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -19,7 +19,7 @@ const style = {
 };
 
 export default function RemoveLiquidityPage() {
-  const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
+  const liquidityToken = assets.find((c) => c.assetId === EXCHANGE_CONTRACT_ID);
   const [amount, setAmount] = useState(null as BigNumber | null);
   const [balance, setBalance] = useState(null as BigNumber | null);
   const [isLoading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ export default function RemoveLiquidityPage() {
 
   const retrieveLiquidityToken = useCallback(async () => {
     const coins = await wallet.getBalances();
-    const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
+    const liquidityToken = coins.find((c) => c.assetId === EXCHANGE_CONTRACT_ID);
     return liquidityToken;
   }, [wallet]);
 
@@ -43,13 +43,13 @@ export default function RemoveLiquidityPage() {
     }
     try {
       const swayswap = ExchangeContractAbi__factory.connect(
-        CONTRACT_ID,
+        EXCHANGE_CONTRACT_ID,
         wallet
       );
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
       await swayswap.functions.remove_liquidity(1, 1, 1000, {
-        forward: [amount, CONTRACT_ID],
+        forward: [amount, EXCHANGE_CONTRACT_ID],
         variableOutputs: 2,
       });
       navigate(Pages.assets);

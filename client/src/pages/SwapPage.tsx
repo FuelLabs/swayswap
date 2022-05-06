@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
-import assets from "src/lib/CoinsMetadata";
+import { assets } from "src/lib/SwaySwapMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
-import { useContract } from "src/context/AppContext";
+import { useExchangeContract } from "src/context/AppContext";
 import { ExchangeContractAbi } from "src/types/contracts";
 import { BigNumber } from "fuels";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
+import { EXCHANGE_CONTRACT_ID } from "src/config";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -45,7 +46,7 @@ const getSwapWithMinimumMinValue = async (
 };
 
 export default function SwapPage() {
-  const contract = useContract()!;
+  const contract = useExchangeContract(EXCHANGE_CONTRACT_ID)!;
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],

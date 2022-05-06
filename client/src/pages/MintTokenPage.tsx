@@ -8,9 +8,7 @@ import { objectId } from "src/lib/utils";
 import { MINT_AMOUNT } from "src/config";
 import { formatUnits } from "ethers/lib/utils";
 import { Coin, CoinInput } from "src/components/CoinInput";
-import { filterCoin } from "src/lib/SwaySwapMetadata";
-import coins from "src/lib/CoinsMetadata";
-import { CoinETH } from "src/lib/constants";
+import { assets, filterAssets, NativeAsset } from "src/lib/SwaySwapMetadata";
 import { Wallet } from "fuels";
 
 const style = {
@@ -23,9 +21,8 @@ const style = {
 
 export default function MintTokenPage() {
   const amount = MINT_AMOUNT;
-  const tokens = coins.filter((t: Coin) => t.assetId !== CoinETH);
   const wallet = useWallet() as Wallet;
-  const [token, setToken] = useState<Coin>(tokens[0]);
+  const [token, setToken] = useState<Coin>(assets[1]);
   const [isMinting, setMinting] = useState(true);
   const navigate = useNavigate();
 
@@ -72,7 +69,7 @@ export default function MintTokenPage() {
             coin={token}
             amount={amount}
             disabled={true}
-            coins={filterCoin(tokens, token)}
+            coins={filterAssets(assets, [token, NativeAsset])}
             onChangeCoin={setToken}
           />
         </div>

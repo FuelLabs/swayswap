@@ -1,28 +1,10 @@
+import { NativeAssetId } from 'fuels';
 import { Coin } from 'src/components/CoinInput';
-import coins from './CoinsMetadata';
-// import data from 'src/metadata.json';
+import coins from 'src/coins.json';
 
-// export const tokens: Array<Coin> = data.tokens;
+export const NativeAsset = coins.find(c => c.assetId === NativeAssetId) as Coin;
 
-// export const SwapContracts: Array<{
-//   tokenSource: string;
-//   tokenTo: string;
-//   swapId: string;
-// }> = data.swapContracts;
+export const assets = coins as Array<Coin>;
 
-// export const getSwapContract = (coinFrom: Coin, coinTo: Coin) => {
-//   return SwapContracts.find((swapContract) => {
-//     return (
-//       (swapContract.tokenSource === coinTo.assetId && swapContract.tokenTo === coinFrom.assetId) ||
-//       (swapContract.tokenSource === coinFrom.assetId && swapContract.tokenTo === coinTo.assetId)
-//     );
-//   });
-// };
-
-// export const getSwappableCoins = (coin: Coin) =>
-//   data.tokens.filter((asset) => getSwapContract(coin, asset));
-
-export const tokens = coins;
-
-export const filterCoin = (coins: Coin[], coin: Coin) =>
-  coins.filter((i) => i.assetId !== coin.assetId);
+export const filterAssets = (coins: Coin[], assets: Coin[]) =>
+  coins.filter((i) => !assets.find(a => a.assetId === i.assetId));

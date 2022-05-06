@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
 import {
-  tokens,
+  assets,
   // filterCoin,
   // getSwappableCoins,
 } from "src/lib/SwaySwapMetadata";
@@ -21,7 +21,7 @@ const style = {
 
 // Mock before implementing
 const getRate = (from: Coin, to: Coin) => {
-  if (to.assetId === tokens[0].assetId) {
+  if (to.assetId === assets[0].assetId) {
     return 0.25;
   }
   return 4;
@@ -32,8 +32,8 @@ export const Swap = () => {
     console.log(e);
   };
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
-    tokens[0],
-    tokens[1],
+    assets[0],
+    assets[1],
   ]);
   const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
