@@ -1,6 +1,6 @@
 ## SwaySwap
 
-SwaySwap is a decentralized sway application.
+SwaySwap is a decentralized Sway application.
 
 ## Contributing
 
