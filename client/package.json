@@ -65,6 +65,6 @@
     "prettier-plugin-tailwindcss": "^0.1.8",
     "tailwindcss": "^3.0.23",
     "typechain": "^8.0.0",
-    "typechain-target-fuels": "^0.0.0-master-f320686"
+    "typechain-target-fuels": "^0.0.0-master-5dea626c"
   }
 }

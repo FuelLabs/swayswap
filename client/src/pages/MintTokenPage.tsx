@@ -6,7 +6,7 @@ import { TextInput } from "src/components/TextInput";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { objectId } from "src/lib/utils";
-import { MINT_AMOUNT, TOKEN_ID } from "src/config";
+import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "src/config";
 import { formatUnits } from "ethers/lib/utils";
 
 const style = {
@@ -72,8 +72,8 @@ export default function MintTokenPage() {
           className={style.confirmButton}
         >
           {isMinting
-            ? `Mint ${formatUnits(MINT_AMOUNT, 9)} tokens`
-            : `Minting ${formatUnits(MINT_AMOUNT, 9)} tokens...`}
+            ? `Mint ${formatUnits(MINT_AMOUNT, DECIMAL_UNITS)} tokens`
+            : `Minting ${formatUnits(MINT_AMOUNT, DECIMAL_UNITS)} tokens...`}
         </div>
       </div>
     </div>

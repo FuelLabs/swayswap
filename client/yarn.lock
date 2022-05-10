@@ -8847,6 +8847,11 @@ ts-essentials@^7.0.1:
   resolved "https://registry.npmjs.org/ts-essentials/-/ts-essentials-7.0.3.tgz"
   integrity sha512-8+gr5+lqO3G84KdiTSMRLtuyJ+nTBVRKuCrK4lidMPdVeEp0uqC875uE5NMcaA7YYMN7XsNiFQuMvasF8HT/xQ==
 
+ts-essentials@^9.1.2:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/ts-essentials/-/ts-essentials-9.1.2.tgz#46db6944b73b4cd603f3d959ef1123c16ba56f59"
+  integrity sha512-EaSmXsAhEiirrTY1Oaa7TSpei9dzuCuFPmjKRJRPamERYtfaGS8/KpOSbjergLz/Y76/aZlV9i/krgzsuWEBbg==
+
 tsconfig-paths@^3.14.1:
   version "3.14.1"
   resolved "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz"
@@ -8921,12 +8926,14 @@ type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typechain-target-fuels@^0.0.0-master-f320686:
-  version "0.0.0-master-f320686"
-  resolved "https://registry.npmjs.org/typechain-target-fuels/-/typechain-target-fuels-0.0.0-master-f320686.tgz"
-  integrity sha512-ASEnifg/49tC9WmbUldWVjWSu8d/0BktD9Y3aA6YnBLtn0Gz7Tgu5FgtatUpS9ai4b/ENFAGW8iKaXf0WNpsRg==
+typechain-target-fuels@^0.0.0-master-5dea626c:
+  version "0.0.0-master-5dea626c"
+  resolved "https://registry.yarnpkg.com/typechain-target-fuels/-/typechain-target-fuels-0.0.0-master-5dea626c.tgz#290e1a0ecd39671d57ab7653d15a7af371e5406c"
+  integrity sha512-i0eMN/HGTzMQ3v3r30G7nEw+kQEyrfu/rOxc1092Oij5DSQQDKPsV813/INdEb+igO1FJDj6KsKjckbO1xUk2w==
   dependencies:
+    ts-essentials "^9.1.2"
     typechain "^6.0.2"
+    typescript "^4.5.2"
 
 typechain@^6.0.2:
   version "6.1.0"
@@ -8966,6 +8973,11 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript@^4.5.2:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.4.tgz#caa78bbc3a59e6a5c510d35703f6a09877ce45e9"
+  integrity sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==
 
 typescript@^4.5.5:
   version "4.6.3"

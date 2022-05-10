@@ -7,7 +7,7 @@ import { CoinInput } from "src/components/CoinInput";
 import { useNavigate } from "react-router-dom";
 import { BigNumber } from "fuels";
 import { Pages } from "src/types/pages";
-import { CONTRACT_ID } from "src/config";
+import { CONTRACT_ID, DECIMAL_UNITS } from "src/config";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -87,7 +87,7 @@ export default function RemoveLiquidityPage() {
             className="mt-3 ml-4 cursor-pointer text-slate-400 underline decoration-1"
             onClick={() => setAmount(balance)}
           >
-            Max amount: {balance ? formatUnits(balance, 9) : "..."}
+            Max amount: {balance ? formatUnits(balance, DECIMAL_UNITS) : "..."}
           </div>
         </div>
         <button
