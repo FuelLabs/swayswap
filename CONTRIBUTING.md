@@ -26,23 +26,12 @@ cd swayswap
 
 ## Building and testing
 
-The following steps are for building, testing and running the SwaySwap dapp in your preferred browser.
+The following steps are for running and viewing the SwaySwap dapp in your preferred browser.
 
-First, to ensure SwaySwap builds in your local environment, run:
-
-```sh
-yarn build
-```
-
-Then run tests with:
+Open the client folder and deploy the SwaySwap dapp for development mode:
 
 ```sh
-yarn test
-```
-
-Finally, to deploy the SwaySwap dapp for development mode, run:
-
-```sh
+cd client
 yarn start
 ```
 
@@ -69,7 +58,7 @@ This is a rough outline of what a contributor's workflow looks like:
 - Make sure what you want to contribute is already tracked as an issue.
   - We may discuss the problem and solution in the issue.
 - Create a Git branch from where you want to base your work. This is usually master.
-- Write code, add test cases, and commit your work.
+- Write code, add test cases where applicable, and commit your work.
 - Run tests and make sure all tests pass.
 - If the PR contains any breaking changes, add the `breaking` label to your PR.
 - Push your changes to a branch in your fork of the repository and submit a pull request.
