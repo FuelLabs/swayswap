@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { BigNumber } from "fuels";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useContract } from "src/context/AppContext";
 import assets from "src/lib/CoinsMetadata";
@@ -8,9 +8,9 @@ import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-import { PoolInfo } from "src/types/contracts/SwayswapContractAbi";
 import { formatUnits } from "ethers/lib/utils";
 import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
+import { useMutation, useQuery } from "react-query";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -66,49 +66,49 @@ export default function PoolPage() {
   const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
   const [stage, setStage] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [poolInfo, setPoolInfo] = useState(null as PoolInfo | null);
+  const { data: poolInfo } = useQuery(
+    "PoolPage-poolInfo",
+    () => contract.callStatic.get_info()
+  );
 
-  useEffect(() => {
-    (async () => {
-      const pi = await contract.callStatic.get_info();
-      setPoolInfo(pi);
-    })();
-  }, [contract]);
+  const addLiquidityMutation = useMutation(
+    async () => {
+      if (!fromAmount) {
+        throw new Error('"fromAmount" is required');
+      }
+      if (!toAmount) {
+        throw new Error('"toAmount" is required');
+      }
 
-  const provideLiquidity = async () => {
-    if (!fromAmount) {
-      throw new Error('"fromAmount" is required');
+      // TODO: Combine all transactions on single tx leverage by scripts
+      // https://github.com/FuelLabs/swayswap-demo/issues/42
+
+      // Deposit coins from
+      await contract.functions.deposit({
+        forward: [fromAmount, coinFrom.assetId],
+      });
+      setStage((s) => s + 1);
+      // Deposit coins to
+      await contract.functions.deposit({
+        forward: [toAmount, coinTo.assetId],
+      });
+      setStage((s) => s + 1);
+      // Create liquidity pool
+      await contract.functions.add_liquidity(1, toAmount, 1000, {
+        variableOutputs: 1,
+      });
+      setStage((s) => s + 1);
+    },
+    {
+      onSuccess: () => {
+        // TODO: Improve feedback after swap
+        navigate(Pages.assets);
+      },
+      onSettled: () => {
+        setStage(0);
+      },
     }
-    if (!toAmount) {
-      throw new Error('"toAmount" is required');
-    }
-
-    // TODO: Combine all transactions on single tx leverage by scripts
-    // https://github.com/FuelLabs/swayswap-demo/issues/42
-    setIsLoading(true);
-    // Deposit coins from
-    setStage(1);
-    await contract.functions.deposit({
-      forward: [fromAmount, coinFrom.assetId],
-    });
-    // Deposit coins to
-    setStage(2);
-    await contract.functions.deposit({
-      forward: [toAmount, coinTo.assetId],
-    });
-    // Create liquidity pool
-    setStage(3);
-    await contract.functions.add_liquidity(1, toAmount, 1000, {
-      variableOutputs: 1,
-    });
-    // We are done, reset
-    setStage(0);
-    setIsLoading(false);
-    // TODO: Improve feedback after add liquidity
-    //
-    navigate(Pages.assets);
-  };
+  );
 
   return (
     <div className={style.wrapper}>
@@ -116,7 +116,7 @@ export default function PoolPage() {
         <div className={style.formHeader}>
           <h1>Pool</h1>
         </div>
-        {isLoading ? (
+        {addLiquidityMutation.isLoading ? (
           <div className="mt-6 mb-8 flex justify-center">
             <PoolLoader
               steps={[
@@ -126,7 +126,7 @@ export default function PoolPage() {
                 `Done`,
               ]}
               step={stage}
-              loading={isLoading}
+              loading={addLiquidityMutation.isLoading}
               coinFrom={coinFrom}
               coinTo={coinTo}
             />
@@ -185,7 +185,7 @@ export default function PoolPage() {
               </div>
             ) : null}
             <div
-              onClick={(e) => provideLiquidity()}
+              onClick={() => addLiquidityMutation.mutate()}
               className={style.confirmButton}
             >
               Confirm

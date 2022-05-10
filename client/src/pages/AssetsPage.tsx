@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { FaFaucet } from "react-icons/fa";
 import { useWallet, useAppContext } from "src/context/AppContext";
 import { CoinQuantity } from "fuels";
@@ -6,6 +5,8 @@ import { BigNumber } from "ethers";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import CoinsMetadata from "src/lib/CoinsMetadata";
 import { Spinner } from "src/components/Spinner";
+import { useQuery, useMutation } from "react-query";
+import { sleep } from "src/lib/utils";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -32,34 +33,23 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
 };
 
 export default function AssetsPage() {
-  const [coins, setCoins] = useState<CoinQuantity[]>([]);
   const { faucet } = useAppContext();
   const wallet = useWallet();
-  const [isLoading, setLoading] = useState(false);
 
-  // Load balances
-  const loadCoins = async () => {
-    return wallet!.getBalances().then((coins) => {
-      setCoins(coins);
-    });
-  };
+  const { data: balances, refetch: refetchBalances } = useQuery(
+    "AssetsPage-balances",
+    () => wallet!.getBalances()
+  );
 
-  const handleClickFaucet = async () => {
-    setLoading(true);
-    try {
+  const faucetMutation = useMutation(
+    async () => {
       await faucet();
-      await loadCoins();
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      await sleep(1000);
+    },
+    {
+      onSuccess: () => refetchBalances(),
     }
-  };
-
-  useEffect(() => {
-    if (wallet?.address) loadCoins();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wallet?.address]);
+  );
 
   return (
     <div className={style.wrapper}>
@@ -67,30 +57,36 @@ export default function AssetsPage() {
         <div className={style.formHeader}>
           <div>Assets</div>
           <div className="flex w-10 justify-center rounded-xl p-1">
-            {isLoading ? (
+            {faucetMutation.isLoading ? (
               <div className="flex justify-center rounded-xl p-1">
                 <Spinner />
               </div>
             ) : (
-              <div className={style.faucetButton} onClick={handleClickFaucet}>
+              <div
+                className={style.faucetButton}
+                onClick={() => faucetMutation.mutate()}
+              >
                 <FaFaucet />
               </div>
             )}
           </div>
         </div>
-
-        {mergeCoinsWithMetadata(coins).map((coin) => {
-          return (
-            <div className="my-4" key={coin.assetId}>
-              <CoinInput
-                coin={coin}
-                disabled={true}
-                amount={coin.amount}
-                coins={coin ? [coin] : []}
-              />
-            </div>
-          );
-        })}
+        {balances ? (
+          <>
+            {mergeCoinsWithMetadata(balances).map((coin) => {
+              return (
+                <div className="my-4" key={coin.assetId}>
+                  <CoinInput
+                    coin={coin}
+                    disabled={true}
+                    amount={coin.amount}
+                    coins={coin ? [coin] : []}
+                  />
+                </div>
+              );
+            })}
+          </>
+        ) : null}
       </div>
     </div>
   );

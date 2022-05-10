@@ -1,13 +1,13 @@
 import { formatUnits } from "ethers/lib/utils";
-import { useCallback, useEffect, useState } from "react";
-import { useWallet } from "src/context/AppContext";
-import { SwayswapContractAbi__factory } from "src/types/contracts";
+import { useState } from "react";
+import { useContract, useWallet } from "src/context/AppContext";
 import coins from "src/lib/CoinsMetadata";
 import { CoinInput } from "src/components/CoinInput";
 import { useNavigate } from "react-router-dom";
 import { BigNumber } from "fuels";
 import { Pages } from "src/types/pages";
 import { CONTRACT_ID, DECIMAL_UNITS } from "src/config";
+import { useMutation, useQuery } from "react-query";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -21,51 +21,41 @@ const style = {
 export default function RemoveLiquidityPage() {
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
   const [amount, setAmount] = useState(null as BigNumber | null);
-  const [balance, setBalance] = useState(null as BigNumber | null);
-  const [isLoading, setLoading] = useState(false);
   const wallet = useWallet()!;
+  const contract = useContract()!;
   const navigate = useNavigate();
 
-  const retrieveLiquidityToken = useCallback(async () => {
-    const coins = await wallet.getBalances();
-    const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
-    return liquidityToken;
-  }, [wallet]);
+  const { data: balance } = useQuery(
+    "RemoveLiquidityPage-balance",
+    async () => {
+      const balances = await wallet.getBalances();
+      const balance = balances.find((b) => b.assetId === CONTRACT_ID)!;
+      return balance.amount;
+    }
+  );
 
-  const removeLiquidity = async () => {
-    if (!amount) {
-      throw new Error('"amount" is required');
-    }
-    setLoading(true);
-    const liquidityToken = await retrieveLiquidityToken();
-    if (amount?.gt(liquidityToken?.amount ?? 0)) {
-      alert("Amount is bigger them the current balance!");
-    }
-    try {
-      const swayswap = SwayswapContractAbi__factory.connect(
-        CONTRACT_ID,
-        wallet
-      );
+  const removeLiquidityMutation = useMutation(
+    async () => {
+      if (!amount) {
+        throw new Error('"amount" is required');
+      }
+      if (amount?.gt(balance!)) {
+        alert("Amount is bigger them the current balance!");
+      }
+
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
-      await swayswap.functions.remove_liquidity(1, 1, 1000, {
+      await contract.functions.remove_liquidity(1, 1, 1000, {
         forward: [amount, CONTRACT_ID],
         variableOutputs: 2,
       });
-      navigate(Pages.assets);
-    } catch (err: any) {
-      alert(err.message);
+    },
+    {
+      onSuccess: () => {
+        navigate(Pages.assets);
+      },
     }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    const init = async () => {
-      const liquidityToken = await retrieveLiquidityToken();
-      setBalance(liquidityToken?.amount ?? BigNumber.from(0));
-    };
-    init();
-  }, [retrieveLiquidityToken]);
+  );
 
   if (!liquidityToken) {
     return null;
@@ -85,17 +75,24 @@ export default function RemoveLiquidityPage() {
           />
           <div
             className="mt-3 ml-4 cursor-pointer text-slate-400 underline decoration-1"
-            onClick={() => setAmount(balance)}
+            onClick={() => setAmount(balance!)}
           >
             Max amount: {balance ? formatUnits(balance, DECIMAL_UNITS) : "..."}
           </div>
         </div>
         <button
-          onClick={(e) => removeLiquidity()}
+          onClick={() => removeLiquidityMutation.mutate()}
           className={style.confirmButton}
-          disabled={!amount || !balance || amount.gt(balance) || isLoading}
+          disabled={
+            !amount ||
+            !balance ||
+            amount.gt(balance) ||
+            removeLiquidityMutation.isLoading
+          }
         >
-          {isLoading ? "Removing..." : "Remove liquidity"}
+          {removeLiquidityMutation.isLoading
+            ? "Removing..."
+            : "Remove liquidity"}
         </button>
       </div>
     </div>

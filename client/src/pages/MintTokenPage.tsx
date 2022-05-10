@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
 import { TokenContractAbi__factory } from "src/types/contracts";
 import { useWallet } from "src/context/AppContext";
 import { TextInput } from "src/components/TextInput";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-import { objectId } from "src/lib/utils";
+import { objectId, sleep } from "src/lib/utils";
 import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "src/config";
 import { formatUnits } from "ethers/lib/utils";
+import { useMutation } from "react-query";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -20,15 +21,16 @@ const style = {
 export default function MintTokenPage() {
   const wallet = useWallet()!;
   const [asset, setAsset] = useState(TOKEN_ID);
-  const [isMinting, setMinting] = useState(true);
   const navigate = useNavigate();
 
-  const handleMinCoins = async () => {
-    const token = TokenContractAbi__factory.connect(TOKEN_ID, wallet);
-    const amount = MINT_AMOUNT;
+  const token = useMemo(
+    () => TokenContractAbi__factory.connect(TOKEN_ID, wallet),
+    [wallet]
+  );
 
-    try {
-      setMinting(true);
+  const mintMutation = useMutation(
+    async () => {
+      const amount = MINT_AMOUNT;
       await token.functions.mint_coins(amount);
       // Transfer the just minted coins to the output
       await token.functions.transfer_coins_to_output(
@@ -39,15 +41,17 @@ export default function MintTokenPage() {
           variableOutputs: 1,
         }
       );
-      // TODO: Improve feedback for the user
-      // Navigate to assets page to show new cons
-      // https://github.com/FuelLabs/swayswap-demo/issues/40
-      navigate(Pages.assets);
-    } catch (err) {
-      console.error(err);
+      await sleep(1000);
+    },
+    {
+      onSuccess: () => {
+        // TODO: Improve feedback for the user
+        // Navigate to assets page to show new cons
+        // https://github.com/FuelLabs/swayswap-demo/issues/40
+        navigate(Pages.assets);
+      },
     }
-    setMinting(false);
-  };
+  );
 
   return (
     <div className={style.wrapper}>
@@ -68,10 +72,10 @@ export default function MintTokenPage() {
           <TextInput value={asset} placeholder={""} onChange={setAsset} />
         </div>
         <div
-          onClick={(e) => isMinting && handleMinCoins()}
+          onClick={() => !mintMutation.isLoading && mintMutation.mutate()}
           className={style.confirmButton}
         >
-          {isMinting
+          {!mintMutation.isLoading
             ? `Mint ${formatUnits(MINT_AMOUNT, DECIMAL_UNITS)} tokens`
             : `Minting ${formatUnits(MINT_AMOUNT, DECIMAL_UNITS)} tokens...`}
         </div>
