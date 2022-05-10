@@ -139,8 +139,8 @@ impl Exchange for Contract {
             assert(min_liquidity > 0);
 
             let eth_reserve = get_current_balance(ETH_ID) - eth_amount;
-            let token_reserve = get_current_balance(TOKEN_ID);
-            let token_amount = (eth_amount * token_reserve) / eth_reserve + 1;
+            let token_reserve = get_current_balance(TOKEN_ID) - current_token_amount;
+            let token_amount = (eth_amount * token_reserve) / eth_reserve;
             let liquidity_minted = (eth_amount * total_liquidity) / eth_reserve;
 
             assert(max_tokens >= token_amount);
@@ -152,7 +152,7 @@ impl Exchange for Contract {
 
             transfer_to_output(liquidity_minted, contract_id(), sender);
 
-            store(token_amount_key, current_token_amount - token_amount);
+            store(token_amount_key, token_amount - current_token_amount);
 
             minted = liquidity_minted;
         } else {
