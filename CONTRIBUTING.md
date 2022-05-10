@@ -26,28 +26,7 @@ cd swayswap
 
 ## Building and testing
 
-**Sway:** The following steps will run the Sway test suite and ensure that everything is set up correctly. Note that this portion pertains to the Sway language, if your intention is to contribute to SwaySwap's front-end only, proceed to the next step.
-
-First, open a new terminal and start `fuel-core` with:
-
-```sh
-fuel-core
-```
-
-Then open a second terminal, cd into the `sway` repo and run:
-
-```sh
-cargo run --bin test
-```
-
-After the test suite runs, you should see:
-
-```console
-Tests passed.
-_n_ tests run (0 skipped)
-```
-
-**SwaySwap:** The following steps are for building, testing and running the SwaySwap dapp in your preferred browser.
+The following steps are for building, testing and running the SwaySwap dapp in your preferred browser.
 
 First, to ensure SwaySwap builds in your local environment, run:
 
