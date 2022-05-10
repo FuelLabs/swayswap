@@ -1,7 +1,9 @@
 {
   "chain_name": "local_testnet",
   "block_production": "Instant",
-  "parent_network": { "type": "LocalTest" },
+  "parent_network": {
+    "type": "LocalTest"
+  },
   "initial_state": {
     "coins": [
       {

@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { useEffect } from "react";
 import { Fragment, useState } from "react";
 import NumberFormat from "react-number-format";
+import { DECIMAL_UNITS } from "src/config";
 import urlJoin from "url-join";
 
 const { PUBLIC_URL } = process.env;
@@ -159,10 +160,13 @@ export function CoinInput({
     <div className={style.transferPropContainer}>
       <div className="flex-1">
         <NumberFormat
-          placeholder="0.0"
-          value={amount && formatUnits(amount, 9)}
+          placeholder="0"
+          decimalScale={DECIMAL_UNITS}
+          value={amount && formatUnits(amount, DECIMAL_UNITS)}
           displayType={disabled ? "text" : "input"}
-          onValueChange={(e) => onChangeAmount?.(parseUnits(e.value, 9))}
+          onValueChange={(e) =>
+            onChangeAmount?.(parseUnits(e.value, DECIMAL_UNITS))
+          }
           className={style.transferPropInput}
           thousandSeparator={false}
           onInput={onInput}

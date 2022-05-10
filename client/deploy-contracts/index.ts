@@ -60,7 +60,7 @@ export async function deployContract(contextLog: string, binaryPath: string, abi
   const bytecode = fs.readFileSync(binaryPath);
   console.log(contextLog, 'Deploy contract...');
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract(ZeroBytes32);
+  const contract = await factory.deployContract([], ZeroBytes32);
 
   console.log(contextLog, 'Contract deployed...');
   return contract;

@@ -18,30 +18,26 @@ const style = {
   switchDirection: `flex items-center justify-center -my-3`,
 };
 
-const getSwapWithMaximumForwardAmount = async (
+const getSwapWithMaximumRequiredAmount = async (
   contract: SwayswapContractAbi,
   assetId: string,
   amount: BigNumber
 ) => {
-  const forwardAmount =
-    await contract.callStatic.swap_with_maximum_forward_amount(amount, {
-      forward: [1, assetId],
-    });
-  return forwardAmount;
+  const requiredAmount = await contract.callStatic.get_swap_with_maximum({
+    forward: [amount, assetId],
+  });
+  return requiredAmount;
 };
 
-const getSwapWithMinimumMinValue = async (
+const getSwapWithMinimumMinAmount = async (
   contract: SwayswapContractAbi,
   assetId: string,
   amount: BigNumber
 ) => {
-  const minValue = await contract.callStatic.swap_with_minimum_min_value(
-    amount,
-    {
-      forward: [1, assetId],
-    }
-  );
-  return minValue;
+  const minAmount = await contract.callStatic.get_swap_with_minimum({
+    forward: [amount, assetId],
+  });
+  return minAmount;
 };
 
 export default function SwapPage() {
@@ -69,17 +65,17 @@ export default function SwapPage() {
     const deadline = 1000;
 
     if (mode === "with_maximum") {
-      const forwardAmount = await getSwapWithMaximumForwardAmount(
+      const requiredAmount = await getSwapWithMaximumRequiredAmount(
         contract,
         coinFrom.assetId,
         toAmount
       );
       await contract.functions.swap_with_maximum(toAmount, deadline, {
-        forward: [forwardAmount, coinFrom.assetId],
+        forward: [requiredAmount, coinFrom.assetId],
         variableOutputs: 1,
       });
     } else if (mode === "with_minimum") {
-      const minValue = await getSwapWithMinimumMinValue(
+      const minValue: BigNumber = await getSwapWithMinimumMinAmount(
         contract,
         coinFrom.assetId,
         fromAmount
@@ -91,40 +87,35 @@ export default function SwapPage() {
     } else {
       throw new Error(`Invalid mode "${mode}"`);
     }
-
-    // TODO: Improve feedback after swap
-    //
     navigate(Pages.assets);
   };
 
   const setAmountField = (amount: BigNumber | null, field: "from" | "to") => {
-    if (field === "from" && mode !== "with_maximum") {
+    if (field === "from" && mode === "with_minimum") {
       setFromAmount(amount);
 
       if (amount) {
         setIsLoading(true);
         (async () => {
-          const minValue = await getSwapWithMinimumMinValue(
+          const minValue = await getSwapWithMinimumMinAmount(
             contract,
             coinFrom.assetId,
             amount
           );
-
           setToAmount(minValue);
         })().finally(() => setIsLoading(false));
       }
-    } else if (field === "to" && mode !== "with_minimum") {
+    } else if (field === "to" && mode === "with_maximum") {
       setToAmount(amount);
 
       if (amount) {
         setIsLoading(true);
         (async () => {
-          const forwardAmount = await getSwapWithMaximumForwardAmount(
+          const forwardAmount = await getSwapWithMaximumRequiredAmount(
             contract,
             coinFrom.assetId,
             amount
           );
-
           setFromAmount(forwardAmount);
         })().finally(() => setIsLoading(false));
       }

@@ -8,8 +8,9 @@ import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-import { PoolInfoStruct } from "src/types/contracts/SwayswapContractAbi";
+import { PoolInfo } from "src/types/contracts/SwayswapContractAbi";
 import { formatUnits } from "ethers/lib/utils";
+import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -66,7 +67,7 @@ export default function PoolPage() {
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
   const [stage, setStage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [poolInfo, setPoolInfo] = useState(null as PoolInfoStruct | null);
+  const [poolInfo, setPoolInfo] = useState(null as PoolInfo | null);
 
   useEffect(() => {
     (async () => {
@@ -159,24 +160,26 @@ export default function PoolPage() {
               >
                 Reserves
                 <br />
-                ETH: {formatUnits(poolInfo.eth_reserve, 9).toString()}
+                ETH:{" "}
+                {formatUnits(poolInfo.eth_reserve, DECIMAL_UNITS).toString()}
                 <br />
-                DAI: {formatUnits(poolInfo.token_reserve, 9).toString()}
+                DAI:{" "}
+                {formatUnits(poolInfo.token_reserve, DECIMAL_UNITS).toString()}
                 {BigNumber.from(poolInfo.eth_reserve).gt(0) &&
                 BigNumber.from(poolInfo.token_reserve).gt(0) ? (
                   <>
                     <br />
                     ETH/DAI:{" "}
-                    {BigNumber.from(1000)
+                    {BigNumber.from(ONE_ASSET)
                       .mul(poolInfo.eth_reserve)
                       .div(poolInfo.token_reserve)
-                      .toNumber() / 1000}
+                      .toNumber() / ONE_ASSET}
                     <br />
                     DAI/ETH:{" "}
-                    {BigNumber.from(1000)
+                    {BigNumber.from(ONE_ASSET)
                       .mul(poolInfo.token_reserve)
                       .div(poolInfo.eth_reserve)
-                      .toNumber() / 1000}
+                      .toNumber() / ONE_ASSET}
                   </>
                 ) : null}
               </div>

@@ -185,14 +185,8 @@ const _abi = [
   },
   {
     type: 'function',
-    inputs: [
-      {
-        name: 'amount_to_forward',
-        type: 'u64',
-        components: null,
-      },
-    ],
-    name: 'swap_with_minimum_min_value',
+    inputs: [],
+    name: 'get_swap_with_minimum',
     outputs: [
       {
         name: '',
@@ -203,14 +197,8 @@ const _abi = [
   },
   {
     type: 'function',
-    inputs: [
-      {
-        name: 'amount_to_receive',
-        type: 'u64',
-        components: null,
-      },
-    ],
-    name: 'swap_with_maximum_forward_amount',
+    inputs: [],
+    name: 'get_swap_with_maximum',
     outputs: [
       {
         name: '',
