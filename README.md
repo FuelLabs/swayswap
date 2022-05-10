@@ -6,7 +6,7 @@
 
 ## About the Project
 
-SwaySwap is a decentralized application that takes advantage of Fuel's lightning fast SDK, and [Sway](https://github.com/FuelLabs/sway) language. Create a wallet, acquire funds from a faucet and start exchanging assets with the world's fastest modular stack.
+SwaySwap is a decentralized application that takes advantage of Fuel's lightning fast TS SDK, Rust SDK, and [Sway](https://github.com/FuelLabs/sway) language. Create a wallet, acquire funds from a faucet and start exchanging assets with the world's fastest modular stack.
 
 ## Getting Started
 
