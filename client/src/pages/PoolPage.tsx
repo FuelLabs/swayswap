@@ -8,7 +8,7 @@ import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-import { PoolInfoStruct } from "src/types/contracts/SwayswapContractAbi";
+import { PoolInfo } from "src/types/contracts/SwayswapContractAbi";
 import { formatUnits } from "ethers/lib/utils";
 import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 
@@ -67,7 +67,7 @@ export default function PoolPage() {
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
   const [stage, setStage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [poolInfo, setPoolInfo] = useState(null as PoolInfoStruct | null);
+  const [poolInfo, setPoolInfo] = useState(null as PoolInfo | null);
 
   useEffect(() => {
     (async () => {
