@@ -3,8 +3,16 @@ import { RiSettings3Fill } from "react-icons/ri";
 import { assets, filterAssets, NativeAsset } from "src/lib/SwaySwapMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
-import { useExchangeContract, useSwaySwapContract, useWallet } from "src/context/AppContext";
-import { ExchangeContractAbi, ExchangeContractAbi__factory, SwayswapContractAbi__factory } from "src/types/contracts";
+import {
+  useExchangeContract,
+  useSwaySwapContract,
+  useWallet,
+} from "src/context/AppContext";
+import {
+  ExchangeContractAbi,
+  ExchangeContractAbi__factory,
+  SwayswapContractAbi__factory,
+} from "src/types/contracts";
 import { BigNumber, NativeAssetId, ZeroBytes32 } from "fuels";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
@@ -52,12 +60,12 @@ const otherSide = assets;
 export default function SwapPage() {
   const wallet = useWallet()!;
   const swaySwapContract = useSwaySwapContract()!;
-  const [exchangeId, setExchangeId] = useState('');
+  const [exchangeId, setExchangeId] = useState("");
   const exchangeContract = useExchangeContract(exchangeId)!;
   const [[assetsTo, assetsFrom], setSides] = useState<[Coin[], Coin[]]>([
     oneSide,
     otherSide,
-  ]) 
+  ]);
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],
@@ -71,8 +79,10 @@ export default function SwapPage() {
 
   useEffect(() => {
     (async () => {
-      const tokenId = coinFrom.assetId === NativeAssetId ? coinTo.assetId : coinFrom.assetId;
-      const exchangeId = await swaySwapContract.callStatic.get_exchange_contract(tokenId);
+      const tokenId =
+        coinFrom.assetId === NativeAssetId ? coinTo.assetId : coinFrom.assetId;
+      const exchangeId =
+        await swaySwapContract.callStatic.get_exchange_contract(tokenId);
 
       setPoolExists(exchangeId !== ZeroBytes32);
       setExchangeId(exchangeId);
@@ -203,7 +213,8 @@ export default function SwapPage() {
         <button
           disabled={!poolExists}
           className={style.confirmButton}
-          onClick={(e) => handleSubmit(e)}>
+          onClick={(e) => handleSubmit(e)}
+        >
           Confirm
         </button>
       </div>

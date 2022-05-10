@@ -28,7 +28,9 @@ export default function RemoveLiquidityPage() {
 
   const retrieveLiquidityToken = useCallback(async () => {
     const coins = await wallet.getBalances();
-    const liquidityToken = coins.find((c) => c.assetId === EXCHANGE_CONTRACT_ID);
+    const liquidityToken = coins.find(
+      (c) => c.assetId === EXCHANGE_CONTRACT_ID
+    );
     return liquidityToken;
   }, [wallet]);
 

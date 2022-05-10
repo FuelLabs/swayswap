@@ -14,9 +14,8 @@ fn get_b256(key: b256) -> b256 {
 
 // Store b256 values on memory
 fn store_b256(key: b256, value: b256) {
-    asm(r1, r2: key, r3: value) {
-        move r1 r3;
-        swwq r2 r1;
+    asm(r1: key, r2: value) {
+        swwq r1 r2;
     };
 }
 

@@ -13,36 +13,42 @@ import type {
   BigNumber,
 } from 'fuels';
 
-export type ContractIdStruct = { value: string };
+export type ContractIdInput = { value: string };
 
-export type RemoveLiquidityReturnStruct = {
+export type ContractId = { value: string };
+
+export type RemoveLiquidityReturnInput = {
   eth_amount: BigNumberish;
   token_amount: BigNumberish;
 };
 
-export type PoolInfoStruct = {
+export type RemoveLiquidityReturn = {
+  eth_amount: BigNumber;
+  token_amount: BigNumber;
+};
+
+export type PoolInfoInput = {
   eth_reserve: BigNumberish;
   token_reserve: BigNumberish;
 };
 
+export type PoolInfo = { eth_reserve: BigNumber; token_reserve: BigNumber };
+
 interface ExchangeContractAbiInterface extends Interface {
   functions: {
-    'deposit()': FunctionFragment;
-    'withdraw(u64,struct ContractId)': FunctionFragment;
-    'add_liquidity(u64,u64,u64)': FunctionFragment;
-    'remove_liquidity(u64,u64,u64)': FunctionFragment;
-    'swap_with_minimum(u64,u64)': FunctionFragment;
-    'swap_with_maximum(u64,u64)': FunctionFragment;
-    'get_info()': FunctionFragment;
-    'swap_with_minimum_min_value(u64)': FunctionFragment;
-    'swap_with_maximum_forward_amount(u64)': FunctionFragment;
+    deposit: FunctionFragment;
+    withdraw: FunctionFragment;
+    add_liquidity: FunctionFragment;
+    remove_liquidity: FunctionFragment;
+    swap_with_minimum: FunctionFragment;
+    swap_with_maximum: FunctionFragment;
+    get_info: FunctionFragment;
+    swap_with_minimum_min_value: FunctionFragment;
+    swap_with_maximum_forward_amount: FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: 'deposit', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'withdraw',
-    values: [BigNumberish, ContractIdStruct]
-  ): string;
+  encodeFunctionData(functionFragment: 'withdraw', values: [BigNumberish, ContractIdInput]): string;
   encodeFunctionData(
     functionFragment: 'add_liquidity',
     values: [BigNumberish, BigNumberish, BigNumberish]
@@ -91,28 +97,13 @@ export class ExchangeContractAbi extends Contract {
   functions: {
     deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 
-    'deposit()'(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
-
     withdraw(
       amount: BigNumberish,
-      asset_id: ContractIdStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    'withdraw(u64,struct ContractId)'(
-      amount: BigNumberish,
-      asset_id: ContractIdStruct,
+      asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
     add_liquidity(
-      min_liquidity: BigNumberish,
-      max_tokens: BigNumberish,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    'add_liquidity(u64,u64,u64)'(
       min_liquidity: BigNumberish,
       max_tokens: BigNumberish,
       deadline: BigNumberish,
@@ -124,22 +115,9 @@ export class ExchangeContractAbi extends Contract {
       min_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<RemoveLiquidityReturnStruct>;
-
-    'remove_liquidity(u64,u64,u64)'(
-      min_eth: BigNumberish,
-      min_tokens: BigNumberish,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<RemoveLiquidityReturnStruct>;
+    ): Promise<RemoveLiquidityReturn>;
 
     swap_with_minimum(
-      min: BigNumberish,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    'swap_with_minimum(u64,u64)'(
       min: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -151,24 +129,9 @@ export class ExchangeContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    'swap_with_maximum(u64,u64)'(
-      amount: BigNumberish,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfoStruct>;
-
-    'get_info()'(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PoolInfoStruct>;
+    get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
 
     swap_with_minimum_min_value(
-      amount_to_forward: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    'swap_with_minimum_min_value(u64)'(
       amount_to_forward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -177,8 +140,50 @@ export class ExchangeContractAbi extends Contract {
       amount_to_receive: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+  };
+  callStatic: {
+    deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 
-    'swap_with_maximum_forward_amount(u64)'(
+    withdraw(
+      amount: BigNumberish,
+      asset_id: ContractIdInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    add_liquidity(
+      min_liquidity: BigNumberish,
+      max_tokens: BigNumberish,
+      deadline: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    remove_liquidity(
+      min_eth: BigNumberish,
+      min_tokens: BigNumberish,
+      deadline: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<RemoveLiquidityReturn>;
+
+    swap_with_minimum(
+      min: BigNumberish,
+      deadline: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    swap_with_maximum(
+      amount: BigNumberish,
+      deadline: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
+
+    swap_with_minimum_min_value(
+      amount_to_forward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    swap_with_maximum_forward_amount(
       amount_to_receive: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -186,28 +191,13 @@ export class ExchangeContractAbi extends Contract {
 
   deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
 
-  'deposit()'(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
-
   withdraw(
     amount: BigNumberish,
-    asset_id: ContractIdStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
-
-  'withdraw(u64,struct ContractId)'(
-    amount: BigNumberish,
-    asset_id: ContractIdStruct,
+    asset_id: ContractIdInput,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 
   add_liquidity(
-    min_liquidity: BigNumberish,
-    max_tokens: BigNumberish,
-    deadline: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
-
-  'add_liquidity(u64,u64,u64)'(
     min_liquidity: BigNumberish,
     max_tokens: BigNumberish,
     deadline: BigNumberish,
@@ -219,22 +209,9 @@ export class ExchangeContractAbi extends Contract {
     min_tokens: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<RemoveLiquidityReturnStruct>;
-
-  'remove_liquidity(u64,u64,u64)'(
-    min_eth: BigNumberish,
-    min_tokens: BigNumberish,
-    deadline: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<RemoveLiquidityReturnStruct>;
+  ): Promise<RemoveLiquidityReturn>;
 
   swap_with_minimum(
-    min: BigNumberish,
-    deadline: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
-
-  'swap_with_minimum(u64,u64)'(
     min: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -246,34 +223,14 @@ export class ExchangeContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
-  'swap_with_maximum(u64,u64)'(
-    amount: BigNumberish,
-    deadline: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
-
-  get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfoStruct>;
-
-  'get_info()'(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<PoolInfoStruct>;
+  get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
 
   swap_with_minimum_min_value(
     amount_to_forward: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
-  'swap_with_minimum_min_value(u64)'(
-    amount_to_forward: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
-
   swap_with_maximum_forward_amount(
-    amount_to_receive: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
-
-  'swap_with_maximum_forward_amount(u64)'(
     amount_to_receive: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;

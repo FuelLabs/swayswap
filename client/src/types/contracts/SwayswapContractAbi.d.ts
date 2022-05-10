@@ -15,8 +15,8 @@ import type {
 
 interface SwayswapContractAbiInterface extends Interface {
   functions: {
-    'add_exchange_contract(b256,b256)': FunctionFragment;
-    'get_exchange_contract(b256)': FunctionFragment;
+    add_exchange_contract: FunctionFragment;
+    get_exchange_contract: FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: 'add_exchange_contract', values: [string, string]): string;
@@ -35,18 +35,19 @@ export class SwayswapContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
-    'add_exchange_contract(b256,b256)'(
+    get_exchange_contract(
+      token_id: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<string>;
+  };
+  callStatic: {
+    add_exchange_contract(
       token_id: string,
       exchange_id: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
     get_exchange_contract(
-      token_id: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<string>;
-
-    'get_exchange_contract(b256)'(
       token_id: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<string>;
@@ -58,18 +59,7 @@ export class SwayswapContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 
-  'add_exchange_contract(b256,b256)'(
-    token_id: string,
-    exchange_id: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
-
   get_exchange_contract(
-    token_id: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<string>;
-
-  'get_exchange_contract(b256)'(
     token_id: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<string>;

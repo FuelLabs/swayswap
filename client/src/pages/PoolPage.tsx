@@ -1,13 +1,19 @@
 import classNames from "classnames";
-import { arrayify, BigNumber, ContractFactory, Wallet, ZeroBytes32 } from "fuels";
+import {
+  arrayify,
+  BigNumber,
+  ContractFactory,
+  Wallet,
+  ZeroBytes32,
+} from "fuels";
 import { useEffect, useState, useCallback } from "react";
 import { RiCheckFill } from "react-icons/ri";
-import { useExchangeContract, useSwaySwapContract, useWallet } from "src/context/AppContext";
 import {
-  assets,
-  NativeAsset,
-  filterAssets
-} from "src/lib/SwaySwapMetadata";
+  useExchangeContract,
+  useSwaySwapContract,
+  useWallet,
+} from "src/context/AppContext";
+import { assets, NativeAsset, filterAssets } from "src/lib/SwaySwapMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
@@ -61,16 +67,22 @@ function PoolLoader({
 }
 
 const createExchangeContract = async (wallet: Wallet, tokenId: string) => {
-  const { bytecode } = (await wallet.provider.getContract(EXCHANGE_CONTRACT_ID))!;
-  const contractFactory = new ContractFactory(bytecode, ExchangeContractAbi__factory.abi, wallet);
+  const { bytecode } = (await wallet.provider.getContract(
+    EXCHANGE_CONTRACT_ID
+  ))!;
+  const contractFactory = new ContractFactory(
+    bytecode,
+    ExchangeContractAbi__factory.abi,
+    wallet
+  );
   const contract = await contractFactory.deployContract([
     [
-      '0x0000000000000000000000000000000000000000000000000000000000000001',
-      tokenId
-    ]
+      "0x0000000000000000000000000000000000000000000000000000000000000001",
+      tokenId,
+    ],
   ]);
   return contract;
-}
+};
 
 export default function PoolPage() {
   const wallet = useWallet()!;
@@ -83,15 +95,17 @@ export default function PoolPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [poolInfo, setPoolInfo] = useState<PoolInfoStruct>({
     eth_reserve: BigNumber.from(0),
-    token_reserve: BigNumber.from(0)
+    token_reserve: BigNumber.from(0),
   });
-  const [exchangeId, setExchangeId] = useState('');
+  const [exchangeId, setExchangeId] = useState("");
   const exchangeContract = useExchangeContract(exchangeId)!;
-  const tokenName = coinTo.name ?? '';
+  const tokenName = coinTo.name ?? "";
 
   const setExchangeContractId = useCallback(async () => {
-    setExchangeId('');
-    const result = await swaySwapContract.callStatic.get_exchange_contract(coinTo.assetId);
+    setExchangeId("");
+    const result = await swaySwapContract.callStatic.get_exchange_contract(
+      coinTo.assetId
+    );
     // If exchange contract id is different
     // of 0 them set exchange contract id
     if (result !== ZeroBytes32) {
@@ -111,15 +125,20 @@ export default function PoolPage() {
       } else {
         setPoolInfo({
           eth_reserve: BigNumber.from(0),
-          token_reserve: BigNumber.from(0)
+          token_reserve: BigNumber.from(0),
         });
       }
     })();
   }, [exchangeId]);
 
   const addLiquidity = async (tokenId: string) => {
-    const contractId = await swaySwapContract.callStatic.get_exchange_contract(tokenId);
-    const exchangeContract = ExchangeContractAbi__factory.connect(contractId, wallet);
+    const contractId = await swaySwapContract.callStatic.get_exchange_contract(
+      tokenId
+    );
+    const exchangeContract = ExchangeContractAbi__factory.connect(
+      contractId,
+      wallet
+    );
     // TODO: Combine all transactions on single tx leverage by scripts
     // https://github.com/FuelLabs/swayswap-demo/issues/42
     setIsLoading(true);
@@ -147,12 +166,17 @@ export default function PoolPage() {
     setIsLoading(true);
     const tokenId = coinTo.assetId;
     // If contract didn't exists create e new contract exchange
-    const contractId = await swaySwapContract.callStatic.get_exchange_contract(tokenId);
+    const contractId = await swaySwapContract.callStatic.get_exchange_contract(
+      tokenId
+    );
     if (contractId === ZeroBytes32) {
       // Create a exchange contract token
       const exchangeContract = await createExchangeContract(wallet, tokenId);
       // Register exchange contract on swayswap
-      await swaySwapContract.functions.add_exchange_contract(tokenId, exchangeContract.id);
+      await swaySwapContract.functions.add_exchange_contract(
+        tokenId,
+        exchangeContract.id
+      );
       // Get new id from the swayswap contract
       await setExchangeContractId();
       // Create pool of liquidity

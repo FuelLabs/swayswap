@@ -1,8 +1,22 @@
-import React, { PropsWithChildren, useCallback, useContext, useMemo } from "react";
-import { Wallet, ScriptTransactionRequest, TransactionResult, BytesLike } from "fuels";
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useMemo,
+} from "react";
+import {
+  Wallet,
+  ScriptTransactionRequest,
+  TransactionResult,
+  BytesLike,
+} from "fuels";
 import { CoinETH } from "src/lib/constants";
 import { randomBytes } from "ethers/lib/utils";
-import { SWAYSWAP_CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "src/config";
+import {
+  SWAYSWAP_CONTRACT_ID,
+  FAUCET_AMOUNT,
+  FUEL_PROVIDER_URL,
+} from "src/config";
 import { atom, useRecoilState } from "recoil";
 import { persistEffect } from "src/lib/recoilEffects";
 import {
@@ -53,10 +67,13 @@ export const AppContextProvider = ({ children }: PropsWithChildren<{}>) => {
     return new Wallet(privateKey, FUEL_PROVIDER_URL);
   }, [privateKey]);
 
-  const exchangeContract = useCallback((contractId: string) => {
-    if (!wallet) return null;
-    return ExchangeContractAbi__factory.connect(contractId, wallet);
-  }, [wallet]);
+  const exchangeContract = useCallback(
+    (contractId: string) => {
+      if (!wallet) return null;
+      return ExchangeContractAbi__factory.connect(contractId, wallet);
+    },
+    [wallet]
+  );
   const swaySwapContract = useMemo(() => {
     if (!wallet) return null;
     return SwayswapContractAbi__factory.connect(SWAYSWAP_CONTRACT_ID, wallet);
