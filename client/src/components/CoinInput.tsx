@@ -160,7 +160,8 @@ export function CoinInput({
     <div className={style.transferPropContainer}>
       <div className="flex-1">
         <NumberFormat
-          placeholder="0.0"
+          placeholder="0"
+          decimalScale={DECIMAL_UNITS}
           value={amount && formatUnits(amount, DECIMAL_UNITS)}
           displayType={disabled ? "text" : "input"}
           onValueChange={(e) =>
