@@ -66,8 +66,8 @@ interface SwayswapContractAbiInterface extends Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: 'get_info', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'get_swap_with_minimum', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'get_swap_with_maximum', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'get_swap_with_minimum', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'get_swap_with_maximum', values: [BigNumberish]): string;
 
   decodeFunctionData(functionFragment: 'deposit', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'withdraw', data: BytesLike): DecodedValue;
@@ -120,10 +120,12 @@ export class SwayswapContractAbi extends Contract {
     get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
 
     get_swap_with_minimum(
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     get_swap_with_maximum(
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -165,10 +167,12 @@ export class SwayswapContractAbi extends Contract {
     get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
 
     get_swap_with_minimum(
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     get_swap_with_maximum(
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -210,10 +214,12 @@ export class SwayswapContractAbi extends Contract {
   get_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
 
   get_swap_with_minimum(
+    amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
   get_swap_with_maximum(
+    amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 }

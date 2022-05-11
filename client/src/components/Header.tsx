@@ -31,12 +31,12 @@ const Header = () => {
         {exists && (
           <div className={style.navItemsContainer}>
             <div
-              onClick={() => navigate(Pages.assets)}
+              onClick={() => navigate(Pages.wallet)}
               className={`${style.navItem} ${
-                location.pathname === Pages.assets && style.activeNavItem
+                location.pathname === Pages.wallet && style.activeNavItem
               }`}
             >
-              Assets
+              Wallet
             </div>
             <div
               onClick={() => navigate(Pages.swap)}
