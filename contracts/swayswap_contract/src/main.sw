@@ -1,8 +1,20 @@
 contract;
 
-use std::{address::*, assert::assert, block::*, chain::auth::*, context::{*, call_frames::*}, contract_id::ContractId, hash::*, panic::panic, storage::*, token::*};
+use std::{
+    address::*,
+    assert::assert,
+    block::*,
+    chain::auth::*,
+    context::{*, call_frames::*},
+    contract_id::ContractId,
+    hash::*,
+    panic::panic,
+    storage::*,
+    token::*,
+};
+
 use std::result::*;
-use swayswap_abi::{Exchange, RemoveLiquidityReturn, PoolInfo};
+use swayswap_abi::{Exchange, PoolInfo, RemoveLiquidityReturn};
 
 ////////////////////////////////////////
 // Constants
@@ -91,11 +103,11 @@ fn get_msg_sender_address_or_panic() -> Address {
 
 impl Exchange for Contract {
     fn deposit() {
-        assert((msg_asset_id()).into() == ETH_ID || (msg_asset_id()).into() == TOKEN_ID);
+        assert(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == TOKEN_ID);
 
         let sender = get_msg_sender_address_or_panic();
 
-        let key = key_deposits(sender, (msg_asset_id()).into());
+        let key = key_deposits(sender, msg_asset_id().into());
 
         let total_amount = get::<u64>(key) + msg_amount();
         store(key, total_amount);
@@ -120,7 +132,7 @@ impl Exchange for Contract {
         assert(msg_amount() == 0);
         assert(deadline > height());
         assert(max_tokens > 0);
-        assert((msg_asset_id()).into() == ETH_ID || (msg_asset_id()).into() == TOKEN_ID);
+        assert(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == TOKEN_ID);
 
         let sender = get_msg_sender_address_or_panic();
 
@@ -177,7 +189,7 @@ impl Exchange for Contract {
 
     fn remove_liquidity(min_eth: u64, min_tokens: u64, deadline: u64) -> RemoveLiquidityReturn {
         assert(msg_amount() > 0);
-        assert((msg_asset_id()).into() == (contract_id()).into());
+        assert(msg_asset_id().into() == (contract_id()).into());
         assert(deadline > height());
         assert(min_eth > 0 && min_tokens > 0);
 
@@ -206,7 +218,7 @@ impl Exchange for Contract {
     }
 
     fn swap_with_minimum(min: u64, deadline: u64) -> u64 {
-        let asset_id = (msg_asset_id()).into();
+        let asset_id = msg_asset_id().into();
         let fowarded_amount = msg_amount();
 
         assert(deadline >= height());
@@ -234,7 +246,7 @@ impl Exchange for Contract {
     }
 
     fn swap_with_maximum(amount: u64, deadline: u64) -> u64 {
-        let asset_id = (msg_asset_id()).into();
+        let asset_id = msg_asset_id().into();
         let fowarded_amount = msg_amount();
 
         assert(deadline >= height());
@@ -280,7 +292,7 @@ impl Exchange for Contract {
         let token_reserve = get_current_balance(TOKEN_ID);
         let amount = msg_amount();
         let mut sold = 0;
-        if ((msg_asset_id()).into() == ETH_ID) {
+        if (msg_asset_id().into() == ETH_ID) {
             sold = get_input_price(amount, eth_reserve, token_reserve);
         } else {
             sold = get_input_price(amount, token_reserve, eth_reserve);
@@ -293,7 +305,7 @@ impl Exchange for Contract {
         let token_reserve = get_current_balance(TOKEN_ID);
         let amount = msg_amount();
         let mut sold = 0;
-        if ((msg_asset_id()).into() == ETH_ID) {
+        if (msg_asset_id().into() == ETH_ID) {
             sold = get_output_price(amount, eth_reserve, token_reserve);
         } else {
             sold = get_output_price(amount, token_reserve, eth_reserve);
