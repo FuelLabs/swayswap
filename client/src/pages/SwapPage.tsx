@@ -8,6 +8,8 @@ import { SwayswapContractAbi } from "src/types/contracts";
 import { BigNumber } from "fuels";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
+import { useMutation, useQuery } from "react-query";
+import { sleep } from "src/lib/utils";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -53,77 +55,75 @@ export default function SwapPage() {
     assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
   const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
-  const [mode, setMode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [activeInput, setActiveInput] = useState(null as "from" | "to" | null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: any) => {
-    if (!fromAmount) {
-      throw new Error('"fromAmount" is required');
-    }
-    if (!toAmount) {
-      throw new Error('"toAmount" is required');
-    }
-
-    const deadline = 1000;
-
-    if (mode === "with_maximum") {
-      const requiredAmount = await getSwapWithMaximumRequiredAmount(
-        contract,
-        coinFrom.assetId,
-        toAmount
-      );
-      await contract.functions.swap_with_maximum(toAmount, deadline, {
-        forward: [requiredAmount, coinFrom.assetId],
-        variableOutputs: 1,
-      });
-    } else if (mode === "with_minimum") {
-      const minValue: BigNumber = await getSwapWithMinimumMinAmount(
-        contract,
-        coinFrom.assetId,
-        fromAmount
-      );
-      await contract.functions.swap_with_minimum(minValue, deadline, {
-        forward: [fromAmount, coinFrom.assetId],
-        variableOutputs: 1,
-      });
-    } else {
-      throw new Error(`Invalid mode "${mode}"`);
-    }
-    navigate(Pages.wallet);
-  };
-
-  const setAmountField = (amount: BigNumber | null, field: "from" | "to") => {
-    if (field === "from" && mode === "with_minimum") {
-      setFromAmount(amount);
-
-      if (amount) {
-        setIsLoading(true);
-        (async () => {
-          const minValue = await getSwapWithMinimumMinAmount(
-            contract,
-            coinFrom.assetId,
-            amount
-          );
-          setToAmount(minValue);
-        })().finally(() => setIsLoading(false));
-      }
-    } else if (field === "to" && mode === "with_maximum") {
-      setToAmount(amount);
-
-      if (amount) {
-        setIsLoading(true);
-        (async () => {
-          const forwardAmount = await getSwapWithMaximumRequiredAmount(
-            contract,
-            coinFrom.assetId,
-            amount
-          );
-          setFromAmount(forwardAmount);
-        })().finally(() => setIsLoading(false));
+  const { data: inactiveAmount } = useQuery(
+    ["SwapPage-inactiveAmount", activeInput, toAmount, fromAmount],
+    async () => {
+      if (activeInput === "to") {
+        if (!toAmount) return null;
+        return await getSwapWithMaximumRequiredAmount(
+          contract,
+          coinFrom.assetId,
+          toAmount
+        );
+      } else if (activeInput === "from") {
+        if (!fromAmount) return null;
+        return await getSwapWithMinimumMinAmount(
+          contract,
+          coinFrom.assetId,
+          fromAmount
+        );
+      } else {
+        return null;
       }
     }
-  };
+  );
+
+  const swapMutation = useMutation(
+    async () => {
+      if (!fromAmount) {
+        throw new Error('"fromAmount" is required');
+      }
+      if (!toAmount) {
+        throw new Error('"toAmount" is required');
+      }
+
+      const deadline = 1000;
+
+      if (activeInput === "to") {
+        const forwardAmount = await getSwapWithMaximumRequiredAmount(
+          contract,
+          coinFrom.assetId,
+          toAmount
+        );
+        await contract.functions.swap_with_maximum(toAmount, deadline, {
+          forward: [forwardAmount, coinFrom.assetId],
+          variableOutputs: 1,
+        });
+      } else if (activeInput === "from") {
+        const minValue = await getSwapWithMinimumMinAmount(
+          contract,
+          coinFrom.assetId,
+          fromAmount
+        );
+        await contract.functions.swap_with_minimum(minValue, deadline, {
+          forward: [fromAmount, coinFrom.assetId],
+          variableOutputs: 1,
+        });
+      } else {
+        throw new Error(`Invalid mode "${activeInput}"`);
+      }
+      await sleep(1000);
+    },
+    {
+      onSuccess: () => {
+        // TODO: Improve feedback after swap
+        navigate(Pages.wallet);
+      },
+    }
+  );
 
   return (
     <div className={style.wrapper}>
@@ -138,9 +138,11 @@ export default function SwapPage() {
         <div className="mt-6">
           <CoinInput
             coin={coinFrom}
-            amount={fromAmount}
-            onInput={() => setMode("with_minimum")}
-            onChangeAmount={(amount) => setAmountField(amount, "from")}
+            amount={activeInput === "from" ? fromAmount : inactiveAmount}
+            onInput={() => setActiveInput("from")}
+            onChangeAmount={(amount) => {
+              if (activeInput === "from") setFromAmount(amount);
+            }}
             coins={getOtherCoins([coinFrom, coinTo])}
             onChangeCoin={(coin: Coin) => setCoins([coin, coinTo])}
           />
@@ -158,14 +160,19 @@ export default function SwapPage() {
         <div className="mb-10">
           <CoinInput
             coin={coinTo}
-            amount={toAmount}
-            onInput={() => setMode("with_maximum")}
-            onChangeAmount={(amount) => setAmountField(amount, "to")}
+            amount={activeInput === "to" ? toAmount : inactiveAmount}
+            onInput={() => setActiveInput("to")}
+            onChangeAmount={(amount) => {
+              if (activeInput === "to") setToAmount(amount);
+            }}
             coins={getOtherCoins([coinFrom, coinTo])}
             onChangeCoin={(coin: Coin) => setCoins([coinFrom, coin])}
           />
         </div>
-        <div onClick={(e) => handleSubmit(e)} className={style.confirmButton}>
+        <div
+          onClick={() => swapMutation.mutate()}
+          className={style.confirmButton}
+        >
           Confirm
         </div>
       </div>

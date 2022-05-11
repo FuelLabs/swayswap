@@ -10,6 +10,7 @@ const WalletPage = lazy(() => import("src/pages/WalletPage"));
 const PoolPage = lazy(() => import("src/pages/PoolPage"));
 const MintTokenPage = lazy(() => import("src/pages/MintTokenPage"));
 const RemoveLiquidityPage = lazy(() => import("./pages/RemoveLiquidityPage"));
+const FaucetPage = lazy(() => import("src/pages/FaucetPage"));
 
 export default function AppRoutes() {
   return (
@@ -39,6 +40,10 @@ export default function AppRoutes() {
         <Route
           path={Pages.removeLiquidity}
           element={<RequireWallet children={<RemoveLiquidityPage />} />}
+        />
+        <Route
+          path={Pages.faucet}
+          element={<RequireWallet children={<FaucetPage />} />}
         />
       </Route>
     </Routes>
