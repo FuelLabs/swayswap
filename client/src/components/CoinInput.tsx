@@ -165,7 +165,7 @@ export function CoinInput({
           value={amount && formatUnits(amount, DECIMAL_UNITS)}
           displayType={disabled ? "text" : "input"}
           onValueChange={(e) =>
-            onChangeAmount?.(parseUnits(e.value, DECIMAL_UNITS))
+            onChangeAmount?.(e.value !== "" ? parseUnits(e.value, DECIMAL_UNITS) : null)
           }
           className={style.transferPropInput}
           thousandSeparator={false}
