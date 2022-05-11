@@ -1,5 +1,6 @@
 import { useAppContext } from "src/context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
@@ -12,15 +13,24 @@ export default function SetupPage() {
   const navigate = useNavigate();
   const { createWallet } = useAppContext();
 
-  const handleWalletCreation = () => {
-    createWallet();
-    navigate("/assets");
-  };
+  const createWalletMutation = useMutation(
+    async () => {
+      createWallet();
+    },
+    {
+      onSuccess: () => {
+        navigate("/assets");
+      },
+    }
+  );
 
   return (
     <div className={style.wrapper}>
       <div className={style.content}>
-        <div onClick={handleWalletCreation} className={style.confirmButton}>
+        <div
+          onClick={() => createWalletMutation.mutate()}
+          className={style.confirmButton}
+        >
           Create wallet
         </div>
       </div>
