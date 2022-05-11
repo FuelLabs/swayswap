@@ -66,9 +66,8 @@ export default function PoolPage() {
   const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
   const [toAmount, setToAmount] = useState(null as BigNumber | null);
   const [stage, setStage] = useState(0);
-  const { data: poolInfo } = useQuery(
-    "PoolPage-poolInfo",
-    () => contract.callStatic.get_info()
+  const { data: poolInfo } = useQuery("PoolPage-poolInfo", () =>
+    contract.callStatic.get_info()
   );
 
   const addLiquidityMutation = useMutation(
@@ -102,7 +101,7 @@ export default function PoolPage() {
     {
       onSuccess: () => {
         // TODO: Improve feedback after swap
-        navigate(Pages.assets);
+        navigate(Pages.wallet);
       },
       onSettled: () => {
         setStage(0);

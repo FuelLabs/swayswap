@@ -87,7 +87,7 @@ export default function SwapPage() {
     } else {
       throw new Error(`Invalid mode "${mode}"`);
     }
-    navigate(Pages.assets);
+    navigate(Pages.wallet);
   };
 
   const setAmountField = (amount: BigNumber | null, field: "from" | "to") => {

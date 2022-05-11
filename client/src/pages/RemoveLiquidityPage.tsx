@@ -52,7 +52,7 @@ export default function RemoveLiquidityPage() {
     },
     {
       onSuccess: () => {
-        navigate(Pages.assets);
+        navigate(Pages.wallet);
       },
     }
   );

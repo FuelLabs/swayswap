@@ -32,7 +32,7 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
   });
 };
 
-export default function AssetsPage() {
+export default function WalletPage() {
   const { faucet } = useAppContext();
   const wallet = useWallet();
 

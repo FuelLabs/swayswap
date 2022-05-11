@@ -6,7 +6,7 @@ import { Pages } from "./types/pages";
 
 const SetupPage = lazy(() => import("src/pages/SetupPage"));
 const SwapPage = lazy(() => import("src/pages/SwapPage"));
-const AssetsPage = lazy(() => import("src/pages/AssetsPage"));
+const WalletPage = lazy(() => import("src/pages/WalletPage"));
 const PoolPage = lazy(() => import("src/pages/PoolPage"));
 const MintTokenPage = lazy(() => import("src/pages/MintTokenPage"));
 const RemoveLiquidityPage = lazy(() => import("./pages/RemoveLiquidityPage"));
@@ -17,12 +17,12 @@ export default function AppRoutes() {
       <Route element={<MainLayout />}>
         <Route
           path="*"
-          element={<RequireWallet children={<Navigate to={Pages.assets} />} />}
+          element={<RequireWallet children={<Navigate to={Pages.wallet} />} />}
         />
         <Route path={Pages.setup} element={<SetupPage />} />
         <Route
-          path={Pages.assets}
-          element={<RequireWallet children={<AssetsPage />} />}
+          path={Pages.wallet}
+          element={<RequireWallet children={<WalletPage />} />}
         />
         <Route
           path={Pages.swap}

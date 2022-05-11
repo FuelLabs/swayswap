@@ -48,7 +48,7 @@ export default function MintTokenPage() {
         // TODO: Improve feedback for the user
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
-        navigate(Pages.assets);
+        navigate(Pages.wallet);
       },
     }
   );

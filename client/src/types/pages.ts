@@ -2,7 +2,7 @@ export enum Pages {
   'pool' = '/pool',
   'swap' = '/swap',
   'setup' = '/setup',
-  'assets' = '/assets',
+  'wallet' = '/wallet',
   'mintToken' = '/mint',
   'removeLiquidity' = '/remove-liquidity',
 }
