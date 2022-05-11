@@ -28,7 +28,7 @@ abi Exchange {
     /// Get information on the liquidity pool.
     fn get_info() -> PoolInfo;
     /// Get the minimum amount of coins that will be received for a swap_with_minimum.
-    fn get_swap_with_minimum() -> u64;
+    fn get_swap_with_minimum(amount: u64) -> u64;
     /// Get required amount of coins for a swap_with_maximum.
-    fn get_swap_with_maximum() -> u64;
+    fn get_swap_with_maximum(amount: u64) -> u64;
 }

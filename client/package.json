@@ -14,7 +14,7 @@
     "@types/react-dom": "^18.0.3",
     "classnames": "^2.3.1",
     "ethers": "^5.5.4",
-    "fuels": "^0.0.0-master-5dea626c",
+    "fuels": "^0.0.0-master-e10c317d",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-error-boundary": "^3.1.4",
@@ -67,6 +67,6 @@
     "prettier-plugin-tailwindcss": "^0.1.8",
     "tailwindcss": "^3.0.23",
     "typechain": "^8.0.0",
-    "typechain-target-fuels": "^0.0.0-master-5dea626c"
+    "typechain-target-fuels": "^0.0.0-master-e10c317d"
   }
 }

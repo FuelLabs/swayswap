@@ -185,7 +185,13 @@ const _abi = [
   },
   {
     type: 'function',
-    inputs: [],
+    inputs: [
+      {
+        name: 'amount',
+        type: 'u64',
+        components: null,
+      },
+    ],
     name: 'get_swap_with_minimum',
     outputs: [
       {
@@ -197,7 +203,13 @@ const _abi = [
   },
   {
     type: 'function',
-    inputs: [],
+    inputs: [
+      {
+        name: 'amount',
+        type: 'u64',
+        components: null,
+      },
+    ],
     name: 'get_swap_with_maximum',
     outputs: [
       {

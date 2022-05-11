@@ -23,9 +23,12 @@ const getSwapWithMaximumRequiredAmount = async (
   assetId: string,
   amount: BigNumber
 ) => {
-  const requiredAmount = await contract.callStatic.get_swap_with_maximum({
-    forward: [amount, assetId],
-  });
+  const requiredAmount = await contract.callStatic.get_swap_with_maximum(
+    amount,
+    {
+      forward: [0, assetId],
+    }
+  );
   return requiredAmount;
 };
 
@@ -34,8 +37,8 @@ const getSwapWithMinimumMinAmount = async (
   assetId: string,
   amount: BigNumber
 ) => {
-  const minAmount = await contract.callStatic.get_swap_with_minimum({
-    forward: [amount, assetId],
+  const minAmount = await contract.callStatic.get_swap_with_minimum(amount, {
+    forward: [0, assetId],
   });
   return minAmount;
 };
