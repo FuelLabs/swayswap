@@ -13,6 +13,7 @@
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "classnames": "^2.3.1",
+    "clipboard": "^2.0.11",
     "ethers": "^5.5.4",
     "fuels": "^0.0.0-master-e10c317d",
     "react": "^18.1.0",

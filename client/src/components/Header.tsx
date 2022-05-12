@@ -1,16 +1,15 @@
 import fuelLogo from "src/assets/fuel-logo-512x512.png";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useWallet } from "src/context/AppContext";
 import { Pages } from "src/types/pages";
 
 const style = {
-  wrapper: `p-4 w-screen flex justify-between items-center`,
-  headerLogo: `flex w-1/4 items-center justify-start`,
-  nav: `flex-1 flex justify-center items-center`,
+  wrapper: `p-4 w-screen flex flex-col sm:flex-row justify-between items-center`,
+  headerLogo: `flex items-center justify-start`,
+  nav: `flex-1 flex justify-center items-center mt-2 sm:mt-0`,
   navItemsContainer: `flex bg-[#191B1F] rounded-3xl`,
   navItem: `px-4 py-2 m-1 flex items-center text-lg font-semibold text-[0.9rem] cursor-pointer rounded-3xl`,
   activeNavItem: `bg-[#20242A]`,
-  buttonsContainer: `flex w-1/4 justify-end items-center`,
+  buttonsContainer: `flex justify-end items-center`,
   button: `flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semi-bold`,
   buttonPadding: `p-2`,
   buttonTextContainer: `h-8 flex items-center`,
@@ -20,7 +19,6 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const exists = Object.values(Pages).includes(location.pathname as Pages);
-  const wallet = useWallet();
 
   return (
     <div className={style.wrapper}>
@@ -68,18 +66,7 @@ const Header = () => {
           </div>
         )}
       </div>
-
-      <div className={style.buttonsContainer}>
-        {wallet && (
-          <div className={`${style.button} ${style.buttonPadding}`}>
-            <div className={style.buttonTextContainer}>
-              {/* TODO: On hover we should show the address https://github.com/FuelLabs/swayswap-demo/issues/38 */}
-              {/* TODO: On click/press should copy wallet address https://github.com/FuelLabs/swayswap-demo/issues/37 */}
-              {wallet?.address.slice(0, 8)}...{wallet?.address.slice(-5)}
-            </div>
-          </div>
-        )}
-      </div>
+      <div className={style.buttonsContainer} />
     </div>
   );
 };
