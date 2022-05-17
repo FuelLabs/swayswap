@@ -1,6 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { toBigInt } from "fuels";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { Fragment, useState } from "react";
@@ -9,6 +10,9 @@ import { DECIMAL_UNITS } from "src/config";
 import urlJoin from "url-join";
 
 const { PUBLIC_URL } = process.env;
+
+// Max value supported
+const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
 
 const style = {
   transferPropContainer: `bg-[#20242A] rounded-2xl p-4 text-3xl border border-[#20242A] 
@@ -138,6 +142,14 @@ export function CoinSelector({
   );
 }
 
+const parseValue = (value: string) => {
+  if (value !== "") {
+    const _value = value === "." ? "0." : value;
+    return parseUnits(_value, DECIMAL_UNITS).toBigInt();
+  }
+  return toBigInt(0);
+};
+
 export function CoinInput({
   amount,
   coin,
@@ -155,18 +167,31 @@ export function CoinInput({
   onChangeCoin?: (value: Coin) => void;
   onInput?: (...args: any) => void;
 }) {
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    if (amount != null) {
+      setValue(formatUnits(amount, DECIMAL_UNITS));
+    } else if (!amount) {
+      setValue("");
+    }
+  }, [amount, setValue]);
+
   return (
     <div className={style.transferPropContainer}>
       <div className="flex-1">
         <NumberFormat
           placeholder="0"
+          allowNegative={false}
           decimalScale={DECIMAL_UNITS}
-          value={amount ? formatUnits(amount, DECIMAL_UNITS) : ''}
+          value={value}
+          isAllowed={({ value }) => {
+            return parseValue(value) <= MAX_U64_VALUE;
+          }}
           displayType={disabled ? "text" : "input"}
           onValueChange={(e) => {
-            onChangeAmount?.(
-              e.value !== "" ? parseUnits(e.value, DECIMAL_UNITS).toBigInt() : null
-            )
+            setValue(e.value);
+            onChangeAmount?.(e.value !== "" ? parseValue(e.value) : null);
           }}
           className={style.transferPropInput}
           thousandSeparator={false}

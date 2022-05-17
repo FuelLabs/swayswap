@@ -11,4 +11,4 @@ export const FAUCET_AMOUNT = parseUnits('0.5', DECIMAL_UNITS).toBigInt();
 export const MINT_AMOUNT = parseUnits('2000', DECIMAL_UNITS).toBigInt();
 export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS).toBigInt();
 export const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY!;
-export const ENABLE_FAUCET_API = process.env.REACT_APP_ENABLE_FAUCET_API === "true";
+export const ENABLE_FAUCET_API = process.env.REACT_APP_ENABLE_FAUCET_API === 'true';

@@ -1,5 +1,11 @@
 import React, { PropsWithChildren, useContext, useMemo } from "react";
-import { Wallet, ScriptTransactionRequest, TransactionResult, CoinStatus, toBigInt } from "fuels";
+import {
+  Wallet,
+  ScriptTransactionRequest,
+  TransactionResult,
+  CoinStatus,
+  toBigInt,
+} from "fuels";
 import { CoinETH } from "src/lib/constants";
 import { randomBytes } from "ethers/lib/utils";
 import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "src/config";
@@ -14,7 +20,7 @@ interface AppContextValue {
   wallet: Wallet | null;
   contract: ExchangeContractAbi | null;
   createWallet: () => void;
-  faucet: () => Promise<TransactionResult<'success'>>;
+  faucet: () => Promise<TransactionResult<"success">>;
 }
 
 const walletPrivateKeyState = atom<string | null>({
@@ -77,7 +83,7 @@ export const AppContextProvider = ({ children }: PropsWithChildren<{}>) => {
               "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
             status: CoinStatus.Unspent,
             maturity: toBigInt(0),
-            blockCreated: toBigInt(0)
+            blockCreated: toBigInt(0),
           });
           transactionRequest.addCoinOutput(
             wallet!.address,
