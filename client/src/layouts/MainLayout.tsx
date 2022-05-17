@@ -5,8 +5,8 @@ import { useQueryErrorResetBoundary } from "react-query";
 import { Suspense } from "react";
 
 const style = {
-  wrapper: `h-screen max-h-screen h-min-screen w-screen bg-[#282c34] text-white select-none flex flex-col justify-between`,
-  content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
+  wrapper: `min-h-screen w-screen bg-[#282c34] text-white select-none flex flex-col justify-between`,
+  content: `bg-[#191B1F] w-[30rem] flex-1 rounded-2xl p-4 m-2`,
   confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-2 px-8 text-l font-semibold items-center
     justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
 };

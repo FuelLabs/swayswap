@@ -1,15 +1,14 @@
 import { formatUnits } from "ethers/lib/utils";
-import { useState } from "react";
 import { useContract, useWallet } from "src/context/AppContext";
 import coins from "src/lib/CoinsMetadata";
-import { CoinInput } from "src/components/CoinInput";
+import { CoinInput, useCoinInput } from "src/components/CoinInput";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { CONTRACT_ID, DECIMAL_UNITS } from "src/config";
 import { useMutation, useQuery } from "react-query";
 
 const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
+  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
   confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
@@ -19,17 +18,22 @@ const style = {
 
 export default function RemoveLiquidityPage() {
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
-  const [amount, setAmount] = useState(null as bigint | null);
   const wallet = useWallet()!;
   const contract = useContract()!;
   const navigate = useNavigate();
+
+  const tokenInput = useCoinInput({ coin: liquidityToken });
+  const amount = tokenInput.value.parsed;
 
   const { data: balance } = useQuery(
     "RemoveLiquidityPage-balance",
     async () => {
       const balances = await wallet.getBalances();
-      const balance = balances.find((b) => b.assetId === CONTRACT_ID)!;
-      return balance.amount;
+      const result = balances.find((b) => b.assetId === CONTRACT_ID)!;
+      return {
+        raw: result?.amount || 0,
+        formatted: result ? formatUnits(result?.amount, DECIMAL_UNITS) : "0",
+      };
     }
   );
 
@@ -38,7 +42,7 @@ export default function RemoveLiquidityPage() {
       if (!amount) {
         throw new Error('"amount" is required');
       }
-      if (amount > (balance || 0)) {
+      if (amount > balance?.raw!) {
         alert("Amount is bigger them the current balance!");
       }
 
@@ -67,16 +71,12 @@ export default function RemoveLiquidityPage() {
           <h1>Remove liquidity</h1>
         </div>
         <div className="mt-8 mb-10">
-          <CoinInput
-            coin={liquidityToken}
-            amount={amount}
-            onChangeAmount={(amount) => setAmount(amount)}
-          />
+          <CoinInput {...tokenInput.getInputProps()} />
           <div
             className="mt-3 ml-4 cursor-pointer text-slate-400 underline decoration-1"
-            onClick={() => setAmount(balance!)}
+            onClick={() => tokenInput.setAmount(balance?.formatted!)}
           >
-            Max amount: {balance ? formatUnits(balance, DECIMAL_UNITS) : "..."}
+            Max amount: {balance?.formatted! || "..."}
           </div>
         </div>
         <button
@@ -85,7 +85,7 @@ export default function RemoveLiquidityPage() {
           disabled={
             !amount ||
             !balance ||
-            amount > balance ||
+            amount > balance.raw ||
             removeLiquidityMutation.isLoading
           }
         >
