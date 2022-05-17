@@ -13,7 +13,7 @@ pub struct PoolInfo {
 }
 
 abi Exchange {
-    /// Deposit coins for later adding to liquidity pool.
+    /// Return the current balance of given token on the contract
     fn get_balance(token: ContractId) -> u64;
     /// Deposit coins for later adding to liquidity pool.
     fn deposit();
