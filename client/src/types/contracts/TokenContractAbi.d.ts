@@ -10,7 +10,6 @@ import type {
   Overrides,
   BigNumberish,
   BytesLike,
-  BigNumber,
 } from 'fuels';
 
 export type ContractIdInput = { value: string };
@@ -83,7 +82,7 @@ export class TokenContractAbi extends Contract {
       target: ContractIdInput,
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    ): Promise<bigint>;
   };
   callStatic: {
     mint_coins(
@@ -114,7 +113,7 @@ export class TokenContractAbi extends Contract {
       target: ContractIdInput,
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    ): Promise<bigint>;
   };
 
   mint_coins(
@@ -145,5 +144,5 @@ export class TokenContractAbi extends Contract {
     target: ContractIdInput,
     asset_id: ContractIdInput,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
+  ): Promise<bigint>;
 }

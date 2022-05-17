@@ -4,8 +4,32 @@
 
 import type { Provider, Wallet } from 'fuels';
 import { Interface, Contract } from 'fuels';
-import type { SwayswapContractAbi, SwayswapContractAbiInterface } from '../SwayswapContractAbi';
+import type { ExchangeContractAbi, ExchangeContractAbiInterface } from '../ExchangeContractAbi';
 const _abi = [
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'token',
+        type: 'struct ContractId',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+            components: null,
+          },
+        ],
+      },
+    ],
+    name: 'get_balance',
+    outputs: [
+      {
+        name: '',
+        type: 'u64',
+        components: null,
+      },
+    ],
+  },
   {
     type: 'function',
     inputs: [],
@@ -221,12 +245,12 @@ const _abi = [
   },
 ];
 
-export class SwayswapContractAbi__factory {
+export class ExchangeContractAbi__factory {
   static readonly abi = _abi;
-  static createInterface(): SwayswapContractAbiInterface {
-    return new Interface(_abi) as SwayswapContractAbiInterface;
+  static createInterface(): ExchangeContractAbiInterface {
+    return new Interface(_abi) as ExchangeContractAbiInterface;
   }
-  static connect(id: string, walletOrProvider: Wallet | Provider): SwayswapContractAbi {
-    return new Contract(id, _abi, walletOrProvider) as SwayswapContractAbi;
+  static connect(id: string, walletOrProvider: Wallet | Provider): ExchangeContractAbi {
+    return new Contract(id, _abi, walletOrProvider) as ExchangeContractAbi;
   }
 }

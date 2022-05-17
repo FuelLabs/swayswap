@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { RiSettings3Fill } from "react-icons/ri";
 import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
 import { useContract } from "src/context/AppContext";
-import { SwayswapContractAbi } from "src/types/contracts";
-import { BigNumber } from "fuels";
+import { ExchangeContractAbi } from "src/types/contracts";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { useMutation, useQuery } from "react-query";
@@ -21,9 +19,9 @@ const style = {
 };
 
 const getSwapWithMaximumRequiredAmount = async (
-  contract: SwayswapContractAbi,
+  contract: ExchangeContractAbi,
   assetId: string,
-  amount: BigNumber
+  amount: bigint
 ) => {
   const requiredAmount = await contract.callStatic.get_swap_with_maximum(
     amount,
@@ -35,9 +33,9 @@ const getSwapWithMaximumRequiredAmount = async (
 };
 
 const getSwapWithMinimumMinAmount = async (
-  contract: SwayswapContractAbi,
+  contract: ExchangeContractAbi,
   assetId: string,
-  amount: BigNumber
+  amount: bigint
 ) => {
   const minAmount = await contract.callStatic.get_swap_with_minimum(amount, {
     forward: [0, assetId],
@@ -53,13 +51,13 @@ export default function SwapPage() {
   ]);
   const getOtherCoins = (coins: Coin[]) =>
     assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
-  const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
-  const [toAmount, setToAmount] = useState(null as BigNumber | null);
+  const [fromAmount, setFromAmount] = useState<bigint | null>(null);
+  const [toAmount, setToAmount] = useState<bigint | null>(null);
   const [activeInput, setActiveInput] = useState(null as "from" | "to" | null);
   const navigate = useNavigate();
 
   const { data: inactiveAmount } = useQuery(
-    ["SwapPage-inactiveAmount", activeInput, toAmount, fromAmount],
+    ["SwapPage-inactiveAmount", activeInput, toAmount?.toString(), fromAmount?.toString()],
     async () => {
       if (activeInput === "to") {
         if (!toAmount) return null;
@@ -130,9 +128,7 @@ export default function SwapPage() {
       <div className={style.content}>
         <div className={style.formHeader}>
           <h1>Swap</h1>
-          <div>
-            {/* <RiSettings3Fill /> */}
-          </div>
+          <div>{/* <RiSettings3Fill /> */}</div>
         </div>
 
         <div className="mt-6">

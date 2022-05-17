@@ -15,7 +15,7 @@ import {
 import path from 'path';
 import fs from 'fs';
 // @ts-ignore
-import { SwayswapContractAbi__factory, TokenContractAbi__factory } from '../src/types/contracts';
+import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../src/types/contracts';
 
 const tokenPath = path.join(
   __dirname,
@@ -23,7 +23,7 @@ const tokenPath = path.join(
 );
 const contractPath = path.join(
   __dirname,
-  '../../contracts/swayswap_contract/out/debug/swayswap_contract.bin'
+  '../../contracts/exchange_contract/out/debug/exchange_contract.bin'
 );
 const providerUrl = process.env.REACT_APP_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
 
@@ -38,10 +38,10 @@ export const seedWallet = async (wallet: Wallet) => {
   transactionRequest.addCoin({
     id: '0x000000000000000000000000000000000000000000000000000000000000000000',
     assetId: NativeAssetId,
-    amount: parseUnits('.5', 9),
+    amount: parseUnits('.5', 9).toBigInt(),
     owner: '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e',
   });
-  transactionRequest.addCoinOutput(wallet.address, parseUnits('.5', 9), NativeAssetId);
+  transactionRequest.addCoinOutput(wallet.address, parseUnits('.5', 9).toBigInt(), NativeAssetId);
   const submit = await wallet.sendTransaction(transactionRequest);
 
   return submit.wait();
@@ -71,7 +71,7 @@ export async function deployContract(contextLog: string, binaryPath: string, abi
     const contract = await deployContract(
       'SwaySwap',
       contractPath,
-      SwayswapContractAbi__factory.abi
+      ExchangeContractAbi__factory.abi
     );
     const token = await deployContract('Token', tokenPath, TokenContractAbi__factory.abi);
 

@@ -1,7 +1,6 @@
 import { FaFaucet, FaRegCopy } from "react-icons/fa";
 import { useWallet, useAppContext } from "src/context/AppContext";
-import { CoinQuantity } from "fuels";
-import { BigNumber } from "ethers";
+import { CoinQuantity, toBigInt } from "fuels";
 import { Coin, CoinInput } from "src/components/CoinInput";
 import CoinsMetadata from "src/lib/CoinsMetadata";
 import { Spinner } from "src/components/Spinner";
@@ -23,10 +22,10 @@ const style = {
   copyButton: `w-8 h-8 flex justify-center items-center p-1`,
   accountContainer: `flex justify-center w-full text-sm my-8`,
   accountContent: `flex items-center border-radius rounded-xl border border-[#3f444e] text-sm p-2 hover:opacity-70 active:opacity-50 cursor-pointer`,
-  address: `text-[#e3e9f3] pl-2 pr-2`
+  address: `text-[#e3e9f3] pl-2 pr-2`,
 };
 
-type Asset = Coin & { amount: BigNumber };
+type Asset = Coin & { amount: bigint };
 const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
   return coins.map((coin) => {
     const coinMetadata = CoinsMetadata.find((c) => c.assetId === coin.assetId);
@@ -38,7 +37,7 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[]): Array<Asset> => {
       name: coinMetadata?.name || "404",
       img: coinMetadata?.img || "/icons/other.svg",
       assetId: coin.assetId,
-      amount: coin.amount || 0,
+      amount: toBigInt(coin.amount || 0),
     };
   });
 };
@@ -54,7 +53,7 @@ export default function WalletPage() {
 
   const handleCopy = () => {
     clipboard.copy(wallet!.address);
-  }
+  };
 
   const faucetMutation = useMutation(
     async () => {
@@ -105,7 +104,7 @@ export default function WalletPage() {
             </button>
           </div>
         </div>
-        <div className={classNames(style.divider, 'mb-6')} />
+        <div className={classNames(style.divider, "mb-6")} />
         <div className="px-6">
           <div className={style.sectionTitle}>Assets</div>
           {balances ? (
