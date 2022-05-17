@@ -1,4 +1,4 @@
-library swayswap_abi;
+library exchange_abi;
 
 use std::contract_id::ContractId;
 
@@ -13,6 +13,8 @@ pub struct PoolInfo {
 }
 
 abi Exchange {
+    /// Return the current balance of given token on the contract
+    fn get_balance(token: ContractId) -> u64;
     /// Deposit coins for later adding to liquidity pool.
     fn deposit();
     /// Withdraw coins that have not been added to a liquidity pool yet.
