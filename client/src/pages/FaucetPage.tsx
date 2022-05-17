@@ -8,7 +8,7 @@ import { Pages } from "src/types/pages";
 import { useNavigate } from "react-router-dom";
 
 const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
+  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl mb-8`,
   confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center

@@ -1,17 +1,16 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { RiSettings3Fill } from "react-icons/ri";
-import { TokenContractAbi__factory } from "src/types/contracts";
-import { useWallet } from "src/context/AppContext";
 import { TextInput } from "src/components/TextInput";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
-import { objectId, sleep } from "src/lib/utils";
+import { sleep } from "src/lib/utils";
 import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "src/config";
 import { formatUnits } from "ethers/lib/utils";
 import { useMutation } from "react-query";
+import { useTokenMethods } from "src/lib/tokens";
 
 const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
+  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
   confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
@@ -19,28 +18,16 @@ const style = {
 };
 
 export default function MintTokenPage() {
-  const wallet = useWallet()!;
   const [asset, setAsset] = useState(TOKEN_ID);
+  const methods = useTokenMethods(TOKEN_ID);
   const navigate = useNavigate();
-
-  const token = useMemo(
-    () => TokenContractAbi__factory.connect(TOKEN_ID, wallet),
-    [wallet]
-  );
 
   const mintMutation = useMutation(
     async () => {
       const amount = MINT_AMOUNT;
-      await token.functions.mint_coins(amount);
-      // Transfer the just minted coins to the output
-      await token.functions.transfer_coins_to_output(
-        amount,
-        objectId(TOKEN_ID),
-        objectId(wallet.address),
-        {
-          variableOutputs: 1,
-        }
-      );
+      await methods.mint(amount);
+      // Transfer minted coins to the output
+      await methods.transferTo(amount, { variableOutputs: 1 });
       await sleep(1000);
     },
     {

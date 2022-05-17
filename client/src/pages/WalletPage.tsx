@@ -1,7 +1,7 @@
 import { FaFaucet, FaRegCopy } from "react-icons/fa";
 import { useWallet, useAppContext } from "src/context/AppContext";
 import { CoinQuantity, toBigInt } from "fuels";
-import { Coin, CoinInput } from "src/components/CoinInput";
+import { Coin } from "src/components/CoinInput";
 import CoinsMetadata from "src/lib/CoinsMetadata";
 import { Spinner } from "src/components/Spinner";
 import { useQuery, useMutation } from "react-query";
@@ -11,10 +11,11 @@ import { Pages } from "src/types/pages";
 import { ENABLE_FAUCET_API } from "src/config";
 import classNames from "classnames";
 import clipboard from "clipboard";
+import { AssetItem } from "src/components/AssetItem";
 
 const style = {
   divider: `border border-[#212327] border-b-0`,
-  wrapper: `w-screen flex flex-1 items-center justify-center mb-14`,
+  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-[#191B1F] w-[30rem] rounded-2xl py-4 m-2`,
   formHeader: `px-6 flex items-center justify-between font-semibold text-xl pb-2`,
   sectionTitle: `px-2 flex items-center justify-between font-semibold text-xl mb-4`,
@@ -107,22 +108,14 @@ export default function WalletPage() {
         <div className={classNames(style.divider, "mb-6")} />
         <div className="px-6">
           <div className={style.sectionTitle}>Assets</div>
-          {balances ? (
-            <>
-              {mergeCoinsWithMetadata(balances).map((coin) => {
-                return (
-                  <div className="my-4" key={coin.assetId}>
-                    <CoinInput
-                      coin={coin}
-                      disabled={true}
-                      amount={coin.amount}
-                      coins={coin ? [coin] : []}
-                    />
-                  </div>
-                );
-              })}
-            </>
-          ) : null}
+          {balances &&
+            mergeCoinsWithMetadata(balances).map((coin) => {
+              return (
+                <div className="my-4" key={coin.assetId}>
+                  <AssetItem key={coin.assetId} coin={coin} />
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>
