@@ -44,11 +44,6 @@ storage {
 // Helper functions
 ////////////////////////////////////////
 
-/// Return token id from storage 
-// fn get_token_id() -> b256 {
-//     get_b256(S_TOKEN_ID)
-// }
-
 /// Compute the storage slot for an address's deposits.
 fn key_deposits(a: Address, asset_id: b256) -> b256 {
     let inner = hash_pair(a.into(), asset_id, HashMethod::Sha256);
