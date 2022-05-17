@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { BigNumber } from "fuels";
 import { useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useContract } from "src/context/AppContext";
@@ -63,8 +62,8 @@ export default function PoolPage() {
     assets[0],
     assets[1],
   ]);
-  const [fromAmount, setFromAmount] = useState(null as BigNumber | null);
-  const [toAmount, setToAmount] = useState(null as BigNumber | null);
+  const [fromAmount, setFromAmount] = useState(null as bigint | null);
+  const [toAmount, setToAmount] = useState(null as bigint | null);
   const [stage, setStage] = useState(0);
   const { data: poolInfo } = useQuery("PoolPage-poolInfo", () =>
     contract.callStatic.get_info()
@@ -164,21 +163,15 @@ export default function PoolPage() {
                 <br />
                 DAI:{" "}
                 {formatUnits(poolInfo.token_reserve, DECIMAL_UNITS).toString()}
-                {BigNumber.from(poolInfo.eth_reserve).gt(0) &&
-                BigNumber.from(poolInfo.token_reserve).gt(0) ? (
+                {poolInfo.eth_reserve > 0 &&
+                 poolInfo.token_reserve > 0 ? (
                   <>
                     <br />
                     ETH/DAI:{" "}
-                    {BigNumber.from(ONE_ASSET)
-                      .mul(poolInfo.eth_reserve)
-                      .div(poolInfo.token_reserve)
-                      .toNumber() / ONE_ASSET}
+                    {((ONE_ASSET * poolInfo.eth_reserve)/poolInfo.token_reserve)/ONE_ASSET}
                     <br />
                     DAI/ETH:{" "}
-                    {BigNumber.from(ONE_ASSET)
-                      .mul(poolInfo.token_reserve)
-                      .div(poolInfo.eth_reserve)
-                      .toNumber() / ONE_ASSET}
+                    {((ONE_ASSET * poolInfo.token_reserve)/poolInfo.eth_reserve)/ONE_ASSET}
                   </>
                 ) : null}
               </div>

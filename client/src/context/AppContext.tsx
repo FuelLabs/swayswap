@@ -1,20 +1,20 @@
 import React, { PropsWithChildren, useContext, useMemo } from "react";
-import { Wallet, ScriptTransactionRequest, TransactionResult } from "fuels";
+import { Wallet, ScriptTransactionRequest, TransactionResult, CoinStatus, toBigInt } from "fuels";
 import { CoinETH } from "src/lib/constants";
 import { randomBytes } from "ethers/lib/utils";
 import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "src/config";
 import { atom, useRecoilState } from "recoil";
 import { persistEffect } from "src/lib/recoilEffects";
 import {
-  SwayswapContractAbi,
-  SwayswapContractAbi__factory,
+  ExchangeContractAbi,
+  ExchangeContractAbi__factory,
 } from "src/types/contracts";
 
 interface AppContextValue {
   wallet: Wallet | null;
-  contract: SwayswapContractAbi | null;
+  contract: ExchangeContractAbi | null;
   createWallet: () => void;
-  faucet: () => Promise<TransactionResult>;
+  faucet: () => Promise<TransactionResult<'success'>>;
 }
 
 const walletPrivateKeyState = atom<string | null>({
@@ -47,7 +47,7 @@ export const AppContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const contract = useMemo(() => {
     if (!wallet) return null;
-    return SwayswapContractAbi__factory.connect(CONTRACT_ID, wallet);
+    return ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
   }, [wallet]);
 
   return (
@@ -69,13 +69,15 @@ export const AppContextProvider = ({ children }: PropsWithChildren<{}>) => {
             script: "0x24400000",
             scriptData: randomBytes(32),
           });
-          // @ts-ignore
           transactionRequest.addCoin({
             id: "0x000000000000000000000000000000000000000000000000000000000000000000",
             assetId: CoinETH,
             amount: FAUCET_AMOUNT,
             owner:
               "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
+            status: CoinStatus.Unspent,
+            maturity: toBigInt(0),
+            blockCreated: toBigInt(0)
           });
           transactionRequest.addCoinOutput(
             wallet!.address,

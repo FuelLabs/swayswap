@@ -4,7 +4,6 @@ import { useContract, useWallet } from "src/context/AppContext";
 import coins from "src/lib/CoinsMetadata";
 import { CoinInput } from "src/components/CoinInput";
 import { useNavigate } from "react-router-dom";
-import { BigNumber } from "fuels";
 import { Pages } from "src/types/pages";
 import { CONTRACT_ID, DECIMAL_UNITS } from "src/config";
 import { useMutation, useQuery } from "react-query";
@@ -20,7 +19,7 @@ const style = {
 
 export default function RemoveLiquidityPage() {
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
-  const [amount, setAmount] = useState(null as BigNumber | null);
+  const [amount, setAmount] = useState(null as bigint | null);
   const wallet = useWallet()!;
   const contract = useContract()!;
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ export default function RemoveLiquidityPage() {
       if (!amount) {
         throw new Error('"amount" is required');
       }
-      if (amount?.gt(balance!)) {
+      if (amount > (balance || 0)) {
         alert("Amount is bigger them the current balance!");
       }
 
@@ -86,7 +85,7 @@ export default function RemoveLiquidityPage() {
           disabled={
             !amount ||
             !balance ||
-            amount.gt(balance) ||
+            amount > balance ||
             removeLiquidityMutation.isLoading
           }
         >

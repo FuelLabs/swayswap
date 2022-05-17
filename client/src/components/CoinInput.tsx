@@ -1,7 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
-import { BigNumber } from "fuels";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { Fragment, useState } from "react";
@@ -149,10 +148,10 @@ export function CoinInput({
   onInput,
 }: {
   disabled?: boolean;
-  amount?: BigNumber | null;
+  amount?: bigint | null;
   coin?: Coin | null;
   coins?: Coin[];
-  onChangeAmount?: (value: BigNumber | null) => void;
+  onChangeAmount?: (value: bigint | null) => void;
   onChangeCoin?: (value: Coin) => void;
   onInput?: (...args: any) => void;
 }) {
@@ -162,11 +161,13 @@ export function CoinInput({
         <NumberFormat
           placeholder="0"
           decimalScale={DECIMAL_UNITS}
-          value={amount && formatUnits(amount, DECIMAL_UNITS)}
+          value={amount ? formatUnits(amount, DECIMAL_UNITS) : ''}
           displayType={disabled ? "text" : "input"}
-          onValueChange={(e) =>
-            onChangeAmount?.(e.value !== "" ? parseUnits(e.value, DECIMAL_UNITS) : null)
-          }
+          onValueChange={(e) => {
+            onChangeAmount?.(
+              e.value !== "" ? parseUnits(e.value, DECIMAL_UNITS).toBigInt() : null
+            )
+          }}
           className={style.transferPropInput}
           thousandSeparator={false}
           onInput={onInput}
