@@ -13,9 +13,9 @@ import { ReactNode } from "react";
 import { useFaucet } from "src/hooks/useFaucet";
 
 const style = {
-  divider: `border border-[#212327] border-b-0`,
+  divider: `border border-gray-700 border-b-0`,
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
-  content: `bg-[#191B1F] w-[30rem] rounded-2xl py-4 m-2`,
+  content: `bg-gray-800 w-[30rem] rounded-2xl py-4 m-2`,
   formHeader: `px-6 flex items-center font-semibold text-xl`,
   titleWrapper: `flex items-center flex-1`,
   title: `flex items-center gap-2 mr-4`,

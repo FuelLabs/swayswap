@@ -16,7 +16,7 @@ import { toNumber } from "fuels";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
-  content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
+  content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
   info: `font-mono my-4 px-4 py-3 text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg`,
 };
@@ -33,15 +33,15 @@ function PoolLoader({
   steps: string[];
 }) {
   return (
-    <ul className="w-full rounded-lg border border-[#2b3039] text-gray-900">
+    <ul className="w-full rounded-lg border border-gray-600 text-gray-900">
       {steps.map((stepText, index) => (
         <li
           key={index}
           className={classNames(
-            "space-between flex w-full items-center border-b border-[#2b3039] px-6 py-2 text-white",
+            "space-between flex w-full items-center border-b border-gray-600 px-6 py-2 text-white",
             {
               "rounded-t-lg": index === 0,
-              "bg-[#58c09a]": step === index && loading,
+              "bg-primary-500": step === index && loading,
               "rounded-b-lg": index === steps.length,
             }
           )}

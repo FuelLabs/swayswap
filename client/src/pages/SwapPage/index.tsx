@@ -13,7 +13,7 @@ import { SwapComponent } from "./SwapComponent";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
-  content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
+  content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
 };
 

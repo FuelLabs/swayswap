@@ -12,11 +12,11 @@ const style = {
   wrapper: `p-4 w-screen flex flex-col sm:flex-row justify-between items-center`,
   headerLogo: `flex items-center justify-start`,
   nav: `flex-1 flex justify-center items-center mt-2 sm:mt-0`,
-  navItemsContainer: `flex bg-[#191B1F] rounded-3xl`,
-  navItem: `m-1 rounded-full border-transparent`,
-  activeNavItem: `bg-[#20242A]`,
+  navItemsContainer: `flex bg-gray-800 rounded-3xl`,
+  navItem: `m-1 rounded-full border-transparent text-gray-400 hover:bg-gray-500/20 hover:text-gray-200`,
+  activeNavItem: `bg-gray-500/20 text-gray-200`,
   buttonsContainer: `flex justify-end items-center`,
-  button: `flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semi-bold`,
+  button: `flex items-center bg-gray-800 rounded-2xl mx-2 font-semi-bold`,
   buttonPadding: `p-2`,
 };
 

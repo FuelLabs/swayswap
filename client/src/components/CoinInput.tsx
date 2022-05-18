@@ -11,9 +11,9 @@ import { Button } from "./Button";
 const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
 
 const style = {
-  transferPropContainer: `flex items-center bg-[#20242A] rounded-2xl p-2 border border-[#20242A]`,
+  transferPropContainer: `flex items-center bg-gray-700 rounded-2xl p-2 border border-gray-700`,
   inputWrapper: `flex flex-1 items-center px-2`,
-  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none text-xl`,
+  transferPropInput: `bg-transparent placeholder:text-gray-300 outline-none text-xl`,
   rightWrapper: `flex flex-1 flex-col items-end`,
   selectorWrapper: `flex items-center`,
   balanceWrapper: `text-sm text-[#7f8690] mb-1`,
@@ -92,9 +92,7 @@ export function useCoinInput({
   function getSafeMaxBalance() {
     const amount = coinBalance?.amount || BigInt(0);
 
-    return (amount > BigInt(0)) ?
-      amount - (gasFee || BigInt(0)) :
-      amount;
+    return amount > BigInt(0) ? amount - (gasFee || BigInt(0)) : amount;
   }
 
   function getInputProps() {
@@ -123,7 +121,7 @@ export function useCoinInput({
     formatted: formatValue(amount),
     setAmount,
     getInputProps,
-    hasEnoughBalance: (getSafeMaxBalance()) >= (amount || BigInt(0))
+    hasEnoughBalance: getSafeMaxBalance() >= (amount || BigInt(0)),
   };
 }
 
@@ -171,10 +169,8 @@ export function CoinInput({
         />
       </div>
       <div className={style.rightWrapper}>
-        { showBalance && (
-          <div className={style.balanceWrapper}>
-            Balance: {balance}
-          </div>
+        {showBalance && (
+          <div className={style.balanceWrapper}>Balance: {balance}</div>
         )}
         <div className={style.selectorWrapper}>
           {showMaxButton && (
