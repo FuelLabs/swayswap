@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { useContract } from "src/context/AppContext";
 import { useNavigate } from "react-router-dom";
@@ -20,10 +21,11 @@ export default function SwapPage() {
   const contract = useContract()!;
   const [previewAmount, setPreviewAmount] = useState<bigint | null>(null);
   const [swapState, setSwapState] = useState<SwapState | null>(null);
+  const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
   const navigate = useNavigate();
 
-  const { isLoading } = useQuery<bigint | null>(
+  const { isLoading } = useQuery(
     [
       "SwapPage-inactiveAmount",
       debouncedState?.amount?.toString(),
@@ -37,7 +39,9 @@ export default function SwapPage() {
     },
     {
       onSuccess: (value) => {
-        setPreviewAmount(value);
+        if (value == null) return;
+        setPreviewAmount(value.amount);
+        setHasLiquidity(value.has_liquidity);
       },
     }
   );
@@ -49,24 +53,36 @@ export default function SwapPage() {
     },
     {
       onSuccess: () => {
-        // TODO: Improve feedback after swap
+        toast.success("Swap made successfully!");
         navigate(Pages.wallet);
       },
     }
   );
 
-  const shouldDisableButton = isLoading || isSwaping || !swapState;
+  const shouldDisableButton =
+    isLoading || isSwaping || !swapState || !hasLiquidity || !previewAmount;
+
+  const getButtonText = () => {
+    if (!hasLiquidity) return "Insufficient liquidity";
+    if (isSwaping) return "Loading...";
+    return "Swap";
+  };
 
   return (
     <div className={style.wrapper}>
       <div className={style.content}>
         <div className={style.formHeader}>
           <h1>Swap</h1>
-          <div>{/* <RiSettings3Fill /> */}</div>
         </div>
         <SwapComponent previewAmount={previewAmount} onChange={setSwapState} />
-        <Button disabled={shouldDisableButton} onClick={() => swap()}>
-          {isSwaping ? "Loading..." : "Swap"}
+        <Button
+          isFull
+          size="lg"
+          variant="primary"
+          isDisabled={shouldDisableButton}
+          onPress={() => swap()}
+        >
+          {getButtonText()}
         </Button>
       </div>
     </div>

@@ -3,7 +3,6 @@ import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput, useCoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
 import { ActiveInput, SwapState } from "./types";
-import { toBigInt } from "fuels";
 
 const style = {
   switchDirection: `flex items-center justify-center -my-3`,
@@ -31,11 +30,11 @@ export function SwapComponent({
     if (activeInput.current === ActiveInput.to) {
       activeInput.current = ActiveInput.from;
       fromInput.setAmount(toInput.amount);
-      toInput.setAmount(toBigInt(0));
+      toInput.setAmount(null);
     } else {
       activeInput.current = ActiveInput.to;
       toInput.setAmount(fromInput.amount);
-      fromInput.setAmount(toBigInt(0));
+      fromInput.setAmount(null);
     }
     setCoins([coinTo, coinFrom]);
   };

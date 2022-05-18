@@ -33,6 +33,10 @@ export type PoolInfoInput = {
 
 export type PoolInfo = { eth_reserve: bigint; token_reserve: bigint };
 
+export type PreviewInfoInput = { amount: BigNumberish; has_liquidity: boolean };
+
+export type PreviewInfo = { amount: bigint; has_liquidity: boolean };
+
 interface ExchangeContractAbiInterface extends Interface {
   functions: {
     get_balance: FunctionFragment;
@@ -129,12 +133,12 @@ export class ExchangeContractAbi extends Contract {
     get_swap_with_minimum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
+    ): Promise<PreviewInfo>;
 
     get_swap_with_maximum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
+    ): Promise<PreviewInfo>;
   };
   callStatic: {
     get_balance(
@@ -181,12 +185,12 @@ export class ExchangeContractAbi extends Contract {
     get_swap_with_minimum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
+    ): Promise<PreviewInfo>;
 
     get_swap_with_maximum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
+    ): Promise<PreviewInfo>;
   };
 
   get_balance(
@@ -233,10 +237,10 @@ export class ExchangeContractAbi extends Contract {
   get_swap_with_minimum(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<bigint>;
+  ): Promise<PreviewInfo>;
 
   get_swap_with_maximum(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<bigint>;
+  ): Promise<PreviewInfo>;
 }

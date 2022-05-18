@@ -44,13 +44,19 @@ export const swapTokens = async (
   const deadline = 1000;
   if (direction === ActiveInput.to && amount) {
     const forwardAmount = await getSwapWithMaximumRequiredAmount(contract, from, amount);
+    if (!forwardAmount.has_liquidity) {
+      throw new Error('Not enough liquidity on pool');
+    }
     await contract.functions.swap_with_maximum(amount, deadline, {
-      forward: [forwardAmount, from],
+      forward: [forwardAmount.amount, from],
       variableOutputs: 1,
     });
   } else if (direction === ActiveInput.from && amount) {
     const minValue = await getSwapWithMinimumMinAmount(contract, from, amount);
-    await contract.functions.swap_with_minimum(minValue, deadline, {
+    if (!minValue.has_liquidity) {
+      throw new Error('Not enough liquidity on pool');
+    }
+    await contract.functions.swap_with_minimum(minValue.amount, deadline, {
       forward: [amount, from],
       variableOutputs: 1,
     });

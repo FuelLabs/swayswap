@@ -12,6 +12,11 @@ pub struct PoolInfo {
     token_reserve: u64,
 }
 
+pub struct PreviewInfo {
+    amount: u64,
+    has_liquidity: bool,
+}
+
 abi Exchange {
     /// Return the current balance of given token on the contract
     fn get_balance(token: ContractId) -> u64;
@@ -30,7 +35,7 @@ abi Exchange {
     /// Get information on the liquidity pool.
     fn get_info() -> PoolInfo;
     /// Get the minimum amount of coins that will be received for a swap_with_minimum.
-    fn get_swap_with_minimum(amount: u64) -> u64;
+    fn get_swap_with_minimum(amount: u64) -> PreviewInfo;
     /// Get required amount of coins for a swap_with_maximum.
-    fn get_swap_with_maximum(amount: u64) -> u64;
+    fn get_swap_with_maximum(amount: u64) -> PreviewInfo;
 }

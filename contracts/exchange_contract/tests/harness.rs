@@ -245,14 +245,15 @@ async fn exchange_contract() {
         .call()
         .await
         .unwrap();
+    assert!(amount_expected.value.has_liquidity);
     let response = exchange_instance
-        .swap_with_minimum(amount_expected.value, 1000)
+        .swap_with_minimum(amount_expected.value.amount, 1000)
         .call_params(CallParameters::new(Some(amount), None))
         .append_variable_outputs(1)
         .call()
         .await
         .unwrap();
-    assert_eq!(response.value, amount_expected.value);
+    assert_eq!(response.value, amount_expected.value.amount);
 
     // TOKEN -> ETH
     let amount_expected = exchange_instance
@@ -264,8 +265,9 @@ async fn exchange_contract() {
         .call()
         .await
         .unwrap();
+    assert!(amount_expected.value.has_liquidity);
     let response = exchange_instance
-        .swap_with_minimum(amount_expected.value, 1000)
+        .swap_with_minimum(amount_expected.value.amount, 1000)
         .call_params(CallParameters::new(
             Some(amount),
             Some(alt_token_id.clone()),
@@ -274,11 +276,28 @@ async fn exchange_contract() {
         .call()
         .await
         .unwrap();
-    assert_eq!(response.value, amount_expected.value);
+    assert_eq!(response.value, amount_expected.value.amount);
    
     ////////////////////
     // SWAP WITH MAXIMUM
     ////////////////////
+    
+    // Should return u64::MAX
+    // If the output is bigger them the reserve
+    let amount_expected = exchange_instance
+        .get_swap_with_maximum(1000)
+        .call()
+        .await
+        .unwrap();
+    assert_eq!(amount_expected.value.amount, u64::MAX);
+    // Should return u64::MAX
+    // If the output is equal to the reserve
+    let amount_expected = exchange_instance
+        .get_swap_with_maximum(101)
+        .call()
+        .await
+        .unwrap();
+    assert_eq!(amount_expected.value.amount, u64::MAX);
     
     // ETH -> TOKEN
     let amount_expected = exchange_instance
@@ -286,14 +305,15 @@ async fn exchange_contract() {
         .call()
         .await
         .unwrap();
+    assert!(amount_expected.value.has_liquidity);
     let response = exchange_instance
         .swap_with_maximum(amount, 1000)
-        .call_params(CallParameters::new(Some(amount_expected.value), None))
+        .call_params(CallParameters::new(Some(amount_expected.value.amount), None))
         .append_variable_outputs(1)
         .call()
         .await
         .unwrap();
-    assert_eq!(response.value, amount_expected.value);
+    assert_eq!(response.value, amount_expected.value.amount);
 
     // TOKEN -> ETH
     let amount_expected = exchange_instance
@@ -301,15 +321,16 @@ async fn exchange_contract() {
         .call()
         .await
         .unwrap();
+    assert!(amount_expected.value.has_liquidity);
     let response = exchange_instance
         .swap_with_minimum(amount, 1000)
         .call_params(CallParameters::new(
-            Some(amount_expected.value),
+            Some(amount_expected.value.amount),
             Some(alt_token_id.clone()),
         ))
         .append_variable_outputs(1)
         .call()
         .await
         .unwrap();
-    assert_eq!(response.value, amount_expected.value);
+    assert_eq!(response.value, amount_expected.value.amount);
 }

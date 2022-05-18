@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '16'
+  NODE_VERSION: "16"
 
 jobs:
   deploy:
@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'yarn'
+          cache: "yarn"
           cache-dependency-path: client/yarn.lock
 
       - name: yarn ci and build
@@ -30,7 +30,7 @@ jobs:
           CI: false
           PUBLIC_URL: "/${{ github.event.repository.name }}"
           REACT_APP_FUEL_PROVIDER_URL: "https://node.swayswap.io/graphql"
-          REACT_APP_CONTRACT_ID: "0x8021e8907874fbfa02b854ee6e5620b4210c5e4b7f9da520ace7bde92632f4b2"
+          REACT_APP_CONTRACT_ID: "0x42b1a46462c1de3337f4fbf2ad3f8422ee7d2362cb319f22a4bb10e3d3b4c7c1"
           REACT_APP_TOKEN_ID: "0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c59e0"
         run: |
           yarn install --frozen-lockfile
