@@ -5,7 +5,7 @@ import { InvertButton } from "src/components/InvertButton";
 import { ActiveInput, SwapState } from "./types";
 
 const style = {
-  switchDirection: `flex items-center justify-center -my-3`,
+  switchDirection: `flex items-center justify-center -my-5`,
 };
 
 const getOtherCoins = (coins: Coin[]) =>
@@ -78,13 +78,13 @@ export function SwapComponent({
 
   return (
     <>
-      <div className="mt-6">
+      <div className="mt-4">
         <CoinInput {...fromInput.getInputProps()} />
       </div>
       <div className={style.switchDirection}>
         <InvertButton onClick={handleInvertCoins} />
       </div>
-      <div className="mb-10">
+      <div className="mb-4">
         <CoinInput {...toInput.getInputProps()} />
       </div>
     </>

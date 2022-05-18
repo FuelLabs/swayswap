@@ -74,7 +74,7 @@ export default function RemoveLiquidityPage() {
         <div className={style.formHeader}>
           <h1>Remove liquidity</h1>
         </div>
-        <div className="mt-8 mb-10">
+        <div className="mt-4 mb-4">
           <CoinInput {...tokenInput.getInputProps()} />
           <Link
             className="inline-flex mt-2 ml-2"

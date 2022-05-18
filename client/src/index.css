@@ -22,7 +22,8 @@ body,
 
 @layer components {
   .focus-ring:not([aria-disabled="true"]) {
-    @apply focus:outline-none focus:ring-inset focus:ring-1 focus:ring-primary-500 focus:border-primary-500;
+    @apply focus:outline-none focus:ring-inset focus:ring-1;
+    @apply focus:ring-primary-500 active:ring-0 disabled:ring-0;
   }
   .transition-main {
     @apply transition ease-in duration-100;
@@ -46,14 +47,20 @@ body,
     @apply text-lg px-4 py-2;
   }
   .button--base {
-    @apply text-gray-400 hover:text-primary-500 disabled:text-gray-400 border-gray-700;
+    @apply text-gray-400 hover:text-primary-500  border-gray-700;
+    @apply focus:border-primary-500 active:border-gray-700;
+    @apply disabled:border-transparent disabled:text-gray-400;
   }
   .button--ghost {
-    @apply text-gray-400 border-transparent hover:bg-white/5 disabled:bg-white/0;
+    @apply text-gray-400 border-transparent hover:bg-white/5;
+    @apply focus:border-primary-500 active:border-gray-700;
+    @apply disabled:border-transparent disabled:bg-white/0;
   }
   .button--primary {
-    @apply bg-primary-500 hover:bg-primary-600 disabled:bg-primary-500 text-primary-100 font-semibold border-transparent;
+    @apply bg-primary-500 hover:bg-primary-600;
+    @apply text-primary-100 font-semibold border-transparent;
     @apply focus:ring-primary-300 focus:border-primary-300;
+    @apply active:border-transparent disabled:bg-primary-500;
   }
   .btn-active {
     @apply active:scale-[0.98] disabled:scale-100;
