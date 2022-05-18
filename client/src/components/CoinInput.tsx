@@ -159,7 +159,7 @@ export function CoinInput({
           value={value}
           displayType={displayType}
           isAllowed={isAllowed}
-          onChange={(e: any) => {
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             onChange?.(e.target.value);
             setValue(e.target.value);
           }}
