@@ -3,22 +3,25 @@
   "version": "0.1.0",
   "license": "Apache-2.0",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "scripts": {
+    "deploy-contracts": "sh ./scripts/deploy-contracts.sh",
+    "build-contracts": "sh ./scripts/build-contracts.sh",
+    "postinstall": "sh ./scripts/postinstall.sh",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "postbuild": "yarn create404",
+    "create404": "cp ./build/index.html ./build/404.html",
+    "test": "react-scripts test",
+    "prettier-format": "prettier --write src"
+  },
   "dependencies": {
     "@fontsource/fira-code": "^4.5.9",
     "@fontsource/inter": "^4.5.10",
-    "@headlessui/react": "^1.5.0",
     "@react-aria/button": "^3.4.4",
     "@react-aria/focus": "^3.5.5",
     "@react-aria/interactions": "^3.8.4",
     "@react-aria/link": "^3.2.5",
     "@tailwindcss/typography": "^0.5.2",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.4.0",
-    "@types/node": "^16.11.22",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.4",
     "classnames": "^2.3.1",
     "clipboard": "^2.0.11",
     "ethers": "^5.5.4",
@@ -40,16 +43,26 @@
     "url-join": "^4.0.1",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "deploy-contracts": "sh ./scripts/deploy-contracts.sh",
-    "build-contracts": "sh ./scripts/build-contracts.sh",
-    "postinstall": "sh ./scripts/postinstall.sh",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "postbuild": "yarn create404",
-    "create404": "cp ./build/index.html ./build/404.html",
-    "test": "react-scripts test",
-    "prettier-format": "prettier --write src"
+  "devDependencies": {
+    "@react-types/button": "^3.4.5",
+    "@react-types/link": "^3.2.5",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^16.11.22",
+    "@types/react-dom": "^18.0.4",
+    "@types/react-google-recaptcha": "^2.1.5",
+    "@types/react": "^18.0.9",
+    "@types/url-join": "^4.0.1",
+    "autoprefixer": "^10.4.2",
+    "eslint": "^8.4.1",
+    "postcss": "^8.4.7",
+    "prettier-plugin-tailwindcss": "^0.1.8",
+    "prettier": "^2.6.2",
+    "tailwindcss": "^3.0.23",
+    "typechain-target-fuels": "^0.0.0-master-d5e02003",
+    "typechain": "^8.0.0"
   },
   "eslintConfig": {
     "extends": [
@@ -68,19 +81,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@react-types/button": "^3.4.5",
-    "@react-types/link": "^3.2.5",
-    "@types/react-google-recaptcha": "^2.1.5",
-    "@types/url-join": "^4.0.1",
-    "autoprefixer": "^10.4.2",
-    "eslint": "^8.4.1",
-    "postcss": "^8.4.7",
-    "prettier": "^2.6.2",
-    "prettier-plugin-tailwindcss": "^0.1.8",
-    "tailwindcss": "^3.0.23",
-    "typechain": "^8.0.0",
-    "typechain-target-fuels": "^0.0.0-master-d5e02003"
   }
 }

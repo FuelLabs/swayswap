@@ -18,7 +18,7 @@ const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  info: `font-mono my-6 ml-1 p-4 text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg`,
+  info: `font-mono my-4 px-4 py-3 text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg`,
 };
 
 function PoolLoader({
@@ -156,10 +156,10 @@ export default function PoolPage() {
           </div>
         ) : (
           <>
-            <div className="mt-6 mb-4">
+            <div className="mt-4 mb-2">
               <CoinInput {...fromInput.getInputProps()} />
             </div>
-            <div className="mb-6">
+            <div className="mb-4">
               <CoinInput {...toInput.getInputProps()} />
             </div>
             {poolInfo ? (

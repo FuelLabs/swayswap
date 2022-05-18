@@ -1673,11 +1673,6 @@
   resolved "https://registry.yarnpkg.com/@fuel-ts/wordlists/-/wordlists-0.0.0-master-d5e02003.tgz#15a197dfc8d0d7a5116ac441bc0aca7d926c1347"
   integrity sha512-sXTn40Q8dM1inadXfelazIfxXfQXyOYhpNy2GtUapXKoXuhKghDuQ6aN2dyMeAC8eghfzphUpawA1zrw1OyweA==
 
-"@headlessui/react@^1.5.0":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.6.1.tgz#d822792e589aac005462491dd62f86095e0c3bef"
-  integrity sha512-gMd6uIs1U4Oz718Z5gFoV0o/vD43/4zvbyiJN9Dt7PK9Ubxn+TmJwTmYwyNJc5KxxU1t0CmgTNgwZX9+4NjCnQ==
-
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.5"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.9.5.tgz#2cbaf9a89460da24b5ca6531b8bbfc23e1df50c7"

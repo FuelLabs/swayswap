@@ -10,9 +10,9 @@ import { CoinSelector } from "./CoinSelector";
 const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
 
 const style = {
-  transferPropContainer: `flex items-center bg-[#20242A] rounded-2xl p-2 text-3xl border border-[#20242A]`,
+  transferPropContainer: `flex items-center bg-[#20242A] rounded-2xl p-2 border border-[#20242A]`,
   inputWrapper: `flex flex-1 items-center px-2`,
-  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none text-2xl`,
+  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none text-xl`,
 };
 
 export interface Coin {
