@@ -4,7 +4,6 @@ import { RequireWallet } from "./components/RequireWallet";
 import { MainLayout } from "./layouts/MainLayout";
 import { Pages } from "./types/pages";
 
-const SetupPage = lazy(() => import("src/pages/SetupPage"));
 const SwapPage = lazy(() => import("src/pages/SwapPage"));
 const WalletPage = lazy(() => import("src/pages/WalletPage"));
 const PoolPage = lazy(() => import("src/pages/PoolPage"));
@@ -20,7 +19,6 @@ export default function AppRoutes() {
           path="*"
           element={<RequireWallet children={<Navigate to={Pages.wallet} />} />}
         />
-        <Route path={Pages.setup} element={<SetupPage />} />
         <Route
           path={Pages.wallet}
           element={<RequireWallet children={<WalletPage />} />}

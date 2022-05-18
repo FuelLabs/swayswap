@@ -10,7 +10,7 @@ import { Pages } from "src/types/pages";
 import { formatUnits } from "ethers/lib/utils";
 import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 import { useMutation, useQuery } from "react-query";
-import { useTokenMethods } from "src/lib/tokens";
+import { useTokenMethods } from "src/hooks/useTokensMethods";
 import toast from "react-hot-toast";
 
 const style = {

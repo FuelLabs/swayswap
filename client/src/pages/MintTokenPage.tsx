@@ -7,7 +7,7 @@ import { sleep } from "src/lib/utils";
 import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "src/config";
 import { formatUnits } from "ethers/lib/utils";
 import { useMutation } from "react-query";
-import { useTokenMethods } from "src/lib/tokens";
+import { useTokenMethods } from "src/hooks/useTokensMethods";
 import toast from "react-hot-toast";
 
 const style = {

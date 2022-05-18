@@ -13,6 +13,7 @@ const style = {
 
 export function MainLayout() {
   const { reset: resetReactQuery } = useQueryErrorResetBoundary();
+
   return (
     <div className={style.wrapper}>
       <Header />
