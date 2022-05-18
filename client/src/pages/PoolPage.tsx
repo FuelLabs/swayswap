@@ -11,6 +11,7 @@ import { formatUnits } from "ethers/lib/utils";
 import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 import { useMutation, useQuery } from "react-query";
 import { useTokenMethods } from "src/lib/tokens";
+import toast from "react-hot-toast";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -123,7 +124,7 @@ export default function PoolPage() {
     },
     {
       onSuccess: () => {
-        // TODO: Improve feedback after swap
+        toast.success("New pool created!");
         navigate(Pages.wallet);
       },
       onSettled: () => {

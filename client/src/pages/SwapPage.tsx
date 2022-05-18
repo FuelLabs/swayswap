@@ -11,6 +11,7 @@ import { useMutation, useQuery } from "react-query";
 import { sleep } from "src/lib/utils";
 import { formatUnits } from "ethers/lib/utils";
 import { DECIMAL_UNITS } from "src/config";
+import toast from "react-hot-toast";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -163,7 +164,7 @@ export default function SwapPage() {
     },
     {
       onSuccess: () => {
-        // TODO: Improve feedback after swap
+        toast.success("Swap made successfully!");
         navigate(Pages.wallet);
       },
     }

@@ -8,6 +8,7 @@ import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "src/config";
 import { formatUnits } from "ethers/lib/utils";
 import { useMutation } from "react-query";
 import { useTokenMethods } from "src/lib/tokens";
+import toast from "react-hot-toast";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -32,9 +33,9 @@ export default function MintTokenPage() {
     },
     {
       onSuccess: () => {
-        // TODO: Improve feedback for the user
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
+        toast.success(`Token minted successfully!`);
         navigate(Pages.wallet);
       },
     }

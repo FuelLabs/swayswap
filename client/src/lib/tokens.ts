@@ -13,6 +13,7 @@ export function useTokenMethods(tokenId: string) {
   );
 
   return {
+    contract,
     getBalance() {
       return wallet.getBalance(tokenId);
     },

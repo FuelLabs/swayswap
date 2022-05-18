@@ -6,6 +6,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
 import { Pages } from "src/types/pages";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -40,10 +41,10 @@ export default function FaucetPage() {
     },
     {
       onSuccess: () => {
-        // TODO: Improve feedback for the user
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
         navigate(Pages.wallet);
+        toast.success("Faucet added successfully!");
       },
     }
   );

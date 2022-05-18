@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
 import { CONTRACT_ID, DECIMAL_UNITS } from "src/config";
 import { useMutation, useQuery } from "react-query";
+import toast from "react-hot-toast";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -43,7 +44,7 @@ export default function RemoveLiquidityPage() {
         throw new Error('"amount" is required');
       }
       if (amount > balance?.raw!) {
-        alert("Amount is bigger them the current balance!");
+        throw new Error("Amount is bigger them the current balance!");
       }
 
       // TODO: Add way to set min_eth and min_tokens
@@ -55,6 +56,7 @@ export default function RemoveLiquidityPage() {
     },
     {
       onSuccess: () => {
+        toast.success("Liquidity removed successfully!");
         navigate(Pages.wallet);
       },
     }

@@ -12,6 +12,7 @@ import { ENABLE_FAUCET_API } from "src/config";
 import classNames from "classnames";
 import clipboard from "clipboard";
 import { AssetItem } from "src/components/AssetItem";
+import toast from "react-hot-toast";
 
 const style = {
   divider: `border border-[#212327] border-b-0`,
@@ -62,7 +63,10 @@ export default function WalletPage() {
       await sleep(1000);
     },
     {
-      onSuccess: () => refetchBalances(),
+      onSuccess: () => {
+        toast.success("Faucet added successfully!");
+        refetchBalances();
+      },
     }
   );
 
