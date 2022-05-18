@@ -1,21 +1,16 @@
 import { formatUnits } from "ethers/lib/utils";
-import { useContract, useWallet } from "src/context/AppContext";
-import coins from "src/lib/CoinsMetadata";
-import { CoinInput, useCoinInput } from "src/components/CoinInput";
-import { useNavigate } from "react-router-dom";
-import { Pages } from "src/types/pages";
-import { CONTRACT_ID, DECIMAL_UNITS } from "src/config";
-import { useMutation, useQuery } from "react-query";
-import toast from "react-hot-toast";
-import { Button } from "src/components/Button";
-import { Link } from "src/components/Link";
 import { toBigInt } from "fuels";
+import { useMutation, useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
-  content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
-  formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-};
+import { Button } from "src/components/Button";
+import { CoinInput, useCoinInput } from "src/components/CoinInput";
+import { CONTRACT_ID, DECIMAL_UNITS } from "src/config";
+import { Link } from "src/components/Link";
+import { Pages } from "src/types/pages";
+import coins from "src/lib/CoinsMetadata";
+import { useContract, useWallet } from "src/context/AppContext";
 
 export default function RemoveLiquidityPage() {
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
@@ -69,37 +64,30 @@ export default function RemoveLiquidityPage() {
   }
 
   return (
-    <div className={style.wrapper}>
-      <div className={style.content}>
-        <div className={style.formHeader}>
-          <h1>Remove liquidity</h1>
-        </div>
-        <div className="mt-4 mb-4">
-          <CoinInput {...tokenInput.getInputProps()} />
-          <Link
-            className="inline-flex mt-2 ml-2"
-            onPress={() => tokenInput.setAmount(balance?.amount!)}
-          >
-            Max amount: {balance?.formatted! || "..."}
-          </Link>
-        </div>
-        <Button
-          isFull
-          size="lg"
-          variant="primary"
-          onPress={() => removeLiquidityMutation.mutate()}
-          isDisabled={
-            !amount ||
-            !balance ||
-            amount > balance.amount ||
-            removeLiquidityMutation.isLoading
-          }
+    <>
+      <div className="mt-4 mb-4">
+        <CoinInput {...tokenInput.getInputProps()} />
+        <Link
+          className="inline-flex mt-2 ml-2"
+          onPress={() => tokenInput.setAmount(balance?.amount!)}
         >
-          {removeLiquidityMutation.isLoading
-            ? "Removing..."
-            : "Remove liquidity"}
-        </Button>
+          Max amount: {balance?.formatted! || "..."}
+        </Link>
       </div>
-    </div>
+      <Button
+        isFull
+        size="lg"
+        variant="primary"
+        onPress={() => removeLiquidityMutation.mutate()}
+        isDisabled={
+          !amount ||
+          !balance ||
+          amount > balance.amount ||
+          removeLiquidityMutation.isLoading
+        }
+      >
+        {removeLiquidityMutation.isLoading ? "Removing..." : "Remove liquidity"}
+      </Button>
+    </>
   );
 }
