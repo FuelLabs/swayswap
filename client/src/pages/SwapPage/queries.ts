@@ -41,13 +41,13 @@ export const swapTokens = async (
   contract: ExchangeContractAbi,
   { from, direction, amount }: SwapState
 ) => {
-  const deadline = 1000;
+  const DEADLINE = 1000;
   if (direction === ActiveInput.to && amount) {
     const forwardAmount = await getSwapWithMaximumRequiredAmount(contract, from, amount);
     if (!forwardAmount.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
     }
-    await contract.functions.swap_with_maximum(amount, deadline, {
+    await contract.functions.swap_with_maximum(amount, DEADLINE, {
       forward: [forwardAmount.amount, from],
       variableOutputs: 1,
     });
@@ -56,7 +56,7 @@ export const swapTokens = async (
     if (!minValue.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
     }
-    await contract.functions.swap_with_minimum(minValue.amount, deadline, {
+    await contract.functions.swap_with_minimum(minValue.amount, DEADLINE, {
       forward: [amount, from],
       variableOutputs: 1,
     });

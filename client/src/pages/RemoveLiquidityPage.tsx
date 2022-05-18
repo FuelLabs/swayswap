@@ -44,9 +44,8 @@ export default function RemoveLiquidityPage() {
         throw new Error('"amount" is required');
       }
       if (amount > balance?.amount!) {
-        alert("Amount is bigger them the current balance!");
+        throw new Error("Amount is bigger them the current balance!");
       }
-
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
       await contract.functions.remove_liquidity(1, 1, 1000, {
@@ -58,6 +57,9 @@ export default function RemoveLiquidityPage() {
       onSuccess: () => {
         toast.success("Liquidity removed successfully!");
         navigate(Pages.wallet);
+      },
+      onError: (error: Error) => {
+        toast.error(error.message);
       },
     }
   );
