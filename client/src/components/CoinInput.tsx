@@ -80,7 +80,8 @@ export function useCoinInput({
       displayType: (disabled ? "text" : "input") as DisplayType,
       onChange: (val: string) => {
         if (disabled) return;
-        onChange?.(val !== "" ? parseValueBigInt(val) : null);
+        const next = val !== "" ? parseValueBigInt(val) : null;
+        typeof onChange === "function" ? onChange(next) : setAmount(next);
       },
       isAllowed: ({ value }: NumberFormatValues) => {
         return parseValueBigInt(value) <= MAX_U64_VALUE;
