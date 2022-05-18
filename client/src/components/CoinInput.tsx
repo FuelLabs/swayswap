@@ -49,10 +49,12 @@ export function useCoinInput({
   onChange,
   ...params
 }: UseCoinParams) {
-  const [amount, setAmount] = useState<string>(initialAmount || "0");
+  const [amount, setAmount] = useState<string>(initialAmount || "");
 
   const parsed = useMemo(() => {
-    return !disabled ? parseUnits(amount, DECIMAL_UNITS).toBigInt() : null;
+    return !disabled
+      ? parseUnits(amount || "0", DECIMAL_UNITS).toBigInt()
+      : null;
   }, [amount, disabled]);
 
   const value = {
@@ -98,7 +100,7 @@ type CoinInputParameters = UseCoinParams & {
 };
 
 export function CoinInput({
-  value: initialValue = "0",
+  value: initialValue,
   displayType,
   onChange,
   coin,

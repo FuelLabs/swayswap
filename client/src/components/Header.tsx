@@ -6,6 +6,7 @@ import cx from "classnames";
 import fuelLogo from "src/assets/fuel-logo-512x512.png";
 import { Pages } from "src/types/pages";
 import { Button } from "./Button";
+import { useWallet } from "src/context/AppContext";
 
 const style = {
   wrapper: `p-4 w-screen flex flex-col sm:flex-row justify-between items-center`,
@@ -17,7 +18,6 @@ const style = {
   buttonsContainer: `flex justify-end items-center`,
   button: `flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semi-bold`,
   buttonPadding: `p-2`,
-  buttonTextContainer: `h-8 flex items-center`,
 };
 
 const HeaderNav = ({
@@ -57,6 +57,7 @@ const HeaderNav = ({
 };
 
 const Header = () => {
+  const wallet = useWallet();
   const navigate = useNavigate();
   const location = useLocation();
   const exists = Object.values(Pages).includes(location.pathname as Pages);
@@ -66,41 +67,42 @@ const Header = () => {
       <div className={style.headerLogo}>
         <img src={fuelLogo} alt="swayswap" height={40} width={40} />
       </div>
-      <div className={style.nav}>
-        {exists && (
-          <FocusScope>
-            <div className={style.navItemsContainer}>
-              <HeaderNav
-                onPress={() => navigate(Pages.wallet)}
-                isActive={location.pathname === Pages.wallet}
-              >
-                Wallet
-              </HeaderNav>
-              <HeaderNav
-                onPress={() => navigate(Pages.swap)}
-                isActive={location.pathname === Pages.swap}
-              >
-                Swap
-              </HeaderNav>
-              <HeaderNav
-                onPress={() => navigate(Pages.pool)}
-                isActive={location.pathname === Pages.pool}
-              >
-                Pool
-              </HeaderNav>
-              {/* TODO: Change in a way that only shows remove liquidity if use has SWAY tokens */}
-              {/* https://github.com/FuelLabs/swayswap/issues/56 */}
-              <HeaderNav
-                onPress={() => navigate(Pages.removeLiquidity)}
-                isActive={location.pathname === Pages.removeLiquidity}
-              >
-                Remove Liquidity
-              </HeaderNav>
-            </div>
-          </FocusScope>
-        )}
-      </div>
-      <div className={style.buttonsContainer} />
+      {wallet && (
+        <div className={style.nav}>
+          {exists && (
+            <FocusScope>
+              <div className={style.navItemsContainer}>
+                <HeaderNav
+                  onPress={() => navigate(Pages.wallet)}
+                  isActive={location.pathname === Pages.wallet}
+                >
+                  Wallet
+                </HeaderNav>
+                <HeaderNav
+                  onPress={() => navigate(Pages.swap)}
+                  isActive={location.pathname === Pages.swap}
+                >
+                  Swap
+                </HeaderNav>
+                <HeaderNav
+                  onPress={() => navigate(Pages.pool)}
+                  isActive={location.pathname === Pages.pool}
+                >
+                  Pool
+                </HeaderNav>
+                {/* TODO: Change in a way that only shows remove liquidity if use has SWAY tokens */}
+                {/* https://github.com/FuelLabs/swayswap/issues/56 */}
+                <HeaderNav
+                  onPress={() => navigate(Pages.removeLiquidity)}
+                  isActive={location.pathname === Pages.removeLiquidity}
+                >
+                  Remove Liquidity
+                </HeaderNav>
+              </div>
+            </FocusScope>
+          )}
+        </div>
+      )}
     </div>
   );
 };
