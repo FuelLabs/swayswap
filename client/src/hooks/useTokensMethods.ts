@@ -2,7 +2,7 @@ import { Overrides } from 'fuels';
 import { useMemo } from 'react';
 import { useWallet } from 'src/context/AppContext';
 import { TokenContractAbi__factory } from 'src/types/contracts';
-import { objectId } from './utils';
+import { objectId } from '../lib/utils';
 
 export function useTokenMethods(tokenId: string) {
   const wallet = useWallet()!;
@@ -13,6 +13,7 @@ export function useTokenMethods(tokenId: string) {
   );
 
   return {
+    contract,
     getBalance() {
       return wallet.getBalance(tokenId);
     },

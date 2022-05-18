@@ -2,8 +2,10 @@ import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { AppContextProvider } from "src/context/AppContext";
 import { QueryClient, QueryClientProvider } from "react-query";
+import toast from "react-hot-toast";
 
 import AppRoutes from "./AppRoutes";
+import { Toaster } from "./components/Toaster";
 
 const { PUBLIC_URL } = process.env;
 
@@ -11,7 +13,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       onError: (error) => {
-        alert((error as Error).message);
+        toast.error((error as Error).message);
       },
       // These two are annoying during development
       retry: false,
@@ -24,7 +26,7 @@ const queryClient = new QueryClient({
     },
     mutations: {
       onError: (error) => {
-        alert((error as Error).message);
+        toast.error((error as Error).message);
       },
     },
   },
@@ -33,6 +35,7 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <RecoilRoot>
+      <Toaster />
       <BrowserRouter basename={PUBLIC_URL}>
         <QueryClientProvider client={queryClient}>
           <AppContextProvider>

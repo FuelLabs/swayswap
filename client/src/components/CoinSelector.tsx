@@ -9,10 +9,9 @@ const style = {
   currencySelector: `flex1`,
   currencySelectorMenuItems: `absolute w-full mt-2 bg-[#191B1F] divide-gray-100
       rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10`,
-  currencySelectorItem: `flex justify-around rounded-md w-full px-2 py-2 text-sm cursor-pointer`,
-  currencySelectorContent: `w-full h-min flex justify-between items-center bg-[#2D2F36]
-      rounded-2xl text-xl font-medium p-2 mt-[-0.2rem] focus:outline-none`,
-  currencySelectorTicker: `mx-2`,
+  currencySelectorItem: `flex justify-around rounded w-full px-2 py-2 text-sm cursor-pointer`,
+  currencySelectorContent: `flex items-center border border-gray-700 rounded-xl text-xl py-2 px-3`,
+  currencySelectorTicker: `ml-2`,
   menuWrapper: `px-1 py-1`,
 };
 
@@ -22,22 +21,24 @@ export interface Coin {
   img?: string;
 }
 
+type CoinSelectorProps = {
+  value?: Coin | null;
+  onChange?: (coin: Coin) => void;
+  coins?: Array<Coin>;
+  isReadOnly?: boolean;
+};
+
 export function CoinSelector({
   value,
   coins,
   onChange,
-}: {
-  value?: Coin | null;
-  onChange?: (coin: Coin) => void;
-  coins?: Array<Coin>;
-}) {
+  isReadOnly,
+}: CoinSelectorProps) {
   const [selected, setSelected] = useState<Coin | null>(null);
   const hasCoins = coins && coins.length > 1;
 
   useEffect(() => {
-    if (!value) {
-      return setSelected(null);
-    }
+    if (!value) return setSelected(null);
     setSelected(value);
   }, [value]);
 
@@ -54,28 +55,23 @@ export function CoinSelector({
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button
-            className={classNames({
+            className={classNames(style.currencySelectorContent, {
               "cursor-default": !hasCoins,
+              "hover:bg-opacity-30": hasCoins,
+              "focus-ring": !isReadOnly,
+              "focus:outline-none": isReadOnly,
             })}
           >
-            <div
-              className={classNames(style.currencySelectorContent, {
-                "hover:bg-opacity-30": hasCoins,
-              })}
-            >
-              {selected && selected.img && (
-                <img
-                  className="rounded-full border-none"
-                  src={urlJoin(PUBLIC_URL, selected.img)}
-                  alt="eth"
-                  height={24}
-                  width={24}
-                />
-              )}
-              <div className={style.currencySelectorTicker}>
-                {selected?.name}
-              </div>
-            </div>
+            {selected && selected.img && (
+              <img
+                className="rounded-full border-none"
+                src={urlJoin(PUBLIC_URL, selected.img)}
+                alt={selected.name}
+                height={24}
+                width={24}
+              />
+            )}
+            <div className={style.currencySelectorTicker}>{selected?.name}</div>
           </Menu.Button>
         </div>
         {hasCoins && (

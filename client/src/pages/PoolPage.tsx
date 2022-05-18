@@ -10,14 +10,15 @@ import { Pages } from "src/types/pages";
 import { formatUnits } from "ethers/lib/utils";
 import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 import { useMutation, useQuery } from "react-query";
-import { useTokenMethods } from "src/lib/tokens";
+import { useTokenMethods } from "src/hooks/useTokensMethods";
+import toast from "react-hot-toast";
+import { Button } from "src/components/Button";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
-    justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
+  info: `font-mono my-6 ml-1 p-4 text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg`,
 };
 
 function PoolLoader({
@@ -123,7 +124,7 @@ export default function PoolPage() {
     },
     {
       onSuccess: () => {
-        // TODO: Improve feedback after swap
+        toast.success("New pool created!");
         navigate(Pages.wallet);
       },
       onSettled: () => {
@@ -158,45 +159,60 @@ export default function PoolPage() {
             <div className="mt-6 mb-4">
               <CoinInput {...fromInput.getInputProps()} />
             </div>
-            <div className="mb-10">
+            <div className="mb-6">
               <CoinInput {...toInput.getInputProps()} />
             </div>
             {poolInfo ? (
-              <div
-                className="mt-3 ml-4 text-slate-400 decoration-1"
-                style={{
-                  fontFamily: "monospace",
-                }}
-              >
-                Reserves
-                <br />
-                ETH:{" "}
-                {formatUnits(poolInfo.eth_reserve, DECIMAL_UNITS).toString()}
-                <br />
-                DAI:{" "}
-                {formatUnits(poolInfo.token_reserve, DECIMAL_UNITS).toString()}
-                {poolInfo.eth_reserve > 0 && poolInfo.token_reserve > 0 ? (
-                  <>
-                    <br />
-                    ETH/DAI:{" "}
-                    {(ONE_ASSET * poolInfo.eth_reserve) /
-                      poolInfo.token_reserve /
-                      ONE_ASSET}
-                    <br />
-                    DAI/ETH:{" "}
-                    {(ONE_ASSET * poolInfo.token_reserve) /
-                      poolInfo.eth_reserve /
-                      ONE_ASSET}
-                  </>
-                ) : null}
+              <div className={style.info}>
+                <h4 className="text-white mb-2 font-bold">Reserves</h4>
+                <div className="flex">
+                  <div className="flex flex-col flex-1">
+                    <span>
+                      ETH:{" "}
+                      {formatUnits(
+                        poolInfo.eth_reserve,
+                        DECIMAL_UNITS
+                      ).toString()}
+                    </span>
+                    <span>
+                      DAI:{" "}
+                      {formatUnits(
+                        poolInfo.token_reserve,
+                        DECIMAL_UNITS
+                      ).toString()}
+                    </span>
+                  </div>
+                  {poolInfo.eth_reserve > 0 && poolInfo.token_reserve > 0 ? (
+                    <div className="flex flex-col">
+                      <span>
+                        <>
+                          ETH/DAI:{" "}
+                          {(ONE_ASSET * poolInfo.eth_reserve) /
+                            poolInfo.token_reserve /
+                            ONE_ASSET}
+                        </>
+                      </span>
+                      <span>
+                        <>
+                          DAI/ETH:{" "}
+                          {(ONE_ASSET * poolInfo.token_reserve) /
+                            poolInfo.eth_reserve /
+                            ONE_ASSET}
+                        </>
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             ) : null}
-            <div
-              onClick={() => addLiquidityMutation.mutate()}
-              className={style.confirmButton}
+            <Button
+              isFull
+              size="lg"
+              variant="primary"
+              onPress={() => addLiquidityMutation.mutate()}
             >
               Confirm
-            </div>
+            </Button>
           </>
         )}
       </div>

@@ -1,3 +1,5 @@
+import "@fontsource/fira-code";
+import "@fontsource/inter/variable.css";
 import "./index.css";
 
 import React from "react";

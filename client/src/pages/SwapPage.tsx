@@ -11,14 +11,14 @@ import { useMutation, useQuery } from "react-query";
 import { sleep } from "src/lib/utils";
 import { formatUnits } from "ethers/lib/utils";
 import { DECIMAL_UNITS } from "src/config";
+import toast from "react-hot-toast";
+import { Button } from "src/components/Button";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
-    justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8`,
-  switchDirection: `flex items-center justify-center -my-3`,
+  switchDirection: `flex items-center justify-center -my-4`,
 };
 
 const DEADLINE = 1000;
@@ -163,7 +163,7 @@ export default function SwapPage() {
     },
     {
       onSuccess: () => {
-        // TODO: Improve feedback after swap
+        toast.success("Swap made successfully!");
         navigate(Pages.wallet);
       },
     }
@@ -183,15 +183,17 @@ export default function SwapPage() {
         <div className={style.switchDirection}>
           <InvertButton onClick={handleInvert} />
         </div>
-        <div className="mb-10">
+        <div className="mb-6">
           <CoinInput {...toInput.getInputProps()} />
         </div>
-        <div
-          onClick={() => swapMutation.mutate()}
-          className={style.confirmButton}
+        <Button
+          isFull
+          size="lg"
+          variant="primary"
+          onPress={() => swapMutation.mutate()}
         >
           Confirm
-        </div>
+        </Button>
       </div>
     </div>
   );
