@@ -12,12 +12,14 @@ export type ButtonProps = AriaButtonProps<"button"> & {
 export function Button({
   size = "sm",
   variant = "base",
+  className,
   ...props
 }: ButtonProps) {
   const ref = useRef<HTMLButtonElement | null>(null);
   const { buttonProps, isPressed } = useButton(props, ref);
 
   const classes = cx({
+    ...(className && { [className]: true }),
     button: true,
     "button--sm": size === "sm",
     "button--md": size === "md",
