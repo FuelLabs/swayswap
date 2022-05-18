@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
-import { useContract } from "src/context/AppContext";
+import { useContract, useWallet } from "src/context/AppContext";
 import assets from "src/lib/CoinsMetadata";
 import { Coin, CoinInput, useCoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
@@ -58,6 +58,13 @@ function PoolLoader({
 export default function PoolPage() {
   const contract = useContract()!;
   const navigate = useNavigate();
+  const wallet = useWallet();
+
+  const { data: balances, refetch: refetchBalances } = useQuery(
+    "AssetsPage-balances",
+    () => wallet!.getBalances()
+  );
+
   const getOtherCoins = (coins: Coin[]) =>
     assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
 
@@ -71,18 +78,20 @@ export default function PoolPage() {
     contract.callStatic.get_info()
   );
 
-  const fromMethods = useTokenMethods(coinFrom.assetId);
+  const fromCoinBalance = balances?.find((coin) => coin.assetId === coinFrom.assetId);
   const fromInput = useCoinInput({
     coin: coinFrom,
     coins: getOtherCoins([coinFrom, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
+    coinBalance: fromCoinBalance
   });
 
-  const toMethods = useTokenMethods(coinTo.assetId);
+  const toCoinBalance = balances?.find((coin) => coin.assetId === coinTo.assetId);
   const toInput = useCoinInput({
     coin: coinTo,
     coins: getOtherCoins([coinTo, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
+    coinBalance: toCoinBalance,
   });
 
   const addLiquidityMutation = useMutation(
@@ -97,11 +106,12 @@ export default function PoolPage() {
         throw new Error('"toAmount" is required');
       }
 
-      const coinFromBalance = await fromMethods.getBalance();
-      const coinToBalance = await toMethods.getBalance();
-      const hasBalance =
-        coinFromBalance >= fromAmount && coinToBalance >= toAmount;
-      console.log(hasBalance);
+      if (!fromInput.hasEnoughBalance) {
+        throw new Error(`Insufficient ${coinFrom.name} balance`);
+      }
+      if (!toInput.hasEnoughBalance) {
+        throw new Error(`Insufficient ${coinTo.name} balance`);
+      }
 
       // TODO: Combine all transactions on single tx leverage by scripts
       // https://github.com/FuelLabs/swayswap-demo/issues/42
@@ -156,11 +166,19 @@ export default function PoolPage() {
           </div>
         ) : (
           <>
-            <div className="mt-4 mb-2">
-              <CoinInput {...fromInput.getInputProps()} />
+            <div className="mt-6 mb-4">
+              <CoinInput
+                {...fromInput.getInputProps()}
+                showMaxButton
+                showBalance
+              />
             </div>
-            <div className="mb-4">
-              <CoinInput {...toInput.getInputProps()} />
+            <div className="mb-6">
+              <CoinInput
+                {...toInput.getInputProps()}
+                showMaxButton
+                showBalance
+              />
             </div>
             {poolInfo ? (
               <div className={style.info}>
@@ -206,12 +224,17 @@ export default function PoolPage() {
               </div>
             ) : null}
             <Button
+              isDisabled={!fromInput.hasEnoughBalance || !toInput.hasEnoughBalance}
               isFull
               size="lg"
               variant="primary"
               onPress={() => addLiquidityMutation.mutate()}
             >
-              Confirm
+              {!fromInput.hasEnoughBalance ? (
+                `Insufficient ${coinFrom.name} balance`
+              ) : !toInput.hasEnoughBalance ? (
+                `Insufficient ${coinTo.name} balance`
+              ) : 'Confirm'}
             </Button>
           </>
         )}
