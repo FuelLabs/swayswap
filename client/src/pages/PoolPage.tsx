@@ -87,8 +87,8 @@ export default function PoolPage() {
 
   const addLiquidityMutation = useMutation(
     async () => {
-      const fromAmount = fromInput.value.parsed;
-      const toAmount = toInput.value.parsed;
+      const fromAmount = fromInput.amount;
+      const toAmount = toInput.amount;
 
       if (!fromAmount) {
         throw new Error('"fromAmount" is required');

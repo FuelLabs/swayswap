@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "react-query";
 import toast from "react-hot-toast";
 import { Button } from "src/components/Button";
 import { Link } from "src/components/Link";
+import { toBigInt } from "fuels";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -23,7 +24,7 @@ export default function RemoveLiquidityPage() {
   const navigate = useNavigate();
 
   const tokenInput = useCoinInput({ coin: liquidityToken });
-  const amount = tokenInput.value.parsed;
+  const amount = tokenInput.amount;
 
   const { data: balance } = useQuery(
     "RemoveLiquidityPage-balance",
@@ -31,7 +32,7 @@ export default function RemoveLiquidityPage() {
       const balances = await wallet.getBalances();
       const result = balances.find((b) => b.assetId === CONTRACT_ID)!;
       return {
-        raw: result?.amount || 0,
+        amount: toBigInt(result?.amount || 0),
         formatted: result ? formatUnits(result?.amount, DECIMAL_UNITS) : "0",
       };
     }
@@ -42,10 +43,9 @@ export default function RemoveLiquidityPage() {
       if (!amount) {
         throw new Error('"amount" is required');
       }
-      if (amount > balance?.raw!) {
+      if (amount > balance?.amount!) {
         throw new Error("Amount is bigger them the current balance!");
       }
-
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
       await contract.functions.remove_liquidity(1, 1, 1000, {
@@ -57,6 +57,9 @@ export default function RemoveLiquidityPage() {
       onSuccess: () => {
         toast.success("Liquidity removed successfully!");
         navigate(Pages.wallet);
+      },
+      onError: (error: Error) => {
+        toast.error(error.message);
       },
     }
   );
@@ -75,7 +78,7 @@ export default function RemoveLiquidityPage() {
           <CoinInput {...tokenInput.getInputProps()} />
           <Link
             className="inline-flex mt-2 ml-2"
-            onPress={() => tokenInput.setAmount(balance?.formatted!)}
+            onPress={() => tokenInput.setAmount(balance?.amount!)}
           >
             Max amount: {balance?.formatted! || "..."}
           </Link>
@@ -88,7 +91,7 @@ export default function RemoveLiquidityPage() {
           isDisabled={
             !amount ||
             !balance ||
-            amount > balance.raw ||
+            amount > balance.amount ||
             removeLiquidityMutation.isLoading
           }
         >

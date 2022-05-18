@@ -220,8 +220,19 @@ const _abi = [
     outputs: [
       {
         name: '',
-        type: 'u64',
-        components: null,
+        type: 'struct PreviewInfo',
+        components: [
+          {
+            name: 'amount',
+            type: 'u64',
+            components: null,
+          },
+          {
+            name: 'has_liquidity',
+            type: 'bool',
+            components: null,
+          },
+        ],
       },
     ],
   },
@@ -238,8 +249,19 @@ const _abi = [
     outputs: [
       {
         name: '',
-        type: 'u64',
-        components: null,
+        type: 'struct PreviewInfo',
+        components: [
+          {
+            name: 'amount',
+            type: 'u64',
+            components: null,
+          },
+          {
+            name: 'has_liquidity',
+            type: 'bool',
+            components: null,
+          },
+        ],
       },
     ],
   },

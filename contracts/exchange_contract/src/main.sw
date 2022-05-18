@@ -13,7 +13,7 @@ use std::{
     token::*,
     result::*,
 };
-use exchange_abi::{Exchange, PoolInfo, RemoveLiquidityReturn};
+use exchange_abi::{Exchange, PoolInfo, PreviewInfo, RemoveLiquidityReturn};
 
 ////////////////////////////////////////
 // Constants
@@ -87,7 +87,13 @@ fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64)
     assert(input_reserve > 0 && output_reserve > 0);
     let numerator: u64 = input_reserve * output_amount;
     let denominator: u64 = calculate_amount_with_fee(output_reserve - output_amount);
-    numerator / denominator + 1
+    let result: u64 = numerator / denominator;
+    if denominator <= 0 || denominator > numerator {
+        // Emulate Infinity Value
+        18446744073709551615u64
+    } else {
+        result + 1
+    }
 }
 
 /// Return the sender as an Address or panic
@@ -326,27 +332,40 @@ impl Exchange for Contract {
         }
     }
 
-    fn get_swap_with_minimum(amount: u64) -> u64 {
+    fn get_swap_with_minimum(amount: u64) -> PreviewInfo {
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
         let mut sold = 0;
+        let mut has_liquidity = false;
         if (msg_asset_id().into() == ETH_ID) {
             sold = get_input_price(amount, eth_reserve, token_reserve);
+            has_liquidity = sold < token_reserve;
         } else {
             sold = get_input_price(amount, token_reserve, eth_reserve);
+            has_liquidity = sold < eth_reserve;
         }
-        sold
+        PreviewInfo {
+            amount: sold,
+            has_liquidity: has_liquidity
+        }
     }
 
-    fn get_swap_with_maximum(amount: u64) -> u64 {
+    fn get_swap_with_maximum(amount: u64) -> PreviewInfo {
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
         let mut sold = 0;
+        let mut has_liquidity = false;
         if (msg_asset_id().into() == ETH_ID) {
             sold = get_output_price(amount, eth_reserve, token_reserve);
+            has_liquidity = sold < token_reserve;
+
         } else {
             sold = get_output_price(amount, token_reserve, eth_reserve);
+            has_liquidity = sold < eth_reserve;
         }
-        sold
+        PreviewInfo {
+            amount: sold,
+            has_liquidity: has_liquidity
+        }
     }
 }
