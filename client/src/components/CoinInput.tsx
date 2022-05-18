@@ -35,6 +35,7 @@ type UseCoinParams = {
   onChangeCoin?: (value: Coin) => void;
   onInput?: (...args: any) => void;
   coinBalance?: CoinQuantity;
+  gasFee?: bigint;
 };
 
 type DisplayType = "input" | "text";
@@ -71,14 +72,13 @@ const formatValue = (amount: bigint | null | undefined) => {
   }
 };
 
-const GAS_FEE = BigInt(1);
-
 export function useCoinInput({
   disabled,
   amount: initialAmount,
   onChange,
   coinBalance,
   coin,
+  gasFee,
   ...params
 }: UseCoinParams) {
   const [amount, setAmount] = useState<bigint | null>(null);
@@ -92,8 +92,8 @@ export function useCoinInput({
   function getSafeMaxBalance() {
     const amount = coinBalance?.amount || BigInt(0);
 
-    return (amount > BigInt(0) && coin?.name === 'ETH') ?
-      amount - BigInt(1) :
+    return (amount > BigInt(0)) ?
+      amount - (gasFee || BigInt(0)) :
       amount;
   }
 

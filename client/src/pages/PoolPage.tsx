@@ -83,7 +83,8 @@ export default function PoolPage() {
     coin: coinFrom,
     coins: getOtherCoins([coinFrom, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    coinBalance: fromCoinBalance
+    coinBalance: fromCoinBalance,
+    gasFee: BigInt(1)
   });
 
   const toCoinBalance = balances?.find((coin) => coin.assetId === coinTo.assetId);
