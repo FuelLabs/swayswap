@@ -10,9 +10,9 @@ import { CoinSelector } from "./CoinSelector";
 const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
 
 const style = {
-  transferPropContainer: `bg-[#20242A] rounded-2xl p-4 text-3xl border border-[#20242A]
-      flex justify-between`,
-  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none w-full text-2xl`,
+  transferPropContainer: `flex items-center bg-[#20242A] rounded-2xl p-2 text-3xl border border-[#20242A]`,
+  inputWrapper: `flex flex-1 items-center px-2`,
+  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none text-2xl`,
 };
 
 const parseValue = (value: string) => {
@@ -94,6 +94,7 @@ type CoinInputParameters = UseCoinParams & {
   displayType: DisplayType;
   isAllowed?: (values: NumberFormatValues) => boolean;
   onChange?: (val: string) => void;
+  isReadOnly?: boolean;
 };
 
 export function CoinInput({
@@ -105,6 +106,7 @@ export function CoinInput({
   isAllowed,
   onChangeCoin,
   onInput,
+  isReadOnly,
 }: CoinInputParameters) {
   const [value, setValue] = useState<string | undefined>(initialValue);
 
@@ -114,7 +116,7 @@ export function CoinInput({
 
   return (
     <div className={style.transferPropContainer}>
-      <div className="flex-1">
+      <div className={style.inputWrapper}>
         <NumberFormat
           allowNegative={false}
           defaultValue={initialValue}
@@ -132,7 +134,12 @@ export function CoinInput({
           onInput={onInput}
         />
       </div>
-      <CoinSelector coins={coins} value={coin} onChange={onChangeCoin} />
+      <CoinSelector
+        coins={coins}
+        value={coin}
+        onChange={onChangeCoin}
+        isReadOnly
+      />
     </div>
   );
 }

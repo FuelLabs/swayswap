@@ -7,20 +7,25 @@ export type ButtonProps = AriaButtonProps<"button"> & {
   className?: string;
   size?: "sm" | "md" | "lg";
   variant?: "base" | "primary" | "ghost";
+  isFull?: boolean;
+  isDisabled?: boolean;
 };
 
 export function Button({
   size = "sm",
   variant = "base",
   className,
+  isFull,
+  isDisabled,
   ...props
 }: ButtonProps) {
   const ref = useRef<HTMLButtonElement | null>(null);
-  const { buttonProps, isPressed } = useButton(props, ref);
+  const { buttonProps, isPressed } = useButton({ ...props, isDisabled }, ref);
 
   const classes = cx({
     ...(className && { [className]: true }),
     button: true,
+    "w-full justify-center": isFull,
     "button--sm": size === "sm",
     "button--md": size === "md",
     "button--lg": size === "lg",
@@ -34,7 +39,9 @@ export function Button({
       ref={ref}
       {...buttonProps}
       className={classes}
-      aria-pressed={isPressed}
+      aria-pressed={!isDisabled && isPressed}
+      disabled={isDisabled}
+      aria-disabled={isDisabled}
     >
       {props.children}
     </button>

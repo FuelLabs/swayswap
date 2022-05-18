@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 import cx from "classnames";
+import { Button } from "./Button";
 
 const style = {
-  confirmButton: `relative flex items-center rounded-2xl font-semibold w-12 h-12
-    border border-[#20242A] bg-[#191B1F] border-4 rounded-2xl cursor-pointer
+  confirmButton: `p-0 relative w-12 h-12
+    border-2 border-[#20242A] bg-[#191B1F] rounded-2xl cursor-pointer
     text-gray-500 hover:text-gray-50`,
   icon: `transition-all`,
-  iconLeft: `translate-x-[4px]`,
-  iconRight: `translate-x-[-4px]`,
+  iconLeft: `translate-x-[6px]`,
+  iconRight: `translate-x-[-6px]`,
   rotate: `rotate-180`,
 };
 
@@ -21,7 +22,11 @@ export function InvertButton({ onClick }: { onClick: () => void }) {
   }
 
   return (
-    <div onClick={handleClick} className={style.confirmButton}>
+    <Button
+      onPress={handleClick}
+      className={style.confirmButton}
+      aria-label="Invert coins"
+    >
       <BsArrowDown
         size={24}
         className={cx(style.icon, style.iconLeft, {
@@ -34,6 +39,6 @@ export function InvertButton({ onClick }: { onClick: () => void }) {
           [style.rotate]: isInverted,
         })}
       />
-    </div>
+    </Button>
   );
 }

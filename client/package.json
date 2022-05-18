@@ -4,6 +4,7 @@
   "license": "Apache-2.0",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "dependencies": {
+    "@fontsource/fira-code": "^4.5.9",
     "@fontsource/inter": "^4.5.10",
     "@headlessui/react": "^1.5.0",
     "@react-aria/button": "^3.4.4",

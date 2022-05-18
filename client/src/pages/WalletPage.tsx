@@ -18,7 +18,11 @@ export default function WalletPage() {
   const wallet = useWallet();
   const { createWallet } = useAppContext();
   const { coins, isLoading, refetch } = useAssets();
-  const faucet = useFaucet();
+  const faucet = useFaucet({
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   const createWalletMutation = useMutation(async () => createWallet(), {
     onSuccess: () => {

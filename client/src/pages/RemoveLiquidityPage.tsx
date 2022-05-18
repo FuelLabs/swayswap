@@ -7,14 +7,13 @@ import { Pages } from "src/types/pages";
 import { CONTRACT_ID, DECIMAL_UNITS } from "src/config";
 import { useMutation, useQuery } from "react-query";
 import toast from "react-hot-toast";
+import { Button } from "src/components/Button";
+import { Link } from "src/components/Link";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  confirmButton: `bg-[#58c09b] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
-    justify-center cursor-pointer border border-[#58c09b] hover:border-[#234169] mt-8 w-full
-    disabled:bg-[#a0bbb1]`,
 };
 
 export default function RemoveLiquidityPage() {
@@ -74,17 +73,19 @@ export default function RemoveLiquidityPage() {
         </div>
         <div className="mt-8 mb-10">
           <CoinInput {...tokenInput.getInputProps()} />
-          <div
-            className="mt-3 ml-4 cursor-pointer text-slate-400 underline decoration-1"
-            onClick={() => tokenInput.setAmount(balance?.formatted!)}
+          <Link
+            className="inline-flex mt-2 ml-2"
+            onPress={() => tokenInput.setAmount(balance?.formatted!)}
           >
             Max amount: {balance?.formatted! || "..."}
-          </div>
+          </Link>
         </div>
-        <button
-          onClick={() => removeLiquidityMutation.mutate()}
-          className={style.confirmButton}
-          disabled={
+        <Button
+          isFull
+          size="lg"
+          variant="primary"
+          onPress={() => removeLiquidityMutation.mutate()}
+          isDisabled={
             !amount ||
             !balance ||
             amount > balance.raw ||
@@ -94,7 +95,7 @@ export default function RemoveLiquidityPage() {
           {removeLiquidityMutation.isLoading
             ? "Removing..."
             : "Remove liquidity"}
-        </button>
+        </Button>
       </div>
     </div>
   );

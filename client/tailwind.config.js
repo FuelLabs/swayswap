@@ -26,6 +26,14 @@ module.exports = {
     },
     fontFamily: {
       sans: ['InterVariable', 'sans-serif'],
+      mono: '"Fira Code", monospace',
+    },
+  },
+  variants: {
+    extend: {
+      backgroundColor: ['disabled'],
+      textColor: ['disabled'],
+      scale: ['disabled'],
     },
   },
   plugins: [require('@tailwindcss/typography')],

@@ -19,7 +19,7 @@ body,
 */
 
 @layer components {
-  .focus-ring {
+  .focus-ring:not([aria-disabled="true"]) {
     @apply focus:outline-none focus:ring-inset focus:ring-1 focus:ring-primary-500 focus:border-primary-500;
   }
   .transition-main {
@@ -32,6 +32,7 @@ body,
   .button {
     @apply appearance-none transition-main inline-flex items-center rounded-md gap-2;
     @apply border focus-ring btn-active cursor-pointer;
+    @apply disabled:cursor-default disabled:opacity-50;
   }
   .button--sm {
     @apply text-sm px-2 h-8;
@@ -43,20 +44,20 @@ body,
     @apply text-lg px-4 py-2;
   }
   .button--base {
-    @apply text-gray-400 hover:text-primary-500 border-gray-700;
+    @apply text-gray-400 hover:text-primary-500 disabled:text-gray-400 border-gray-700;
   }
   .button--ghost {
-    @apply text-gray-400 border-transparent hover:bg-white/5;
+    @apply text-gray-400 border-transparent hover:bg-white/5 disabled:bg-white/0;
   }
   .button--primary {
-    @apply bg-primary-500 hover:bg-primary-600 text-primary-100 font-semibold border-transparent;
+    @apply bg-primary-500 hover:bg-primary-600 disabled:bg-primary-500 text-primary-100 font-semibold border-transparent;
     @apply focus:ring-primary-300 focus:border-primary-300;
   }
   .btn-active {
-    @apply active:scale-[0.98];
+    @apply active:scale-[0.98] disabled:scale-100;
   }
   *[aria-pressed="true"],
   *[data-pressed="true"] {
-    @apply scale-[0.9];
+    @apply scale-[0.9] disabled:scale-100;
   }
 }
