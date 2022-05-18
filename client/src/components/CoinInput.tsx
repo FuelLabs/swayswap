@@ -29,7 +29,7 @@ export interface Coin {
 type UseCoinParams = {
   amount?: bigint | null;
   onChange?: (val: bigint | null) => void;
-  disabled?: boolean;
+  isReadOnly?: boolean;
   coin?: Coin | null;
   coins?: Coin[];
   onChangeCoin?: (value: Coin) => void;
@@ -73,9 +73,9 @@ const formatValue = (amount: bigint | null | undefined) => {
 };
 
 export function useCoinInput({
-  disabled,
   amount: initialAmount,
   onChange,
+  isReadOnly,
   coinBalance,
   coin,
   gasFee,
@@ -99,10 +99,11 @@ export function useCoinInput({
     return {
       ...params,
       coin,
+      isReadOnly,
       value: formatValue(amount),
-      displayType: (disabled ? "text" : "input") as DisplayType,
+      displayType: (isReadOnly ? "text" : "input") as DisplayType,
       onChange: (val: string) => {
-        if (disabled) return;
+        if (isReadOnly) return;
         const next = val !== "" ? parseValueBigInt(val) : null;
         typeof onChange === "function" ? onChange(next) : setAmount(next);
       },

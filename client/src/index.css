@@ -69,4 +69,14 @@ body,
   *[data-pressed="true"] {
     @apply scale-[0.9] disabled:scale-100;
   }
+
+  .coin-selector {
+    @apply h-10 px-2 rounded-xl gap-1 bg-gray-800;
+  }
+  .coin-selector:not([aria-disabled="true"]) {
+    @apply hover:text-gray-300 hover:border-gray-600;
+  }
+  .coin-selector[aria-disabled="true"] {
+    @apply opacity-100;
+  }
 }

@@ -8,7 +8,6 @@ const { PUBLIC_URL } = process.env;
 
 const style = {
   currencySelector: `flex1`,
-  button: `h-10 px-2 rounded-lg gap-1 hover:text-gray-300 hover:border-gray-600`,
 };
 
 export interface Coin {
@@ -48,11 +47,11 @@ export function CoinSelector({
 
   return (
     <div className={style.currencySelector}>
-      <Button size="md" className={style.button}>
+      <Button size="md" className="coin-selector" isDisabled={isReadOnly}>
         {selected && selected.img && (
           <img
             className="rounded-full border-none ml-1"
-            src={urlJoin(PUBLIC_URL, selected.img)}
+            src={`/${urlJoin(PUBLIC_URL, selected.img)}`}
             alt={selected.name}
             height={20}
             width={20}
