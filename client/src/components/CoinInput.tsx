@@ -1,10 +1,11 @@
-import { toBigInt } from "fuels";
+import { CoinQuantity, toBigInt } from "fuels";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { useEffect } from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
 import { DECIMAL_UNITS } from "src/config";
 import { CoinSelector } from "./CoinSelector";
+import { Button } from "./Button";
 
 // Max value supported
 const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
@@ -13,6 +14,10 @@ const style = {
   transferPropContainer: `flex items-center bg-[#20242A] rounded-2xl p-2 border border-[#20242A]`,
   inputWrapper: `flex flex-1 items-center px-2`,
   transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none text-xl`,
+  rightWrapper: `flex flex-1 flex-col items-end`,
+  selectorWrapper: `flex items-center`,
+  balanceWrapper: `text-sm text-[#7f8690] mb-1`,
+  maxButton: `mr-2`,
 };
 
 export interface Coin {
@@ -29,6 +34,8 @@ type UseCoinParams = {
   coins?: Coin[];
   onChangeCoin?: (value: Coin) => void;
   onInput?: (...args: any) => void;
+  coinBalance?: CoinQuantity;
+  gasFee?: bigint;
 };
 
 type DisplayType = "input" | "text";
@@ -39,6 +46,10 @@ type CoinInputParameters = UseCoinParams & {
   isAllowed?: (values: NumberFormatValues) => boolean;
   onChange?: (val: string) => void;
   isReadOnly?: boolean;
+  showMaxButton?: boolean;
+  showBalance?: boolean;
+  setMaxBalance?: () => void;
+  balance?: string;
 };
 
 const parseValue = (value: string) => {
@@ -65,6 +76,9 @@ export function useCoinInput({
   disabled,
   amount: initialAmount,
   onChange,
+  coinBalance,
+  coin,
+  gasFee,
   ...params
 }: UseCoinParams) {
   const [amount, setAmount] = useState<bigint | null>(null);
@@ -73,9 +87,20 @@ export function useCoinInput({
     if (initialAmount != null) setAmount(initialAmount);
   }, [initialAmount]);
 
+  // TODO: consider real gas fee, replacing GAS_FEE variable.
+  // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.
+  function getSafeMaxBalance() {
+    const amount = coinBalance?.amount || BigInt(0);
+
+    return (amount > BigInt(0)) ?
+      amount - (gasFee || BigInt(0)) :
+      amount;
+  }
+
   function getInputProps() {
     return {
       ...params,
+      coin,
       value: formatValue(amount),
       displayType: (disabled ? "text" : "input") as DisplayType,
       onChange: (val: string) => {
@@ -86,6 +111,10 @@ export function useCoinInput({
       isAllowed: ({ value }: NumberFormatValues) => {
         return parseValueBigInt(value) <= MAX_U64_VALUE;
       },
+      setMaxBalance: () => {
+        setAmount(getSafeMaxBalance());
+      },
+      balance: formatValue(coinBalance?.amount || BigInt(0)),
     } as CoinInputParameters;
   }
 
@@ -94,6 +123,7 @@ export function useCoinInput({
     formatted: formatValue(amount),
     setAmount,
     getInputProps,
+    hasEnoughBalance: (getSafeMaxBalance()) >= (amount || BigInt(0))
   };
 }
 
@@ -107,11 +137,17 @@ export function CoinInput({
   onChangeCoin,
   onInput,
   isReadOnly,
+  showMaxButton,
+  showBalance,
+  setMaxBalance,
+  balance,
 }: CoinInputParameters) {
   const [value, setValue] = useState<string | undefined>(initialValue);
 
   useEffect(() => {
-    if (initialValue) setValue(initialValue);
+    if (initialValue) {
+      setValue(initialValue);
+    }
   }, [initialValue]);
 
   return (
@@ -123,9 +159,9 @@ export function CoinInput({
           value={value}
           displayType={displayType}
           isAllowed={isAllowed}
-          onValueChange={(e) => {
-            onChange?.(e.value);
-            setValue(e.value);
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange?.(e.target.value);
+            setValue(e.target.value);
           }}
           decimalScale={DECIMAL_UNITS}
           placeholder="0"
@@ -134,12 +170,30 @@ export function CoinInput({
           onInput={onInput}
         />
       </div>
-      <CoinSelector
-        coins={coins}
-        value={coin}
-        onChange={onChangeCoin}
-        isReadOnly={isReadOnly}
-      />
+      <div className={style.rightWrapper}>
+        { showBalance && (
+          <div className={style.balanceWrapper}>
+            Balance: {balance}
+          </div>
+        )}
+        <div className={style.selectorWrapper}>
+          {showMaxButton && (
+            <Button
+              onPress={setMaxBalance}
+              className={style.maxButton}
+              variant="ghost"
+            >
+              Max
+            </Button>
+          )}
+          <CoinSelector
+            coins={coins}
+            value={coin}
+            onChange={onChangeCoin}
+            isReadOnly={isReadOnly}
+          />
+        </div>
+      </div>
     </div>
   );
 }
