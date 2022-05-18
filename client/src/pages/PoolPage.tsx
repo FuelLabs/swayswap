@@ -100,19 +100,7 @@ export default function PoolPage() {
       const fromAmount = fromInput.amount;
       const toAmount = toInput.amount;
 
-      if (!fromAmount) {
-        throw new Error('"fromAmount" is required');
-      }
-      if (!toAmount) {
-        throw new Error('"toAmount" is required');
-      }
-
-      if (!fromInput.hasEnoughBalance) {
-        throw new Error(`Insufficient ${coinFrom.name} balance`);
-      }
-      if (!toInput.hasEnoughBalance) {
-        throw new Error(`Insufficient ${coinTo.name} balance`);
-      }
+      if (!fromAmount || !toAmount) return;
 
       // TODO: Combine all transactions on single tx leverage by scripts
       // https://github.com/FuelLabs/swayswap-demo/issues/42
@@ -138,11 +126,41 @@ export default function PoolPage() {
         toast.success("New pool created!");
         navigate(Pages.wallet);
       },
+      onError: (e: any) => {
+        const errors = e?.response?.errors;
+
+        if (errors.length) {
+          if (errors[0].message === 'enough coins could not be found') {
+            toast.error("Not enough balance in your wallet to create this pool.");
+          }
+        }
+      },
       onSettled: () => {
         setStage(0);
       },
     }
   );
+
+  const handleCreatePool = () => {
+    const fromAmount = fromInput.amount;
+    const toAmount = toInput.amount;
+
+    if (!fromAmount) {
+      throw new Error('"fromAmount" is required');
+    }
+    if (!toAmount) {
+      throw new Error('"toAmount" is required');
+    }
+
+    if (!fromInput.hasEnoughBalance) {
+      throw new Error(`Insufficient ${coinFrom.name} balance`);
+    }
+    if (!toInput.hasEnoughBalance) {
+      throw new Error(`Insufficient ${coinTo.name} balance`);
+    }
+
+    addLiquidityMutation.mutate();
+  }
 
   return (
     <div className={style.wrapper}>
@@ -229,7 +247,7 @@ export default function PoolPage() {
               isFull
               size="lg"
               variant="primary"
-              onPress={() => addLiquidityMutation.mutate()}
+              onPress={handleCreatePool}
             >
               {!fromInput.hasEnoughBalance ? (
                 `Insufficient ${coinFrom.name} balance`
