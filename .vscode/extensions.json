@@ -1,3 +1,7 @@
 {
-  "recommendations": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "FuelLabs.sway-vscode-plugin"]
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "FuelLabs.sway-vscode-plugin"
+  ]
 }
