@@ -1,9 +1,10 @@
 import { useAtom } from 'jotai';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { CoinInput, useCoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
 import { Coin } from "src/types";
-import { ActiveInput, swapActiveInputAtom, swapCoinsAtom, SwapState } from './jotai';
+import { swapActiveInputAtom, swapAmountAtom, swapCoinsAtom } from './jotai';
+import { ActiveInput, SwapState } from './types';
 
 const style = {
   switchDirection: `flex items-center justify-center -my-5`,
@@ -12,22 +13,16 @@ const style = {
 type SwapComponentProps = {
   previewAmount?: bigint | null;
   onChange?: (swapState: SwapState) => void;
-  amount?: bigint | null;
 };
 
 export function SwapComponent({
   previewAmount: previewValue,
   onChange,
-  amount,
 }: SwapComponentProps) {
+  const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [initialActiveInput, setInitialActiveInput] = useAtom(swapActiveInputAtom);
-  const activeInput = useRef<ActiveInput>(initialActiveInput);
-
-  useEffect(() => {
-    setInitialActiveInput(activeInput?.current);
-  }, [activeInput.current]);
-
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
+  const activeInput = useRef<ActiveInput>(initialActiveInput);
 
   const handleInvertCoins = () => {
     if (activeInput.current === ActiveInput.to) {
@@ -43,27 +38,41 @@ export function SwapComponent({
   };
 
   const fromInput = useCoinInput({
-    amount: activeInput.current === ActiveInput.from ? amount : undefined,
     coin: coinFrom,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => (activeInput.current = ActiveInput.from),
   });
 
   const toInput = useCoinInput({
-    amount: activeInput.current === ActiveInput.to ? amount : undefined,
     coin: coinTo,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => (activeInput.current = ActiveInput.to),
   });
 
   useEffect(() => {
+    if (activeInput.current === ActiveInput.to) {
+      toInput.setAmount(initialAmount);
+    } else {
+      fromInput.setAmount(initialAmount);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const amount = activeInput.current === ActiveInput.from
+      ? fromInput.amount
+      : toInput.amount;
+
+    // Set value to hydrate
+    setInitialAmount(amount);
+    // Set current input
+    setInitialActiveInput(activeInput?.current);
+
+    // Call on onChange
     onChange?.({
       from: coinFrom.assetId,
       to: coinTo.assetId,
-      amount:
-        activeInput.current === ActiveInput.from
-          ? fromInput.amount
-          : toInput.amount,
+      amount,
       direction: activeInput.current,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
