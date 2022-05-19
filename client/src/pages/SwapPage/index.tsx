@@ -13,7 +13,13 @@ import { sleep } from "src/lib/utils";
 
 import { queryPreviewAmount, swapTokens } from "./queries";
 import { SwapComponent } from "./SwapComponent";
-import { SwapState } from "./types";
+import { ActiveInput, SwapState } from "./types";
+import { useBalances } from "src/hooks/useBalances";
+import { CoinQuantity } from "fuels";
+
+const getBalanceAsset = (balances: CoinQuantity[] | undefined, assetId: string) => {
+  return balances?.find((item) => item.assetId === assetId);
+}
 
 export default function SwapPage() {
   const contract = useContract()!;
@@ -21,6 +27,7 @@ export default function SwapPage() {
   const [swapState, setSwapState] = useState<SwapState | null>(null);
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
+  const { data: balances } = useBalances();
   const navigate = useNavigate();
 
   const { isLoading } = useQuery(
@@ -32,7 +39,7 @@ export default function SwapPage() {
       debouncedState?.to,
     ],
     async () => {
-      if (!debouncedState) return null;
+      if (!debouncedState?.amount) return null;
       return queryPreviewAmount(contract, debouncedState);
     },
     {
@@ -57,13 +64,17 @@ export default function SwapPage() {
     }
   );
 
+  const hasNotBalance = (
+    !swapState ||
+    !swapState.amount ||
+    !getBalanceAsset(balances, swapState.direction === ActiveInput.to ? swapState.to : swapState.from)
+  );
   const shouldDisableButton =
     isLoading ||
     isSwaping ||
-    !swapState ||
     !hasLiquidity ||
     !previewAmount ||
-    !swapState.amount;
+    hasNotBalance;
 
   const getButtonText = () => {
     if (!hasLiquidity) return "Insufficient liquidity";
