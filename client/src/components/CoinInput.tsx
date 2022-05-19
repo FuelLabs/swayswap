@@ -62,9 +62,9 @@ const parseValueBigInt = (value: string) => {
 const formatValue = (amount: bigint | null | undefined) => {
   if (amount != null) {
     return formatUnits(amount, DECIMAL_UNITS);
-  } else if (!amount) {
-    return "";
   }
+  // If amount is null return empty string
+  return "";
 };
 
 export function useCoinInput({
@@ -82,7 +82,8 @@ export function useCoinInput({
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
 
   useEffect(() => {
-    if (initialAmount != null) setAmount(initialAmount);
+    // Enable value initialAmount to be null
+    if (initialAmount !== undefined) setAmount(initialAmount);
   }, [initialAmount]);
 
   // TODO: consider real gas fee, replacing GAS_FEE variable.
@@ -150,7 +151,8 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
     const [value, setValue] = useState<string | undefined>(initialValue);
 
     useEffect(() => {
-      if (initialValue) {
+      // Enable to clean field using empty string
+      if (initialValue != null) {
         setValue(initialValue);
       }
     }, [initialValue]);
