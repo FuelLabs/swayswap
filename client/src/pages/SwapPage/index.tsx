@@ -58,7 +58,12 @@ export default function SwapPage() {
   );
 
   const shouldDisableButton =
-    isLoading || isSwaping || !swapState || !hasLiquidity || !previewAmount;
+    isLoading ||
+    isSwaping ||
+    !swapState ||
+    !hasLiquidity ||
+    !previewAmount ||
+    !swapState.amount;
 
   const getButtonText = () => {
     if (!hasLiquidity) return "Insufficient liquidity";

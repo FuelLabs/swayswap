@@ -72,6 +72,7 @@ export function useCoinInput({
   showBalance = true,
   coin,
   gasFee,
+  onInput,
   ...params
 }: UseCoinParams) {
   const [amount, setAmount] = useState<bigint | null>(null);
@@ -96,6 +97,7 @@ export function useCoinInput({
       isReadOnly,
       value: formatValue(amount),
       displayType: (isReadOnly ? "text" : "input") as DisplayType,
+      onInput,
       onChange: (val: string) => {
         if (isReadOnly) return;
         const next = val !== "" ? parseValueBigInt(val) : null;
@@ -105,6 +107,7 @@ export function useCoinInput({
         return parseValueBigInt(value) <= MAX_U64_VALUE;
       },
       setMaxBalance: () => {
+        onInput?.();
         setAmount(getSafeMaxBalance());
       },
       balance: formatValue(coinBalance?.amount || BigInt(0)),
