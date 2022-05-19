@@ -13,5 +13,11 @@ export function AssetItem({ coin }: AssetItemProps) {
     isReadOnly: true,
   });
 
-  return <CoinInput {...input.getInputProps()} />;
+  return (
+    <CoinInput
+      {...input.getInputProps()}
+      showBalance={false}
+      showMaxButton={false}
+    />
+  );
 }

@@ -14,7 +14,7 @@ const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
 
 const style = {
   transferPropContainer: `flex bg-gray-700 rounded-2xl p-2 border border-gray-700`,
-  input: `mx-2 h-10 bg-transparent placeholder:text-gray-300 outline-none text-xl`,
+  input: `mx-2 h-10 bg-transparent placeholder:text-gray-300 outline-none text-xl flex items-center`,
   rightWrapper: `flex flex-1 flex-col items-end`,
   maxButton: `text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800`,
 };

@@ -56,7 +56,7 @@ export function CoinSelector({
           />
         )}
         <div className="ml-2">{selected?.name}</div>
-        <FiChevronDown className="text-gray-500" />
+        {!isReadOnly && <FiChevronDown className="text-gray-500" />}
       </Button>
       <Dialog {...dialog.dialogProps}>
         <Dialog.Content>
