@@ -11,13 +11,11 @@ import { Link } from "src/components/Link";
 import { Pages } from "src/types/pages";
 import coins from "src/lib/CoinsMetadata";
 import { useContract, useWallet } from "src/context/AppContext";
-import { useEffect, useRef } from "react";
 
 export default function RemoveLiquidityPage() {
   const wallet = useWallet()!;
   const contract = useContract()!;
   const navigate = useNavigate();
-  const firstInputRef = useRef<HTMLInputElement | null>(null);
 
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
   const tokenInput = useCoinInput({ coin: liquidityToken });
@@ -61,10 +59,6 @@ export default function RemoveLiquidityPage() {
     }
   );
 
-  useEffect(() => {
-    firstInputRef.current?.focus();
-  }, []);
-
   if (!liquidityToken) {
     return null;
   }
@@ -72,7 +66,7 @@ export default function RemoveLiquidityPage() {
   return (
     <>
       <div className="mt-4 mb-4">
-        <CoinInput {...tokenInput.getInputProps()} ref={firstInputRef} />
+        <CoinInput {...tokenInput.getInputProps()} autoFocus />
         <Link
           className="inline-flex mt-2 ml-2"
           onPress={() => tokenInput.setAmount(balance?.amount!)}
