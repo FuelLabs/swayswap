@@ -22,6 +22,7 @@ const style = {
 type UseCoinParams = {
   amount?: bigint | null;
   isReadOnly?: boolean;
+  coinSelectorDisabled?: boolean;
   coin?: Coin | null;
   gasFee?: bigint;
   showBalance?: boolean;
@@ -37,6 +38,7 @@ type CoinInputParameters = UseCoinParams & {
   balance?: string;
   displayType: DisplayType;
   isReadOnly?: boolean;
+  coinSelectorDisable?: boolean;
   showBalance?: boolean;
   showMaxButton?: boolean;
   autoFocus?: boolean;
@@ -60,9 +62,9 @@ const parseValueBigInt = (value: string) => {
 const formatValue = (amount: bigint | null | undefined) => {
   if (amount != null) {
     return formatUnits(amount, DECIMAL_UNITS);
-  } else if (!amount) {
-    return "";
   }
+  // If amount is null return empty string
+  return "";
 };
 
 export function useCoinInput({
@@ -72,6 +74,7 @@ export function useCoinInput({
   showBalance = true,
   coin,
   gasFee,
+  onInput,
   ...params
 }: UseCoinParams) {
   const [amount, setAmount] = useState<bigint | null>(null);
@@ -79,7 +82,8 @@ export function useCoinInput({
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
 
   useEffect(() => {
-    if (initialAmount != null) setAmount(initialAmount);
+    // Enable value initialAmount to be null
+    if (initialAmount !== undefined) setAmount(initialAmount);
   }, [initialAmount]);
 
   // TODO: consider real gas fee, replacing GAS_FEE variable.
@@ -96,6 +100,7 @@ export function useCoinInput({
       isReadOnly,
       value: formatValue(amount),
       displayType: (isReadOnly ? "text" : "input") as DisplayType,
+      onInput,
       onChange: (val: string) => {
         if (isReadOnly) return;
         const next = val !== "" ? parseValueBigInt(val) : null;
@@ -105,6 +110,7 @@ export function useCoinInput({
         return parseValueBigInt(value) <= MAX_U64_VALUE;
       },
       setMaxBalance: () => {
+        onInput?.();
         setAmount(getSafeMaxBalance());
       },
       balance: formatValue(coinBalance?.amount || BigInt(0)),
@@ -133,6 +139,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
       onChangeCoin,
       onInput,
       isReadOnly,
+      coinSelectorDisabled,
       showMaxButton,
       showBalance,
       setMaxBalance,
@@ -144,7 +151,8 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
     const [value, setValue] = useState<string | undefined>(initialValue);
 
     useEffect(() => {
-      if (initialValue) {
+      // Enable to clean field using empty string
+      if (initialValue != null) {
         setValue(initialValue);
       }
     }, [initialValue]);
@@ -173,7 +181,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
           <CoinSelector
             value={coin}
             onChange={onChangeCoin}
-            isReadOnly={isReadOnly}
+            isReadOnly={isReadOnly || coinSelectorDisabled}
           />
           {(showBalance || showMaxButton) && (
             <div className="flex items-center gap-2 mt-2">

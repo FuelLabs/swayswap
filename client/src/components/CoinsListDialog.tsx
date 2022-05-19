@@ -1,11 +1,8 @@
 import { useState } from "react";
 import CoinsMetadata from "src/lib/CoinsMetadata";
 import { Coin } from "src/types";
-import urlJoin from "url-join";
 import { Input } from "./Input";
 import { Menu } from "./Menu";
-
-const { PUBLIC_URL } = process.env;
 
 const style = {
   input: `appearance-none w-full rounded-md bg-gray-700 px-4 py-2 focus-ring text-gray-100`,
@@ -50,7 +47,7 @@ export function CoinsListDialog({ onSelect }: CoinListModalProps) {
             <Menu.Item key={coin.assetId} className={style.coinItem}>
               <img
                 className="rounded-full border-none ml-1"
-                src={`/${urlJoin(PUBLIC_URL, coin.img!)}`}
+                src={coin.img}
                 alt={coin.name}
                 height={30}
                 width={30}
