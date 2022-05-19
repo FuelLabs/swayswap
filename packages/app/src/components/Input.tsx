@@ -1,9 +1,9 @@
 import type { AriaTextFieldOptions } from "@react-aria/textfield";
 import { useTextField } from "@react-aria/textfield";
+import { mergeRefs } from "@react-aria/utils";
 import cx from "classnames";
 import type { FC } from "react";
 import { forwardRef, useRef } from "react";
-import mergeRefs from "react-merge-refs";
 
 const style = {
   input: `appearance-none w-full rounded-md bg-gray-700 px-4 py-2 focus-ring text-gray-100`,
@@ -19,7 +19,7 @@ export const Input: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     const { inputProps } = useTextField(props, innerRef);
     return (
       <input
-        ref={mergeRefs([innerRef, ref])}
+        ref={mergeRefs(innerRef, ref)}
         className={cx(className, style.input)}
         {...inputProps}
       />
