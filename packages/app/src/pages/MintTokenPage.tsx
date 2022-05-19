@@ -66,9 +66,7 @@ export default function MintTokenPage() {
               className="px-2"
               value={amount}
               onChange={setAmount}
-              isAllowed={(values) => {
-                return (values.floatValue || 0) <= 2000;
-              }}
+              isAllowed={(values) => (values.floatValue || 0) <= 2000}
             />
           </div>
         </div>

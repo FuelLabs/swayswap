@@ -14,7 +14,6 @@ import { ENABLE_FAUCET_API } from "~/config";
 import { useWallet } from "~/context/AppContext";
 import { useFaucet } from "~/hooks/useFaucet";
 import { Pages } from "~/types/pages";
-import { Spinner } from "./Spinner";
 
 export type WalletPropsCard = {
   children: ReactNode;

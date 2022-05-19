@@ -1,7 +1,5 @@
-import {
-  SpinnerCircular,
-  SpinnerCircularProps,
-} from "spinners-react/lib/esm/SpinnerCircular";
+import type { SpinnerCircularProps } from "spinners-react/lib/esm/SpinnerCircular";
+import { SpinnerCircular } from "spinners-react/lib/esm/SpinnerCircular";
 
 export function Spinner(props: SpinnerCircularProps) {
   return <SpinnerCircular {...props} />;

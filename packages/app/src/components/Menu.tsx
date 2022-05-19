@@ -5,7 +5,7 @@ import type { TreeProps, TreeState } from "@react-stately/tree";
 import { useTreeState } from "@react-stately/tree";
 import type { ItemProps, Node } from "@react-types/shared";
 import cx from "classnames";
-import type { FC, Key } from "react";
+import type { FC, Key, ReactNode } from "react";
 import { useEffect, useRef } from "react";
 
 const style = {
@@ -15,8 +15,8 @@ const style = {
 };
 
 type ListItemProps = {
-  item: Node<any>;
-  state: TreeState<any>;
+  item: Node<ReactNode>;
+  state: TreeState<ReactNode>;
   onAction?: (key: Key) => void;
   className?: string;
 };
