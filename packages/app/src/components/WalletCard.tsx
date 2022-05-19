@@ -1,14 +1,15 @@
 import clipboard from "clipboard";
 import type { ReactNode } from "react";
 import toast from "react-hot-toast";
-import { BiWallet } from "react-icons/bi";
+import { BiCoin, BiDotsHorizontalRounded, BiWallet } from "react-icons/bi";
 import { FaFaucet, FaRegCopy } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+import { Menu } from "./Menu";
 import { PageContent } from "./PageContent";
+import { Popover, usePopover } from "./Popover";
 
 import { Button } from "~/components/Button";
-import { Spinner } from "~/components/Spinner";
 import { ENABLE_FAUCET_API } from "~/config";
 import { useWallet } from "~/context/AppContext";
 import { useFaucet } from "~/hooks/useFaucet";
@@ -21,6 +22,8 @@ export type WalletPropsCard = {
 
 export function WalletCard({ children, onFaucetAdded }: WalletPropsCard) {
   const wallet = useWallet();
+  const navigate = useNavigate();
+  const popover = usePopover({ placement: "bottom" });
 
   const faucetMutation = useFaucet({
     onSuccess: () => {
@@ -34,6 +37,11 @@ export function WalletCard({ children, onFaucetAdded }: WalletPropsCard) {
     toast("Address copied", { icon: "✨" });
   };
 
+  function handleFaucet() {
+    faucetMutation.mutate();
+    popover.close();
+  }
+
   const titleElementRight = wallet && (
     <div className="flex items-center gap-3">
       {ENABLE_FAUCET_API ? (
@@ -42,15 +50,25 @@ export function WalletCard({ children, onFaucetAdded }: WalletPropsCard) {
         </Link>
       ) : (
         <>
-          {faucetMutation.isLoading ? (
-            <div className="flex justify-center rounded-xl p-1">
-              <Spinner />
-            </div>
-          ) : (
-            <Button variant="ghost" onPress={() => faucetMutation.mutate()}>
-              <FaFaucet size="1.2rem" />
-            </Button>
-          )}
+          <Button
+            variant="ghost"
+            isLoading={faucetMutation.isLoading}
+            {...popover.getTriggerProps()}
+          >
+            <BiDotsHorizontalRounded size="1.2rem" />
+          </Button>
+          <Popover {...popover.rootProps}>
+            <Menu>
+              <Menu.Item key="faucet" onPress={handleFaucet}>
+                <FaFaucet size={16} className="text-gray-600" />
+                Faucet
+              </Menu.Item>
+              <Menu.Item key="mint" onPress={() => navigate("/mint")}>
+                <BiCoin size={16} className="text-gray-600" />
+                Mint Tokens
+              </Menu.Item>
+            </Menu>
+          </Popover>
         </>
       )}
     </div>

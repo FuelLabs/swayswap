@@ -1,4 +1,4 @@
-import { useDialog } from "@react-aria/dialog";
+import { useDialog as useReactAriaDialog } from "@react-aria/dialog";
 import { FocusScope } from "@react-aria/focus";
 import type { OverlayProps, ModalAriaProps } from "@react-aria/overlays";
 import {
@@ -68,7 +68,7 @@ export const Dialog: DialogComponent = ({ state, ...props }) => {
 
   usePreventScroll();
   const { modalProps } = useModal();
-  const { dialogProps, titleProps } = useDialog(props, ref);
+  const { dialogProps, titleProps } = useReactAriaDialog(props, ref);
   const ctxValue = {
     ref,
     state,
@@ -142,7 +142,7 @@ function DialogContent({ children, className }: DialogContentProps) {
   );
 }
 
-export function useDialogProps() {
+export function useDialog() {
   const state = useOverlayTriggerState({});
   const openButtonRef = useRef<HTMLButtonElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -151,6 +151,7 @@ export function useDialogProps() {
     ref: openButtonRef,
     onPress: () => state.open(),
   };
+
   const closeButtonProps = {
     ref: closeButtonRef,
     onPress: () => state.close(),

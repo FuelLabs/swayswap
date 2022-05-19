@@ -1,8 +1,10 @@
 import { useButton } from "@react-aria/button";
+import { mergeRefs } from "@react-aria/utils";
 import type { AriaButtonProps } from "@react-types/button";
 import cx from "classnames";
 import { forwardRef, useRef } from "react";
-import mergeRefs from "react-merge-refs";
+
+import { Spinner } from "./Spinner";
 
 export type ButtonProps = AriaButtonProps<"button"> & {
   className?: string;
@@ -10,6 +12,7 @@ export type ButtonProps = AriaButtonProps<"button"> & {
   variant?: "base" | "primary" | "ghost";
   isFull?: boolean;
   isDisabled?: boolean;
+  isLoading?: boolean;
   /**
    * TODO: use useDialog from react-aria instead
    * @deprecated this is used here just because of Radix Dialog.Trigger use
@@ -20,7 +23,15 @@ export type ButtonProps = AriaButtonProps<"button"> & {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { size = "sm", variant = "base", className, isFull, isDisabled, ...props },
+    {
+      size = "sm",
+      variant = "base",
+      className,
+      isFull,
+      isDisabled,
+      isLoading,
+      ...props
+    },
     ref
   ) => {
     const innerRef = useRef<HTMLButtonElement | null>(null);
@@ -47,14 +58,22 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <button
-        ref={mergeRefs([innerRef, ref])}
+        ref={mergeRefs(innerRef, ref)}
         {...buttonProps}
         className={classes}
         aria-pressed={!isDisabled && isPressed}
         disabled={isDisabled}
         aria-disabled={isDisabled}
       >
-        {props.children}
+        {isLoading ? (
+          <Spinner
+            size={size === "sm" ? 16 : 22}
+            secondaryColor="rgba(255,255,255,0.2)"
+            color="rgba(255,255,255,0.8)"
+          />
+        ) : (
+          props.children
+        )}
       </button>
     );
   }
