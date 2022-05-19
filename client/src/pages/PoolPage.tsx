@@ -12,6 +12,7 @@ import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 import { useMutation, useQuery } from "react-query";
 import toast from "react-hot-toast";
 import { Button } from "src/components/Button";
+import { toNumber } from "fuels";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -223,17 +224,17 @@ export default function PoolPage() {
                       <span>
                         <>
                           ETH/DAI:{" "}
-                          {(ONE_ASSET * poolInfo.eth_reserve) /
-                            poolInfo.token_reserve /
-                            ONE_ASSET}
+                          {+(toNumber(ONE_ASSET * poolInfo.eth_reserve) /
+                            toNumber(poolInfo.token_reserve) /
+                            toNumber(ONE_ASSET)).toFixed(6) }
                         </>
                       </span>
                       <span>
                         <>
                           DAI/ETH:{" "}
-                          {(ONE_ASSET * poolInfo.token_reserve) /
-                            poolInfo.eth_reserve /
-                            ONE_ASSET}
+                          {+(toNumber(ONE_ASSET * poolInfo.token_reserve) /
+                            toNumber(poolInfo.eth_reserve) /
+                            toNumber(ONE_ASSET)).toFixed(6) }
                         </>
                       </span>
                     </div>
