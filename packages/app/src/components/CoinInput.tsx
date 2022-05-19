@@ -6,6 +6,7 @@ import NumberFormat from "react-number-format";
 
 import { Button } from "./Button";
 import { CoinSelector } from "./CoinSelector";
+import { Spinner } from "./Spinner";
 
 import { DECIMAL_UNITS } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
@@ -45,6 +46,7 @@ type CoinInputParameters = UseCoinParams & {
   showBalance?: boolean;
   showMaxButton?: boolean;
   autoFocus?: boolean;
+  isLoading?: boolean;
   isAllowed?: (values: NumberFormatValues) => boolean;
   onChange?: (val: string) => void;
   setMaxBalance?: () => void;
@@ -149,6 +151,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
       setMaxBalance,
       balance,
       autoFocus,
+      isLoading,
     },
     ref
   ) => {
@@ -163,24 +166,30 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
 
     return (
       <div className={style.transferPropContainer}>
-        <NumberFormat
-          autoFocus={autoFocus}
-          getInputRef={ref}
-          allowNegative={false}
-          defaultValue={initialValue}
-          value={value}
-          displayType={displayType}
-          isAllowed={isAllowed}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            onChange?.(e.target.value);
-            setValue(e.target.value);
-          }}
-          decimalScale={DECIMAL_UNITS}
-          placeholder="0"
-          className={style.input}
-          thousandSeparator={false}
-          onInput={onInput}
-        />
+        {isLoading ? (
+          <div className="mt-3 ml-4">
+            <Spinner />
+          </div>
+        ) : (
+          <NumberFormat
+            autoFocus={autoFocus}
+            getInputRef={ref}
+            allowNegative={false}
+            defaultValue={initialValue}
+            value={value}
+            displayType={displayType}
+            isAllowed={isAllowed}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              onChange?.(e.target.value);
+              setValue(e.target.value);
+            }}
+            decimalScale={DECIMAL_UNITS}
+            placeholder="0"
+            className={style.input}
+            thousandSeparator={false}
+            onInput={onInput}
+          />
+        )}
         <div className={style.rightWrapper}>
           <CoinSelector
             value={coin}

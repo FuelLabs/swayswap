@@ -16,11 +16,13 @@ const style = {
 type SwapComponentProps = {
   previewAmount?: bigint | null;
   onChange?: (swapState: SwapState) => void;
+  isLoading?: boolean;
 };
 
 export function SwapComponent({
-  previewAmount: previewValue,
   onChange,
+  isLoading,
+  previewAmount: previewValue,
 }: SwapComponentProps) {
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [initialActiveInput, setInitialActiveInput] =
@@ -113,7 +115,11 @@ export function SwapComponent({
         <InvertButton onClick={handleInvertCoins} />
       </div>
       <div className="mb-4">
-        <CoinInput {...toInput.getInputProps()} coinSelectorDisabled={true} />
+        <CoinInput
+          {...toInput.getInputProps()}
+          coinSelectorDisabled={true}
+          isLoading={isLoading}
+        />
       </div>
     </>
   );

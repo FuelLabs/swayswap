@@ -52,6 +52,7 @@ export default function SwapPage() {
       },
     }
   );
+
   const { mutate: swap, isLoading: isSwaping } = useMutation(
     async () => {
       if (!swapState) return;
@@ -73,14 +74,19 @@ export default function SwapPage() {
       balances,
       swapState.direction === ActiveInput.to ? swapState.to : swapState.from
     );
+
   const shouldDisableButton =
     isLoading || isSwaping || !hasLiquidity || !previewAmount || hasNotBalance;
 
-  const getButtonText = () => {
+  function getButtonText() {
     if (!hasLiquidity) return "Insufficient liquidity";
     if (isSwaping) return "Loading...";
     return "Swap";
-  };
+  }
+
+  function handleSwap(state: SwapState) {
+    setSwapState(state);
+  }
 
   return (
     <PageContent>
@@ -88,7 +94,11 @@ export default function SwapPage() {
         <MdSwapCalls className="text-primary-500" />
         Swap
       </PageContent.Title>
-      <SwapComponent previewAmount={previewAmount} onChange={setSwapState} />
+      <SwapComponent
+        previewAmount={previewAmount}
+        onChange={handleSwap}
+        isLoading={isLoading}
+      />
       <Button
         isFull
         size="lg"
