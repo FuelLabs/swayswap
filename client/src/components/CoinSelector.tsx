@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { FiChevronDown } from "react-icons/fi";
+import CoinsMetadata from "src/lib/CoinsMetadata";
+import { Coin } from "src/types";
 import urlJoin from "url-join";
 
 import { Button } from "./Button";
+import { CoinsListModal } from "./CoinsListModal";
+import { Dialog, useDialogProps } from "./Dialog";
 
 const { PUBLIC_URL } = process.env;
 
@@ -10,44 +14,38 @@ const style = {
   currencySelector: `flex1`,
 };
 
-export interface Coin {
-  assetId: string;
-  name?: string;
-  img?: string;
-}
-
 type CoinSelectorProps = {
   value?: Coin | null;
   onChange?: (coin: Coin) => void;
-  coins?: Array<Coin>;
   isReadOnly?: boolean;
 };
 
 export function CoinSelector({
   value,
-  coins,
   onChange,
   isReadOnly,
 }: CoinSelectorProps) {
   const [selected, setSelected] = useState<Coin | null>(null);
-  // const hasCoins = coins && coins.length > 1;
+  const dialog = useDialogProps();
 
   useEffect(() => {
     if (!value) return setSelected(null);
     setSelected(value);
   }, [value]);
 
-  // const handleSelect = useCallback(
-  //   (coin: Coin) => {
-  //     setSelected(coin);
-  //     onChange?.(coin);
-  //   },
-  //   [setSelected, onChange]
-  // );
+  function handleSelect(assetId: string) {
+    dialog.close();
+    setSelected(CoinsMetadata.find((coin) => coin.assetId === assetId)!);
+  }
 
   return (
     <div className={style.currencySelector}>
-      <Button size="md" className="coin-selector" isDisabled={isReadOnly}>
+      <Button
+        {...dialog.openButtonProps}
+        size="md"
+        className="coin-selector"
+        isDisabled={isReadOnly}
+      >
         {selected && selected.img && (
           <img
             className="rounded-full border-none ml-1"
@@ -60,6 +58,11 @@ export function CoinSelector({
         <div className="ml-2">{selected?.name}</div>
         <FiChevronDown className="text-gray-500" />
       </Button>
+      <Dialog {...dialog.dialogProps}>
+        <Dialog.Content>
+          <CoinsListModal onSelect={handleSelect} />
+        </Dialog.Content>
+      </Dialog>
     </div>
   );
 }

@@ -10,6 +10,12 @@ export type ButtonProps = AriaButtonProps<"button"> & {
   variant?: "base" | "primary" | "ghost";
   isFull?: boolean;
   isDisabled?: boolean;
+  /**
+   * TODO: use useDialog from react-aria instead
+   * @deprecated this is used here just because of Radix Dialog.Trigger use
+   * a prop called asChild as pass onClick as context
+   * */
+  onClick?: () => void;
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -19,7 +25,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const innerRef = useRef<HTMLButtonElement | null>(null);
     const { buttonProps, isPressed } = useButton(
-      { ...props, isDisabled },
+      {
+        ...props,
+        onPress: props.onClick ? props.onClick : props.onPress,
+        isDisabled,
+      },
       innerRef
     );
 
