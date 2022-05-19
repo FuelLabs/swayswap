@@ -1,11 +1,8 @@
 import { useWallet } from 'src/context/AppContext';
 import { CoinQuantity, toBigInt } from 'fuels';
 import { Coin } from 'src/types';
-import CoinsMetadata from 'src/lib/CoinsMetadata';
+import CoinsMetadata, { ASSET_404 } from 'src/lib/CoinsMetadata';
 import { useQuery } from 'react-query';
-import urljoin from 'url-join';
-
-const { PUBLIC_URL } = process.env;
 
 type Asset = Coin & { amount: bigint };
 const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<Asset> => {
@@ -15,8 +12,8 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<Asset> => {
       // TODO: Create default Coin Metadata when token didn't have registered data
       // Another options could be querying from the contract
       // https://github.com/FuelLabs/swayswap-demo/issues/33
-      name: coinMetadata?.name || '404',
-      img: urljoin(PUBLIC_URL, coinMetadata?.img || '/icons/other.svg'),
+      name: coinMetadata?.name || ASSET_404.name,
+      img: coinMetadata?.img || ASSET_404.img,
       assetId: coin.assetId,
       amount: toBigInt(coin.amount || 0),
     };
