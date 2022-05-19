@@ -33,12 +33,13 @@ type UseCoinParams = {
 type DisplayType = "input" | "text";
 
 type CoinInputParameters = UseCoinParams & {
+  value: string;
   balance?: string;
   displayType: DisplayType;
   isReadOnly?: boolean;
   showBalance?: boolean;
   showMaxButton?: boolean;
-  value: string;
+  autoFocus?: boolean;
   isAllowed?: (values: NumberFormatValues) => boolean;
   onChange?: (val: string) => void;
   setMaxBalance?: () => void;
@@ -136,6 +137,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
       showBalance,
       setMaxBalance,
       balance,
+      autoFocus,
     },
     ref
   ) => {
@@ -150,6 +152,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
     return (
       <div className={style.transferPropContainer}>
         <NumberFormat
+          autoFocus={autoFocus}
           getInputRef={ref}
           allowNegative={false}
           defaultValue={initialValue}

@@ -1,7 +1,7 @@
 import { toNumber } from "fuels";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import toast from "react-hot-toast";
 
@@ -60,7 +60,6 @@ function PoolLoader({
 export default function AddLiquidity() {
   const contract = useContract()!;
   const navigate = useNavigate();
-  const firstInputRef = useRef<HTMLInputElement | null>(null);
 
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
@@ -152,10 +151,6 @@ export default function AddLiquidity() {
     addLiquidityMutation.mutate();
   };
 
-  useEffect(() => {
-    firstInputRef.current?.focus();
-  }, []);
-
   return addLiquidityMutation.isLoading ? (
     <div className="mt-6 mb-8 flex justify-center">
       <PoolLoader
@@ -174,7 +169,7 @@ export default function AddLiquidity() {
   ) : (
     <>
       <div className="mt-6 mb-4">
-        <CoinInput {...fromInput.getInputProps()} ref={firstInputRef} />
+        <CoinInput {...fromInput.getInputProps()} autoFocus />
       </div>
       <div className="mb-6">
         <CoinInput {...toInput.getInputProps()} />
