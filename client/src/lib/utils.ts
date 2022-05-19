@@ -8,4 +8,4 @@ export const objectId = (value: string) => ({
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const relativeUrl = (path: string) => urljoin(PUBLIC_URL, path);
+export const relativeUrl = (path: string) => urljoin(PUBLIC_URL || '/', path);
