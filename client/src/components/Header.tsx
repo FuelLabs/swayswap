@@ -11,8 +11,8 @@ import { Button } from "./Button";
 import { useWallet } from "src/context/AppContext";
 
 const style = {
-  wrapper: `p-4 w-screen flex flex-col sm:flex-row justify-between items-center`,
-  headerLogo: `flex items-center justify-start`,
+  wrapper: `relative p-4 w-screen flex flex-col sm:flex-row justify-between items-center`,
+  headerLogo: `absolute top-4 left-4 flex items-center justify-start`,
   nav: `flex-1 flex justify-center items-center mt-2 sm:mt-0`,
   navItemsContainer: `px-1 gap-1 flex bg-gray-800 rounded-3xl`,
   navItem: `py-1 px-3 my-1 text-base rounded-full border-transparent text-gray-400 hover:bg-gray-500/20 hover:text-gray-200`,
