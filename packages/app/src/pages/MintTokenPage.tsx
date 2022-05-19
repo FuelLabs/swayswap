@@ -62,7 +62,14 @@ export default function MintTokenPage() {
             <label className="mx-1 mb-2 flex text-gray-300">
               Amount to mint
             </label>
-            <NumberInput className="px-2" value={amount} onChange={setAmount} />
+            <NumberInput
+              className="px-2"
+              value={amount}
+              onChange={setAmount}
+              isAllowed={(values) => {
+                return (values.floatValue || 0) <= 2000;
+              }}
+            />
           </div>
         </div>
       </div>
