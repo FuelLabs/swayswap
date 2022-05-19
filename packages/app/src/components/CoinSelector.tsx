@@ -3,7 +3,7 @@ import { FiChevronDown } from "react-icons/fi";
 
 import { Button } from "./Button";
 import { CoinsListDialog } from "./CoinsListDialog";
-import { Dialog, useDialogProps } from "./Dialog";
+import { Dialog, useDialog } from "./Dialog";
 
 import CoinsMetadata from "~/lib/CoinsMetadata";
 import type { Coin } from "~/types";
@@ -20,7 +20,7 @@ type CoinSelectorProps = {
 
 export function CoinSelector({ value, isReadOnly }: CoinSelectorProps) {
   const [selected, setSelected] = useState<Coin | null>(null);
-  const dialog = useDialogProps();
+  const dialog = useDialog();
 
   useEffect(() => {
     if (!value) return setSelected(null);
