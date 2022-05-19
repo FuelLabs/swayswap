@@ -23,11 +23,11 @@ import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../src/
 
 const tokenPath = path.join(
   __dirname,
-  '../../contracts/token_contract/out/debug/token_contract.bin'
+  '../../../contracts/token_contract/out/debug/token_contract.bin'
 );
 const contractPath = path.join(
   __dirname,
-  '../../contracts/exchange_contract/out/debug/exchange_contract.bin'
+  '../../../contracts/exchange_contract/out/debug/exchange_contract.bin'
 );
 const providerUrl = process.env.VITE_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
 
