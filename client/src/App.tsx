@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 import AppRoutes from "./AppRoutes";
 import { Toaster } from "./components/Toaster";
+import { Dialog } from "./components/Dialog";
 
 const { PUBLIC_URL } = process.env;
 
@@ -38,9 +39,11 @@ export default function App() {
       <Toaster />
       <BrowserRouter basename={PUBLIC_URL}>
         <QueryClientProvider client={queryClient}>
-          <AppContextProvider>
-            <AppRoutes />
-          </AppContextProvider>
+          <Dialog.Provider>
+            <AppContextProvider>
+              <AppRoutes />
+            </AppContextProvider>
+          </Dialog.Provider>
         </QueryClientProvider>
       </BrowserRouter>
     </RecoilRoot>
