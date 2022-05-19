@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import assets from "src/lib/CoinsMetadata";
-import { Coin, CoinInput, useCoinInput } from "src/components/CoinInput";
+import { CoinInput, useCoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
 import { ActiveInput, SwapState } from "./types";
+import { Coin } from "src/types";
 
 const style = {
   switchDirection: `flex items-center justify-center -my-5`,
 };
-
-const getOtherCoins = (coins: Coin[]) =>
-  assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
 
 type SwapComponentProps = {
   previewAmount?: bigint | null;
@@ -41,14 +39,12 @@ export function SwapComponent({
 
   const fromInput = useCoinInput({
     coin: coinFrom,
-    coins: getOtherCoins([coinFrom, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => (activeInput.current = ActiveInput.from),
   });
 
   const toInput = useCoinInput({
     coin: coinTo,
-    coins: getOtherCoins([coinFrom, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => (activeInput.current = ActiveInput.to),
   });

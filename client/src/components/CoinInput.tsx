@@ -6,6 +6,7 @@ import NumberFormat, { NumberFormatValues } from "react-number-format";
 import { DECIMAL_UNITS } from "src/config";
 import { CoinSelector } from "./CoinSelector";
 import { Button } from "./Button";
+import { Coin } from "src/types";
 
 // Max value supported
 const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
@@ -20,18 +21,11 @@ const style = {
   maxButton: `mr-2`,
 };
 
-export interface Coin {
-  assetId: string;
-  name?: string;
-  img?: string;
-}
-
 type UseCoinParams = {
   amount?: bigint | null;
   onChange?: (val: bigint | null) => void;
   isReadOnly?: boolean;
   coin?: Coin | null;
-  coins?: Coin[];
   onChangeCoin?: (value: Coin) => void;
   onInput?: (...args: any) => void;
   coinBalance?: CoinQuantity;
@@ -131,7 +125,6 @@ export function CoinInput({
   displayType,
   onChange,
   coin,
-  coins,
   isAllowed,
   onChangeCoin,
   onInput,
@@ -184,7 +177,6 @@ export function CoinInput({
             </Button>
           )}
           <CoinSelector
-            coins={coins}
             value={coin}
             onChange={onChangeCoin}
             isReadOnly={isReadOnly}

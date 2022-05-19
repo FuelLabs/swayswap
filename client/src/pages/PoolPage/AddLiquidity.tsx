@@ -3,7 +3,7 @@ import { useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { useContract, useWallet } from "src/context/AppContext";
 import assets from "src/lib/CoinsMetadata";
-import { Coin, CoinInput, useCoinInput } from "src/components/CoinInput";
+import { CoinInput, useCoinInput } from "src/components/CoinInput";
 import { Spinner } from "src/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "src/types/pages";
@@ -12,6 +12,7 @@ import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 import { useMutation, useQuery } from "react-query";
 import toast from "react-hot-toast";
 import { Button } from "src/components/Button";
+import { Coin } from "src/types";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -63,9 +64,6 @@ export default function AddLiquidity() {
     wallet!.getBalances()
   );
 
-  const getOtherCoins = (coins: Coin[]) =>
-    assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
-
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],
@@ -81,7 +79,6 @@ export default function AddLiquidity() {
   );
   const fromInput = useCoinInput({
     coin: coinFrom,
-    coins: getOtherCoins([coinFrom, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     coinBalance: fromCoinBalance,
     gasFee: BigInt(1),
@@ -92,7 +89,6 @@ export default function AddLiquidity() {
   );
   const toInput = useCoinInput({
     coin: coinTo,
-    coins: getOtherCoins([coinTo, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     coinBalance: toCoinBalance,
   });
