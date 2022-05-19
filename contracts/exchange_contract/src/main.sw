@@ -46,8 +46,8 @@ storage {
 
 /// Compute the storage slot for an address's deposits.
 fn key_deposits(a: Address, asset_id: b256) -> b256 {
-    let inner = hash_pair(a.into(), asset_id, HashMethod::Sha256);
-    hash_pair(S_DEPOSITS, inner, HashMethod::Sha256)
+    let inner = sha256((a.into(), asset_id));
+    sha256((S_DEPOSITS, inner))
 }
 
 /// Return token reserve balance

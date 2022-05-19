@@ -26,7 +26,9 @@
     "lint": "run-s lint:check prettier:check",
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --write .",
-    "test": "turbo run test -- --passWithNoTests"
+    "test": "turbo run test -- --passWithNoTests",
+    "build-contracts": "pnpm run --filter swayswap-app build-contracts",
+    "deploy-contracts": "pnpm run --filter swayswap-app deploy-contracts"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
