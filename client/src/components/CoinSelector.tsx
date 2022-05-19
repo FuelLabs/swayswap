@@ -2,13 +2,10 @@ import { useState, useEffect } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import CoinsMetadata from "src/lib/CoinsMetadata";
 import { Coin } from "src/types";
-import urlJoin from "url-join";
 
 import { Button } from "./Button";
 import { CoinsListDialog } from "./CoinsListDialog";
 import { Dialog, useDialogProps } from "./Dialog";
-
-const { PUBLIC_URL } = process.env;
 
 const style = {
   currencySelector: `flex1`,
@@ -49,7 +46,7 @@ export function CoinSelector({
         {selected && selected.img && (
           <img
             className="rounded-full border-none ml-1"
-            src={`/${urlJoin(PUBLIC_URL, selected.img)}`}
+            src={selected.img}
             alt={selected.name}
             height={20}
             width={20}
