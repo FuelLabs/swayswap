@@ -5,7 +5,7 @@ import { Coin } from "src/types";
 import urlJoin from "url-join";
 
 import { Button } from "./Button";
-import { CoinsListModal } from "./CoinsListModal";
+import { CoinsListDialog } from "./CoinsListDialog";
 import { Dialog, useDialogProps } from "./Dialog";
 
 const { PUBLIC_URL } = process.env;
@@ -60,7 +60,7 @@ export function CoinSelector({
       </Button>
       <Dialog {...dialog.dialogProps}>
         <Dialog.Content>
-          <CoinsListModal onSelect={handleSelect} />
+          <CoinsListDialog onSelect={handleSelect} />
         </Dialog.Content>
       </Dialog>
     </div>

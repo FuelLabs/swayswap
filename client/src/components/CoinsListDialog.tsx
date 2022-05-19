@@ -18,7 +18,7 @@ export type CoinListModalProps = {
   onSelect?: (assetId: string) => void;
 };
 
-export function CoinsListModal({ onSelect }: CoinListModalProps) {
+export function CoinsListDialog({ onSelect }: CoinListModalProps) {
   const [value, setValue] = useState("");
 
   function filterBySearch(coin: Coin) {
