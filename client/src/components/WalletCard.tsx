@@ -63,12 +63,14 @@ export function WalletCard({ children, onFaucetAdded }: WalletPropsCard) {
           <BiWallet className="text-primary-500" />
           Wallet
         </div>
-        <Button aria-label="Copy your wallet address" onPress={handleCopy}>
-          <span className="text-gray-100">
-            {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
-          </span>
-          <FaRegCopy size="1em" />
-        </Button>
+        {wallet && (
+          <Button aria-label="Copy your wallet address" onPress={handleCopy}>
+            <span className="text-gray-100">
+              {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
+            </span>
+            <FaRegCopy size="1em" />
+          </Button>
+        )}
       </PageContent.Title>
       {children}
     </PageContent>
