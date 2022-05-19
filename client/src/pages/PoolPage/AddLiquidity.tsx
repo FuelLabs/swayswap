@@ -1,24 +1,25 @@
-import classNames from "classnames";
-import { useState } from "react";
-import { RiCheckFill } from "react-icons/ri";
-import { useContract, useWallet } from "src/context/AppContext";
-import assets from "src/lib/CoinsMetadata";
-import { CoinInput, useCoinInput } from "src/components/CoinInput";
-import { Spinner } from "src/components/Spinner";
-import { useNavigate } from "react-router-dom";
-import { Pages } from "src/types/pages";
-import { formatUnits } from "ethers/lib/utils";
-import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 import { useMutation, useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import classNames from "classnames";
 import toast from "react-hot-toast";
+
+import assets from "src/lib/CoinsMetadata";
 import { Button } from "src/components/Button";
 import { Coin } from "src/types";
+import { CoinInput, useCoinInput } from "src/components/CoinInput";
+import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
+import { formatUnits } from "ethers/lib/utils";
+import { Pages } from "src/types/pages";
+import { RiCheckFill } from "react-icons/ri";
+import { Spinner } from "src/components/Spinner";
+import { useContract } from "src/context/AppContext";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  info: `font-mono my-4 px-4 py-3 text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg`,
+  info: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg`,
 };
 
 function PoolLoader({
@@ -58,11 +59,6 @@ function PoolLoader({
 export default function AddLiquidity() {
   const contract = useContract()!;
   const navigate = useNavigate();
-  const wallet = useWallet();
-
-  const { data: balances } = useQuery("AssetsPage-balances", () =>
-    wallet!.getBalances()
-  );
 
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
@@ -74,23 +70,15 @@ export default function AddLiquidity() {
     contract.callStatic.get_info()
   );
 
-  const fromCoinBalance = balances?.find(
-    (coin) => coin.assetId === coinFrom.assetId
-  );
   const fromInput = useCoinInput({
     coin: coinFrom,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    coinBalance: fromCoinBalance,
     gasFee: BigInt(1),
   });
 
-  const toCoinBalance = balances?.find(
-    (coin) => coin.assetId === coinTo.assetId
-  );
   const toInput = useCoinInput({
     coin: coinTo,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    coinBalance: toCoinBalance,
   });
 
   const addLiquidityMutation = useMutation(
@@ -159,10 +147,10 @@ export default function AddLiquidity() {
   ) : (
     <>
       <div className="mt-6 mb-4">
-        <CoinInput {...fromInput.getInputProps()} showMaxButton showBalance />
+        <CoinInput {...fromInput.getInputProps()} />
       </div>
       <div className="mb-6">
-        <CoinInput {...toInput.getInputProps()} showMaxButton showBalance />
+        <CoinInput {...toInput.getInputProps()} />
       </div>
       {poolInfo ? (
         <div className={style.info}>

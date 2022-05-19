@@ -19,6 +19,7 @@ export function SwapComponent({
   onChange,
 }: SwapComponentProps) {
   const activeInput = useRef<ActiveInput>(ActiveInput.from);
+
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],
