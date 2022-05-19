@@ -1,35 +1,30 @@
-import { formatUnits } from "ethers/lib/utils";
+import { parseUnits } from "ethers/lib/utils";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { RiSettings3Fill } from "react-icons/ri";
+import { BiCoin } from "react-icons/bi";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
-import { TextInput } from "~/components/TextInput";
-import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "~/config";
+import { Button } from "~/components/Button";
+import { Input } from "~/components/Input";
+import { NumberInput } from "~/components/NumberInput";
+import { PageContent } from "~/components/PageContent";
+import { DECIMAL_UNITS, TOKEN_ID } from "~/config";
 import { useTokenMethods } from "~/hooks/useTokensMethods";
 import { sleep } from "~/lib/utils";
 import { Pages } from "~/types/pages";
-
-const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
-  content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
-  formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  confirmButton: `bg-primary-500 my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center
-    justify-center cursor-pointer border border-primary-500 hover:border-primary-600 mt-8`,
-};
 
 export default function MintTokenPage() {
   const [asset, setAsset] = useState(TOKEN_ID);
   const methods = useTokenMethods(TOKEN_ID);
   const navigate = useNavigate();
+  const [amount, setAmount] = useState<string>("2000");
 
   const mintMutation = useMutation(
     async () => {
-      const amount = MINT_AMOUNT;
-      await methods.mint(amount);
-      // Transfer minted coins to the output
-      await methods.transferTo(amount, { variableOutputs: 1 });
+      const mintAmount = parseUnits(amount, DECIMAL_UNITS).toBigInt();
+      await methods.mint(mintAmount);
+      await methods.transferTo(mintAmount, { variableOutputs: 1 });
       await sleep(1000);
     },
     {
@@ -43,32 +38,44 @@ export default function MintTokenPage() {
   );
 
   return (
-    <div className={style.wrapper}>
-      <div className={style.content}>
-        <div className={style.formHeader}>
-          <h1>Mint tokens</h1>
-          <div>
-            <RiSettings3Fill />
-          </div>
-        </div>
-        <div className="mt-8">
-          <label className="mx-2 mb-2 flex text-gray-300">
-            Paste the the token contractId
-          </label>
+    <PageContent>
+      <PageContent.Title>
+        <BiCoin className="text-primary-500" />
+        Mint
+      </PageContent.Title>
+      <div className="mb-4">
+        <div className="flex gap-4 items-center">
           {/* TODO: Add validation of contract id, querying from the the core */}
           {/* TODO: Add validation to match a valid address */}
           {/* https://github.com/FuelLabs/swayswap-demo/issues/41 */}
-          <TextInput value={asset} placeholder={""} onChange={setAsset} />
-        </div>
-        <div
-          onClick={() => !mintMutation.isLoading && mintMutation.mutate()}
-          className={style.confirmButton}
-        >
-          {!mintMutation.isLoading
-            ? `Mint ${formatUnits(MINT_AMOUNT, DECIMAL_UNITS)} tokens`
-            : `Minting ${formatUnits(MINT_AMOUNT, DECIMAL_UNITS)} tokens...`}
+          <div>
+            <label className="mx-1 mb-2 flex text-gray-300">
+              Paste token contractId
+            </label>
+            <Input
+              value={asset}
+              placeholder="Type contract id"
+              onChange={setAsset}
+            />
+          </div>
+          <div>
+            <label className="mx-1 mb-2 flex text-gray-300">
+              Amount to mint
+            </label>
+            <NumberInput className="px-2" value={amount} onChange={setAmount} />
+          </div>
         </div>
       </div>
-    </div>
+      <Button
+        isFull
+        size="lg"
+        variant="primary"
+        isDisabled={!amount || parseInt(amount, 2) <= 0}
+        isLoading={mintMutation.isLoading}
+        onPress={() => !mintMutation.isLoading && mintMutation.mutate()}
+      >
+        Mint
+      </Button>
+    </PageContent>
   );
 }
