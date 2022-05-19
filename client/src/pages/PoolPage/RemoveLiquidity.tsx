@@ -66,7 +66,11 @@ export default function RemoveLiquidityPage() {
   return (
     <>
       <div className="mt-4 mb-4">
-        <CoinInput {...tokenInput.getInputProps()} autoFocus />
+        <CoinInput
+          {...tokenInput.getInputProps()}
+          autoFocus
+          coinSelectorDisabled={true}
+        />
         <Link
           className="inline-flex mt-2 ml-2"
           onPress={() => tokenInput.setAmount(balance?.amount!)}

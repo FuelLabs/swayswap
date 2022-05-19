@@ -22,6 +22,7 @@ const style = {
 type UseCoinParams = {
   amount?: bigint | null;
   isReadOnly?: boolean;
+  coinSelectorDisabled?: boolean;
   coin?: Coin | null;
   gasFee?: bigint;
   showBalance?: boolean;
@@ -37,6 +38,7 @@ type CoinInputParameters = UseCoinParams & {
   balance?: string;
   displayType: DisplayType;
   isReadOnly?: boolean;
+  coinSelectorDisable?: boolean;
   showBalance?: boolean;
   showMaxButton?: boolean;
   autoFocus?: boolean;
@@ -136,6 +138,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
       onChangeCoin,
       onInput,
       isReadOnly,
+      coinSelectorDisabled,
       showMaxButton,
       showBalance,
       setMaxBalance,
@@ -176,7 +179,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
           <CoinSelector
             value={coin}
             onChange={onChangeCoin}
-            isReadOnly={isReadOnly}
+            isReadOnly={isReadOnly || coinSelectorDisabled}
           />
           {(showBalance || showMaxButton) && (
             <div className="flex items-center gap-2 mt-2">

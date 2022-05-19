@@ -76,13 +76,17 @@ export function SwapComponent({
   return (
     <>
       <div className="mt-4">
-        <CoinInput {...fromInput.getInputProps()} autoFocus />
+        <CoinInput
+          {...fromInput.getInputProps()}
+          autoFocus
+          coinSelectorDisabled={true}
+        />
       </div>
       <div className={style.switchDirection}>
         <InvertButton onClick={handleInvertCoins} />
       </div>
       <div className="mb-4">
-        <CoinInput {...toInput.getInputProps()} />
+        <CoinInput {...toInput.getInputProps()} coinSelectorDisabled={true} />
       </div>
     </>
   );

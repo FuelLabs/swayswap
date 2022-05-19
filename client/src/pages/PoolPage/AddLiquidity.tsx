@@ -169,10 +169,14 @@ export default function AddLiquidity() {
   ) : (
     <>
       <div className="mt-6 mb-4">
-        <CoinInput {...fromInput.getInputProps()} autoFocus />
+        <CoinInput
+          {...fromInput.getInputProps()}
+          autoFocus
+          coinSelectorDisabled={true}
+        />
       </div>
       <div className="mb-6">
-        <CoinInput {...toInput.getInputProps()} />
+        <CoinInput {...toInput.getInputProps()} coinSelectorDisabled={true} />
       </div>
       {poolInfo ? (
         <div className={style.info}>
