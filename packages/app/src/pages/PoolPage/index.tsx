@@ -12,8 +12,9 @@ import { Button } from "~/components/Button";
 import { PageContent } from "~/components/PageContent";
 
 const style = {
-  button: `text-xs`,
-  active: `text-gray-200`,
+  button: `relative text-sm font-semibold border-transparent px-0`,
+  active: `text-gray-200 after:content-[''] after:w-full after:h-0.5 after:bg-primary-500
+  after:top-0 after:left-0 after:absolute after:translate-y-[-12px] after:rounded-full`,
 };
 
 const SubpagesNav = () => {
@@ -29,6 +30,7 @@ const SubpagesNav = () => {
         break;
     }
   };
+
   const location = useLocation();
   const path = useResolvedPath(location);
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ const SubpagesNav = () => {
   const isRemoveActive = path.pathname.includes("pool/remove");
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-4">
       <Button
         onKeyDown={onKeyDown}
         size="sm"
@@ -44,7 +46,10 @@ const SubpagesNav = () => {
         className={cx(style.button, { [style.active]: isAddActive })}
       >
         <BiPlusCircle
-          className={cx("text-gray-500", { "text-primary-500": isAddActive })}
+          className={cx({
+            "text-gray-500": !isAddActive,
+            "text-primary-500": isAddActive,
+          })}
         />
         Add Liquidity
       </Button>
@@ -55,7 +60,8 @@ const SubpagesNav = () => {
         className={cx(style.button, { [style.active]: isRemoveActive })}
       >
         <BiMinusCircle
-          className={cx("text-gray-500", {
+          className={cx({
+            "text-gray-500": !isRemoveActive,
             "text-primary-500": isRemoveActive,
           })}
         />
