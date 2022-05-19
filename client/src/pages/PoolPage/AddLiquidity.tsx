@@ -1,3 +1,4 @@
+import { toNumber } from "fuels";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -130,6 +131,27 @@ export default function AddLiquidity() {
     }
   );
 
+  const handleCreatePool = () => {
+    const fromAmount = fromInput.amount;
+    const toAmount = toInput.amount;
+
+    if (!fromAmount) {
+      throw new Error('"fromAmount" is required');
+    }
+    if (!toAmount) {
+      throw new Error('"toAmount" is required');
+    }
+
+    if (!fromInput.hasEnoughBalance) {
+      throw new Error(`Insufficient ${coinFrom.name} balance`);
+    }
+    if (!toInput.hasEnoughBalance) {
+      throw new Error(`Insufficient ${coinTo.name} balance`);
+    }
+
+    addLiquidityMutation.mutate();
+  };
+
   useEffect(() => {
     firstInputRef.current?.focus();
   }, []);
@@ -176,17 +198,25 @@ export default function AddLiquidity() {
                 <span>
                   <>
                     ETH/DAI:{" "}
-                    {(ONE_ASSET * poolInfo.eth_reserve) /
-                      poolInfo.token_reserve /
-                      ONE_ASSET}
+                    {
+                      +(
+                        toNumber(ONE_ASSET * poolInfo.eth_reserve) /
+                        toNumber(poolInfo.token_reserve) /
+                        toNumber(ONE_ASSET)
+                      ).toFixed(6)
+                    }
                   </>
                 </span>
                 <span>
                   <>
                     DAI/ETH:{" "}
-                    {(ONE_ASSET * poolInfo.token_reserve) /
-                      poolInfo.eth_reserve /
-                      ONE_ASSET}
+                    {
+                      +(
+                        toNumber(ONE_ASSET * poolInfo.token_reserve) /
+                        toNumber(poolInfo.eth_reserve) /
+                        toNumber(ONE_ASSET)
+                      ).toFixed(6)
+                    }
                   </>
                 </span>
               </div>
@@ -199,7 +229,7 @@ export default function AddLiquidity() {
         isFull
         size="lg"
         variant="primary"
-        onPress={() => addLiquidityMutation.mutate()}
+        onPress={handleCreatePool}
       >
         {!fromInput.hasEnoughBalance
           ? `Insufficient ${coinFrom.name} balance`
