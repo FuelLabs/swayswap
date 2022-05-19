@@ -1,3 +1,6 @@
+/// <reference types="@fuel-ts/providers" />
+/// <reference types="@fuel-ts/contract" />
+
 /**
  * Deploy contract to SwaySwap node.
  */
@@ -26,7 +29,7 @@ const contractPath = path.join(
   __dirname,
   '../../contracts/exchange_contract/out/debug/exchange_contract.bin'
 );
-const providerUrl = import.meta.env.VITE_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
+const providerUrl = process.env.VITE_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
 
 // @ts-ignore
 export const seedWallet = async (wallet: Wallet) => {

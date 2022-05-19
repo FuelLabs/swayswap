@@ -80,9 +80,7 @@ export function useCoinInput({
 }: UseCoinParams) {
   const [amount, setAmount] = useState<bigint | null>(null);
   const { data: balances } = useBalances({ enabled: showBalance });
-  const coinBalance = balances?.find(
-    (item: any) => item.assetId === coin?.assetId
-  );
+  const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
 
   useEffect(() => {
     // Enable value initialAmount to be null

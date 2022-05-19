@@ -53,6 +53,7 @@ dist-ssr
 *.pem
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -64,3 +65,6 @@ tsconfig.tsbuildinfo
 
 # storybook
 storybook-static
+
+# general
+contracts/token_contract/.rustc_info.json
