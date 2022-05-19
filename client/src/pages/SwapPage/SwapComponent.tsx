@@ -64,7 +64,7 @@ export function SwapComponent({
   }, [fromInput.amount, toInput.amount, coinFrom, coinTo]);
 
   useEffect(() => {
-    if (!previewValue) return;
+    if (previewValue == null) return;
     if (activeInput.current === ActiveInput.from) {
       toInput.setAmount(previewValue);
     } else {
