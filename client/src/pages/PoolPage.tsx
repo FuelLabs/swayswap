@@ -10,7 +10,6 @@ import { Pages } from "src/types/pages";
 import { formatUnits } from "ethers/lib/utils";
 import { DECIMAL_UNITS, ONE_ASSET } from "src/config";
 import { useMutation, useQuery } from "react-query";
-import { useTokenMethods } from "src/hooks/useTokensMethods";
 import toast from "react-hot-toast";
 import { Button } from "src/components/Button";
 
@@ -60,7 +59,7 @@ export default function PoolPage() {
   const navigate = useNavigate();
   const wallet = useWallet();
 
-  const { data: balances, refetch: refetchBalances } = useQuery(
+  const { data: balances } = useQuery(
     "AssetsPage-balances",
     () => wallet!.getBalances()
   );
