@@ -12,32 +12,48 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./client
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ env.NODE_VERSION }}
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-          cache-dependency-path: client/yarn.lock
+          node-version: "14"
+          registry-url: "https://registry.npmjs.org"
 
-      - name: yarn ci and build
+      - name: Cache PNPM modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 7.0.0
+          run_install: true
+
+      - name: Lint & Test
+        run: |
+          pnpm lint
+          pnpm test
+
+      - name: Build
         env:
           CI: false
           PUBLIC_URL: "/${{ github.event.repository.name }}"
-          REACT_APP_FUEL_PROVIDER_URL: "https://node.swayswap.io/graphql"
-          REACT_APP_CONTRACT_ID: "0x42b1a46462c1de3337f4fbf2ad3f8422ee7d2362cb319f22a4bb10e3d3b4c7c1"
-          REACT_APP_TOKEN_ID: "0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c59e0"
+          VITE__FUEL_PROVIDER_URL: "https://node.swayswap.io/graphql"
+          VITE__CONTRACT_ID: "0x42b1a46462c1de3337f4fbf2ad3f8422ee7d2362cb319f22a4bb10e3d3b4c7c1"
+          VITE__TOKEN_ID: "0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c59e0"
         run: |
-          yarn install --frozen-lockfile
-          yarn build
+          pnpm build
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./client/build
+          clean: true
+          branch: gh-pages
+          folder: packages/app/dist
