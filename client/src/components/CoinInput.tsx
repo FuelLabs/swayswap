@@ -1,6 +1,6 @@
 import { toBigInt } from "fuels";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
-import { useEffect } from "react";
+import { forwardRef, useEffect } from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
 import { DECIMAL_UNITS } from "src/config";
@@ -121,70 +121,76 @@ export function useCoinInput({
   };
 }
 
-export function CoinInput({
-  value: initialValue,
-  displayType,
-  onChange,
-  coin,
-  isAllowed,
-  onChangeCoin,
-  onInput,
-  isReadOnly,
-  showMaxButton,
-  showBalance,
-  setMaxBalance,
-  balance,
-}: CoinInputParameters) {
-  const [value, setValue] = useState<string | undefined>(initialValue);
+export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
+  (
+    {
+      value: initialValue,
+      displayType,
+      onChange,
+      coin,
+      isAllowed,
+      onChangeCoin,
+      onInput,
+      isReadOnly,
+      showMaxButton,
+      showBalance,
+      setMaxBalance,
+      balance,
+    },
+    ref
+  ) => {
+    const [value, setValue] = useState<string | undefined>(initialValue);
 
-  useEffect(() => {
-    if (initialValue) {
-      setValue(initialValue);
-    }
-  }, [initialValue]);
+    useEffect(() => {
+      if (initialValue) {
+        setValue(initialValue);
+      }
+    }, [initialValue]);
 
-  return (
-    <div className={style.transferPropContainer}>
-      <NumberFormat
-        allowNegative={false}
-        defaultValue={initialValue}
-        value={value}
-        displayType={displayType}
-        isAllowed={isAllowed}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          onChange?.(e.target.value);
-          setValue(e.target.value);
-        }}
-        decimalScale={DECIMAL_UNITS}
-        placeholder="0"
-        className={style.input}
-        thousandSeparator={false}
-        onInput={onInput}
-      />
-      <div className={style.rightWrapper}>
-        <CoinSelector
-          value={coin}
-          onChange={onChangeCoin}
-          isReadOnly={isReadOnly}
+    return (
+      <div className={style.transferPropContainer}>
+        <NumberFormat
+          getInputRef={ref}
+          allowNegative={false}
+          defaultValue={initialValue}
+          value={value}
+          displayType={displayType}
+          isAllowed={isAllowed}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange?.(e.target.value);
+            setValue(e.target.value);
+          }}
+          decimalScale={DECIMAL_UNITS}
+          placeholder="0"
+          className={style.input}
+          thousandSeparator={false}
+          onInput={onInput}
         />
-        {(showBalance || showMaxButton) && (
-          <div className="flex items-center gap-2 mt-2">
-            {showBalance && (
-              <div className="text-xs text-gray-400">Balance: {balance}</div>
-            )}
-            {showMaxButton && (
-              <Button
-                size="sm"
-                onPress={setMaxBalance}
-                className={style.maxButton}
-                variant="ghost"
-              >
-                Max
-              </Button>
-            )}
-          </div>
-        )}
+        <div className={style.rightWrapper}>
+          <CoinSelector
+            value={coin}
+            onChange={onChangeCoin}
+            isReadOnly={isReadOnly}
+          />
+          {(showBalance || showMaxButton) && (
+            <div className="flex items-center gap-2 mt-2">
+              {showBalance && (
+                <div className="text-xs text-gray-400">Balance: {balance}</div>
+              )}
+              {showMaxButton && (
+                <Button
+                  size="sm"
+                  onPress={setMaxBalance}
+                  className={style.maxButton}
+                  variant="ghost"
+                >
+                  Max
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+);

@@ -19,6 +19,7 @@ export function SwapComponent({
   onChange,
 }: SwapComponentProps) {
   const activeInput = useRef<ActiveInput>(ActiveInput.from);
+  const firstInputRef = useRef<HTMLInputElement | null>(null);
 
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
@@ -73,10 +74,14 @@ export function SwapComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewValue]);
 
+  useEffect(() => {
+    firstInputRef.current?.focus();
+  }, []);
+
   return (
     <>
       <div className="mt-4">
-        <CoinInput {...fromInput.getInputProps()} />
+        <CoinInput {...fromInput.getInputProps()} ref={firstInputRef} />
       </div>
       <div className={style.switchDirection}>
         <InvertButton onClick={handleInvertCoins} />
