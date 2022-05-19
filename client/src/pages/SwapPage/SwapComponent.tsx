@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import assets from "src/lib/CoinsMetadata";
+import { useAtom } from 'jotai';
+import { useEffect, useRef } from "react";
 import { CoinInput, useCoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
-import { ActiveInput, SwapState } from "./types";
 import { Coin } from "src/types";
+import { swapActiveInputAtom, swapAmountAtom, swapCoinsAtom } from './jotai';
+import { ActiveInput, SwapState } from './types';
 
 const style = {
   switchDirection: `flex items-center justify-center -my-5`,
@@ -18,12 +19,10 @@ export function SwapComponent({
   previewAmount: previewValue,
   onChange,
 }: SwapComponentProps) {
-  const activeInput = useRef<ActiveInput>(ActiveInput.from);
-
-  const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
-    assets[0],
-    assets[1],
-  ]);
+  const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
+  const [initialActiveInput, setInitialActiveInput] = useAtom(swapActiveInputAtom);
+  const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
+  const activeInput = useRef<ActiveInput>(initialActiveInput);
 
   const handleInvertCoins = () => {
     if (activeInput.current === ActiveInput.to) {
@@ -51,13 +50,29 @@ export function SwapComponent({
   });
 
   useEffect(() => {
+    if (activeInput.current === ActiveInput.to) {
+      toInput.setAmount(initialAmount);
+    } else {
+      fromInput.setAmount(initialAmount);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const amount = activeInput.current === ActiveInput.from
+      ? fromInput.amount
+      : toInput.amount;
+
+    // Set value to hydrate
+    setInitialAmount(amount);
+    // Set current input
+    setInitialActiveInput(activeInput?.current);
+
+    // Call on onChange
     onChange?.({
       from: coinFrom.assetId,
       to: coinTo.assetId,
-      amount:
-        activeInput.current === ActiveInput.from
-          ? fromInput.amount
-          : toInput.amount,
+      amount,
       direction: activeInput.current,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
