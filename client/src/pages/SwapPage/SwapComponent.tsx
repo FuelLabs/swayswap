@@ -1,9 +1,9 @@
+import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from "react";
-import assets from "src/lib/CoinsMetadata";
 import { CoinInput, useCoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
-import { ActiveInput, SwapState } from "./types";
 import { Coin } from "src/types";
+import { ActiveInput, swapActiveInputAtom, swapCoinsAtom, SwapState } from './jotai';
 
 const style = {
   switchDirection: `flex items-center justify-center -my-5`,
@@ -12,18 +12,22 @@ const style = {
 type SwapComponentProps = {
   previewAmount?: bigint | null;
   onChange?: (swapState: SwapState) => void;
+  amount?: bigint | null;
 };
 
 export function SwapComponent({
   previewAmount: previewValue,
   onChange,
+  amount,
 }: SwapComponentProps) {
-  const activeInput = useRef<ActiveInput>(ActiveInput.from);
+  const [initialActiveInput, setInitialActiveInput] = useAtom(swapActiveInputAtom);
+  const activeInput = useRef<ActiveInput>(initialActiveInput);
 
-  const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
-    assets[0],
-    assets[1],
-  ]);
+  useEffect(() => {
+    setInitialActiveInput(activeInput?.current);
+  }, [activeInput.current]);
+
+  const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
 
   const handleInvertCoins = () => {
     if (activeInput.current === ActiveInput.to) {
@@ -39,12 +43,14 @@ export function SwapComponent({
   };
 
   const fromInput = useCoinInput({
+    amount: activeInput.current === ActiveInput.from ? amount : undefined,
     coin: coinFrom,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => (activeInput.current = ActiveInput.from),
   });
 
   const toInput = useCoinInput({
+    amount: activeInput.current === ActiveInput.to ? amount : undefined,
     coin: coinTo,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => (activeInput.current = ActiveInput.to),

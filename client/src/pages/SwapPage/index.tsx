@@ -1,3 +1,4 @@
+import { useAtom } from 'jotai';
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { MdSwapCalls } from "react-icons/md";
@@ -13,12 +14,13 @@ import { sleep } from "src/lib/utils";
 
 import { queryPreviewAmount, swapTokens } from "./queries";
 import { SwapComponent } from "./SwapComponent";
-import { SwapState } from "./types";
+import { swapAtom } from "./jotai";
 
 export default function SwapPage() {
   const contract = useContract()!;
   const [previewAmount, setPreviewAmount] = useState<bigint | null>(null);
-  const [swapState, setSwapState] = useState<SwapState | null>(null);
+  const [swapState, setSwapState] = useAtom(swapAtom);
+
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
   const navigate = useNavigate();
@@ -72,7 +74,10 @@ export default function SwapPage() {
         <MdSwapCalls className="text-primary-500" />
         Swap
       </PageContent.Title>
-      <SwapComponent previewAmount={previewAmount} onChange={setSwapState} />
+      <SwapComponent
+        amount={debouncedState?.amount}
+        previewAmount={previewAmount}
+        onChange={setSwapState} />
       <Button
         isFull
         size="lg"

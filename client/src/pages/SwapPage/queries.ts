@@ -1,5 +1,5 @@
 import { ExchangeContractAbi } from 'src/types/contracts';
-import { ActiveInput, SwapState } from './types';
+import { ActiveInput, SwapState } from './jotai';
 
 const getSwapWithMaximumRequiredAmount = async (
   contract: ExchangeContractAbi,
