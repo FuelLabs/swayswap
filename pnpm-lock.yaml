@@ -78,6 +78,7 @@ importers:
       autoprefixer: ^10.4.2
       classnames: ^2.3.1
       clipboard: ^2.0.11
+      decimal.js: ^10.3.1
       eslint: ^8.4.1
       ethers: ^5.6.5
       fuels: 0.0.0-master-d5e02003
@@ -124,6 +125,7 @@ importers:
       '@tailwindcss/typography': 0.5.2_tailwindcss@3.0.24
       classnames: 2.3.1
       clipboard: 2.0.11
+      decimal.js: 10.3.1
       ethers: 5.6.6
       fuels: 0.0.0-master-d5e02003
       graphql-request: 4.2.0
@@ -5143,7 +5145,6 @@ packages:
 
   /decimal.js/10.3.1:
     resolution: {integrity: sha512-V0pfhfr8suzyPGOx3nmq4aHqabehUZn6Ch9kyFpV79TGDTWFmHqUqXdabR7QHqxzrYolF4+tVmJhUG4OURg5dQ==}
-    dev: true
 
   /decode-uri-component/0.2.0:
     resolution: {integrity: sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=}

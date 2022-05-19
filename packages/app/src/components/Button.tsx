@@ -66,11 +66,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         aria-disabled={isDisabled}
       >
         {isLoading ? (
-          <Spinner
-            size={size === "sm" ? 16 : 22}
-            secondaryColor="rgba(255,255,255,0.2)"
-            color="rgba(255,255,255,0.8)"
-          />
+          <Spinner size={size === "sm" ? 16 : 22} variant="base" />
         ) : (
           props.children
         )}

@@ -1,7 +1,13 @@
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useRef } from "react";
 
-import { swapActiveInputAtom, swapAmountAtom, swapCoinsAtom } from "./jotai";
+import { PricePerToken } from "./PricePerToken";
+import {
+  swapActiveInputAtom,
+  swapAmountAtom,
+  swapCoinsAtom,
+  swapIsTypingAtom,
+} from "./jotai";
 import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
 
@@ -28,6 +34,7 @@ export function SwapComponent({
   const [initialActiveInput, setInitialActiveInput] =
     useAtom(swapActiveInputAtom);
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
+  const setTyping = useSetAtom(swapIsTypingAtom);
   const activeInput = useRef<ActiveInput>(initialActiveInput);
 
   const handleInvertCoins = () => {
@@ -47,6 +54,7 @@ export function SwapComponent({
     coin: coinFrom,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => {
+      setTyping(true);
       activeInput.current = ActiveInput.from;
     },
   });
@@ -55,6 +63,7 @@ export function SwapComponent({
     coin: coinTo,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => {
+      setTyping(true);
       activeInput.current = ActiveInput.to;
     },
   });
@@ -100,6 +109,7 @@ export function SwapComponent({
     } else {
       fromInput.setAmount(previewValue);
     }
+    setTyping(false);
   }, [previewValue]);
 
   return (
@@ -121,6 +131,12 @@ export function SwapComponent({
           isLoading={isLoading}
         />
       </div>
+      <PricePerToken
+        fromCoin={coinFrom.symbol}
+        fromAmount={fromInput.amount}
+        toCoin={coinTo.symbol}
+        toAmount={toInput.amount}
+      />
     </>
   );
 }

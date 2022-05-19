@@ -6,6 +6,7 @@ import NumberFormat from "react-number-format";
 
 import { Button } from "./Button";
 import { CoinSelector } from "./CoinSelector";
+import type { NumberInputProps } from "./NumberInput";
 import { Spinner } from "./Spinner";
 
 import { DECIMAL_UNITS } from "~/config";
@@ -37,20 +38,21 @@ type UseCoinParams = {
 
 type DisplayType = "input" | "text";
 
-type CoinInputParameters = UseCoinParams & {
-  value: string;
-  balance?: string;
-  displayType: DisplayType;
-  isReadOnly?: boolean;
-  coinSelectorDisable?: boolean;
-  showBalance?: boolean;
-  showMaxButton?: boolean;
-  autoFocus?: boolean;
-  isLoading?: boolean;
-  isAllowed?: (values: NumberFormatValues) => boolean;
-  onChange?: (val: string) => void;
-  setMaxBalance?: () => void;
-};
+type CoinInputParameters = UseCoinParams &
+  NumberInputProps & {
+    value: string;
+    balance?: string;
+    displayType: DisplayType;
+    isReadOnly?: boolean;
+    coinSelectorDisable?: boolean;
+    showBalance?: boolean;
+    showMaxButton?: boolean;
+    autoFocus?: boolean;
+    isLoading?: boolean;
+    isAllowed?: (values: NumberFormatValues) => boolean;
+    onChange?: (val: string) => void;
+    setMaxBalance?: () => void;
+  };
 
 const parseValue = (value: string) => (value === "." ? "0." : value);
 
@@ -152,6 +154,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
       balance,
       autoFocus,
       isLoading,
+      ...props
     },
     ref
   ) => {
@@ -167,13 +170,10 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
     return (
       <div className={style.transferPropContainer}>
         {isLoading ? (
-          <Spinner
-            className="self-start mt-2 ml-2"
-            color="rgba(255,255,255,0.7)"
-            secondaryColor="rgba(255,255,255,0.2)"
-          />
+          <Spinner className="self-start mt-2 ml-2" variant="base" />
         ) : (
           <NumberFormat
+            {...props}
             autoFocus={autoFocus}
             getInputRef={ref}
             allowNegative={false}
