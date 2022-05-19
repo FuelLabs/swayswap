@@ -1,9 +1,10 @@
 import NumberFormat from "react-number-format";
 
 const style = {
-  transferPropContainer: `bg-[#20242A] rounded-2xl p-4 text-3xl border border-[#20242A] 
-        flex justify-between`,
-  transferPropInput: `bg-transparent placeholder:text-[#B2B9D2] outline-none w-full text-2xl`,
+  transferPropContainer: `
+    bg-gray-700 rounded-2xl p-4 text-3xl border border-gray-700 flex justify-between
+  `,
+  transferPropInput: `bg-transparent placeholder:text-gray-300 outline-none w-full text-2xl`,
 };
 
 export function NumberInput({

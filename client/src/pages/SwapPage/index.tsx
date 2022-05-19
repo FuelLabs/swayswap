@@ -1,21 +1,19 @@
-import toast from "react-hot-toast";
-import { useState } from "react";
-import { useContract } from "src/context/AppContext";
-import { useNavigate } from "react-router-dom";
-import { Pages } from "src/types/pages";
 import { useMutation, useQuery } from "react-query";
-import { sleep } from "src/lib/utils";
-import { queryPreviewAmount, swapTokens } from "./queries";
-import { SwapState } from "./types";
-import { Button } from "src/components/Button";
-import useDebounce from "src/hooks/useDebounce";
-import { SwapComponent } from "./SwapComponent";
+import { useNavigate } from "react-router-dom";
+import { MdSwapCalls } from "react-icons/md";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
-  content: `bg-[#191B1F] w-[30rem] rounded-2xl p-4 m-2`,
-  formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-};
+import { Button } from "src/components/Button";
+import { PageContent } from "src/components/PageContent";
+import { useContract } from "src/context/AppContext";
+import useDebounce from "src/hooks/useDebounce";
+import { Pages } from "src/types/pages";
+import { sleep } from "src/lib/utils";
+
+import { queryPreviewAmount, swapTokens } from "./queries";
+import { SwapComponent } from "./SwapComponent";
+import { SwapState } from "./types";
 
 export default function SwapPage() {
   const contract = useContract()!;
@@ -69,22 +67,21 @@ export default function SwapPage() {
   };
 
   return (
-    <div className={style.wrapper}>
-      <div className={style.content}>
-        <div className={style.formHeader}>
-          <h1>Swap</h1>
-        </div>
-        <SwapComponent previewAmount={previewAmount} onChange={setSwapState} />
-        <Button
-          isFull
-          size="lg"
-          variant="primary"
-          isDisabled={shouldDisableButton}
-          onPress={() => swap()}
-        >
-          {getButtonText()}
-        </Button>
-      </div>
-    </div>
+    <PageContent>
+      <PageContent.Title>
+        <MdSwapCalls className="text-primary-500" />
+        Swap
+      </PageContent.Title>
+      <SwapComponent previewAmount={previewAmount} onChange={setSwapState} />
+      <Button
+        isFull
+        size="lg"
+        variant="primary"
+        isDisabled={shouldDisableButton}
+        onPress={() => swap()}
+      >
+        {getButtonText()}
+      </Button>
+    </PageContent>
   );
 }

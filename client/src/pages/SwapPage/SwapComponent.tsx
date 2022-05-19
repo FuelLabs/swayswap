@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import assets from "src/lib/CoinsMetadata";
-import { Coin, CoinInput, useCoinInput } from "src/components/CoinInput";
+import { CoinInput, useCoinInput } from "src/components/CoinInput";
 import { InvertButton } from "src/components/InvertButton";
 import { ActiveInput, SwapState } from "./types";
+import { Coin } from "src/types";
 
 const style = {
   switchDirection: `flex items-center justify-center -my-5`,
 };
-
-const getOtherCoins = (coins: Coin[]) =>
-  assets.filter(({ assetId }) => !coins.find((c) => c.assetId === assetId));
 
 type SwapComponentProps = {
   previewAmount?: bigint | null;
@@ -21,6 +19,8 @@ export function SwapComponent({
   onChange,
 }: SwapComponentProps) {
   const activeInput = useRef<ActiveInput>(ActiveInput.from);
+  const firstInputRef = useRef<HTMLInputElement | null>(null);
+
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],
@@ -41,14 +41,12 @@ export function SwapComponent({
 
   const fromInput = useCoinInput({
     coin: coinFrom,
-    coins: getOtherCoins([coinFrom, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => (activeInput.current = ActiveInput.from),
   });
 
   const toInput = useCoinInput({
     coin: coinTo,
-    coins: getOtherCoins([coinFrom, coinTo]),
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onInput: () => (activeInput.current = ActiveInput.to),
   });
@@ -76,10 +74,14 @@ export function SwapComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewValue]);
 
+  useEffect(() => {
+    firstInputRef.current?.focus();
+  }, []);
+
   return (
     <>
       <div className="mt-4">
-        <CoinInput {...fromInput.getInputProps()} />
+        <CoinInput {...fromInput.getInputProps()} ref={firstInputRef} />
       </div>
       <div className={style.switchDirection}>
         <InvertButton onClick={handleInvertCoins} />

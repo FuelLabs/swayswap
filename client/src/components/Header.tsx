@@ -1,6 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { FocusScope, useFocusManager } from "@react-aria/focus";
-import { ReactNode } from "react";
+import { BiWallet, BiDollarCircle } from "react-icons/bi";
+import { MdSwapCalls } from "react-icons/md";
+import { ComponentType, ReactNode } from "react";
 import cx from "classnames";
 
 import fuelLogo from "src/assets/fuel-logo-512x512.png";
@@ -9,24 +11,27 @@ import { Button } from "./Button";
 import { useWallet } from "src/context/AppContext";
 
 const style = {
-  wrapper: `p-4 w-screen flex flex-col sm:flex-row justify-between items-center`,
-  headerLogo: `flex items-center justify-start`,
+  wrapper: `relative p-4 w-screen flex flex-col sm:flex-row justify-between items-center`,
+  headerLogo: `absolute top-4 left-4 flex items-center justify-start`,
   nav: `flex-1 flex justify-center items-center mt-2 sm:mt-0`,
-  navItemsContainer: `flex bg-[#191B1F] rounded-3xl`,
-  navItem: `m-1 rounded-full border-transparent`,
-  activeNavItem: `bg-[#20242A]`,
+  navItemsContainer: `px-1 gap-1 flex bg-gray-800 rounded-3xl`,
+  navItem: `py-1 px-3 my-1 text-base rounded-full border-transparent text-gray-400 hover:bg-gray-500/20 hover:text-gray-200`,
+  activeNavItem: `bg-gray-500/20 text-gray-200`,
   buttonsContainer: `flex justify-end items-center`,
-  button: `flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semi-bold`,
+  button: `flex items-center bg-gray-800 rounded-2xl mx-2 font-semi-bold`,
   buttonPadding: `p-2`,
+  navIcon: `text-gray-500 stroke-current`,
 };
 
 const HeaderNav = ({
   onPress,
   isActive,
+  icon: Icon,
   children,
 }: {
   onPress: () => void;
   isActive: boolean;
+  icon: ComponentType<any>;
   children: ReactNode;
 }) => {
   const focusManager = useFocusManager();
@@ -51,6 +56,9 @@ const HeaderNav = ({
         [style.activeNavItem]: isActive,
       })}
     >
+      <Icon
+        className={cx("text-primary-gray", { "text-primary-400": isActive })}
+      />
       {children}
     </Button>
   );
@@ -60,7 +68,6 @@ const Header = () => {
   const wallet = useWallet();
   const navigate = useNavigate();
   const location = useLocation();
-  const exists = Object.values(Pages).includes(location.pathname as Pages);
 
   return (
     <div className={style.wrapper}>
@@ -69,38 +76,31 @@ const Header = () => {
       </div>
       {wallet && (
         <div className={style.nav}>
-          {exists && (
-            <FocusScope>
-              <div className={style.navItemsContainer}>
-                <HeaderNav
-                  onPress={() => navigate(Pages.wallet)}
-                  isActive={location.pathname === Pages.wallet}
-                >
-                  Wallet
-                </HeaderNav>
-                <HeaderNav
-                  onPress={() => navigate(Pages.swap)}
-                  isActive={location.pathname === Pages.swap}
-                >
-                  Swap
-                </HeaderNav>
-                <HeaderNav
-                  onPress={() => navigate(Pages.pool)}
-                  isActive={location.pathname === Pages.pool}
-                >
-                  Pool
-                </HeaderNav>
-                {/* TODO: Change in a way that only shows remove liquidity if use has SWAY tokens */}
-                {/* https://github.com/FuelLabs/swayswap/issues/56 */}
-                <HeaderNav
-                  onPress={() => navigate(Pages.removeLiquidity)}
-                  isActive={location.pathname === Pages.removeLiquidity}
-                >
-                  Remove Liquidity
-                </HeaderNav>
-              </div>
-            </FocusScope>
-          )}
+          <FocusScope>
+            <div className={style.navItemsContainer}>
+              <HeaderNav
+                icon={BiWallet}
+                onPress={() => navigate(Pages.wallet)}
+                isActive={location.pathname === Pages.wallet}
+              >
+                Wallet
+              </HeaderNav>
+              <HeaderNav
+                icon={MdSwapCalls}
+                onPress={() => navigate(Pages.swap)}
+                isActive={location.pathname === Pages.swap}
+              >
+                Swap
+              </HeaderNav>
+              <HeaderNav
+                icon={BiDollarCircle}
+                onPress={() => navigate(Pages.pool)}
+                isActive={location.pathname.includes(Pages.pool)}
+              >
+                Pool
+              </HeaderNav>
+            </div>
+          </FocusScope>
         </div>
       )}
     </div>

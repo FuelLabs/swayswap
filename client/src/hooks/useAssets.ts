@@ -1,6 +1,6 @@
 import { useWallet } from 'src/context/AppContext';
 import { CoinQuantity, toBigInt } from 'fuels';
-import { Coin } from 'src/components/CoinInput';
+import { Coin } from 'src/types';
 import CoinsMetadata from 'src/lib/CoinsMetadata';
 import { useQuery } from 'react-query';
 

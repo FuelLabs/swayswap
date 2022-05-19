@@ -1,14 +1,16 @@
-import { Coin } from 'src/components/CoinInput';
+import { Coin } from 'src/types';
 import { CONTRACT_ID, TOKEN_ID } from 'src/config';
 
 const CoinsMetadata: Array<Coin> = [
   {
-    name: 'ETH',
+    name: 'Ether',
+    symbol: 'ETH',
     assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
     img: '/icons/eth.svg',
   },
   {
     name: 'DAI',
+    symbol: 'DAI',
     // TODO: Remove this when adding dynamic token insertion
     // Make temporarily easy to change token contract id
     // https://github.com/FuelLabs/swayswap-demo/issues/33
@@ -16,7 +18,8 @@ const CoinsMetadata: Array<Coin> = [
     img: '/icons/dai.svg',
   },
   {
-    name: 'SWAY',
+    name: 'Sway',
+    symbol: 'SWAY',
     // TODO: Remove this when adding dynamic token insertion
     // Make temporarily easy to change token contract id
     // https://github.com/FuelLabs/swayswap-demo/issues/33

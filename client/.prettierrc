@@ -1,7 +1,7 @@
 {
   "overrides": [
     {
-      "files": ["*.js", "*.ts",  ".tsx"],
+      "files": ["*.js", "*.ts", ".tsx"],
       "options": {
         "printWidth": 100,
         "semi": true,

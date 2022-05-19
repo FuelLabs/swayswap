@@ -1,4 +1,5 @@
-import { Coin, CoinInput, useCoinInput } from "./CoinInput";
+import { Coin } from "src/types";
+import { CoinInput, useCoinInput } from "./CoinInput";
 
 type Asset = Coin & { amount: bigint };
 type AssetItemProps = {
@@ -7,11 +8,16 @@ type AssetItemProps = {
 
 export function AssetItem({ coin }: AssetItemProps) {
   const input = useCoinInput({
-    amount: coin.amount,
     coin,
-    coins: coin ? [coin] : [],
-    disabled: true,
+    amount: coin.amount,
+    isReadOnly: true,
   });
 
-  return <CoinInput {...input.getInputProps()} />;
+  return (
+    <CoinInput
+      {...input.getInputProps()}
+      showBalance={false}
+      showMaxButton={false}
+    />
+  );
 }
