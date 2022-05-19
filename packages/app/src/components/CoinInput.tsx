@@ -167,9 +167,11 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
     return (
       <div className={style.transferPropContainer}>
         {isLoading ? (
-          <div className="mt-3 ml-4">
-            <Spinner />
-          </div>
+          <Spinner
+            className="self-start mt-2 ml-2"
+            color="rgba(255,255,255,0.7)"
+            secondaryColor="rgba(255,255,255,0.2)"
+          />
         ) : (
           <NumberFormat
             autoFocus={autoFocus}
