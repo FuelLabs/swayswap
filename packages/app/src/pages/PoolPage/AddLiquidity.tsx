@@ -2,7 +2,8 @@
 import classNames from "classnames";
 import { formatUnits } from "ethers/lib/utils";
 import { toNumber } from "fuels";
-import { useState } from "react";
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { RiCheckFill } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
@@ -14,6 +15,8 @@ import { DECIMAL_UNITS, ONE_ASSET } from "~/config";
 import { useContract } from "~/context/AppContext";
 import assets from "~/lib/CoinsMetadata";
 import type { Coin } from "~/types";
+import { Pages } from "~/types/pages";
+import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -57,6 +60,9 @@ function PoolLoader({
 }
 
 export default function AddLiquidity() {
+  const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
+  const [toInitialAmount, setToInitialAmount] = useAtom(poolToAmountAtom);
+
   const contract = useContract()!;
 
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
@@ -126,6 +132,16 @@ export default function AddLiquidity() {
       },
     }
   );
+
+  useEffect(() => {
+    fromInput.setAmount(fromInitialAmount);
+    toInput.setAmount(toInitialAmount);
+  }, []);
+
+  useEffect(() => {
+    setFromInitialAmount(fromInput.amount);
+    setToInitialAmount(toInput.amount);
+  }, [fromInput.amount, toInput.amount]);
 
   const handleCreatePool = () => {
     const fromAmount = fromInput.amount;
