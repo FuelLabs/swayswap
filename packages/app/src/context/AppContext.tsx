@@ -1,13 +1,13 @@
 import { randomBytes } from "ethers/lib/utils";
 import type { TransactionResult } from "fuels";
 import { Wallet, ScriptTransactionRequest, CoinStatus, toBigInt } from "fuels";
+import { useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import type { PropsWithChildren } from "react";
 import React, { useContext, useMemo } from "react";
-import { atom, useRecoilState } from "recoil";
 
 import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "~/config";
-import { CoinETH } from "~/lib/constants";
-import { persistEffect } from "~/lib/recoilEffects";
+import { CoinETH, LocalStorageKey } from "~/lib/constants";
 import type { ExchangeContractAbi } from "~/types/contracts";
 import { ExchangeContractAbi__factory } from "~/types/contracts";
 
@@ -18,11 +18,10 @@ interface AppContextValue {
   faucet: () => Promise<TransactionResult<"success">>;
 }
 
-const walletPrivateKeyState = atom<string | null>({
-  key: "privateKey",
-  default: null,
-  effects_UNSTABLE: [persistEffect],
-});
+const walletPrivateKeyState = atomWithStorage<string | null>(
+  `${LocalStorageKey}-state`,
+  null
+);
 
 export const AppContext = React.createContext<AppContextValue | null>(null);
 
@@ -41,7 +40,7 @@ export const useContract = () => {
 export const AppContextProvider = ({
   children,
 }: PropsWithChildren<unknown>) => {
-  const [privateKey, setPrivateKey] = useRecoilState(walletPrivateKeyState);
+  const [privateKey, setPrivateKey] = useAtom(walletPrivateKeyState);
 
   const wallet = useMemo(() => {
     if (!privateKey) return null;

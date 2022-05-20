@@ -4,6 +4,7 @@ import { useQueryErrorResetBoundary } from "react-query";
 import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
 
 import Header from "~/components/Header";
+import Skeleton from "~/components/Skeleton";
 import { Pages } from "~/types/pages";
 
 const style = {
@@ -61,7 +62,7 @@ export function MainLayout() {
                   placeContent: "center",
                 }}
               >
-                <div style={{ textAlign: "center" }}>Loading...</div>
+                <Skeleton />
               </div>
             }
           >

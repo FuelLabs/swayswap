@@ -1,7 +1,6 @@
 import toast from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot } from "recoil";
 
 import AppRoutes from "./AppRoutes";
 import { Dialog } from "./components/Dialog";
@@ -36,7 +35,7 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <RecoilRoot>
+    <>
       <Toaster />
       <BrowserRouter basename={PUBLIC_URL}>
         <QueryClientProvider client={queryClient}>
@@ -47,6 +46,6 @@ export default function App() {
           </Dialog.Provider>
         </QueryClientProvider>
       </BrowserRouter>
-    </RecoilRoot>
+    </>
   );
 }
