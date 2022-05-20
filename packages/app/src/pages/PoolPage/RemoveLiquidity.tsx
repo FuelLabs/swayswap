@@ -52,7 +52,7 @@ export default function RemoveLiquidityPage() {
     {
       onSuccess: () => {
         toast.success("Liquidity removed successfully!");
-        navigate(Pages.wallet);
+        navigate(Pages.assets);
       },
       onError: (error: Error) => {
         toast.error(error.message);

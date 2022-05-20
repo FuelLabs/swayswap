@@ -32,7 +32,7 @@ export default function MintTokenPage() {
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
         toast.success(`Token minted successfully!`);
-        navigate(Pages.wallet);
+        navigate(Pages.assets);
       },
     }
   );

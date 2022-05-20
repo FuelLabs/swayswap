@@ -112,7 +112,7 @@ export default function AddLiquidity() {
     {
       onSuccess: () => {
         toast.success("New pool created!");
-        navigate(Pages.wallet);
+        navigate(Pages.assets);
       },
       onError: (e: any) => {
         const errors = e?.response?.errors;
