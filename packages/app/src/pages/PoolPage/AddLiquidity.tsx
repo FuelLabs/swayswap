@@ -6,7 +6,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { RiCheckFill } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
 
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
@@ -15,7 +14,6 @@ import { DECIMAL_UNITS, ONE_ASSET } from "~/config";
 import { useContract } from "~/context/AppContext";
 import assets from "~/lib/CoinsMetadata";
 import type { Coin } from "~/types";
-import { Pages } from "~/types/pages";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -60,7 +58,6 @@ function PoolLoader({
 
 export default function AddLiquidity() {
   const contract = useContract()!;
-  const navigate = useNavigate();
 
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
@@ -112,7 +109,6 @@ export default function AddLiquidity() {
     {
       onSuccess: () => {
         toast.success("New pool created!");
-        navigate(Pages.assets);
       },
       onError: (e: any) => {
         const errors = e?.response?.errors;

@@ -1,6 +1,5 @@
 export enum Pages {
   'addLiquidity' = 'add-liquidity',
-  'assets' = '/assets',
   'createWallet' = '/create-wallet',
   'faucet' = '/faucet',
   'mintToken' = '/mint',

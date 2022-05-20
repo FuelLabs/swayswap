@@ -3,18 +3,15 @@ import ReCAPTCHA from "react-google-recaptcha";
 import toast from "react-hot-toast";
 import { FaFaucet } from "react-icons/fa";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
 
 import { Button } from "~/components/Button";
-import { PageContent } from "~/components/PageContent";
+import { Card } from "~/components/Card";
 import { FUEL_FAUCET_URL, RECAPTCHA_SITE_KEY } from "~/config";
 import { useWallet } from "~/context/AppContext";
 import { sleep } from "~/lib/utils";
-import { Pages } from "~/types/pages";
 
 export default function FaucetPage() {
   const wallet = useWallet()!;
-  const navigate = useNavigate();
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
   const faucetMutation = useMutation(
@@ -39,18 +36,17 @@ export default function FaucetPage() {
       onSuccess: () => {
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
-        navigate(Pages.assets);
         toast.success("Faucet added successfully!");
       },
     }
   );
 
   return (
-    <PageContent>
-      <PageContent.Title>
+    <Card>
+      <Card.Title>
         <FaFaucet className="text-primary-500" />
         Faucet
-      </PageContent.Title>
+      </Card.Title>
       <div className="my-6 flex items-center justify-center">
         <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} onChange={setRecaptchaToken} />
       </div>
@@ -63,6 +59,6 @@ export default function FaucetPage() {
       >
         Faucet tokens
       </Button>
-    </PageContent>
+    </Card>
   );
 }

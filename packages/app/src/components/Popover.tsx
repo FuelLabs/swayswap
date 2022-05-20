@@ -20,7 +20,7 @@ import type { ButtonProps } from "./Button";
 
 const style = {
   popover: `
-    bg-gray-900 rounded-lg text-gray-200
+    bg-gray-900 rounded-xl text-gray-200
   `,
   content: `
     relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring

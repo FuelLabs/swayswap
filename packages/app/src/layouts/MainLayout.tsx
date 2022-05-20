@@ -65,7 +65,9 @@ export function MainLayout() {
               </div>
             }
           >
-            <Outlet />
+            <div className="w-screen flex flex-1 items-center justify-center pb-14">
+              <Outlet />
+            </div>
           </Suspense>
         )}
       </ErrorBoundary>

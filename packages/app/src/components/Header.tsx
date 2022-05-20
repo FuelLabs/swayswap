@@ -1,18 +1,16 @@
-import { FocusScope, useFocusManager } from "@react-aria/focus";
 import cx from "classnames";
-import clipboard from "clipboard";
 import type { ComponentType, ReactNode } from "react";
-import toast from "react-hot-toast";
 import { BiDollarCircle } from "react-icons/bi";
-import { FaRegCopy } from "react-icons/fa";
-import { MdChecklist, MdSwapCalls } from "react-icons/md";
+import { MdSwapCalls } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import type { ButtonProps } from "./Button";
 import { Button } from "./Button";
+import { ButtonGroup } from "./ButtonGroup";
+import { WalletWidget } from "./WalletWidget";
 
 import fuelLogo from "~/assets/fuel-logo-512x512.png";
 import { useWallet } from "~/context/AppContext";
-import { useEthBalance } from "~/hooks/useEthBalance";
 import { Pages } from "~/types/pages";
 
 const style = {
@@ -26,8 +24,13 @@ const style = {
   button: `flex items-center bg-gray-800 rounded-2xl mx-2 font-semi-bold`,
   buttonPadding: `p-2`,
   navIcon: `text-gray-500 stroke-current`,
-  wallet: `flex items-center gap-3 absolute top-4 right-4 rounded-full
-  text-gray-300 bg-gray-800 inner-shadow p-1`,
+};
+
+type HeaderNavProps = ButtonProps & {
+  onPress: () => void;
+  isActive: boolean;
+  icon: ComponentType<any>;
+  children: ReactNode;
 };
 
 const HeaderNav = ({
@@ -35,53 +38,28 @@ const HeaderNav = ({
   isActive,
   icon: Icon,
   children,
-}: {
-  onPress: () => void;
-  isActive: boolean;
-  icon: ComponentType<any>;
-  children: ReactNode;
-}) => {
-  const focusManager = useFocusManager();
-  const onKeyDown = (e: any) => {
-    // eslint-disable-next-line default-case
-    switch (e.key) {
-      case "ArrowRight":
-        focusManager.focusNext({ wrap: true });
-        break;
-      case "ArrowLeft":
-        focusManager.focusPrevious({ wrap: true });
-        break;
-    }
-  };
-
-  return (
-    <Button
-      onKeyDown={onKeyDown}
-      variant="ghost"
-      size="lg"
-      onPress={onPress}
-      className={cx(style.navItem, {
-        [style.activeNavItem]: isActive,
-      })}
-    >
-      <Icon
-        className={cx("text-primary-gray", { "text-primary-400": isActive })}
-      />
-      {children}
-    </Button>
-  );
-};
+  ...props
+}: HeaderNavProps) => (
+  <Button
+    {...props}
+    variant="ghost"
+    size="lg"
+    onPress={onPress}
+    className={cx(style.navItem, {
+      [style.activeNavItem]: isActive,
+    })}
+  >
+    <Icon
+      className={cx("text-primary-gray", { "text-primary-400": isActive })}
+    />
+    {children}
+  </Button>
+);
 
 const Header = () => {
   const wallet = useWallet();
   const navigate = useNavigate();
   const location = useLocation();
-  const ethBalance = useEthBalance();
-
-  const handleCopy = () => {
-    clipboard.copy(wallet!.address);
-    toast("Address copied", { icon: "✨" });
-  };
 
   return (
     <div className={style.wrapper}>
@@ -90,8 +68,8 @@ const Header = () => {
       </div>
       {wallet && (
         <div className={style.nav}>
-          <FocusScope>
-            <div className={style.navItemsContainer}>
+          <div className={style.navItemsContainer}>
+            <ButtonGroup>
               <HeaderNav
                 icon={MdSwapCalls}
                 onPress={() => navigate(Pages.swap)}
@@ -106,38 +84,11 @@ const Header = () => {
               >
                 Pool
               </HeaderNav>
-              <HeaderNav
-                icon={MdChecklist}
-                onPress={() => navigate(Pages.assets)}
-                isActive={location.pathname.includes(Pages.assets)}
-              >
-                Assets
-              </HeaderNav>
-            </div>
-          </FocusScope>
+            </ButtonGroup>
+          </div>
         </div>
       )}
-      {wallet && (
-        <nav
-          className={cx(style.wallet, {
-            "pl-5": Boolean(ethBalance.formatted),
-          })}
-        >
-          <>
-            {ethBalance.formatted && <span>{ethBalance.formatted} ETH</span>}
-            <Button
-              aria-label="Copy your wallet address"
-              onPress={handleCopy}
-              className="bg-gray-700 px-4 rounded-full"
-            >
-              <span className="text-gray-100">
-                {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
-              </span>
-              <FaRegCopy size="1em" />
-            </Button>
-          </>
-        </nav>
-      )}
+      {wallet && <WalletWidget />}
     </div>
   );
 };

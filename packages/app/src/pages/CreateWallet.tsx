@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "~/components/Button";
-import { PageContent } from "~/components/PageContent";
+import { Card } from "~/components/Card";
 import { useAppContext } from "~/context/AppContext";
 import { Pages } from "~/types/pages";
 
@@ -23,7 +23,7 @@ export default function CreateWallet() {
   }
 
   return (
-    <PageContent>
+    <Card>
       <div className="flex flex-col justify-center text-gray-400 prose text-center">
         <h3 className="text-gray-300 mb-0">⚡️ Welcome SwaySwap</h3>
         <p>
@@ -36,6 +36,6 @@ export default function CreateWallet() {
           </Button>
         </div>
       </div>
-    </PageContent>
+    </Card>
   );
 }

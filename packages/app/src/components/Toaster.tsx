@@ -1,9 +1,11 @@
 import toast, { ToastBar, Toaster as Root } from "react-hot-toast";
 import { MdClose } from "react-icons/md";
 
+import { Button } from "./Button";
+
 const style = {
   toast: `px-4 py-3 flex items-center gap-2 bg-gray-800 text-gray-50 rounded-lg`,
-  closeButton: `transition-all opacity-50 hover:opacity-100`,
+  closeButton: `transition-all p-1 h-auto hover:opacity-100 focus-ring rounded border-transparent`,
 };
 
 export function Toaster() {
@@ -16,12 +18,13 @@ export function Toaster() {
               {icon}
               {message}
               {t.type !== "loading" && (
-                <button
+                <Button
+                  autoFocus
                   className={style.closeButton}
                   onClick={() => toast.dismiss(t.id)}
                 >
                   <MdClose />
-                </button>
+                </Button>
               )}
             </div>
           )}
