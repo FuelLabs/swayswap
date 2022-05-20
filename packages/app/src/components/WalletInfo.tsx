@@ -94,10 +94,10 @@ export function WalletInfo({ onClose }: WalletInfoProps) {
       ))}
       {!isLoading && !coins.length && (
         <div className="text-gray-300 pb-1">
-          There&apos; no asset added yet.
+          There is no assets in your wallet.
           <br />
-          <Link onPress={() => faucet.mutate()}>Click here</Link> to generate a
-          new asset.
+          <Link onPress={() => faucet.mutate()}>Click here</Link> to faucet test
+          ether.
         </div>
       )}
     </Card>
