@@ -44,6 +44,7 @@ export default function AssetsPage() {
       ) : (
         <>
           <Button
+            autoFocus
             variant="ghost"
             isLoading={faucet.isLoading}
             {...popover.getTriggerProps()}

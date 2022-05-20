@@ -62,7 +62,7 @@ export default function SwapPage() {
     {
       onSuccess: () => {
         toast.success("Swap made successfully!");
-        navigate(Pages.wallet);
+        navigate(Pages.assets);
       },
     }
   );
