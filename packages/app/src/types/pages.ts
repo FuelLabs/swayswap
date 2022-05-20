@@ -5,7 +5,6 @@ export enum Pages {
   'setup' = '/setup',
   'createWallet' = '/create-wallet',
   'mintToken' = '/mint',
-  'faucet' = '/faucet',
   'addLiquidity' = 'add-liquidity',
   'removeLiquidity' = 'remove-liquidity',
 }
