@@ -89,7 +89,7 @@ export default function SwapPage() {
   }
 
   return (
-    <PageContent>
+    <PageContent className="min-w-[450px]">
       <PageContent.Title>
         <MdSwapCalls className="text-primary-500" />
         Swap

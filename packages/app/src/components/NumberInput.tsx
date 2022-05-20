@@ -7,7 +7,7 @@ const style = {
   transferPropInput: `bg-transparent placeholder:text-gray-300 outline-none w-full`,
 };
 
-type NumberInputProps = Omit<NumberFormatProps, "onChange"> & {
+export type NumberInputProps = Omit<NumberFormatProps, "onChange"> & {
   disabled?: boolean;
   value?: number | string | null;
   onChange?: (value: string) => void;
