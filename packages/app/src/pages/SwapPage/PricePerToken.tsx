@@ -1,4 +1,4 @@
-import { Decimal } from "decimal.js";
+import { toNumber } from "fuels";
 import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { BiRefresh } from "react-icons/bi";
@@ -19,9 +19,9 @@ function getPricePerToken(
   toAmount?: bigint | null
 ) {
   if (!fromAmount || !toAmount) return "";
-  const from = new Decimal(fromAmount.toString());
-  const to = new Decimal(toAmount.toString());
-  const price = direction === "from" ? from.div(to) : to.div(from);
+  const from = toNumber(fromAmount);
+  const to = toNumber(toAmount);
+  const price = direction === "from" ? from / to : to / from;
   return price.toFixed(6);
 }
 
