@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BiRefresh } from "react-icons/bi";
 
 import { swapIsTypingAtom } from "./jotai";
+import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
 
@@ -11,17 +12,15 @@ const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
 };
 
-type Direction = "from" | "to";
-
 function getPricePerToken(
-  direction: Direction,
+  direction: ActiveInput,
   fromAmount?: bigint | null,
   toAmount?: bigint | null
 ) {
   if (!fromAmount || !toAmount) return "";
   const from = toNumber(fromAmount);
   const to = toNumber(toAmount);
-  const price = direction === "from" ? from / to : to / from;
+  const price = direction === ActiveInput.from ? from / to : to / from;
   return price.toFixed(6);
 }
 
@@ -38,15 +37,17 @@ export function PricePerToken({
   toCoin,
   toAmount,
 }: PricePerTokenProps) {
-  const [direction, setDirection] = useState<Direction>("from");
+  const [direction, setDirection] = useState<ActiveInput>(ActiveInput.from);
   const isTyping = useAtomValue(swapIsTypingAtom);
 
   const pricePerToken = getPricePerToken(direction, fromAmount, toAmount);
-  const from = direction === "from" ? toCoin : fromCoin;
-  const to = direction === "from" ? fromCoin : toCoin;
+  const from = direction === ActiveInput.from ? toCoin : fromCoin;
+  const to = direction === ActiveInput.from ? fromCoin : toCoin;
 
   function toggle() {
-    setDirection((dir) => (dir === "from" ? "to" : "from"));
+    setDirection((dir) =>
+      dir === ActiveInput.from ? ActiveInput.to : ActiveInput.from
+    );
   }
 
   if (isTyping) return null;
