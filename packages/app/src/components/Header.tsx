@@ -27,7 +27,7 @@ const style = {
   buttonPadding: `p-2`,
   navIcon: `text-gray-500 stroke-current`,
   wallet: `flex items-center gap-3 absolute top-4 right-4 rounded-full
-  text-gray-300 bg-gray-800 inner-shadow pl-5 p-1`,
+  text-gray-300 bg-gray-800 inner-shadow p-1`,
 };
 
 const HeaderNav = ({
@@ -118,7 +118,11 @@ const Header = () => {
         </div>
       )}
       {wallet && (
-        <nav className={style.wallet}>
+        <nav
+          className={cx(style.wallet, {
+            "pl-5": Boolean(ethBalance.formatted),
+          })}
+        >
           <>
             {ethBalance.formatted && <span>{ethBalance.formatted} ETH</span>}
             <Button
