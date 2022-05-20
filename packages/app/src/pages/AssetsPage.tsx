@@ -1,58 +1,51 @@
-import clipboard from "clipboard";
-import type { ReactNode } from "react";
 import toast from "react-hot-toast";
-import { BiCoin, BiDotsHorizontalRounded, BiWallet } from "react-icons/bi";
-import { FaFaucet, FaRegCopy } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { BiCoin, BiDotsHorizontalRounded } from "react-icons/bi";
+import { FaFaucet } from "react-icons/fa";
+import { MdChecklist } from "react-icons/md";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 
-import { Menu } from "./Menu";
-import { PageContent } from "./PageContent";
-import { Popover, usePopover } from "./Popover";
-
+import { AssetItem } from "~/components/AssetItem";
 import { Button } from "~/components/Button";
+import { Link } from "~/components/Link";
+import { Menu } from "~/components/Menu";
+import { PageContent } from "~/components/PageContent";
+import { Popover, usePopover } from "~/components/Popover";
+import { Spinner } from "~/components/Spinner";
 import { ENABLE_FAUCET_API } from "~/config";
 import { useWallet } from "~/context/AppContext";
+import { useAssets } from "~/hooks/useAssets";
 import { useFaucet } from "~/hooks/useFaucet";
 import { Pages } from "~/types/pages";
 
-export type WalletPropsCard = {
-  children: ReactNode;
-  onFaucetAdded?: () => void;
-};
-
-export function WalletCard({ children, onFaucetAdded }: WalletPropsCard) {
+export default function AssetsPage() {
   const wallet = useWallet();
   const navigate = useNavigate();
   const popover = usePopover({ placement: "bottom" });
+  const { coins, isLoading, refetch } = useAssets();
 
-  const faucetMutation = useFaucet({
+  const faucet = useFaucet({
     onSuccess: () => {
       toast.success("Faucet added successfully!");
-      onFaucetAdded?.();
+      refetch();
     },
   });
 
-  const handleCopy = () => {
-    clipboard.copy(wallet!.address);
-    toast("Address copied", { icon: "✨" });
-  };
-
   function handleFaucet() {
-    faucetMutation.mutate();
+    faucet.mutate();
     popover.close();
   }
 
   const titleElementRight = wallet && (
     <div className="flex items-center gap-3">
       {ENABLE_FAUCET_API ? (
-        <Link to={Pages.faucet}>
+        <RouterLink to={Pages.faucet}>
           <FaFaucet />
-        </Link>
+        </RouterLink>
       ) : (
         <>
           <Button
             variant="ghost"
-            isLoading={faucetMutation.isLoading}
+            isLoading={faucet.isLoading}
             {...popover.getTriggerProps()}
           >
             <BiDotsHorizontalRounded size="1.2rem" />
@@ -78,19 +71,28 @@ export function WalletCard({ children, onFaucetAdded }: WalletPropsCard) {
     <PageContent>
       <PageContent.Title elementRight={titleElementRight}>
         <div className="flex items-center gap-2 mr-2">
-          <BiWallet className="text-primary-500" />
-          Wallet
+          <MdChecklist className="text-primary-500" />
+          Assets
         </div>
-        {wallet && (
-          <Button aria-label="Copy your wallet address" onPress={handleCopy}>
-            <span className="text-gray-100">
-              {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
-            </span>
-            <FaRegCopy size="1em" />
-          </Button>
-        )}
       </PageContent.Title>
-      {children}
+      {isLoading && (
+        <div className="flex justify-start rounded-xl px-2 pt-2">
+          <Spinner />
+        </div>
+      )}
+      {coins.map((coin) => (
+        <div className="mt-4" key={coin.assetId}>
+          <AssetItem key={coin.assetId} coin={coin} />
+        </div>
+      ))}
+      {!isLoading && !coins.length && (
+        <div className="text-gray-300 pb-1">
+          There&apos; no asset added yet.
+          <br />
+          <Link onPress={() => faucet.mutate()}>Click here</Link> to generate a
+          new asset.
+        </div>
+      )}
     </PageContent>
   );
 }

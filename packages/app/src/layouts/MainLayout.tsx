@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useQueryErrorResetBoundary } from "react-query";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
 
 import Header from "~/components/Header";
 
@@ -14,6 +14,8 @@ const style = {
 
 export function MainLayout() {
   const { reset: resetReactQuery } = useQueryErrorResetBoundary();
+  const location = useLocation();
+  const path = useResolvedPath(location);
 
   return (
     <div className={style.wrapper}>
@@ -45,22 +47,26 @@ export function MainLayout() {
           </div>
         )}
       >
-        <Suspense
-          fallback={
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                placeItems: "center",
-                placeContent: "center",
-              }}
-            >
-              <div style={{ textAlign: "center" }}>Loading...</div>
-            </div>
-          }
-        >
+        {path.pathname === "/create-wallet" ? (
           <Outlet />
-        </Suspense>
+        ) : (
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  placeItems: "center",
+                  placeContent: "center",
+                }}
+              >
+                <div style={{ textAlign: "center" }}>Loading...</div>
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
+        )}
       </ErrorBoundary>
     </div>
   );

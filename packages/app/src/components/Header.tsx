@@ -1,8 +1,8 @@
 import { FocusScope, useFocusManager } from "@react-aria/focus";
 import cx from "classnames";
 import type { ComponentType, ReactNode } from "react";
-import { BiWallet, BiDollarCircle } from "react-icons/bi";
-import { MdSwapCalls } from "react-icons/md";
+import { BiDollarCircle } from "react-icons/bi";
+import { MdChecklist, MdSwapCalls } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "./Button";
@@ -81,13 +81,6 @@ const Header = () => {
           <FocusScope>
             <div className={style.navItemsContainer}>
               <HeaderNav
-                icon={BiWallet}
-                onPress={() => navigate(Pages.wallet)}
-                isActive={location.pathname === Pages.wallet}
-              >
-                Wallet
-              </HeaderNav>
-              <HeaderNav
                 icon={MdSwapCalls}
                 onPress={() => navigate(Pages.swap)}
                 isActive={location.pathname === Pages.swap}
@@ -100,6 +93,13 @@ const Header = () => {
                 isActive={location.pathname.includes(Pages.pool)}
               >
                 Pool
+              </HeaderNav>
+              <HeaderNav
+                icon={MdChecklist}
+                onPress={() => navigate(Pages.assets)}
+                isActive={location.pathname.includes(Pages.assets)}
+              >
+                Assets
               </HeaderNav>
             </div>
           </FocusScope>

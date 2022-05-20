@@ -33,9 +33,9 @@ export const PageContent: PageContentComponent = ({ className, children }) => {
   );
   return (
     <div className={style.wrapper}>
-      <div className={cx(className, style.content)}>
+      <div className={cx(className, style.content, { "py-8": !title })}>
         {title}
-        <div className={cx(style.divider, "my-3")} />
+        {title && <div className={cx(style.divider, "my-3")} />}
         <div className="px-5 pb-2">{customChildren}</div>
       </div>
     </div>
