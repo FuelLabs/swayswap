@@ -6,7 +6,7 @@ const VARIANTS = {
     color: "rgba(255,255,255,0.7)",
     secondaryColor: "rgba(255,255,255,0.2)",
   },
-  primar: {
+  primary: {
     color: "#2aac98",
     secondaryColor: "#134034",
   },
@@ -24,4 +24,5 @@ Spinner.defaultProps = {
   size: 22,
   thickness: 250,
   speed: 150,
+  variant: "primary",
 };

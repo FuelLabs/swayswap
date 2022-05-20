@@ -9,13 +9,9 @@ import { CoinSelector } from "./CoinSelector";
 import type { NumberInputProps } from "./NumberInput";
 import { Spinner } from "./Spinner";
 
-import { DECIMAL_UNITS } from "~/config";
+import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import type { Coin } from "~/types";
-
-// Max value supported
-// eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
 
 const style = {
   transferPropContainer: `flex bg-gray-700 rounded-2xl p-2 border border-gray-700`,

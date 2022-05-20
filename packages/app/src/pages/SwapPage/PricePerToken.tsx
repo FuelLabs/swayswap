@@ -1,4 +1,4 @@
-import { toNumber } from "fuels";
+import { Decimal } from "decimal.js";
 import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { BiRefresh } from "react-icons/bi";
@@ -17,11 +17,16 @@ function getPricePerToken(
   fromAmount?: bigint | null,
   toAmount?: bigint | null
 ) {
-  if (!fromAmount || !toAmount) return "";
-  const from = toNumber(fromAmount);
-  const to = toNumber(toAmount);
-  const price = direction === ActiveInput.from ? from / to : to / from;
-  return price.toFixed(6);
+  // TODO: remove decimal.js and use fuels instead
+  // we decided to use decimal.js because of we're getting some issus
+  // when trying to divide between bigints
+  if (fromAmount && toAmount) {
+    const from = new Decimal(fromAmount.toString());
+    const to = new Decimal(toAmount.toString());
+    const price = direction === ActiveInput.from ? from.div(to) : to.div(from);
+    return price.toFixed(6);
+  }
+  return "";
 }
 
 type PricePerTokenProps = {

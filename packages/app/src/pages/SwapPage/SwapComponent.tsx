@@ -33,6 +33,7 @@ export function SwapComponent({
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [initialActiveInput, setInitialActiveInput] =
     useAtom(swapActiveInputAtom);
+
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
   const setTyping = useSetAtom(swapIsTypingAtom);
   const activeInput = useRef<ActiveInput>(initialActiveInput);
@@ -82,16 +83,18 @@ export function SwapComponent({
         ? fromInput.amount
         : toInput.amount;
 
+    // This is used to reset preview amount when set first input value for null
+    if (activeInput.current === ActiveInput.from && amount === null) {
+      toInput.setAmount(null);
+    }
+    if (activeInput.current === ActiveInput.to && amount === null) {
+      fromInput.setAmount(null);
+    }
+
     // Set value to hydrate
     setInitialAmount(amount);
     // Set current input
     setInitialActiveInput(activeInput?.current);
-
-    // This is used to reset preview amount when set first input value for null
-    if (amount === null) {
-      toInput.setAmount(null);
-      return;
-    }
 
     // Call on onChange
     onChange?.({
@@ -117,7 +120,8 @@ export function SwapComponent({
       <div className="mt-4">
         <CoinInput
           {...fromInput.getInputProps()}
-          autoFocus
+          {...(activeInput.current === ActiveInput.to && { isLoading })}
+          autoFocus={activeInput.current === ActiveInput.from}
           coinSelectorDisabled={true}
         />
       </div>
@@ -127,8 +131,9 @@ export function SwapComponent({
       <div className="mb-4">
         <CoinInput
           {...toInput.getInputProps()}
+          {...(activeInput.current === ActiveInput.from && { isLoading })}
+          autoFocus={activeInput.current === ActiveInput.to}
           coinSelectorDisabled={true}
-          isLoading={isLoading}
         />
       </div>
       <PricePerToken
