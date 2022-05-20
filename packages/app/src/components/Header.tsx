@@ -117,21 +117,23 @@ const Header = () => {
           </FocusScope>
         </div>
       )}
-      <nav className={style.wallet}>
-        <>
-          {ethBalance.formatted && <span>{ethBalance.formatted} ETH</span>}
-          <Button
-            aria-label="Copy your wallet address"
-            onPress={handleCopy}
-            className="bg-gray-700 px-4 rounded-full"
-          >
-            <span className="text-gray-100">
-              {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
-            </span>
-            <FaRegCopy size="1em" />
-          </Button>
-        </>
-      </nav>
+      {wallet && (
+        <nav className={style.wallet}>
+          <>
+            {ethBalance.formatted && <span>{ethBalance.formatted} ETH</span>}
+            <Button
+              aria-label="Copy your wallet address"
+              onPress={handleCopy}
+              className="bg-gray-700 px-4 rounded-full"
+            >
+              <span className="text-gray-100">
+                {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
+              </span>
+              <FaRegCopy size="1em" />
+            </Button>
+          </>
+        </nav>
+      )}
     </div>
   );
 };
