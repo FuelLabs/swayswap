@@ -63,6 +63,21 @@ This command also creates a temporary wallet and sends some coins to your wallet
 
 For information about running the client go [here](./packages/app/README.md)
 
+## Setup Env Variables
+After installing the client dependencies in `/packages/app` the contents of `.env.example` are automatically copied to `.env`.  In `.env` we have:
+
+VITE_FUEL_PROVIDER_URL - Link for the fuel node
+
+VITE_CONTRACT_ID - Id (address) of the deployed swayswap contract
+
+VITE_TOKEN_ID= Id (address) of the deployed token contract
+
+VITE_RECAPTCHA_SITE_KEY - The site key is used to invoke recaptcha service on the website
+
+VITE_FUEL_FAUCET_URL= Link for the fuel faucet
+
+After deploying the swayswap and token contracts make sure to copy and paste the swayswap and token contract ids into .env before running the development server.
+
 <!--
 ### Set up ENV Variables
 	TO-DO: Add infos about .env on the root README.md
