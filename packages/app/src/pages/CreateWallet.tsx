@@ -27,8 +27,10 @@ export default function CreateWallet() {
       <div className="flex flex-col justify-center text-gray-400 prose text-center">
         <h3 className="text-gray-300 mb-0">⚡️ Welcome SwaySwap</h3>
         <p>
-          Seems you don&apos; have any wallet yet
-          <br /> Click bellow to generate one
+          <p>
+            Seems like you don&apos;t have any wallet yet.
+            <br /> Click below to generate one.
+          </p>
         </p>
         <div>
           <Button variant="primary" size="lg" onPress={handleCreateWallet}>
