@@ -32,7 +32,7 @@ export default function CreateWallet() {
         </p>
         <div>
           <Button variant="primary" size="lg" onPress={handleCreateWallet}>
-            Connect Wallet
+            Create Wallet
           </Button>
         </div>
       </div>
