@@ -11,7 +11,7 @@ import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
-import { PageContent } from "~/components/PageContent";
+import { Card } from "~/components/Card";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import useDebounce from "~/hooks/useDebounce";
@@ -62,7 +62,6 @@ export default function SwapPage() {
     {
       onSuccess: () => {
         toast.success("Swap made successfully!");
-        navigate(Pages.wallet);
       },
     }
   );
@@ -89,11 +88,11 @@ export default function SwapPage() {
   }
 
   return (
-    <PageContent className="min-w-[450px]">
-      <PageContent.Title>
+    <Card className="min-w-[450px]">
+      <Card.Title>
         <MdSwapCalls className="text-primary-500" />
         Swap
-      </PageContent.Title>
+      </Card.Title>
       <SwapComponent
         previewAmount={previewAmount}
         onChange={handleSwap}
@@ -108,6 +107,6 @@ export default function SwapPage() {
       >
         {getButtonText()}
       </Button>
-    </PageContent>
+    </Card>
   );
 }

@@ -1,11 +1,13 @@
-import { FocusScope, useFocusManager } from "@react-aria/focus";
 import cx from "classnames";
 import type { ComponentType, ReactNode } from "react";
-import { BiWallet, BiDollarCircle } from "react-icons/bi";
+import { BiDollarCircle } from "react-icons/bi";
 import { MdSwapCalls } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import type { ButtonProps } from "./Button";
 import { Button } from "./Button";
+import { ButtonGroup } from "./ButtonGroup";
+import { WalletWidget } from "./WalletWidget";
 
 import fuelLogo from "~/assets/fuel-logo-512x512.png";
 import { useWallet } from "~/context/AppContext";
@@ -24,47 +26,35 @@ const style = {
   navIcon: `text-gray-500 stroke-current`,
 };
 
+type HeaderNavProps = ButtonProps & {
+  onPress: () => void;
+  isActive: boolean;
+  icon: ComponentType<any>;
+  children: ReactNode;
+};
+
 const HeaderNav = ({
   onPress,
   isActive,
   icon: Icon,
   children,
-}: {
-  onPress: () => void;
-  isActive: boolean;
-  icon: ComponentType<any>;
-  children: ReactNode;
-}) => {
-  const focusManager = useFocusManager();
-  const onKeyDown = (e: any) => {
-    // eslint-disable-next-line default-case
-    switch (e.key) {
-      case "ArrowRight":
-        focusManager.focusNext({ wrap: true });
-        break;
-      case "ArrowLeft":
-        focusManager.focusPrevious({ wrap: true });
-        break;
-    }
-  };
-
-  return (
-    <Button
-      onKeyDown={onKeyDown}
-      variant="ghost"
-      size="lg"
-      onPress={onPress}
-      className={cx(style.navItem, {
-        [style.activeNavItem]: isActive,
-      })}
-    >
-      <Icon
-        className={cx("text-primary-gray", { "text-primary-400": isActive })}
-      />
-      {children}
-    </Button>
-  );
-};
+  ...props
+}: HeaderNavProps) => (
+  <Button
+    {...props}
+    variant="ghost"
+    size="lg"
+    onPress={onPress}
+    className={cx(style.navItem, {
+      [style.activeNavItem]: isActive,
+    })}
+  >
+    <Icon
+      className={cx("text-primary-gray", { "text-primary-400": isActive })}
+    />
+    {children}
+  </Button>
+);
 
 const Header = () => {
   const wallet = useWallet();
@@ -78,15 +68,8 @@ const Header = () => {
       </div>
       {wallet && (
         <div className={style.nav}>
-          <FocusScope>
-            <div className={style.navItemsContainer}>
-              <HeaderNav
-                icon={BiWallet}
-                onPress={() => navigate(Pages.wallet)}
-                isActive={location.pathname === Pages.wallet}
-              >
-                Wallet
-              </HeaderNav>
+          <div className={style.navItemsContainer}>
+            <ButtonGroup>
               <HeaderNav
                 icon={MdSwapCalls}
                 onPress={() => navigate(Pages.swap)}
@@ -101,10 +84,11 @@ const Header = () => {
               >
                 Pool
               </HeaderNav>
-            </div>
-          </FocusScope>
+            </ButtonGroup>
+          </div>
         </div>
       )}
+      {wallet && <WalletWidget />}
     </div>
   );
 };

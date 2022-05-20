@@ -3,7 +3,6 @@ import { formatUnits } from "ethers/lib/utils";
 import { toBigInt } from "fuels";
 import toast from "react-hot-toast";
 import { useMutation, useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
 
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
@@ -11,12 +10,10 @@ import { Link } from "~/components/Link";
 import { CONTRACT_ID, DECIMAL_UNITS } from "~/config";
 import { useContract, useWallet } from "~/context/AppContext";
 import coins from "~/lib/CoinsMetadata";
-import { Pages } from "~/types/pages";
 
 export default function RemoveLiquidityPage() {
   const wallet = useWallet()!;
   const contract = useContract()!;
-  const navigate = useNavigate();
 
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
   const tokenInput = useCoinInput({ coin: liquidityToken });
@@ -52,7 +49,6 @@ export default function RemoveLiquidityPage() {
     {
       onSuccess: () => {
         toast.success("Liquidity removed successfully!");
-        navigate(Pages.wallet);
       },
       onError: (error: Error) => {
         toast.error(error.message);

@@ -3,21 +3,18 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { BiCoin } from "react-icons/bi";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
 
 import { Button } from "~/components/Button";
+import { Card } from "~/components/Card";
 import { Input } from "~/components/Input";
 import { NumberInput } from "~/components/NumberInput";
-import { PageContent } from "~/components/PageContent";
 import { DECIMAL_UNITS, TOKEN_ID } from "~/config";
 import { useTokenMethods } from "~/hooks/useTokensMethods";
 import { sleep } from "~/lib/utils";
-import { Pages } from "~/types/pages";
 
 export default function MintTokenPage() {
   const [asset, setAsset] = useState(TOKEN_ID);
   const methods = useTokenMethods(TOKEN_ID);
-  const navigate = useNavigate();
   const [amount, setAmount] = useState<string>("2000");
 
   const mintMutation = useMutation(
@@ -32,17 +29,16 @@ export default function MintTokenPage() {
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
         toast.success(`Token minted successfully!`);
-        navigate(Pages.wallet);
       },
     }
   );
 
   return (
-    <PageContent>
-      <PageContent.Title>
+    <Card>
+      <Card.Title>
         <BiCoin className="text-primary-500" />
         Mint
-      </PageContent.Title>
+      </Card.Title>
       <div className="mb-4">
         <div className="flex gap-4 items-center">
           {/* TODO: Add validation of contract id, querying from the the core */}
@@ -63,6 +59,7 @@ export default function MintTokenPage() {
               Amount to mint
             </label>
             <NumberInput
+              autoFocus
               className="px-2"
               value={amount}
               onChange={setAmount}
@@ -81,6 +78,6 @@ export default function MintTokenPage() {
       >
         Mint
       </Button>
-    </PageContent>
+    </Card>
   );
 }

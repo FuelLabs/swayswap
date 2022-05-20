@@ -5,5 +5,5 @@ import { useWallet } from '~/context/AppContext';
 
 export function useBalances(opts: UseQueryOptions = {}) {
   const wallet = useWallet();
-  return useQuery('AssetsPage-balances', () => wallet!.getBalances(), opts as any);
+  return useQuery('AssetsPage-balances', () => wallet?.getBalances(), opts as any);
 }

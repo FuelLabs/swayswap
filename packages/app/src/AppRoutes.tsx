@@ -5,15 +5,15 @@ import { RequireWallet } from "./components/RequireWallet";
 import { MainLayout } from "./layouts/MainLayout";
 import { Pages } from "./types/pages";
 
-const SwapPage = lazy(() => import("~/pages/SwapPage"));
-const WalletPage = lazy(() => import("~/pages/WalletPage"));
-const MintTokenPage = lazy(() => import("~/pages/MintTokenPage"));
-const FaucetPage = lazy(() => import("~/pages/FaucetPage"));
-const PoolPage = lazy(() => import("~/pages/PoolPage/index"));
 const AddLiquidity = lazy(() => import("./pages/PoolPage/AddLiquidity"));
+const CreateWallet = lazy(() => import("~/pages/CreateWallet"));
+const FaucetPage = lazy(() => import("~/pages/FaucetPage"));
+const MintTokenPage = lazy(() => import("~/pages/MintTokenPage"));
+const PoolPage = lazy(() => import("~/pages/PoolPage/index"));
 const RemoveLiquidityPage = lazy(
   () => import("./pages/PoolPage/RemoveLiquidity")
 );
+const SwapPage = lazy(() => import("~/pages/SwapPage"));
 
 export default function AppRoutes() {
   return (
@@ -23,18 +23,11 @@ export default function AppRoutes() {
           path="*"
           element={
             <RequireWallet>
-              <Navigate to={Pages.wallet} />
+              <Navigate to={Pages.swap} />
             </RequireWallet>
           }
         />
-        <Route
-          path={Pages.wallet}
-          element={
-            <RequireWallet>
-              <WalletPage />
-            </RequireWallet>
-          }
-        />
+        <Route path={Pages.createWallet} element={<CreateWallet />} />
         <Route
           path={Pages.swap}
           element={

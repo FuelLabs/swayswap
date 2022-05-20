@@ -1,10 +1,11 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useQueryErrorResetBoundary } from "react-query";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
 
 import Header from "~/components/Header";
 import Skeleton from "~/components/Skeleton";
+import { Pages } from "~/types/pages";
 
 const style = {
   wrapper: `min-h-screen w-screen text-white select-none flex flex-col justify-between`,
@@ -15,6 +16,8 @@ const style = {
 
 export function MainLayout() {
   const { reset: resetReactQuery } = useQueryErrorResetBoundary();
+  const location = useLocation();
+  const path = useResolvedPath(location);
 
   return (
     <div className={style.wrapper}>
@@ -46,22 +49,30 @@ export function MainLayout() {
           </div>
         )}
       >
-        <Suspense
-          fallback={
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                placeItems: "center",
-                placeContent: "center",
-              }}
-            >
-              <Skeleton />
+        {path.pathname === Pages.createWallet ? (
+          <div className="w-screen flex flex-1 items-center justify-center pb-14">
+            <Outlet />
+          </div>
+        ) : (
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  placeItems: "center",
+                  placeContent: "center",
+                }}
+              >
+                <Skeleton />
+              </div>
+            }
+          >
+            <div className="w-screen flex flex-1 items-center justify-center pb-14">
+              <Outlet />
             </div>
-          }
-        >
-          <Outlet />
-        </Suspense>
+          </Suspense>
+        )}
       </ErrorBoundary>
     </div>
   );
