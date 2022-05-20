@@ -5,15 +5,16 @@ import { RequireWallet } from "./components/RequireWallet";
 import { MainLayout } from "./layouts/MainLayout";
 import { Pages } from "./types/pages";
 
+const AddLiquidity = lazy(() => import("./pages/PoolPage/AddLiquidity"));
 const AssetsPage = lazy(() => import("~/pages/AssetsPage"));
-const SwapPage = lazy(() => import("~/pages/SwapPage"));
 const CreateWallet = lazy(() => import("~/pages/CreateWallet"));
+const FaucetPage = lazy(() => import("~/pages/FaucetPage"));
 const MintTokenPage = lazy(() => import("~/pages/MintTokenPage"));
 const PoolPage = lazy(() => import("~/pages/PoolPage/index"));
-const AddLiquidity = lazy(() => import("./pages/PoolPage/AddLiquidity"));
 const RemoveLiquidityPage = lazy(
   () => import("./pages/PoolPage/RemoveLiquidity")
 );
+const SwapPage = lazy(() => import("~/pages/SwapPage"));
 
 export default function AppRoutes() {
   return (
@@ -68,6 +69,14 @@ export default function AppRoutes() {
           element={
             <RequireWallet>
               <MintTokenPage />
+            </RequireWallet>
+          }
+        />
+        <Route
+          path={Pages.faucet}
+          element={
+            <RequireWallet>
+              <FaucetPage />
             </RequireWallet>
           }
         />

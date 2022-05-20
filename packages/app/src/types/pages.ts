@@ -1,10 +1,11 @@
 export enum Pages {
-  'assets' = '/assets',
-  'pool' = '/pool',
-  'swap' = '/swap',
-  'setup' = '/setup',
-  'createWallet' = '/create-wallet',
-  'mintToken' = '/mint',
   'addLiquidity' = 'add-liquidity',
+  'assets' = '/assets',
+  'createWallet' = '/create-wallet',
+  'faucet' = '/faucet',
+  'mintToken' = '/mint',
+  'pool' = '/pool',
   'removeLiquidity' = 'remove-liquidity',
+  'setup' = '/setup',
+  'swap' = '/swap',
 }

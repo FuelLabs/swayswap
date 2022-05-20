@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { BiCoin, BiDotsHorizontalRounded } from "react-icons/bi";
 import { FaFaucet } from "react-icons/fa";
 import { MdChecklist } from "react-icons/md";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { AssetItem } from "~/components/AssetItem";
 import { Button } from "~/components/Button";
@@ -31,40 +31,36 @@ export default function AssetsPage() {
   });
 
   function handleFaucet() {
+    if (ENABLE_FAUCET_API) {
+      navigate(Pages.faucet);
+      return;
+    }
     faucet.mutate();
     popover.close();
   }
 
   const titleElementRight = wallet && (
     <div className="flex items-center gap-3">
-      {ENABLE_FAUCET_API ? (
-        <RouterLink to={Pages.faucet}>
-          <FaFaucet />
-        </RouterLink>
-      ) : (
-        <>
-          <Button
-            autoFocus
-            variant="ghost"
-            isLoading={faucet.isLoading}
-            {...popover.getTriggerProps()}
-          >
-            <BiDotsHorizontalRounded size="1.2rem" />
-          </Button>
-          <Popover {...popover.rootProps}>
-            <Menu>
-              <Menu.Item key="faucet" onPress={handleFaucet}>
-                <FaFaucet size={16} className="text-gray-600" />
-                Faucet
-              </Menu.Item>
-              <Menu.Item key="mint" onPress={() => navigate("/mint")}>
-                <BiCoin size={16} className="text-gray-600" />
-                Mint Tokens
-              </Menu.Item>
-            </Menu>
-          </Popover>
-        </>
-      )}
+      <Button
+        autoFocus
+        variant="ghost"
+        isLoading={faucet.isLoading}
+        {...popover.getTriggerProps()}
+      >
+        <BiDotsHorizontalRounded size="1.2rem" />
+      </Button>
+      <Popover {...popover.rootProps}>
+        <Menu>
+          <Menu.Item key="faucet" onPress={handleFaucet}>
+            <FaFaucet size={16} className="text-gray-600" />
+            Faucet
+          </Menu.Item>
+          <Menu.Item key="mint" onPress={() => navigate("/mint")}>
+            <BiCoin size={16} className="text-gray-600" />
+            Mint Tokens
+          </Menu.Item>
+        </Menu>
+      </Popover>
     </div>
   );
 
