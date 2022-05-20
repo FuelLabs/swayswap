@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "~/components/Button";
 import { PageContent } from "~/components/PageContent";
 import { useAppContext } from "~/context/AppContext";
+import { Pages } from "~/types/pages";
 
 export default function CreateWallet() {
   const { createWallet } = useAppContext();
@@ -13,7 +14,7 @@ export default function CreateWallet() {
   const createWalletMutation = useMutation(async () => createWallet(), {
     onSuccess: () => {
       toast.success("Wallet created successfully!");
-      navigate("/swap");
+      navigate(Pages.swap);
     },
   });
 

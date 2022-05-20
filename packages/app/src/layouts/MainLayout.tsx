@@ -4,6 +4,7 @@ import { useQueryErrorResetBoundary } from "react-query";
 import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
 
 import Header from "~/components/Header";
+import { Pages } from "~/types/pages";
 
 const style = {
   wrapper: `min-h-screen w-screen text-white select-none flex flex-col justify-between`,
@@ -47,7 +48,7 @@ export function MainLayout() {
           </div>
         )}
       >
-        {path.pathname === "/create-wallet" ? (
+        {path.pathname === Pages.createWallet ? (
           <Outlet />
         ) : (
           <Suspense

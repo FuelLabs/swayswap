@@ -23,7 +23,7 @@ export default function AppRoutes() {
           path="*"
           element={
             <RequireWallet>
-              <Navigate to="/swap" />
+              <Navigate to={Pages.swap} />
             </RequireWallet>
           }
         />
