@@ -11,8 +11,9 @@ import { useMutation, useQuery } from "react-query";
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { Spinner } from "~/components/Spinner";
-import { DECIMAL_UNITS, ONE_ASSET } from "~/config";
+import { DECIMAL_UNITS, ONE_ASSET_UNIT } from "~/config";
 import { useContract } from "~/context/AppContext";
+import { calculateRatio } from "~/lib/asset";
 import assets from "~/lib/CoinsMetadata";
 import type { Coin } from "~/types";
 import { Pages } from "~/types/pages";
@@ -143,26 +144,47 @@ export default function AddLiquidity() {
     setToInitialAmount(toInput.amount);
   }, [fromInput.amount, toInput.amount]);
 
-  const handleCreatePool = () => {
+  const validateCreatePool = () => {
     const fromAmount = fromInput.amount;
     const toAmount = toInput.amount;
+    // const fromToRatio = (
+    //   toNumber(ONE_ASSET_UNIT * poolInfo.token_reserve) /
+    //   toNumber(poolInfo.eth_reserve) /
+    //   toNumber(ONE_ASSET_UNIT)
+    // );
+
+    const errors = [];
 
     if (!fromAmount) {
-      throw new Error('"fromAmount" is required');
+      errors.push(`Inform ${coinFrom.name} amount`);
     }
     if (!toAmount) {
-      throw new Error('"toAmount" is required');
+      errors.push(`Inform ${coinTo.name} amount`);
     }
-
     if (!fromInput.hasEnoughBalance) {
-      throw new Error(`Insufficient ${coinFrom.name} balance`);
+      errors.push(`Insufficient ${coinFrom.name} balance`);
     }
     if (!toInput.hasEnoughBalance) {
-      throw new Error(`Insufficient ${coinTo.name} balance`);
+      errors.push(`Insufficient ${coinTo.name} balance`);
     }
+    if (poolInfo) {
+      const reservesRatio = calculateRatio(poolInfo.eth_reserve, poolInfo.token_reserve);
+      const addLiquidityRatio = calculateRatio(fromAmount, toAmount);
+
+      console.log(`reservesRatio`, reservesRatio);
+      console.log(`addLiquidityRatio`, addLiquidityRatio);
+    }
+
+    return errors;
+  }
+
+  const handleCreatePool = () => {
+    if (errorsCreatePull.length) return;
 
     addLiquidityMutation.mutate();
   };
+
+  const errorsCreatePull = validateCreatePool();
 
   return addLiquidityMutation.isLoading ? (
     <div className="mt-6 mb-8 flex justify-center">
@@ -209,26 +231,12 @@ export default function AddLiquidity() {
               <div className="flex flex-col">
                 <span>
                   <>
-                    ETH/DAI:{" "}
-                    {
-                      +(
-                        toNumber(ONE_ASSET * poolInfo.eth_reserve) /
-                        toNumber(poolInfo.token_reserve) /
-                        toNumber(ONE_ASSET)
-                      ).toFixed(6)
-                    }
+                    ETH/DAI: {calculateRatio(poolInfo.eth_reserve, poolInfo.token_reserve).toFixed(6)}
                   </>
                 </span>
                 <span>
                   <>
-                    DAI/ETH:{" "}
-                    {
-                      +(
-                        toNumber(ONE_ASSET * poolInfo.token_reserve) /
-                        toNumber(poolInfo.eth_reserve) /
-                        toNumber(ONE_ASSET)
-                      ).toFixed(6)
-                    }
+                    DAI/ETH: {calculateRatio(poolInfo.token_reserve, poolInfo.eth_reserve).toFixed(6)}
                   </>
                 </span>
               </div>
@@ -237,17 +245,13 @@ export default function AddLiquidity() {
         </div>
       ) : null}
       <Button
-        isDisabled={!fromInput.hasEnoughBalance || !toInput.hasEnoughBalance}
+        isDisabled={!!errorsCreatePull.length}
         isFull
         size="lg"
         variant="primary"
         onPress={handleCreatePool}
       >
-        {!fromInput.hasEnoughBalance
-          ? `Insufficient ${coinFrom.name} balance`
-          : !toInput.hasEnoughBalance
-          ? `Insufficient ${coinTo.name} balance`
-          : "Confirm"}
+        {errorsCreatePull.length ? errorsCreatePull[0] : 'Confirm'}
       </Button>
     </>
   );
