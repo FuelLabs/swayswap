@@ -11,7 +11,7 @@ import { useMutation, useQuery } from "react-query";
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { Spinner } from "~/components/Spinner";
-import { DECIMAL_UNITS, ONE_ASSET_UNIT, SLIPPAGE_TOLERANCE } from "~/config";
+import { DECIMAL_UNITS, ONE_ASSET, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { calculateRatio } from "~/lib/asset";
 import assets from "~/lib/CoinsMetadata";
@@ -167,10 +167,10 @@ export default function AddLiquidity() {
     const errors = [];
 
     if (!fromInput.amount) {
-      errors.push(`Inform ${coinFrom.name} amount`);
+      errors.push(`Enter ${coinFrom.name} amount`);
     }
     if (!toInput.amount) {
-      errors.push(`Inform ${coinTo.name} amount`);
+      errors.push(`Enter ${coinTo.name} amount`);
     }
     if (!fromInput.hasEnoughBalance) {
       errors.push(`Insufficient ${coinFrom.name} balance`);
@@ -179,11 +179,11 @@ export default function AddLiquidity() {
       errors.push(`Insufficient ${coinTo.name} balance`);
     }
     if (poolInfo) {
-      const minRatio = reservesFromToRatio - (reservesFromToRatio * SLIPPAGE_TOLERANCE);
-      const maxRatio = reservesFromToRatio + (reservesFromToRatio * SLIPPAGE_TOLERANCE);
+      const minRatio = reservesFromToRatio * (1 - SLIPPAGE_TOLERANCE);
+      const maxRatio = reservesFromToRatio * (1 + SLIPPAGE_TOLERANCE);
 
       if ( addLiquidityRatio < minRatio || addLiquidityRatio > maxRatio ) {
-        errors.push(`Informed ratio doesn't match pool`);
+        errors.push(`Entered ratio doesn't match pool`);
       }
     }
 
