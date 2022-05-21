@@ -40,15 +40,16 @@ export function SwapComponent({
 
   const handleInvertCoins = () => {
     if (activeInput.current === ActiveInput.to) {
-      activeInput.current = ActiveInput.from;
+      const from = fromInput.amount;
       fromInput.setAmount(toInput.amount);
-      toInput.setAmount(null);
+      toInput.setAmount(from);
     } else {
-      activeInput.current = ActiveInput.to;
+      const to = toInput.amount;
       toInput.setAmount(fromInput.amount);
-      fromInput.setAmount(null);
+      fromInput.setAmount(to);
     }
     setCoins([coinTo, coinFrom]);
+    // activeInput.current = ActiveInput.from;
   };
 
   const fromInput = useCoinInput({
