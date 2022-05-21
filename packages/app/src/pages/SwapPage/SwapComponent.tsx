@@ -49,7 +49,6 @@ export function SwapComponent({
       fromInput.setAmount(to);
     }
     setCoins([coinTo, coinFrom]);
-    // activeInput.current = ActiveInput.from;
   };
 
   const fromInput = useCoinInput({
