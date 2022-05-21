@@ -4,7 +4,7 @@ Thanks for your interest in contributing to SwaySwap! This document outlines the
 
 If you run into any difficulties getting started, you can always ask questions on our [Discord](https://discord.gg/xfpK4Pe).
 
-## Setting up a development workspace
+## Setting Up a Development Workspace
 
 See the [introduction](../introduction/index.md) section for instructions on installing and setting up the Sway toolchain. (This step is only necessary if contributing to smart contract development with Sway.)
 
@@ -14,7 +14,7 @@ You will need to have `yarn`, or a similar package manager installed. For the pu
 yarn install
 ```
 
-## Getting the repository
+## Getting the Repository
 
 1. Visit the [SwaySwap](https://github.com/FuelLabs/swayswap) repo and fork the project.
 2. Then clone your forked copy to your local machine and get to work.
@@ -24,7 +24,7 @@ git clone https://github.com/FuelLabs/swayswap
 cd swayswap
 ```
 
-## Building and testing
+## Getting Started
 
 The following steps are for running and viewing the SwaySwap dapp in your preferred browser.
 
@@ -39,7 +39,7 @@ To view SwaySwap in the browser, open [http://localhost:3000](http://localhost:3
 
 Congratulations! You've now got everything setup and are ready to start making contributions.
 
-## Finding something to work on
+## Finding Something to Work On
 
 There are many ways in which you may contribute to the SwaySwap project, some of which involve coding knowledge and some which do not. A few examples include:
 
@@ -51,7 +51,7 @@ Check out our [Help Wanted](https://github.com/FuelLabs/swayswap/issues?q=is%3Ao
 
 If you are planning something big, for example, related to multiple components or changes current behaviors, make sure to [open an issue](https://github.com/FuelLabs/swayswap/issues/new) to discuss with us before starting on the implementation.
 
-## Contribution flow
+## Contribution Flow
 
 This is a rough outline of what a contributor's workflow looks like:
 
@@ -73,7 +73,7 @@ This is a rough outline of what a contributor's workflow looks like:
 
 Thanks for your contributions!
 
-### Linking issues
+### Linking Issues
 
 Pull requests should be linked to at least one issue in the same repo.
 
