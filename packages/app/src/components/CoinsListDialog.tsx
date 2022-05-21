@@ -13,6 +13,11 @@ const style = {
   noResults: `px-6 py-4 border-t border-gray-700`,
 };
 
+function filterByValid(coin: Coin) {
+  // this is just for now until we have tokens coming from backend
+  return coin.symbol === "DAI";
+}
+
 export type CoinListModalProps = {
   onSelect?: (assetId: string) => void;
 };
@@ -25,7 +30,7 @@ export function CoinsListDialog({ onSelect }: CoinListModalProps) {
     return coin.name?.toLowerCase().includes(value.toLocaleLowerCase());
   }
 
-  const filtered = CoinsMetadata.filter(filterBySearch);
+  const filtered = CoinsMetadata.filter(filterByValid).filter(filterBySearch);
   const hasResults = Boolean(filtered.length);
 
   return (

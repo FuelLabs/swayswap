@@ -3,7 +3,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
 
 import { SwapComponent } from "./SwapComponent";
 import { queryPreviewAmount, swapTokens } from "./queries";
@@ -16,7 +15,6 @@ import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import useDebounce from "~/hooks/useDebounce";
 import { sleep } from "~/lib/utils";
-import { Pages } from "~/types/pages";
 
 const getBalanceAsset = (
   balances: CoinQuantity[] | undefined,
@@ -30,7 +28,6 @@ export default function SwapPage() {
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
   const { data: balances } = useBalances();
-  const navigate = useNavigate();
 
   const { isLoading } = useQuery(
     [

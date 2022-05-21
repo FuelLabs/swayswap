@@ -53,7 +53,9 @@ export function SwapComponent({
 
   const fromInput = useCoinInput({
     coin: coinFrom,
-    onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
+    onChangeCoin: (coin: Coin) => {
+      setCoins([coin, coinTo]);
+    },
     onInput: () => {
       setTyping(true);
       activeInput.current = ActiveInput.from;
@@ -62,7 +64,9 @@ export function SwapComponent({
 
   const toInput = useCoinInput({
     coin: coinTo,
-    onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
+    onChangeCoin: (coin: Coin) => {
+      setCoins([coinFrom, coin]);
+    },
     onInput: () => {
       setTyping(true);
       activeInput.current = ActiveInput.to;
@@ -97,12 +101,14 @@ export function SwapComponent({
     setInitialActiveInput(activeInput?.current);
 
     // Call on onChange
-    onChange?.({
-      from: coinFrom.assetId,
-      to: coinTo.assetId,
-      amount,
-      direction: activeInput.current,
-    });
+    if (coinFrom?.assetId && coinTo?.assetId) {
+      onChange?.({
+        from: coinFrom?.assetId,
+        to: coinTo.assetId,
+        amount,
+        direction: activeInput.current,
+      });
+    }
   }, [fromInput.amount, toInput.amount, coinFrom, coinTo]);
 
   useEffect(() => {
@@ -122,7 +128,7 @@ export function SwapComponent({
           {...fromInput.getInputProps()}
           {...(activeInput.current === ActiveInput.to && { isLoading })}
           autoFocus={activeInput.current === ActiveInput.from}
-          coinSelectorDisabled={true}
+          coinSelectorDisabled={coinFrom?.symbol === "ETH"}
         />
       </div>
       <div className={style.switchDirection}>
@@ -133,13 +139,13 @@ export function SwapComponent({
           {...toInput.getInputProps()}
           {...(activeInput.current === ActiveInput.from && { isLoading })}
           autoFocus={activeInput.current === ActiveInput.to}
-          coinSelectorDisabled={true}
+          coinSelectorDisabled={coinTo?.symbol === "ETH"}
         />
       </div>
       <PricePerToken
-        fromCoin={coinFrom.symbol}
+        fromCoin={coinFrom?.symbol}
         fromAmount={fromInput.amount}
-        toCoin={coinTo.symbol}
+        toCoin={coinTo?.symbol}
         toAmount={toInput.amount}
       />
     </>
