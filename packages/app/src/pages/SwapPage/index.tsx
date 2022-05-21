@@ -52,7 +52,7 @@ const getValidationState = ({
 }: StateParams): ValidationStateEnum => {
   if (!swapState?.to || !swapState?.from)
     return ValidationStateEnum.SelectToken;
-  if (swapState?.amount == null) {
+  if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
   if (!swapState.hasBalance) {
