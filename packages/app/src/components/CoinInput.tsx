@@ -95,6 +95,16 @@ export function useCoinInput({
   }
 
   function getInputProps() {
+    const handleInputPropsChange = (val: string) => {
+      if (isReadOnly) return;
+      const next = val !== "" ? parseValueBigInt(val) : null;
+      if (typeof onChange === "function") {
+        onChange(next);
+      } else {
+        setAmount(next);
+      }
+    };
+
     return {
       ...params,
       coin,
@@ -102,20 +112,12 @@ export function useCoinInput({
       value: formatValue(amount),
       displayType: (isReadOnly ? "text" : "input") as DisplayType,
       onInput,
-      onChange: (val: string) => {
-        if (isReadOnly) return;
-        const next = val !== "" ? parseValueBigInt(val) : null;
-        if (typeof onChange === "function") {
-          onChange(next);
-        } else {
-          setAmount(next);
-        }
-      },
+      onChange: handleInputPropsChange,
       isAllowed: ({ value }: NumberFormatValues) =>
         parseValueBigInt(value) <= MAX_U64_VALUE,
       setMaxBalance: () => {
         onInput?.();
-        setAmount(getSafeMaxBalance());
+        handleInputPropsChange(formatValue(getSafeMaxBalance()));
       },
       balance: formatValue(coinBalance?.amount || BigInt(0)),
       showBalance,
