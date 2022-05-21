@@ -89,15 +89,15 @@ For information about running the client go [here](./packages/app/README.md)
 
 After installing the client dependencies in `/packages/app` the contents of `.env.example` are automatically copied to `.env`. In `.env` we have:
 
-VITE_FUEL_PROVIDER_URL - Link for the fuel node
+- VITE_FUEL_PROVIDER_URL - Link for the fuel node
 
-VITE_CONTRACT_ID - Id (address) of the deployed swayswap contract
+- VITE_CONTRACT_ID - Id (address) of the deployed swayswap contract
 
-VITE_TOKEN_ID= Id (address) of the deployed token contract
+- VITE_TOKEN_ID= Id (address) of the deployed token contract
 
-VITE_RECAPTCHA_SITE_KEY - The site key is used to invoke recaptcha service on the website
+- VITE_RECAPTCHA_SITE_KEY - The site key is used to invoke recaptcha service on the website
 
-VITE_FUEL_FAUCET_URL= Link for the fuel faucet
+- VITE_FUEL_FAUCET_URL= Link for the fuel faucet
 
 After deploying the swayswap and token contracts make sure to copy and paste the swayswap and token contract ids into .env before running the development server.
 
