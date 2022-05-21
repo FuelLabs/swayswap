@@ -77,11 +77,13 @@ export default function AddLiquidity() {
   );
 
   const handleChangeFromValue = (val: bigint | null) => {
+    fromInput.setAmount(val);
     const _val = val || BigInt(0);
     const newToValue = Math.round(toNumber(_val) / reservesFromToRatio);
     toInput.setAmount(BigInt(newToValue));
   }
   const handleChangeToValue = (val: bigint | null) => {
+    toInput.setAmount(val);
     const _val = val || BigInt(0);
     const newFromValue = Math.round(toNumber(_val) * reservesFromToRatio);
     fromInput.setAmount(BigInt(newFromValue));
