@@ -9,7 +9,7 @@
 ## Live links
 
 - [Latest release](https://fuellabs.github.io/swayswap)
-- [Master branch](https://swayswap.vercel.app/create-wallet)
+- [Master branch](https://swayswap.vercel.app/)
 
 Short description
 
