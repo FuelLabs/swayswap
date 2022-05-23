@@ -14,6 +14,7 @@ const style = {
 };
 
 function filterByValid(coin: Coin) {
+  // TODO: remove this in the future
   // this is just for now until we have tokens coming from backend
   return coin.symbol === "DAI";
 }

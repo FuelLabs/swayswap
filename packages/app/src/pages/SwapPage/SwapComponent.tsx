@@ -13,6 +13,7 @@ import { ActiveInput } from "./types";
 
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { InvertButton } from "~/components/InvertButton";
+import { CoinETH } from "~/lib/constants";
 import type { Coin } from "~/types";
 
 const style = {
@@ -130,7 +131,7 @@ export function SwapComponent({
           {...fromInput.getInputProps()}
           {...(activeInput.current === ActiveInput.to && { isLoading })}
           autoFocus={activeInput.current === ActiveInput.from}
-          coinSelectorDisabled={coinFrom?.symbol === "ETH"}
+          coinSelectorDisabled={coinFrom?.assetId === CoinETH}
         />
       </div>
       <div className={style.switchDirection}>
@@ -141,7 +142,7 @@ export function SwapComponent({
           {...toInput.getInputProps()}
           {...(activeInput.current === ActiveInput.from && { isLoading })}
           autoFocus={activeInput.current === ActiveInput.to}
-          coinSelectorDisabled={coinTo?.symbol === "ETH"}
+          coinSelectorDisabled={coinTo?.assetId === CoinETH}
         />
       </div>
       <PricePerToken
