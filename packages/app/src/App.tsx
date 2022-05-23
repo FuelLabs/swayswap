@@ -4,10 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./AppRoutes";
 import { Dialog } from "./components/Dialog";
 import { Toaster } from "./components/Toaster";
+import { queryClient } from "./queryClient";
 
 import { AppContextProvider } from "~/context/AppContext";
-
-import { queryClient } from "./queryClient";
 
 const { PUBLIC_URL } = process.env;
 

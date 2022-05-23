@@ -1,18 +1,18 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
-import { useMutation, useQuery, QueryClient } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 import { SwapComponent } from "./SwapComponent";
 import { queryPreviewAmount, swapTokens } from "./queries";
 import type { SwapState } from "./types";
-import { queryClient } from "~/queryClient";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { useContract } from "~/context/AppContext";
 import useDebounce from "~/hooks/useDebounce";
 import { isSwayInfinity, sleep } from "~/lib/utils";
+import { queryClient } from "~/queryClient";
 
 type StateParams = {
   swapState: SwapState | null;
