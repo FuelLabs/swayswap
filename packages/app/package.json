@@ -16,8 +16,8 @@
   "dependencies": {
     "@fontsource/fira-code": "^4.5.9",
     "@fontsource/inter": "^4.5.10",
-    "@fuel-ts/contract": "0.0.0-master-d5e02003",
-    "@fuel-ts/providers": "0.0.0-master-d5e02003",
+    "@fuel-ts/contract": "0.0.0-master-6c8ce489",
+    "@fuel-ts/providers": "0.0.0-master-6c8ce489",
     "@radix-ui/react-dialog": "^0.1.7",
     "@react-aria/button": "^3.4.4",
     "@react-aria/dialog": "^3.1.9",
@@ -35,7 +35,7 @@
     "classnames": "^2.3.1",
     "clipboard": "^2.0.11",
     "ethers": "^5.6.5",
-    "fuels": "0.0.0-master-d5e02003",
+    "fuels": "0.0.0-master-6c8ce489",
     "graphql-request": "^4.2.0",
     "jotai": "^1.6.6",
     "react": "^18.1.0",
@@ -69,7 +69,7 @@
     "postcss": "^8.4.7",
     "tailwindcss": "^3.0.23",
     "typechain": "^8.0.0",
-    "typechain-target-fuels": "0.0.0-master-d5e02003",
+    "typechain-target-fuels": "0.0.0-master-6c8ce489",
     "typescript": "^4.6.4",
     "vite": "^2.9.7"
   }
