@@ -8,17 +8,17 @@ import toast from "react-hot-toast";
 import { RiCheckFill } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
 
+import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
+
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { Spinner } from "~/components/Spinner";
-import { DECIMAL_UNITS, ONE_ASSET, SLIPPAGE_TOLERANCE } from "~/config";
+import { DECIMAL_UNITS, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
-import { calculateRatio } from "~/lib/asset";
 import assets from "~/lib/CoinsMetadata";
+import { calculateRatio } from "~/lib/asset";
 import type { Coin } from "~/types";
-import { Pages } from "~/types/pages";
-import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -74,51 +74,57 @@ export default function AddLiquidity() {
   ]);
 
   const [stage, setStage] = useState(0);
-  const { data: poolInfo, refetch: refetchPoolInfo } = useQuery("PoolPage-poolInfo", () =>
-    contract.callStatic.get_info()
+  const { data: poolInfo, refetch: refetchPoolInfo } = useQuery(
+    "PoolPage-poolInfo",
+    () => contract.callStatic.get_info()
   );
 
   const handleChangeFromValue = (val: bigint | null) => {
     fromInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const _val = val || BigInt(0);
-      const newToValue = Math.round(toNumber(_val) / reservesFromToRatio);
+      const value = val || BigInt(0);
+      const newToValue = Math.round(toNumber(value) / reservesFromToRatio);
       toInput.setAmount(BigInt(newToValue));
     }
-  }
+  };
   const handleChangeToValue = (val: bigint | null) => {
     toInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const _val = val || BigInt(0);
-      const newFromValue = Math.round(toNumber(_val) * reservesFromToRatio);
+      const value = val || BigInt(0);
+      const newFromValue = Math.round(toNumber(value) * reservesFromToRatio);
       fromInput.setAmount(BigInt(newFromValue));
     }
-  }
+  };
 
   const fromInput = useCoinInput({
     coin: coinFrom,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     gasFee: BigInt(1),
-    onChange: handleChangeFromValue
+    onChange: handleChangeFromValue,
   });
 
   const toInput = useCoinInput({
     coin: coinTo,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    onChange: handleChangeToValue
+    onChange: handleChangeToValue,
   });
 
-  const reservesFromToRatio = calculateRatio(poolInfo?.eth_reserve, poolInfo?.token_reserve);
-  const reservesToFromRatio = calculateRatio(poolInfo?.token_reserve, poolInfo?.eth_reserve);
+  const reservesFromToRatio = calculateRatio(
+    poolInfo?.eth_reserve,
+    poolInfo?.token_reserve
+  );
+  const reservesToFromRatio = calculateRatio(
+    poolInfo?.token_reserve,
+    poolInfo?.eth_reserve
+  );
   const addLiquidityRatio = calculateRatio(fromInput.amount, toInput.amount);
 
   const addLiquidityMutation = useMutation(
     async () => {
       const fromAmount = fromInput.amount;
       const toAmount = toInput.amount;
-
       if (!fromAmount || !toAmount) return;
 
       // TODO: Combine all transactions on single tx leverage by scripts
@@ -195,13 +201,13 @@ export default function AddLiquidity() {
       const minRatio = reservesFromToRatio * (1 - SLIPPAGE_TOLERANCE);
       const maxRatio = reservesFromToRatio * (1 + SLIPPAGE_TOLERANCE);
 
-      if ( addLiquidityRatio < minRatio || addLiquidityRatio > maxRatio ) {
+      if (addLiquidityRatio < minRatio || addLiquidityRatio > maxRatio) {
         errors.push(`Entered ratio doesn't match pool`);
       }
     }
 
     return errors;
-  }
+  };
 
   const errorsCreatePull = validateCreatePool();
 
@@ -249,14 +255,10 @@ export default function AddLiquidity() {
             {poolInfo.eth_reserve > 0 && poolInfo.token_reserve > 0 ? (
               <div className="flex flex-col">
                 <span>
-                  <>
-                    ETH/DAI: {reservesFromToRatio.toFixed(6)}
-                  </>
+                  <>ETH/DAI: {reservesFromToRatio.toFixed(6)}</>
                 </span>
                 <span>
-                  <>
-                    DAI/ETH: {reservesToFromRatio.toFixed(6)}
-                  </>
+                  <>DAI/ETH: {reservesToFromRatio.toFixed(6)}</>
                 </span>
               </div>
             ) : null}
@@ -268,14 +270,17 @@ export default function AddLiquidity() {
         isFull
         size="lg"
         variant="primary"
-        onPress={errorsCreatePull.length ? undefined : () => addLiquidityMutation.mutate()}
-      >
-        {errorsCreatePull.length ?
-          errorsCreatePull[0] :
-          reservesFromToRatio ?
-            'Add liquidity' :
-            'Create liquidity'
+        onPress={
+          errorsCreatePull.length
+            ? undefined
+            : () => addLiquidityMutation.mutate()
         }
+      >
+        {errorsCreatePull.length
+          ? errorsCreatePull[0]
+          : reservesFromToRatio
+          ? "Add liquidity"
+          : "Create liquidity"}
       </Button>
     </>
   );
