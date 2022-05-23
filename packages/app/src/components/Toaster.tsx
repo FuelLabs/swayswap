@@ -24,7 +24,7 @@ export function Toaster() {
                 <Button
                   autoFocus
                   className={style.closeButton}
-                  onClick={() => toast.dismiss(t.id)}
+                  onPress={() => toast.dismiss(t.id)}
                 >
                   <MdClose />
                 </Button>
