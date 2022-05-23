@@ -12,7 +12,10 @@ export function Toaster() {
   return (
     <Root position="bottom-right">
       {(t) => (
-        <ToastBar toast={t} style={{ padding: 0, background: "transparent" }}>
+        <ToastBar
+          toast={t}
+          style={{ padding: 0, background: "transparent", ...t.style }}
+        >
           {({ icon, message }) => (
             <div className={style.toast}>
               {icon}
