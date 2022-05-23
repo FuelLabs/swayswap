@@ -1,5 +1,5 @@
 import { useAtom, useSetAtom } from "jotai";
-import { useEffect, useRef } from "react";
+import { startTransition, useEffect } from "react";
 
 import { PricePerToken } from "./PricePerToken";
 import {
@@ -13,6 +13,7 @@ import { ActiveInput } from "./types";
 
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { InvertButton } from "~/components/InvertButton";
+import { CoinETH } from "~/lib/constants";
 import type { Coin } from "~/types";
 
 const style = {
@@ -31,46 +32,53 @@ export function SwapComponent({
   previewAmount: previewValue,
 }: SwapComponentProps) {
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
-  const [initialActiveInput, setInitialActiveInput] =
-    useAtom(swapActiveInputAtom);
-
+  const [activeInput, setActiveInput] = useAtom(swapActiveInputAtom);
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
   const setTyping = useSetAtom(swapIsTypingAtom);
-  const activeInput = useRef<ActiveInput>(initialActiveInput);
 
   const handleInvertCoins = () => {
-    if (activeInput.current === ActiveInput.to) {
-      activeInput.current = ActiveInput.from;
-      fromInput.setAmount(toInput.amount);
-      toInput.setAmount(null);
+    if (activeInput === ActiveInput.to) {
+      const from = fromInput.amount;
+      startTransition(() => {
+        setActiveInput(ActiveInput.from);
+        fromInput.setAmount(toInput.amount);
+        toInput.setAmount(from);
+      });
     } else {
-      activeInput.current = ActiveInput.to;
-      toInput.setAmount(fromInput.amount);
-      fromInput.setAmount(null);
+      const to = toInput.amount;
+      startTransition(() => {
+        setActiveInput(ActiveInput.to);
+        toInput.setAmount(fromInput.amount);
+        fromInput.setAmount(to);
+      });
     }
     setCoins([coinTo, coinFrom]);
   };
 
   const fromInput = useCoinInput({
     coin: coinFrom,
-    onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
+    onChangeCoin: (coin: Coin) => {
+      setCoins([coin, coinTo]);
+    },
     onInput: () => {
       setTyping(true);
-      activeInput.current = ActiveInput.from;
+      setActiveInput(ActiveInput.from);
     },
   });
 
   const toInput = useCoinInput({
     coin: coinTo,
-    onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
+    onChangeCoin: (coin: Coin) => {
+      setCoins([coinFrom, coin]);
+    },
     onInput: () => {
       setTyping(true);
-      activeInput.current = ActiveInput.to;
+      setActiveInput(ActiveInput.to);
     },
   });
 
   useEffect(() => {
-    if (activeInput.current === ActiveInput.to) {
+    if (activeInput === ActiveInput.to) {
       toInput.setAmount(initialAmount);
     } else {
       fromInput.setAmount(initialAmount);
@@ -78,38 +86,37 @@ export function SwapComponent({
   }, []);
 
   useEffect(() => {
-    const currentInput =
-      activeInput.current === ActiveInput.from ? fromInput : toInput;
+    const currentInput = activeInput === ActiveInput.from ? fromInput : toInput;
     const amount = currentInput.amount;
-    const coin = activeInput.current === ActiveInput.from ? coinFrom : coinTo;
+    const coin = activeInput === ActiveInput.from ? coinFrom : coinTo;
 
     // This is used to reset preview amount when set first input value for null
-    if (activeInput.current === ActiveInput.from && amount === null) {
+    if (activeInput === ActiveInput.from && amount === null) {
       toInput.setAmount(null);
     }
-    if (activeInput.current === ActiveInput.to && amount === null) {
+    if (activeInput === ActiveInput.to && amount === null) {
       fromInput.setAmount(null);
     }
 
     // Set value to hydrate
     setInitialAmount(amount);
-    // Set current input
-    setInitialActiveInput(activeInput?.current);
 
-    // Call on onChange
-    onChange?.({
-      from: coinFrom.assetId,
-      to: coinTo.assetId,
-      amount,
-      coin,
-      direction: activeInput.current,
-      hasBalance: fromInput.hasEnoughBalance,
-    });
+    if (coin && coinFrom && coinTo) {
+      // Call on onChange
+      onChange?.({
+        amount,
+        coin,
+        from: coinFrom?.assetId,
+        to: coinTo?.assetId,
+        direction: activeInput,
+        hasBalance: fromInput.hasEnoughBalance,
+      });
+    }
   }, [fromInput.amount, toInput.amount, coinFrom, coinTo]);
 
   useEffect(() => {
     if (previewValue == null) return;
-    if (activeInput.current === ActiveInput.from) {
+    if (activeInput === ActiveInput.from) {
       toInput.setAmount(previewValue);
     } else {
       fromInput.setAmount(previewValue);
@@ -122,9 +129,9 @@ export function SwapComponent({
       <div className="mt-4">
         <CoinInput
           {...fromInput.getInputProps()}
-          {...(activeInput.current === ActiveInput.to && { isLoading })}
-          autoFocus={activeInput.current === ActiveInput.from}
-          coinSelectorDisabled={true}
+          {...(activeInput === ActiveInput.to && { isLoading })}
+          autoFocus={activeInput === ActiveInput.from}
+          coinSelectorDisabled={coinFrom?.assetId === CoinETH}
         />
       </div>
       <div className={style.switchDirection}>
@@ -133,15 +140,15 @@ export function SwapComponent({
       <div className="mb-4">
         <CoinInput
           {...toInput.getInputProps()}
-          {...(activeInput.current === ActiveInput.from && { isLoading })}
-          autoFocus={activeInput.current === ActiveInput.to}
-          coinSelectorDisabled={true}
+          {...(activeInput === ActiveInput.from && { isLoading })}
+          autoFocus={activeInput === ActiveInput.to}
+          coinSelectorDisabled={coinTo?.assetId === CoinETH}
         />
       </div>
       <PricePerToken
-        fromCoin={coinFrom.symbol}
+        fromCoin={coinFrom?.symbol}
         fromAmount={fromInput.amount}
-        toCoin={coinTo.symbol}
+        toCoin={coinTo?.symbol}
         toAmount={toInput.amount}
       />
     </>

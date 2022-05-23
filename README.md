@@ -4,6 +4,15 @@
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 ![twitter](https://img.shields.io/twitter/follow/SwayLang?style=social)
 
+## Live links
+
+- [Latest release](https://fuellabs.github.io/swayswap)
+- [Master branch](https://swayswap.vercel.app/)
+
+Short description
+
+<!-- ![SwaySwap Interface](cover.png) -->
+
 ## About the Project
 
 SwaySwap is a decentralized application that takes advantage of Fuel's lightning fast TS SDK, Rust SDK, and [Sway](https://github.com/FuelLabs/sway) language. Create a wallet, acquire funds from a faucet and start exchanging assets with the world's fastest modular stack.
