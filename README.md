@@ -69,6 +69,11 @@ This command also creates a temporary wallet and sends some coins to your wallet
 For information about running the client go [here](./packages/app/README.md)
 
 ## Setup Env Variables
+<<<<<<< HEAD
+=======
+
+After installing the client dependencies in `/packages/app` the contents of `.env.example` are automatically copied to `.env`. In `.env` we have:
+>>>>>>> master
 
 After installing the client dependencies in `/packages/app` the contents of `.env.example` are automatically copied to `.env`. In `.env` we have:
 
