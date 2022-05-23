@@ -78,10 +78,10 @@ export function SwapComponent({
   }, []);
 
   useEffect(() => {
-    const amount =
-      activeInput.current === ActiveInput.from
-        ? fromInput.amount
-        : toInput.amount;
+    const currentInput =
+      activeInput.current === ActiveInput.from ? fromInput : toInput;
+    const amount = currentInput.amount;
+    const coin = activeInput.current === ActiveInput.from ? coinFrom : coinTo;
 
     // This is used to reset preview amount when set first input value for null
     if (activeInput.current === ActiveInput.from && amount === null) {
@@ -101,7 +101,9 @@ export function SwapComponent({
       from: coinFrom.assetId,
       to: coinTo.assetId,
       amount,
+      coin,
       direction: activeInput.current,
+      hasBalance: fromInput.hasEnoughBalance,
     });
   }, [fromInput.amount, toInput.amount, coinFrom, coinTo]);
 

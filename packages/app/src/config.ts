@@ -19,3 +19,5 @@ export const SLIPPAGE_TOLERANCE = 0.005;
 // Max value supported
 // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
 export const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
+// Max value from Sway Contract
+export const MAX_U64_STRING = '18446744073709551615';
