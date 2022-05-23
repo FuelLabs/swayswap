@@ -13,6 +13,7 @@ import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { Spinner } from "~/components/Spinner";
 import { DECIMAL_UNITS, ONE_ASSET, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
+import { useBalances } from "~/hooks/useBalances";
 import { calculateRatio } from "~/lib/asset";
 import assets from "~/lib/CoinsMetadata";
 import type { Coin } from "~/types";
@@ -61,6 +62,7 @@ function PoolLoader({
 }
 
 export default function AddLiquidity() {
+  const balances = useBalances();
   const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
   const [toInitialAmount, setToInitialAmount] = useAtom(poolToAmountAtom);
 
@@ -72,7 +74,7 @@ export default function AddLiquidity() {
   ]);
 
   const [stage, setStage] = useState(0);
-  const { data: poolInfo } = useQuery("PoolPage-poolInfo", () =>
+  const { data: poolInfo, refetch: refetchPoolInfo } = useQuery("PoolPage-poolInfo", () =>
     contract.callStatic.get_info()
   );
 
@@ -141,6 +143,10 @@ export default function AddLiquidity() {
     {
       onSuccess: () => {
         toast.success("New pool created!");
+        fromInput.setAmount(BigInt(0));
+        toInput.setAmount(BigInt(0));
+        refetchPoolInfo();
+        balances.refetch();
       },
       onError: (e: any) => {
         const errors = e?.response?.errors;
@@ -264,7 +270,12 @@ export default function AddLiquidity() {
         variant="primary"
         onPress={errorsCreatePull.length ? undefined : () => addLiquidityMutation.mutate()}
       >
-        {errorsCreatePull.length ? errorsCreatePull[0] : 'Confirm'}
+        {errorsCreatePull.length ?
+          errorsCreatePull[0] :
+          reservesFromToRatio ?
+            'Add liquidity' :
+            'Create liquidity'
+        }
       </Button>
     </>
   );
