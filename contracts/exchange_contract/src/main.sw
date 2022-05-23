@@ -338,22 +338,17 @@ impl Exchange for Contract {
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
         let mut sold = 0;
-        let mut reserve = 0;
         let mut has_liquidity = false;
         if (msg_asset_id().into() == ETH_ID) {
             sold = get_input_price(amount, eth_reserve, token_reserve);
-            reserve = token_reserve;
             has_liquidity = sold < token_reserve;
         } else {
             sold = get_input_price(amount, token_reserve, eth_reserve);
-            reserve = eth_reserve;
             has_liquidity = sold < eth_reserve;
         }
         PreviewInfo {
             amount: sold,
-            reserve: reserve,
             has_liquidity: has_liquidity,
-            fee: LIQUIDITY_MINER_FEE,
         }
     }
 
@@ -361,23 +356,18 @@ impl Exchange for Contract {
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
         let mut sold = 0;
-        let mut reserve = 0;
         let mut has_liquidity = false;
         if (msg_asset_id().into() == ETH_ID) {
             sold = get_output_price(amount, eth_reserve, token_reserve);
-            reserve = token_reserve;
             has_liquidity = sold < token_reserve;
 
         } else {
             sold = get_output_price(amount, token_reserve, eth_reserve);
-            reserve = token_reserve;
             has_liquidity = sold < eth_reserve;
         }
         PreviewInfo {
             amount: sold,
-            reserve: reserve,
             has_liquidity: has_liquidity,
-            fee: LIQUIDITY_MINER_FEE,
         }
     }
 }

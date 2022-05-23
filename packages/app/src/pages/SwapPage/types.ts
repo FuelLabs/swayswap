@@ -10,6 +10,8 @@ export type SwapState = {
   to: string;
   direction: ActiveInput;
   coin: Coin;
+  coinFrom: Coin;
+  coinTo: Coin;
   amount: bigint | null;
   hasBalance: boolean;
 };

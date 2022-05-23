@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { formatUnits } from "ethers/lib/utils";
+import { toNumber } from "fuels";
 import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
@@ -22,10 +22,12 @@ function getPricePerToken(
   if (!toAmount || !fromAmount) return "";
   const ratio =
     direction === ActiveInput.from
-      ? BigNumber.from(fromAmount || 0).div(toAmount || 0)
-      : BigNumber.from(toAmount || 0).div(fromAmount || 0);
-  const price = ratio.mul(ONE_ASSET);
-  return formatUnits(price, DECIMAL_UNITS);
+      ? BigNumber.from(fromAmount || 0).toNumber() /
+        BigNumber.from(toAmount || 0).toNumber()
+      : BigNumber.from(toAmount || 0).toNumber() /
+        BigNumber.from(fromAmount || 0).toNumber();
+  const price = ratio * toNumber(ONE_ASSET);
+  return (price / toNumber(ONE_ASSET)).toFixed(DECIMAL_UNITS);
 }
 
 type PricePerTokenProps = {

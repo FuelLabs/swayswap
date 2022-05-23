@@ -33,19 +33,9 @@ export type PoolInfoInput = {
 
 export type PoolInfo = { eth_reserve: bigint; token_reserve: bigint };
 
-export type PreviewInfoInput = {
-  amount: BigNumberish;
-  has_liquidity: boolean;
-  reserve: BigNumberish;
-  fee: BigNumberish;
-};
+export type PreviewInfoInput = { amount: BigNumberish; has_liquidity: boolean };
 
-export type PreviewInfo = {
-  amount: bigint;
-  has_liquidity: boolean;
-  reserve: bigint;
-  fee: bigint;
-};
+export type PreviewInfo = { amount: bigint; has_liquidity: boolean };
 
 interface ExchangeContractAbiInterface extends Interface {
   functions: {
