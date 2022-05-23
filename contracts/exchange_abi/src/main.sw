@@ -15,6 +15,8 @@ pub struct PoolInfo {
 pub struct PreviewInfo {
     amount: u64,
     has_liquidity: bool,
+    reserve: u64,
+    fee: u64,
 }
 
 abi Exchange {

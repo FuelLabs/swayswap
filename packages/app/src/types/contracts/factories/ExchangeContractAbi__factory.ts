@@ -232,6 +232,16 @@ const _abi = [
             type: 'bool',
             components: null,
           },
+          {
+            name: 'reserve',
+            type: 'u64',
+            components: null,
+          },
+          {
+            name: 'fee',
+            type: 'u64',
+            components: null,
+          },
         ],
       },
     ],
@@ -259,6 +269,16 @@ const _abi = [
           {
             name: 'has_liquidity',
             type: 'bool',
+            components: null,
+          },
+          {
+            name: 'reserve',
+            type: 'u64',
+            components: null,
+          },
+          {
+            name: 'fee',
+            type: 'u64',
             components: null,
           },
         ],
