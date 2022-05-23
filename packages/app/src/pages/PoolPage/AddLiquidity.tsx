@@ -74,8 +74,9 @@ export default function AddLiquidity() {
   ]);
 
   const [stage, setStage] = useState(0);
-  const { data: poolInfo, refetch: refetchPoolInfo } = useQuery("PoolPage-poolInfo", () =>
-    contract.callStatic.get_info()
+  const { data: poolInfo, refetch: refetchPoolInfo } = useQuery(
+    "PoolPage-poolInfo",
+    () => contract.callStatic.get_info()
   );
 
   const handleChangeFromValue = (val: bigint | null) => {
@@ -86,7 +87,7 @@ export default function AddLiquidity() {
       const newToValue = Math.round(toNumber(_val) / reservesFromToRatio);
       toInput.setAmount(BigInt(newToValue));
     }
-  }
+  };
   const handleChangeToValue = (val: bigint | null) => {
     toInput.setAmount(val);
 
@@ -95,23 +96,29 @@ export default function AddLiquidity() {
       const newFromValue = Math.round(toNumber(_val) * reservesFromToRatio);
       fromInput.setAmount(BigInt(newFromValue));
     }
-  }
+  };
 
   const fromInput = useCoinInput({
     coin: coinFrom,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     gasFee: BigInt(1),
-    onChange: handleChangeFromValue
+    onChange: handleChangeFromValue,
   });
 
   const toInput = useCoinInput({
     coin: coinTo,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    onChange: handleChangeToValue
+    onChange: handleChangeToValue,
   });
 
-  const reservesFromToRatio = calculateRatio(poolInfo?.eth_reserve, poolInfo?.token_reserve);
-  const reservesToFromRatio = calculateRatio(poolInfo?.token_reserve, poolInfo?.eth_reserve);
+  const reservesFromToRatio = calculateRatio(
+    poolInfo?.eth_reserve,
+    poolInfo?.token_reserve
+  );
+  const reservesToFromRatio = calculateRatio(
+    poolInfo?.token_reserve,
+    poolInfo?.eth_reserve
+  );
   const addLiquidityRatio = calculateRatio(fromInput.amount, toInput.amount);
 
   const addLiquidityMutation = useMutation(
@@ -195,13 +202,13 @@ export default function AddLiquidity() {
       const minRatio = reservesFromToRatio * (1 - SLIPPAGE_TOLERANCE);
       const maxRatio = reservesFromToRatio * (1 + SLIPPAGE_TOLERANCE);
 
-      if ( addLiquidityRatio < minRatio || addLiquidityRatio > maxRatio ) {
+      if (addLiquidityRatio < minRatio || addLiquidityRatio > maxRatio) {
         errors.push(`Entered ratio doesn't match pool`);
       }
     }
 
     return errors;
-  }
+  };
 
   const errorsCreatePull = validateCreatePool();
 
@@ -249,14 +256,10 @@ export default function AddLiquidity() {
             {poolInfo.eth_reserve > 0 && poolInfo.token_reserve > 0 ? (
               <div className="flex flex-col">
                 <span>
-                  <>
-                    ETH/DAI: {reservesFromToRatio.toFixed(6)}
-                  </>
+                  <>ETH/DAI: {reservesFromToRatio.toFixed(6)}</>
                 </span>
                 <span>
-                  <>
-                    DAI/ETH: {reservesToFromRatio.toFixed(6)}
-                  </>
+                  <>DAI/ETH: {reservesToFromRatio.toFixed(6)}</>
                 </span>
               </div>
             ) : null}
@@ -268,14 +271,17 @@ export default function AddLiquidity() {
         isFull
         size="lg"
         variant="primary"
-        onPress={errorsCreatePull.length ? undefined : () => addLiquidityMutation.mutate()}
-      >
-        {errorsCreatePull.length ?
-          errorsCreatePull[0] :
-          reservesFromToRatio ?
-            'Add liquidity' :
-            'Create liquidity'
+        onPress={
+          errorsCreatePull.length
+            ? undefined
+            : () => addLiquidityMutation.mutate()
         }
+      >
+        {errorsCreatePull.length
+          ? errorsCreatePull[0]
+          : reservesFromToRatio
+          ? "Add liquidity"
+          : "Create liquidity"}
       </Button>
     </>
   );

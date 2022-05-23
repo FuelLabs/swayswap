@@ -93,7 +93,11 @@ export default function SwapPage() {
     }
   );
 
-  const { mutate: swap, isLoading: isSwaping, isSuccess: hasSwapped } = useMutation(
+  const {
+    mutate: swap,
+    isLoading: isSwaping,
+    isSuccess: hasSwapped,
+  } = useMutation(
     async () => {
       if (!swapState) return;
       await swapTokens(contract, swapState);

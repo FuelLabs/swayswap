@@ -30,7 +30,7 @@ export function SwapComponent({
   onChange,
   isLoading,
   previewAmount: previewValue,
-  hasSwapped
+  hasSwapped,
 }: SwapComponentProps) {
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [initialActiveInput, setInitialActiveInput] =
