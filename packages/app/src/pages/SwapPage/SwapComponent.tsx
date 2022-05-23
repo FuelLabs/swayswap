@@ -103,7 +103,7 @@ export function SwapComponent({
       amount,
       coin,
       direction: activeInput.current,
-      hasBalance: currentInput.hasEnoughBalance,
+      hasBalance: fromInput.hasEnoughBalance,
     });
   }, [fromInput.amount, toInput.amount, coinFrom, coinTo]);
 

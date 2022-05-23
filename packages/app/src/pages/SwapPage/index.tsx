@@ -50,8 +50,9 @@ const getValidationState = ({
   previewAmount,
   hasLiquidity,
 }: StateParams): ValidationStateEnum => {
-  if (!swapState?.to || !swapState?.from)
+  if (!swapState?.to || !swapState?.from) {
     return ValidationStateEnum.SelectToken;
+  }
   if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
