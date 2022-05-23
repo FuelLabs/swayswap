@@ -124,7 +124,7 @@ export function SwapComponent({
       toInput.setAmount(null);
       fromInput.setAmount(null);
     }
-  });
+  }, [hasSwapped]);
 
   return (
     <>
