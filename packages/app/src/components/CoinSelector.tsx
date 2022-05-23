@@ -1,73 +1,122 @@
 import cx from "classnames";
-import { useState, useEffect } from "react";
+import { formatUnits } from "ethers/lib/utils";
+import { useState, useEffect, forwardRef, useMemo } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 import { Button } from "./Button";
 import { CoinsListDialog } from "./CoinsListDialog";
 import { Dialog, useDialog } from "./Dialog";
 
+import { DECIMAL_UNITS } from "~/config";
+import { useBalances } from "~/hooks/useBalances";
 import CoinsMetadata from "~/lib/CoinsMetadata";
 import type { Coin } from "~/types";
 
 const style = {
-  currencySelector: `flex1`,
+  root: `flex flex-1 flex-col items-end`,
+  maxButton: `text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800`,
 };
 
-type CoinSelectorProps = {
-  value?: Coin | null;
-  isReadOnly?: boolean;
-  onChange?: (coin: Coin) => void;
-};
-
-export function CoinSelector({
-  value,
-  isReadOnly,
-  onChange,
-}: CoinSelectorProps) {
-  const [selected, setSelected] = useState<Coin | null>(null);
-  const dialog = useDialog();
-
-  useEffect(() => {
-    if (!value) return setSelected(null);
-    setSelected(value);
-  }, [value]);
-
-  function handleSelect(assetId: string) {
-    const next = CoinsMetadata.find((coin) => coin.assetId === assetId)!;
-    dialog.close();
-    setSelected(next);
-    onChange?.(next);
+const formatValue = (amount: bigint | null | undefined) => {
+  if (amount != null) {
+    return formatUnits(amount, DECIMAL_UNITS);
   }
+  // If amount is null return empty string
+  return "";
+};
 
-  return (
-    <div className={style.currencySelector}>
-      <Button
-        {...dialog.openButtonProps}
-        size="md"
-        className={cx("coin-selector", { "coin-selector--empty": !selected })}
-        isDisabled={isReadOnly}
-      >
-        {selected && selected.img && (
-          <img
-            className="rounded-full border-none ml-1"
-            src={selected.img}
-            alt={selected.name}
-            height={20}
-            width={20}
-          />
+export type CoinSelectorProps = {
+  coin?: Coin | null;
+  isReadOnly?: boolean;
+  showBalance?: boolean;
+  showMaxButton?: boolean;
+  onChange?: (coin: Coin) => void;
+  onSetMaxBalance?: () => void;
+};
+
+export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
+  (
+    {
+      coin,
+      isReadOnly,
+      showBalance = true,
+      showMaxButton = true,
+      onChange,
+      onSetMaxBalance,
+    },
+    ref
+  ) => {
+    const [selected, setSelected] = useState<Coin | null>(null);
+    const dialog = useDialog();
+    const { data: balances } = useBalances({ enabled: showBalance });
+    const coinBalance = balances?.find(
+      (item) => item.assetId === coin?.assetId
+    );
+
+    const balance = useMemo(
+      () => formatValue(coinBalance?.amount || BigInt(0)),
+      [coinBalance?.assetId]
+    );
+
+    useEffect(() => {
+      if (!coin) return setSelected(null);
+      setSelected(coin);
+    }, [coin]);
+
+    function handleSelect(assetId: string) {
+      const next = CoinsMetadata.find((item) => item.assetId === assetId)!;
+      dialog.close();
+      setSelected(next);
+      onChange?.(next);
+    }
+
+    return (
+      <div className={style.root} ref={ref}>
+        <Button
+          {...dialog.openButtonProps}
+          size="md"
+          className={cx("coin-selector", { "coin-selector--empty": !selected })}
+          isDisabled={isReadOnly}
+        >
+          {selected && selected.img && (
+            <img
+              className="rounded-full border-none ml-1"
+              src={selected.img}
+              alt={selected.name}
+              height={20}
+              width={20}
+            />
+          )}
+          {selected ? (
+            <div className="ml-2">{selected?.name}</div>
+          ) : (
+            <div className="ml-2">Select token</div>
+          )}
+          {!isReadOnly && <FiChevronDown className="text-current" />}
+        </Button>
+        <Dialog {...dialog.dialogProps}>
+          <Dialog.Content>
+            <CoinsListDialog onSelect={handleSelect} />
+          </Dialog.Content>
+        </Dialog>
+        {(showBalance || showMaxButton) && (
+          <div className="flex items-center gap-2 mt-2">
+            {showBalance && (
+              <div className="text-xs text-gray-400">Balance: {balance}</div>
+            )}
+            {showMaxButton && (
+              <Button
+                size="sm"
+                onPress={onSetMaxBalance}
+                className={style.maxButton}
+                variant="ghost"
+              >
+                Max
+              </Button>
+            )}
+          </div>
         )}
-        {selected ? (
-          <div className="ml-2">{selected?.name}</div>
-        ) : (
-          <div className="ml-2">Select token</div>
-        )}
-        {!isReadOnly && <FiChevronDown className="text-current" />}
-      </Button>
-      <Dialog {...dialog.dialogProps}>
-        <Dialog.Content>
-          <CoinsListDialog onSelect={handleSelect} />
-        </Dialog.Content>
-      </Dialog>
-    </div>
-  );
-}
+      </div>
+    );
+  }
+);

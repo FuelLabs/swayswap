@@ -1,11 +1,11 @@
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { toBigInt } from "fuels";
+import type { ReactNode } from "react";
 import { forwardRef, useEffect, useState } from "react";
 import type { NumberFormatValues } from "react-number-format";
 import NumberFormat from "react-number-format";
 
-import { Button } from "./Button";
-import { CoinSelector } from "./CoinSelector";
+import type { CoinSelectorProps } from "./CoinSelector";
 import type { NumberInputProps } from "./NumberInput";
 import { Spinner } from "./Spinner";
 
@@ -21,34 +21,24 @@ const style = {
 };
 
 type UseCoinParams = {
+  /**
+   * Props for <CoinInput />
+   */
   amount?: bigint | null;
-  isReadOnly?: boolean;
-  coinSelectorDisabled?: boolean;
   coin?: Coin | null;
   gasFee?: bigint;
-  showBalance?: boolean;
+  isReadOnly?: boolean;
   onInput?: (...args: any) => void;
   onChange?: (val: bigint | null) => void;
-  onChangeCoin?: (value: Coin) => void;
+  /**
+   * Coins for <CoinSelector />
+   */
+  showBalance?: boolean;
+  showMaxButton?: boolean;
+  onChangeCoin?: (coin: Coin) => void;
 };
 
 type DisplayType = "input" | "text";
-
-type CoinInputParameters = UseCoinParams &
-  NumberInputProps & {
-    value: string;
-    balance?: string;
-    displayType: DisplayType;
-    isReadOnly?: boolean;
-    coinSelectorDisable?: boolean;
-    showBalance?: boolean;
-    showMaxButton?: boolean;
-    autoFocus?: boolean;
-    isLoading?: boolean;
-    isAllowed?: (values: NumberFormatValues) => boolean;
-    onChange?: (val: string) => void;
-    setMaxBalance?: () => void;
-  };
 
 const parseValue = (value: string) => (value === "." ? "0." : value);
 
@@ -71,21 +61,18 @@ const formatValue = (amount: bigint | null | undefined) => {
 export function useCoinInput({
   amount: initialAmount,
   onChange,
-  isReadOnly,
-  showBalance = true,
   coin,
   gasFee,
+  isReadOnly,
   onInput,
+  showBalance,
+  showMaxButton,
+  onChangeCoin,
   ...params
 }: UseCoinParams) {
   const [amount, setAmount] = useState<bigint | null>(null);
-  const { data: balances } = useBalances({ enabled: showBalance });
+  const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
-
-  useEffect(() => {
-    // Enable value initialAmount to be null
-    if (initialAmount !== undefined) setAmount(initialAmount);
-  }, [initialAmount]);
 
   // TODO: consider real gas fee, replacing GAS_FEE variable.
   // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.
@@ -94,64 +81,82 @@ export function useCoinInput({
     return next > BigInt(0) ? next - (gasFee || BigInt(0)) : next;
   }
 
-  function getInputProps() {
-    const handleInputPropsChange = (val: string) => {
-      if (isReadOnly) return;
-      const next = val !== "" ? parseValueBigInt(val) : null;
-      if (typeof onChange === "function") {
-        onChange(next);
-      } else {
-        setAmount(next);
-      }
-    };
+  const handleInputPropsChange = (val: string) => {
+    if (isReadOnly) return;
+    const next = val !== "" ? parseValueBigInt(val) : null;
+    if (typeof onChange === "function") {
+      onChange(next);
+    } else {
+      setAmount(next);
+    }
+  };
 
+  function getInputProps() {
     return {
       ...params,
       coin,
-      isReadOnly,
       value: formatValue(amount),
       displayType: (isReadOnly ? "text" : "input") as DisplayType,
       onInput,
       onChange: handleInputPropsChange,
+      balance: formatValue(coinBalance?.amount || BigInt(0)),
       isAllowed: ({ value }: NumberFormatValues) =>
         parseValueBigInt(value) <= MAX_U64_VALUE,
-      setMaxBalance: () => {
+    } as CoinInputProps;
+  }
+
+  function getCoinSelectorProps() {
+    return {
+      coin,
+      isReadOnly,
+      showBalance,
+      showMaxButton,
+      onChange: onChangeCoin,
+      onSetMaxBalance: () => {
         onInput?.();
         handleInputPropsChange(formatValue(getSafeMaxBalance()));
       },
-      balance: formatValue(coinBalance?.amount || BigInt(0)),
-      showBalance,
-      showMaxButton: showBalance,
-    } as CoinInputParameters;
+    } as CoinSelectorProps;
   }
+
+  useEffect(() => {
+    // Enable value initialAmount to be null
+    if (initialAmount !== undefined) setAmount(initialAmount);
+  }, [initialAmount]);
 
   return {
     amount,
-    formatted: formatValue(amount),
     setAmount,
     getInputProps,
+    getCoinSelectorProps,
+    formatted: formatValue(amount),
     hasEnoughBalance: getSafeMaxBalance() >= (amount || BigInt(0)),
   };
 }
 
-export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
+type CoinInputProps = Omit<UseCoinParams, "onChange"> &
+  NumberInputProps & {
+    value: string;
+    balance?: string;
+    displayType: DisplayType;
+    autoFocus?: boolean;
+    isLoading?: boolean;
+    rightElement?: ReactNode;
+    isAllowed?: (values: NumberFormatValues) => boolean;
+    onChange?: (val: string) => void;
+  };
+
+export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
   (
     {
       value: initialValue,
       displayType,
       onChange,
-      coin,
       isAllowed,
-      onChangeCoin,
       onInput,
-      isReadOnly,
-      coinSelectorDisabled,
-      showMaxButton,
-      showBalance,
-      setMaxBalance,
-      balance,
       autoFocus,
       isLoading,
+      rightElement,
       ...props
     },
     ref
@@ -190,30 +195,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputParameters>(
             onInput={onInput}
           />
         )}
-        <div className={style.rightWrapper}>
-          <CoinSelector
-            value={coin}
-            onChange={onChangeCoin}
-            isReadOnly={isReadOnly || coinSelectorDisabled}
-          />
-          {(showBalance || showMaxButton) && (
-            <div className="flex items-center gap-2 mt-2">
-              {showBalance && (
-                <div className="text-xs text-gray-400">Balance: {balance}</div>
-              )}
-              {showMaxButton && (
-                <Button
-                  size="sm"
-                  onPress={setMaxBalance}
-                  className={style.maxButton}
-                  variant="ghost"
-                >
-                  Max
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
+        {rightElement}
       </div>
     );
   }

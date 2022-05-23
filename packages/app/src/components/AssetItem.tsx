@@ -1,4 +1,5 @@
 import { CoinInput, useCoinInput } from "./CoinInput";
+import { CoinSelector } from "./CoinSelector";
 
 import type { Coin } from "~/types";
 
@@ -12,13 +13,14 @@ export function AssetItem({ coin }: AssetItemProps) {
     coin,
     amount: coin.amount,
     isReadOnly: true,
+    showBalance: false,
+    showMaxButton: false,
   });
 
   return (
     <CoinInput
       {...input.getInputProps()}
-      showBalance={false}
-      showMaxButton={false}
+      rightElement={<CoinSelector {...input.getCoinSelectorProps()} />}
     />
   );
 }

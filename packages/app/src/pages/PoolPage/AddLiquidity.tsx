@@ -12,6 +12,7 @@ import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
+import { CoinSelector } from "~/components/CoinSelector";
 import { Spinner } from "~/components/Spinner";
 import { DECIMAL_UNITS, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
@@ -231,12 +232,15 @@ export default function AddLiquidity() {
       <div className="mt-6 mb-4">
         <CoinInput
           {...fromInput.getInputProps()}
+          rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
           autoFocus
-          coinSelectorDisabled={true}
         />
       </div>
       <div className="mb-6">
-        <CoinInput {...toInput.getInputProps()} coinSelectorDisabled={true} />
+        <CoinInput
+          {...toInput.getInputProps()}
+          rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
+        />
       </div>
       {poolInfo ? (
         <div className={style.info}>
