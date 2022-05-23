@@ -101,6 +101,7 @@ export default function AddLiquidity() {
 
   const fromInput = useCoinInput({
     coin: coinFrom,
+    disableWhenEth: true,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     gasFee: BigInt(1),
     onChange: handleChangeFromValue,
@@ -108,6 +109,7 @@ export default function AddLiquidity() {
 
   const toInput = useCoinInput({
     coin: coinTo,
+    disableWhenEth: true,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onChange: handleChangeToValue,
   });

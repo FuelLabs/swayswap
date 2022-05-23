@@ -1,10 +1,12 @@
 import { useButton } from "@react-aria/button";
-import { mergeRefs } from "@react-aria/utils";
+import { mergeProps, mergeRefs } from "@react-aria/utils";
 import type { AriaButtonProps } from "@react-types/button";
 import cx from "classnames";
 import { forwardRef, useRef } from "react";
 
 import { Spinner } from "./Spinner";
+
+import { omit } from "~/lib/utils";
 
 export type ButtonProps = AriaButtonProps<"button"> & {
   className?: string;
@@ -13,12 +15,6 @@ export type ButtonProps = AriaButtonProps<"button"> & {
   isFull?: boolean;
   isDisabled?: boolean;
   isLoading?: boolean;
-  /**
-   * TODO: use useDialog from react-aria instead
-   * @deprecated this is used here just because of Radix Dialog.Trigger use
-   * a prop called asChild as pass onClick as context
-   * */
-  onClick?: () => void;
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -36,11 +32,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const innerRef = useRef<HTMLButtonElement | null>(null);
     const { buttonProps, isPressed } = useButton(
-      {
-        ...props,
-        onPress: props.onClick ? props.onClick : props.onPress,
-        isDisabled,
-      },
+      { ...props, isDisabled },
       innerRef
     );
 
@@ -56,10 +48,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       "button--ghost": variant === "ghost",
     });
 
+    const customProps = omit(["onPress"], props);
+
     return (
       <button
         ref={mergeRefs(innerRef, ref)}
-        {...buttonProps}
+        {...mergeProps(customProps, buttonProps)}
         className={classes}
         aria-pressed={!isDisabled && isPressed}
         disabled={isDisabled}

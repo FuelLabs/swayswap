@@ -15,3 +15,10 @@ export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve
 export const relativeUrl = (path: string) => urljoin(PUBLIC_URL || '/', path);
 
 export const isSwayInfinity = (value: BigNumberish | null) => value?.toString() === MAX_U64_STRING;
+
+export function omit<T>(list: string[], props: T) {
+  return Object.entries(props).reduce((obj, [key, value]) => {
+    if (list.some((k) => k === key)) return obj;
+    return { ...obj, [key]: value };
+  }, {} as T) as T;
+}

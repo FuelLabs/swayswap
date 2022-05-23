@@ -14,7 +14,6 @@ import { ActiveInput } from "./types";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { InvertButton } from "~/components/InvertButton";
-import { CoinETH } from "~/lib/constants";
 import type { Coin } from "~/types";
 
 const style = {
@@ -58,6 +57,7 @@ export function SwapComponent({
 
   const fromInput = useCoinInput({
     coin: coinFrom,
+    disableWhenEth: true,
     onChangeCoin: (coin: Coin) => {
       setCoins([coin, coinTo]);
     },
@@ -69,6 +69,7 @@ export function SwapComponent({
 
   const toInput = useCoinInput({
     coin: coinTo,
+    disableWhenEth: true,
     onChangeCoin: (coin: Coin) => {
       setCoins([coinFrom, coin]);
     },
@@ -132,12 +133,7 @@ export function SwapComponent({
           {...fromInput.getInputProps()}
           {...(activeInput === ActiveInput.to && { isLoading })}
           autoFocus={activeInput === ActiveInput.from}
-          rightElement={
-            <CoinSelector
-              {...fromInput.getCoinSelectorProps()}
-              isReadOnly={coinFrom?.assetId === CoinETH}
-            />
-          }
+          rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
         />
       </div>
       <div className={style.switchDirection}>
@@ -148,12 +144,7 @@ export function SwapComponent({
           {...toInput.getInputProps()}
           {...(activeInput === ActiveInput.from && { isLoading })}
           autoFocus={activeInput === ActiveInput.to}
-          rightElement={
-            <CoinSelector
-              {...toInput.getCoinSelectorProps()}
-              isReadOnly={coinTo?.assetId === CoinETH}
-            />
-          }
+          rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
         />
       </div>
       <PricePerToken

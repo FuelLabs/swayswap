@@ -1,7 +1,7 @@
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { toBigInt } from "fuels";
 import type { ReactNode } from "react";
-import { forwardRef, useEffect, useState } from "react";
+import { useMemo, forwardRef, useEffect, useState } from "react";
 import type { NumberFormatValues } from "react-number-format";
 import NumberFormat from "react-number-format";
 
@@ -11,6 +11,7 @@ import { Spinner } from "./Spinner";
 
 import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
+import { CoinETH } from "~/lib/constants";
 import type { Coin } from "~/types";
 
 const style = {
@@ -36,6 +37,7 @@ type UseCoinParams = {
   showBalance?: boolean;
   showMaxButton?: boolean;
   onChangeCoin?: (coin: Coin) => void;
+  disableWhenEth?: boolean;
 };
 
 type DisplayType = "input" | "text";
@@ -68,11 +70,13 @@ export function useCoinInput({
   showBalance,
   showMaxButton,
   onChangeCoin,
+  disableWhenEth,
   ...params
 }: UseCoinParams) {
   const [amount, setAmount] = useState<bigint | null>(null);
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
+  const isEth = useMemo(() => coin?.assetId === CoinETH, [coin?.assetId]);
 
   // TODO: consider real gas fee, replacing GAS_FEE variable.
   // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.
@@ -116,6 +120,11 @@ export function useCoinInput({
         onInput?.();
         handleInputPropsChange(formatValue(getSafeMaxBalance()));
       },
+      ...(disableWhenEth &&
+        isEth && {
+          isReadOnly: true,
+          tooltip: "Currently, we only support ETH to TOKEN.",
+        }),
     } as CoinSelectorProps;
   }
 
