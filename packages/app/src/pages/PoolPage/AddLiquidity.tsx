@@ -2,7 +2,8 @@
 import classNames from "classnames";
 import { formatUnits } from "ethers/lib/utils";
 import { toNumber } from "fuels";
-import { useState } from "react";
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { RiCheckFill } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
@@ -10,10 +11,14 @@ import { useMutation, useQuery } from "react-query";
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { Spinner } from "~/components/Spinner";
-import { DECIMAL_UNITS, ONE_ASSET } from "~/config";
+import { DECIMAL_UNITS, ONE_ASSET, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
+import { useBalances } from "~/hooks/useBalances";
+import { calculateRatio } from "~/lib/asset";
 import assets from "~/lib/CoinsMetadata";
 import type { Coin } from "~/types";
+import { Pages } from "~/types/pages";
+import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -57,6 +62,10 @@ function PoolLoader({
 }
 
 export default function AddLiquidity() {
+  const balances = useBalances();
+  const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
+  const [toInitialAmount, setToInitialAmount] = useAtom(poolToAmountAtom);
+
   const contract = useContract()!;
 
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
@@ -65,20 +74,45 @@ export default function AddLiquidity() {
   ]);
 
   const [stage, setStage] = useState(0);
-  const { data: poolInfo } = useQuery("PoolPage-poolInfo", () =>
+  const { data: poolInfo, refetch: refetchPoolInfo } = useQuery("PoolPage-poolInfo", () =>
     contract.callStatic.get_info()
   );
+
+  const handleChangeFromValue = (val: bigint | null) => {
+    fromInput.setAmount(val);
+
+    if (reservesFromToRatio) {
+      const _val = val || BigInt(0);
+      const newToValue = Math.round(toNumber(_val) / reservesFromToRatio);
+      toInput.setAmount(BigInt(newToValue));
+    }
+  }
+  const handleChangeToValue = (val: bigint | null) => {
+    toInput.setAmount(val);
+
+    if (reservesFromToRatio) {
+      const _val = val || BigInt(0);
+      const newFromValue = Math.round(toNumber(_val) * reservesFromToRatio);
+      fromInput.setAmount(BigInt(newFromValue));
+    }
+  }
 
   const fromInput = useCoinInput({
     coin: coinFrom,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     gasFee: BigInt(1),
+    onChange: handleChangeFromValue
   });
 
   const toInput = useCoinInput({
     coin: coinTo,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
+    onChange: handleChangeToValue
   });
+
+  const reservesFromToRatio = calculateRatio(poolInfo?.eth_reserve, poolInfo?.token_reserve);
+  const reservesToFromRatio = calculateRatio(poolInfo?.token_reserve, poolInfo?.eth_reserve);
+  const addLiquidityRatio = calculateRatio(fromInput.amount, toInput.amount);
 
   const addLiquidityMutation = useMutation(
     async () => {
@@ -109,6 +143,10 @@ export default function AddLiquidity() {
     {
       onSuccess: () => {
         toast.success("New pool created!");
+        fromInput.setAmount(BigInt(0));
+        toInput.setAmount(BigInt(0));
+        refetchPoolInfo();
+        balances.refetch();
       },
       onError: (e: any) => {
         const errors = e?.response?.errors;
@@ -127,26 +165,45 @@ export default function AddLiquidity() {
     }
   );
 
-  const handleCreatePool = () => {
-    const fromAmount = fromInput.amount;
-    const toAmount = toInput.amount;
+  useEffect(() => {
+    fromInput.setAmount(fromInitialAmount);
+    toInput.setAmount(toInitialAmount);
+  }, []);
 
-    if (!fromAmount) {
-      throw new Error('"fromAmount" is required');
-    }
-    if (!toAmount) {
-      throw new Error('"toAmount" is required');
-    }
+  useEffect(() => {
+    setFromInitialAmount(fromInput.amount);
+    setToInitialAmount(toInput.amount);
+  }, [fromInput.amount, toInput.amount]);
 
+  const validateCreatePool = () => {
+    const errors = [];
+
+    if (!fromInput.amount) {
+      errors.push(`Enter ${coinFrom.name} amount`);
+    }
+    if (!toInput.amount) {
+      errors.push(`Enter ${coinTo.name} amount`);
+    }
     if (!fromInput.hasEnoughBalance) {
-      throw new Error(`Insufficient ${coinFrom.name} balance`);
+      errors.push(`Insufficient ${coinFrom.name} balance`);
     }
     if (!toInput.hasEnoughBalance) {
-      throw new Error(`Insufficient ${coinTo.name} balance`);
+      errors.push(`Insufficient ${coinTo.name} balance`);
     }
 
-    addLiquidityMutation.mutate();
-  };
+    if (reservesFromToRatio) {
+      const minRatio = reservesFromToRatio * (1 - SLIPPAGE_TOLERANCE);
+      const maxRatio = reservesFromToRatio * (1 + SLIPPAGE_TOLERANCE);
+
+      if ( addLiquidityRatio < minRatio || addLiquidityRatio > maxRatio ) {
+        errors.push(`Entered ratio doesn't match pool`);
+      }
+    }
+
+    return errors;
+  }
+
+  const errorsCreatePull = validateCreatePool();
 
   return addLiquidityMutation.isLoading ? (
     <div className="mt-6 mb-8 flex justify-center">
@@ -193,26 +250,12 @@ export default function AddLiquidity() {
               <div className="flex flex-col">
                 <span>
                   <>
-                    ETH/DAI:{" "}
-                    {
-                      +(
-                        toNumber(ONE_ASSET * poolInfo.eth_reserve) /
-                        toNumber(poolInfo.token_reserve) /
-                        toNumber(ONE_ASSET)
-                      ).toFixed(6)
-                    }
+                    ETH/DAI: {reservesFromToRatio.toFixed(6)}
                   </>
                 </span>
                 <span>
                   <>
-                    DAI/ETH:{" "}
-                    {
-                      +(
-                        toNumber(ONE_ASSET * poolInfo.token_reserve) /
-                        toNumber(poolInfo.eth_reserve) /
-                        toNumber(ONE_ASSET)
-                      ).toFixed(6)
-                    }
+                    DAI/ETH: {reservesToFromRatio.toFixed(6)}
                   </>
                 </span>
               </div>
@@ -221,17 +264,18 @@ export default function AddLiquidity() {
         </div>
       ) : null}
       <Button
-        isDisabled={!fromInput.hasEnoughBalance || !toInput.hasEnoughBalance}
+        isDisabled={!!errorsCreatePull.length}
         isFull
         size="lg"
         variant="primary"
-        onPress={handleCreatePool}
+        onPress={errorsCreatePull.length ? undefined : () => addLiquidityMutation.mutate()}
       >
-        {!fromInput.hasEnoughBalance
-          ? `Insufficient ${coinFrom.name} balance`
-          : !toInput.hasEnoughBalance
-          ? `Insufficient ${coinTo.name} balance`
-          : "Confirm"}
+        {errorsCreatePull.length ?
+          errorsCreatePull[0] :
+          reservesFromToRatio ?
+            'Add liquidity' :
+            'Create liquidity'
+        }
       </Button>
     </>
   );

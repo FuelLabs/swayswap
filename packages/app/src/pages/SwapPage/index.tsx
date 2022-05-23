@@ -1,4 +1,3 @@
-import type { CoinQuantity } from "fuels";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
@@ -7,19 +6,63 @@ import { useMutation, useQuery } from "react-query";
 import { SwapComponent } from "./SwapComponent";
 import { queryPreviewAmount, swapTokens } from "./queries";
 import type { SwapState } from "./types";
-import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { useContract } from "~/context/AppContext";
-import { useBalances } from "~/hooks/useBalances";
 import useDebounce from "~/hooks/useDebounce";
-import { sleep } from "~/lib/utils";
+import { isSwayInfinity, sleep } from "~/lib/utils";
 
-const getBalanceAsset = (
-  balances: CoinQuantity[] | undefined,
-  assetId: string
-) => balances?.find((item) => item.assetId === assetId);
+type StateParams = {
+  swapState: SwapState | null;
+  previewAmount: bigint | null;
+  hasLiquidity: boolean;
+};
+
+enum ValidationStateEnum {
+  SelectToken = 0,
+  EnterAmount = 1,
+  InsufficientBalance = 2,
+  InsufficientLiquidity = 3,
+  Swap = 4,
+}
+
+const getValidationText = (
+  state: ValidationStateEnum,
+  swapState: SwapState | null
+) => {
+  switch (state) {
+    case ValidationStateEnum.SelectToken:
+      return "Select token";
+    case ValidationStateEnum.EnterAmount:
+      return "Enter amount";
+    case ValidationStateEnum.InsufficientBalance:
+      return `Insufficient ${swapState?.coin.symbol || ""} balance`;
+    case ValidationStateEnum.InsufficientLiquidity:
+      return "Insufficient liquidity";
+    default:
+      return "Swap";
+  }
+};
+
+const getValidationState = ({
+  swapState,
+  previewAmount,
+  hasLiquidity,
+}: StateParams): ValidationStateEnum => {
+  if (!swapState?.to || !swapState?.from) {
+    return ValidationStateEnum.SelectToken;
+  }
+  if (!swapState?.amount) {
+    return ValidationStateEnum.EnterAmount;
+  }
+  if (!swapState.hasBalance) {
+    return ValidationStateEnum.InsufficientBalance;
+  }
+  if (!hasLiquidity || isSwayInfinity(previewAmount))
+    return ValidationStateEnum.InsufficientLiquidity;
+  return ValidationStateEnum.Swap;
+};
 
 export default function SwapPage() {
   const contract = useContract()!;
@@ -27,7 +70,6 @@ export default function SwapPage() {
   const [swapState, setSwapState] = useState<SwapState | null>(null);
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
-  const { data: balances } = useBalances();
 
   const { isLoading } = useQuery(
     [
@@ -63,26 +105,18 @@ export default function SwapPage() {
     }
   );
 
-  const hasNotBalance =
-    !swapState ||
-    !swapState.amount ||
-    !getBalanceAsset(
-      balances,
-      swapState.direction === ActiveInput.to ? swapState.to : swapState.from
-    );
-
-  const shouldDisableButton =
-    isLoading || isSwaping || !hasLiquidity || !previewAmount || hasNotBalance;
-
-  function getButtonText() {
-    if (!hasLiquidity) return "Insufficient liquidity";
-    if (isSwaping) return "Loading...";
-    return "Swap";
-  }
-
   function handleSwap(state: SwapState) {
     setSwapState(state);
   }
+
+  const validationState = getValidationState({
+    swapState,
+    previewAmount,
+    hasLiquidity,
+  });
+
+  const shouldDisableSwap =
+    isLoading || validationState !== ValidationStateEnum.Swap;
 
   return (
     <Card className="min-w-[450px]">
@@ -97,12 +131,13 @@ export default function SwapPage() {
       />
       <Button
         isFull
+        isLoading={isSwaping}
         size="lg"
         variant="primary"
-        isDisabled={shouldDisableButton}
+        isDisabled={shouldDisableSwap}
         onPress={() => swap()}
       >
-        {getButtonText()}
+        {getValidationText(validationState, swapState)}
       </Button>
     </Card>
   );
