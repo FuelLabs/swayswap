@@ -23,12 +23,14 @@ type SwapComponentProps = {
   previewAmount?: bigint | null;
   onChange?: (swapState: SwapState) => void;
   isLoading?: boolean;
+  hasSwapped?: boolean;
 };
 
 export function SwapComponent({
   onChange,
   isLoading,
   previewAmount: previewValue,
+  hasSwapped
 }: SwapComponentProps) {
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [initialActiveInput, setInitialActiveInput] =
@@ -116,6 +118,13 @@ export function SwapComponent({
     }
     setTyping(false);
   }, [previewValue]);
+
+  useEffect(() => {
+    if (hasSwapped) {
+      toInput.setAmount(null);
+      fromInput.setAmount(null);
+    }
+  });
 
   return (
     <>

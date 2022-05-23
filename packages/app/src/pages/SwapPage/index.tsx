@@ -92,7 +92,7 @@ export default function SwapPage() {
     }
   );
 
-  const { mutate: swap, isLoading: isSwaping } = useMutation(
+  const { mutate: swap, isLoading: isSwaping, isSuccess: hasSwapped } = useMutation(
     async () => {
       if (!swapState) return;
       await swapTokens(contract, swapState);
@@ -127,6 +127,7 @@ export default function SwapPage() {
         previewAmount={previewAmount}
         onChange={handleSwap}
         isLoading={isLoading}
+        hasSwapped={hasSwapped}
       />
       <Button
         isFull
