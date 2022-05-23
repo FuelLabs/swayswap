@@ -114,6 +114,7 @@ export default function SwapPage() {
     previewAmount,
     hasLiquidity,
   });
+
   const shouldDisableSwap =
     isLoading || validationState !== ValidationStateEnum.Swap;
 
