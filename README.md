@@ -5,7 +5,6 @@
 [![Github Forks](https://img.shields.io/github/forks/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
 [![Github Stars](https://img.shields.io/github/stars/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
 
-
 ## Live links
 
 - [Latest release](https://fuellabs.github.io/swayswap)
