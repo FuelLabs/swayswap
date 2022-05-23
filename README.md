@@ -1,25 +1,8 @@
 # ⚡️ [SwaySwap](https://fuellabs.github.io/swayswap) ⚡️
 
-<<<<<<< HEAD
-[![License](https://img.shields.io/github/license/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
-[![Issues Open](https://img.shields.io/github/issues/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
-[![Github Forks](https://img.shields.io/github/forks/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
-[![Github Stars](https://img.shields.io/github/stars/FuelLabs/swayswap)](https://github.com/FuelLabs/swayswap)
-
-
-## Live links
-
-- [Latest release](https://fuellabs.github.io/swayswap)
-- [Master branch](https://swayswap.vercel.app/)
-
-Short description
-
-<!-- ![SwaySwap Interface](cover.png) -->
-=======
 [![build](https://github.com/FuelLabs/swayswap/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/FuelLabs/swayswap/actions/workflows/gh-pages.yml)
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 ![twitter](https://img.shields.io/twitter/follow/SwayLang?style=social)
->>>>>>> cc39359 (add contributing and readme)
 
 ## About the Project
 
