@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "react-query";
 
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
+import { CoinSelector } from "~/components/CoinSelector";
 import { Link } from "~/components/Link";
 import { CONTRACT_ID, DECIMAL_UNITS } from "~/config";
 import { useContract, useWallet } from "~/context/AppContext";
@@ -65,8 +66,8 @@ export default function RemoveLiquidityPage() {
       <div className="mt-4 mb-4">
         <CoinInput
           {...tokenInput.getInputProps()}
+          rightElement={<CoinSelector {...tokenInput.getCoinSelectorProps()} />}
           autoFocus
-          coinSelectorDisabled={true}
         />
         <Link
           className="inline-flex mt-2 ml-2"
