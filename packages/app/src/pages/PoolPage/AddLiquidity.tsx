@@ -75,10 +75,11 @@ export default function AddLiquidity() {
   ]);
 
   const [stage, setStage] = useState(0);
-  const { data: poolInfo, refetch: refetchPoolInfo } = useQuery(
-    "PoolPage-poolInfo",
-    () => contract.callStatic.get_info()
-  );
+  const {
+    data: poolInfo,
+    refetch: refetchPoolInfo,
+    isLoading: isLoadingPoolInfo,
+  } = useQuery("PoolPage-poolInfo", () => contract.callStatic.get_info());
 
   const handleChangeFromValue = (val: bigint | null) => {
     fromInput.setAmount(val);
@@ -283,7 +284,7 @@ export default function AddLiquidity() {
           ? "Add liquidity"
           : "Create liquidity"}
       </Button>
-      {!reservesFromToRatio ? (
+      {!reservesFromToRatio && !isLoadingPoolInfo ? (
         <div className={style.createPoolInfo}>
           <h4 className="text-orange-400 mb-2 font-bold">
             You are creating a new pool
