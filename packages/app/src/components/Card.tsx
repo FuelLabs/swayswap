@@ -26,10 +26,10 @@ type CardComponent = FC<CardProps> & {
 
 export const Card: CardComponent = ({ className, children }) => {
   const title = Children.toArray(children)?.find(
-    (child: any) => child.type?.id === "CardTitle"
+    (child: any) => child.type?.id === "CardTitle" // eslint-disable-line @typescript-eslint/no-explicit-any
   );
   const customChildren = Children.toArray(children)?.filter(
-    (child: any) => child.type?.id !== "CardTitle"
+    (child: any) => child.type?.id !== "CardTitle" // eslint-disable-line @typescript-eslint/no-explicit-any
   );
 
   return (

@@ -21,7 +21,7 @@ export function mockImage() {
     }
 
     getAttribute(name: string) {
-      return name in this ? (this as any)[name] : null;
+      return name in this ? (this as any)[name] : null; // eslint-disable-line @typescript-eslint/no-explicit-any
     }
 
     constructor() {

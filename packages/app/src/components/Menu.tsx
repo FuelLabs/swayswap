@@ -5,7 +5,7 @@ import type { TreeProps, TreeState } from "@react-stately/tree";
 import { useTreeState } from "@react-stately/tree";
 import type { ItemProps, Node } from "@react-types/shared";
 import cx from "classnames";
-import type { FC, Key, ReactNode } from "react";
+import type { FC, Key, KeyboardEvent, ReactNode } from "react";
 import { useEffect, useRef } from "react";
 
 const style = {
@@ -40,7 +40,7 @@ function ListItem({ item, state, onAction, className }: ListItemProps) {
 
   const customProps = {
     onClick: item.props.onPress,
-    onKeyDown: (e: any) => {
+    onKeyDown: (e: KeyboardEvent) => {
       if (e.keyCode === 32 || e.key === "Enter") {
         item.props.onPress?.();
       }
@@ -59,6 +59,7 @@ function ListItem({ item, state, onAction, className }: ListItemProps) {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MenuProps = TreeProps<any> & {
   onAction?: (key: Key) => void;
   className?: string;
@@ -104,7 +105,7 @@ export const Menu: MenuComponent = ({
 };
 
 type ItemComponent = FC<
-  ItemProps<any> & { className?: string; onPress?: () => void }
+  ItemProps<any> & { className?: string; onPress?: () => void } // eslint-disable-line @typescript-eslint/no-explicit-any
 >;
 const Item: ItemComponent = RootItem;
 Menu.Item = Item;
