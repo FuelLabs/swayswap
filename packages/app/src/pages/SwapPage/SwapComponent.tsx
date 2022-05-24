@@ -25,7 +25,6 @@ type SwapComponentProps = {
   previewAmount?: bigint | null;
   onChange?: (swapState: SwapState) => void;
   isLoading?: boolean;
-  hasSwapped?: boolean;
 };
 
 export function SwapComponent({
