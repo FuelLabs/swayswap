@@ -1,3 +1,4 @@
+import { toBigInt } from "fuels";
 import { useAtom, useSetAtom } from "jotai";
 import { startTransition, useEffect } from "react";
 
@@ -6,6 +7,7 @@ import {
   swapAmountAtom,
   swapCoinsAtom,
   swapIsTypingAtom,
+  useSetTyping,
 } from "./jotai";
 import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
@@ -13,6 +15,8 @@ import { ActiveInput } from "./types";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { InvertButton } from "~/components/InvertButton";
+import { NETWORK_FEE } from "~/config";
+import { CoinETH } from "~/lib/constants";
 import type { Coin } from "~/types";
 
 const style = {
@@ -28,12 +32,12 @@ type SwapComponentProps = {
 export function SwapComponent({
   onChange,
   isLoading,
-  previewAmount: previewValue,
+  previewAmount,
 }: SwapComponentProps) {
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [activeInput, setActiveInput] = useAtom(swapActiveInputAtom);
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
-  const setTyping = useSetAtom(swapIsTypingAtom);
+  const setTyping = useSetTyping();
 
   const handleInvertCoins = () => {
     if (activeInput === ActiveInput.to) {
@@ -57,6 +61,7 @@ export function SwapComponent({
   const fromInput = useCoinInput({
     coin: coinFrom,
     disableWhenEth: true,
+    gasFee: toBigInt(NETWORK_FEE),
     onChangeCoin: (coin: Coin) => {
       setCoins([coin, coinTo]);
     },
@@ -89,7 +94,6 @@ export function SwapComponent({
   useEffect(() => {
     const currentInput = activeInput === ActiveInput.from ? fromInput : toInput;
     const amount = currentInput.amount;
-    const coin = activeInput === ActiveInput.from ? coinFrom : coinTo;
 
     // This is used to reset preview amount when set first input value for null
     if (activeInput === ActiveInput.from && amount === null) {
@@ -102,13 +106,11 @@ export function SwapComponent({
     // Set value to hydrate
     setInitialAmount(amount);
 
-    if (coin && coinFrom && coinTo) {
+    if (coinFrom && coinTo) {
       // Call on onChange
       onChange?.({
         amount,
-        coin,
-        from: coinFrom?.assetId,
-        to: coinTo?.assetId,
+        amountFrom: fromInput.amount,
         coinFrom,
         coinTo,
         direction: activeInput,
@@ -118,14 +120,12 @@ export function SwapComponent({
   }, [fromInput.amount, toInput.amount, coinFrom, coinTo]);
 
   useEffect(() => {
-    if (previewValue == null) return;
     if (activeInput === ActiveInput.from) {
-      toInput.setAmount(previewValue);
+      toInput.setAmount(previewAmount || null);
     } else {
-      fromInput.setAmount(previewValue);
+      fromInput.setAmount(previewAmount || null);
     }
-    setTyping(false);
-  }, [previewValue]);
+  }, [previewAmount]);
 
   return (
     <>

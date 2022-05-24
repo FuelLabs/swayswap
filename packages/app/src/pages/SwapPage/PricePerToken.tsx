@@ -27,7 +27,7 @@ function getPricePerToken(
       : BigNumber.from(toAmount || 0).toNumber() /
         BigNumber.from(fromAmount || 0).toNumber();
   const price = ratio * toNumber(ONE_ASSET);
-  return (price / toNumber(ONE_ASSET)).toFixed(DECIMAL_UNITS);
+  return (price / toNumber(ONE_ASSET)).toFixed(6);
 }
 
 type PricePerTokenProps = {
@@ -35,6 +35,7 @@ type PricePerTokenProps = {
   fromAmount?: bigint | null;
   toCoin?: string;
   toAmount?: bigint | null;
+  isLoading?: boolean;
 };
 
 export function PricePerToken({
@@ -42,6 +43,7 @@ export function PricePerToken({
   fromAmount,
   toCoin,
   toAmount,
+  isLoading,
 }: PricePerTokenProps) {
   const [direction, setDirection] = useState<ActiveInput>(ActiveInput.to);
   const isTyping = useAtomValue(swapIsTypingAtom);
@@ -56,7 +58,7 @@ export function PricePerToken({
     );
   }
 
-  if (isTyping) return null;
+  if (isTyping || isLoading) return null;
   if (!fromAmount || !toAmount) return null;
 
   return (

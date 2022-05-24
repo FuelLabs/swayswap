@@ -1,12 +1,14 @@
+import classNames from "classnames";
 import type { ReactNode } from "react";
 
 type TableItemProps = {
   title: ReactNode;
   value: ReactNode;
+  className?: string;
 };
 
-export const PreviewItem = ({ title, value }: TableItemProps) => (
-  <div className="flex">
+export const PreviewItem = ({ title, value, className }: TableItemProps) => (
+  <div className={classNames("flex", className)}>
     <div>{title}</div>
     <div className="flex-auto text-right">{value}</div>
   </div>
