@@ -12,6 +12,7 @@ import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
+import { CoinSelector } from "~/components/CoinSelector";
 import { Spinner } from "~/components/Spinner";
 import { DECIMAL_UNITS, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
@@ -25,6 +26,7 @@ const style = {
   content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
   info: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg`,
+  createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg max-w-[400px]`,
 };
 
 function PoolLoader({
@@ -74,10 +76,11 @@ export default function AddLiquidity() {
   ]);
 
   const [stage, setStage] = useState(0);
-  const { data: poolInfo, refetch: refetchPoolInfo } = useQuery(
-    "PoolPage-poolInfo",
-    () => contract.callStatic.get_info()
-  );
+  const {
+    data: poolInfo,
+    refetch: refetchPoolInfo,
+    isLoading: isLoadingPoolInfo,
+  } = useQuery("PoolPage-poolInfo", () => contract.callStatic.get_info());
 
   const handleChangeFromValue = (val: bigint | null) => {
     fromInput.setAmount(val);
@@ -100,6 +103,7 @@ export default function AddLiquidity() {
 
   const fromInput = useCoinInput({
     coin: coinFrom,
+    disableWhenEth: true,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     gasFee: BigInt(1),
     onChange: handleChangeFromValue,
@@ -107,6 +111,7 @@ export default function AddLiquidity() {
 
   const toInput = useCoinInput({
     coin: coinTo,
+    disableWhenEth: true,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onChange: handleChangeToValue,
   });
@@ -148,24 +153,37 @@ export default function AddLiquidity() {
     },
     {
       onSuccess: () => {
-        toast.success("New pool created!");
+        toast.success(
+          reservesFromToRatio
+            ? "Added liquidity to the pool."
+            : "New pool created."
+        );
         fromInput.setAmount(BigInt(0));
         toInput.setAmount(BigInt(0));
-        refetchPoolInfo();
-        balances.refetch();
       },
       onError: (e: any) => {
         const errors = e?.response?.errors;
 
-        if (errors.length) {
+        if (errors?.length) {
           if (errors[0].message === "enough coins could not be found") {
             toast.error(
-              "Not enough balance in your wallet to create this pool."
+              `Not enough balance in your wallet to ${
+                reservesFromToRatio ? "add liquidity to" : "create"
+              } this pool.`
             );
           }
+        } else {
+          toast.error(
+            `Error when trying to ${
+              reservesFromToRatio ? "add liquidity to" : "create"
+            } this pool.`
+          );
         }
       },
-      onSettled: () => {
+      onSettled: async () => {
+        await refetchPoolInfo();
+        await balances.refetch();
+
         setStage(0);
       },
     }
@@ -231,14 +249,17 @@ export default function AddLiquidity() {
       <div className="mt-6 mb-4">
         <CoinInput
           {...fromInput.getInputProps()}
+          rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
           autoFocus
-          coinSelectorDisabled={true}
         />
       </div>
       <div className="mb-6">
-        <CoinInput {...toInput.getInputProps()} coinSelectorDisabled={true} />
+        <CoinInput
+          {...toInput.getInputProps()}
+          rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
+        />
       </div>
-      {poolInfo ? (
+      {poolInfo && reservesFromToRatio ? (
         <div className={style.info}>
           <h4 className="text-white mb-2 font-bold">Reserves</h4>
           <div className="flex">
@@ -282,6 +303,17 @@ export default function AddLiquidity() {
           ? "Add liquidity"
           : "Create liquidity"}
       </Button>
+      {!reservesFromToRatio && !isLoadingPoolInfo ? (
+        <div className={style.createPoolInfo}>
+          <h4 className="text-orange-400 mb-2 font-bold">
+            You are creating a new pool
+          </h4>
+          <div className="flex">
+            You are the first to provide liquidity to this pool. The ratio
+            between these tokens will set the price of this pool.
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
