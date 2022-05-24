@@ -13,13 +13,15 @@ import { useBalances } from "~/hooks/useBalances";
 import coins from "~/lib/CoinsMetadata";
 
 export default function RemoveLiquidityPage() {
-  const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>([]);
+  const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>(
+    []
+  );
   const balances = useBalances();
   const contract = useContract()!;
 
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
   const tokenInput = useCoinInput({
-    coin: liquidityToken
+    coin: liquidityToken,
   });
   const amount = tokenInput.amount;
 
@@ -63,7 +65,7 @@ export default function RemoveLiquidityPage() {
 
     return errors;
   };
-  
+
   useEffect(() => {
     setErrorsRemoveLiquidity(validateRemoveLiquidity());
   }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
@@ -103,11 +105,7 @@ export default function RemoveLiquidityPage() {
         }
         isDisabled={isRemoveButtonDisabled}
       >
-        {errorsRemoveLiquidity.length
-          ? errorsRemoveLiquidity[0]
-          : removeLiquidityMutation.isLoading
-          ? 'Removing...'
-          : 'Remove liquidity'}
+        {getButtonText()}
       </Button>
     </>
   );
