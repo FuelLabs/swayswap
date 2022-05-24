@@ -1,14 +1,12 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
-import { Link } from "~/components/Link";
-import { CONTRACT_ID, DECIMAL_UNITS } from "~/config";
-import { useContract, useWallet } from "~/context/AppContext";
+import { CONTRACT_ID } from "~/config";
+import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import coins from "~/lib/CoinsMetadata";
 
