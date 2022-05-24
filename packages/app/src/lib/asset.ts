@@ -1,15 +1,14 @@
-import { toNumber } from "fuels"
-import { ONE_ASSET } from "~/config"
+import { toNumber } from 'fuels';
 
-export const calculateRatio = (fromAmount?: bigint | null, toAmount?: bigint | null) => {
-  const _fromAmount = fromAmount || BigInt(0);
-  const _toAmount = toAmount || BigInt(0);
+import { ONE_ASSET } from '~/config';
 
-  const ratio = (
-    toNumber(ONE_ASSET * _fromAmount) /
-    toNumber(_toAmount) /
-    toNumber(ONE_ASSET)
-  );
+export const calculateRatio = (
+  initialFromAmount?: bigint | null,
+  initialToAmount?: bigint | null
+) => {
+  const fromAmount = initialFromAmount || BigInt(0);
+  const toAmount = initialToAmount || BigInt(0);
+  const ratio = toNumber(ONE_ASSET * fromAmount) / toNumber(toAmount) / toNumber(ONE_ASSET);
 
-  return (isNaN(ratio) || !isFinite(ratio)) ? 0 : ratio;
-}
+  return Number.isNaN(ratio) || !Number.isFinite(ratio) ? 0 : ratio;
+};
