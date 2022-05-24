@@ -15,11 +15,7 @@ import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { Spinner } from "~/components/Spinner";
-import {
-  CONTRACT_ID,
-  DECIMAL_UNITS,
-  SLIPPAGE_TOLERANCE,
-} from "~/config";
+import { CONTRACT_ID, DECIMAL_UNITS, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import assets from "~/lib/CoinsMetadata";
