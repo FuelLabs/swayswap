@@ -338,7 +338,7 @@ impl Exchange for Contract {
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
         let mut sold = 0;
-        let mut has_liquidity = false;
+        let mut has_liquidity = true;
         if (msg_asset_id().into() == ETH_ID) {
             sold = get_input_price(amount, eth_reserve, token_reserve);
             has_liquidity = sold < token_reserve;
@@ -356,14 +356,14 @@ impl Exchange for Contract {
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
         let mut sold = 0;
-        let mut has_liquidity = false;
+        let mut has_liquidity = true;
         if (msg_asset_id().into() == ETH_ID) {
             sold = get_output_price(amount, eth_reserve, token_reserve);
-            has_liquidity = sold < token_reserve;
+            has_liquidity = sold < eth_reserve;
 
         } else {
             sold = get_output_price(amount, token_reserve, eth_reserve);
-            has_liquidity = sold < eth_reserve;
+            has_liquidity = sold < token_reserve;
         }
         PreviewInfo {
             amount: sold,

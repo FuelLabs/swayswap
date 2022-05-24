@@ -1,3 +1,5 @@
+import type { CoinQuantity } from "fuels";
+import { toNumber } from "fuels";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
@@ -6,15 +8,18 @@ import { useMutation, useQuery } from "react-query";
 import { PricePerToken } from "./PricePerToken";
 import { SwapComponent } from "./SwapComponent";
 import { SwapPreview } from "./SwapPreview";
+import { calculatePriceWithSlippage } from "./helpers";
 import { queryPreviewAmount, swapTokens } from "./queries";
 import type { SwapInfo, SwapState } from "./types";
-import { ValidationStateEnum } from "./types";
+import { ActiveInput, ValidationStateEnum } from "./types";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { useContract } from "~/context/AppContext";
+import { useBalances } from "~/hooks/useBalances";
 import useDebounce from "~/hooks/useDebounce";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
+import { useSlippage } from "~/hooks/useSlippage";
 import { ZERO } from "~/lib/constants";
 import { isSwayInfinity, sleep } from "~/lib/utils";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
@@ -23,6 +28,8 @@ type StateParams = {
   swapState: SwapState | null;
   previewAmount: bigint | null;
   hasLiquidity: boolean;
+  slippage: number;
+  balances?: CoinQuantity[];
 };
 
 const getValidationText = (
@@ -48,6 +55,8 @@ const getValidationText = (
 const getValidationState = ({
   swapState,
   previewAmount,
+  slippage,
+  balances,
   hasLiquidity,
 }: StateParams): ValidationStateEnum => {
   if (!swapState?.coinFrom || !swapState?.coinTo) {
@@ -56,10 +65,19 @@ const getValidationState = ({
   if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
-  if (previewAmount === ZERO) {
-    return ValidationStateEnum.InsufficientAmount;
-  }
-  if (!swapState.hasBalance) {
+  if (
+    !swapState.hasBalance ||
+    (swapState.direction === ActiveInput.to &&
+      calculatePriceWithSlippage(
+        previewAmount || ZERO,
+        slippage,
+        swapState.direction
+      ) >
+        toNumber(
+          balances?.find((coin) => coin.assetId === swapState.coinFrom.assetId)
+            ?.amount || ZERO
+        ))
+  ) {
     return ValidationStateEnum.InsufficientBalance;
   }
   if (!hasLiquidity || isSwayInfinity(previewAmount))
@@ -84,6 +102,8 @@ export default function SwapPage() {
     }),
     [poolInfo, previewInfo, swapState]
   );
+  const slippage = useSlippage();
+  const { data: balances } = useBalances();
 
   const { isLoading } = useQuery(
     [
@@ -130,6 +150,8 @@ export default function SwapPage() {
 
   const validationState = getValidationState({
     swapState,
+    balances,
+    slippage: slippage.value,
     previewAmount,
     hasLiquidity,
   });

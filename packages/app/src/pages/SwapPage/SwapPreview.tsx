@@ -2,13 +2,14 @@ import { formatUnits } from "ethers/lib/utils";
 import { useAtomValue } from "jotai";
 import { BsArrowDown } from "react-icons/bs";
 
-import { calculatePriceImpact } from "./helpers";
+import { calculatePriceImpact, calculatePriceWithSlippage } from "./helpers";
 import { swapIsTypingAtom } from "./jotai";
 import type { SwapInfo } from "./types";
 import { ActiveInput } from "./types";
 
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { DECIMAL_UNITS, NETWORK_FEE } from "~/config";
+import { useSlippage } from "~/hooks/useSlippage";
 import { ZERO } from "~/lib/constants";
 
 type SwapPreviewProps = {
@@ -19,6 +20,7 @@ type SwapPreviewProps = {
 export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
   const { amount, previewAmount, direction, coinFrom, coinTo } = swapInfo;
   const isTyping = useAtomValue(swapIsTypingAtom);
+  const slippage = useSlippage();
 
   if (
     !coinFrom ||
@@ -56,8 +58,15 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
             direction === ActiveInput.from
               ? "Minimum received after slippage"
               : "Maximum sent after slippage"
-          }:`}
-          value={`${formatUnits(previewAmount, DECIMAL_UNITS)} ${
+          } (${slippage.formatted}):`}
+          value={`${formatUnits(
+            calculatePriceWithSlippage(
+              previewAmount,
+              slippage.value,
+              direction
+            ),
+            DECIMAL_UNITS
+          )} ${
             direction === ActiveInput.from ? coinTo.symbol : coinFrom.symbol
           }`}
         />

@@ -8,7 +8,7 @@ import { swapIsTypingAtom } from "./jotai";
 import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
-import { DECIMAL_UNITS, ONE_ASSET } from "~/config";
+import { ONE_ASSET } from "~/config";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,

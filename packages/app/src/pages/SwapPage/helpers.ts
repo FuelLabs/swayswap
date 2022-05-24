@@ -38,3 +38,17 @@ export const calculatePriceImpact = ({
   }
   return getPriceImpact(amount, previewAmount, eth_reserve, token_reserve);
 };
+
+export const calculatePriceWithSlippage = (
+  amount: bigint,
+  slippage: number,
+  direction: ActiveInput
+) => {
+  let total = 0;
+  if (direction === ActiveInput.from) {
+    total = toNumber(amount) * (1 - slippage);
+  } else {
+    total = toNumber(amount) * (1 + slippage);
+  }
+  return Math.trunc(total);
+};

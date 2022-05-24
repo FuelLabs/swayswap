@@ -1,12 +1,11 @@
 import { toBigInt } from "fuels";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { startTransition, useEffect } from "react";
 
 import {
   swapActiveInputAtom,
   swapAmountAtom,
   swapCoinsAtom,
-  swapIsTypingAtom,
   useSetTyping,
 } from "./jotai";
 import type { SwapState } from "./types";
@@ -16,7 +15,7 @@ import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { InvertButton } from "~/components/InvertButton";
 import { NETWORK_FEE } from "~/config";
-import { CoinETH } from "~/lib/constants";
+import { CoinETH, ZERO } from "~/lib/constants";
 import type { Coin } from "~/types";
 
 const style = {
@@ -40,6 +39,7 @@ export function SwapComponent({
   const setTyping = useSetTyping();
 
   const handleInvertCoins = () => {
+    setTyping(true);
     if (activeInput === ActiveInput.to) {
       const from = fromInput.amount;
       startTransition(() => {
@@ -61,7 +61,7 @@ export function SwapComponent({
   const fromInput = useCoinInput({
     coin: coinFrom,
     disableWhenEth: true,
-    gasFee: toBigInt(NETWORK_FEE),
+    gasFee: coinFrom?.assetId === CoinETH ? toBigInt(NETWORK_FEE) : ZERO,
     onChangeCoin: (coin: Coin) => {
       setCoins([coin, coinTo]);
     },
