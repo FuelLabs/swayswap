@@ -1,3 +1,4 @@
+import cx from "classnames";
 import { useState, useEffect } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
@@ -18,7 +19,11 @@ type CoinSelectorProps = {
   onChange?: (coin: Coin) => void;
 };
 
-export function CoinSelector({ value, isReadOnly }: CoinSelectorProps) {
+export function CoinSelector({
+  value,
+  isReadOnly,
+  onChange,
+}: CoinSelectorProps) {
   const [selected, setSelected] = useState<Coin | null>(null);
   const dialog = useDialog();
 
@@ -28,8 +33,10 @@ export function CoinSelector({ value, isReadOnly }: CoinSelectorProps) {
   }, [value]);
 
   function handleSelect(assetId: string) {
+    const next = CoinsMetadata.find((coin) => coin.assetId === assetId)!;
     dialog.close();
-    setSelected(CoinsMetadata.find((coin) => coin.assetId === assetId)!);
+    setSelected(next);
+    onChange?.(next);
   }
 
   return (
@@ -37,7 +44,7 @@ export function CoinSelector({ value, isReadOnly }: CoinSelectorProps) {
       <Button
         {...dialog.openButtonProps}
         size="md"
-        className="coin-selector"
+        className={cx("coin-selector", { "coin-selector--empty": !selected })}
         isDisabled={isReadOnly}
       >
         {selected && selected.img && (
@@ -49,8 +56,12 @@ export function CoinSelector({ value, isReadOnly }: CoinSelectorProps) {
             width={20}
           />
         )}
-        <div className="ml-2">{selected?.name}</div>
-        {!isReadOnly && <FiChevronDown className="text-gray-500" />}
+        {selected ? (
+          <div className="ml-2">{selected?.name}</div>
+        ) : (
+          <div className="ml-2">Select token</div>
+        )}
+        {!isReadOnly && <FiChevronDown className="text-current" />}
       </Button>
       <Dialog {...dialog.dialogProps}>
         <Dialog.Content>

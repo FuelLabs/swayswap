@@ -8,17 +8,17 @@ import toast from "react-hot-toast";
 import { RiCheckFill } from "react-icons/ri";
 import { useMutation, useQuery } from "react-query";
 
+import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
+
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { Spinner } from "~/components/Spinner";
-import { DECIMAL_UNITS, ONE_ASSET, SLIPPAGE_TOLERANCE } from "~/config";
+import { DECIMAL_UNITS, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
-import { calculateRatio } from "~/lib/asset";
 import assets from "~/lib/CoinsMetadata";
+import { calculateRatio } from "~/lib/asset";
 import type { Coin } from "~/types";
-import { Pages } from "~/types/pages";
-import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -83,8 +83,8 @@ export default function AddLiquidity() {
     fromInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const _val = val || BigInt(0);
-      const newToValue = Math.round(toNumber(_val) / reservesFromToRatio);
+      const value = val || BigInt(0);
+      const newToValue = Math.round(toNumber(value) / reservesFromToRatio);
       toInput.setAmount(BigInt(newToValue));
     }
   };
@@ -92,8 +92,8 @@ export default function AddLiquidity() {
     toInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const _val = val || BigInt(0);
-      const newFromValue = Math.round(toNumber(_val) * reservesFromToRatio);
+      const value = val || BigInt(0);
+      const newFromValue = Math.round(toNumber(value) * reservesFromToRatio);
       fromInput.setAmount(BigInt(newFromValue));
     }
   };
@@ -125,7 +125,6 @@ export default function AddLiquidity() {
     async () => {
       const fromAmount = fromInput.amount;
       const toAmount = toInput.amount;
-
       if (!fromAmount || !toAmount) return;
 
       // TODO: Combine all transactions on single tx leverage by scripts

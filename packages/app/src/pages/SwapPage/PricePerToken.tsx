@@ -2,7 +2,7 @@ import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { useAtomValue } from "jotai";
 import { useState } from "react";
-import { BiRefresh } from "react-icons/bi";
+import { AiOutlineSwap } from "react-icons/ai";
 
 import { swapIsTypingAtom } from "./jotai";
 import { ActiveInput } from "./types";
@@ -64,7 +64,7 @@ export function PricePerToken({
         <span className="text-gray-200">{pricePerToken}</span> {to}
       </div>
       <Button size="sm" className="h-auto p-0 border-none" onPress={toggle}>
-        <BiRefresh size={20} />
+        <AiOutlineSwap size={20} />
       </Button>
     </div>
   );

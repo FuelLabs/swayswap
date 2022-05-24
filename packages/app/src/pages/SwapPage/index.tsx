@@ -1,9 +1,11 @@
+import { useSetAtom } from "jotai";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 
 import { SwapComponent } from "./SwapComponent";
+import { swapHasSwappedAtom } from "./jotai";
 import { queryPreviewAmount, swapTokens } from "./queries";
 import type { SwapState } from "./types";
 
@@ -13,8 +15,6 @@ import { useContract } from "~/context/AppContext";
 import useDebounce from "~/hooks/useDebounce";
 import { isSwayInfinity, sleep } from "~/lib/utils";
 import { queryClient } from "~/queryClient";
-import { useSetAtom } from "jotai";
-import { swapHasSwappedAtom } from "./jotai";
 
 type StateParams = {
   swapState: SwapState | null;
@@ -96,10 +96,7 @@ export default function SwapPage() {
     }
   );
 
-  const {
-    mutate: swap,
-    isLoading: isSwaping
-  } = useMutation(
+  const { mutate: swap, isLoading: isSwaping } = useMutation(
     async () => {
       if (!swapState) return;
       await swapTokens(contract, swapState);
@@ -123,6 +120,7 @@ export default function SwapPage() {
     previewAmount,
     hasLiquidity,
   });
+
   const shouldDisableSwap =
     isLoading || validationState !== ValidationStateEnum.Swap;
 
