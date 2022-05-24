@@ -1,14 +1,13 @@
-import { BigNumber } from "ethers";
-import { formatUnits } from "ethers/lib/utils";
-import { useAtomValue } from "jotai";
+import { toNumber } from "fuels";
 import { useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 
-import { swapIsTypingAtom } from "./jotai";
+import { useValueIsTyping } from "./jotai";
 import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
-import { DECIMAL_UNITS, ONE_ASSET } from "~/config";
+import { ONE_ASSET } from "~/config";
+import { divideBigInt } from "~/lib/utils";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
@@ -22,10 +21,10 @@ function getPricePerToken(
   if (!toAmount || !fromAmount) return "";
   const ratio =
     direction === ActiveInput.from
-      ? BigNumber.from(fromAmount || 0).div(toAmount || 0)
-      : BigNumber.from(toAmount || 0).div(fromAmount || 0);
-  const price = ratio.mul(ONE_ASSET);
-  return formatUnits(price, DECIMAL_UNITS);
+      ? divideBigInt(fromAmount, toAmount)
+      : divideBigInt(toAmount, fromAmount);
+  const price = ratio * toNumber(ONE_ASSET);
+  return (price / toNumber(ONE_ASSET)).toFixed(6);
 }
 
 type PricePerTokenProps = {
@@ -33,6 +32,7 @@ type PricePerTokenProps = {
   fromAmount?: bigint | null;
   toCoin?: string;
   toAmount?: bigint | null;
+  isLoading?: boolean;
 };
 
 export function PricePerToken({
@@ -40,9 +40,10 @@ export function PricePerToken({
   fromAmount,
   toCoin,
   toAmount,
+  isLoading,
 }: PricePerTokenProps) {
   const [direction, setDirection] = useState<ActiveInput>(ActiveInput.to);
-  const isTyping = useAtomValue(swapIsTypingAtom);
+  const isTyping = useValueIsTyping();
 
   const pricePerToken = getPricePerToken(direction, fromAmount, toAmount);
   const from = direction === ActiveInput.from ? toCoin : fromCoin;
@@ -54,7 +55,7 @@ export function PricePerToken({
     );
   }
 
-  if (isTyping) return null;
+  if (isTyping || isLoading) return null;
   if (!fromAmount || !toAmount) return null;
 
   return (

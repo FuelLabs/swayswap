@@ -28,6 +28,8 @@ const TOKEN_ID = 0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c5
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
+// Liquidity miner fee apply to all swaps
+const LIQUIDITY_MINER_FEE = 333;
 
 ////////////////////////////////////////
 // Storage declarations
@@ -69,7 +71,7 @@ fn remove_reserve(token_id: b256, amount: u64) {
 
 // Calculate 0.3% fee
 fn calculate_amount_with_fee(amount: u64) -> u64 {
-    let fee: u64 = (amount / 333);
+    let fee: u64 = (amount / LIQUIDITY_MINER_FEE);
     amount - fee
 }
 
@@ -337,7 +339,7 @@ impl Exchange for Contract {
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
         let mut sold = 0;
-        let mut has_liquidity = false;
+        let mut has_liquidity = true;
         if (msg_asset_id().into() == ETH_ID) {
             sold = get_input_price(amount, eth_reserve, token_reserve);
             has_liquidity = sold < token_reserve;
@@ -347,7 +349,7 @@ impl Exchange for Contract {
         }
         PreviewInfo {
             amount: sold,
-            has_liquidity: has_liquidity
+            has_liquidity: has_liquidity,
         }
     }
 
@@ -355,18 +357,18 @@ impl Exchange for Contract {
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
         let mut sold = 0;
-        let mut has_liquidity = false;
+        let mut has_liquidity = true;
         if (msg_asset_id().into() == ETH_ID) {
             sold = get_output_price(amount, eth_reserve, token_reserve);
-            has_liquidity = sold < token_reserve;
+            has_liquidity = sold < eth_reserve;
 
         } else {
             sold = get_output_price(amount, token_reserve, eth_reserve);
-            has_liquidity = sold < eth_reserve;
+            has_liquidity = sold < token_reserve;
         }
         PreviewInfo {
             amount: sold,
-            has_liquidity: has_liquidity
+            has_liquidity: has_liquidity,
         }
     }
 }

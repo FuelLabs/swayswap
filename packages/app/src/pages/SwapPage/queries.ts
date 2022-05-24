@@ -27,14 +27,18 @@ const getSwapWithMinimumMinAmount = async (
 
 export const queryPreviewAmount = async (
   contract: ExchangeContractAbi,
-  { amount, direction, from }: SwapState
+  { amount, direction, coinFrom }: SwapState
 ) => {
   if (direction === ActiveInput.to && amount) {
-    const previewAmount = await getSwapWithMaximumRequiredAmount(contract, from, amount);
+    const previewAmount = await getSwapWithMaximumRequiredAmount(
+      contract,
+      coinFrom.assetId,
+      amount
+    );
     return previewAmount;
   }
   if (amount) {
-    const previewAmount = await getSwapWithMinimumMinAmount(contract, from, amount);
+    const previewAmount = await getSwapWithMinimumMinAmount(contract, coinFrom.assetId, amount);
     return previewAmount;
   }
   return null;
@@ -42,25 +46,29 @@ export const queryPreviewAmount = async (
 
 export const swapTokens = async (
   contract: ExchangeContractAbi,
-  { from, direction, amount }: SwapState
+  { coinFrom, direction, amount }: SwapState
 ) => {
   const DEADLINE = 1000;
   if (direction === ActiveInput.to && amount) {
-    const forwardAmount = await getSwapWithMaximumRequiredAmount(contract, from, amount);
+    const forwardAmount = await getSwapWithMaximumRequiredAmount(
+      contract,
+      coinFrom.assetId,
+      amount
+    );
     if (!forwardAmount.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
     }
     await contract.functions.swap_with_maximum(amount, DEADLINE, {
-      forward: [forwardAmount.amount, from],
+      forward: [forwardAmount.amount, coinFrom.assetId],
       variableOutputs: 1,
     });
   } else if (direction === ActiveInput.from && amount) {
-    const minValue = await getSwapWithMinimumMinAmount(contract, from, amount);
+    const minValue = await getSwapWithMinimumMinAmount(contract, coinFrom.assetId, amount);
     if (!minValue.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
     }
     await contract.functions.swap_with_minimum(minValue.amount, DEADLINE, {
-      forward: [amount, from],
+      forward: [amount, coinFrom.assetId],
       variableOutputs: 1,
     });
   }
