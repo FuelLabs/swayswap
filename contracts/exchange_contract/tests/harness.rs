@@ -241,8 +241,6 @@ async fn exchange_contract() {
         .unwrap();
     assert_eq!(result.value.amount, 9);
     assert!(result.value.has_liquidity);
-    assert_eq!(result.value.reserve, 100);
-    assert_eq!(result.value.fee, 333);
     let result = exchange_instance
         .get_swap_with_maximum(10)
         .call()
@@ -250,8 +248,6 @@ async fn exchange_contract() {
         .unwrap();
     assert_eq!(result.value.amount, 12);
     assert!(result.value.has_liquidity);
-    assert_eq!(result.value.reserve, 100);
-    assert_eq!(result.value.fee, 333);
 
     ////////////////////
     // SWAP WITH MINIMUM
