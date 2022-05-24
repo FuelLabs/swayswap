@@ -15,6 +15,7 @@ export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS).toBigInt();
 export const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY!;
 export const ENABLE_FAUCET_API = import.meta.env.VITE_ENABLE_FAUCET_API === 'true';
 export const SLIPPAGE_TOLERANCE = 0.005;
+export const NETWORK_FEE = 1;
 
 // Max value supported
 // eslint-disable-next-line @typescript-eslint/no-loss-of-precision

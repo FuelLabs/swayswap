@@ -233,6 +233,22 @@ async fn exchange_contract() {
     // Inspect the wallet for alt tokens to be 100
     assert_eq!(total_amount, 100);
 
+    // Return reserve amounts and fee
+    let result = exchange_instance
+        .get_swap_with_minimum(10)
+        .call()
+        .await
+        .unwrap();
+    assert_eq!(result.value.amount, 9);
+    assert!(result.value.has_liquidity);
+    let result = exchange_instance
+        .get_swap_with_maximum(10)
+        .call()
+        .await
+        .unwrap();
+    assert_eq!(result.value.amount, 12);
+    assert!(result.value.has_liquidity);
+
     ////////////////////
     // SWAP WITH MINIMUM
     ////////////////////
