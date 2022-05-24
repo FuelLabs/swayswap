@@ -23,8 +23,8 @@ import useDebounce from "~/hooks/useDebounce";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useSlippage } from "~/hooks/useSlippage";
 import { ZERO } from "~/lib/constants";
+import { queryClient } from "~/lib/queryClient";
 import { isSwayInfinity, sleep } from "~/lib/utils";
-import { queryClient } from "~/queryClient";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
 
 type StateParams = {
