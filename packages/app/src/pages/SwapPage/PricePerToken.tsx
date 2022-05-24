@@ -1,5 +1,5 @@
 import { toNumber } from "fuels";
-import { startTransition, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 
 import { useValueIsTyping } from "./jotai";
