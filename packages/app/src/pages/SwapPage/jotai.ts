@@ -6,6 +6,7 @@ import assets from '~/lib/CoinsMetadata';
 import type { Coin } from '~/types';
 
 export const swapActiveInputAtom = atom<ActiveInput>(ActiveInput.from);
-export const swapCoinsAtom = atom<[Coin | null, Coin | null]>([assets[0], null]);
-export const swapAmountAtom = atom<bigint | null>(null);
+export const swapCoinsAtom = atom<[Coin, Coin]>([assets[0], assets[1]]);
 export const swapIsTypingAtom = atom<boolean>(false);
+export const swapHasSwappedAtom = atom<boolean>(false);
+export const swapAmountAtom = atom<bigint | null>(null);

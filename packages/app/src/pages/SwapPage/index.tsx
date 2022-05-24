@@ -1,9 +1,11 @@
+import { useSetAtom } from "jotai";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 
 import { SwapComponent } from "./SwapComponent";
+import { swapHasSwappedAtom } from "./jotai";
 import { queryPreviewAmount, swapTokens } from "./queries";
 import type { SwapState } from "./types";
 
@@ -12,6 +14,7 @@ import { Card } from "~/components/Card";
 import { useContract } from "~/context/AppContext";
 import useDebounce from "~/hooks/useDebounce";
 import { isSwayInfinity, sleep } from "~/lib/utils";
+import { queryClient } from "~/queryClient";
 
 type StateParams = {
   swapState: SwapState | null;
@@ -70,6 +73,7 @@ export default function SwapPage() {
   const [swapState, setSwapState] = useState<SwapState | null>(null);
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
+  const setHasSwapped = useSetAtom(swapHasSwappedAtom);
 
   const { isLoading } = useQuery(
     [
@@ -100,7 +104,9 @@ export default function SwapPage() {
     },
     {
       onSuccess: () => {
+        setHasSwapped(true);
         toast.success("Swap made successfully!");
+        queryClient.refetchQueries(["AssetsPage-balances"]);
       },
     }
   );
