@@ -53,7 +53,11 @@ export const seedWallet = async (wallet: Wallet) => {
   return submit.wait();
 };
 
-export async function deployContract(contextLog: string, binaryPath: string, abi: JsonAbi | Interface) {
+export async function deployContract(
+  contextLog: string,
+  binaryPath: string,
+  abi: JsonAbi | Interface
+) {
   console.log(contextLog, 'Create wallet...');
   console.log(contextLog, 'connected to', providerUrl);
   const wallet = Wallet.generate({ provider: providerUrl });

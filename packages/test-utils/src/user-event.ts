@@ -18,7 +18,8 @@ function patch($value: any) {
       // @ts-expect-error
       acc[key] = (...args: any[]) => ({ ...patch(value(...args)), press }); // eslint-disable-line @typescript-eslint/no-explicit-any
     } else {
-      acc[key] = async (...args: any[]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      acc[key] = async (...args: any[]) => {
         act(() => {
           // @ts-expect-error
           value(...args);
