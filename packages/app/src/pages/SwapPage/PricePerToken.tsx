@@ -1,14 +1,13 @@
-import { BigNumber } from "ethers";
 import { toNumber } from "fuels";
-import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 
-import { swapIsTypingAtom } from "./jotai";
+import { useValueIsTyping } from "./jotai";
 import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
 import { ONE_ASSET } from "~/config";
+import { divideBigInt } from "~/lib/utils";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
@@ -22,10 +21,8 @@ function getPricePerToken(
   if (!toAmount || !fromAmount) return "";
   const ratio =
     direction === ActiveInput.from
-      ? BigNumber.from(fromAmount || 0).toNumber() /
-        BigNumber.from(toAmount || 0).toNumber()
-      : BigNumber.from(toAmount || 0).toNumber() /
-        BigNumber.from(fromAmount || 0).toNumber();
+      ? divideBigInt(fromAmount, toAmount)
+      : divideBigInt(toAmount, fromAmount);
   const price = ratio * toNumber(ONE_ASSET);
   return (price / toNumber(ONE_ASSET)).toFixed(6);
 }
@@ -46,7 +43,7 @@ export function PricePerToken({
   isLoading,
 }: PricePerTokenProps) {
   const [direction, setDirection] = useState<ActiveInput>(ActiveInput.to);
-  const isTyping = useAtomValue(swapIsTypingAtom);
+  const isTyping = useValueIsTyping();
 
   const pricePerToken = getPricePerToken(direction, fromAmount, toAmount);
   const from = direction === ActiveInput.from ? toCoin : fromCoin;

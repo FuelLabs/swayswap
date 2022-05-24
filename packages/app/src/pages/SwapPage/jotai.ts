@@ -1,4 +1,4 @@
-import { atom, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useRef } from 'react';
 
 import { ActiveInput } from './types';
@@ -10,7 +10,8 @@ export const swapActiveInputAtom = atom<ActiveInput>(ActiveInput.from);
 export const swapCoinsAtom = atom<[Coin, Coin]>([assets[0], assets[1]]);
 export const swapIsTypingAtom = atom<boolean>(false);
 
-export const useSetTyping = () => {
+export const useValueIsTyping = () => useAtomValue(swapIsTypingAtom);
+export const useSetIsTyping = () => {
   const setTyping = useSetAtom(swapIsTypingAtom);
   const timeout = useRef<number>(0);
 
@@ -26,5 +27,6 @@ export const useSetTyping = () => {
     }
   };
 };
+
 export const swapHasSwappedAtom = atom<boolean>(false);
 export const swapAmountAtom = atom<bigint | null>(null);

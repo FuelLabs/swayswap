@@ -55,32 +55,36 @@ const getValidationText = (
   }
 };
 
-const getValidationState = ({
+const hasBalanceWithSlippage = ({
   swapState,
   previewAmount,
   slippage,
   balances,
-  hasLiquidity,
-}: StateParams): ValidationStateEnum => {
+}: StateParams) => {
+  if (swapState!.direction === ActiveInput.to) {
+    const amountWithSlippage = calculatePriceWithSlippage(
+      previewAmount || ZERO,
+      slippage,
+      swapState!.direction
+    );
+    const currentBalance = toNumber(
+      balances?.find((coin) => coin.assetId === swapState!.coinFrom.assetId)
+        ?.amount || ZERO
+    );
+    return amountWithSlippage > currentBalance;
+  }
+  return false;
+};
+
+const getValidationState = (stateParams: StateParams): ValidationStateEnum => {
+  const { swapState, previewAmount, hasLiquidity } = stateParams;
   if (!swapState?.coinFrom || !swapState?.coinTo) {
     return ValidationStateEnum.SelectToken;
   }
   if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
-  if (
-    !swapState.hasBalance ||
-    (swapState.direction === ActiveInput.to &&
-      calculatePriceWithSlippage(
-        previewAmount || ZERO,
-        slippage,
-        swapState.direction
-      ) >
-        toNumber(
-          balances?.find((coin) => coin.assetId === swapState.coinFrom.assetId)
-            ?.amount || ZERO
-        ))
-  ) {
+  if (!swapState.hasBalance || hasBalanceWithSlippage(stateParams)) {
     return ValidationStateEnum.InsufficientBalance;
   }
   if (!hasLiquidity || isSwayInfinity(previewAmount))

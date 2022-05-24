@@ -1,9 +1,8 @@
 import { formatUnits } from "ethers/lib/utils";
-import { useAtomValue } from "jotai";
 import { BsArrowDown } from "react-icons/bs";
 
 import { calculatePriceImpact, calculatePriceWithSlippage } from "./helpers";
-import { swapIsTypingAtom } from "./jotai";
+import { useValueIsTyping } from "./jotai";
 import type { SwapInfo } from "./types";
 import { ActiveInput } from "./types";
 
@@ -19,7 +18,7 @@ type SwapPreviewProps = {
 
 export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
   const { amount, previewAmount, direction, coinFrom, coinTo } = swapInfo;
-  const isTyping = useAtomValue(swapIsTypingAtom);
+  const isTyping = useValueIsTyping();
   const slippage = useSlippage();
 
   if (

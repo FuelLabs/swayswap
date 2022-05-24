@@ -7,7 +7,7 @@ import {
   swapAmountAtom,
   swapCoinsAtom,
   swapHasSwappedAtom,
-  useSetTyping,
+  useSetIsTyping,
 } from "./jotai";
 import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
@@ -37,9 +37,10 @@ export function SwapComponent({
   const [activeInput, setActiveInput] = useAtom(swapActiveInputAtom);
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
   const hasSwapped = useAtomValue(swapHasSwappedAtom);
-  const setTyping = useSetTyping();
+  const setTyping = useSetIsTyping();
 
   const handleInvertCoins = () => {
+    setTyping(true);
     if (activeInput === ActiveInput.to) {
       const from = fromInput.amount;
       startTransition(() => {
