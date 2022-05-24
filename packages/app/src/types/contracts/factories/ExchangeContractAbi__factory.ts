@@ -203,6 +203,11 @@ const _abi = [
             type: 'u64',
             components: null,
           },
+          {
+            name: 'lp_token_supply',
+            type: 'u64',
+            components: null,
+          },
         ],
       },
     ],
