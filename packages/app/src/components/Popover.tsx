@@ -46,7 +46,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
     );
 
     const { modalProps } = useModal();
-    const { dialogProps } = useDialog(props as any, innerRef);
+    const { dialogProps } = useDialog(props as any, innerRef); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     if (!state.isOpen) return null;
     return (

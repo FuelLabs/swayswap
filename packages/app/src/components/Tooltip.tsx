@@ -19,7 +19,7 @@ const style = {
 export type TooltipProps = React.HTMLAttributes<Element> & {
   className?: string;
   content?: ReactNode;
-  children: any;
+  children: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 };
 
 export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(

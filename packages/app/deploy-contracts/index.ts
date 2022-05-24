@@ -16,6 +16,7 @@ import {
   Wallet,
   ZeroBytes32,
 } from 'fuels';
+import type { JsonAbi, Interface } from 'fuels';
 import path from 'path';
 
 // @ts-ignore
@@ -52,7 +53,7 @@ export const seedWallet = async (wallet: Wallet) => {
   return submit.wait();
 };
 
-export async function deployContract(contextLog: string, binaryPath: string, abi: any) {
+export async function deployContract(contextLog: string, binaryPath: string, abi: JsonAbi | Interface) {
   console.log(contextLog, 'Create wallet...');
   console.log(contextLog, 'connected to', providerUrl);
   const wallet = Wallet.generate({ provider: providerUrl });

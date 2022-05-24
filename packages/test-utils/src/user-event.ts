@@ -8,16 +8,17 @@ type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 
 type PatchResult = Omit<Writeable<typeof $userEvent>, 'setup'> & {
   press: typeof press;
-  setup: (...args: any[]) => PatchResult;
+  setup: (...args: any[]) => PatchResult; // eslint-disable-line @typescript-eslint/no-explicit-any
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function patch($value: any) {
   const result = Object.entries($value).reduce((acc, [key, value]) => {
     if (key === 'setup') {
       // @ts-expect-error
-      acc[key] = (...args: any[]) => ({ ...patch(value(...args)), press });
+      acc[key] = (...args: any[]) => ({ ...patch(value(...args)), press }); // eslint-disable-line @typescript-eslint/no-explicit-any
     } else {
-      acc[key] = async (...args: any[]) => {
+      acc[key] = async (...args: any[]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
         act(() => {
           // @ts-expect-error
           value(...args);
@@ -27,7 +28,7 @@ function patch($value: any) {
     }
 
     return acc;
-  }, {} as any);
+  }, {} as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   return result as PatchResult;
 }

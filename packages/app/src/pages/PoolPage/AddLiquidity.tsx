@@ -161,6 +161,7 @@ export default function AddLiquidity() {
         fromInput.setAmount(BigInt(0));
         toInput.setAmount(BigInt(0));
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError: (e: any) => {
         const errors = e?.response?.errors;
 
