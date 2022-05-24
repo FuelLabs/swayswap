@@ -1,6 +1,6 @@
 import "@fontsource/fira-code";
 import "@fontsource/inter/variable.css";
-import "./index.css";
+import "./styles/index.css";
 
 import { createRoot } from "react-dom/client";
 
