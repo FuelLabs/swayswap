@@ -14,12 +14,13 @@ import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { Spinner } from "~/components/Spinner";
-import { DECIMAL_UNITS, SLIPPAGE_TOLERANCE } from "~/config";
+import { CONTRACT_ID, DECIMAL_UNITS, ONE_ASSET, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import assets from "~/lib/CoinsMetadata";
 import { calculateRatio } from "~/lib/asset";
 import type { Coin } from "~/types";
+import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
@@ -230,6 +231,13 @@ export default function AddLiquidity() {
 
   const errorsCreatePull = validateCreatePool();
 
+  const liquidityFactor = BigInt(toNumber(fromInput.amount || BigInt(0)) * toNumber(poolInfo?.lp_token_supply || BigInt(1)));
+  const previewTokensToReceive = calculateRatio(liquidityFactor, poolInfo?.eth_reserve || BigInt(1));
+  const nextTotalTokenSupply = previewTokensToReceive + toNumber(poolInfo?.lp_token_supply || BigInt(0));
+  const poolContractBalance = balances?.data?.find((item) => item.assetId === CONTRACT_ID);
+  const currentPoolTokensAmount = toNumber(poolContractBalance?.amount || BigInt(0));
+  const nextCurrentPoolShare = calculateRatio(BigInt(previewTokensToReceive + currentPoolTokensAmount), BigInt(nextTotalTokenSupply)) || 1;
+
   return addLiquidityMutation.isLoading ? (
     <div className="mt-6 mb-8 flex justify-center">
       <PoolLoader
@@ -260,6 +268,18 @@ export default function AddLiquidity() {
           rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
         />
       </div>
+      {!!addLiquidityRatio && (
+        <PreviewTable title="Expected output:" className="my-2">
+          <PreviewItem
+            title="Pool tokens you'll receive:"
+            value={formatUnits(previewTokensToReceive, DECIMAL_UNITS)}
+          />
+          <PreviewItem
+            title={"Your share of current pool:"}
+            value={`${(nextCurrentPoolShare * 100).toFixed(2)}%`}
+          />
+        </PreviewTable>
+      )}
       {poolInfo && reservesFromToRatio ? (
         <div className={style.info}>
           <h4 className="text-white mb-2 font-bold">Reserves</h4>
