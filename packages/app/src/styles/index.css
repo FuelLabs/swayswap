@@ -1,0 +1,10 @@
+@import "tailwindcss/base";
+@import "./base.css";
+
+@import "tailwindcss/components";
+@import "./components/accordion.css";
+@import "./components/button.css";
+@import "./components/coin-selector.css";
+
+@import "tailwindcss/utilities";
+@import "./utilities.css";

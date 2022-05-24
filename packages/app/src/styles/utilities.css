@@ -1,0 +1,16 @@
+@layer utilities {
+  .focus-ring:not([aria-disabled="true"]) {
+    @apply focus:outline-none focus:ring-inset focus:ring-1;
+    @apply focus:ring-primary-500 active:ring-0 disabled:ring-0;
+  }
+  .transition-main {
+    @apply transition ease-in duration-100;
+  }
+  .link {
+    @apply text-primary-400 no-underline hover:underline rounded-lg;
+    @apply focus:outline-none focus:underline;
+  }
+  .inner-shadow {
+    box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.2);
+  }
+}
