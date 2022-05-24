@@ -1,11 +1,12 @@
 import { toBigInt } from "fuels";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { startTransition, useEffect } from "react";
 
 import {
   swapActiveInputAtom,
   swapAmountAtom,
   swapCoinsAtom,
+  swapHasSwappedAtom,
   useSetTyping,
 } from "./jotai";
 import type { SwapState } from "./types";
@@ -15,7 +16,6 @@ import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { InvertButton } from "~/components/InvertButton";
 import { NETWORK_FEE } from "~/config";
-import { CoinETH, ZERO } from "~/lib/constants";
 import type { Coin } from "~/types";
 
 const style = {
@@ -36,10 +36,10 @@ export function SwapComponent({
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [activeInput, setActiveInput] = useAtom(swapActiveInputAtom);
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
+  const hasSwapped = useAtomValue(swapHasSwappedAtom);
   const setTyping = useSetTyping();
 
   const handleInvertCoins = () => {
-    setTyping(true);
     if (activeInput === ActiveInput.to) {
       const from = fromInput.amount;
       startTransition(() => {
@@ -61,7 +61,7 @@ export function SwapComponent({
   const fromInput = useCoinInput({
     coin: coinFrom,
     disableWhenEth: true,
-    gasFee: coinFrom?.assetId === CoinETH ? toBigInt(NETWORK_FEE) : ZERO,
+    gasFee: toBigInt(NETWORK_FEE),
     onChangeCoin: (coin: Coin) => {
       setCoins([coin, coinTo]);
     },
@@ -126,6 +126,13 @@ export function SwapComponent({
       fromInput.setAmount(previewAmount || null);
     }
   }, [previewAmount]);
+
+  useEffect(() => {
+    if (hasSwapped) {
+      toInput.setAmount(null);
+      fromInput.setAmount(null);
+    }
+  }, [hasSwapped]);
 
   return (
     <>
