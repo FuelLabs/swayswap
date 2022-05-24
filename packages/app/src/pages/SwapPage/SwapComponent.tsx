@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { PricePerToken } from "./PricePerToken";
 import {
   swapActiveInputAtom,
-  swapAmountAtom,
+  swapInitialAmountAtom,
   swapCoinsAtom,
   swapIsTypingAtom,
 } from "./jotai";
@@ -32,7 +32,7 @@ export function SwapComponent({
   previewAmount: previewValue,
   hasSwapped,
 }: SwapComponentProps) {
-  const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
+  const [initialAmount, setInitialAmount] = useAtom(swapInitialAmountAtom);
   const [initialActiveInput, setInitialActiveInput] =
     useAtom(swapActiveInputAtom);
 
