@@ -66,7 +66,7 @@ export const Dialog: DialogComponent = ({ state, ...props }) => {
     ref
   );
 
-  usePreventScroll();
+  usePreventScroll({ isDisabled: !state.isOpen });
   const { modalProps } = useModal();
   const { dialogProps, titleProps } = useReactAriaDialog(props, ref);
   const ctxValue = {
