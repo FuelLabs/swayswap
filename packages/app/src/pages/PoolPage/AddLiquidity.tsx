@@ -13,11 +13,11 @@ import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
+import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { Spinner } from "~/components/Spinner";
 import {
   CONTRACT_ID,
   DECIMAL_UNITS,
-  ONE_ASSET,
   SLIPPAGE_TOLERANCE,
 } from "~/config";
 import { useContract } from "~/context/AppContext";
@@ -25,7 +25,6 @@ import { useBalances } from "~/hooks/useBalances";
 import assets from "~/lib/CoinsMetadata";
 import { calculateRatio } from "~/lib/asset";
 import type { Coin } from "~/types";
-import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 
 const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
