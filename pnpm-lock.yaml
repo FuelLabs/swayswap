@@ -48,8 +48,8 @@ importers:
     specifiers:
       '@fontsource/fira-code': ^4.5.9
       '@fontsource/inter': ^4.5.10
-      '@fuel-ts/contract': 0.0.0-master-d5e02003
-      '@fuel-ts/providers': 0.0.0-master-d5e02003
+      '@fuel-ts/contract': 0.0.0-master-6c8ce489
+      '@fuel-ts/providers': 0.0.0-master-6c8ce489
       '@headlessui/react': ^1.6.2
       '@radix-ui/react-dialog': ^0.1.7
       '@radix-ui/react-tooltip': ^0.1.7
@@ -85,7 +85,7 @@ importers:
       clipboard: ^2.0.11
       eslint: ^8.4.1
       ethers: ^5.6.5
-      fuels: 0.0.0-master-d5e02003
+      fuels: 0.0.0-master-6c8ce489
       graphql-request: ^4.2.0
       jotai: ^1.6.6
       postcss: ^8.4.7
@@ -102,7 +102,7 @@ importers:
       spinners-react: ^1.0.7
       tailwindcss: ^3.0.23
       typechain: ^8.0.0
-      typechain-target-fuels: 0.0.0-master-d5e02003
+      typechain-target-fuels: 0.0.0-master-6c8ce489
       typescript: ^4.6.4
       url-join: ^5.0.0
       vite: ^2.9.7
@@ -110,8 +110,8 @@ importers:
     dependencies:
       '@fontsource/fira-code': 4.5.9
       '@fontsource/inter': 4.5.10
-      '@fuel-ts/contract': 0.0.0-master-d5e02003
-      '@fuel-ts/providers': 0.0.0-master-d5e02003
+      '@fuel-ts/contract': 0.0.0-master-6c8ce489
+      '@fuel-ts/providers': 0.0.0-master-6c8ce489
       '@headlessui/react': 1.6.2_ef5jwxihqo6n7gxfmzogljlgcm
       '@radix-ui/react-dialog': 0.1.7_ohobp6rpsmerwlq5ipwfh5yigy
       '@radix-ui/react-tooltip': 0.1.7_ef5jwxihqo6n7gxfmzogljlgcm
@@ -133,7 +133,7 @@ importers:
       classnames: 2.3.1
       clipboard: 2.0.11
       ethers: 5.6.6
-      fuels: 0.0.0-master-d5e02003
+      fuels: 0.0.0-master-6c8ce489
       graphql-request: 4.2.0
       jotai: 1.6.7_tgajdcwcfqxyh72yjgxojourrm
       react: 18.1.0
@@ -167,7 +167,7 @@ importers:
       postcss: 8.4.14
       tailwindcss: 3.0.24
       typechain: 8.0.0_typescript@4.6.4
-      typechain-target-fuels: 0.0.0-master-d5e02003
+      typechain-target-fuels: 0.0.0-master-6c8ce489
       typescript: 4.6.4
       vite: 2.9.9
 
@@ -201,7 +201,7 @@ importers:
       eslint-config-airbnb-typescript: 17.0.0_j24moc6fxpksz6plqhrv2fyfqe
       eslint-config-prettier: 8.5.0_eslint@8.15.0
       eslint-plugin-eslint-comments: 3.2.0_eslint@8.15.0
-      eslint-plugin-import: 2.26.0_eor5fr4wgkua4fh2zz3r4cqkce
+      eslint-plugin-import: 2.26.0_eslint@8.15.0
       eslint-plugin-jest-dom: 4.0.1_eslint@8.15.0
       eslint-plugin-jsx-a11y: 6.5.1_eslint@8.15.0
       eslint-plugin-prettier: 4.0.0_iqftbjqlxzn3ny5nablrkczhqi
@@ -1965,110 +1965,111 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@fuel-ts/abi-coder/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-Yzg+3UDit+OWe5VonmTrt6XY76Bx1eU+Y3z+YrHeG/vASMlpvdd/HfeU7wviaY3nun2nGTGmOuOa8y2ROqn0Nw==}
+  /@fuel-ts/abi-coder/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-mlqe0Q286WRT/EVEunQWvPcFNeWgFJ62ZrUYL6Ftctl8YGglFGDXvrB9AZvy8DbnHIiexBV1EnBptOrmhRnsgw==}
     dependencies:
       '@ethersproject/abi': 5.6.2
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
       '@ethersproject/sha2': 5.6.0
       '@ethersproject/strings': 5.6.0
-      '@fuel-ts/math': 0.0.0-master-d5e02003
+      '@fuel-ts/math': 0.0.0-master-6c8ce489
     dev: false
 
-  /@fuel-ts/constants/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-0gq9EwAiltBfU5aIGlLgBQun0XKPFgku6//6dSv4ALG3bSOHgcfO35LfVDC3z8W9+BII7EV+MbHMScwi4uMkUw==}
+  /@fuel-ts/constants/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-OyqWH7Zrrs3ABucK+3AWLus2eweMGSSpAxYEiWNTeQlpecvw0nxHJKzwm2NYtG8my2jtxySTj4EzMxuDKB61rA==}
     dev: false
 
-  /@fuel-ts/contract/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-ym720wzFazH4NTdJ+S/xJkELrC8Xr4UVPIGU+QepO1ZRBPcd1iXjOyeN5c0zxQ/b2V772pnGscowagasu+RJqg==}
+  /@fuel-ts/contract/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-fuK5+1b7F7L1sOrkfwhH+27JO4399YVvGgScJ8g6raA7OvqasE/ZAJW6aKLDdx7qKChVUeZ0E0YlmJosNiI2JA==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
       '@ethersproject/random': 5.6.0
       '@ethersproject/sha2': 5.6.0
-      '@fuel-ts/abi-coder': 0.0.0-master-d5e02003
-      '@fuel-ts/constants': 0.0.0-master-d5e02003
-      '@fuel-ts/interfaces': 0.0.0-master-d5e02003
-      '@fuel-ts/math': 0.0.0-master-d5e02003
-      '@fuel-ts/merkle': 0.0.0-master-d5e02003
-      '@fuel-ts/providers': 0.0.0-master-d5e02003
-      '@fuel-ts/wallet': 0.0.0-master-d5e02003
+      '@fuel-ts/abi-coder': 0.0.0-master-6c8ce489
+      '@fuel-ts/constants': 0.0.0-master-6c8ce489
+      '@fuel-ts/interfaces': 0.0.0-master-6c8ce489
+      '@fuel-ts/math': 0.0.0-master-6c8ce489
+      '@fuel-ts/merkle': 0.0.0-master-6c8ce489
+      '@fuel-ts/providers': 0.0.0-master-6c8ce489
+      '@fuel-ts/script': 0.0.0-master-6c8ce489
+      '@fuel-ts/wallet': 0.0.0-master-6c8ce489
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/hasher/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-l2jUf6sR2FieEg6bdI6JjwV2Y8sdYLmhQA4Dxys/Se1qHTi8JBKg60ehlRWg2YOSG+LB6pugM9hnAI1AO3zMFw==}
+  /@fuel-ts/hasher/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-EYGnYTVbEo3nWh90x+9x77O3B+FvrErVu9ok5yf7EA3qX0r6J397QaFG7S7rjQdPiEX0VDUd8/2sYfgy9Jj6lg==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.0
-      '@fuel-ts/constants': 0.0.0-master-d5e02003
-      '@fuel-ts/providers': 0.0.0-master-d5e02003
+      '@fuel-ts/constants': 0.0.0-master-6c8ce489
+      '@fuel-ts/providers': 0.0.0-master-6c8ce489
       lodash.clonedeep: 4.5.0
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/hdwallet/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-xv8IYfxDYFw46NVFcSZD8Xq6wHYgm01oShFdcHxzb9Y/hviWaA6pHepSLVkHuy7fwc+ZrhJv+xvFZ0W3gz7ijw==}
+  /@fuel-ts/hdwallet/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-a78j4ErmCfGz2mcsUYe8Ys2v41VGXqTi/QEIkekt87C79L/1Xb7AU3Xxh3WI7CgPNkts8ytlPnUaTtaGqJ2SRw==}
     dependencies:
       '@ethersproject/basex': 5.6.0
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.0
-      '@fuel-ts/math': 0.0.0-master-d5e02003
-      '@fuel-ts/mnemonic': 0.0.0-master-d5e02003
-      '@fuel-ts/signer': 0.0.0-master-d5e02003
+      '@fuel-ts/math': 0.0.0-master-6c8ce489
+      '@fuel-ts/mnemonic': 0.0.0-master-6c8ce489
+      '@fuel-ts/signer': 0.0.0-master-6c8ce489
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/interfaces/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-vEnwGafaJ28KkhIILV92Cx8gcfw3RFoCG6dUJ/+IV0IMfpjN+c42bkHL1CLqmIaVy0OmUapSj/Bp0C3m9xhaxQ==}
+  /@fuel-ts/interfaces/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-BP0O3tSwHqzfjiXgzuHKeUzDx3i9/GrTh7lcGL8ZBI6zXAEGgxcuO/kUdTfp/AgY281UK7yi37Q5Hyd7Xz4Jhw==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
     dev: false
 
-  /@fuel-ts/math/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-79VLTCfxsc+jlzotSS+UV0PVPvrG4tMXzDqy9XtGjyYUiC7I3mYWwEviR5FaUp/K/EQ/YjkC5PdRf7DgoIbAmg==}
+  /@fuel-ts/math/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-hJQ4Us27S4oOL65sND55Bm6/6axzEu81C11/3mvGAtRQXsgQ24CMmq/Dnw8EvVQQPmdHDXL5A3xdKxhRb7kblA==}
     dev: false
 
-  /@fuel-ts/merkle-shared/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-7nVI97z1nIveBsVT3bm0kWVog7dv3hRHGxaSrAQ69HOFmzEbZUazAvi2ojckXHlnMf7UAoKmbvUKSGPjItzCtQ==}
+  /@fuel-ts/merkle-shared/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-ucbe712msEhN9Jh6FTVGp3FXcQVNbywJqw8D04ce3qjgvUDWiyP8ai+XoLrk4P+EXD9Nhe2PvIcpIWnnvOnDOw==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.0
-      '@fuel-ts/math': 0.0.0-master-d5e02003
+      '@fuel-ts/math': 0.0.0-master-6c8ce489
     dev: false
 
-  /@fuel-ts/merkle/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-UqBlVO94r/su9imJUG1fww2WhnTE9tNOMhnoh+OtJYKbCR+nTfl8jeme9fB3DsEeGgGZNmBvv+TeYrA/wDlsyQ==}
+  /@fuel-ts/merkle/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-oviIl0zwaXHvtoYjaoOn2KGSCxBK2ZqDVeYNLQLcoVUjsOi5QBDIYTHJBt2lA1ECGB0MlZ8JNJFQ8XjhC1F9ag==}
     dependencies:
-      '@fuel-ts/merkle-shared': 0.0.0-master-d5e02003
+      '@fuel-ts/merkle-shared': 0.0.0-master-6c8ce489
     dev: false
 
-  /@fuel-ts/mnemonic/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-RQQ2KVLwt/kziFN8yXwapmf1nZx62RfNMLH/HfFvZlsKESQW4kss0+uSZUt61AaOHxajTdPBEnip7bo3EP42kA==}
+  /@fuel-ts/mnemonic/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-f6o6Wl0zMqsj+y70J8rqixv1xcyPANaFNUziDZMoAz4cJruK+1/lJl31XEh/im0rm+YLNEq2cimfhxnEzu9q5Q==}
     dependencies:
       '@ethersproject/basex': 5.6.0
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.0
       '@ethersproject/random': 5.6.0
       '@ethersproject/sha2': 5.6.0
-      '@fuel-ts/wordlists': 0.0.0-master-d5e02003
+      '@fuel-ts/wordlists': 0.0.0-master-6c8ce489
     dev: false
 
-  /@fuel-ts/providers/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-UFIIBUR9dNHdti+/U1Q2bEsdV/Z2uZQfg5iLNJRHAkokVOEEEwOFnfpT/fu/t5Pj1BXzYGrG+dGeStBNOdRVcQ==}
+  /@fuel-ts/providers/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-uBvKIbSmTVtGtlmXaBuMODpPbNir5I2IDglC/ecAC22YUcOx+KPS2IkNCRjX2Zp8h3Gllf3p9FogCjLhRGHFTQ==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/networks': 5.6.2
       '@ethersproject/random': 5.6.0
       '@ethersproject/sha2': 5.6.0
-      '@fuel-ts/constants': 0.0.0-master-d5e02003
-      '@fuel-ts/interfaces': 0.0.0-master-d5e02003
-      '@fuel-ts/math': 0.0.0-master-d5e02003
-      '@fuel-ts/transactions': 0.0.0-master-d5e02003
+      '@fuel-ts/constants': 0.0.0-master-6c8ce489
+      '@fuel-ts/interfaces': 0.0.0-master-6c8ce489
+      '@fuel-ts/math': 0.0.0-master-6c8ce489
+      '@fuel-ts/transactions': 0.0.0-master-6c8ce489
       graphql: 15.8.0
       graphql-request: 3.7.0_graphql@15.8.0
       graphql-tag: 2.12.6_graphql@15.8.0
@@ -2076,44 +2077,56 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/signer/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-YNFnlUPzlGBEEJPIFpdxJNXc3vozczfcZSyxaIjC9zPdxcDGFiLfWcH7N3tnYajb6Z7lfcC7VpLX2KmylEArgA==}
+  /@fuel-ts/script/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-9eIQSm90mAQrSC0KhMMoztvDH6ZaAUL+QCs8FnjREJwipKoBZQdupvxY8i832JfIfBWzbfRRbe46Opo0d57UGw==}
+    dependencies:
+      '@ethersproject/bytes': 5.6.1
+      '@fuel-ts/abi-coder': 0.0.0-master-6c8ce489
+      '@fuel-ts/constants': 0.0.0-master-6c8ce489
+      '@fuel-ts/providers': 0.0.0-master-6c8ce489
+      '@fuel-ts/wallet': 0.0.0-master-6c8ce489
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /@fuel-ts/signer/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-J0JhBlgxRJrR6VnxFCJSvqitBspC2UFgrYfN4mwTLjUxzbffjtozoB1NqT/vpWzodY/scnJm7JWV80+JrfzljQ==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/random': 5.5.1
       '@ethersproject/sha2': 5.6.0
-      '@fuel-ts/hasher': 0.0.0-master-d5e02003
+      '@fuel-ts/hasher': 0.0.0-master-6c8ce489
       elliptic: 6.5.4
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/transactions/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-9QxUHixP/bjcTdfPgqDFZlEXiNOQDRwTV4Gkg8KTk9N7NaGZeqDsL8GucKIL+ouHklL756Xag3tgIuHlowMZ5Q==}
+  /@fuel-ts/transactions/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-gqhlUKM2kfNMPvJ95DNhCGgWwSTmebUJprKTHYKIGzlshBtsLLJJtlLeiduFjRggkz8XDDbFOPoQvmb4jQm9Jg==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@fuel-ts/abi-coder': 0.0.0-master-d5e02003
-      '@fuel-ts/constants': 0.0.0-master-d5e02003
+      '@fuel-ts/abi-coder': 0.0.0-master-6c8ce489
+      '@fuel-ts/constants': 0.0.0-master-6c8ce489
     dev: false
 
-  /@fuel-ts/wallet/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-eb0SPao/HHgCCTmaENhXaDzxH9Mpysk9yMhe+iVUbWVIs7sBTv9VDhlc0tbHAPMx2rmy2F4WPSbD6LDmyrmCLQ==}
+  /@fuel-ts/wallet/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-8BvHWYu6mHbrHJjk22HKLqokFq4S55a5j9GUxu27pW80YqwCH5faLfeFzOCkQcUCM019QimmcUWuIvzBPHzelg==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@fuel-ts/constants': 0.0.0-master-d5e02003
-      '@fuel-ts/hasher': 0.0.0-master-d5e02003
-      '@fuel-ts/hdwallet': 0.0.0-master-d5e02003
-      '@fuel-ts/interfaces': 0.0.0-master-d5e02003
-      '@fuel-ts/math': 0.0.0-master-d5e02003
-      '@fuel-ts/mnemonic': 0.0.0-master-d5e02003
-      '@fuel-ts/providers': 0.0.0-master-d5e02003
-      '@fuel-ts/signer': 0.0.0-master-d5e02003
+      '@fuel-ts/constants': 0.0.0-master-6c8ce489
+      '@fuel-ts/hasher': 0.0.0-master-6c8ce489
+      '@fuel-ts/hdwallet': 0.0.0-master-6c8ce489
+      '@fuel-ts/interfaces': 0.0.0-master-6c8ce489
+      '@fuel-ts/math': 0.0.0-master-6c8ce489
+      '@fuel-ts/mnemonic': 0.0.0-master-6c8ce489
+      '@fuel-ts/providers': 0.0.0-master-6c8ce489
+      '@fuel-ts/signer': 0.0.0-master-6c8ce489
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/wordlists/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-sXTn40Q8dM1inadXfelazIfxXfQXyOYhpNy2GtUapXKoXuhKghDuQ6aN2dyMeAC8eghfzphUpawA1zrw1OyweA==}
+  /@fuel-ts/wordlists/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-U28IpzYxgkQZ159WS2SMRkzuuXqVr3o5Zk6RuHy6Ef41qhyAPhobH8X1F6317kXjQ0l3/ASWXI+uAbQpd+W4RQ==}
     dev: false
 
   /@headlessui/react/1.6.2_ef5jwxihqo6n7gxfmzogljlgcm:
@@ -4271,8 +4284,6 @@ packages:
     dependencies:
       micromatch: 3.1.10
       normalize-path: 2.1.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /anymatch/3.1.2:
@@ -4756,8 +4767,6 @@ packages:
       snapdragon-node: 2.1.1
       split-string: 3.1.0
       to-regex: 3.0.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /braces/3.0.2:
@@ -5265,21 +5274,11 @@ packages:
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
     dependencies:
       ms: 2.0.0
 
   /debug/3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
     dependencies:
       ms: 2.1.2
 
@@ -5826,7 +5825,7 @@ packages:
     dependencies:
       confusing-browser-globals: 1.0.11
       eslint: 8.15.0
-      eslint-plugin-import: 2.26.0_eor5fr4wgkua4fh2zz3r4cqkce
+      eslint-plugin-import: 2.26.0_eslint@8.15.0
       object.assign: 4.1.2
       object.entries: 1.1.5
       semver: 6.3.0
@@ -5844,7 +5843,7 @@ packages:
       '@typescript-eslint/parser': 5.25.0_hcfsmds2fshutdssjqluwm76uu
       eslint: 8.15.0
       eslint-config-airbnb-base: 15.0.0_gwd37gqv3vjv3xlpl7ju3ag2qu
-      eslint-plugin-import: 2.26.0_eor5fr4wgkua4fh2zz3r4cqkce
+      eslint-plugin-import: 2.26.0_eslint@8.15.0
     dev: false
 
   /eslint-config-prettier/6.15.0_eslint@6.8.0:
@@ -5866,7 +5865,7 @@ packages:
       eslint: 8.15.0
     dev: false
 
-  /eslint-config-react-app/5.2.1_ckh43hc77i4l5toqxpdts3avcu:
+  /eslint-config-react-app/5.2.1_yq2d5tvldknwrp7r6pszxgjgsu:
     resolution: {integrity: sha512-pGIZ8t0mFLcV+6ZirRgYK6RVqUIKRIi9MmgzUEmrIknsn3AdO0I32asO86dJgloHq+9ZPl8UIg8mYrvgP5u2wQ==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': 2.x
@@ -5878,10 +5877,6 @@ packages:
       eslint-plugin-jsx-a11y: 6.x
       eslint-plugin-react: 7.x
       eslint-plugin-react-hooks: 1.x || 2.x
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
       '@typescript-eslint/eslint-plugin': 2.34.0_fmavwhclprfd5wnbs7ocgoy2gu
       '@typescript-eslint/parser': 2.34.0_z6m2zvrkqxyghb4a2ijhravsdi
@@ -5889,11 +5884,10 @@ packages:
       confusing-browser-globals: 1.0.11
       eslint: 6.8.0
       eslint-plugin-flowtype: 3.13.0_eslint@6.8.0
-      eslint-plugin-import: 2.26.0_tbglwmj7t2rhd43mvxmptakoay
+      eslint-plugin-import: 2.26.0_eslint@6.8.0
       eslint-plugin-jsx-a11y: 6.5.1_eslint@6.8.0
       eslint-plugin-react: 7.30.0_eslint@6.8.0
       eslint-plugin-react-hooks: 2.5.1_eslint@6.8.0
-      typescript: 3.9.10
     dev: true
 
   /eslint-import-resolver-node/0.3.6:
@@ -5901,60 +5895,13 @@ packages:
     dependencies:
       debug: 3.2.7
       resolve: 1.22.0
-    transitivePeerDependencies:
-      - supports-color
 
-  /eslint-module-utils/2.7.3_mcjqbk7r2nrqjiufidliyvmmpu:
+  /eslint-module-utils/2.7.3:
     resolution: {integrity: sha512-088JEC7O3lDZM9xGe0RerkOMd0EjFl+Yvd1jPWIkMT5u3H9+HC34mWWPnqPrN13gieT9pBOO+Qt07Nb/6TresQ==}
     engines: {node: '>=4'}
-    peerDependencies:
-      '@typescript-eslint/parser': '*'
-      eslint-import-resolver-node: '*'
-      eslint-import-resolver-typescript: '*'
-      eslint-import-resolver-webpack: '*'
-    peerDependenciesMeta:
-      '@typescript-eslint/parser':
-        optional: true
-      eslint-import-resolver-node:
-        optional: true
-      eslint-import-resolver-typescript:
-        optional: true
-      eslint-import-resolver-webpack:
-        optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.25.0_hcfsmds2fshutdssjqluwm76uu
       debug: 3.2.7
-      eslint-import-resolver-node: 0.3.6
       find-up: 2.1.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /eslint-module-utils/2.7.3_v3bireslbrxtr5bkc2nznayije:
-    resolution: {integrity: sha512-088JEC7O3lDZM9xGe0RerkOMd0EjFl+Yvd1jPWIkMT5u3H9+HC34mWWPnqPrN13gieT9pBOO+Qt07Nb/6TresQ==}
-    engines: {node: '>=4'}
-    peerDependencies:
-      '@typescript-eslint/parser': '*'
-      eslint-import-resolver-node: '*'
-      eslint-import-resolver-typescript: '*'
-      eslint-import-resolver-webpack: '*'
-    peerDependenciesMeta:
-      '@typescript-eslint/parser':
-        optional: true
-      eslint-import-resolver-node:
-        optional: true
-      eslint-import-resolver-typescript:
-        optional: true
-      eslint-import-resolver-webpack:
-        optional: true
-    dependencies:
-      '@typescript-eslint/parser': 2.34.0_z6m2zvrkqxyghb4a2ijhravsdi
-      debug: 3.2.7
-      eslint-import-resolver-node: 0.3.6
-      find-up: 2.1.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
 
   /eslint-plugin-eslint-comments/3.2.0_eslint@8.15.0:
     resolution: {integrity: sha512-0jkOl0hfojIHHmEHgmNdqv4fmh7300NdpA9FFpF7zaoLvB/QeXOGNLIo86oAveJFrfB1p05kC8hpEMHM8DwWVQ==}
@@ -5977,55 +5924,19 @@ packages:
       lodash: 4.17.21
     dev: true
 
-  /eslint-plugin-import/2.26.0_eor5fr4wgkua4fh2zz3r4cqkce:
+  /eslint-plugin-import/2.26.0_eslint@6.8.0:
     resolution: {integrity: sha512-hYfi3FXaM8WPLf4S1cikh/r4IxnO6zrhZbEGz2b660EJRbuxgpDS5gkCuYgGWg2xxh2rBuIr4Pvhve/7c31koA==}
     engines: {node: '>=4'}
     peerDependencies:
-      '@typescript-eslint/parser': '*'
       eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-    peerDependenciesMeta:
-      '@typescript-eslint/parser':
-        optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.25.0_hcfsmds2fshutdssjqluwm76uu
-      array-includes: 3.1.5
-      array.prototype.flat: 1.3.0
-      debug: 2.6.9
-      doctrine: 2.1.0
-      eslint: 8.15.0
-      eslint-import-resolver-node: 0.3.6
-      eslint-module-utils: 2.7.3_mcjqbk7r2nrqjiufidliyvmmpu
-      has: 1.0.3
-      is-core-module: 2.9.0
-      is-glob: 4.0.3
-      minimatch: 3.1.2
-      object.values: 1.1.5
-      resolve: 1.22.0
-      tsconfig-paths: 3.14.1
-    transitivePeerDependencies:
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - supports-color
-    dev: false
-
-  /eslint-plugin-import/2.26.0_tbglwmj7t2rhd43mvxmptakoay:
-    resolution: {integrity: sha512-hYfi3FXaM8WPLf4S1cikh/r4IxnO6zrhZbEGz2b660EJRbuxgpDS5gkCuYgGWg2xxh2rBuIr4Pvhve/7c31koA==}
-    engines: {node: '>=4'}
-    peerDependencies:
-      '@typescript-eslint/parser': '*'
-      eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-    peerDependenciesMeta:
-      '@typescript-eslint/parser':
-        optional: true
-    dependencies:
-      '@typescript-eslint/parser': 2.34.0_z6m2zvrkqxyghb4a2ijhravsdi
       array-includes: 3.1.5
       array.prototype.flat: 1.3.0
       debug: 2.6.9
       doctrine: 2.1.0
       eslint: 6.8.0
       eslint-import-resolver-node: 0.3.6
-      eslint-module-utils: 2.7.3_v3bireslbrxtr5bkc2nznayije
+      eslint-module-utils: 2.7.3
       has: 1.0.3
       is-core-module: 2.9.0
       is-glob: 4.0.3
@@ -6033,11 +5944,29 @@ packages:
       object.values: 1.1.5
       resolve: 1.22.0
       tsconfig-paths: 3.14.1
-    transitivePeerDependencies:
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - supports-color
     dev: true
+
+  /eslint-plugin-import/2.26.0_eslint@8.15.0:
+    resolution: {integrity: sha512-hYfi3FXaM8WPLf4S1cikh/r4IxnO6zrhZbEGz2b660EJRbuxgpDS5gkCuYgGWg2xxh2rBuIr4Pvhve/7c31koA==}
+    engines: {node: '>=4'}
+    peerDependencies:
+      eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
+    dependencies:
+      array-includes: 3.1.5
+      array.prototype.flat: 1.3.0
+      debug: 2.6.9
+      doctrine: 2.1.0
+      eslint: 8.15.0
+      eslint-import-resolver-node: 0.3.6
+      eslint-module-utils: 2.7.3
+      has: 1.0.3
+      is-core-module: 2.9.0
+      is-glob: 4.0.3
+      minimatch: 3.1.2
+      object.values: 1.1.5
+      resolve: 1.22.0
+      tsconfig-paths: 3.14.1
+    dev: false
 
   /eslint-plugin-jest-dom/4.0.1_eslint@8.15.0:
     resolution: {integrity: sha512-9aUaX4AtlFBziLqKSjc7DKHQ/y1T32qNapG3uSeLDMJYKswASoQLJWOfLIE+zEHKvCNzNIz8T7282tQkuu0TKQ==}
@@ -6519,8 +6448,6 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /expect/25.5.0:
@@ -6586,8 +6513,6 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /extract-files/9.0.0:
@@ -6814,17 +6739,17 @@ packages:
     dev: true
     optional: true
 
-  /fuels/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-4E/aXC3eAaRrdhFX3zxVu6Njyiy86qfuC9tHQ4R1cJVsJPhYfuQkpkSNrUs/4ILuukMkYsiT9P5uznuguoaFOw==}
+  /fuels/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-OIQkunJmKSWYlDRlDacfuHu+VrSSk2owVTYsi/DgKJUcq8X+hlrT54eqWNxl4OJfK+KiwCfDet+vQjVhJuN36w==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@fuel-ts/abi-coder': 0.0.0-master-d5e02003
-      '@fuel-ts/constants': 0.0.0-master-d5e02003
-      '@fuel-ts/contract': 0.0.0-master-d5e02003
-      '@fuel-ts/math': 0.0.0-master-d5e02003
-      '@fuel-ts/providers': 0.0.0-master-d5e02003
-      '@fuel-ts/transactions': 0.0.0-master-d5e02003
-      '@fuel-ts/wallet': 0.0.0-master-d5e02003
+      '@fuel-ts/abi-coder': 0.0.0-master-6c8ce489
+      '@fuel-ts/constants': 0.0.0-master-6c8ce489
+      '@fuel-ts/contract': 0.0.0-master-6c8ce489
+      '@fuel-ts/math': 0.0.0-master-6c8ce489
+      '@fuel-ts/providers': 0.0.0-master-6c8ce489
+      '@fuel-ts/transactions': 0.0.0-master-6c8ce489
+      '@fuel-ts/wallet': 0.0.0-master-6c8ce489
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -7997,8 +7922,6 @@ packages:
       which: 2.0.2
     optionalDependencies:
       fsevents: 2.3.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /jest-haste-map/28.1.0:
@@ -9038,8 +8961,6 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /micromatch/4.0.5:
@@ -9165,8 +9086,6 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /natural-compare/1.4.0:
@@ -10420,8 +10339,6 @@ packages:
       micromatch: 3.1.10
       minimist: 1.2.6
       walker: 1.0.8
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /saxes/3.1.11:
@@ -10590,8 +10507,6 @@ packages:
       source-map: 0.5.7
       source-map-resolve: 0.5.3
       use: 3.1.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /source-map-js/1.0.2:
@@ -11277,9 +11192,9 @@ packages:
       enquirer: 2.3.6
       eslint: 6.8.0
       eslint-config-prettier: 6.15.0_eslint@6.8.0
-      eslint-config-react-app: 5.2.1_ckh43hc77i4l5toqxpdts3avcu
+      eslint-config-react-app: 5.2.1_yq2d5tvldknwrp7r6pszxgjgsu
       eslint-plugin-flowtype: 3.13.0_eslint@6.8.0
-      eslint-plugin-import: 2.26.0_tbglwmj7t2rhd43mvxmptakoay
+      eslint-plugin-import: 2.26.0_eslint@6.8.0
       eslint-plugin-jsx-a11y: 6.5.1_eslint@6.8.0
       eslint-plugin-prettier: 3.4.1_w56nqx62sqpcgkca3sb3623wsa
       eslint-plugin-react: 7.30.0_eslint@6.8.0
@@ -11311,8 +11226,6 @@ packages:
       - '@types/node'
       - bufferutil
       - canvas
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
       - supports-color
       - utf-8-validate
     dev: true
@@ -11578,32 +11491,11 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /typechain-target-fuels/0.0.0-master-d5e02003:
-    resolution: {integrity: sha512-FB/Wn2ZZEG4bUTidznQFWA/bRieu9k0xp5zbRwmngJqIGdVlAD4BBAjYX4tPqtkhcbeo5zPgoDyu5ApfyY3eNg==}
+  /typechain-target-fuels/0.0.0-master-6c8ce489:
+    resolution: {integrity: sha512-8a+/AkwYPniZKjqk+jYMCwoAxa78hvz6vEvAw5f4dCQvnP0iMltt3/M4d4/fIgCYgALsm0vjMqv9riSTd4fF1w==}
     dependencies:
       ts-essentials: 9.1.2_typescript@4.6.4
-      typechain: 6.1.0_typescript@4.6.4
-      typescript: 4.6.4
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /typechain/6.1.0_typescript@4.6.4:
-    resolution: {integrity: sha512-GGfkK0p3fUgz8kYxjSS4nKcWXE0Lo+teHTetghousIK5njbNoYNDlwn91QIyD181L3fVqlTvBE0a/q3AZmjNfw==}
-    hasBin: true
-    peerDependencies:
-      typescript: '>=4.1.0'
-    dependencies:
-      '@types/prettier': 2.6.1
-      debug: 4.3.4
-      fs-extra: 7.0.1
-      glob: 7.2.3
-      js-sha3: 0.8.0
-      lodash: 4.17.21
-      mkdirp: 1.0.4
-      prettier: 2.6.2
-      ts-command-line-args: 2.3.1
-      ts-essentials: 7.0.3_typescript@4.6.4
+      typechain: 8.0.0_typescript@4.6.4
       typescript: 4.6.4
     transitivePeerDependencies:
       - supports-color
