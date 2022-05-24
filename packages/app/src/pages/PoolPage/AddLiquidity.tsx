@@ -153,24 +153,37 @@ export default function AddLiquidity() {
     },
     {
       onSuccess: () => {
-        toast.success("New pool created!");
+        toast.success(
+          reservesFromToRatio
+            ? "Added liquidity to the pool."
+            : "New pool created."
+        );
         fromInput.setAmount(BigInt(0));
         toInput.setAmount(BigInt(0));
-        refetchPoolInfo();
-        balances.refetch();
       },
       onError: (e: any) => {
         const errors = e?.response?.errors;
 
-        if (errors.length) {
+        if (errors?.length) {
           if (errors[0].message === "enough coins could not be found") {
             toast.error(
-              "Not enough balance in your wallet to create this pool."
+              `Not enough balance in your wallet to ${
+                reservesFromToRatio ? "add liquidity to" : "create"
+              } this pool.`
             );
           }
+        } else {
+          toast.error(
+            `Error when trying to ${
+              reservesFromToRatio ? "add liquidity to" : "create"
+            } this pool.`
+          );
         }
       },
-      onSettled: () => {
+      onSettled: async () => {
+        await refetchPoolInfo();
+        await balances.refetch();
+
         setStage(0);
       },
     }
