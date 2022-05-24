@@ -1,12 +1,13 @@
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useRef } from "react";
 
 import { PricePerToken } from "./PricePerToken";
 import {
   swapActiveInputAtom,
-  swapInitialAmountAtom,
+  swapAmountAtom,
   swapCoinsAtom,
   swapIsTypingAtom,
+  swapHasSwappedAtom
 } from "./jotai";
 import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
@@ -29,15 +30,15 @@ type SwapComponentProps = {
 export function SwapComponent({
   onChange,
   isLoading,
-  previewAmount: previewValue,
-  hasSwapped,
+  previewAmount: previewValue
 }: SwapComponentProps) {
-  const [initialAmount, setInitialAmount] = useAtom(swapInitialAmountAtom);
+  const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [initialActiveInput, setInitialActiveInput] =
     useAtom(swapActiveInputAtom);
 
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
   const setTyping = useSetAtom(swapIsTypingAtom);
+  const hasSwapped = useAtomValue(swapHasSwappedAtom);
   const activeInput = useRef<ActiveInput>(initialActiveInput);
 
   const handleInvertCoins = () => {

@@ -13,6 +13,8 @@ import { useContract } from "~/context/AppContext";
 import useDebounce from "~/hooks/useDebounce";
 import { isSwayInfinity, sleep } from "~/lib/utils";
 import { queryClient } from "~/queryClient";
+import { useSetAtom } from "jotai";
+import { swapHasSwappedAtom } from "./jotai";
 
 type StateParams = {
   swapState: SwapState | null;
@@ -71,6 +73,7 @@ export default function SwapPage() {
   const [swapState, setSwapState] = useState<SwapState | null>(null);
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
+  const setHasSwapped = useSetAtom(swapHasSwappedAtom);
 
   const { isLoading } = useQuery(
     [
@@ -95,8 +98,7 @@ export default function SwapPage() {
 
   const {
     mutate: swap,
-    isLoading: isSwaping,
-    isSuccess: hasSwapped,
+    isLoading: isSwaping
   } = useMutation(
     async () => {
       if (!swapState) return;
@@ -105,6 +107,7 @@ export default function SwapPage() {
     },
     {
       onSuccess: () => {
+        setHasSwapped(true);
         toast.success("Swap made successfully!");
         queryClient.refetchQueries(["AssetsPage-balances"]);
       },
@@ -133,7 +136,6 @@ export default function SwapPage() {
         previewAmount={previewAmount}
         onChange={handleSwap}
         isLoading={isLoading}
-        hasSwapped={hasSwapped}
       />
       <Button
         isFull

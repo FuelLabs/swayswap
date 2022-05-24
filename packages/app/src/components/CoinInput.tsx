@@ -12,8 +12,6 @@ import { Spinner } from "./Spinner";
 import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import type { Coin } from "~/types";
-import { useAtom } from "jotai";
-import { swapAmountAtom } from "~/pages/SwapPage/jotai";
 
 const style = {
   transferPropContainer: `flex bg-gray-700 rounded-2xl p-2 border border-gray-700`,
@@ -80,7 +78,7 @@ export function useCoinInput({
   onInput,
   ...params
 }: UseCoinParams) {
-  const [amount, setAmount] = useAtom(swapAmountAtom);
+  const [amount, setAmount] = useState<bigint | null>(null);
   const { data: balances } = useBalances({ enabled: showBalance });
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
 
