@@ -14,7 +14,12 @@ import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { Spinner } from "~/components/Spinner";
-import { CONTRACT_ID, DECIMAL_UNITS, ONE_ASSET, SLIPPAGE_TOLERANCE } from "~/config";
+import {
+  CONTRACT_ID,
+  DECIMAL_UNITS,
+  ONE_ASSET,
+  SLIPPAGE_TOLERANCE,
+} from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import assets from "~/lib/CoinsMetadata";
@@ -231,12 +236,27 @@ export default function AddLiquidity() {
 
   const errorsCreatePull = validateCreatePool();
 
-  const liquidityFactor = BigInt(toNumber(fromInput.amount || BigInt(0)) * toNumber(poolInfo?.lp_token_supply || BigInt(1)));
-  const previewTokensToReceive = calculateRatio(liquidityFactor, poolInfo?.eth_reserve || BigInt(1));
-  const nextTotalTokenSupply = previewTokensToReceive + toNumber(poolInfo?.lp_token_supply || BigInt(0));
-  const poolContractBalance = balances?.data?.find((item) => item.assetId === CONTRACT_ID);
-  const currentPoolTokensAmount = toNumber(poolContractBalance?.amount || BigInt(0));
-  const nextCurrentPoolShare = calculateRatio(BigInt(previewTokensToReceive + currentPoolTokensAmount), BigInt(nextTotalTokenSupply)) || 1;
+  const liquidityFactor = BigInt(
+    toNumber(fromInput.amount || BigInt(0)) *
+      toNumber(poolInfo?.lp_token_supply || BigInt(1))
+  );
+  const previewTokensToReceive = calculateRatio(
+    liquidityFactor,
+    poolInfo?.eth_reserve || BigInt(1)
+  );
+  const nextTotalTokenSupply =
+    previewTokensToReceive + toNumber(poolInfo?.lp_token_supply || BigInt(0));
+  const poolContractBalance = balances?.data?.find(
+    (item) => item.assetId === CONTRACT_ID
+  );
+  const currentPoolTokensAmount = toNumber(
+    poolContractBalance?.amount || BigInt(0)
+  );
+  const nextCurrentPoolShare =
+    calculateRatio(
+      BigInt(previewTokensToReceive + currentPoolTokensAmount),
+      BigInt(nextTotalTokenSupply)
+    ) || 1;
 
   return addLiquidityMutation.isLoading ? (
     <div className="mt-6 mb-8 flex justify-center">
