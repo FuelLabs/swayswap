@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import { RequireWallet } from "./components/RequireWallet";
 import { MainLayout } from "./layouts/MainLayout";
-import { Pages, PoolPages } from "./types/pages";
+import { Pages } from "./types/pages";
 
 const AddLiquidity = lazy(() => import("./pages/PoolPage/AddLiquidity"));
 const CreateWallet = lazy(() => import("~/pages/CreateWallet"));
@@ -45,11 +45,11 @@ export default function AppRoutes() {
             </RequireWallet>
           }
         >
-          <Route index element={<Navigate to={PoolPages.poolsList} />} />
-          <Route path={PoolPages.poolsList} element={<PoolsPreview />} />
-          <Route path={PoolPages.addLiquidity} element={<AddLiquidity />} />
+          <Route index element={<Navigate to={Pages["pool.list"]} />} />
+          <Route path={Pages["pool.list"]} element={<PoolsPreview />} />
+          <Route path={Pages["pool.addLiquidity"]} element={<AddLiquidity />} />
           <Route
-            path={PoolPages.removeLiquidity}
+            path={Pages["pool.removeLiquidity"]}
             element={
               <RequireWallet>
                 <RemoveLiquidityPage />

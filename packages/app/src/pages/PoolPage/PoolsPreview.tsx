@@ -7,9 +7,10 @@ import { PreviewTable, PreviewItem } from "~/components/PreviewTable";
 import { Spinner } from "~/components/Spinner";
 import { TokenIcon } from "~/components/TokenIcon";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
+import { useUserPositions } from "~/hooks/useUserPositions";
+import CoinsMetadata from "~/lib/CoinsMetadata";
 import { calculateRatio } from "~/lib/asset";
-import { COIN_DAI, COIN_ETH } from "~/lib/constants";
-import { PoolPages } from "~/types/pages";
+import { Pages } from "~/types/pages";
 
 function WithoutPositions() {
   return (
@@ -21,14 +22,17 @@ function WithoutPositions() {
 }
 
 function PositionItem() {
-  const info = usePoolInfo();
   const navigate = useNavigate();
+  const info = useUserPositions();
+  const token = CoinsMetadata.find((c) => c.symbol === "ETH/DAI");
+  const coinFrom = token?.pairOf?.[0];
+  const coinTo = token?.pairOf?.[1];
 
   return (
     <Accordion.Item value="item-1">
       <Accordion.Trigger>
         <div className="flex items-center">
-          <TokenIcon coinFrom={COIN_ETH} coinTo={COIN_DAI} />
+          <TokenIcon coinFrom={coinFrom} coinTo={coinTo} />
           ETH/DAI
         </div>
       </Accordion.Trigger>
@@ -38,7 +42,7 @@ function PositionItem() {
             title="Pooled DAI"
             value={
               <div className="inline-flex items-center gap">
-                {info.pooledDAI} <TokenIcon coinFrom={COIN_DAI} size={14} />
+                {info.pooledDAI} <TokenIcon coinFrom={coinTo} size={14} />
               </div>
             }
           />
@@ -46,7 +50,7 @@ function PositionItem() {
             title="Pooled ETH"
             value={
               <div className="inline-flex items-center gap">
-                {info.pooledETH} <TokenIcon coinFrom={COIN_ETH} size={14} />
+                {info.pooledETH} <TokenIcon coinFrom={coinFrom} size={14} />
               </div>
             }
           />
@@ -56,13 +60,13 @@ function PositionItem() {
         <div className="flex items-center justify-between gap-2 mt-3">
           <Button
             isFull
-            onPress={() => navigate(`../${PoolPages.addLiquidity}`)}
+            onPress={() => navigate(`../${Pages["pool.addLiquidity"]}`)}
           >
             Add liquidity
           </Button>
           <Button
             isFull
-            onPress={() => navigate(`../${PoolPages.removeLiquidity}`)}
+            onPress={() => navigate(`../${Pages["pool.removeLiquidity"]}`)}
           >
             Remove liquidity
           </Button>

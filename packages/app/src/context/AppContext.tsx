@@ -73,7 +73,7 @@ export const AppContextProvider = ({
           });
           transactionRequest.addCoin({
             id: "0x000000000000000000000000000000000000000000000000000000000000000000",
-            assetId: COIN_ETH.assetId,
+            assetId: COIN_ETH,
             amount: FAUCET_AMOUNT,
             owner:
               "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
@@ -84,7 +84,7 @@ export const AppContextProvider = ({
           transactionRequest.addCoinOutput(
             wallet!.address,
             FAUCET_AMOUNT,
-            COIN_ETH.assetId
+            COIN_ETH
           );
           const submit = await wallet!.sendTransaction(transactionRequest);
 

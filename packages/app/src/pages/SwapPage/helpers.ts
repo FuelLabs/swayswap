@@ -28,12 +28,12 @@ export const calculatePriceImpact = ({
   if (!previewAmount || !amount || !token_reserve || !eth_reserve) return '0';
 
   if (direction === ActiveInput.from) {
-    if (coinFrom?.assetId !== COIN_ETH.assetId) {
+    if (coinFrom?.assetId !== COIN_ETH) {
       return getPriceImpact(previewAmount, amount, token_reserve, eth_reserve);
     }
     return getPriceImpact(previewAmount, amount, eth_reserve, token_reserve);
   }
-  if (coinFrom?.assetId !== COIN_ETH.assetId) {
+  if (coinFrom?.assetId !== COIN_ETH) {
     return getPriceImpact(amount, previewAmount, token_reserve, eth_reserve);
   }
   return getPriceImpact(amount, previewAmount, eth_reserve, token_reserve);
