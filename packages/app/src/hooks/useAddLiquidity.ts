@@ -6,7 +6,7 @@ import type { UseQueryResult } from 'react-query';
 import { useBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
-import { DEADLINE, SLIPPAGE_TOLERANCE } from '~/config';
+import { DEADLINE } from '~/config';
 import { useContract } from '~/context/AppContext';
 import type { Coin } from '~/types';
 import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
@@ -64,7 +64,6 @@ export function useAddLiquidity({
       onSuccess: (liquidityTokens) => {
         if (liquidityTokens) {
           toast.success(reservesFromToRatio ? 'Added liquidity to the pool.' : 'New pool created.');
-
         } else {
           toast.error(
             `Error when trying to ${reservesFromToRatio ? 'add liquidity to' : 'create'} this pool.`
