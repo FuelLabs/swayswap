@@ -6,8 +6,8 @@ import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { CONTRACT_ID } from "~/config";
-import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
+import { useContract } from "~/hooks/useContract";
 import coins from "~/lib/CoinsMetadata";
 
 export default function RemoveLiquidityPage() {

@@ -68,7 +68,10 @@ export function MainLayout() {
               </div>
             }
           >
-            <div className="w-screen flex flex-1 items-center justify-center pb-14">
+            <div
+              className="w-screen flex flex-1 items-center justify-center pb-14"
+              data-testid="content"
+            >
               <Outlet />
             </div>
           </Suspense>

@@ -12,9 +12,9 @@ import { Menu } from "~/components/Menu";
 import { Popover, usePopover } from "~/components/Popover";
 import { Spinner } from "~/components/Spinner";
 import { ENABLE_FAUCET_API } from "~/config";
-import { useWallet } from "~/context/AppContext";
 import { useAssets } from "~/hooks/useAssets";
 import { useFaucet } from "~/hooks/useFaucet";
+import { useWallet } from "~/hooks/useWallet";
 import { Pages } from "~/types/pages";
 
 type WalletInfoProps = {

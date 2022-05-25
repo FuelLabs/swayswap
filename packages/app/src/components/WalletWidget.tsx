@@ -9,10 +9,10 @@ import { ButtonGroup } from "./ButtonGroup";
 import { Popover, usePopover } from "./Popover";
 import { WalletInfo } from "./WalletInfo";
 
-import { useWallet } from "~/context/AppContext";
 import { useEthBalance } from "~/hooks/useEthBalance";
 import { useFaucet } from "~/hooks/useFaucet";
 import { useUserInfo } from "~/hooks/useUserInfo";
+import { useWallet } from "~/hooks/useWallet";
 
 const style = {
   wallet: `flex items-center absolute gap-3 top-4 right-4 rounded-full text-gray-300 bg-gray-800 inner-shadow p-1`,

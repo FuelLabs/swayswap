@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import { objectId } from '../lib/utils';
 
-import { useWallet } from '~/context/AppContext';
+import { useWallet } from '~/hooks/useWallet';
 import { Token_contractAbi__factory } from '~/types/contracts';
 
 export function useTokenMethods(tokenId: string) {

@@ -10,7 +10,7 @@ import { ButtonGroup } from "./ButtonGroup";
 import { WalletWidget } from "./WalletWidget";
 
 import fuelLogo from "~/assets/fuel-logo-512x512.png";
-import { useWallet } from "~/context/AppContext";
+import { useWallet } from "~/hooks/useWallet";
 import { Pages } from "~/types/pages";
 
 const style = {

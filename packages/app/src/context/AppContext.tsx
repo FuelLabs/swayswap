@@ -15,7 +15,7 @@ interface AppContextValue {
   wallet: Wallet | null;
   contract: Exchange_contractAbi | null;
   createWallet: () => void;
-  faucet: () => Promise<TransactionResult<"success">>;
+  faucet: () => Promise<TransactionResult<"success"> | null>;
 }
 
 const walletPrivateKeyState = atomWithStorage<string | null>(
@@ -26,16 +26,6 @@ const walletPrivateKeyState = atomWithStorage<string | null>(
 export const AppContext = React.createContext<AppContextValue | null>(null);
 
 export const useAppContext = () => useContext(AppContext)!;
-
-export const useWallet = () => {
-  const { wallet } = useContext(AppContext)!;
-  return wallet;
-};
-
-export const useContract = () => {
-  const { contract } = useContext(AppContext)!;
-  return contract;
-};
 
 export const AppContextProvider = ({
   children,
@@ -65,6 +55,7 @@ export const AppContextProvider = ({
           return nextWallet;
         },
         faucet: async () => {
+          if (!wallet) return null;
           const transactionRequest = new ScriptTransactionRequest({
             gasPrice: 0,
             gasLimit: "0x0F4240",
@@ -82,12 +73,11 @@ export const AppContextProvider = ({
             blockCreated: toBigInt(0),
           });
           transactionRequest.addCoinOutput(
-            wallet!.address,
+            wallet?.address,
             FAUCET_AMOUNT,
             COIN_ETH
           );
           const submit = await wallet!.sendTransaction(transactionRequest);
-
           return submit.wait();
         },
       }}

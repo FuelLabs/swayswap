@@ -7,7 +7,7 @@ import { useBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { SLIPPAGE_TOLERANCE } from '~/config';
-import { useContract } from '~/context/AppContext';
+import { useContract } from '~/hooks/useContract';
 import type { Coin } from '~/types';
 import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 

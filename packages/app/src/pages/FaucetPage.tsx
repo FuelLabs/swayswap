@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { FUEL_FAUCET_URL, RECAPTCHA_SITE_KEY } from "~/config";
-import { useWallet } from "~/context/AppContext";
+import { useWallet } from "~/hooks/useWallet";
 import { sleep } from "~/lib/utils";
 
 export default function FaucetPage() {

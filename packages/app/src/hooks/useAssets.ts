@@ -2,7 +2,7 @@ import type { CoinQuantity } from 'fuels';
 import { toBigInt } from 'fuels';
 import { useQuery } from 'react-query';
 
-import { useWallet } from '~/context/AppContext';
+import { useWallet } from '~/hooks/useWallet';
 import CoinsMetadata, { ASSET_404 } from '~/lib/CoinsMetadata';
 import type { Coin } from '~/types';
 
