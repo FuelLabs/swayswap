@@ -8,7 +8,7 @@ import { useBalances } from './useBalances';
 import type { UseCoinInput } from '~/components/CoinInput';
 import { useContract } from '~/context/AppContext';
 import type { Coin } from '~/types';
-import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
+import { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 
 export interface UseAddLiquidityProps {
   fromInput: UseCoinInput;
