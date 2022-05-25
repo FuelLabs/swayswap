@@ -3,7 +3,7 @@ import { toNumber } from 'fuels';
 import type { SwapInfo } from './types';
 import { ActiveInput } from './types';
 
-import { CoinETH } from '~/lib/constants';
+import { COIN_ETH } from '~/lib/constants';
 
 export function getPriceImpact(
   outputAmount: bigint,
@@ -28,12 +28,12 @@ export const calculatePriceImpact = ({
   if (!previewAmount || !amount || !token_reserve || !eth_reserve) return '0';
 
   if (direction === ActiveInput.from) {
-    if (coinFrom?.assetId !== CoinETH) {
+    if (coinFrom?.assetId !== COIN_ETH.assetId) {
       return getPriceImpact(previewAmount, amount, token_reserve, eth_reserve);
     }
     return getPriceImpact(previewAmount, amount, eth_reserve, token_reserve);
   }
-  if (coinFrom?.assetId !== CoinETH) {
+  if (coinFrom?.assetId !== COIN_ETH.assetId) {
     return getPriceImpact(amount, previewAmount, token_reserve, eth_reserve);
   }
   return getPriceImpact(amount, previewAmount, eth_reserve, token_reserve);

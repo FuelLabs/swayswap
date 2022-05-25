@@ -7,6 +7,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { Button } from "./Button";
 import { CoinsListDialog } from "./CoinsListDialog";
 import { Dialog, useDialog } from "./Dialog";
+import { TokenIcon } from "./TokenIcon";
 import { Tooltip } from "./Tooltip";
 
 import { DECIMAL_UNITS } from "~/config";
@@ -78,15 +79,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
           "coin-selector--empty": !selected,
         })}
       >
-        {selected && selected.img && (
-          <img
-            className="rounded-full border-none ml-1"
-            src={selected.img}
-            alt={selected.name}
-            height={20}
-            width={20}
-          />
-        )}
+        {selected && selected.img && <TokenIcon coinFrom={coin} />}
         {selected ? (
           <div className="ml-2">{selected?.name}</div>
         ) : (

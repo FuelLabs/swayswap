@@ -7,7 +7,7 @@ import type { PropsWithChildren } from "react";
 import React, { useContext, useMemo } from "react";
 
 import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "~/config";
-import { CoinETH, LocalStorageKey } from "~/lib/constants";
+import { COIN_ETH, LocalStorageKey } from "~/lib/constants";
 import type { ExchangeContractAbi } from "~/types/contracts";
 import { ExchangeContractAbi__factory } from "~/types/contracts";
 
@@ -73,7 +73,7 @@ export const AppContextProvider = ({
           });
           transactionRequest.addCoin({
             id: "0x000000000000000000000000000000000000000000000000000000000000000000",
-            assetId: CoinETH,
+            assetId: COIN_ETH.assetId,
             amount: FAUCET_AMOUNT,
             owner:
               "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
@@ -84,7 +84,7 @@ export const AppContextProvider = ({
           transactionRequest.addCoinOutput(
             wallet!.address,
             FAUCET_AMOUNT,
-            CoinETH
+            COIN_ETH.assetId
           );
           const submit = await wallet!.sendTransaction(transactionRequest);
 

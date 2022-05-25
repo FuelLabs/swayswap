@@ -1,7 +1,11 @@
 import { toBigInt } from 'fuels';
 
+import CoinsMetadata from './CoinsMetadata';
+
 export const contractABI = {};
 export const contractAddress = '0xF93c18172eAba6a9F145B3FB16d2bBeA2e096477';
 export const LocalStorageKey = 'swayswap-v2';
-export const CoinETH = '0x0000000000000000000000000000000000000000000000000000000000000000';
 export const ZERO = toBigInt(0);
+
+export const COIN_ETH = CoinsMetadata[0];
+export const COIN_DAI = CoinsMetadata[1];
