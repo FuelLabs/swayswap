@@ -9,7 +9,6 @@ import { TokenIcon } from "~/components/TokenIcon";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useUserPositions } from "~/hooks/useUserPositions";
 import CoinsMetadata from "~/lib/CoinsMetadata";
-import { calculateRatio } from "~/lib/asset";
 import { Pages } from "~/types/pages";
 
 function WithoutPositions() {
