@@ -8,7 +8,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 config({
   path:
-    process.env.NODE_ENV === 'PRODUCTION'
+    process.env.NODE_ENV === 'production'
       ? resolve(__dirname, './.env.production')
       : resolve(__dirname, './.env'),
 });
