@@ -4,7 +4,7 @@ import { useBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { calculateRatio } from '~/lib/asset';
-import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
+import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 
 export interface UsePreviewLiquidityProps {
   fromInput: UseCoinInput;
