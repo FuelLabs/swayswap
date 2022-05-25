@@ -98,7 +98,7 @@ export default function SwapPage() {
   const [swapState, setSwapState] = useState<SwapState | null>(null);
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
-  const { data: poolInfo } = usePoolInfo(contract);
+  const { data: poolInfo } = usePoolInfo();
   const previewAmount = previewInfo?.amount || ZERO;
   const swapInfo = useMemo<SwapInfo>(
     () => ({

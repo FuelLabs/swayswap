@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { RiCheckFill } from "react-icons/ri";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
@@ -17,6 +17,7 @@ import { Spinner } from "~/components/Spinner";
 import { DECIMAL_UNITS, SLIPPAGE_TOLERANCE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
+import { usePoolInfo } from "~/hooks/usePoolInfo";
 import assets from "~/lib/CoinsMetadata";
 import { calculateRatio } from "~/lib/asset";
 import type { Coin } from "~/types";
@@ -64,23 +65,21 @@ function PoolLoader({
 }
 
 export default function AddLiquidity() {
-  const balances = useBalances();
   const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
   const [toInitialAmount, setToInitialAmount] = useAtom(poolToAmountAtom);
-
+  const [stage, setStage] = useState(0);
   const contract = useContract()!;
-
+  const balances = useBalances();
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],
   ]);
 
-  const [stage, setStage] = useState(0);
   const {
     data: poolInfo,
     refetch: refetchPoolInfo,
     isLoading: isLoadingPoolInfo,
-  } = useQuery("PoolPage-poolInfo", () => contract.callStatic.get_info());
+  } = usePoolInfo();
 
   const handleChangeFromValue = (val: bigint | null) => {
     fromInput.setAmount(val);
@@ -91,6 +90,7 @@ export default function AddLiquidity() {
       toInput.setAmount(BigInt(newToValue));
     }
   };
+
   const handleChangeToValue = (val: bigint | null) => {
     toInput.setAmount(val);
 
