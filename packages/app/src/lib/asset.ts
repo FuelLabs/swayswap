@@ -1,7 +1,5 @@
 import { toNumber } from 'fuels';
 
-import { ONE_ASSET } from '~/config';
-
 export const calculateRatio = (
   initialFromAmount?: bigint | null,
   initialToAmount?: bigint | null
