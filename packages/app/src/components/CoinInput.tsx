@@ -40,6 +40,15 @@ type UseCoinParams = {
   disableWhenEth?: boolean;
 };
 
+export type UseCoinInput = {
+  amount: bigint | null;
+  setAmount: React.Dispatch<React.SetStateAction<bigint | null>>;
+  getInputProps: () => CoinInputProps;
+  getCoinSelectorProps: () => CoinSelectorProps;
+  formatted: string;
+  hasEnoughBalance: boolean;
+};
+
 type DisplayType = "input" | "text";
 
 const parseValue = (value: string) => (value === "." ? "0." : value);
@@ -72,7 +81,7 @@ export function useCoinInput({
   onChangeCoin,
   disableWhenEth,
   ...params
-}: UseCoinParams) {
+}: UseCoinParams): UseCoinInput {
   const [amount, setAmount] = useState<bigint | null>(null);
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
