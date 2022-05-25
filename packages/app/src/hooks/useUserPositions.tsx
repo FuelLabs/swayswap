@@ -28,11 +28,13 @@ export function useUserPositions() {
   const ethAmount = (lpTokenBalanceNum * tokenReserveETH) / totalLiquidity;
   const tokenAmount = (lpTokenBalanceNum * tokenReserveDAI) / totalLiquidity;
   const poolShare = (ethAmount / tokenAmount) * 100;
+  const hasPositions = lpTokenBalance > 0;
 
   return {
     pooledDAI,
     pooledETH,
     poolTokens,
     poolShare,
+    hasPositions,
   };
 }
