@@ -1,4 +1,5 @@
 import { BiListUl } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 import { Accordion } from "~/components/Accordion";
 import { Button } from "~/components/Button";
@@ -8,6 +9,7 @@ import { TokenIcon } from "~/components/TokenIcon";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { calculateRatio } from "~/lib/asset";
 import { COIN_DAI, COIN_ETH } from "~/lib/constants";
+import { PoolPages } from "~/types/pages";
 
 function WithoutPositions() {
   return (
@@ -20,6 +22,7 @@ function WithoutPositions() {
 
 function PositionItem() {
   const info = usePoolInfo();
+  const navigate = useNavigate();
 
   return (
     <Accordion.Item value="item-1">
@@ -47,12 +50,22 @@ function PositionItem() {
               </div>
             }
           />
-          <PreviewItem title="Your pool tokens" value={<div>50</div>} />
-          <PreviewItem title="Your pool share" value={<div>50</div>} />
+          <PreviewItem title="Your pool tokens" value={info.poolTokens} />
+          <PreviewItem title="Your pool share" value={`${info.poolShare}%`} />
         </PreviewTable>
         <div className="flex items-center justify-between gap-2 mt-3">
-          <Button isFull>Add liquidity</Button>
-          <Button isFull>Remove liquidity</Button>
+          <Button
+            isFull
+            onPress={() => navigate(`../${PoolPages.addLiquidity}`)}
+          >
+            Add liquidity
+          </Button>
+          <Button
+            isFull
+            onPress={() => navigate(`../${PoolPages.removeLiquidity}`)}
+          >
+            Remove liquidity
+          </Button>
         </div>
       </Accordion.Content>
     </Accordion.Item>

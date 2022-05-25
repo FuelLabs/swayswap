@@ -9,8 +9,8 @@ export const FUEL_FAUCET_URL =
 export const CONTRACT_ID = process.env.VITE_CONTRACT_ID!;
 export const TOKEN_ID = process.env.VITE_TOKEN_ID!;
 export const DECIMAL_UNITS = 3;
-export const FAUCET_AMOUNT = parseUnits('100000', DECIMAL_UNITS).toBigInt();
-export const MINT_AMOUNT = 20000;
+export const FAUCET_AMOUNT = parseUnits('0.5', DECIMAL_UNITS).toBigInt();
+export const MINT_AMOUNT = 2000;
 export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS).toBigInt();
 export const RECAPTCHA_SITE_KEY = process.env.VITE_RECAPTCHA_SITE_KEY!;
 export const ENABLE_FAUCET_API = process.env.VITE_ENABLE_FAUCET_API === 'true';
