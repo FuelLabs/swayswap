@@ -53,7 +53,7 @@
     "react-query": "^3.38.1",
     "react-router-dom": "6",
     "spinners-react": "^1.0.7",
-    "url-join": "^5.0.0",
+    "url-join-ts": "^1.0.5",
     "vite-tsconfig-paths": "^3.4.1",
     "web-vitals": "^2.1.4"
   },
