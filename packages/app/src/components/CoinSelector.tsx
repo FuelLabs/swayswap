@@ -79,9 +79,15 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
           "coin-selector--empty": !selected,
         })}
       >
-        {selected && selected.img && <TokenIcon coinFrom={coin} />}
+        {selected && selected.img && (
+          <TokenIcon
+            {...(coin?.pairOf
+              ? { coinFrom: coin.pairOf[0], coinTo: coin.pairOf[1] }
+              : { coinFrom: coin })}
+          />
+        )}
         {selected ? (
-          <div className="ml-2">{selected?.name}</div>
+          <div className="ml-1">{selected?.name}</div>
         ) : (
           <div className="ml-2">Select token</div>
         )}

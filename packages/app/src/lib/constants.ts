@@ -9,3 +9,4 @@ export const ZERO = toBigInt(0);
 
 export const COIN_ETH = CoinsMetadata[0];
 export const COIN_DAI = CoinsMetadata[1];
+export const COIN_ETHDAI = CoinsMetadata[2];

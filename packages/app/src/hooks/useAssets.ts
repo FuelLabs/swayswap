@@ -16,6 +16,7 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<Asset> =>
       // https://github.com/FuelLabs/swayswap-demo/issues/33
       name: coinMetadata?.name || ASSET_404.name,
       img: coinMetadata?.img || ASSET_404.img,
+      pairOf: coinMetadata?.pairOf,
       assetId: coin.assetId,
       amount: toBigInt(coin.amount || 0),
     };

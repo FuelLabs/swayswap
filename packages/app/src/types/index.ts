@@ -3,4 +3,5 @@ export interface Coin {
   symbol?: string;
   name?: string;
   img?: string;
+  pairOf?: Coin[];
 }
