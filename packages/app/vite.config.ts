@@ -4,8 +4,10 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: process.env.PUBLIC_URL || '/',
   build: {
     target: ['es2020'],
+    outDir: process.env.BUILD_PATH || 'dist',
   },
   plugins: [react()],
   define: {

@@ -182,11 +182,9 @@ export default function SwapPage() {
       />
       <SwapPreview isLoading={isLoading} swapInfo={swapInfo} />
       <PricePerToken
+        swapState={swapState}
+        previewAmount={previewAmount}
         isLoading={isLoading}
-        fromCoin={swapState?.coinFrom.symbol}
-        fromAmount={swapState?.amount}
-        toCoin={swapState?.coinTo.symbol}
-        toAmount={previewAmount}
       />
       <Button
         isFull
