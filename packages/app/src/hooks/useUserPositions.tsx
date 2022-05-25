@@ -23,16 +23,14 @@ export function useUserPositions() {
 
   const lpTokenBalanceNum = toNumber(lpTokenBalance);
   const totalLiquidity = toNumber(info?.lp_token_supply || BigInt(0));
-  const tokenReserveETH = toNumber(info?.eth_reserve || BigInt(0));
-  const tokenReserveDAI = toNumber(info?.token_reserve || BigInt(0));
-  const ethAmount = (lpTokenBalanceNum * tokenReserveETH) / totalLiquidity;
-  const tokenAmount = (lpTokenBalanceNum * tokenReserveDAI) / totalLiquidity;
-  const poolShare = (ethAmount / tokenAmount) * 100;
+  const poolShare = ((lpTokenBalanceNum / totalLiquidity) * 100).toFixed(2);
+  const hasPositions = lpTokenBalance > 0;
 
   return {
     pooledDAI,
     pooledETH,
     poolTokens,
     poolShare,
+    hasPositions,
   };
 }

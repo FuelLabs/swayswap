@@ -9,7 +9,6 @@ import { TokenIcon } from "~/components/TokenIcon";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useUserPositions } from "~/hooks/useUserPositions";
 import CoinsMetadata from "~/lib/CoinsMetadata";
-import { calculateRatio } from "~/lib/asset";
 import { Pages } from "~/types/pages";
 
 function WithoutPositions() {
@@ -77,11 +76,8 @@ function PositionItem() {
 }
 
 export default function PoolsPreview() {
-  const { data: poolInfo, isLoading } = usePoolInfo();
-  const reservesFromToRatio = calculateRatio(
-    poolInfo?.eth_reserve,
-    poolInfo?.token_reserve
-  );
+  const { isLoading } = usePoolInfo();
+  const { hasPositions } = useUserPositions();
 
   return (
     <div>
@@ -89,8 +85,8 @@ export default function PoolsPreview() {
         Your liquidity positions
       </h3>
       {isLoading && <Spinner />}
-      {Boolean(!isLoading && !reservesFromToRatio) && <WithoutPositions />}
-      {Boolean(!isLoading && reservesFromToRatio) && (
+      {Boolean(!isLoading && !hasPositions) && <WithoutPositions />}
+      {Boolean(!isLoading && hasPositions) && (
         <Accordion type="single" defaultValue="item-1" collapsible>
           <PositionItem />
         </Accordion>
