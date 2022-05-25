@@ -1,5 +1,5 @@
 import type { Coin } from '~/types';
-import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
+import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 
 export enum ActiveInput {
   'from' = 'from',

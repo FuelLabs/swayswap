@@ -8,12 +8,12 @@ import React, { useContext, useMemo } from "react";
 
 import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "~/config";
 import { CoinETH, LocalStorageKey } from "~/lib/constants";
-import type { ExchangeContractAbi } from "~/types/contracts";
-import { ExchangeContractAbi__factory } from "~/types/contracts";
+import type { Exchange_contractAbi } from "~/types/contracts";
+import { Exchange_contractAbi__factory } from "~/types/contracts";
 
 interface AppContextValue {
   wallet: Wallet | null;
-  contract: ExchangeContractAbi | null;
+  contract: Exchange_contractAbi | null;
   createWallet: () => void;
   faucet: () => Promise<TransactionResult<"success">>;
 }
@@ -49,7 +49,7 @@ export const AppContextProvider = ({
 
   const contract = useMemo(() => {
     if (!wallet) return null;
-    return ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
+    return Exchange_contractAbi__factory.connect(CONTRACT_ID, wallet);
   }, [wallet]);
 
   return (

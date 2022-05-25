@@ -24,7 +24,7 @@ export type TokenListInput = {
 
 export type TokenList = { tokens: any; cursor: bigint; items: bigint };
 
-interface SwayswapContractAbiInterface extends Interface {
+interface Swayswap_contractAbiInterface extends Interface {
   functions: {
     add_exchange_contract: FunctionFragment;
     get_exchange_contract: FunctionFragment;
@@ -43,8 +43,8 @@ interface SwayswapContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'list_contracts', data: BytesLike): DecodedValue;
 }
 
-export class SwayswapContractAbi extends Contract {
-  interface: SwayswapContractAbiInterface;
+export class Swayswap_contractAbi extends Contract {
+  interface: Swayswap_contractAbiInterface;
   functions: {
     add_exchange_contract(
       token_id: ContractIdInput,

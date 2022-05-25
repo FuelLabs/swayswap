@@ -4,7 +4,7 @@
 
 import type { Provider, Wallet } from 'fuels';
 import { Interface, Contract } from 'fuels';
-import type { TokenContractAbi, TokenContractAbiInterface } from '../TokenContractAbi';
+import type { Token_contractAbi, Token_contractAbiInterface } from '../Token_contractAbi';
 const _abi = [
   {
     type: 'function',
@@ -159,12 +159,12 @@ const _abi = [
   },
 ];
 
-export class TokenContractAbi__factory {
+export class Token_contractAbi__factory {
   static readonly abi = _abi;
-  static createInterface(): TokenContractAbiInterface {
-    return new Interface(_abi) as TokenContractAbiInterface;
+  static createInterface(): Token_contractAbiInterface {
+    return new Interface(_abi) as Token_contractAbiInterface;
   }
-  static connect(id: string, walletOrProvider: Wallet | Provider): TokenContractAbi {
-    return new Contract(id, _abi, walletOrProvider) as TokenContractAbi;
+  static connect(id: string, walletOrProvider: Wallet | Provider): Token_contractAbi {
+    return new Contract(id, _abi, walletOrProvider) as Token_contractAbi;
   }
 }

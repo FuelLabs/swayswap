@@ -4,7 +4,7 @@
 
 import type { Provider, Wallet } from 'fuels';
 import { Interface, Contract } from 'fuels';
-import type { SwayswapContractAbi, SwayswapContractAbiInterface } from '../SwayswapContractAbi';
+import type { Swayswap_contractAbi, Swayswap_contractAbiInterface } from '../Swayswap_contractAbi';
 const _abi = [
   {
     type: 'function',
@@ -107,12 +107,12 @@ const _abi = [
   },
 ];
 
-export class SwayswapContractAbi__factory {
+export class Swayswap_contractAbi__factory {
   static readonly abi = _abi;
-  static createInterface(): SwayswapContractAbiInterface {
-    return new Interface(_abi) as SwayswapContractAbiInterface;
+  static createInterface(): Swayswap_contractAbiInterface {
+    return new Interface(_abi) as Swayswap_contractAbiInterface;
   }
-  static connect(id: string, walletOrProvider: Wallet | Provider): SwayswapContractAbi {
-    return new Contract(id, _abi, walletOrProvider) as SwayswapContractAbi;
+  static connect(id: string, walletOrProvider: Wallet | Provider): Swayswap_contractAbi {
+    return new Contract(id, _abi, walletOrProvider) as Swayswap_contractAbi;
   }
 }
