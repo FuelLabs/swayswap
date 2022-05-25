@@ -84,7 +84,7 @@ export default function AddLiquidity() {
 
     if (reservesFromToRatio) {
       const value = val || BigInt(0);
-      const newToValue = Math.round(toNumber(value) / reservesFromToRatio);
+      const newToValue = Math.ceil(toNumber(value) / reservesFromToRatio);
       toInput.setAmount(BigInt(newToValue));
     }
   };
@@ -93,7 +93,7 @@ export default function AddLiquidity() {
 
     if (reservesFromToRatio) {
       const value = val || BigInt(0);
-      const newFromValue = Math.round(toNumber(value) * reservesFromToRatio);
+      const newFromValue = Math.floor(toNumber(value) * reservesFromToRatio);
       fromInput.setAmount(BigInt(newFromValue));
     }
   };
@@ -191,7 +191,7 @@ export default function AddLiquidity() {
           />
           <PreviewItem
             title={"Your share of current pool:"}
-            value={`${(nextCurrentPoolShare * 100).toFixed(2)}%`}
+            value={`${parseFloat((nextCurrentPoolShare * 100).toFixed(6))}%`}
           />
         </PreviewTable>
       )}

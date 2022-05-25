@@ -6,6 +6,7 @@ import type { UseQueryResult } from 'react-query';
 import { useBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
+import { SLIPPAGE_TOLERANCE } from '~/config';
 import { useContract } from '~/context/AppContext';
 import type { Coin } from '~/types';
 import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
@@ -108,10 +109,9 @@ export function useAddLiquidity({
     }
 
     if (reservesFromToRatio) {
-      // const minRatio = reservesFromToRatio * (1 - SLIPPAGE_TOLERANCE);
-      // const maxRatio = reservesFromToRatio * (1 + SLIPPAGE_TOLERANCE);
+      const minRatio = reservesFromToRatio * (1 - SLIPPAGE_TOLERANCE);
 
-      if (addLiquidityRatio !== reservesFromToRatio) {
+      if (addLiquidityRatio < minRatio || addLiquidityRatio > reservesFromToRatio) {
         errors.push(`Entered ratio doesn't match pool`);
       }
     }

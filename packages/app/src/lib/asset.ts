@@ -8,7 +8,7 @@ export const calculateRatio = (
 ) => {
   const fromAmount = initialFromAmount || BigInt(0);
   const toAmount = initialToAmount || BigInt(0);
-  const ratio = toNumber(ONE_ASSET * fromAmount) / toNumber(toAmount) / toNumber(ONE_ASSET);
+  const ratio = toNumber(fromAmount) / toNumber(toAmount);
 
   return Number.isNaN(ratio) || !Number.isFinite(ratio) ? 0 : ratio;
 };
