@@ -25,7 +25,7 @@ import { useSlippage } from "~/hooks/useSlippage";
 import { ZERO } from "~/lib/constants";
 import { queryClient } from "~/lib/queryClient";
 import { isSwayInfinity, sleep } from "~/lib/utils";
-import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
+import type { PreviewInfo } from "~/types/contracts/Exchange_contractAbi";
 
 type StateParams = {
   swapState: SwapState | null;
@@ -182,11 +182,9 @@ export default function SwapPage() {
       />
       <SwapPreview isLoading={isLoading} swapInfo={swapInfo} />
       <PricePerToken
+        swapState={swapState}
+        previewAmount={previewAmount}
         isLoading={isLoading}
-        fromCoin={swapState?.coinFrom.symbol}
-        fromAmount={swapState?.amount}
-        toCoin={swapState?.coinTo.symbol}
-        toAmount={previewAmount}
       />
       <Button
         isFull

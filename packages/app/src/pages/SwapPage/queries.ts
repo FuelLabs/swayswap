@@ -1,10 +1,10 @@
 import type { SwapState } from './types';
 import { ActiveInput } from './types';
 
-import type { ExchangeContractAbi } from '~/types/contracts';
+import type { Exchange_contractAbi } from '~/types/contracts';
 
 const getSwapWithMaximumRequiredAmount = async (
-  contract: ExchangeContractAbi,
+  contract: Exchange_contractAbi,
   assetId: string,
   amount: bigint
 ) => {
@@ -15,7 +15,7 @@ const getSwapWithMaximumRequiredAmount = async (
 };
 
 const getSwapWithMinimumMinAmount = async (
-  contract: ExchangeContractAbi,
+  contract: Exchange_contractAbi,
   assetId: string,
   amount: bigint
 ) => {
@@ -26,7 +26,7 @@ const getSwapWithMinimumMinAmount = async (
 };
 
 export const queryPreviewAmount = async (
-  contract: ExchangeContractAbi,
+  contract: Exchange_contractAbi,
   { amount, direction, coinFrom }: SwapState
 ) => {
   if (direction === ActiveInput.to && amount) {
@@ -45,7 +45,7 @@ export const queryPreviewAmount = async (
 };
 
 export const swapTokens = async (
-  contract: ExchangeContractAbi,
+  contract: Exchange_contractAbi,
   { coinFrom, direction, amount }: SwapState
 ) => {
   const DEADLINE = 1000;
