@@ -8,14 +8,14 @@ import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { Input } from "~/components/Input";
 import { NumberInput } from "~/components/NumberInput";
-import { DECIMAL_UNITS, TOKEN_ID } from "~/config";
+import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "~/config";
 import { useTokenMethods } from "~/hooks/useTokensMethods";
 import { sleep } from "~/lib/utils";
 
 export default function MintTokenPage() {
   const [asset, setAsset] = useState(TOKEN_ID);
   const methods = useTokenMethods(TOKEN_ID);
-  const [amount, setAmount] = useState<string>("2000");
+  const [amount, setAmount] = useState<string>(`${MINT_AMOUNT}`);
 
   const mintMutation = useMutation(
     async () => {
@@ -63,7 +63,7 @@ export default function MintTokenPage() {
               className="px-2"
               value={amount}
               onChange={setAmount}
-              isAllowed={(values) => (values.floatValue || 0) <= 2000}
+              isAllowed={(values) => (values.floatValue || 0) <= MINT_AMOUNT}
             />
           </div>
         </div>
