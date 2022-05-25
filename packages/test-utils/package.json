@@ -34,7 +34,8 @@
     "jest-fail-on-console": "^2.4.1",
     "jest-matcher-utils": "^28.1.0",
     "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "react-dom": "^18.1.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@fuels-ui/config": "workspace:*",

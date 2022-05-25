@@ -5,6 +5,7 @@
 @import "./components/accordion.css";
 @import "./components/button.css";
 @import "./components/coin-selector.css";
+@import "./components/toast.css";
 
 @import "tailwindcss/utilities";
 @import "./utilities.css";

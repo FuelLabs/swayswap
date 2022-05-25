@@ -11,7 +11,7 @@ import { Spinner } from "./Spinner";
 
 import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
-import { CoinETH } from "~/lib/constants";
+import { COIN_ETH } from "~/lib/constants";
 import type { Coin } from "~/types";
 
 const style = {
@@ -85,7 +85,7 @@ export function useCoinInput({
   const [amount, setAmount] = useState<bigint | null>(null);
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
-  const isEth = useMemo(() => coin?.assetId === CoinETH, [coin?.assetId]);
+  const isEth = useMemo(() => coin?.assetId === COIN_ETH, [coin?.assetId]);
 
   // TODO: consider real gas fee, replacing GAS_FEE variable.
   // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.

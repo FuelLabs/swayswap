@@ -14,7 +14,7 @@ import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 export interface UseAddLiquidityProps {
   fromInput: UseCoinInput;
   toInput: UseCoinInput;
-  poolInfoQuery: UseQueryResult<PoolInfo, unknown>;
+  poolInfoQuery: UseQueryResult<PoolInfo | undefined, unknown>;
   coinFrom: Coin;
   coinTo: Coin;
   reservesFromToRatio: number;
@@ -34,6 +34,7 @@ export function useAddLiquidity({
   const contract = useContract()!;
   const [stage, setStage] = useState(0);
   const balances = useBalances();
+
   const mutation = useMutation(
     async () => {
       const fromAmount = fromInput.amount;

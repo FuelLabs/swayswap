@@ -1,7 +1,8 @@
 import { useQuery } from 'react-query';
 
-import type { Exchange_contractAbi } from '~/types/contracts';
+import { useContract } from '~/context/AppContext';
 
-export function usePoolInfo(contract: Exchange_contractAbi) {
-  return useQuery('PoolPage-poolInfo', () => contract.callStatic.get_info());
+export function usePoolInfo() {
+  const contract = useContract();
+  return useQuery('PoolPage-poolInfo', () => contract?.callStatic.get_info());
 }

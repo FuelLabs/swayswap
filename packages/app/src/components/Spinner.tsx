@@ -1,5 +1,5 @@
-import type { SpinnerCircularProps } from "spinners-react/lib/esm/SpinnerCircular";
-import { SpinnerCircular } from "spinners-react/lib/esm/SpinnerCircular";
+import type { SpinnerCircularProps } from "spinners-react/lib/cjs/SpinnerCircular";
+import { SpinnerCircular } from "spinners-react/lib/cjs/SpinnerCircular";
 
 const VARIANTS = {
   base: {

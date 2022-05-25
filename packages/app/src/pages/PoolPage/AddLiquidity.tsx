@@ -14,7 +14,6 @@ import { CoinSelector } from "~/components/CoinSelector";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { Spinner } from "~/components/Spinner";
 import { CONTRACT_ID, DECIMAL_UNITS } from "~/config";
-import { useContract } from "~/context/AppContext";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { usePreviewLiquidity } from "~/hooks/usePreviewLiquidity";
@@ -67,16 +66,12 @@ function PoolLoader({
 export default function AddLiquidity() {
   const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
   const [toInitialAmount, setToInitialAmount] = useAtom(poolToAmountAtom);
-
-  const contract = useContract()!;
-
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
     assets[0],
     assets[1],
   ]);
 
-  const poolInfoQuery = usePoolInfo(contract);
-
+  const poolInfoQuery = usePoolInfo();
   const { data: poolInfo, isLoading: isLoadingPoolInfo } = poolInfoQuery;
 
   const handleChangeFromValue = (val: bigint | null) => {
@@ -88,6 +83,7 @@ export default function AddLiquidity() {
       toInput.setAmount(BigInt(newToValue));
     }
   };
+
   const handleChangeToValue = (val: bigint | null) => {
     toInput.setAmount(val);
 
@@ -117,10 +113,12 @@ export default function AddLiquidity() {
     poolInfo?.eth_reserve,
     poolInfo?.token_reserve
   );
+
   const reservesToFromRatio = calculateRatio(
     poolInfo?.token_reserve,
     poolInfo?.eth_reserve
   );
+
   const addLiquidityRatio = calculateRatio(fromInput.amount, toInput.amount);
 
   const {
