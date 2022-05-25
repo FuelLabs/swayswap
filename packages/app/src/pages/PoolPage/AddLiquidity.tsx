@@ -4,19 +4,20 @@ import { formatUnits } from "ethers/lib/utils";
 import { toNumber } from "fuels";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { RiCheckFill } from "react-icons/ri";
-import { useMutation, useQuery } from "react-query";
 
 import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
+import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { Spinner } from "~/components/Spinner";
-import { DECIMAL_UNITS, SLIPPAGE_TOLERANCE } from "~/config";
+import { CONTRACT_ID, DECIMAL_UNITS } from "~/config";
 import { useContract } from "~/context/AppContext";
-import { useBalances } from "~/hooks/useBalances";
+import { useAddLiquidity } from "~/hooks/useAddLiquidity";
+import { usePoolInfo } from "~/hooks/usePoolInfo";
+import { usePreviewLiquidity } from "~/hooks/usePreviewLiquidity";
 import assets from "~/lib/CoinsMetadata";
 import { calculateRatio } from "~/lib/asset";
 import type { Coin } from "~/types";
@@ -64,7 +65,6 @@ function PoolLoader({
 }
 
 export default function AddLiquidity() {
-  const balances = useBalances();
   const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
   const [toInitialAmount, setToInitialAmount] = useAtom(poolToAmountAtom);
 
@@ -75,19 +75,16 @@ export default function AddLiquidity() {
     assets[1],
   ]);
 
-  const [stage, setStage] = useState(0);
-  const {
-    data: poolInfo,
-    refetch: refetchPoolInfo,
-    isLoading: isLoadingPoolInfo,
-  } = useQuery("PoolPage-poolInfo", () => contract.callStatic.get_info());
+  const poolInfoQuery = usePoolInfo(contract);
+
+  const { data: poolInfo, isLoading: isLoadingPoolInfo } = poolInfoQuery;
 
   const handleChangeFromValue = (val: bigint | null) => {
     fromInput.setAmount(val);
 
     if (reservesFromToRatio) {
       const value = val || BigInt(0);
-      const newToValue = Math.round(toNumber(value) / reservesFromToRatio);
+      const newToValue = Math.ceil(toNumber(value) / reservesFromToRatio);
       toInput.setAmount(BigInt(newToValue));
     }
   };
@@ -96,7 +93,7 @@ export default function AddLiquidity() {
 
     if (reservesFromToRatio) {
       const value = val || BigInt(0);
-      const newFromValue = Math.round(toNumber(value) * reservesFromToRatio);
+      const newFromValue = Math.floor(toNumber(value) * reservesFromToRatio);
       fromInput.setAmount(BigInt(newFromValue));
     }
   };
@@ -126,69 +123,19 @@ export default function AddLiquidity() {
   );
   const addLiquidityRatio = calculateRatio(fromInput.amount, toInput.amount);
 
-  const addLiquidityMutation = useMutation(
-    async () => {
-      const fromAmount = fromInput.amount;
-      const toAmount = toInput.amount;
-      if (!fromAmount || !toAmount) return;
-
-      // TODO: Combine all transactions on single tx leverage by scripts
-      // https://github.com/FuelLabs/swayswap-demo/issues/42
-
-      // Deposit coins from
-      await contract.functions.deposit({
-        forward: [fromAmount, coinFrom.assetId],
-      });
-      setStage((s) => s + 1);
-      // Deposit coins to
-      await contract.functions.deposit({
-        forward: [toAmount, coinTo.assetId],
-      });
-      setStage((s) => s + 1);
-      // Create liquidity pool
-      await contract.functions.add_liquidity(1, toAmount, 1000, {
-        variableOutputs: 1,
-      });
-      setStage((s) => s + 1);
-    },
-    {
-      onSuccess: () => {
-        toast.success(
-          reservesFromToRatio
-            ? "Added liquidity to the pool."
-            : "New pool created."
-        );
-        fromInput.setAmount(BigInt(0));
-        toInput.setAmount(BigInt(0));
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onError: (e: any) => {
-        const errors = e?.response?.errors;
-
-        if (errors?.length) {
-          if (errors[0].message === "enough coins could not be found") {
-            toast.error(
-              `Not enough balance in your wallet to ${
-                reservesFromToRatio ? "add liquidity to" : "create"
-              } this pool.`
-            );
-          }
-        } else {
-          toast.error(
-            `Error when trying to ${
-              reservesFromToRatio ? "add liquidity to" : "create"
-            } this pool.`
-          );
-        }
-      },
-      onSettled: async () => {
-        await refetchPoolInfo();
-        await balances.refetch();
-
-        setStage(0);
-      },
-    }
-  );
+  const {
+    mutation: addLiquidityMutation,
+    stage,
+    errorsCreatePull,
+  } = useAddLiquidity({
+    fromInput,
+    toInput,
+    poolInfoQuery,
+    coinFrom,
+    coinTo,
+    reservesFromToRatio,
+    addLiquidityRatio,
+  });
 
   useEffect(() => {
     fromInput.setAmount(fromInitialAmount);
@@ -200,35 +147,11 @@ export default function AddLiquidity() {
     setToInitialAmount(toInput.amount);
   }, [fromInput.amount, toInput.amount]);
 
-  const validateCreatePool = () => {
-    const errors = [];
-
-    if (!fromInput.amount) {
-      errors.push(`Enter ${coinFrom.name} amount`);
-    }
-    if (!toInput.amount) {
-      errors.push(`Enter ${coinTo.name} amount`);
-    }
-    if (!fromInput.hasEnoughBalance) {
-      errors.push(`Insufficient ${coinFrom.name} balance`);
-    }
-    if (!toInput.hasEnoughBalance) {
-      errors.push(`Insufficient ${coinTo.name} balance`);
-    }
-
-    if (reservesFromToRatio) {
-      const minRatio = reservesFromToRatio * (1 - SLIPPAGE_TOLERANCE);
-      const maxRatio = reservesFromToRatio * (1 + SLIPPAGE_TOLERANCE);
-
-      if (addLiquidityRatio < minRatio || addLiquidityRatio > maxRatio) {
-        errors.push(`Entered ratio doesn't match pool`);
-      }
-    }
-
-    return errors;
-  };
-
-  const errorsCreatePull = validateCreatePool();
+  const { previewTokensToReceive, nextCurrentPoolShare } = usePreviewLiquidity({
+    fromInput,
+    poolInfo,
+    contractId: CONTRACT_ID,
+  });
 
   return addLiquidityMutation.isLoading ? (
     <div className="mt-6 mb-8 flex justify-center">
@@ -260,6 +183,18 @@ export default function AddLiquidity() {
           rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
         />
       </div>
+      {!!addLiquidityRatio && (
+        <PreviewTable title="Expected output:" className="my-2">
+          <PreviewItem
+            title="Pool tokens you'll receive:"
+            value={formatUnits(previewTokensToReceive, DECIMAL_UNITS)}
+          />
+          <PreviewItem
+            title={"Your share of current pool:"}
+            value={`${parseFloat((nextCurrentPoolShare * 100).toFixed(6))}%`}
+          />
+        </PreviewTable>
+      )}
       {poolInfo && reservesFromToRatio ? (
         <div className={style.info}>
           <h4 className="text-white mb-2 font-bold">Reserves</h4>

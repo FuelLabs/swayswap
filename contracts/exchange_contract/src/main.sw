@@ -331,6 +331,7 @@ impl Exchange for Contract {
         PoolInfo {
             eth_reserve: get_current_reserve(ETH_ID),
             token_reserve: get_current_reserve(TOKEN_ID),
+            lp_token_supply: storage.lp_token_supply,
         }
     }
 

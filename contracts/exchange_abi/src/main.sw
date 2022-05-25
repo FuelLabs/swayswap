@@ -10,6 +10,7 @@ pub struct RemoveLiquidityReturn {
 pub struct PoolInfo {
     eth_reserve: u64,
     token_reserve: u64,
+    lp_token_supply: u64,
 }
 
 pub struct PreviewInfo {

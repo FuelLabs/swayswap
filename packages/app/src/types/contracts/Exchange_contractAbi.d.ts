@@ -29,9 +29,14 @@ export type RemoveLiquidityReturn = {
 export type PoolInfoInput = {
   eth_reserve: BigNumberish;
   token_reserve: BigNumberish;
+  lp_token_supply: BigNumberish;
 };
 
-export type PoolInfo = { eth_reserve: bigint; token_reserve: bigint };
+export type PoolInfo = {
+  eth_reserve: bigint;
+  token_reserve: bigint;
+  lp_token_supply: bigint;
+};
 
 export type PreviewInfoInput = { amount: BigNumberish; has_liquidity: boolean };
 
