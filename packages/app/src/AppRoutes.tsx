@@ -3,13 +3,14 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import { RequireWallet } from "./components/RequireWallet";
 import { MainLayout } from "./layouts/MainLayout";
-import { Pages } from "./types/pages";
+import { Pages, PoolPages } from "./types/pages";
 
 const AddLiquidity = lazy(() => import("./pages/PoolPage/AddLiquidity"));
 const CreateWallet = lazy(() => import("~/pages/CreateWallet"));
 const FaucetPage = lazy(() => import("~/pages/FaucetPage"));
 const MintTokenPage = lazy(() => import("~/pages/MintTokenPage"));
 const PoolPage = lazy(() => import("~/pages/PoolPage/index"));
+const PoolsPreview = lazy(() => import("~/pages/PoolPage/PoolsPreview"));
 const RemoveLiquidityPage = lazy(
   () => import("./pages/PoolPage/RemoveLiquidity")
 );
@@ -44,10 +45,11 @@ export default function AppRoutes() {
             </RequireWallet>
           }
         >
-          <Route index element={<Navigate to={Pages.addLiquidity} />} />
-          <Route path={Pages.addLiquidity} element={<AddLiquidity />} />
+          <Route index element={<Navigate to={PoolPages.poolsList} />} />
+          <Route path={PoolPages.poolsList} element={<PoolsPreview />} />
+          <Route path={PoolPages.addLiquidity} element={<AddLiquidity />} />
           <Route
-            path={Pages.removeLiquidity}
+            path={PoolPages.removeLiquidity}
             element={
               <RequireWallet>
                 <RemoveLiquidityPage />

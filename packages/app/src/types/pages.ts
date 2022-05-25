@@ -1,10 +1,14 @@
-export enum Pages {
+export enum PoolPages {
+  'poolsList' = 'list',
   'addLiquidity' = 'add-liquidity',
+  'removeLiquidity' = 'remove-liquidity',
+}
+
+export enum Pages {
   'createWallet' = '/create-wallet',
   'faucet' = '/faucet',
   'mintToken' = '/mint',
   'pool' = '/pool',
-  'removeLiquidity' = 'remove-liquidity',
   'setup' = '/setup',
   'swap' = '/swap',
 }

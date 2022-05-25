@@ -2,9 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ExchangeContractAbi } from './ExchangeContractAbi';
-export type { SwayswapContractAbi } from './SwayswapContractAbi';
 export type { TokenContractAbi } from './TokenContractAbi';
 
 export { ExchangeContractAbi__factory } from './factories/ExchangeContractAbi__factory';
-export { SwayswapContractAbi__factory } from './factories/SwayswapContractAbi__factory';
 export { TokenContractAbi__factory } from './factories/TokenContractAbi__factory';

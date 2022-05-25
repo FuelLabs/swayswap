@@ -18,17 +18,14 @@
   }
 
   .accordion--root {
-    @apply max-w-[100%] rounded-lg;
+    @apply max-w-[100%];
   }
 
   .accordion--item {
     @apply overflow-hidden mt-[1px];
 
     &:first-child {
-      @apply mt-0 rounded-tl-lg rounded-tr-lg;
-    }
-    &:last-child {
-      @apply rounded-bl-lg rounded-br-lg;
+      @apply mt-0;
     }
     &:focus-within {
       @apply relative z-10;
@@ -41,7 +38,7 @@
 
   .accordion--header {
     all: unset;
-    @apply px-1 flex border-b-2 border-b-gray-700;
+    @apply flex border-b-2 border-b-gray-700;
   }
 
   .accordion--trigger {
@@ -73,7 +70,7 @@
     }
 
     & > div {
-      @apply px-1 mt-3;
+      @apply mt-3;
     }
   }
 }
