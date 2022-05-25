@@ -132,7 +132,6 @@ export default function AddLiquidity() {
     coinFrom,
     coinTo,
     reservesFromToRatio,
-    addLiquidityRatio,
   });
 
   useEffect(() => {

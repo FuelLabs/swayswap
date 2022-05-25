@@ -61,7 +61,7 @@ interface Exchange_contractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'withdraw', values: [BigNumberish, ContractIdInput]): string;
   encodeFunctionData(
     functionFragment: 'add_liquidity',
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: 'remove_liquidity',
@@ -109,7 +109,6 @@ export class Exchange_contractAbi extends Contract {
 
     add_liquidity(
       min_liquidity: BigNumberish,
-      max_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<bigint>;
@@ -161,7 +160,6 @@ export class Exchange_contractAbi extends Contract {
 
     add_liquidity(
       min_liquidity: BigNumberish,
-      max_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<bigint>;
@@ -213,7 +211,6 @@ export class Exchange_contractAbi extends Contract {
 
   add_liquidity(
     min_liquidity: BigNumberish,
-    max_tokens: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<bigint>;

@@ -5,7 +5,7 @@ import { useMutation } from "react-query";
 import { Button } from "~/components/Button";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
-import { CONTRACT_ID } from "~/config";
+import { CONTRACT_ID, DEADLINE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import coins from "~/lib/CoinsMetadata";
@@ -30,7 +30,7 @@ export default function RemoveLiquidityPage() {
       }
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
-      await contract.functions.remove_liquidity(1, 1, 1000, {
+      await contract.functions.remove_liquidity(1, 1, DEADLINE, {
         forward: [amount, CONTRACT_ID],
         variableOutputs: 2,
       });

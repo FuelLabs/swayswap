@@ -6,7 +6,7 @@ import type { UseQueryResult } from 'react-query';
 import { useBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
-import { SLIPPAGE_TOLERANCE } from '~/config';
+import { DEADLINE, SLIPPAGE_TOLERANCE } from '~/config';
 import { useContract } from '~/context/AppContext';
 import type { Coin } from '~/types';
 import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
@@ -18,7 +18,6 @@ export interface UseAddLiquidityProps {
   coinFrom: Coin;
   coinTo: Coin;
   reservesFromToRatio: number;
-  addLiquidityRatio: number;
 }
 
 export function useAddLiquidity({
@@ -28,7 +27,6 @@ export function useAddLiquidity({
   coinFrom,
   coinTo,
   reservesFromToRatio,
-  addLiquidityRatio,
 }: UseAddLiquidityProps) {
   const [errorsCreatePull, setErrorsCreatePull] = useState<string[]>([]);
   const contract = useContract()!;
@@ -55,14 +53,23 @@ export function useAddLiquidity({
       });
       setStage((s) => s + 1);
       // Create liquidity pool
-      await contract.functions.add_liquidity(1, toAmount, 1000, {
-        variableOutputs: 1,
+      const liquidityTokens = await contract.functions.add_liquidity(1, DEADLINE, {
+        variableOutputs: 2,
       });
       setStage((s) => s + 1);
+
+      return liquidityTokens;
     },
     {
-      onSuccess: () => {
-        toast.success(reservesFromToRatio ? 'Added liquidity to the pool.' : 'New pool created.');
+      onSuccess: (liquidityTokens) => {
+        if (liquidityTokens) {
+          toast.success(reservesFromToRatio ? 'Added liquidity to the pool.' : 'New pool created.');
+
+        } else {
+          toast.error(
+            `Error when trying to ${reservesFromToRatio ? 'add liquidity to' : 'create'} this pool.`
+          );
+        }
         fromInput.setAmount(BigInt(0));
         toInput.setAmount(BigInt(0));
       },
@@ -109,14 +116,6 @@ export function useAddLiquidity({
       errors.push(`Insufficient ${coinTo.name} balance`);
     }
 
-    if (reservesFromToRatio) {
-      const minRatio = reservesFromToRatio * (1 - SLIPPAGE_TOLERANCE);
-
-      if (addLiquidityRatio < minRatio || addLiquidityRatio > reservesFromToRatio) {
-        errors.push(`Entered ratio doesn't match pool`);
-      }
-    }
-
     return errors;
   };
 
@@ -128,7 +127,6 @@ export function useAddLiquidity({
     fromInput.hasEnoughBalance,
     toInput.hasEnoughBalance,
     reservesFromToRatio,
-    addLiquidityRatio,
   ]);
 
   return {
