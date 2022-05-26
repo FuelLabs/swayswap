@@ -1,8 +1,9 @@
 import { BigNumber } from 'ethers';
+import { commify, formatUnits } from 'ethers/lib/utils';
 import type { BigNumberish } from 'fuels';
 import { urlJoin } from 'url-join-ts';
 
-import { MAX_U64_STRING } from '~/config';
+import { DECIMAL_UNITS, MAX_U64_STRING } from '~/config';
 
 const { PUBLIC_URL } = process.env;
 
@@ -24,6 +25,17 @@ export function omit<T>(list: string[], props: T) {
   }, {} as T) as T;
 }
 
-export function divideBigInt(from: BigNumberish, to: BigNumberish) {
-  return BigNumber.from(from).toNumber() / BigNumber.from(to).toNumber();
+export function divideFn(value?: BigNumberish | null, by?: BigNumberish | null) {
+  return BigNumber.from(value).toNumber() / BigNumber.from(by).toNumber();
 }
+
+export function divideFnValidOnly(value?: BigNumberish | null, by?: BigNumberish | null) {
+  const result = divideFn(value || 0, by || 0);
+
+  return Number.isNaN(result) || !Number.isFinite(result) ? 0 : result;
+}
+
+export const parseToFormattedNumber = (
+  value: string | BigNumberish,
+  unit: BigNumberish = DECIMAL_UNITS
+) => commify(formatUnits(value, unit));

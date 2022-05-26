@@ -25,7 +25,7 @@ const DAI = {
   img: relativeUrl('/icons/dai.svg'),
 };
 
-const ETH_DAI = {
+export const ETH_DAI = {
   name: 'ETH/DAI',
   symbol: 'ETH/DAI',
   // TODO: Remove this when adding dynamic token insertion

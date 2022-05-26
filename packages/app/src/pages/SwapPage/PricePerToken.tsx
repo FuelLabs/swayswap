@@ -9,7 +9,7 @@ import { ActiveInput } from "./types";
 import { Button } from "~/components/Button";
 import { ONE_ASSET } from "~/config";
 import { ZERO } from "~/lib/constants";
-import { divideBigInt } from "~/lib/utils";
+import { divideFnValidOnly } from "~/lib/utils";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
@@ -20,7 +20,7 @@ function getPricePerToken(
   toAmount?: bigint | null
 ) {
   if (!toAmount || !fromAmount) return "";
-  const ratio = divideBigInt(toAmount, fromAmount);
+  const ratio = divideFnValidOnly(toAmount, fromAmount);
   const price = ratio * toNumber(ONE_ASSET);
   return (price / toNumber(ONE_ASSET)).toFixed(6);
 }

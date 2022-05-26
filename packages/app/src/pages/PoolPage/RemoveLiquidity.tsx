@@ -3,6 +3,9 @@ import toast from "react-hot-toast";
 import { BiDollarCircle } from "react-icons/bi";
 import { useMutation } from "react-query";
 
+import { PoolCurrentPosition } from "./PoolCurrentPosition";
+import { RemoveLiquidityPreview } from "./RemoveLiquidityPreview";
+
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
@@ -94,10 +97,13 @@ export default function RemoveLiquidityPage() {
       <div className="mt-4 mb-4">
         <CoinInput
           {...tokenInput.getInputProps()}
-          rightElement={<CoinSelector {...tokenInput.getCoinSelectorProps()} />}
+          rightElement={
+            <CoinSelector {...tokenInput.getCoinSelectorProps()} isReadOnly />
+          }
           autoFocus
         />
       </div>
+      <RemoveLiquidityPreview amount={amount} />
       <Button
         isFull
         size="lg"
@@ -111,6 +117,10 @@ export default function RemoveLiquidityPage() {
       >
         {getButtonText()}
       </Button>
+      <div className="mt-8">
+        <h3 className="mb-1 mt-5 text-gray-100">Your current positions</h3>
+      </div>
+      <PoolCurrentPosition />
     </Card>
   );
 }
