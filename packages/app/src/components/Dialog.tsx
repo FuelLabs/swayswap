@@ -18,18 +18,6 @@ import { MdClose } from "react-icons/md";
 
 import { Button } from "./Button";
 
-const style = {
-  overlay: `
-    bg-black/70 fixed top-0 left-0 right-0 bottom-0 w-screen h-screen overflow-y-auto grid place-items-center
-  `,
-  content: `
-    relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring
-  `,
-  closeButton: `
-    h-auto absolute top-2 right-2 focus-ring p-1 rounded border-transparent
-  `,
-};
-
 type DialogContext = {
   state?: OverlayTriggerState;
   ref?: React.MutableRefObject<HTMLDivElement | null>;
@@ -81,7 +69,7 @@ export const Dialog: DialogComponent = ({ state, ...props }) => {
   if (!state.isOpen) return null;
   return (
     <OverlayContainer>
-      <div className={style.overlay} {...underlayProps}>
+      <div className="dialog--overlay" {...underlayProps}>
         <ctx.Provider value={ctxValue}>{children}</ctx.Provider>
       </div>
     </OverlayContainer>
@@ -125,14 +113,14 @@ function DialogContent({ children, className }: DialogContentProps) {
       {...props.dialogProps}
       {...props.modalProps}
       ref={props.ref}
-      className={cx(className, style.content)}
+      className={cx(className, "dialog")}
     >
       <FocusScope contain autoFocus>
         <Button
           size="sm"
           ref={closeButtonRef}
           onPress={handleClose}
-          className={style.closeButton}
+          className="dialog--closeBtn"
         >
           <MdClose />
         </Button>

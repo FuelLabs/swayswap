@@ -3,8 +3,10 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useQueryErrorResetBoundary } from "react-query";
 import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
 
+import { FaucetWidget } from "~/components/FaucetWidget";
 import Header from "~/components/Header";
 import Skeleton from "~/components/Skeleton";
+import { useWallet } from "~/context/AppContext";
 import { Pages } from "~/types/pages";
 
 const style = {
@@ -18,6 +20,7 @@ export function MainLayout() {
   const { reset: resetReactQuery } = useQueryErrorResetBoundary();
   const location = useLocation();
   const path = useResolvedPath(location);
+  const wallet = useWallet();
 
   return (
     <div className={style.wrapper}>
@@ -74,6 +77,7 @@ export function MainLayout() {
           </Suspense>
         )}
       </ErrorBoundary>
+      {wallet && <FaucetWidget />}
     </div>
   );
 }

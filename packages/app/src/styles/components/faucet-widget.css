@@ -1,0 +1,49 @@
+@layer components {
+  .faucetWidget {
+    @apply absolute bottom-5 left-5;
+
+    & > button {
+      @apply bg-gray-800 rounded-full;
+    }
+  }
+
+  .faucetWidget--dialog {
+    @apply min-w-[auto];
+
+    & .card {
+      @apply pt-0 max-w-[300px] min-w-[auto];
+    }
+
+    & .card--divider {
+      @apply mt-0;
+    }
+  }
+
+  .faucetWidget--tabBtn {
+    @apply px-0 relative h-14 border-none rounded-none;
+
+    &:first-child {
+      @apply mr-3;
+    }
+
+    &::after {
+      @apply absolute block w-full bottom-0 left-0 content-[""] h-[3px] bg-transparent;
+    }
+  }
+
+  .faucetWidget--tabBtn.active {
+    @apply text-gray-100;
+
+    &::after {
+      @apply bg-primary-500;
+    }
+  }
+
+  .faucetWidget--formRow {
+    @apply mt-3;
+  }
+
+  .faucetWidget--label {
+    @apply mb-2 flex text-sm;
+  }
+}

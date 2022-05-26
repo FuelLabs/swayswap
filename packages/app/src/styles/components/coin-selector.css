@@ -1,11 +1,17 @@
 @layer components {
-  .coin-selector {
+  .coinSelector {
     @apply h-10 px-2 rounded-xl gap-1 bg-gray-800;
   }
-  .coin-selector:not([aria-disabled="true"]) {
+  .coinSelector:not([aria-disabled="true"]) {
     @apply hover:text-gray-300 hover:border-gray-600;
   }
-  .coin-selector[aria-disabled="true"] {
+  .coinSelector[aria-disabled="true"] {
     @apply opacity-100;
+  }
+  .coinSelector--root {
+    @apply flex flex-1 flex-col items-end;
+  }
+  .coinSelector--maxButton {
+    @apply text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800;
   }
 }

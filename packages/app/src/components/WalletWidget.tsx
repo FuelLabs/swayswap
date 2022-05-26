@@ -47,10 +47,6 @@ export function WalletWidget() {
     toast("Address copied", { icon: "✨" });
   };
 
-  function handleClose() {
-    popover.close();
-  }
-
   useEffect(() => {
     if (wallet && userInfo.isNew) {
       setTimeout(() => {
@@ -77,7 +73,7 @@ export function WalletWidget() {
               {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
             </Button>
             <Popover {...popover.rootProps}>
-              <WalletInfo onClose={handleClose} />
+              <WalletInfo />
             </Popover>
             <Button
               aria-label="Copy your wallet address"
