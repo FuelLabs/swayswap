@@ -1,11 +1,15 @@
 import classNames from "classnames";
 import { formatUnits } from "ethers/lib/utils";
 import { toNumber } from "fuels";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 
-import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
+import {
+  poolFromAmountAtom,
+  poolStageDoneAtom,
+  poolToAmountAtom,
+} from "./jotai";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
@@ -31,15 +35,14 @@ const style = {
 
 function PoolLoader({
   loading,
-  step,
   steps,
 }: {
   coinFrom: Coin;
   coinTo: Coin;
   loading: boolean;
-  step: number;
   steps: string[];
 }) {
+  const step = useAtomValue(poolStageDoneAtom);
   return (
     <ul className="w-full rounded-lg border border-gray-600 text-gray-900">
       {steps.map((stepText, index) => (
@@ -54,9 +57,21 @@ function PoolLoader({
             }
           )}
         >
-          <div className="flex-1">{stepText}</div>
+          <div
+            className="flex-1"
+            aria-label={`Loading step: ${stepText}`}
+            aria-disabled={step > index}
+          >
+            {stepText}
+          </div>
           {step === index && loading && <Spinner />}
-          {step > index && <RiCheckFill />}
+          {step > index && (
+            <RiCheckFill
+              data-testid={`step-done-icon-${step}`}
+              aria-label={`Step completed: ${stepText}`}
+              aria-hidden
+            />
+          )}
         </li>
       ))}
     </ul>
@@ -121,11 +136,7 @@ export default function AddLiquidity() {
 
   const addLiquidityRatio = calculateRatio(fromInput.amount, toInput.amount);
 
-  const {
-    mutation: addLiquidityMutation,
-    stage,
-    errorsCreatePull,
-  } = useAddLiquidity({
+  const { mutation: addLiquidityMutation, errorsCreatePull } = useAddLiquidity({
     fromInput,
     toInput,
     poolInfoQuery,
@@ -172,7 +183,6 @@ export default function AddLiquidity() {
               `Provide liquidity`,
               `Done`,
             ]}
-            step={stage}
             loading={addLiquidityMutation.isLoading}
             coinFrom={coinFrom}
             coinTo={coinTo}
@@ -259,7 +269,9 @@ export default function AddLiquidity() {
             onPress={
               errorsCreatePull.length
                 ? undefined
-                : () => addLiquidityMutation.mutate()
+                : () => {
+                    addLiquidityMutation.mutate();
+                  }
             }
           >
             {getButtonText()}

@@ -1,10 +1,10 @@
 import { renderWithRouter, screen, waitFor } from "@fuels-ui/test-utils";
-import { parseUnits } from "ethers/lib/utils";
 import { Wallet } from "fuels";
 
 import App from "~/App";
-import { FUEL_PROVIDER_URL } from "~/config";
+import { CONTRACT_ID, FUEL_PROVIDER_URL } from "~/config";
 import { mint } from "~/lib/test-utils";
+import { Exchange_contractAbi__factory } from "~/types/contracts";
 
 const { privateKey } = Wallet.generate({ provider: FUEL_PROVIDER_URL });
 const wallet = new Wallet(privateKey, FUEL_PROVIDER_URL);
@@ -13,23 +13,12 @@ jest.mock("../../hooks/useWallet", () => ({
   useWallet: jest.fn(() => wallet),
 }));
 
-jest.mock("../../config", () => {
-  const mod = jest.requireActual("../../config");
-
-  return {
-    __esModule: true,
-    ...mod,
-    FAUCET_AMOUNT: parseUnits("1000000", mod.DECIMAL_UNITS).toBigInt(),
-    MINT_AMOUNT: 2000000,
-  };
-});
+jest.mock("../../hooks/useContract.ts", () => ({
+  useContract: () => Exchange_contractAbi__factory.connect(CONTRACT_ID, wallet),
+}));
 
 describe("PoolPage", () => {
   it("should render with no position first", async () => {
-    jest.mock("../../hooks/useUserPositions", () => ({
-      useUserPositions: () => ({ hasPositions: false }),
-    }));
-
     renderWithRouter(<App />, { route: "/pool/list" });
 
     const noPositions = await screen.findByText(/no open positions/i);
@@ -44,6 +33,7 @@ describe("PoolPage", () => {
       const noResults = await screen.findByText(/You are creating a new pool/);
       expect(noResults).toBeInTheDocument();
     });
+    jest.unmock("../../lib/asset.ts");
   });
 
   it("should show insufficient balance if has no coinTo balance", async () => {
@@ -88,7 +78,26 @@ describe("PoolPage", () => {
     await user.type(coinFromInput, "10");
     await user.type(coinToInput, "4000");
 
-    const submit = await screen.findByTestId("submit");
-    expect(submit).not.toBeDisabled();
+    await waitFor(async () => {
+      const submit = await screen.findByTestId("submit");
+      expect(submit).not.toBeDisabled();
+      await user.click(submit);
+    });
+
+    await waitFor(async () => {
+      expect(
+        await screen.findByLabelText("Step completed: Provide liquidity")
+      ).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      expect(await screen.findByLabelText(/Coin From/)).toBeInTheDocument();
+    });
+  });
+
+  it("should have positions on pool preview", async () => {
+    renderWithRouter(<App />, { route: "/pool/list" });
+    const noPositions = await screen.findByText(/pooled eth/i);
+    expect(noPositions).toBeInTheDocument();
   });
 });
