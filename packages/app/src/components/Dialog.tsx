@@ -1,5 +1,6 @@
 import { useDialog as useReactAriaDialog } from "@react-aria/dialog";
 import { FocusScope } from "@react-aria/focus";
+import type { ModalAriaProps } from "@react-aria/overlays";
 import {
   useOverlay,
   usePreventScroll,
@@ -10,7 +11,7 @@ import {
 import type { OverlayTriggerState } from "@react-stately/overlays";
 import { useOverlayTriggerState } from "@react-stately/overlays";
 import type { AriaDialogProps } from "@react-types/dialog";
-import type { OverlayProps, ModalAriaProps } from "@react-types/overlays";
+import type { OverlayProps } from "@react-types/overlays";
 import cx from "classnames";
 import { createContext, useContext, useRef } from "react";
 import type { FC, ReactNode } from "react";
