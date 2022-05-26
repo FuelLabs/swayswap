@@ -76,6 +76,15 @@ fn calculate_amount_with_fee(amount: u64) -> u64 {
     amount - fee
 }
 
+fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
+    let result_wrapped = ((~U128::from(0, a) * ~U128::from(0, b)) / ~U128::from(0, c)).to_u64();
+    // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
+    match result_wrapped {
+        Result::Ok(inner_value) => inner_value,
+        _ => revert(0),
+    }
+}
+
 /// Pricing function for converting between ETH and Tokens.
 fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -> u64 {
     assert(input_reserve > 0 && output_reserve > 0);
@@ -98,7 +107,7 @@ fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64)
     let result_wrapped = (numerator / denominator).to_u64();
     if denominator > numerator {
         // Emulate Infinity Value
-        18446744073709551615u64
+        ~u64::max()
     } else {
         // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
         match result_wrapped {
@@ -185,8 +194,8 @@ impl Exchange for Contract {
 
             let eth_reserve = get_current_reserve(ETH_ID);
             let token_reserve = get_current_reserve(TOKEN_ID);
-            let token_amount = (eth_amount * token_reserve) / eth_reserve;
-            let liquidity_minted = (eth_amount * total_liquidity) / eth_reserve;
+            let token_amount = mutiply_div(eth_amount, token_reserve, eth_reserve);
+            let liquidity_minted = mutiply_div(eth_amount, total_liquidity, eth_reserve);
 
             assert(max_tokens >= token_amount);
             assert(liquidity_minted >= min_liquidity);
@@ -241,8 +250,8 @@ impl Exchange for Contract {
 
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
-        let eth_amount = (msg_amount() * eth_reserve) / total_liquidity;
-        let token_amount = (msg_amount() * token_reserve) / total_liquidity;
+        let eth_amount = mutiply_div(msg_amount(), eth_reserve, total_liquidity);
+        let token_amount = mutiply_div(msg_amount(), token_reserve, total_liquidity);
 
         assert((eth_amount >= min_eth) && (token_amount >= min_tokens));
 
