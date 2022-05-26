@@ -1,5 +1,6 @@
 import cx from "classnames";
 import clipboard from "clipboard";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { FaRegCopy } from "react-icons/fa";
 
@@ -10,6 +11,8 @@ import { WalletInfo } from "./WalletInfo";
 
 import { useWallet } from "~/context/AppContext";
 import { useEthBalance } from "~/hooks/useEthBalance";
+import { useFaucet } from "~/hooks/useFaucet";
+import { useUserInfo } from "~/hooks/useUserInfo";
 
 const style = {
   wallet: `flex items-center absolute gap-3 top-4 right-4 rounded-full text-gray-300 bg-gray-800 inner-shadow p-1`,
@@ -22,6 +25,22 @@ export function WalletWidget() {
   const wallet = useWallet();
   const ethBalance = useEthBalance();
   const popover = usePopover({ placement: "bottom end", offset: 10 });
+  const [userInfo, setUserInfo] = useUserInfo();
+  const faucet = useFaucet({
+    onSuccess() {
+      toast.success(
+        "Hey, we added 0.5 ETH to your test account. Open you wallet clicking above to add more.",
+        {
+          icon: "💰",
+          duration: 5000,
+          position: "top-right",
+          style: {
+            marginTop: 55,
+          },
+        }
+      );
+    },
+  });
 
   const handleCopy = () => {
     clipboard.copy(wallet!.address);
@@ -31,6 +50,15 @@ export function WalletWidget() {
   function handleClose() {
     popover.close();
   }
+
+  useEffect(() => {
+    if (wallet && userInfo.isNew) {
+      setTimeout(() => {
+        faucet.mutate();
+        setUserInfo({ isNew: false });
+      }, 1000);
+    }
+  }, [userInfo]);
 
   return (
     <div

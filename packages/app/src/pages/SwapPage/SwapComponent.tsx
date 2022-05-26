@@ -1,19 +1,21 @@
-import { useAtom, useSetAtom } from "jotai";
+import { toBigInt } from "fuels";
+import { useAtom, useAtomValue } from "jotai";
 import { startTransition, useEffect } from "react";
 
-import { PricePerToken } from "./PricePerToken";
 import {
   swapActiveInputAtom,
   swapAmountAtom,
   swapCoinsAtom,
-  swapIsTypingAtom,
+  swapHasSwappedAtom,
+  useSetIsTyping,
 } from "./jotai";
 import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
 
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
+import { CoinSelector } from "~/components/CoinSelector";
 import { InvertButton } from "~/components/InvertButton";
-import { CoinETH } from "~/lib/constants";
+import { NETWORK_FEE } from "~/config";
 import type { Coin } from "~/types";
 
 const style = {
@@ -29,14 +31,16 @@ type SwapComponentProps = {
 export function SwapComponent({
   onChange,
   isLoading,
-  previewAmount: previewValue,
+  previewAmount,
 }: SwapComponentProps) {
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [activeInput, setActiveInput] = useAtom(swapActiveInputAtom);
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
-  const setTyping = useSetAtom(swapIsTypingAtom);
+  const hasSwapped = useAtomValue(swapHasSwappedAtom);
+  const setTyping = useSetIsTyping();
 
   const handleInvertCoins = () => {
+    setTyping(true);
     if (activeInput === ActiveInput.to) {
       const from = fromInput.amount;
       startTransition(() => {
@@ -57,6 +61,8 @@ export function SwapComponent({
 
   const fromInput = useCoinInput({
     coin: coinFrom,
+    disableWhenEth: true,
+    gasFee: toBigInt(NETWORK_FEE),
     onChangeCoin: (coin: Coin) => {
       setCoins([coin, coinTo]);
     },
@@ -68,6 +74,7 @@ export function SwapComponent({
 
   const toInput = useCoinInput({
     coin: coinTo,
+    disableWhenEth: true,
     onChangeCoin: (coin: Coin) => {
       setCoins([coinFrom, coin]);
     },
@@ -88,7 +95,6 @@ export function SwapComponent({
   useEffect(() => {
     const currentInput = activeInput === ActiveInput.from ? fromInput : toInput;
     const amount = currentInput.amount;
-    const coin = activeInput === ActiveInput.from ? coinFrom : coinTo;
 
     // This is used to reset preview amount when set first input value for null
     if (activeInput === ActiveInput.from && amount === null) {
@@ -101,13 +107,13 @@ export function SwapComponent({
     // Set value to hydrate
     setInitialAmount(amount);
 
-    if (coin && coinFrom && coinTo) {
+    if (coinFrom && coinTo) {
       // Call on onChange
       onChange?.({
         amount,
-        coin,
-        from: coinFrom?.assetId,
-        to: coinTo?.assetId,
+        amountFrom: fromInput.amount,
+        coinFrom,
+        coinTo,
         direction: activeInput,
         hasBalance: fromInput.hasEnoughBalance,
       });
@@ -115,14 +121,19 @@ export function SwapComponent({
   }, [fromInput.amount, toInput.amount, coinFrom, coinTo]);
 
   useEffect(() => {
-    if (previewValue == null) return;
     if (activeInput === ActiveInput.from) {
-      toInput.setAmount(previewValue);
+      toInput.setAmount(previewAmount || null);
     } else {
-      fromInput.setAmount(previewValue);
+      fromInput.setAmount(previewAmount || null);
     }
-    setTyping(false);
-  }, [previewValue]);
+  }, [previewAmount]);
+
+  useEffect(() => {
+    if (hasSwapped) {
+      toInput.setAmount(null);
+      fromInput.setAmount(null);
+    }
+  }, [hasSwapped]);
 
   return (
     <>
@@ -131,7 +142,7 @@ export function SwapComponent({
           {...fromInput.getInputProps()}
           {...(activeInput === ActiveInput.to && { isLoading })}
           autoFocus={activeInput === ActiveInput.from}
-          coinSelectorDisabled={coinFrom?.assetId === CoinETH}
+          rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
         />
       </div>
       <div className={style.switchDirection}>
@@ -142,15 +153,9 @@ export function SwapComponent({
           {...toInput.getInputProps()}
           {...(activeInput === ActiveInput.from && { isLoading })}
           autoFocus={activeInput === ActiveInput.to}
-          coinSelectorDisabled={coinTo?.assetId === CoinETH}
+          rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
         />
       </div>
-      <PricePerToken
-        fromCoin={coinFrom?.symbol}
-        fromAmount={fromInput.amount}
-        toCoin={coinTo?.symbol}
-        toAmount={toInput.amount}
-      />
     </>
   );
 }

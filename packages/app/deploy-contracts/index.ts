@@ -16,10 +16,11 @@ import {
   Wallet,
   ZeroBytes32,
 } from 'fuels';
+import type { JsonAbi, Interface } from 'fuels';
 import path from 'path';
 
 // @ts-ignore
-import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../src/types/contracts';
+import { Exchange_contractAbi__factory, Token_contractAbi__factory } from '../src/types/contracts';
 
 const tokenPath = path.join(
   __dirname,
@@ -52,7 +53,11 @@ export const seedWallet = async (wallet: Wallet) => {
   return submit.wait();
 };
 
-export async function deployContract(contextLog: string, binaryPath: string, abi: any) {
+export async function deployContract(
+  contextLog: string,
+  binaryPath: string,
+  abi: JsonAbi | Interface
+) {
   console.log(contextLog, 'Create wallet...');
   console.log(contextLog, 'connected to', providerUrl);
   const wallet = Wallet.generate({ provider: providerUrl });
@@ -76,9 +81,9 @@ export async function deployContract(contextLog: string, binaryPath: string, abi
     const contract = await deployContract(
       'SwaySwap',
       contractPath,
-      ExchangeContractAbi__factory.abi
+      Exchange_contractAbi__factory.abi
     );
-    const token = await deployContract('Token', tokenPath, TokenContractAbi__factory.abi);
+    const token = await deployContract('Token', tokenPath, Token_contractAbi__factory.abi);
 
     console.log('SwaySwap Contract Id', contract.id);
     console.log('Token Contract Id', token.id);

@@ -1,67 +1,86 @@
-import { BigNumber } from "ethers";
-import { formatUnits } from "ethers/lib/utils";
-import { useAtomValue } from "jotai";
-import { useState } from "react";
+import { toNumber } from "fuels";
+import { useEffect, useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 
-import { swapIsTypingAtom } from "./jotai";
+import { useValueIsTyping } from "./jotai";
+import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
-import { DECIMAL_UNITS, ONE_ASSET } from "~/config";
+import { ONE_ASSET } from "~/config";
+import { ZERO } from "~/lib/constants";
+import { divideFnValidOnly } from "~/lib/utils";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
 };
 
 function getPricePerToken(
-  direction?: ActiveInput,
   fromAmount?: bigint | null,
   toAmount?: bigint | null
 ) {
   if (!toAmount || !fromAmount) return "";
-  const ratio =
-    direction === ActiveInput.from
-      ? BigNumber.from(fromAmount || 0).div(toAmount || 0)
-      : BigNumber.from(toAmount || 0).div(fromAmount || 0);
-  const price = ratio.mul(ONE_ASSET);
-  return formatUnits(price, DECIMAL_UNITS);
+  const ratio = divideFnValidOnly(toAmount, fromAmount);
+  const price = ratio * toNumber(ONE_ASSET);
+  return (price / toNumber(ONE_ASSET)).toFixed(6);
 }
 
 type PricePerTokenProps = {
-  fromCoin?: string;
-  fromAmount?: bigint | null;
-  toCoin?: string;
-  toAmount?: bigint | null;
+  swapState?: SwapState | null;
+  previewAmount?: bigint | null;
+  isLoading?: boolean;
 };
 
-export function PricePerToken({
-  fromCoin,
-  fromAmount,
-  toCoin,
-  toAmount,
-}: PricePerTokenProps) {
-  const [direction, setDirection] = useState<ActiveInput>(ActiveInput.to);
-  const isTyping = useAtomValue(swapIsTypingAtom);
+type Asset = {
+  symbol: string;
+  amount: bigint;
+};
 
-  const pricePerToken = getPricePerToken(direction, fromAmount, toAmount);
-  const from = direction === ActiveInput.from ? toCoin : fromCoin;
-  const to = direction === ActiveInput.from ? fromCoin : toCoin;
+const createAsset = (
+  symbol?: string | null,
+  amount?: bigint | null
+): Asset => ({
+  symbol: symbol || "",
+  amount: amount || ZERO,
+});
+
+export function PricePerToken({
+  swapState,
+  previewAmount,
+  isLoading,
+}: PricePerTokenProps) {
+  const [[assetFrom, assetTo], setAssets] = useState<
+    [Asset | null, Asset | null]
+  >([null, null]);
+  const isTyping = useValueIsTyping();
+
+  useEffect(() => {
+    if (swapState?.direction === ActiveInput.from) {
+      setAssets([
+        createAsset(swapState.coinFrom.symbol, swapState.amount),
+        createAsset(swapState.coinTo.symbol, previewAmount),
+      ]);
+    } else if (swapState) {
+      setAssets([
+        createAsset(swapState.coinFrom.symbol, previewAmount),
+        createAsset(swapState.coinTo.symbol, swapState.amount),
+      ]);
+    }
+  }, [swapState, previewAmount]);
 
   function toggle() {
-    setDirection((dir) =>
-      dir === ActiveInput.from ? ActiveInput.to : ActiveInput.from
-    );
+    setAssets([assetTo, assetFrom]);
   }
 
-  if (isTyping) return null;
-  if (!fromAmount || !toAmount) return null;
+  if (isTyping || isLoading) return null;
+  if (!assetFrom?.amount || !assetTo?.amount) return null;
+  const pricePerToken = getPricePerToken(assetFrom.amount, assetTo.amount);
 
   return (
     <div className={style.wrapper}>
       <div>
-        <span className="text-gray-200">1</span> {from} ={" "}
-        <span className="text-gray-200">{pricePerToken}</span> {to}
+        <span className="text-gray-200">1</span> {assetFrom.symbol} ={" "}
+        <span className="text-gray-200">{pricePerToken}</span> {assetTo.symbol}
       </div>
       <Button size="sm" className="h-auto p-0 border-none" onPress={toggle}>
         <AiOutlineSwap size={20} />

@@ -1,31 +1,39 @@
-import { useState } from "react";
+import type { CoinQuantity } from "fuels";
+import { toNumber } from "fuels";
+import { useSetAtom } from "jotai";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 
+import { PricePerToken } from "./PricePerToken";
 import { SwapComponent } from "./SwapComponent";
+import { SwapPreview } from "./SwapPreview";
+import { calculatePriceWithSlippage } from "./helpers";
+import { swapHasSwappedAtom } from "./jotai";
 import { queryPreviewAmount, swapTokens } from "./queries";
-import type { SwapState } from "./types";
+import type { SwapInfo, SwapState } from "./types";
+import { ActiveInput, ValidationStateEnum } from "./types";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { useContract } from "~/context/AppContext";
+import { useBalances } from "~/hooks/useBalances";
 import useDebounce from "~/hooks/useDebounce";
+import { usePoolInfo } from "~/hooks/usePoolInfo";
+import { useSlippage } from "~/hooks/useSlippage";
+import { ZERO } from "~/lib/constants";
+import { queryClient } from "~/lib/queryClient";
 import { isSwayInfinity, sleep } from "~/lib/utils";
+import type { PreviewInfo } from "~/types/contracts/Exchange_contractAbi";
 
 type StateParams = {
   swapState: SwapState | null;
   previewAmount: bigint | null;
   hasLiquidity: boolean;
+  slippage: number;
+  balances?: CoinQuantity[];
 };
-
-enum ValidationStateEnum {
-  SelectToken = 0,
-  EnterAmount = 1,
-  InsufficientBalance = 2,
-  InsufficientLiquidity = 3,
-  Swap = 4,
-}
 
 const getValidationText = (
   state: ValidationStateEnum,
@@ -37,7 +45,9 @@ const getValidationText = (
     case ValidationStateEnum.EnterAmount:
       return "Enter amount";
     case ValidationStateEnum.InsufficientBalance:
-      return `Insufficient ${swapState?.coin.symbol || ""} balance`;
+      return `Insufficient ${swapState?.coinFrom.symbol || ""} balance`;
+    case ValidationStateEnum.InsufficientAmount:
+      return `Insufficient amount to swap`;
     case ValidationStateEnum.InsufficientLiquidity:
       return "Insufficient liquidity";
     default:
@@ -45,18 +55,36 @@ const getValidationText = (
   }
 };
 
-const getValidationState = ({
+const hasBalanceWithSlippage = ({
   swapState,
   previewAmount,
-  hasLiquidity,
-}: StateParams): ValidationStateEnum => {
-  if (!swapState?.to || !swapState?.from) {
+  slippage,
+  balances,
+}: StateParams) => {
+  if (swapState!.direction === ActiveInput.to) {
+    const amountWithSlippage = calculatePriceWithSlippage(
+      previewAmount || ZERO,
+      slippage,
+      swapState!.direction
+    );
+    const currentBalance = toNumber(
+      balances?.find((coin) => coin.assetId === swapState!.coinFrom.assetId)
+        ?.amount || ZERO
+    );
+    return amountWithSlippage > currentBalance;
+  }
+  return false;
+};
+
+const getValidationState = (stateParams: StateParams): ValidationStateEnum => {
+  const { swapState, previewAmount, hasLiquidity } = stateParams;
+  if (!swapState?.coinFrom || !swapState?.coinTo) {
     return ValidationStateEnum.SelectToken;
   }
   if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
-  if (!swapState.hasBalance) {
+  if (!swapState.hasBalance || hasBalanceWithSlippage(stateParams)) {
     return ValidationStateEnum.InsufficientBalance;
   }
   if (!hasLiquidity || isSwayInfinity(previewAmount))
@@ -66,28 +94,47 @@ const getValidationState = ({
 
 export default function SwapPage() {
   const contract = useContract()!;
-  const [previewAmount, setPreviewAmount] = useState<bigint | null>(null);
+  const [previewInfo, setPreviewInfo] = useState<PreviewInfo | null>(null);
   const [swapState, setSwapState] = useState<SwapState | null>(null);
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
+  const { data: poolInfo } = usePoolInfo();
+  const previewAmount = previewInfo?.amount || ZERO;
+  const swapInfo = useMemo<SwapInfo>(
+    () => ({
+      ...poolInfo,
+      ...previewInfo,
+      ...swapState,
+      previewAmount,
+    }),
+    [poolInfo, previewInfo, swapState]
+  );
+  const slippage = useSlippage();
+  const { data: balances } = useBalances();
+  const setHasSwapped = useSetAtom(swapHasSwappedAtom);
 
   const { isLoading } = useQuery(
     [
       "SwapPage-inactiveAmount",
       debouncedState?.amount?.toString(),
       debouncedState?.direction,
-      debouncedState?.from,
-      debouncedState?.to,
+      debouncedState?.coinFrom.assetId,
+      debouncedState?.coinTo.assetId,
     ],
     async () => {
       if (!debouncedState?.amount) return null;
       return queryPreviewAmount(contract, debouncedState);
     },
     {
-      onSuccess: (value) => {
-        if (value == null) return;
-        setPreviewAmount(value.amount);
-        setHasLiquidity(value.has_liquidity);
+      onSuccess: (preview) => {
+        if (preview == null) return;
+        if (isSwayInfinity(preview.amount)) {
+          setPreviewInfo(null);
+          setHasLiquidity(false);
+        } else {
+          setHasLiquidity(preview.has_liquidity);
+          setPreviewInfo(preview);
+        }
       },
     }
   );
@@ -100,7 +147,9 @@ export default function SwapPage() {
     },
     {
       onSuccess: () => {
+        setHasSwapped(true);
         toast.success("Swap made successfully!");
+        queryClient.refetchQueries(["AssetsPage-balances"]);
       },
     }
   );
@@ -111,6 +160,8 @@ export default function SwapPage() {
 
   const validationState = getValidationState({
     swapState,
+    balances,
+    slippage: slippage.value,
     previewAmount,
     hasLiquidity,
   });
@@ -119,7 +170,7 @@ export default function SwapPage() {
     isLoading || validationState !== ValidationStateEnum.Swap;
 
   return (
-    <Card className="min-w-[450px]">
+    <Card className="self-start min-w-[450px] mt-24">
       <Card.Title>
         <MdSwapCalls className="text-primary-500" />
         Swap
@@ -127,6 +178,12 @@ export default function SwapPage() {
       <SwapComponent
         previewAmount={previewAmount}
         onChange={handleSwap}
+        isLoading={isLoading}
+      />
+      <SwapPreview isLoading={isLoading} swapInfo={swapInfo} />
+      <PricePerToken
+        swapState={swapState}
+        previewAmount={previewAmount}
         isLoading={isLoading}
       />
       <Button

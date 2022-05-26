@@ -29,7 +29,7 @@ const style = {
 type HeaderNavProps = ButtonProps & {
   onPress: () => void;
   isActive: boolean;
-  icon: ComponentType<any>;
+  icon: ComponentType<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   children: ReactNode;
 };
 

@@ -29,15 +29,20 @@ export type RemoveLiquidityReturn = {
 export type PoolInfoInput = {
   eth_reserve: BigNumberish;
   token_reserve: BigNumberish;
+  lp_token_supply: BigNumberish;
 };
 
-export type PoolInfo = { eth_reserve: bigint; token_reserve: bigint };
+export type PoolInfo = {
+  eth_reserve: bigint;
+  token_reserve: bigint;
+  lp_token_supply: bigint;
+};
 
 export type PreviewInfoInput = { amount: BigNumberish; has_liquidity: boolean };
 
 export type PreviewInfo = { amount: bigint; has_liquidity: boolean };
 
-interface ExchangeContractAbiInterface extends Interface {
+interface Exchange_contractAbiInterface extends Interface {
   functions: {
     get_balance: FunctionFragment;
     deposit: FunctionFragment;
@@ -56,7 +61,7 @@ interface ExchangeContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'withdraw', values: [BigNumberish, ContractIdInput]): string;
   encodeFunctionData(
     functionFragment: 'add_liquidity',
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: 'remove_liquidity',
@@ -86,8 +91,8 @@ interface ExchangeContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'get_swap_with_maximum', data: BytesLike): DecodedValue;
 }
 
-export class ExchangeContractAbi extends Contract {
-  interface: ExchangeContractAbiInterface;
+export class Exchange_contractAbi extends Contract {
+  interface: Exchange_contractAbiInterface;
   functions: {
     get_balance(
       token: ContractIdInput,
@@ -104,7 +109,6 @@ export class ExchangeContractAbi extends Contract {
 
     add_liquidity(
       min_liquidity: BigNumberish,
-      max_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<bigint>;
@@ -156,7 +160,6 @@ export class ExchangeContractAbi extends Contract {
 
     add_liquidity(
       min_liquidity: BigNumberish,
-      max_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<bigint>;
@@ -208,7 +211,6 @@ export class ExchangeContractAbi extends Contract {
 
   add_liquidity(
     min_liquidity: BigNumberish,
-    max_tokens: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<bigint>;

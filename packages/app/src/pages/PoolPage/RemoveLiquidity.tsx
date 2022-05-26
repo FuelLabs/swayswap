@@ -1,47 +1,41 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-import { formatUnits } from "ethers/lib/utils";
-import { toBigInt } from "fuels";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useMutation, useQuery } from "react-query";
+import { BiDollarCircle } from "react-icons/bi";
+import { useMutation } from "react-query";
+
+import { PoolCurrentPosition } from "./PoolCurrentPosition";
+import { RemoveLiquidityPreview } from "./RemoveLiquidityPreview";
 
 import { Button } from "~/components/Button";
+import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
-import { Link } from "~/components/Link";
-import { CONTRACT_ID, DECIMAL_UNITS } from "~/config";
-import { useContract, useWallet } from "~/context/AppContext";
+import { CoinSelector } from "~/components/CoinSelector";
+import { CONTRACT_ID, DEADLINE } from "~/config";
+import { useContract } from "~/context/AppContext";
+import { useBalances } from "~/hooks/useBalances";
 import coins from "~/lib/CoinsMetadata";
 
 export default function RemoveLiquidityPage() {
-  const wallet = useWallet()!;
+  const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>(
+    []
+  );
+  const balances = useBalances();
   const contract = useContract()!;
 
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
-  const tokenInput = useCoinInput({ coin: liquidityToken });
+  const tokenInput = useCoinInput({
+    coin: liquidityToken,
+  });
   const amount = tokenInput.amount;
-
-  const { data: balance } = useQuery(
-    "RemoveLiquidityPage-balance",
-    async () => {
-      const balances = await wallet.getBalances();
-      const result = balances.find((b) => b.assetId === CONTRACT_ID)!;
-      return {
-        amount: toBigInt(result?.amount || 0),
-        formatted: result ? formatUnits(result?.amount, DECIMAL_UNITS) : "0",
-      };
-    }
-  );
 
   const removeLiquidityMutation = useMutation(
     async () => {
       if (!amount) {
         throw new Error('"amount" is required');
       }
-      if (amount > balance?.amount!) {
-        throw new Error("Amount is bigger them the current balance!");
-      }
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
-      await contract.functions.remove_liquidity(1, 1, 1000, {
+      await contract.functions.remove_liquidity(1, 1, DEADLINE, {
         forward: [amount, CONTRACT_ID],
         variableOutputs: 2,
       });
@@ -49,6 +43,8 @@ export default function RemoveLiquidityPage() {
     {
       onSuccess: () => {
         toast.success("Liquidity removed successfully!");
+        tokenInput.setAmount(BigInt(0));
+        balances.refetch();
       },
       onError: (error: Error) => {
         toast.error(error.message);
@@ -60,35 +56,71 @@ export default function RemoveLiquidityPage() {
     return null;
   }
 
+  const validateRemoveLiquidity = () => {
+    const errors = [];
+
+    if (!tokenInput.amount) {
+      errors.push(`Enter ${liquidityToken.name} amount`);
+    }
+    if (!tokenInput.hasEnoughBalance) {
+      errors.push(`Insufficient ${liquidityToken.name} balance`);
+    }
+
+    return errors;
+  };
+
+  useEffect(() => {
+    setErrorsRemoveLiquidity(validateRemoveLiquidity());
+  }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
+
+  const isRemoveButtonDisabled =
+    !!errorsRemoveLiquidity.length || removeLiquidityMutation.isLoading;
+
+  const getButtonText = () => {
+    if (errorsRemoveLiquidity.length) {
+      return errorsRemoveLiquidity[0];
+    }
+
+    if (removeLiquidityMutation.isLoading) {
+      return "Removing...";
+    }
+
+    return "Remove liquidity";
+  };
+
   return (
-    <>
+    <Card>
+      <Card.Title>
+        <BiDollarCircle className="text-primary-500" />
+        Remove Liquidity
+      </Card.Title>
       <div className="mt-4 mb-4">
         <CoinInput
           {...tokenInput.getInputProps()}
+          rightElement={
+            <CoinSelector {...tokenInput.getCoinSelectorProps()} isReadOnly />
+          }
           autoFocus
-          coinSelectorDisabled={true}
         />
-        <Link
-          className="inline-flex mt-2 ml-2"
-          onPress={() => tokenInput.setAmount(balance?.amount!)}
-        >
-          Max amount: {balance?.formatted! || "..."}
-        </Link>
       </div>
+      <RemoveLiquidityPreview amount={amount} />
       <Button
         isFull
         size="lg"
         variant="primary"
-        onPress={() => removeLiquidityMutation.mutate()}
-        isDisabled={
-          !amount ||
-          !balance ||
-          amount > balance.amount ||
-          removeLiquidityMutation.isLoading
+        onPress={
+          isRemoveButtonDisabled
+            ? undefined
+            : () => removeLiquidityMutation.mutate()
         }
+        isDisabled={isRemoveButtonDisabled}
       >
-        {removeLiquidityMutation.isLoading ? "Removing..." : "Remove liquidity"}
+        {getButtonText()}
       </Button>
-    </>
+      <div className="mt-8">
+        <h3 className="mb-1 mt-5 text-gray-100">Your current positions</h3>
+      </div>
+      <PoolCurrentPosition />
+    </Card>
   );
 }
