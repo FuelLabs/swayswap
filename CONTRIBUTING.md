@@ -115,7 +115,19 @@ This is a rough outline of what a contributor's workflow looks like:
 - Run tests and make sure all tests pass.
 - If the PR contains any breaking changes, add the `breaking` label to your PR.
 - Push your changes to a branch in your fork of the repository and submit a pull request.
-  - Make sure mention the issue, which is created at step 1, in the commit message.
+  - Use one of the following tags in the title of your PR:
+    - `feat:` - A new feature
+    - `fix:` - A bug fix
+    - `docs:` - Documentation only changes
+    - `style:` - Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+    - `refactor:` - A code change that neither fixes a bug nor adds a feature
+    - `perf:` - A code change that improves performance
+    - `test:` - Adding missing tests or correcting existing tests
+    - `build:` - Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+    - `ci:` - Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+    - `chore:` - Other changes that don't modify src or test files
+    - `revert:` - Reverts a previous commit
+  - Make sure to mention the issue, which is created at step 1, in the commit message.
 - Your PR will be reviewed and some changes may be requested.
   - Once you've made changes, your PR must be re-reviewed and approved.
   - If the PR becomes out of date, you can use GitHub's 'update branch' button.
