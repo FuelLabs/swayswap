@@ -1,8 +1,10 @@
-import { BiListUl } from "react-icons/bi";
+import cx from "classnames";
+import { BiListUl, BiDollarCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
 import { Accordion } from "~/components/Accordion";
 import { Button } from "~/components/Button";
+import { Card } from "~/components/Card";
 import { PreviewTable, PreviewItem } from "~/components/PreviewTable";
 import { Spinner } from "~/components/Spinner";
 import { TokenIcon } from "~/components/TokenIcon";
@@ -10,6 +12,27 @@ import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useUserPositions } from "~/hooks/useUserPositions";
 import CoinsMetadata from "~/lib/CoinsMetadata";
 import { Pages } from "~/types/pages";
+
+const style = {
+  button: `relative font-semibold text-xs`,
+};
+
+const SubpagesNav = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="flex items-center gap-4">
+      <Button
+        size="sm"
+        variant="primary"
+        onPress={() => navigate(`../${Pages["pool.addLiquidity"]}`)}
+        className={cx(style.button)}
+      >
+        Add Liquidity
+      </Button>
+    </div>
+  );
+};
 
 function WithoutPositions() {
   return (
@@ -80,7 +103,11 @@ export default function PoolsPreview() {
   const { hasPositions } = useUserPositions();
 
   return (
-    <div>
+    <Card>
+      <Card.Title elementRight={<SubpagesNav />}>
+        <BiDollarCircle className="text-primary-500" />
+        Pool
+      </Card.Title>
       <h3 className="pb-1 mb-3 mt-5 text-gray-100 border-b border-dashed border-gray-600">
         Your liquidity positions
       </h3>
@@ -91,6 +118,6 @@ export default function PoolsPreview() {
           <PositionItem />
         </Accordion>
       )}
-    </div>
+    </Card>
   );
 }
