@@ -29,7 +29,15 @@ export const PoolCurrentPosition = () => {
           </div>
         }
       />
-      <PreviewItem title="Your pool tokens" value={info.formattedPoolTokens} />
+      <PreviewItem
+        title="Your pool tokens"
+        value={
+          <div className="flex flex-1 items-center justify-end">
+            {info.formattedPoolTokens}{" "}
+            <TokenIcon coinFrom={coinFrom} coinTo={coinTo} size={14} />
+          </div>
+        }
+      />
       <PreviewItem
         title="Your pool share"
         value={`${info.formattedPoolShare}%`}
