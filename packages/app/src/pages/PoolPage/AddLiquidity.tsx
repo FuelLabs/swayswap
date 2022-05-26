@@ -6,20 +6,19 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 
+import { AddLiquidityPreview } from "./AddLiquidityPreview";
 import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
-import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { Spinner } from "~/components/Spinner";
-import { CONTRACT_ID, DECIMAL_UNITS } from "~/config";
+import { DECIMAL_UNITS } from "~/config";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
-import { usePreviewLiquidity } from "~/hooks/usePreviewLiquidity";
 import assets from "~/lib/CoinsMetadata";
-import { calculateRatio } from "~/lib/asset";
+import { divideFnValidOnly } from "~/lib/utils";
 import type { Coin } from "~/types";
 
 const style = {
@@ -110,17 +109,17 @@ export default function AddLiquidity() {
     onChange: handleChangeToValue,
   });
 
-  const reservesFromToRatio = calculateRatio(
+  const reservesFromToRatio = divideFnValidOnly(
     poolInfo?.eth_reserve,
     poolInfo?.token_reserve
   );
 
-  const reservesToFromRatio = calculateRatio(
+  const reservesToFromRatio = divideFnValidOnly(
     poolInfo?.token_reserve,
     poolInfo?.eth_reserve
   );
 
-  const addLiquidityRatio = calculateRatio(fromInput.amount, toInput.amount);
+  const addLiquidityRatio = divideFnValidOnly(fromInput.amount, toInput.amount);
 
   const {
     mutation: addLiquidityMutation,
@@ -144,12 +143,6 @@ export default function AddLiquidity() {
     setFromInitialAmount(fromInput.amount);
     setToInitialAmount(toInput.amount);
   }, [fromInput.amount, toInput.amount]);
-
-  const { previewTokensToReceive, nextCurrentPoolShare } = usePreviewLiquidity({
-    fromInput,
-    poolInfo,
-    contractId: CONTRACT_ID,
-  });
 
   return (
     <Card>
@@ -189,18 +182,7 @@ export default function AddLiquidity() {
             />
           </div>
           {!!addLiquidityRatio && (
-            <PreviewTable title="Expected output:" className="my-2">
-              <PreviewItem
-                title="Pool tokens you'll receive:"
-                value={formatUnits(previewTokensToReceive, DECIMAL_UNITS)}
-              />
-              <PreviewItem
-                title={"Your share of current pool:"}
-                value={`${parseFloat(
-                  (nextCurrentPoolShare * 100).toFixed(6)
-                )}%`}
-              />
-            </PreviewTable>
+            <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
           )}
           {poolInfo && reservesFromToRatio ? (
             <div className={style.info}>
