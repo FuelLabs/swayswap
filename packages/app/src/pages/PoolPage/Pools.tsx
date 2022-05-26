@@ -55,7 +55,7 @@ function PositionItem() {
       <Accordion.Trigger>
         <div className="flex items-center">
           <TokenIcon coinFrom={coinFrom} coinTo={coinTo} />
-          ETH/DAI
+          <div className="ml-2">ETH/DAI</div>
         </div>
       </Accordion.Trigger>
       <Accordion.Content>

@@ -1,12 +1,13 @@
 /* eslint-disable no-nested-ternary */
 import classNames from "classnames";
-import { formatUnits } from "ethers/lib/utils";
 import { toNumber } from "fuels";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 
+import { AddLiquidityPoolPrice } from "./AddLiquidityPoolPrice";
 import { AddLiquidityPreview } from "./AddLiquidityPreview";
+import { PoolCurrentReserves } from "./PoolCurrentReserves";
 import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 import { Button } from "~/components/Button";
@@ -14,7 +15,6 @@ import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { Spinner } from "~/components/Spinner";
-import { DECIMAL_UNITS } from "~/config";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import assets from "~/lib/CoinsMetadata";
@@ -25,7 +25,6 @@ const style = {
   wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
   content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  info: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg`,
   createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg max-w-[400px]`,
 };
 
@@ -114,11 +113,6 @@ export default function AddLiquidity() {
     poolInfo?.token_reserve
   );
 
-  const reservesToFromRatio = divideFnValidOnly(
-    poolInfo?.token_reserve,
-    poolInfo?.eth_reserve
-  );
-
   const addLiquidityRatio = divideFnValidOnly(fromInput.amount, toInput.amount);
 
   const {
@@ -184,39 +178,13 @@ export default function AddLiquidity() {
           {!!addLiquidityRatio && (
             <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
           )}
-          {poolInfo && reservesFromToRatio ? (
-            <div className={style.info}>
-              <h4 className="text-white mb-2 font-bold">Reserves</h4>
-              <div className="flex">
-                <div className="flex flex-col flex-1">
-                  <span>
-                    ETH:{" "}
-                    {formatUnits(
-                      poolInfo.eth_reserve,
-                      DECIMAL_UNITS
-                    ).toString()}
-                  </span>
-                  <span>
-                    DAI:{" "}
-                    {formatUnits(
-                      poolInfo.token_reserve,
-                      DECIMAL_UNITS
-                    ).toString()}
-                  </span>
-                </div>
-                {poolInfo.eth_reserve > 0 && poolInfo.token_reserve > 0 ? (
-                  <div className="flex flex-col">
-                    <span>
-                      <>ETH/DAI: {reservesFromToRatio.toFixed(6)}</>
-                    </span>
-                    <span>
-                      <>DAI/ETH: {reservesToFromRatio.toFixed(6)}</>
-                    </span>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          ) : null}
+          {!!(poolInfo && reservesFromToRatio) && (
+            <AddLiquidityPoolPrice
+              coinFrom={coinFrom}
+              coinTo={coinTo}
+              reservesFromToRatio={reservesFromToRatio}
+            />
+          )}
           <Button
             isDisabled={!!errorsCreatePull.length}
             isFull
@@ -245,6 +213,7 @@ export default function AddLiquidity() {
               </div>
             </div>
           ) : null}
+          {!!(poolInfo && reservesFromToRatio) && <PoolCurrentReserves />}
         </>
       )}
     </Card>

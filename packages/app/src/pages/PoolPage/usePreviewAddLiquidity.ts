@@ -1,11 +1,10 @@
-import { formatUnits } from 'ethers/lib/utils';
 import { toNumber } from 'fuels';
 
 import { useUserPositions } from '../../hooks/useUserPositions';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { DECIMAL_UNITS } from '~/config';
-import { divideFnValidOnly } from '~/lib/utils';
+import { divideFnValidOnly, parseToFormattedNumber } from '~/lib/utils';
 import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 
 export interface UsePreviewLiquidityProps {
@@ -21,7 +20,8 @@ export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewLiquid
   const nextCurrentPoolShare =
     divideFnValidOnly(BigInt(previewTokens + poolTokensNum), BigInt(nextTotalTokenSupply)) || 1;
 
-  const formattedPreviewTokens = formatUnits(previewTokens, DECIMAL_UNITS);
+  const formattedPreviewTokens = parseToFormattedNumber(previewTokens, DECIMAL_UNITS);
+
   const formattedNextCurrentPoolShare = parseFloat((nextCurrentPoolShare * 100).toFixed(6));
 
   return {

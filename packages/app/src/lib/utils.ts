@@ -1,8 +1,9 @@
 import { BigNumber } from 'ethers';
+import { commify, formatUnits } from 'ethers/lib/utils';
 import type { BigNumberish } from 'fuels';
 import { urlJoin } from 'url-join-ts';
 
-import { MAX_U64_STRING } from '~/config';
+import { DECIMAL_UNITS, MAX_U64_STRING } from '~/config';
 
 const { PUBLIC_URL } = process.env;
 
@@ -33,3 +34,8 @@ export function divideFnValidOnly(value?: BigNumberish | null, by?: BigNumberish
 
   return Number.isNaN(result) || !Number.isFinite(result) ? 0 : result;
 }
+
+export const parseToFormattedNumber = (
+  value: string | BigNumberish,
+  unit: BigNumberish = DECIMAL_UNITS
+) => commify(formatUnits(value, unit));

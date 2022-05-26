@@ -1,9 +1,8 @@
-import { formatUnits } from 'ethers/lib/utils';
-
 import { useBalances } from './useBalances';
 
 import { DECIMAL_UNITS } from '~/config';
 import CoinsMetadata from '~/lib/CoinsMetadata';
+import { parseToFormattedNumber } from '~/lib/utils';
 
 const ETH_ID = CoinsMetadata.find((item) => item.symbol === 'ETH')?.assetId;
 
@@ -12,6 +11,6 @@ export function useEthBalance() {
   const balance = balances?.find((item) => item.assetId === ETH_ID)?.amount;
   return {
     raw: balance,
-    formatted: balance && formatUnits(balance, DECIMAL_UNITS),
+    formatted: balance && parseToFormattedNumber(balance, DECIMAL_UNITS),
   };
 }
