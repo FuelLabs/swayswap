@@ -36,18 +36,24 @@ jobs:
           version: 7.0.0
           run_install: true
 
+      - name: Setup Docker
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Lint & Test
         run: |
           pnpm lint
-          pnpm test
+          pnpm ci:test-coverage
+        env:
+          VITE_FUEL_PROVIDER_URL: http://localhost:4000/graphql
 
       - name: Build
         env:
           CI: false
           PUBLIC_URL: "/${{ github.event.repository.name }}"
-          VITE_FUEL_PROVIDER_URL: "https://node.swayswap.io/graphql"
-          VITE_CONTRACT_ID: "0xac01cffc1fe91976228834078e888efcd185d6792bd2138b09afbdf833599ef6"
-          VITE_TOKEN_ID: "0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c59e0"
         run: |
           pnpm build
 

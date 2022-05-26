@@ -19,16 +19,22 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "ci:test-coverage": "run-s services:run contracts test:coverage services:clean",
+    "ci:test": "run-s services:run contracts test services:clean",
+    "contracts": "run-s contracts:*",
+    "contracts:build": "pnpm run --filter swayswap-app build-contracts",
+    "contracts:deploy": "pnpm run --filter swayswap-app deploy-contracts",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "pnpm lint:check --fix",
     "lint": "run-s lint:check prettier:check",
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --write .",
-    "test": "turbo run test -- --passWithNoTests",
-    "build-contracts": "pnpm run --filter swayswap-app build-contracts",
-    "deploy-contracts": "pnpm run --filter swayswap-app deploy-contracts"
+    "services:clean": "make services-clean",
+    "services:run": "make services-run",
+    "test:coverage": "turbo run test -- --collectCoverage",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",

@@ -37,7 +37,16 @@ jobs:
           version: 7.0.0
           run_install: true
 
+      - name: Setup Docker
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Lint & Test
         run: |
           pnpm lint
-          pnpm test
+          pnpm ci:test-coverage
+        env:
+          VITE_FUEL_PROVIDER_URL: http://localhost:4000/graphql
