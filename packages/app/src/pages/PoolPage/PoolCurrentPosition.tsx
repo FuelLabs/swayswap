@@ -2,10 +2,11 @@ import { PreviewTable, PreviewItem } from "~/components/PreviewTable";
 import { TokenIcon } from "~/components/TokenIcon";
 import { useCoinMetadata } from "~/hooks/useCoinMetadata";
 import { useUserPositions } from "~/hooks/useUserPositions";
+import { ETH_DAI } from "~/lib/CoinsMetadata";
 
 export const PoolCurrentPosition = () => {
   const info = useUserPositions();
-  const { coinMetaData } = useCoinMetadata({ symbol: "ETH/DAI" });
+  const { coinMetaData } = useCoinMetadata({ symbol: ETH_DAI.name });
   const coinFrom = coinMetaData?.pairOf?.[0];
   const coinTo = coinMetaData?.pairOf?.[1];
 

@@ -177,7 +177,7 @@ export default function AddLiquidity() {
             <CoinInput
               {...toInput.getInputProps()}
               rightElement={
-                <CoinSelector {...toInput.getCoinSelectorProps()} />
+                <CoinSelector {...toInput.getCoinSelectorProps()} isReadOnly />
               }
             />
           </div>

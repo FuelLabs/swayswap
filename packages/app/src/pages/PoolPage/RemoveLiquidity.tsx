@@ -97,7 +97,9 @@ export default function RemoveLiquidityPage() {
       <div className="mt-4 mb-4">
         <CoinInput
           {...tokenInput.getInputProps()}
-          rightElement={<CoinSelector {...tokenInput.getCoinSelectorProps()} />}
+          rightElement={
+            <CoinSelector {...tokenInput.getCoinSelectorProps()} isReadOnly />
+          }
           autoFocus
         />
       </div>
