@@ -1,5 +1,7 @@
 import cx from "classnames";
-import { useState } from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { BiCoin } from "react-icons/bi";
 import { FaFaucet } from "react-icons/fa";
 
@@ -9,7 +11,7 @@ import { Dialog, useDialog } from "./Dialog";
 import { Input } from "./Input";
 import { NumberInput } from "./NumberInput";
 
-import { MINT_AMOUNT, TOKEN_ID } from "~/config";
+import { MINT_AMOUNT, RECAPTCHA_SITE_KEY, TOKEN_ID } from "~/config";
 import { useFaucet } from "~/hooks/useFaucet";
 import { useMint } from "~/hooks/useMint";
 
@@ -18,6 +20,7 @@ export function FaucetWidget() {
   const [mintTokenID, setMintTokenID] = useState(TOKEN_ID);
   const [mintAmount, setMintAmount] = useState<string>(`${MINT_AMOUNT}`);
   const [showing, setShowing] = useState("faucet");
+  const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
 
   const faucet = useFaucet({
     onSuccess: () => dialog.close(),
@@ -31,13 +34,21 @@ export function FaucetWidget() {
   const faucetContent = (
     <>
       <div>Click the button below to mint 0.5 ETH to your wallet.</div>
+      <div className="mt-4 mx-6 flex items-center justify-center">
+        <ReCAPTCHA
+          theme="dark"
+          sitekey={RECAPTCHA_SITE_KEY}
+          onChange={setFaucetCaptcha}
+        />
+      </div>
       <Button
         size="md"
         variant="primary"
         isFull
-        className="mt-4"
+        className="mt-5"
+        isDisabled={!faucetCaptcha}
         isLoading={faucet.isLoading}
-        onPress={faucet.handleFaucet}
+        onPress={() => faucet.handleFaucet(faucetCaptcha)}
       >
         Give me ETH
       </Button>

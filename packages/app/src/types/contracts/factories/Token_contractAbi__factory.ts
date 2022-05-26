@@ -20,7 +20,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -38,7 +38,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -78,7 +78,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -118,7 +118,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },

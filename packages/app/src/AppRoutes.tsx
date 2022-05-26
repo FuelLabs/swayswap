@@ -7,7 +7,6 @@ import { Pages } from "./types/pages";
 
 const AddLiquidity = lazy(() => import("./pages/PoolPage/AddLiquidity"));
 const CreateWallet = lazy(() => import("~/pages/CreateWallet"));
-const FaucetPage = lazy(() => import("~/pages/FaucetPage"));
 const PoolPage = lazy(() => import("~/pages/PoolPage/index"));
 const PoolsPreview = lazy(() => import("~/pages/PoolPage/Pools"));
 const RemoveLiquidityPage = lazy(
@@ -56,14 +55,6 @@ export default function AppRoutes() {
             }
           />
         </Route>
-        <Route
-          path={Pages.faucet}
-          element={
-            <RequireWallet>
-              <FaucetPage />
-            </RequireWallet>
-          }
-        />
       </Route>
     </Routes>
   );

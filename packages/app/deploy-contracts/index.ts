@@ -1,6 +1,4 @@
-/// <reference types="@fuel-ts/providers" />
-/// <reference types="@fuel-ts/contract" />
-
+/* eslint-disable no-console */
 /**
  * Deploy contract to SwaySwap node.
  */
@@ -9,14 +7,8 @@
 // https://github.com/FuelLabs/sway/issues/1308
 import { parseUnits, randomBytes } from 'ethers/lib/utils';
 import fs from 'fs';
-import {
-  ContractFactory,
-  NativeAssetId,
-  ScriptTransactionRequest,
-  Wallet,
-  ZeroBytes32,
-} from 'fuels';
-import type { JsonAbi, Interface } from 'fuels';
+import { ContractFactory, NativeAssetId, ScriptTransactionRequest, Wallet } from 'fuels';
+import type { Interface, JsonAbi } from 'fuels';
 import path from 'path';
 
 // @ts-ignore
@@ -32,8 +24,7 @@ const contractPath = path.join(
 );
 const providerUrl = process.env.VITE_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
 
-// @ts-ignore
-export const seedWallet = async (wallet: Wallet) => {
+const seedWallet = async (wallet: Wallet) => {
   const transactionRequest = new ScriptTransactionRequest({
     gasPrice: 0,
     gasLimit: '0x0F4240',
@@ -53,7 +44,7 @@ export const seedWallet = async (wallet: Wallet) => {
   return submit.wait();
 };
 
-export async function deployContract(
+async function deployContractBinary(
   contextLog: string,
   binaryPath: string,
   abi: JsonAbi | Interface
@@ -70,7 +61,7 @@ export async function deployContract(
   const bytecode = fs.readFileSync(binaryPath);
   console.log(contextLog, 'Deploy contract...');
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract([], ZeroBytes32);
+  const contract = await factory.deployContract([], NativeAssetId);
 
   console.log(contextLog, 'Contract deployed...');
   return contract;
@@ -78,12 +69,12 @@ export async function deployContract(
 
 (async function main() {
   try {
-    const contract = await deployContract(
+    const contract = await deployContractBinary(
       'SwaySwap',
       contractPath,
       Exchange_contractAbi__factory.abi
     );
-    const token = await deployContract('Token', tokenPath, Token_contractAbi__factory.abi);
+    const token = await deployContractBinary('Token', tokenPath, Token_contractAbi__factory.abi);
 
     console.log('SwaySwap Contract Id', contract.id);
     console.log('Token Contract Id', token.id);

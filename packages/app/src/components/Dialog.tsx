@@ -1,6 +1,6 @@
 import { useDialog as useReactAriaDialog } from "@react-aria/dialog";
 import { FocusScope } from "@react-aria/focus";
-import type { OverlayProps, ModalAriaProps } from "@react-aria/overlays";
+import type { ModalAriaProps } from "@react-aria/overlays";
 import {
   useOverlay,
   usePreventScroll,
@@ -11,6 +11,7 @@ import {
 import type { OverlayTriggerState } from "@react-stately/overlays";
 import { useOverlayTriggerState } from "@react-stately/overlays";
 import type { AriaDialogProps } from "@react-types/dialog";
+import type { OverlayProps } from "@react-types/overlays";
 import cx from "classnames";
 import { createContext, useContext, useRef } from "react";
 import type { FC, ReactNode } from "react";
@@ -97,13 +98,15 @@ function DialogTitle({ children, className }: DialogTitleProps) {
 type DialogContentProps = {
   children: ReactNode;
   className?: string;
+  onClose?: () => void;
 };
 
-function DialogContent({ children, className }: DialogContentProps) {
+function DialogContent({ children, className, onClose }: DialogContentProps) {
   const props = useContext(ctx);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   function handleClose() {
+    onClose?.();
     props.state?.close();
   }
 

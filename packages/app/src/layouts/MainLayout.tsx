@@ -77,7 +77,11 @@ export function MainLayout() {
           </Suspense>
         )}
       </ErrorBoundary>
-      {wallet && <FaucetWidget />}
+      {wallet && (
+        <>
+          <FaucetWidget />
+        </>
+      )}
     </div>
   );
 }

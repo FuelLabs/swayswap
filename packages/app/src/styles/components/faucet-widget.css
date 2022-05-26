@@ -11,7 +11,7 @@
     @apply min-w-[auto];
 
     & .card {
-      @apply pt-0 max-w-[300px] min-w-[auto];
+      @apply pt-0 max-w-[346px] min-w-[auto];
     }
 
     & .card--divider {

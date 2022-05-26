@@ -1,9 +1,9 @@
 import toast from 'react-hot-toast';
-import { useQueryClient, useMutation } from 'react-query';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { ENABLE_FAUCET_API } from '~/config';
-import { useAppContext } from '~/context/AppContext';
+import { ENABLE_FAUCET_API, FUEL_FAUCET_URL } from '~/config';
+import { useWallet } from '~/context/AppContext';
 import { sleep } from '~/lib/utils';
 import { Pages } from '~/types/pages';
 
@@ -12,31 +12,45 @@ type UseFaucetOpts = {
 };
 
 export function useFaucet(opts: UseFaucetOpts = {}) {
-  const { faucet } = useAppContext();
-  const client = useQueryClient();
+  const wallet = useWallet();
   const navigate = useNavigate();
 
   const mutation = useMutation(
-    async () => {
-      await faucet();
+    async (variables: { captcha: string | null }) => {
+      const response = await fetch(FUEL_FAUCET_URL, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: wallet?.address,
+          captcha: variables.captcha ?? '',
+        }),
+      }).then((r) => r.json());
+
+      if (response.status !== 'Success') {
+        throw new Error(`Invalid faucet response: ${JSON.stringify(response)}`);
+      }
+
       await sleep(1000);
     },
     {
-      ...opts,
-      onSuccess() {
-        opts.onSuccess?.();
+      onSuccess: () => {
+        // Navigate to assets page to show new cons
+        // https://github.com/FuelLabs/swayswap-demo/issues/40
         toast.success('Faucet added successfully!');
-        client.refetchQueries(['AssetsPage-balances']);
+        opts.onSuccess?.();
       },
     }
   );
 
-  function handleFaucet() {
+  function handleFaucet(captcha: string | null) {
     if (ENABLE_FAUCET_API) {
       navigate(Pages.faucet);
       return;
     }
-    mutation.mutate();
+    mutation.mutate({ captcha });
   }
 
   return {

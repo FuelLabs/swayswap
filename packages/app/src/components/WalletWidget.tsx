@@ -9,6 +9,7 @@ import { ButtonGroup } from "./ButtonGroup";
 import { Popover, usePopover } from "./Popover";
 import { WalletInfo } from "./WalletInfo";
 
+import { ENABLE_FAUCET_API } from "~/config";
 import { useWallet } from "~/context/AppContext";
 import { useEthBalance } from "~/hooks/useEthBalance";
 import { useFaucet } from "~/hooks/useFaucet";
@@ -48,7 +49,7 @@ export function WalletWidget() {
   };
 
   useEffect(() => {
-    if (wallet && userInfo.isNew) {
+    if (wallet && userInfo.isNew && !ENABLE_FAUCET_API) {
       setTimeout(() => {
         faucet.mutate();
         setUserInfo({ isNew: false });
