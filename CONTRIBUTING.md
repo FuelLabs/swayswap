@@ -74,7 +74,7 @@ After installing the client dependencies in `/packages/app` the contents of `.en
 
 - `VITE_FUEL_FAUCET_URL=` - Link for the fuel faucet
 
-After deploying the SwaySwap and token contracts make sure to copy and paste the SwaySwap and token contract IDs into `.env` before running the development server.
+Before starting the development server make sure the contract ID and token ID environment variables are set to the corresponding contract addresses.
 
 ## Getting the Repository
 
