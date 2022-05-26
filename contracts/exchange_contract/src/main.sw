@@ -122,7 +122,9 @@ fn get_msg_sender_address_or_panic() -> Address {
 
 impl Exchange for Contract {
     fn get_balance(token: ContractId) -> u64 {
-        this_balance(token)
+        let sender = get_msg_sender_address_or_panic();
+        let key = key_deposits(sender, token.into());
+        get::<u64>(key)
     }
 
     fn deposit() {
@@ -151,10 +153,9 @@ impl Exchange for Contract {
         transfer_to_output(amount, asset_id, sender)
     }
 
-    fn add_liquidity(min_liquidity: u64, max_tokens: u64, deadline: u64) -> u64 {
+    fn add_liquidity(min_liquidity: u64, deadline: u64) -> u64 {
         assert(msg_amount() == 0);
         assert(deadline > height());
-        assert(max_tokens > 0);
         assert(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == TOKEN_ID);
 
         let sender = get_msg_sender_address_or_panic();
@@ -162,12 +163,12 @@ impl Exchange for Contract {
         let total_liquidity = storage.lp_token_supply;
 
         let eth_amount_key = key_deposits(sender, ETH_ID);
-        let eth_amount = get::<u64>(eth_amount_key);
-        store(eth_amount_key, 0);
+        let current_eth_amount = get::<u64>(eth_amount_key);
+
         let token_amount_key = key_deposits(sender, TOKEN_ID);
         let current_token_amount = get::<u64>(token_amount_key);
 
-        assert(eth_amount > 0);
+        assert(current_eth_amount > 0);
 
         let mut minted: u64 = 0;
         if total_liquidity > 0 {
@@ -175,45 +176,56 @@ impl Exchange for Contract {
 
             let eth_reserve = get_current_reserve(ETH_ID);
             let token_reserve = get_current_reserve(TOKEN_ID);
-            let token_amount = (eth_amount * token_reserve) / eth_reserve;
-            let liquidity_minted = (eth_amount * total_liquidity) / eth_reserve;
+            let token_amount = (current_eth_amount * token_reserve) / eth_reserve;
+            let liquidity_minted = (current_eth_amount * total_liquidity) / eth_reserve;
 
-            assert(max_tokens >= token_amount);
             assert(liquidity_minted >= min_liquidity);
-            assert(current_token_amount >= token_amount);
 
-            // Add fund to the reservers
-            add_reserve(TOKEN_ID, token_amount);
-            add_reserve(ETH_ID, eth_amount);
-            // Mint LP token
-            mint(liquidity_minted);
-            storage.lp_token_supply = total_liquidity + liquidity_minted;
+            // if token ratio is correct, proceed with liquidity operation
+            // otherwise, return current user balances in contract
+            if (current_token_amount >= token_amount) {
+              // Add fund to the reservers
+              add_reserve(TOKEN_ID, token_amount);
+              add_reserve(ETH_ID, current_eth_amount);
+              // Mint LP token
+              mint(liquidity_minted);
+              storage.lp_token_supply = total_liquidity + liquidity_minted;
 
-            transfer_to_output(liquidity_minted, contract_id(), sender);
+              transfer_to_output(liquidity_minted, contract_id(), sender);
 
-            store(token_amount_key, token_amount - current_token_amount);
+              // If user sent more than the correct ratio, we deposit back the extra tokens
+              let token_extra = current_token_amount - token_amount;
+              if (token_extra > 0) {
+                transfer_to_output(token_extra, ~ContractId::from(TOKEN_ID), sender);
+              }
 
-            minted = liquidity_minted;
+              minted = liquidity_minted;
+            } else {
+              transfer_to_output(current_token_amount, ~ContractId::from(TOKEN_ID), sender);
+              transfer_to_output(current_eth_amount, ~ContractId::from(ETH_ID), sender);
+              minted = 0;
+            }
+
         } else {
-            assert(eth_amount > MINIMUM_LIQUIDITY);
+            assert(current_eth_amount > MINIMUM_LIQUIDITY);
 
-            let token_amount = max_tokens;
-            let initial_liquidity = eth_amount;
-            assert(current_token_amount >= token_amount);
+            let initial_liquidity = current_eth_amount;
 
             // Add fund to the reservers
-            add_reserve(TOKEN_ID, token_amount);
-            add_reserve(ETH_ID, eth_amount);
+            add_reserve(TOKEN_ID, current_token_amount);
+            add_reserve(ETH_ID, current_eth_amount);
             // Mint LP token
             mint(initial_liquidity);
             storage.lp_token_supply = initial_liquidity;
 
             transfer_to_output(initial_liquidity, contract_id(), sender);
 
-            store(token_amount_key, current_token_amount - token_amount);
-
             minted = initial_liquidity;
         };
+
+        // Clear user contract balances after finishing add/create liquidity
+        store(token_amount_key, 0);
+        store(eth_amount_key, 0);
 
         minted
     }
