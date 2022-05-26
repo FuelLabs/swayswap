@@ -82,7 +82,12 @@ fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -
     let input_amount_with_fee: u64 = calculate_amount_with_fee(input_amount);
     let numerator = ~U128::from(0, input_amount_with_fee) * ~U128::from(0, output_reserve);
     let denominator = ~U128::from(0, input_reserve) + ~U128::from(0, input_amount_with_fee);
-    (numerator / denominator).to_u64().unwrap()
+    let result_wrapped = (numerator / denominator).to_u64();
+    // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
+    match result_wrapped {
+        Result::Ok(inner_value) => inner_value,
+        _ => revert(0),
+    }
 }
 
 /// Pricing function for converting between ETH and Tokens.
@@ -90,12 +95,16 @@ fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64)
     assert(input_reserve > 0 && output_reserve > 0);
     let numerator = ~U128::from(0, input_reserve) * ~U128::from(0, output_amount);
     let denominator = ~U128::from(0, calculate_amount_with_fee(output_reserve - output_amount));
-    let result = (numerator / denominator).to_u64().unwrap();
+    let result_wrapped = (numerator / denominator).to_u64();
     if denominator == ~U128::new() || denominator > numerator {
         // Emulate Infinity Value
         18446744073709551615u64
     } else {
-        result + 1
+        // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
+        match result_wrapped {
+            Result::Ok(inner_value) => inner_value + 1,
+            _ => revert(0),
+        }
     }
 }
 
