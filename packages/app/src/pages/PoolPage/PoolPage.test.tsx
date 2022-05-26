@@ -26,14 +26,14 @@ describe("PoolPage", () => {
   });
 
   it("should see a no pool message when try to add first time", async () => {
-    jest.mock("../../lib/asset.ts", () => ({ calculateRatio: () => 0 }));
+    jest.mock("../../lib/utils.ts", () => ({ divideFnValidOnly: () => 0 }));
     renderWithRouter(<App />, { route: "/pool/add-liquidity" });
 
     await waitFor(async () => {
       const noResults = await screen.findByText(/You are creating a new pool/);
       expect(noResults).toBeInTheDocument();
     });
-    jest.unmock("../../lib/asset.ts");
+    jest.unmock("../../lib/utils.ts");
   });
 
   it("should show insufficient balance if has no coinTo balance", async () => {
