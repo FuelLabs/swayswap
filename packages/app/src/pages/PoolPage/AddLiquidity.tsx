@@ -1,7 +1,5 @@
 /* eslint-disable no-nested-ternary */
 import classNames from "classnames";
-import { formatUnits } from "ethers/lib/utils";
-import { toNumber } from "fuels";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
@@ -19,6 +17,8 @@ import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { usePreviewLiquidity } from "~/hooks/usePreviewLiquidity";
 import assets from "~/lib/CoinsMetadata";
 import { calculateRatio } from "~/lib/asset";
+import { ZERO } from "~/lib/constants";
+import { formatUnits, toBigInt, toNumber } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {
@@ -78,9 +78,9 @@ export default function AddLiquidity() {
     fromInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const value = val || BigInt(0);
+      const value = val || ZERO;
       const newToValue = Math.ceil(toNumber(value) / reservesFromToRatio);
-      toInput.setAmount(BigInt(newToValue));
+      toInput.setAmount(toBigInt(newToValue));
     }
   };
 
@@ -88,9 +88,9 @@ export default function AddLiquidity() {
     toInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const value = val || BigInt(0);
+      const value = val || ZERO;
       const newFromValue = Math.floor(toNumber(value) * reservesFromToRatio);
-      fromInput.setAmount(BigInt(newFromValue));
+      fromInput.setAmount(toBigInt(newFromValue));
     }
   };
 
@@ -98,7 +98,7 @@ export default function AddLiquidity() {
     coin: coinFrom,
     disableWhenEth: true,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    gasFee: BigInt(1),
+    gasFee: toBigInt(1),
     onChange: handleChangeFromValue,
   });
 
@@ -199,12 +199,10 @@ export default function AddLiquidity() {
           <div className="flex">
             <div className="flex flex-col flex-1">
               <span>
-                ETH:{" "}
-                {formatUnits(poolInfo.eth_reserve, DECIMAL_UNITS).toString()}
+                ETH: {formatUnits(poolInfo.eth_reserve, DECIMAL_UNITS)}
               </span>
               <span>
-                DAI:{" "}
-                {formatUnits(poolInfo.token_reserve, DECIMAL_UNITS).toString()}
+                DAI: {formatUnits(poolInfo.token_reserve, DECIMAL_UNITS)}
               </span>
             </div>
             {poolInfo.eth_reserve > 0 && poolInfo.token_reserve > 0 ? (

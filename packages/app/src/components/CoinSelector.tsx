@@ -1,5 +1,4 @@
 import cx from "classnames";
-import { formatUnits } from "ethers/lib/utils";
 import type { ReactNode } from "react";
 import { useState, useEffect, forwardRef, useMemo } from "react";
 import { FiChevronDown } from "react-icons/fi";
@@ -13,6 +12,7 @@ import { Tooltip } from "./Tooltip";
 import { DECIMAL_UNITS } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import CoinsMetadata from "~/lib/CoinsMetadata";
+import { formatUnits } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {

@@ -1,4 +1,3 @@
-import { toBigInt } from "fuels";
 import { useAtom, useAtomValue } from "jotai";
 import { startTransition, useEffect } from "react";
 
@@ -16,6 +15,7 @@ import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { InvertButton } from "~/components/InvertButton";
 import { NETWORK_FEE } from "~/config";
+import { toBigInt } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {

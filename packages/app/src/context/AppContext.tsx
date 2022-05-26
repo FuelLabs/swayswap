@@ -1,6 +1,6 @@
 import { randomBytes } from "ethers/lib/utils";
 import type { TransactionResult } from "fuels";
-import { Wallet, ScriptTransactionRequest, CoinStatus, toBigInt } from "fuels";
+import { Wallet, ScriptTransactionRequest, CoinStatus } from "fuels";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import type { PropsWithChildren } from "react";
@@ -8,6 +8,7 @@ import React, { useContext, useMemo } from "react";
 
 import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "~/config";
 import { COIN_ETH, LocalStorageKey } from "~/lib/constants";
+import { toBigInt } from "~/lib/math";
 import type { Exchange_contractAbi } from "~/types/contracts";
 import { Exchange_contractAbi__factory } from "~/types/contracts";
 

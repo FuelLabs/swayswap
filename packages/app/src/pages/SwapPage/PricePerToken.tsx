@@ -1,4 +1,3 @@
-import { toNumber } from "fuels";
 import { useEffect, useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 
@@ -9,7 +8,7 @@ import { ActiveInput } from "./types";
 import { Button } from "~/components/Button";
 import { ONE_ASSET } from "~/config";
 import { ZERO } from "~/lib/constants";
-import { divideBigInt } from "~/lib/utils";
+import { toNumber, divideBigInt } from "~/lib/math";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,

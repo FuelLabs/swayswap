@@ -1,9 +1,8 @@
-import { formatUnits } from 'ethers/lib/utils';
-
 import { useBalances } from './useBalances';
 
 import { DECIMAL_UNITS } from '~/config';
 import CoinsMetadata from '~/lib/CoinsMetadata';
+import { formatUnits } from '~/lib/math';
 
 const ETH_ID = CoinsMetadata.find((item) => item.symbol === 'ETH')?.assetId;
 

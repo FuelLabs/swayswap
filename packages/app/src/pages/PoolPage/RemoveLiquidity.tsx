@@ -9,6 +9,7 @@ import { CONTRACT_ID } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import coins from "~/lib/CoinsMetadata";
+import { ZERO } from "~/lib/constants";
 
 export default function RemoveLiquidityPage() {
   const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>(
@@ -38,7 +39,7 @@ export default function RemoveLiquidityPage() {
     {
       onSuccess: () => {
         toast.success("Liquidity removed successfully!");
-        tokenInput.setAmount(BigInt(0));
+        tokenInput.setAmount(ZERO);
         balances.refetch();
       },
       onError: (error: Error) => {

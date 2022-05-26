@@ -1,5 +1,4 @@
 import type { CoinQuantity } from "fuels";
-import { toNumber } from "fuels";
 import { useSetAtom } from "jotai";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
@@ -23,6 +22,7 @@ import useDebounce from "~/hooks/useDebounce";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useSlippage } from "~/hooks/useSlippage";
 import { ZERO } from "~/lib/constants";
+import { toNumber } from "~/lib/math";
 import { queryClient } from "~/lib/queryClient";
 import { isSwayInfinity, sleep } from "~/lib/utils";
 import type { PreviewInfo } from "~/types/contracts/Exchange_contractAbi";

@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import type { BigNumberish } from 'fuels';
 import { urlJoin } from 'url-join-ts';
 
@@ -22,8 +21,4 @@ export function omit<T>(list: string[], props: T) {
     if (list.some((k) => k === key)) return obj;
     return { ...obj, [key]: value };
   }, {} as T) as T;
-}
-
-export function divideBigInt(from: BigNumberish, to: BigNumberish) {
-  return BigNumber.from(from).toNumber() / BigNumber.from(to).toNumber();
 }

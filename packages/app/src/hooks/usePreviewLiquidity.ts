@@ -1,9 +1,9 @@
-import { toNumber } from 'fuels';
-
 import { useBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { calculateRatio } from '~/lib/asset';
+import { ZERO } from '~/lib/constants';
+import { toBigInt, toNumber } from '~/lib/math';
 import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 
 export interface UsePreviewLiquidityProps {
@@ -14,21 +14,20 @@ export interface UsePreviewLiquidityProps {
 
 export function usePreviewLiquidity({ fromInput, poolInfo, contractId }: UsePreviewLiquidityProps) {
   const balances = useBalances();
-  const liquidityFactor = BigInt(
-    toNumber(fromInput.amount || BigInt(0)) * toNumber(poolInfo?.lp_token_supply || BigInt(1))
+  const liquidityFactor = toBigInt(
+    toNumber(fromInput.amount || ZERO) * toNumber(poolInfo?.lp_token_supply || toBigInt(1))
   );
   const previewTokensToReceive = calculateRatio(
     liquidityFactor,
-    poolInfo?.eth_reserve || BigInt(1)
+    poolInfo?.eth_reserve || toBigInt(1)
   );
-  const nextTotalTokenSupply =
-    previewTokensToReceive + toNumber(poolInfo?.lp_token_supply || BigInt(0));
+  const nextTotalTokenSupply = previewTokensToReceive + toNumber(poolInfo?.lp_token_supply || ZERO);
   const poolContractBalance = balances?.data?.find((item) => item.assetId === contractId);
-  const currentPoolTokensAmount = toNumber(poolContractBalance?.amount || BigInt(0));
+  const currentPoolTokensAmount = toNumber(poolContractBalance?.amount || ZERO);
   const nextCurrentPoolShare =
     calculateRatio(
-      BigInt(previewTokensToReceive + currentPoolTokensAmount),
-      BigInt(nextTotalTokenSupply)
+      toBigInt(previewTokensToReceive + currentPoolTokensAmount),
+      toBigInt(nextTotalTokenSupply)
     ) || 1;
 
   return {

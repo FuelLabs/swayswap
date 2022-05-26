@@ -1,9 +1,8 @@
-import { toNumber } from 'fuels';
-
 import type { SwapInfo } from './types';
 import { ActiveInput } from './types';
 
 import { COIN_ETH } from '~/lib/constants';
+import { toNumber } from '~/lib/math';
 
 export function getPriceImpact(
   outputAmount: bigint,
