@@ -96,7 +96,7 @@ fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64)
     let numerator = ~U128::from(0, input_reserve) * ~U128::from(0, output_amount);
     let denominator = ~U128::from(0, calculate_amount_with_fee(output_reserve - output_amount));
     let result_wrapped = (numerator / denominator).to_u64();
-    if denominator == ~U128::new() || denominator > numerator {
+    if denominator > numerator {
         // Emulate Infinity Value
         18446744073709551615u64
     } else {
