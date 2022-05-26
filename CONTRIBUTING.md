@@ -14,7 +14,7 @@ A prerequisite for running a Fuel node is Docker. Platform-specific installation
 
 The Sway toolchain and Fuel Core full node can be installed with:
 
-```
+```sh
 cargo install forc fuel-core
 ```
 
@@ -22,31 +22,31 @@ cargo install forc fuel-core
 
 There is no guarantee that either package will work with the `nightly` Rust toolchain, so ensure you are using `stable` with:
 
-```
+```sh
 rustup default stable
 ```
 
 This project uses `pnpm` for managing packages and dependencies. `pnpm` can be installed with:
 
-```
+```sh
 npm install -g pnpm
 ```
 
 You can install the project dependencies by running the following command in the root directory.
 
-```
+```sh
 pnpm install
 ```
 
 A Fuel node can be run locally with:
 
-```
+```sh
 docker compose up
 ```
 
 Compile the Sway libraries and contracts located in the `/contracts` directory with:
 
-```
+```sh
 pnpm build-contracts
 ```
 
@@ -54,7 +54,7 @@ This command also builds Sway type information for the frontend to use. The type
 
 Deploy the SwaySwap exhance and token contracts to the Fuel Network locally with:
 
-```
+```sh
 pnpm deploy-contracts
 ```
 

@@ -15,7 +15,7 @@ This project is just a simple ViteJS boilerplate ready to go.
 
 Install all dependencies with `pnpm`:
 
-```bash
+```sh
 pnpm install
 ```
 
@@ -23,7 +23,7 @@ This command also copies the contents of `.env.example` in a newly created `.env
 
 Then, run the development server:
 
-```bash
+```sh
 pnpm dev
 ```
 
