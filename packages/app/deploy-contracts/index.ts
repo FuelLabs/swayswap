@@ -1,6 +1,4 @@
-/// <reference types="@fuel-ts/providers" />
-/// <reference types="@fuel-ts/contract" />
-
+/* eslint-disable no-console */
 /**
  * Deploy contract to SwaySwap node.
  */
@@ -13,6 +11,7 @@ import {
   ContractFactory,
   NativeAssetId,
   ScriptTransactionRequest,
+  toBigInt,
   Wallet,
   ZeroBytes32,
 } from 'fuels';
@@ -32,11 +31,10 @@ const contractPath = path.join(
 );
 const providerUrl = process.env.VITE_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
 
-// @ts-ignore
-export const seedWallet = async (wallet: Wallet) => {
+const seedWallet = async (wallet: Wallet) => {
   const transactionRequest = new ScriptTransactionRequest({
     gasPrice: 0,
-    gasLimit: '0x0F4240',
+    gasLimit: 1_000_000,
     script: '0x24400000',
     scriptData: randomBytes(32),
   });
@@ -44,16 +42,16 @@ export const seedWallet = async (wallet: Wallet) => {
   transactionRequest.addCoin({
     id: '0x000000000000000000000000000000000000000000000000000000000000000000',
     assetId: NativeAssetId,
-    amount: parseUnits('.5', 9).toBigInt(),
+    amount: toBigInt(5_000_000),
     owner: '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e',
   });
-  transactionRequest.addCoinOutput(wallet.address, parseUnits('.5', 9).toBigInt(), NativeAssetId);
+  transactionRequest.addCoinOutput(wallet.address, toBigInt(5_000_000), NativeAssetId);
   const submit = await wallet.sendTransaction(transactionRequest);
 
   return submit.wait();
 };
 
-export async function deployContract(
+async function deployContractBinary(
   contextLog: string,
   binaryPath: string,
   abi: JsonAbi | Interface
@@ -78,12 +76,12 @@ export async function deployContract(
 
 (async function main() {
   try {
-    const contract = await deployContract(
+    const contract = await deployContractBinary(
       'SwaySwap',
       contractPath,
       Exchange_contractAbi__factory.abi
     );
-    const token = await deployContract('Token', tokenPath, Token_contractAbi__factory.abi);
+    const token = await deployContractBinary('Token', tokenPath, Token_contractAbi__factory.abi);
 
     console.log('SwaySwap Contract Id', contract.id);
     console.log('Token Contract Id', token.id);
