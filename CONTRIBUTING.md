@@ -55,7 +55,7 @@ This command also builds Sway type information for the frontend to use. The type
 Deploy the SwaySwap exhance and token contracts to the Fuel Network locally with:
 
 ```sh
-pnpm deploy-contracts
+pnpm contracts:deploy
 ```
 
 This command also creates a temporary wallet and sends some coins to your wallet. Copy and paste the SwaySwap contract ID and token contract ID into the `.env.example` file.

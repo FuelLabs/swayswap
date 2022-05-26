@@ -10,8 +10,8 @@
     "test": "jest",
     "test:watch": "jest --watch --detectOpenHandles",
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
-    "deploy-contracts": "sh ./scripts/deploy-contracts.sh",
-    "build-contracts": "sh ./scripts/build-contracts.sh",
+    "contracts:build": "sh ./scripts/build-contracts.sh",
+    "contracts:deploy": "pnpm exec ts-node -r dotenv/config deploy-contracts",
     "postinstall": "sh ./scripts/postinstall.sh",
     "create404": "cp ./dist/index.html ./dist/404.html"
   },

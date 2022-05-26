@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "16"
           registry-url: "https://registry.npmjs.org"
 
       - name: Cache PNPM modules
@@ -42,6 +42,31 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: 1.61.0
+          override: true
+
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Install rustfmt
+        run: rustup component add rustfmt
+
+      - name: Install Forc
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: forc --version 0.13.0
+
+      - name: Create .env file
+        run: |
+          cp packages/app/.env.production packages/app/.env
+          mv packages/app/.env packages/app/.env.in
+          sed -e 's+https://node.swayswap.io/graphql+http://localhost:4000+g' packages/app/.env.in > packages/app/.env
+          rm -rf packages/app/.env.in
 
       - name: Lint & Test
         run: |
