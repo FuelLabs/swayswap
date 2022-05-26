@@ -3,6 +3,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useQueryErrorResetBoundary } from "react-query";
 import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
 
+import { FaucetDialog } from "~/components/FaucetDialog";
 import Header from "~/components/Header";
 import Skeleton from "~/components/Skeleton";
 import { Pages } from "~/types/pages";
@@ -21,6 +22,7 @@ export function MainLayout() {
 
   return (
     <div className={style.wrapper}>
+      <FaucetDialog />
       <Header />
       <ErrorBoundary
         onReset={resetReactQuery}
