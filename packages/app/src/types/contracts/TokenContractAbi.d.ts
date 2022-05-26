@@ -10,6 +10,7 @@ import type {
   Overrides,
   BigNumberish,
   BytesLike,
+  BigNumber,
 } from 'fuels';
 
 export type ContractIdInput = { value: string };
@@ -20,7 +21,7 @@ export type AddressInput = { value: string };
 
 export type Address = { value: string };
 
-interface Token_contractAbiInterface extends Interface {
+interface TokenContractAbiInterface extends Interface {
   functions: {
     mint_coins: FunctionFragment;
     burn_coins: FunctionFragment;
@@ -29,20 +30,20 @@ interface Token_contractAbiInterface extends Interface {
     get_balance: FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: 'mint_coins', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'burn_coins', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'mint_coins', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'burn_coins', values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: 'force_transfer_coins',
     values: [BigNumberish, ContractIdInput, ContractIdInput]
-  ): Uint8Array;
+  ): string;
   encodeFunctionData(
     functionFragment: 'transfer_coins_to_output',
     values: [BigNumberish, ContractIdInput, AddressInput]
-  ): Uint8Array;
+  ): string;
   encodeFunctionData(
     functionFragment: 'get_balance',
     values: [ContractIdInput, ContractIdInput]
-  ): Uint8Array;
+  ): string;
 
   decodeFunctionData(functionFragment: 'mint_coins', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'burn_coins', data: BytesLike): DecodedValue;
@@ -51,8 +52,8 @@ interface Token_contractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'get_balance', data: BytesLike): DecodedValue;
 }
 
-export class Token_contractAbi extends Contract {
-  interface: Token_contractAbiInterface;
+export class TokenContractAbi extends Contract {
+  interface: TokenContractAbiInterface;
   functions: {
     mint_coins(
       mint_amount: BigNumberish,
@@ -82,7 +83,7 @@ export class Token_contractAbi extends Contract {
       target: ContractIdInput,
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
+    ): Promise<BigNumber>;
   };
   callStatic: {
     mint_coins(
@@ -113,7 +114,7 @@ export class Token_contractAbi extends Contract {
       target: ContractIdInput,
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
+    ): Promise<BigNumber>;
   };
 
   mint_coins(
@@ -144,5 +145,5 @@ export class Token_contractAbi extends Contract {
     target: ContractIdInput,
     asset_id: ContractIdInput,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<bigint>;
+  ): Promise<BigNumber>;
 }
