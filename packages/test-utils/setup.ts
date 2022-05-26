@@ -21,6 +21,9 @@ if (typeof window.matchMedia !== 'function') {
   });
 }
 
-export function setup() {
-  failOnConsole();
-}
+failOnConsole({
+  silenceMessage: (msg) => {
+    if (msg.includes('toHexString')) return true;
+    return false;
+  },
+});

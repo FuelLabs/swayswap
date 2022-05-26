@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import classNames from "classnames";
 import { formatUnits } from "ethers/lib/utils";
 import { toNumber } from "fuels";
@@ -135,6 +134,22 @@ export default function AddLiquidity() {
     addLiquidityRatio,
   });
 
+  const { previewTokensToReceive, nextCurrentPoolShare } = usePreviewLiquidity({
+    fromInput,
+    poolInfo,
+    contractId: CONTRACT_ID,
+  });
+
+  function getButtonText() {
+    if (isLoadingPoolInfo) {
+      return "Loading...";
+    }
+    if (errorsCreatePull.length) {
+      return errorsCreatePull[0];
+    }
+    return reservesFromToRatio ? "Add liquidity" : "Create liquidity";
+  }
+
   useEffect(() => {
     fromInput.setAmount(fromInitialAmount);
     toInput.setAmount(toInitialAmount);
@@ -144,12 +159,6 @@ export default function AddLiquidity() {
     setFromInitialAmount(fromInput.amount);
     setToInitialAmount(toInput.amount);
   }, [fromInput.amount, toInput.amount]);
-
-  const { previewTokensToReceive, nextCurrentPoolShare } = usePreviewLiquidity({
-    fromInput,
-    poolInfo,
-    contractId: CONTRACT_ID,
-  });
 
   return addLiquidityMutation.isLoading ? (
     <div className="mt-6 mb-8 flex justify-center">
@@ -170,6 +179,9 @@ export default function AddLiquidity() {
     <>
       <div className="mt-6 mb-4">
         <CoinInput
+          aria-label="Coin From Input"
+          id="coinFrom"
+          name="coinFrom"
           {...fromInput.getInputProps()}
           rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
           autoFocus
@@ -177,6 +189,9 @@ export default function AddLiquidity() {
       </div>
       <div className="mb-6">
         <CoinInput
+          aria-label="Coin To Input"
+          id="coinTo"
+          name="coinTo"
           {...toInput.getInputProps()}
           rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
         />
@@ -221,7 +236,8 @@ export default function AddLiquidity() {
         </div>
       ) : null}
       <Button
-        isDisabled={!!errorsCreatePull.length}
+        data-testid="submit"
+        isDisabled={isLoadingPoolInfo || Boolean(errorsCreatePull.length)}
         isFull
         size="lg"
         variant="primary"
@@ -231,11 +247,7 @@ export default function AddLiquidity() {
             : () => addLiquidityMutation.mutate()
         }
       >
-        {errorsCreatePull.length
-          ? errorsCreatePull[0]
-          : reservesFromToRatio
-          ? "Add liquidity"
-          : "Create liquidity"}
+        {getButtonText()}
       </Button>
       {!reservesFromToRatio && !isLoadingPoolInfo ? (
         <div className={style.createPoolInfo}>

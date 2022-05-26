@@ -46,7 +46,9 @@ const CardTitle: FC<CardTitleProps> & { id: string } = ({
   elementRight,
 }) => (
   <div className={style.titleWrapper}>
-    <h2 className="flex items-center gap-2">{children}</h2>
+    <h2 className="flex items-center gap-2" data-testid="card-title">
+      {children}
+    </h2>
     {elementRight}
   </div>
 );

@@ -1,37 +1,17 @@
-import { parseUnits } from "ethers/lib/utils";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { BiCoin } from "react-icons/bi";
-import { useMutation } from "react-query";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { Input } from "~/components/Input";
 import { NumberInput } from "~/components/NumberInput";
-import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "~/config";
-import { useTokenMethods } from "~/hooks/useTokensMethods";
-import { sleep } from "~/lib/utils";
+import { MINT_AMOUNT, TOKEN_ID } from "~/config";
+import { useMint } from "~/hooks/useMint";
 
 export default function MintTokenPage() {
   const [asset, setAsset] = useState(TOKEN_ID);
-  const methods = useTokenMethods(TOKEN_ID);
   const [amount, setAmount] = useState<string>(`${MINT_AMOUNT}`);
-
-  const mintMutation = useMutation(
-    async () => {
-      const mintAmount = parseUnits(amount, DECIMAL_UNITS).toBigInt();
-      await methods.mint(mintAmount);
-      await methods.transferTo(mintAmount, { variableOutputs: 1 });
-      await sleep(1000);
-    },
-    {
-      onSuccess: () => {
-        // Navigate to assets page to show new cons
-        // https://github.com/FuelLabs/swayswap-demo/issues/40
-        toast.success(`Token minted successfully!`);
-      },
-    }
-  );
+  const mintMutation = useMint();
 
   return (
     <Card>
@@ -45,20 +25,32 @@ export default function MintTokenPage() {
           {/* TODO: Add validation to match a valid address */}
           {/* https://github.com/FuelLabs/swayswap-demo/issues/41 */}
           <div>
-            <label className="mx-1 mb-2 flex text-gray-300">
+            <label
+              id="label-1"
+              className="mx-1 mb-2 flex text-gray-300"
+              htmlFor="contractId"
+            >
               Paste token contractId
             </label>
             <Input
+              aria-labelledby="label-1"
+              id="contractId"
               value={asset}
               placeholder="Type contract id"
               onChange={setAsset}
             />
           </div>
           <div>
-            <label className="mx-1 mb-2 flex text-gray-300">
+            <label
+              id="label-2"
+              className="mx-1 mb-2 flex text-gray-300"
+              htmlFor="amount"
+            >
               Amount to mint
             </label>
             <NumberInput
+              aria-labelledby="label-2"
+              id="amount"
               autoFocus
               className="px-2"
               value={amount}
@@ -69,12 +61,15 @@ export default function MintTokenPage() {
         </div>
       </div>
       <Button
+        data-testid="submit"
         isFull
         size="lg"
         variant="primary"
         isDisabled={!amount || parseInt(amount, 2) <= 0}
         isLoading={mintMutation.isLoading}
-        onPress={() => !mintMutation.isLoading && mintMutation.mutate()}
+        onPress={() =>
+          !mintMutation.isLoading && mintMutation.mutate({ amount })
+        }
       >
         Mint
       </Button>

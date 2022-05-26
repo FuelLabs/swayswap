@@ -27,6 +27,28 @@ export const AppContext = React.createContext<AppContextValue | null>(null);
 
 export const useAppContext = () => useContext(AppContext)!;
 
+export async function faucet(amount: bigint, wallet?: Wallet | null) {
+  if (!wallet) return null;
+  const transactionRequest = new ScriptTransactionRequest({
+    gasPrice: 0,
+    gasLimit: "0x0F4240",
+    script: "0x24400000",
+    scriptData: randomBytes(32),
+  });
+  transactionRequest.addCoin({
+    id: "0x000000000000000000000000000000000000000000000000000000000000000000",
+    assetId: COIN_ETH,
+    amount,
+    owner: "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
+    status: CoinStatus.Unspent,
+    maturity: toBigInt(0),
+    blockCreated: toBigInt(0),
+  });
+  transactionRequest.addCoinOutput(wallet.address, amount, COIN_ETH);
+  const submit = await wallet.sendTransaction(transactionRequest);
+  return submit.wait();
+}
+
 export const AppContextProvider = ({
   children,
 }: PropsWithChildren<unknown>) => {
@@ -47,38 +69,13 @@ export const AppContextProvider = ({
       value={{
         wallet,
         contract,
+        faucet: () => faucet(FAUCET_AMOUNT, wallet),
         createWallet: () => {
           const nextWallet = Wallet.generate({
             provider: FUEL_PROVIDER_URL,
           });
           setPrivateKey(nextWallet.privateKey);
           return nextWallet;
-        },
-        faucet: async () => {
-          if (!wallet) return null;
-          const transactionRequest = new ScriptTransactionRequest({
-            gasPrice: 0,
-            gasLimit: "0x0F4240",
-            script: "0x24400000",
-            scriptData: randomBytes(32),
-          });
-          transactionRequest.addCoin({
-            id: "0x000000000000000000000000000000000000000000000000000000000000000000",
-            assetId: COIN_ETH,
-            amount: FAUCET_AMOUNT,
-            owner:
-              "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
-            status: CoinStatus.Unspent,
-            maturity: toBigInt(0),
-            blockCreated: toBigInt(0),
-          });
-          transactionRequest.addCoinOutput(
-            wallet?.address,
-            FAUCET_AMOUNT,
-            COIN_ETH
-          );
-          const submit = await wallet!.sendTransaction(transactionRequest);
-          return submit.wait();
         },
       }}
     >

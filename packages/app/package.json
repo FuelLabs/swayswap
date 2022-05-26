@@ -8,6 +8,7 @@
     "build": "tsc && vite build && pnpm create404",
     "preview": "vite preview",
     "test": "jest",
+    "test:watch": "jest --watch --detectOpenHandles",
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
     "deploy-contracts": "sh ./scripts/deploy-contracts.sh",
     "build-contracts": "sh ./scripts/build-contracts.sh",
@@ -15,6 +16,7 @@
     "create404": "cp ./dist/index.html ./dist/404.html"
   },
   "dependencies": {
+    "@ethersproject/bytes": "^5.6.1",
     "@fontsource/fira-code": "^4.5.9",
     "@fontsource/inter": "^4.5.10",
     "@fuel-ts/contract": "0.0.0-master-6c8ce489",
