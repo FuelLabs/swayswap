@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { BiDollarCircle } from "react-icons/bi";
 import { useMutation } from "react-query";
 
+import { PoolCurrentPosition } from "./PoolCurrentPosition";
+import { RemoveLiquidityPreview } from "./RemoveLiquidityPreview";
+
 import { Button } from "~/components/Button";
+import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
-import { CONTRACT_ID } from "~/config";
+import { CONTRACT_ID, DEADLINE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import coins from "~/lib/CoinsMetadata";
@@ -31,7 +36,7 @@ export default function RemoveLiquidityPage() {
       }
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
-      await contract.functions.remove_liquidity(1, 1, 1000, {
+      await contract.functions.remove_liquidity(1, 1, DEADLINE, {
         forward: [amount, CONTRACT_ID],
         variableOutputs: 2,
       });
@@ -85,14 +90,21 @@ export default function RemoveLiquidityPage() {
   };
 
   return (
-    <>
+    <Card>
+      <Card.Title>
+        <BiDollarCircle className="text-primary-500" />
+        Remove Liquidity
+      </Card.Title>
       <div className="mt-4 mb-4">
         <CoinInput
           {...tokenInput.getInputProps()}
-          rightElement={<CoinSelector {...tokenInput.getCoinSelectorProps()} />}
+          rightElement={
+            <CoinSelector {...tokenInput.getCoinSelectorProps()} isReadOnly />
+          }
           autoFocus
         />
       </div>
+      <RemoveLiquidityPreview amount={amount} />
       <Button
         isFull
         size="lg"
@@ -106,6 +118,10 @@ export default function RemoveLiquidityPage() {
       >
         {getButtonText()}
       </Button>
-    </>
+      <div className="mt-8">
+        <h3 className="mb-1 mt-5 text-gray-100">Your current positions</h3>
+      </div>
+      <PoolCurrentPosition />
+    </Card>
   );
 }

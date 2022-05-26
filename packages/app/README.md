@@ -13,17 +13,17 @@ This project is just a simple ViteJS boilerplate ready to go.
 
 ## Getting Started
 
-Install all dependencies with pnpm
+Install all dependencies with `pnpm`:
 
-```bash
+```sh
 pnpm install
 ```
 
-This command also copies the contents of .env.example in a newly created .env file, which the frontend will use to interact with your deployed contracts. Before starting the development server make sure the contract id and token id environment variables are set to the corresponding contract addresses.
+This command also copies the contents of `.env.example` in a newly created `.env` file, which the frontend will use to interact with your deployed contracts. Before starting the development server make sure the contract id and token id environment variables are set to the corresponding contract addresses.
 
 Then, run the development server:
 
-```bash
+```sh
 pnpm dev
 ```
 

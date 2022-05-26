@@ -16,6 +16,7 @@ export const RECAPTCHA_SITE_KEY = process.env.VITE_RECAPTCHA_SITE_KEY!;
 export const ENABLE_FAUCET_API = process.env.VITE_ENABLE_FAUCET_API === 'true';
 export const SLIPPAGE_TOLERANCE = 0.005;
 export const NETWORK_FEE = 1;
+export const DEADLINE = 5000;
 
 // Max value supported
 // eslint-disable-next-line @typescript-eslint/no-loss-of-precision

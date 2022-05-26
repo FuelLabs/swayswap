@@ -80,11 +80,6 @@ const _abi = [
         components: null,
       },
       {
-        name: 'max_tokens',
-        type: 'u64',
-        components: null,
-      },
-      {
         name: 'deadline',
         type: 'u64',
         components: null,

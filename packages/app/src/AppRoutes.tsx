@@ -10,7 +10,7 @@ const CreateWallet = lazy(() => import("~/pages/CreateWallet"));
 const FaucetPage = lazy(() => import("~/pages/FaucetPage"));
 const MintTokenPage = lazy(() => import("~/pages/MintTokenPage"));
 const PoolPage = lazy(() => import("~/pages/PoolPage/index"));
-const PoolsPreview = lazy(() => import("~/pages/PoolPage/PoolsPreview"));
+const PoolsPreview = lazy(() => import("~/pages/PoolPage/Pools"));
 const RemoveLiquidityPage = lazy(
   () => import("./pages/PoolPage/RemoveLiquidity")
 );
