@@ -9,6 +9,7 @@ import { RiCheckFill } from "react-icons/ri";
 import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 import { Button } from "~/components/Button";
+import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
@@ -150,103 +151,120 @@ export default function AddLiquidity() {
     contractId: CONTRACT_ID,
   });
 
-  return addLiquidityMutation.isLoading ? (
-    <div className="mt-6 mb-8 flex justify-center">
-      <PoolLoader
-        steps={[
-          `Deposit: ${coinFrom.name}`,
-          `Deposit: ${coinTo.name}`,
-          `Provide liquidity`,
-          `Done`,
-        ]}
-        step={stage}
-        loading={addLiquidityMutation.isLoading}
-        coinFrom={coinFrom}
-        coinTo={coinTo}
-      />
-    </div>
-  ) : (
-    <>
-      <div className="mt-6 mb-4">
-        <CoinInput
-          {...fromInput.getInputProps()}
-          rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
-          autoFocus
-        />
-      </div>
-      <div className="mb-6">
-        <CoinInput
-          {...toInput.getInputProps()}
-          rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
-        />
-      </div>
-      {!!addLiquidityRatio && (
-        <PreviewTable title="Expected output:" className="my-2">
-          <PreviewItem
-            title="Pool tokens you'll receive:"
-            value={formatUnits(previewTokensToReceive, DECIMAL_UNITS)}
+  return (
+    <Card>
+      <Card.Title>Add Liquidity</Card.Title>
+      {addLiquidityMutation.isLoading ? (
+        <div className="mt-6 mb-8 flex justify-center">
+          <PoolLoader
+            steps={[
+              `Deposit: ${coinFrom.name}`,
+              `Deposit: ${coinTo.name}`,
+              `Provide liquidity`,
+              `Done`,
+            ]}
+            step={stage}
+            loading={addLiquidityMutation.isLoading}
+            coinFrom={coinFrom}
+            coinTo={coinTo}
           />
-          <PreviewItem
-            title={"Your share of current pool:"}
-            value={`${parseFloat((nextCurrentPoolShare * 100).toFixed(6))}%`}
-          />
-        </PreviewTable>
-      )}
-      {poolInfo && reservesFromToRatio ? (
-        <div className={style.info}>
-          <h4 className="text-white mb-2 font-bold">Reserves</h4>
-          <div className="flex">
-            <div className="flex flex-col flex-1">
-              <span>
-                ETH:{" "}
-                {formatUnits(poolInfo.eth_reserve, DECIMAL_UNITS).toString()}
-              </span>
-              <span>
-                DAI:{" "}
-                {formatUnits(poolInfo.token_reserve, DECIMAL_UNITS).toString()}
-              </span>
-            </div>
-            {poolInfo.eth_reserve > 0 && poolInfo.token_reserve > 0 ? (
-              <div className="flex flex-col">
-                <span>
-                  <>ETH/DAI: {reservesFromToRatio.toFixed(6)}</>
-                </span>
-                <span>
-                  <>DAI/ETH: {reservesToFromRatio.toFixed(6)}</>
-                </span>
+        </div>
+      ) : (
+        <>
+          <div className="mt-6 mb-4">
+            <CoinInput
+              {...fromInput.getInputProps()}
+              rightElement={
+                <CoinSelector {...fromInput.getCoinSelectorProps()} />
+              }
+              autoFocus
+            />
+          </div>
+          <div className="mb-6">
+            <CoinInput
+              {...toInput.getInputProps()}
+              rightElement={
+                <CoinSelector {...toInput.getCoinSelectorProps()} />
+              }
+            />
+          </div>
+          {!!addLiquidityRatio && (
+            <PreviewTable title="Expected output:" className="my-2">
+              <PreviewItem
+                title="Pool tokens you'll receive:"
+                value={formatUnits(previewTokensToReceive, DECIMAL_UNITS)}
+              />
+              <PreviewItem
+                title={"Your share of current pool:"}
+                value={`${parseFloat(
+                  (nextCurrentPoolShare * 100).toFixed(6)
+                )}%`}
+              />
+            </PreviewTable>
+          )}
+          {poolInfo && reservesFromToRatio ? (
+            <div className={style.info}>
+              <h4 className="text-white mb-2 font-bold">Reserves</h4>
+              <div className="flex">
+                <div className="flex flex-col flex-1">
+                  <span>
+                    ETH:{" "}
+                    {formatUnits(
+                      poolInfo.eth_reserve,
+                      DECIMAL_UNITS
+                    ).toString()}
+                  </span>
+                  <span>
+                    DAI:{" "}
+                    {formatUnits(
+                      poolInfo.token_reserve,
+                      DECIMAL_UNITS
+                    ).toString()}
+                  </span>
+                </div>
+                {poolInfo.eth_reserve > 0 && poolInfo.token_reserve > 0 ? (
+                  <div className="flex flex-col">
+                    <span>
+                      <>ETH/DAI: {reservesFromToRatio.toFixed(6)}</>
+                    </span>
+                    <span>
+                      <>DAI/ETH: {reservesToFromRatio.toFixed(6)}</>
+                    </span>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
-      <Button
-        isDisabled={!!errorsCreatePull.length}
-        isFull
-        size="lg"
-        variant="primary"
-        onPress={
-          errorsCreatePull.length
-            ? undefined
-            : () => addLiquidityMutation.mutate()
-        }
-      >
-        {errorsCreatePull.length
-          ? errorsCreatePull[0]
-          : reservesFromToRatio
-          ? "Add liquidity"
-          : "Create liquidity"}
-      </Button>
-      {!reservesFromToRatio && !isLoadingPoolInfo ? (
-        <div className={style.createPoolInfo}>
-          <h4 className="text-orange-400 mb-2 font-bold">
-            You are creating a new pool
-          </h4>
-          <div className="flex">
-            You are the first to provide liquidity to this pool. The ratio
-            between these tokens will set the price of this pool.
-          </div>
-        </div>
-      ) : null}
-    </>
+            </div>
+          ) : null}
+          <Button
+            isDisabled={!!errorsCreatePull.length}
+            isFull
+            size="lg"
+            variant="primary"
+            onPress={
+              errorsCreatePull.length
+                ? undefined
+                : () => addLiquidityMutation.mutate()
+            }
+          >
+            {errorsCreatePull.length
+              ? errorsCreatePull[0]
+              : reservesFromToRatio
+              ? "Add liquidity"
+              : "Create liquidity"}
+          </Button>
+          {!reservesFromToRatio && !isLoadingPoolInfo ? (
+            <div className={style.createPoolInfo}>
+              <h4 className="text-orange-400 mb-2 font-bold">
+                You are creating a new pool
+              </h4>
+              <div className="flex">
+                You are the first to provide liquidity to this pool. The ratio
+                between these tokens will set the price of this pool.
+              </div>
+            </div>
+          ) : null}
+        </>
+      )}
+    </Card>
   );
 }
