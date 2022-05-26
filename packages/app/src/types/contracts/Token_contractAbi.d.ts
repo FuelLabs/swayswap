@@ -29,20 +29,20 @@ interface Token_contractAbiInterface extends Interface {
     get_balance: FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: 'mint_coins', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'burn_coins', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'mint_coins', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'burn_coins', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(
     functionFragment: 'force_transfer_coins',
     values: [BigNumberish, ContractIdInput, ContractIdInput]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: 'transfer_coins_to_output',
     values: [BigNumberish, ContractIdInput, AddressInput]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: 'get_balance',
     values: [ContractIdInput, ContractIdInput]
-  ): string;
+  ): Uint8Array;
 
   decodeFunctionData(functionFragment: 'mint_coins', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'burn_coins', data: BytesLike): DecodedValue;

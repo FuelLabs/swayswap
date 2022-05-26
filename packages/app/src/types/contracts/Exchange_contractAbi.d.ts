@@ -56,28 +56,31 @@ interface Exchange_contractAbiInterface extends Interface {
     get_swap_with_maximum: FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: 'get_balance', values: [ContractIdInput]): string;
-  encodeFunctionData(functionFragment: 'deposit', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'withdraw', values: [BigNumberish, ContractIdInput]): string;
+  encodeFunctionData(functionFragment: 'get_balance', values: [ContractIdInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'deposit', values?: undefined): Uint8Array;
+  encodeFunctionData(
+    functionFragment: 'withdraw',
+    values: [BigNumberish, ContractIdInput]
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: 'add_liquidity',
     values: [BigNumberish, BigNumberish]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: 'remove_liquidity',
     values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: 'swap_with_minimum',
     values: [BigNumberish, BigNumberish]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: 'swap_with_maximum',
     values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: 'get_info', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'get_swap_with_minimum', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'get_swap_with_maximum', values: [BigNumberish]): string;
+  ): Uint8Array;
+  encodeFunctionData(functionFragment: 'get_info', values?: undefined): Uint8Array;
+  encodeFunctionData(functionFragment: 'get_swap_with_minimum', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'get_swap_with_maximum', values: [BigNumberish]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'get_balance', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'deposit', data: BytesLike): DecodedValue;
