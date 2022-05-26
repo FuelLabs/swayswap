@@ -8,7 +8,7 @@ export const FUEL_FAUCET_URL =
 
 export const CONTRACT_ID = process.env.VITE_CONTRACT_ID!;
 export const TOKEN_ID = process.env.VITE_TOKEN_ID!;
-export const DECIMAL_UNITS = 3;
+export const DECIMAL_UNITS = 9;
 export const FAUCET_AMOUNT = parseUnits('0.5', DECIMAL_UNITS).toBigInt();
 export const MINT_AMOUNT = 2000;
 export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS).toBigInt();
