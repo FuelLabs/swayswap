@@ -6,13 +6,7 @@ If you run into any difficulties getting started, you can always ask questions o
 
 ## Setting Up a Development Workspace
 
-See the [introduction](../introduction/index.md) section for instructions on installing and setting up the Sway toolchain. (This step is only necessary if contributing to smart contract development with Sway.)
-
-You will need to have `yarn`, or a similar package manager installed. For the purposes of this contributing, we will recommend what was used in the original development of the project.
-
-```sh
-yarn install
-```
+For instructions regarding workspace setup, see [`README`](./README.md).
 
 ## Getting the Repository
 
@@ -32,7 +26,7 @@ Open the client folder and deploy the SwaySwap dapp for development mode:
 
 ```sh
 cd client
-yarn start
+pnpm dev
 ```
 
 To view SwaySwap in the browser, open [http://localhost:3000](http://localhost:3000).
