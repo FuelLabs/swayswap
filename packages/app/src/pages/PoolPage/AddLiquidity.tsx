@@ -14,6 +14,7 @@ import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
+import { NavigateBackButton } from "~/components/NavigateBackButton";
 import { Spinner } from "~/components/Spinner";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
@@ -140,7 +141,12 @@ export default function AddLiquidity() {
 
   return (
     <Card className="sm:min-w-[400px]">
-      <Card.Title>Add Liquidity</Card.Title>
+      <Card.Title>
+        <div className="flex items-center">
+          <NavigateBackButton />
+          Add Liquidity
+        </div>
+      </Card.Title>
       {addLiquidityMutation.isLoading ? (
         <div className="mt-6 mb-8 flex justify-center">
           <PoolLoader
