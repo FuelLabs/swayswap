@@ -1,5 +1,6 @@
+import type { BigNumberish } from '@ethersproject/bignumber';
+import { BigNumber } from '@ethersproject/bignumber';
 import * as ethers from '@ethersproject/units';
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { Decimal } from 'decimal.js';
 
 export const ZERO = toBigInt(0);

@@ -9,10 +9,10 @@ import { Spinner } from "./Spinner";
 
 import { DECIMAL_UNITS, MAX_U64_VALUE, TOKEN_ID } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
+import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { COIN_ETH } from "~/lib/constants";
 import { formatUnits, parseUnits, toBigInt } from "~/lib/math";
 import type { Coin } from "~/types";
-import { usePoolInfo } from "~/hooks/usePoolInfo";
 
 type UseCoinParams = {
   /**
@@ -97,9 +97,7 @@ export function useCoinInput({
     }
   };
 
-  const isAllowed = ({ value }: NumberFormatValues) => {
-    return parseValueBigInt(value) <= MAX_U64_VALUE;
-  };
+  const isAllowed = ({ value }: NumberFormatValues) => parseValueBigInt(value) <= MAX_U64_VALUE;
 
   function getInputProps() {
     return {

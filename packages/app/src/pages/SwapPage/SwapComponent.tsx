@@ -15,8 +15,8 @@ import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { InvertButton } from "~/components/InvertButton";
 import { NETWORK_FEE } from "~/config";
-import { toBigInt } from "~/lib/math";
 import { useUserInfo } from "~/hooks/useUserInfo";
+import { toBigInt } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {

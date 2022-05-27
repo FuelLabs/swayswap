@@ -21,6 +21,7 @@ import { useBalances } from "~/hooks/useBalances";
 import useDebounce from "~/hooks/useDebounce";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useSlippage } from "~/hooks/useSlippage";
+import { COIN_ETH } from "~/lib/constants";
 import { ZERO, toNumber } from "~/lib/math";
 import { queryClient } from "~/lib/queryClient";
 import { isSwayInfinity, sleep } from "~/lib/utils";
@@ -28,7 +29,6 @@ import type {
   PoolInfo,
   PreviewInfo,
 } from "~/types/contracts/Exchange_contractAbi";
-import { COIN_ETH } from "~/lib/constants";
 
 type StateParams = {
   swapState: SwapState | null;
@@ -107,9 +107,9 @@ const hasReserveAmount = (
   if (swapState?.direction === ActiveInput.to) {
     if (swapState.coinTo.assetId === COIN_ETH) {
       return (swapState.amount || 0) < (poolInfo?.eth_reserve || 0);
-    } else {
+    } 
       return (swapState.amount || 0) < (poolInfo?.token_reserve || 0);
-    }
+    
   }
   return true;
 };

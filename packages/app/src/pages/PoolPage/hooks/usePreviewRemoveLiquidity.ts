@@ -23,7 +23,7 @@ export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLi
     multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), tokenReserve),
     totalLiquidity
   );
-  let previewETHRemoved = divideFnValidOnly(
+  const previewETHRemoved = divideFnValidOnly(
     multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), ethReserve),
     totalLiquidity
   );
