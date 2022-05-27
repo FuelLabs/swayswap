@@ -2,6 +2,8 @@ version: "3"
 
 services:
   swayswap-fuel-core:
+    env_file:
+      - ./docker/fuel-core/.env.docker
     build: ./docker/fuel-core
     ports:
       - "4000:4000"
