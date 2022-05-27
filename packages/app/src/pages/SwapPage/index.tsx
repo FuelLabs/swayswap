@@ -144,7 +144,7 @@ export default function SwapPage() {
     ],
     async () => {
       if (!debouncedState?.amount) return null;
-      if (!hasReserveAmount(debouncedState)) return null;
+      if (!hasReserveAmount(debouncedState, poolInfo)) return null;
       return queryPreviewAmount(contract, debouncedState);
     },
     {
