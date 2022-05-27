@@ -1,4 +1,4 @@
-import { randomBytes } from "ethers/lib/utils";
+import { randomBytes } from "@ethersproject/random";
 import type { TransactionResult } from "fuels";
 import { Wallet, ScriptTransactionRequest, CoinStatus } from "fuels";
 import { useAtom } from "jotai";

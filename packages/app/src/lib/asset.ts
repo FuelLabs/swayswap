@@ -1,6 +1,4 @@
-import { ZERO } from './constants';
-
-import { toNumber } from '~/lib/math';
+import { toNumber, ZERO } from '~/lib/math';
 
 export const calculateRatio = (
   initialFromAmount?: bigint | null,

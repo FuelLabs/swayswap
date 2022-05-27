@@ -1,38 +1,26 @@
-import { BigNumber } from 'bignumber.js';
-import { Decimal } from 'decimal.js';
-import { commify } from 'ethers/lib/utils';
-import type { BigNumberish } from 'fuels';
+import * as ethers from '@ethersproject/units';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 
-import { ZERO } from './constants';
+export const ZERO = toBigInt(0);
 
-import { DECIMAL_UNITS } from '~/config';
-
-export function toNumber(number: BigNumberish) {
-  let value: number | string | null = null;
-  if (typeof number === 'bigint') {
-    value = BigInt(number).toString();
-  } else {
-    value = number;
-  }
-  return new BigNumber(value || 0).toNumber();
+export function toNumber(number: BigNumberish | null | undefined) {
+  return BigNumber.from(number || 0).toNumber();
 }
 
 export function parseUnits(number: string, precision: number) {
-  const denominator = Number([1, ...new Array(precision).fill(0)].join(''));
-  return toBigInt(new Decimal(toNumber(number)).mul(denominator).toFixed());
+  return ethers.parseUnits(number, precision);
 }
 
 export function toBigInt(number: BigNumberish) {
-  return BigInt(Math.trunc(toNumber(number)));
+  return BigNumber.from(number).toBigInt();
 }
 
-export function formatUnits(number: BigNumberish, precision: number) {
-  const denominator = Number([1, ...new Array(precision).fill(0)].join(''));
-  return new Decimal(toNumber(number)).div(denominator).toFixed();
+export function formatUnits(number: BigNumberish, precision: number): string {
+  return ethers.formatUnits(number, precision);
 }
 
 export function divideFn(value?: BigNumberish | null, by?: BigNumberish | null) {
-  return toNumber(value || ZERO) / toNumber(by || ZERO);
+  return toNumber(value || 0) / toNumber(by || 0);
 }
 
 export function divideFnValidOnly(value?: BigNumberish | null, by?: BigNumberish | null) {
@@ -41,7 +29,6 @@ export function divideFnValidOnly(value?: BigNumberish | null, by?: BigNumberish
   return Number.isNaN(result) || !Number.isFinite(result) ? 0 : result;
 }
 
-export const parseToFormattedNumber = (
-  value: string | BigNumberish,
-  unit: number = DECIMAL_UNITS
-) => commify(formatUnits(value, unit));
+export function parseToFormattedNumber(value: string | BigNumberish, precision: number) {
+  return ethers.commify(formatUnits(value, precision));
+}

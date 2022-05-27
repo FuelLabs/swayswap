@@ -8,8 +8,7 @@ import { ActiveInput } from "./types";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { DECIMAL_UNITS, NETWORK_FEE } from "~/config";
 import { useSlippage } from "~/hooks/useSlippage";
-import { ZERO } from "~/lib/constants";
-import { formatUnits } from "~/lib/math";
+import { ZERO, formatUnits } from "~/lib/math";
 
 type SwapPreviewProps = {
   swapInfo: SwapInfo;

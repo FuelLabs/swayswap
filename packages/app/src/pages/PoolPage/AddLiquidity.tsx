@@ -18,8 +18,7 @@ import { Spinner } from "~/components/Spinner";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import assets from "~/lib/CoinsMetadata";
-import { ZERO } from "~/lib/constants";
-import { toBigInt, divideFnValidOnly } from "~/lib/math";
+import { ZERO, toBigInt, divideFnValidOnly } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {

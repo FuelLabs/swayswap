@@ -2,8 +2,7 @@ import { useBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { calculateRatio } from '~/lib/asset';
-import { ZERO } from '~/lib/constants';
-import { toBigInt, toNumber } from '~/lib/math';
+import { ZERO, toBigInt, toNumber } from '~/lib/math';
 import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 
 export interface UsePreviewLiquidityProps {

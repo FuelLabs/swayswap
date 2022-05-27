@@ -14,7 +14,7 @@ import { CONTRACT_ID, DEADLINE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
 import coins from "~/lib/CoinsMetadata";
-import { ZERO } from "~/lib/constants";
+import { ZERO } from "~/lib/math";
 
 export default function RemoveLiquidityPage() {
   const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>(

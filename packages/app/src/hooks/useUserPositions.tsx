@@ -3,8 +3,8 @@ import { usePoolInfo } from "./usePoolInfo";
 
 import { DECIMAL_UNITS } from "~/config";
 import CoinsMetadata from "~/lib/CoinsMetadata";
-import { ZERO } from "~/lib/constants";
 import {
+  ZERO,
   toNumber,
   divideFnValidOnly,
   parseToFormattedNumber,

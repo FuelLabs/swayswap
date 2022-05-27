@@ -77,7 +77,8 @@ fn calculate_amount_with_fee(amount: u64) -> u64 {
 }
 
 fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
-    let result_wrapped = ((~U128::from(0, a) * ~U128::from(0, b)) / ~U128::from(0, c)).to_u64();
+    let calculation = (~U128::from(0, a) * ~U128::from(0, b)) / ~U128::from(0, c);
+    let result_wrapped = (calculation).to_u64();
     // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
     match result_wrapped {
         Result::Ok(inner_value) => inner_value,
