@@ -26,6 +26,7 @@ type DialogContext = {
   modalProps?: ModalAriaProps;
   dialogProps?: React.HTMLAttributes<HTMLElement>;
   titleProps?: React.HTMLAttributes<HTMLElement>;
+  isBlocked?: boolean;
 };
 
 const ctx = createContext<DialogContext>({});
@@ -34,6 +35,7 @@ export type DialogProps = OverlayProps &
   AriaDialogProps & {
     children: ReactNode;
     state: OverlayTriggerState;
+    isBlocked?: boolean;
   };
 
 type DialogComponent = FC<DialogProps> & {
@@ -42,14 +44,14 @@ type DialogComponent = FC<DialogProps> & {
   Content: typeof DialogContent;
 };
 
-export const Dialog: DialogComponent = ({ state, ...props }) => {
+export const Dialog: DialogComponent = ({ state, isBlocked, ...props }) => {
   const { children } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const { overlayProps, underlayProps } = useOverlay(
     {
       ...props,
-      isDismissable: true,
-      isOpen: state.isOpen,
+      isDismissable: !isBlocked,
+      isOpen: isBlocked ? true : state.isOpen,
       onClose: state.close,
     },
     ref
@@ -65,6 +67,7 @@ export const Dialog: DialogComponent = ({ state, ...props }) => {
     modalProps,
     dialogProps,
     titleProps,
+    isBlocked,
   };
 
   if (!state.isOpen) return null;
@@ -119,14 +122,16 @@ function DialogContent({ children, className, onClose }: DialogContentProps) {
       className={cx(className, "dialog")}
     >
       <FocusScope contain autoFocus>
-        <Button
-          size="sm"
-          ref={closeButtonRef}
-          onPress={handleClose}
-          className="dialog--closeBtn"
-        >
-          <MdClose />
-        </Button>
+        {!props.isBlocked && (
+          <Button
+            size="sm"
+            ref={closeButtonRef}
+            onPress={handleClose}
+            className="dialog--closeBtn"
+          >
+            <MdClose />
+          </Button>
+        )}
         {children}
       </FocusScope>
     </div>

@@ -9,6 +9,7 @@ const AddLiquidity = lazy(() => import("./pages/PoolPage/AddLiquidity"));
 const CreateWallet = lazy(() => import("~/pages/CreateWallet"));
 const PoolPage = lazy(() => import("~/pages/PoolPage/index"));
 const PoolsPreview = lazy(() => import("~/pages/PoolPage/Pools"));
+const MintPage = lazy(() => import("~/pages/MintPage"));
 const RemoveLiquidityPage = lazy(
   () => import("./pages/PoolPage/RemoveLiquidity")
 );
@@ -32,6 +33,14 @@ export default function AppRoutes() {
           element={
             <RequireWallet>
               <SwapPage />
+            </RequireWallet>
+          }
+        />
+        <Route
+          path={Pages.mintToken}
+          element={
+            <RequireWallet>
+              <MintPage />
             </RequireWallet>
           }
         />

@@ -11,31 +11,11 @@
     @apply min-w-[auto];
 
     & .card {
-      @apply pt-0 max-w-[346px] min-w-[auto];
+      @apply max-w-[346px] min-w-[auto];
     }
 
-    & .card--divider {
-      @apply mt-0;
-    }
-  }
-
-  .faucetWidget--tabBtn {
-    @apply px-0 relative h-14 border-none rounded-none;
-
-    &:first-child {
-      @apply mr-3;
-    }
-
-    &::after {
-      @apply absolute block w-full bottom-0 left-0 content-[""] h-[3px] bg-transparent;
-    }
-  }
-
-  .faucetWidget--tabBtn.active {
-    @apply text-gray-100;
-
-    &::after {
-      @apply bg-primary-500;
+    & .card--title {
+      @apply text-gray-100;
     }
   }
 
