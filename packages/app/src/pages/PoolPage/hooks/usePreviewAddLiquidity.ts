@@ -18,7 +18,7 @@ export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewLiquid
   const previewTokens = divideFnValidOnly(liquidityFactor, totalLiquidity);
   const nextTotalTokenSupply = previewTokens + toNumber(poolInfo?.lp_token_supply || BigInt(0));
   const nextCurrentPoolShare =
-    divideFnValidOnly(BigInt(previewTokens + poolTokensNum), BigInt(nextTotalTokenSupply)) || 1;
+    divideFnValidOnly(BigInt(previewTokens) + poolTokensNum, BigInt(nextTotalTokenSupply)) || 1;
   let formattedPreviewTokens = parseToFormattedNumber(previewTokens, DECIMAL_UNITS);
   const formattedNextCurrentPoolShare = parseFloat((nextCurrentPoolShare * 100).toFixed(6));
 

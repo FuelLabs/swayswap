@@ -1,10 +1,10 @@
-import { parseUnits } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 
 import { useTokenMethods } from './useTokensMethods';
 
 import { DECIMAL_UNITS, TOKEN_ID } from '~/config';
+import { parseUnits } from '~/lib/math';
 
 type UseMintOpts = {
   tokenId: string;
