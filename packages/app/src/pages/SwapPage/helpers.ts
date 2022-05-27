@@ -2,7 +2,7 @@ import type { SwapInfo } from './types';
 import { ActiveInput } from './types';
 
 import { COIN_ETH } from '~/lib/constants';
-import { divideFnValidOnly, multiplyFn, toNumber } from '~/lib/math';
+import { divideFnValidOnly, multiplyFn } from '~/lib/math';
 
 export function getPriceImpact(
   outputAmount: bigint,

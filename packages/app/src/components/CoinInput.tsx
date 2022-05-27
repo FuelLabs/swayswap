@@ -7,9 +7,8 @@ import type { CoinSelectorProps } from "./CoinSelector";
 import type { NumberInputProps } from "./NumberInput";
 import { Spinner } from "./Spinner";
 
-import { DECIMAL_UNITS, MAX_U64_VALUE, TOKEN_ID } from "~/config";
+import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
-import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { COIN_ETH } from "~/lib/constants";
 import { formatUnits, parseUnits, toBigInt } from "~/lib/math";
 import type { Coin } from "~/types";
@@ -97,7 +96,8 @@ export function useCoinInput({
     }
   };
 
-  const isAllowed = ({ value }: NumberFormatValues) => parseValueBigInt(value) <= MAX_U64_VALUE;
+  const isAllowed = ({ value }: NumberFormatValues) =>
+    parseValueBigInt(value) <= MAX_U64_VALUE;
 
   function getInputProps() {
     return {

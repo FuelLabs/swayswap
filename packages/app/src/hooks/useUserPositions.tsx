@@ -5,7 +5,6 @@ import { DECIMAL_UNITS } from "~/config";
 import CoinsMetadata from "~/lib/CoinsMetadata";
 import {
   ZERO,
-  toNumber,
   divideFnValidOnly,
   parseToFormattedNumber,
   toBigInt,

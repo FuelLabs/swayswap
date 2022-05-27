@@ -107,9 +107,8 @@ const hasReserveAmount = (
   if (swapState?.direction === ActiveInput.to) {
     if (swapState.coinTo.assetId === COIN_ETH) {
       return (swapState.amount || 0) < (poolInfo?.eth_reserve || 0);
-    } 
-      return (swapState.amount || 0) < (poolInfo?.token_reserve || 0);
-    
+    }
+    return (swapState.amount || 0) < (poolInfo?.token_reserve || 0);
   }
   return true;
 };

@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 import classNames from "classnames";
-import { toNumber } from "fuels";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
