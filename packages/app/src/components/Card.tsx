@@ -39,7 +39,7 @@ const CardTitle: FC<CardTitleProps> & { id: string } = ({
   elementRight,
 }) => (
   <div className="card--title">
-    <h2>{children}</h2>
+    <h2 className="flex-1">{children}</h2>
     {elementRight}
   </div>
 );

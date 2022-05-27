@@ -1,3 +1,5 @@
+import { BsArrowDown } from "react-icons/bs";
+
 import { usePreviewAddLiquidity } from "./usePreviewAddLiquidity";
 
 import type { UseCoinInput } from "~/components/CoinInput";
@@ -27,20 +29,25 @@ export const AddLiquidityPreview = ({
     });
 
   return (
-    <PreviewTable title="Expected output:" className="mt-2">
-      <PreviewItem
-        title="Pool tokens you'll receive:"
-        value={
-          <div className="flex flex-1 items-center justify-end">
-            {formattedPreviewTokens}{" "}
-            <TokenIcon coinFrom={coinFrom} coinTo={coinTo} size={14} />
-          </div>
-        }
-      />
-      <PreviewItem
-        title={"Your share of current pool:"}
-        value={`${formattedNextCurrentPoolShare}%`}
-      />
-    </PreviewTable>
+    <>
+      <div className="flex justify-center">
+        <BsArrowDown size={20} className="text-gray-400" />
+      </div>
+      <PreviewTable title="Expected output:" className="mt-2 mb-4">
+        <PreviewItem
+          title="Pool tokens you'll receive:"
+          value={
+            <div className="flex flex-1 items-center justify-end">
+              {formattedPreviewTokens}{" "}
+              <TokenIcon coinFrom={coinFrom} coinTo={coinTo} size={14} />
+            </div>
+          }
+        />
+        <PreviewItem
+          title={"Your share of current pool:"}
+          value={`${formattedNextCurrentPoolShare}%`}
+        />
+      </PreviewTable>
+    </>
   );
 };

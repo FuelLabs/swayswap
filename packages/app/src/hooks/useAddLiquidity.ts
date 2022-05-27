@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 import type { UseQueryResult } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
 import { useBalances } from './useBalances';
 
@@ -32,6 +33,7 @@ export function useAddLiquidity({
   const contract = useContract()!;
   const [stage, setStage] = useState(0);
   const balances = useBalances();
+  const navigate = useNavigate();
 
   const mutation = useMutation(
     async () => {
@@ -93,6 +95,7 @@ export function useAddLiquidity({
       onSettled: async () => {
         await poolInfoQuery.refetch();
         await balances.refetch();
+        navigate('../');
 
         setStage(0);
       },
