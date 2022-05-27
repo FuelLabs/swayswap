@@ -8,7 +8,7 @@ import { ActiveInput } from "./types";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { DECIMAL_UNITS, NETWORK_FEE } from "~/config";
 import { useSlippage } from "~/hooks/useSlippage";
-import { ZERO, formatUnits, toFixed } from "~/lib/math";
+import { ZERO, parseToFormattedNumber, toFixed } from "~/lib/math";
 
 type SwapPreviewProps = {
   swapInfo: SwapInfo;
@@ -33,18 +33,23 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
   }
   // Expected amount of tokens to be received
   const outputAmount = toFixed(
-    formatUnits(
+    parseToFormattedNumber(
       direction === ActiveInput.from ? previewAmount : amount || ZERO,
       DECIMAL_UNITS
-    )
+    ),
+    3
   );
   const inputAmountWithSlippage = toFixed(
-    formatUnits(
+    parseToFormattedNumber(
       calculatePriceWithSlippage(previewAmount, slippage.value, direction),
       DECIMAL_UNITS
-    )
+    ),
+    3
   );
-  const networkFee = toFixed(formatUnits(NETWORK_FEE, DECIMAL_UNITS));
+  const networkFee = toFixed(
+    parseToFormattedNumber(NETWORK_FEE, DECIMAL_UNITS),
+    3
+  );
 
   return (
     <div>

@@ -1,33 +1,45 @@
-import { toNumber } from 'fuels';
-
 import { DECIMAL_UNITS } from '~/config';
 import { useUserPositions } from '~/hooks/useUserPositions';
-import { divideFnValidOnly, parseToFormattedNumber } from '~/lib/math';
+import {
+  divideFnValidOnly,
+  maxAmount,
+  minimumZero,
+  multiplyFn,
+  parseToFormattedNumber,
+  ZERO,
+} from '~/lib/math';
 
 export interface UsePreviewRemoveLiquidity {
   amountToRemove?: bigint | null;
 }
 
 export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLiquidity) {
-  const { tokenReserve, ethReserve, totalLiquidity, poolTokensNum } = useUserPositions();
+  const { tokenReserve, ethReserve, totalLiquidity, poolTokensNum, poolTokens } =
+    useUserPositions();
+  const amountToRemoveNum = amountToRemove || ZERO;
+  const userLPTokenBalance = poolTokens || ZERO;
 
-  const amountToRemoveNum = toNumber(amountToRemove || BigInt(0));
-
-  const previewDAIRemoved = divideFnValidOnly(amountToRemoveNum * tokenReserve, totalLiquidity);
-  const previewETHRemoved = divideFnValidOnly(amountToRemoveNum * ethReserve, totalLiquidity);
+  const previewDAIRemoved = divideFnValidOnly(
+    multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), tokenReserve),
+    totalLiquidity
+  );
+  let previewETHRemoved = divideFnValidOnly(
+    multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), ethReserve),
+    totalLiquidity
+  );
   const formattedPreviewDAIRemoved = parseToFormattedNumber(
-    Math.floor(previewDAIRemoved),
+    minimumZero(Math.floor(previewDAIRemoved)),
     DECIMAL_UNITS
   );
   const formattedPreviewETHRemoved = parseToFormattedNumber(
-    Math.floor(previewETHRemoved),
+    minimumZero(Math.floor(previewETHRemoved)),
     DECIMAL_UNITS
   );
 
-  const nextCurrentPoolTokens = poolTokensNum - amountToRemoveNum;
-  const nextPoolShare = nextCurrentPoolTokens / totalLiquidity;
+  const nextCurrentPoolTokens = minimumZero(poolTokensNum - amountToRemoveNum);
+  const nextPoolShare = divideFnValidOnly(nextCurrentPoolTokens, totalLiquidity);
   const formattedNextCurrentPoolTokens = parseToFormattedNumber(
-    nextCurrentPoolTokens,
+    minimumZero(nextCurrentPoolTokens),
     DECIMAL_UNITS
   );
   const formattedNextPoolShare = parseFloat((nextPoolShare * 100).toFixed(6));

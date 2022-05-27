@@ -40,7 +40,7 @@ export function divideFnValidOnly(value?: BigNumberish | null, by?: BigNumberish
   return Number(Number.isNaN(result) || !Number.isFinite(result) ? 0 : result);
 }
 
-export function parseToFormattedNumber(value: string | BigNumberish, precision: number) {
+export function parseToFormattedNumber(value: string | BigNumberish, precision: number = 3) {
   let val = value;
   if (typeof value === 'number') {
     val = BigInt(value);
@@ -48,6 +48,14 @@ export function parseToFormattedNumber(value: string | BigNumberish, precision: 
   return ethers.commify(formatUnits(val, precision));
 }
 
-export function mutiplyFn(value?: BigNumberish | null, by?: BigNumberish | null) {
+export function multiplyFn(value?: BigNumberish | null, by?: BigNumberish | null) {
   return new Decimal(value?.toString() || 0).mul(by?.toString() || 0).toNumber();
+}
+
+export function minimumZero(value: number | bigint) {
+  return value < 0 ? 0 : value;
+}
+
+export function maxAmount(value: number | bigint, max: number | bigint) {
+  return max > value ? value : max;
 }

@@ -2,7 +2,7 @@ import type { SwapInfo } from './types';
 import { ActiveInput } from './types';
 
 import { COIN_ETH } from '~/lib/constants';
-import { divideFnValidOnly, toNumber } from '~/lib/math';
+import { divideFnValidOnly, multiplyFn, toNumber } from '~/lib/math';
 
 export function getPriceImpact(
   outputAmount: bigint,
@@ -46,9 +46,9 @@ export const calculatePriceWithSlippage = (
 ) => {
   let total = 0;
   if (direction === ActiveInput.from) {
-    total = toNumber(amount) * (1 - slippage);
+    total = multiplyFn(amount, 1 - slippage);
   } else {
-    total = toNumber(amount) * (1 + slippage);
+    total = multiplyFn(amount, 1 + slippage);
   }
-  return Math.trunc(total);
+  return BigInt(Math.trunc(total));
 };

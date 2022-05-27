@@ -18,7 +18,7 @@ import { Spinner } from "~/components/Spinner";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import assets from "~/lib/CoinsMetadata";
-import { ZERO, toBigInt, divideFnValidOnly, mutiplyFn } from "~/lib/math";
+import { ZERO, toBigInt, divideFnValidOnly, multiplyFn } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {
@@ -91,7 +91,7 @@ export default function AddLiquidity() {
 
     if (reservesFromToRatio) {
       const value = val || ZERO;
-      const newFromValue = Math.floor(mutiplyFn(value, reservesFromToRatio));
+      const newFromValue = Math.floor(multiplyFn(value, reservesFromToRatio));
       fromInput.setAmount(BigInt(newFromValue));
     }
   };

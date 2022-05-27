@@ -9,7 +9,7 @@ import {
   divideFnValidOnly,
   parseToFormattedNumber,
   toBigInt,
-  mutiplyFn,
+  multiplyFn,
 } from "~/lib/math";
 
 export function useUserPositions() {
@@ -21,7 +21,7 @@ export function useUserPositions() {
   const poolTokens = balances?.find(
     (coin) => coin.assetId === lpToken?.assetId
   )?.amount;
-  const poolTokensNum = toNumber(poolTokens || ZERO);
+  const poolTokensNum = poolTokens || ZERO;
 
   // info?.token_reserve
   const totalLiquidity = toBigInt(info?.lp_token_supply || ZERO);
@@ -35,11 +35,11 @@ export function useUserPositions() {
   const formattedEthReserve = parseToFormattedNumber(ethReserve, DECIMAL_UNITS);
 
   const pooledDAI = divideFnValidOnly(
-    mutiplyFn(poolTokensNum, tokenReserve),
+    multiplyFn(poolTokensNum, tokenReserve),
     totalLiquidity
   );
   const pooledETH = divideFnValidOnly(
-    mutiplyFn(poolTokensNum, ethReserve),
+    multiplyFn(poolTokensNum, ethReserve),
     totalLiquidity
   );
   const formattedPooledDAI = parseToFormattedNumber(
