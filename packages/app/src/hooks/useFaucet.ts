@@ -1,11 +1,9 @@
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 
-import { ENABLE_FAUCET_API, FUEL_FAUCET_URL } from '~/config';
+import { FUEL_FAUCET_URL } from '~/config';
 import { useWallet } from '~/context/AppContext';
 import { sleep } from '~/lib/utils';
-import { Pages } from '~/types/pages';
 
 type UseFaucetOpts = {
   onSuccess?: () => void;
@@ -13,7 +11,6 @@ type UseFaucetOpts = {
 
 export function useFaucet(opts: UseFaucetOpts = {}) {
   const wallet = useWallet();
-  const navigate = useNavigate();
   const client = useQueryClient();
 
   const mutation = useMutation(
@@ -48,10 +45,6 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
   );
 
   function handleFaucet(captcha: string | null) {
-    if (ENABLE_FAUCET_API) {
-      navigate(Pages.faucet);
-      return;
-    }
     mutation.mutate({ captcha });
   }
 
