@@ -16,6 +16,7 @@ import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { InvertButton } from "~/components/InvertButton";
 import { NETWORK_FEE } from "~/config";
+import { useUserInfo } from "~/hooks/useUserInfo";
 import type { Coin } from "~/types";
 
 const style = {
@@ -38,6 +39,7 @@ export function SwapComponent({
   const [[coinFrom, coinTo], setCoins] = useAtom(swapCoinsAtom);
   const hasSwapped = useAtomValue(swapHasSwappedAtom);
   const setTyping = useSetIsTyping();
+  const [userInfo] = useUserInfo();
 
   const handleInvertCoins = () => {
     setTyping(true);
@@ -141,7 +143,7 @@ export function SwapComponent({
         <CoinInput
           {...fromInput.getInputProps()}
           {...(activeInput === ActiveInput.to && { isLoading })}
-          autoFocus={activeInput === ActiveInput.from}
+          autoFocus={!userInfo.isNew && activeInput === ActiveInput.from}
           rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
         />
       </div>
@@ -152,7 +154,7 @@ export function SwapComponent({
         <CoinInput
           {...toInput.getInputProps()}
           {...(activeInput === ActiveInput.from && { isLoading })}
-          autoFocus={activeInput === ActiveInput.to}
+          autoFocus={!userInfo.isNew && activeInput === ActiveInput.to}
           rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
         />
       </div>
