@@ -5,7 +5,6 @@ import { FaFaucet } from "react-icons/fa";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
-import { usePopover } from "./Popover";
 import { Tooltip } from "./Tooltip";
 
 import { RECAPTCHA_SITE_KEY } from "~/config";
@@ -16,11 +15,7 @@ export function FaucetWidget() {
   const [userInfo, setUserInfo] = useUserInfo();
   const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
   const dialog = useDialog();
-
-  const popover = usePopover({
-    offset: 55,
-    crossOffset: 140,
-  });
+  const [showTour, setShowTour] = useState(false);
 
   const faucet = useFaucet({
     onSuccess: () => {
@@ -30,7 +25,12 @@ export function FaucetWidget() {
   });
 
   useEffect(() => {
-    if (userInfo.isNew) popover.open();
+    if (userInfo.isNew) {
+      console.log(userInfo.isNew);
+      setTimeout(() => {
+        setShowTour(true);
+      }, 2000);
+    }
   }, [userInfo.isNew]);
 
   const tour = (
@@ -46,7 +46,8 @@ export function FaucetWidget() {
   return (
     <div className="faucetWidget">
       <Tooltip
-        defaultOpen
+        open={showTour}
+        onOpenChange={setShowTour}
         sideOffset={5}
         content={tour}
         className="bg-primary-500 text-primary-500"

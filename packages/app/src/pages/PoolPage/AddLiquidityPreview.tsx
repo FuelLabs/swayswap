@@ -27,7 +27,7 @@ export const AddLiquidityPreview = ({
     });
 
   return (
-    <PreviewTable title="Expected output:" className="my-2">
+    <PreviewTable title="Expected output:" className="mt-2">
       <PreviewItem
         title="Pool tokens you'll receive:"
         value={

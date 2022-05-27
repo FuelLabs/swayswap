@@ -3,7 +3,7 @@ import cx from "classnames";
 import type { Coin } from "~/types";
 
 const style = {
-  icon: `inline-flex rounded-full ml-1 border-2 border-transparent overflow-hidden`,
+  icon: `inline-flex rounded-full border-2 border-transparent`,
   iconLast: `last:ml-[-10px] last:z-10 border-gray-800`,
 };
 

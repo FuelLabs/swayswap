@@ -28,8 +28,8 @@ export const Card: CardComponent = ({ className, children }) => {
   return (
     <div className={cx(className, "card", { "py-8": !title })}>
       {title}
-      {title && <div className={cx("card--divider", "my-3")} />}
-      <div className="px-5 pb-2">{customChildren}</div>
+      {title && <div className={cx("card--divider")} />}
+      <div className="card--content">{customChildren}</div>
     </div>
   );
 };
