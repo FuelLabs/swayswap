@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import toast from "react-hot-toast";
 import { FaFaucet } from "react-icons/fa";
 
 import { Button } from "./Button";
@@ -7,15 +8,18 @@ import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
 import { Tooltip } from "./Tooltip";
 
-import { RECAPTCHA_SITE_KEY } from "~/config";
+import { ENABLE_FAUCET_API, FAUCET_AMOUNT, RECAPTCHA_SITE_KEY } from "~/config";
+import { useAppContext } from "~/context/AppContext";
 import { useFaucet } from "~/hooks/useFaucet";
 import { useUserInfo } from "~/hooks/useUserInfo";
 
 export function FaucetWidget() {
+  const appContext = useAppContext();
   const [userInfo, setUserInfo] = useUserInfo();
   const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
   const dialog = useDialog();
   const [showTour, setShowTour] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const faucet = useFaucet({
     onSuccess: () => {
@@ -26,7 +30,6 @@ export function FaucetWidget() {
 
   useEffect(() => {
     if (userInfo.isNew) {
-      console.log(userInfo.isNew);
       setTimeout(() => {
         setShowTour(true);
       }, 2000);
@@ -43,6 +46,23 @@ export function FaucetWidget() {
     </>
   );
 
+  async function directFaucet() {
+    // If faucet api is disable faucet without
+    // use API
+    setLoading(true);
+    if (userInfo.isNew) setUserInfo({ isNew: false });
+    await appContext.faucet();
+    setLoading(false);
+    toast.success(`${FAUCET_AMOUNT} ETH add to your wallet!`);
+  }
+
+  function handleClickFaucet() {
+    if (ENABLE_FAUCET_API) {
+      return dialog.openButtonProps.onPress();
+    }
+    directFaucet();
+  }
+
   return (
     <div className="faucetWidget">
       <Tooltip
@@ -53,7 +73,11 @@ export function FaucetWidget() {
         className="bg-primary-500 text-primary-500"
         contentClassName="text-white"
       >
-        <Button {...dialog.openButtonProps} size="md">
+        <Button
+          {...dialog.openButtonProps}
+          onPress={handleClickFaucet}
+          size="md"
+        >
           <FaFaucet />
           Faucet
         </Button>
@@ -88,7 +112,7 @@ export function FaucetWidget() {
               isFull
               className="mt-5"
               isDisabled={!faucetCaptcha}
-              isLoading={faucet.isLoading}
+              isLoading={isLoading || faucet.isLoading}
               onPress={() => faucet.handleFaucet(faucetCaptcha)}
             >
               Give me ETH
