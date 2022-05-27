@@ -7,7 +7,7 @@ import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { TokenIcon } from "~/components/TokenIcon";
 import { useCoinMetadata } from "~/hooks/useCoinMetadata";
 import { ETH_DAI } from "~/lib/CoinsMetadata";
-import type { PoolInfo } from "~/types/contracts/Exchange_contractAbi";
+import type { PoolInfo } from "~/types/contracts/ExchangeContractAbi";
 
 export interface AddLiquidityPreviewProps {
   poolInfo?: PoolInfo;

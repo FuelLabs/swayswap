@@ -25,7 +25,7 @@ import { useSlippage } from "~/hooks/useSlippage";
 import { ZERO } from "~/lib/constants";
 import { queryClient } from "~/lib/queryClient";
 import { isSwayInfinity, sleep } from "~/lib/utils";
-import type { PreviewInfo } from "~/types/contracts/Exchange_contractAbi";
+import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
 
 type StateParams = {
   swapState: SwapState | null;

@@ -42,7 +42,7 @@ export type PreviewInfoInput = { amount: BigNumberish; has_liquidity: boolean };
 
 export type PreviewInfo = { amount: bigint; has_liquidity: boolean };
 
-interface Exchange_contractAbiInterface extends Interface {
+interface ExchangeContractAbiInterface extends Interface {
   functions: {
     get_balance: FunctionFragment;
     deposit: FunctionFragment;
@@ -94,8 +94,8 @@ interface Exchange_contractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'get_swap_with_maximum', data: BytesLike): DecodedValue;
 }
 
-export class Exchange_contractAbi extends Contract {
-  interface: Exchange_contractAbiInterface;
+export class ExchangeContractAbi extends Contract {
+  interface: ExchangeContractAbiInterface;
   functions: {
     get_balance(
       token: ContractIdInput,

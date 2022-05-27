@@ -10,7 +10,7 @@ import type { UseCoinInput } from '~/components/CoinInput';
 import { DEADLINE } from '~/config';
 import { useContract } from '~/context/AppContext';
 import type { Coin } from '~/types';
-import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
+import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UseAddLiquidityProps {
   fromInput: UseCoinInput;

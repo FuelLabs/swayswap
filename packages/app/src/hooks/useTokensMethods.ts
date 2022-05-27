@@ -4,12 +4,12 @@ import { useMemo } from 'react';
 import { objectId } from '../lib/utils';
 
 import { useWallet } from '~/context/AppContext';
-import { Token_contractAbi__factory } from '~/types/contracts';
+import { TokenContractAbi__factory } from '~/types/contracts';
 
 export function useTokenMethods(tokenId: string) {
   const wallet = useWallet()!;
   const contract = useMemo(
-    () => Token_contractAbi__factory.connect(tokenId, wallet),
+    () => TokenContractAbi__factory.connect(tokenId, wallet),
     [wallet.address]
   );
 
