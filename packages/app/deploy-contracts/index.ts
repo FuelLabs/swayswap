@@ -5,17 +5,10 @@
 
 // TODO: Remove this file after `forc` enabled deploy a contract to a custom url
 // https://github.com/FuelLabs/sway/issues/1308
-import { parseUnits, randomBytes } from 'ethers/lib/utils';
+import { randomBytes } from 'ethers/lib/utils';
 import fs from 'fs';
-import {
-  ContractFactory,
-  NativeAssetId,
-  ScriptTransactionRequest,
-  toBigInt,
-  Wallet,
-  ZeroBytes32,
-} from 'fuels';
-import type { JsonAbi, Interface } from 'fuels';
+import { ContractFactory, NativeAssetId, ScriptTransactionRequest, Wallet, toBigInt } from 'fuels';
+import type { Interface, JsonAbi } from 'fuels';
 import path from 'path';
 
 // @ts-ignore
@@ -68,7 +61,7 @@ async function deployContractBinary(
   const bytecode = fs.readFileSync(binaryPath);
   console.log(contextLog, 'Deploy contract...');
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract([], ZeroBytes32);
+  const contract = await factory.deployContract([], NativeAssetId);
 
   console.log(contextLog, 'Contract deployed...');
   return contract;

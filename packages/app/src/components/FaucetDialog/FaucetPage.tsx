@@ -6,6 +6,7 @@ import { useMutation } from "react-query";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
+import { useFaucetDialogAtom } from "~/components/FaucetDialog";
 import { FUEL_FAUCET_URL, RECAPTCHA_SITE_KEY } from "~/config";
 import { useWallet } from "~/context/AppContext";
 import { sleep } from "~/lib/utils";
@@ -13,6 +14,7 @@ import { sleep } from "~/lib/utils";
 export default function FaucetPage() {
   const wallet = useWallet()!;
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [, setFaucetDialog] = useFaucetDialogAtom();
 
   const faucetMutation = useMutation(
     async () => {
@@ -37,6 +39,7 @@ export default function FaucetPage() {
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
         toast.success("Faucet added successfully!");
+        setFaucetDialog(false);
       },
     }
   );

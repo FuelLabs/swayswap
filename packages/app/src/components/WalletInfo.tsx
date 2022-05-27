@@ -1,21 +1,19 @@
 import toast from "react-hot-toast";
-import { BiCoin, BiDotsHorizontalRounded, BiWallet } from "react-icons/bi";
+import { BiWallet } from "react-icons/bi";
 import { FaFaucet } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 import { Card } from "./Card";
+import { useDialog } from "./Dialog";
+import { useFaucetDialogAtom } from "./FaucetDialog";
 
 import { AssetItem } from "~/components/AssetItem";
 import { Button } from "~/components/Button";
 import { Link } from "~/components/Link";
-import { Menu } from "~/components/Menu";
-import { Popover, usePopover } from "~/components/Popover";
 import { Spinner } from "~/components/Spinner";
 import { ENABLE_FAUCET_API } from "~/config";
 import { useWallet } from "~/context/AppContext";
 import { useAssets } from "~/hooks/useAssets";
 import { useFaucet } from "~/hooks/useFaucet";
-import { Pages } from "~/types/pages";
 
 type WalletInfoProps = {
   onClose: () => void;
@@ -23,9 +21,9 @@ type WalletInfoProps = {
 
 export function WalletInfo({ onClose }: WalletInfoProps) {
   const wallet = useWallet();
-  const navigate = useNavigate();
-  const popover = usePopover({ placement: "bottom" });
   const { coins, isLoading, refetch } = useAssets();
+  const dialog = useDialog();
+  const [, setFaucetDialogOpen] = useFaucetDialogAtom();
 
   const faucet = useFaucet({
     onSuccess: () => {
@@ -36,17 +34,11 @@ export function WalletInfo({ onClose }: WalletInfoProps) {
 
   function handleFaucet() {
     if (ENABLE_FAUCET_API) {
-      navigate(Pages.faucet);
+      setFaucetDialogOpen(true);
       onClose();
       return;
     }
     faucet.mutate();
-    popover.close();
-  }
-
-  function handleMint() {
-    navigate("/mint");
-    onClose();
   }
 
   const titleElementRight = wallet && (
@@ -55,22 +47,11 @@ export function WalletInfo({ onClose }: WalletInfoProps) {
         autoFocus
         variant="ghost"
         isLoading={faucet.isLoading}
-        {...popover.getTriggerProps()}
+        ref={dialog.openButtonProps.ref}
+        onPress={handleFaucet}
       >
-        <BiDotsHorizontalRounded size="1.2rem" />
+        <FaFaucet size={16} className="text-gray-600" />
       </Button>
-      <Popover {...popover.rootProps}>
-        <Menu>
-          <Menu.Item key="faucet" onPress={handleFaucet}>
-            <FaFaucet size={16} className="text-gray-600" />
-            Faucet
-          </Menu.Item>
-          <Menu.Item key="mint" onPress={handleMint}>
-            <BiCoin size={16} className="text-gray-600" />
-            Mint Tokens
-          </Menu.Item>
-        </Menu>
-      </Popover>
     </div>
   );
 
