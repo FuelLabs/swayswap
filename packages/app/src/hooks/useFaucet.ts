@@ -17,7 +17,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
   const client = useQueryClient();
 
   const mutation = useMutation(
-    async (variables: { captcha: string | null }) => {
+    async ({ captcha }: { captcha?: string | null } = {}) => {
       const response = await fetch(FUEL_FAUCET_URL, {
         method: 'POST',
         headers: {
@@ -26,7 +26,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
         },
         body: JSON.stringify({
           address: wallet?.address,
-          captcha: variables.captcha ?? '',
+          captcha: captcha || '',
         }),
       }).then((r) => r.json());
 

@@ -3,6 +3,7 @@ import clipboard from "clipboard";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { FaRegCopy } from "react-icons/fa";
+import { useMutation, useQueryClient } from "react-query";
 
 import { Button } from "./Button";
 import { ButtonGroup } from "./ButtonGroup";
@@ -10,9 +11,8 @@ import { Popover, usePopover } from "./Popover";
 import { WalletInfo } from "./WalletInfo";
 
 import { ENABLE_FAUCET_API } from "~/config";
-import { useWallet } from "~/context/AppContext";
+import { useAppContext, useWallet } from "~/context/AppContext";
 import { useEthBalance } from "~/hooks/useEthBalance";
-import { useFaucet } from "~/hooks/useFaucet";
 import { useUserInfo } from "~/hooks/useUserInfo";
 
 const style = {
@@ -25,22 +25,20 @@ const style = {
 export function WalletWidget() {
   const wallet = useWallet();
   const ethBalance = useEthBalance();
-  const popover = usePopover({ placement: "bottom end", offset: 10 });
+  const { faucet } = useAppContext();
   const [userInfo, setUserInfo] = useUserInfo();
-  const faucet = useFaucet({
-    onSuccess() {
-      toast.success(
-        "Hey, we added 0.5 ETH to your test account. Open you wallet clicking above to add more.",
-        {
-          icon: "💰",
-          duration: 5000,
-          position: "top-right",
-          style: {
-            marginTop: 55,
-          },
-        }
-      );
-    },
+  const client = useQueryClient();
+
+  const popover = usePopover({
+    placement: "bottom end",
+    offset: 10,
+    crossOffset: 42,
+  });
+
+  const autoFaucet = useMutation(async () => {
+    await faucet();
+    setUserInfo({ isNew: false });
+    client.refetchQueries(["AssetsPage-balances"]);
   });
 
   const handleCopy = () => {
@@ -49,11 +47,9 @@ export function WalletWidget() {
   };
 
   useEffect(() => {
-    if (wallet && userInfo.isNew && !ENABLE_FAUCET_API) {
-      setTimeout(() => {
-        faucet.mutate();
-        setUserInfo({ isNew: false });
-      }, 1000);
+    if (wallet && userInfo.isNew && ENABLE_FAUCET_API) {
+      popover.open();
+      autoFaucet.mutate();
     }
   }, [userInfo]);
 
@@ -74,7 +70,7 @@ export function WalletWidget() {
               {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
             </Button>
             <Popover {...popover.rootProps}>
-              <WalletInfo />
+              <WalletInfo onClose={() => popover.close()} />
             </Popover>
             <Button
               aria-label="Copy your wallet address"

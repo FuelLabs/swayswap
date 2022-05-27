@@ -1,6 +1,6 @@
 @layer components {
   .faucetWidget {
-    @apply absolute bottom-5 left-5;
+    @apply fixed bottom-5 left-5;
 
     & > button {
       @apply bg-gray-800 rounded-full;
