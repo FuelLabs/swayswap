@@ -1,4 +1,4 @@
-import { usePreviewAddLiquidity } from "./usePreviewAddLiquidity";
+import { usePreviewAddLiquidity } from "./hooks/usePreviewAddLiquidity";
 
 import type { UseCoinInput } from "~/components/CoinInput";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
@@ -27,7 +27,7 @@ export const AddLiquidityPreview = ({
     });
 
   return (
-    <PreviewTable title="Expected output:" className="my-2">
+    <PreviewTable title="Expected output:" className="my-2 mb-5">
       <PreviewItem
         title="Pool tokens you'll receive:"
         value={

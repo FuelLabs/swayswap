@@ -18,14 +18,15 @@ import { Spinner } from "~/components/Spinner";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import assets from "~/lib/CoinsMetadata";
-import { ZERO, toBigInt, divideFnValidOnly } from "~/lib/math";
+import { ZERO, toBigInt, divideFnValidOnly, mutiplyFn } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
+  wrapper: `self-start max-w-[500px] mt-24`,
   content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg max-w-[400px]`,
+  createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed
+  border-white/10 rounded-lg w-full`,
 };
 
 function PoolLoader({
@@ -78,8 +79,10 @@ export default function AddLiquidity() {
 
     if (reservesFromToRatio) {
       const value = val || ZERO;
-      const newToValue = Math.ceil(toNumber(value) / reservesFromToRatio);
-      toInput.setAmount(toBigInt(newToValue));
+      const newToValue = Math.ceil(
+        divideFnValidOnly(value, reservesFromToRatio)
+      );
+      toInput.setAmount(BigInt(newToValue));
     }
   };
 
@@ -88,8 +91,8 @@ export default function AddLiquidity() {
 
     if (reservesFromToRatio) {
       const value = val || ZERO;
-      const newFromValue = Math.floor(toNumber(value) * reservesFromToRatio);
-      fromInput.setAmount(toBigInt(newFromValue));
+      const newFromValue = Math.floor(mutiplyFn(value, reservesFromToRatio));
+      fromInput.setAmount(BigInt(newFromValue));
     }
   };
 
@@ -108,11 +111,12 @@ export default function AddLiquidity() {
     onChange: handleChangeToValue,
   });
 
+  // If reserve didn't return a ratio them the current user
+  // Is creating the pool and the ratio is 1:1
   const reservesFromToRatio = divideFnValidOnly(
     poolInfo?.eth_reserve,
     poolInfo?.token_reserve
   );
-
   const addLiquidityRatio = divideFnValidOnly(fromInput.amount, toInput.amount);
 
   const {
@@ -139,7 +143,7 @@ export default function AddLiquidity() {
   }, [fromInput.amount, toInput.amount]);
 
   return (
-    <Card>
+    <Card className={style.wrapper}>
       <Card.Title>Add Liquidity</Card.Title>
       {addLiquidityMutation.isLoading ? (
         <div className="mt-6 mb-8 flex justify-center">
@@ -175,16 +179,12 @@ export default function AddLiquidity() {
               }
             />
           </div>
-          {!!addLiquidityRatio && (
-            <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
-          )}
-          {!!(poolInfo && reservesFromToRatio) && (
-            <AddLiquidityPoolPrice
-              coinFrom={coinFrom}
-              coinTo={coinTo}
-              reservesFromToRatio={reservesFromToRatio}
-            />
-          )}
+          <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
+          <AddLiquidityPoolPrice
+            coinFrom={coinFrom}
+            coinTo={coinTo}
+            reservesFromToRatio={addLiquidityRatio || 1}
+          />
           <Button
             isDisabled={!!errorsCreatePull.length}
             isFull

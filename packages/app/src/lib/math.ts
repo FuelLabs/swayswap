@@ -41,5 +41,13 @@ export function divideFnValidOnly(value?: BigNumberish | null, by?: BigNumberish
 }
 
 export function parseToFormattedNumber(value: string | BigNumberish, precision: number) {
-  return ethers.commify(formatUnits(value, precision));
+  let val = value;
+  if (typeof value === 'number') {
+    val = BigInt(value);
+  }
+  return ethers.commify(formatUnits(val, precision));
+}
+
+export function mutiplyFn(value?: BigNumberish | null, by?: BigNumberish | null) {
+  return new Decimal(value?.toString() || 0).mul(by?.toString() || 0).toNumber();
 }

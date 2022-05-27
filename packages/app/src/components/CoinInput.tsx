@@ -54,7 +54,6 @@ type DisplayType = "input" | "text";
 const parseValue = (value: string) => (value === "." ? "0." : value);
 
 const parseValueBigInt = (value: string) => {
-  console.log(value);
   if (value !== "") {
     const nextValue = parseValue(value);
     return toBigInt(parseUnits(nextValue, DECIMAL_UNITS));
