@@ -1,0 +1,21 @@
+@layer components {
+  .card {
+    @apply bg-gray-800 min-w-[400px] rounded-xl py-3;
+  }
+
+  .card--divider {
+    @apply border border-gray-700 border-b-0;
+  }
+
+  .card--title {
+    @apply px-5 flex justify-between text-xl;
+
+    & > h2 {
+      @apply flex items-center gap-2;
+    }
+  }
+
+  .card--title {
+    @apply flex items-center;
+  }
+}

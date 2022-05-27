@@ -4,3 +4,4 @@
 dist
 CHANGELOG.md
 packages/app/src/types
+contracts/**/out/**

@@ -66,10 +66,20 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
   }
 );
 
-type UsePopoverProps = Pick<AriaPositionProps, "offset" | "placement">;
+type UsePopoverProps = Pick<
+  AriaPositionProps,
+  "offset" | "placement" | "crossOffset"
+> & {
+  defaultOpen?: boolean;
+};
 
-export function usePopover(opts: UsePopoverProps = {}) {
-  const state = useOverlayTriggerState({});
+export function usePopover({
+  offset = 5,
+  placement = "top",
+  crossOffset,
+  defaultOpen,
+}: UsePopoverProps = {}) {
+  const state = useOverlayTriggerState({ defaultOpen });
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
@@ -80,28 +90,25 @@ export function usePopover(opts: UsePopoverProps = {}) {
   );
 
   const { overlayProps: positionProps } = useOverlayPosition({
-    placement: "top",
-    offset: 5,
-    ...opts,
-    isOpen: state.isOpen,
+    placement,
+    offset,
+    crossOffset,
+    isOpen: state?.isOpen,
     targetRef: triggerRef,
     overlayRef,
   });
 
-  const rootProps = {
-    state,
-    ...overlayProps,
-    ...positionProps,
+  const rootProps = mergeProps({ state }, overlayProps, positionProps, {
     ref: overlayRef,
-  };
+  });
 
   function getTriggerProps(props: ButtonProps = {}) {
-    return mergeProps({
-      ...props,
-      ...triggerBaseProps,
-      ref: triggerRef,
-      onPress: () => state.toggle(),
-    });
+    return mergeProps(
+      props,
+      triggerBaseProps,
+      { ref: triggerRef },
+      { onPress: () => state.toggle() }
+    );
   }
 
   return {

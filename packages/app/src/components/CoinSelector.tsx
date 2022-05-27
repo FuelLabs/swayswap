@@ -15,11 +15,6 @@ import { useBalances } from "~/hooks/useBalances";
 import CoinsMetadata from "~/lib/CoinsMetadata";
 import type { Coin } from "~/types";
 
-const style = {
-  root: `flex flex-1 flex-col items-end`,
-  maxButton: `text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800`,
-};
-
 const formatValue = (amount: bigint | null | undefined) => {
   if (amount != null) {
     return formatUnits(amount, DECIMAL_UNITS);
@@ -75,8 +70,8 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
         {...dialog.openButtonProps}
         size="md"
         isDisabled={isReadOnly}
-        className={cx("coin-selector", {
-          "coin-selector--empty": !selected,
+        className={cx("coinSelector", {
+          "coinSelector--empty": !selected,
         })}
       >
         {selected &&
@@ -103,7 +98,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
     }, [coin]);
 
     return (
-      <div className={style.root} ref={ref}>
+      <div className="coinSelector--root" ref={ref}>
         {tooltipContent ? (
           <Tooltip content={tooltipContent}>{button}</Tooltip>
         ) : (
@@ -123,7 +118,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
               <Button
                 size="sm"
                 onPress={onSetMaxBalance}
-                className={style.maxButton}
+                className="coinSelector--maxButton"
                 variant="ghost"
               >
                 Max
