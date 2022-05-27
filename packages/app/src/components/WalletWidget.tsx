@@ -13,7 +13,7 @@ import { useAssets } from "~/hooks/useAssets";
 import { useEthBalance } from "~/hooks/useEthBalance";
 
 const style = {
-  wallet: `flex items-center absolute gap-3 top-4 right-4 rounded-full text-gray-300 bg-gray-800 inner-shadow p-1`,
+  wallet: `flex items-center gap-3 rounded-full text-gray-300 bg-gray-800 inner-shadow p-1`,
   button: `py-0 px-3 border-transparent rounded-none`,
   buttonLeft: `border-r-2 border-r-gray-800 text-gray-300 hover:text-gray-200 disabled:hover:text-gray-200 disabled:text-gray-200 rounded-l-full`,
   buttonRight: `rounded-r-full`,

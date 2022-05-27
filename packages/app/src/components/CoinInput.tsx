@@ -14,13 +14,6 @@ import { useBalances } from "~/hooks/useBalances";
 import { COIN_ETH } from "~/lib/constants";
 import type { Coin } from "~/types";
 
-const style = {
-  transferPropContainer: `flex bg-gray-700 rounded-2xl p-2 border border-gray-700`,
-  input: `w-[120px] sm:w-[auto] mx-2 h-10 bg-transparent placeholder:text-gray-300 outline-none text-xl flex items-center`,
-  rightWrapper: `flex flex-1 flex-col items-end`,
-  maxButton: `text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800`,
-};
-
 type UseCoinParams = {
   /**
    * Props for <CoinInput />
@@ -189,7 +182,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     }, [initialValue]);
 
     return (
-      <div className={style.transferPropContainer}>
+      <div className="coinInput">
         {isLoading ? (
           <Spinner className="self-start mt-2 ml-2" variant="base" />
         ) : (
@@ -208,7 +201,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
             }}
             decimalScale={DECIMAL_UNITS}
             placeholder="0"
-            className={style.input}
+            className="coinInput--input"
             thousandSeparator={false}
             onInput={onInput}
           />

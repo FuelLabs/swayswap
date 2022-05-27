@@ -11,28 +11,24 @@ export const PoolCurrentReserves = () => {
   const coinTo = coinMetaData?.pairOf?.[1];
 
   return (
-    <PreviewTable title="Current pool reserves" className="my-2 mt-4">
+    <PreviewTable title="Current pool reserves" className="mt-4">
       <PreviewItem
         title={
-          <div className="inline-flex items-center gap">
+          <div className="inline-flex items-center gap-2">
             <TokenIcon coinFrom={coinFrom} size={14} />
-            <div className="ml-2">
-              {coinFrom?.name}: {formattedEthReserve}
-            </div>
+            {coinFrom?.name}
           </div>
         }
-        value=""
+        value={formattedEthReserve}
       />
       <PreviewItem
         title={
-          <div className="inline-flex items-center gap">
+          <div className="inline-flex items-center gap-2">
             <TokenIcon coinFrom={coinTo} size={14} />
-            <div className="ml-2">
-              {coinTo?.name}: {formattedTokenReserve}
-            </div>
+            {coinTo?.name}
           </div>
         }
-        value=""
+        value={formattedTokenReserve}
       />
     </PreviewTable>
   );

@@ -1,0 +1,18 @@
+@layer components {
+  .layout {
+    @apply min-h-screen text-white grid gap-8;
+    grid-template-rows: auto 1fr auto;
+  }
+  .layout--wrapper {
+    @apply flex justify-center items-center;
+    place-self: center center;
+  }
+  .layout-errorContent {
+    @apply w-[30rem] flex-1 rounded-2xl p-4 m-2;
+  }
+  .layout-confirmBtn {
+    @apply bg-primary-500 my-2 rounded-2xl py-2 px-8 text-l font-semibold;
+    @apply items-center justify-center cursor-pointer border;
+    @apply border-primary-500 hover:border-primary-600 mt-8;
+  }
+}

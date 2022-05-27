@@ -110,7 +110,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
           </Dialog.Content>
         </Dialog>
         {(showBalance || showMaxButton) && (
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-2 mt-2 whitespace-nowrap">
             {showBalance && (
               <div className="text-xs text-gray-400">Balance: {balance}</div>
             )}
