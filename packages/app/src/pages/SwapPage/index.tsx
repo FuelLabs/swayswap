@@ -1,31 +1,31 @@
-import type {CoinQuantity} from "fuels";
-import {toNumber} from "fuels";
-import {useSetAtom} from "jotai";
-import {useMemo, useState} from "react";
+import type { CoinQuantity } from "fuels";
+import { toNumber } from "fuels";
+import { useSetAtom } from "jotai";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import {MdSwapCalls} from "react-icons/md";
-import {useMutation, useQuery} from "react-query";
+import { MdSwapCalls } from "react-icons/md";
+import { useMutation, useQuery } from "react-query";
 
-import {PricePerToken} from "./PricePerToken";
-import {SwapComponent} from "./SwapComponent";
-import {SwapPreview} from "./SwapPreview";
-import {calculatePriceWithSlippage} from "./helpers";
-import {swapHasSwappedAtom} from "./jotai";
-import {queryPreviewAmount, swapTokens} from "./queries";
-import type {SwapInfo, SwapState} from "./types";
-import {ActiveInput, ValidationStateEnum} from "./types";
+import { PricePerToken } from "./PricePerToken";
+import { SwapComponent } from "./SwapComponent";
+import { SwapPreview } from "./SwapPreview";
+import { calculatePriceWithSlippage } from "./helpers";
+import { swapHasSwappedAtom } from "./jotai";
+import { queryPreviewAmount, swapTokens } from "./queries";
+import type { SwapInfo, SwapState } from "./types";
+import { ActiveInput, ValidationStateEnum } from "./types";
 
-import {Button} from "~/components/Button";
-import {Card} from "~/components/Card";
-import {useContract} from "~/context/AppContext";
-import {useBalances} from "~/hooks/useBalances";
+import { Button } from "~/components/Button";
+import { Card } from "~/components/Card";
+import { useContract } from "~/context/AppContext";
+import { useBalances } from "~/hooks/useBalances";
 import useDebounce from "~/hooks/useDebounce";
-import {usePoolInfo} from "~/hooks/usePoolInfo";
-import {useSlippage} from "~/hooks/useSlippage";
-import {ZERO} from "~/lib/constants";
-import {queryClient} from "~/lib/queryClient";
-import {isSwayInfinity, sleep} from "~/lib/utils";
-import type {PreviewInfo} from "~/types/contracts/ExchangeContractAbi";
+import { usePoolInfo } from "~/hooks/usePoolInfo";
+import { useSlippage } from "~/hooks/useSlippage";
+import { ZERO } from "~/lib/constants";
+import { queryClient } from "~/lib/queryClient";
+import { isSwayInfinity, sleep } from "~/lib/utils";
+import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
 
 type StateParams = {
   swapState: SwapState | null;
@@ -77,7 +77,7 @@ const hasBalanceWithSlippage = ({
 };
 
 const getValidationState = (stateParams: StateParams): ValidationStateEnum => {
-  const {swapState, previewAmount, hasLiquidity} = stateParams;
+  const { swapState, previewAmount, hasLiquidity } = stateParams;
   if (!swapState?.coinFrom || !swapState?.coinTo) {
     return ValidationStateEnum.SelectToken;
   }
@@ -98,7 +98,7 @@ export default function SwapPage() {
   const [swapState, setSwapState] = useState<SwapState | null>(null);
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
-  const {data: poolInfo} = usePoolInfo();
+  const { data: poolInfo } = usePoolInfo();
   const previewAmount = previewInfo?.amount || ZERO;
   const swapInfo = useMemo<SwapInfo>(
     () => ({
@@ -110,10 +110,10 @@ export default function SwapPage() {
     [poolInfo, previewInfo, swapState]
   );
   const slippage = useSlippage();
-  const {data: balances} = useBalances();
+  const { data: balances } = useBalances();
   const setHasSwapped = useSetAtom(swapHasSwappedAtom);
 
-  const {isLoading} = useQuery(
+  const { isLoading } = useQuery(
     [
       "SwapPage-inactiveAmount",
       debouncedState?.amount?.toString(),
@@ -139,7 +139,7 @@ export default function SwapPage() {
     }
   );
 
-  const {mutate: swap, isLoading: isSwaping} = useMutation(
+  const { mutate: swap, isLoading: isSwaping } = useMutation(
     async () => {
       if (!swapState) return;
       await swapTokens(contract, swapState);

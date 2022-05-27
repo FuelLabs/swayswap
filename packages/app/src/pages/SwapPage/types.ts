@@ -1,5 +1,5 @@
-import type {Coin} from '~/types';
-import type {PoolInfo} from '~/types/contracts/ExchangeContractAbi';
+import type { Coin } from '~/types';
+import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export enum ActiveInput {
   'from' = 'from',
@@ -17,9 +17,9 @@ export type SwapState = {
 
 export type SwapInfo = Partial<
   SwapState &
-  PoolInfo & {
-    previewAmount: bigint | null;
-  }
+    PoolInfo & {
+      previewAmount: bigint | null;
+    }
 >;
 
 export enum ValidationStateEnum {

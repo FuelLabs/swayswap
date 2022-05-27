@@ -1,15 +1,15 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import {useMutation} from 'react-query';
-import type {UseQueryResult} from 'react-query';
+import { useMutation } from 'react-query';
+import type { UseQueryResult } from 'react-query';
 
-import {useBalances} from './useBalances';
+import { useBalances } from './useBalances';
 
-import type {UseCoinInput} from '~/components/CoinInput';
-import {DEADLINE} from '~/config';
-import {useContract} from '~/context/AppContext';
-import type {Coin} from '~/types';
-import type {PoolInfo} from '~/types/contracts/ExchangeContractAbi';
+import type { UseCoinInput } from '~/components/CoinInput';
+import { DEADLINE } from '~/config';
+import { useContract } from '~/context/AppContext';
+import type { Coin } from '~/types';
+import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UseAddLiquidityProps {
   fromInput: UseCoinInput;
@@ -79,7 +79,8 @@ export function useAddLiquidity({
         if (errors?.length) {
           if (errors[0].message === 'enough coins could not be found') {
             toast.error(
-              `Not enough balance in your wallet to ${reservesFromToRatio ? 'add liquidity to' : 'create'
+              `Not enough balance in your wallet to ${
+                reservesFromToRatio ? 'add liquidity to' : 'create'
               } this pool.`
             );
           }

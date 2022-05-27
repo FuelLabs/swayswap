@@ -1,19 +1,19 @@
-import {toNumber} from 'fuels';
+import { toNumber } from 'fuels';
 
-import {useUserPositions} from '../../hooks/useUserPositions';
+import { useUserPositions } from '../../hooks/useUserPositions';
 
-import type {UseCoinInput} from '~/components/CoinInput';
-import {DECIMAL_UNITS} from '~/config';
-import {divideFnValidOnly, parseToFormattedNumber} from '~/lib/utils';
-import type {PoolInfo} from '~/types/contracts/ExchangeContractAbi';
+import type { UseCoinInput } from '~/components/CoinInput';
+import { DECIMAL_UNITS } from '~/config';
+import { divideFnValidOnly, parseToFormattedNumber } from '~/lib/utils';
+import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UsePreviewLiquidityProps {
   fromInput: UseCoinInput;
   poolInfo?: PoolInfo;
 }
 
-export function usePreviewAddLiquidity({fromInput, poolInfo}: UsePreviewLiquidityProps) {
-  const {totalLiquidity, poolTokensNum} = useUserPositions();
+export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewLiquidityProps) {
+  const { totalLiquidity, poolTokensNum } = useUserPositions();
   const liquidityFactor = BigInt(toNumber(fromInput.amount || BigInt(0)) * totalLiquidity);
   const previewTokens = divideFnValidOnly(liquidityFactor, totalLiquidity);
   const nextTotalTokenSupply = previewTokens + toNumber(poolInfo?.lp_token_supply || BigInt(0));

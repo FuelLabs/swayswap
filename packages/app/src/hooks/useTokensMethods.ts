@@ -1,10 +1,10 @@
-import type {Overrides} from 'fuels';
-import {useMemo} from 'react';
+import type { Overrides } from 'fuels';
+import { useMemo } from 'react';
 
-import {objectId} from '../lib/utils';
+import { objectId } from '../lib/utils';
 
-import {useWallet} from '~/context/AppContext';
-import {TokenContractAbi__factory} from '~/types/contracts';
+import { useWallet } from '~/context/AppContext';
+import { TokenContractAbi__factory } from '~/types/contracts';
 
 export function useTokenMethods(tokenId: string) {
   const wallet = useWallet()!;
@@ -21,7 +21,7 @@ export function useTokenMethods(tokenId: string) {
     mint(amount: bigint) {
       return contract.functions.mint_coins(amount);
     },
-    transferTo(amount: bigint, overrides: Overrides & {from?: string | Promise<string>} = {}) {
+    transferTo(amount: bigint, overrides: Overrides & { from?: string | Promise<string> } = {}) {
       return contract.functions.transfer_coins_to_output(
         amount,
         objectId(contract.id),
