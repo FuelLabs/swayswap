@@ -1,6 +1,7 @@
 @layer components {
   .card {
-    @apply bg-gray-800 min-w-[400px] rounded-xl py-3;
+    @apply bg-gray-800 rounded-xl py-3;
+    @apply max-w-[350px] sm:min-w-[400px];
   }
 
   .card--divider {

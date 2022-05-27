@@ -19,7 +19,7 @@ import { NETWORK_FEE } from "~/config";
 import type { Coin } from "~/types";
 
 const style = {
-  switchDirection: `flex items-center justify-center -my-5`,
+  switchDirection: `flex items-center sm:justify-center -my-5`,
 };
 
 type SwapComponentProps = {

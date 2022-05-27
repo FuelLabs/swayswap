@@ -10,7 +10,8 @@ import { useWallet } from "~/context/AppContext";
 import { Pages } from "~/types/pages";
 
 const style = {
-  wrapper: `min-h-screen w-screen text-white select-none flex flex-col justify-between`,
+  centered: `flex flex-1 place-content-center place-items-center`,
+  wrapper: `min-h-screen w-screen text-white flex flex-col justify-between overflow-y-auto`,
   content: `w-[30rem] flex-1 rounded-2xl p-4 m-2`,
   confirmButton: `bg-primary-500 my-2 rounded-2xl py-2 px-8 text-l font-semibold items-center
     justify-center cursor-pointer border border-primary-500 hover:border-primary-600 mt-8`,
@@ -28,14 +29,7 @@ export function MainLayout() {
       <ErrorBoundary
         onReset={resetReactQuery}
         fallbackRender={({ error, resetErrorBoundary }) => (
-          <div
-            style={{
-              display: "flex",
-              flex: 1,
-              placeItems: "center",
-              placeContent: "center",
-            }}
-          >
+          <div className={style.centered}>
             <div className={style.content} style={{ textAlign: "center" }}>
               Error
               <br />
@@ -53,26 +47,21 @@ export function MainLayout() {
         )}
       >
         {path.pathname === Pages.createWallet ? (
-          <div className="w-screen flex flex-1 items-center justify-center pb-14">
+          <div className="w-screen flex flex-1 pb-14">
             <Outlet />
           </div>
         ) : (
           <Suspense
             fallback={
-              <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  placeItems: "center",
-                  placeContent: "center",
-                }}
-              >
+              <div className={style.centered}>
                 <Skeleton />
               </div>
             }
           >
-            <div className="w-screen flex flex-1 items-center justify-center pb-14">
-              <Outlet />
+            <div className={style.centered}>
+              <div className="-translate-y-[40px]">
+                <Outlet />
+              </div>
             </div>
           </Suspense>
         )}
