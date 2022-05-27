@@ -7,6 +7,10 @@
     }
   }
 
+  .faucetWidget--tour {
+    @apply fixed bottom-5 left-5 outline-none;
+  }
+
   .faucetWidget--dialog {
     @apply min-w-[auto];
 

@@ -13,47 +13,53 @@ import { mergeProps, mergeRefs } from "@react-aria/utils";
 import type { OverlayTriggerState } from "@react-stately/overlays";
 import { useOverlayTriggerState } from "@react-stately/overlays";
 import cx from "classnames";
+import type {
+  ReactNode,
+  ForwardRefExoticComponent,
+  PropsWithoutRef,
+  RefAttributes,
+} from "react";
 import { forwardRef, useRef } from "react";
-import type { ReactNode } from "react";
-
-import type { ButtonProps } from "./Button";
+import { MdOutlineArrowDropDown } from "react-icons/md";
 
 const style = {
-  popover: `
-    bg-gray-900 rounded-xl text-gray-200
-  `,
-  content: `
-    relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring
-  `,
-  closeButton: `
-    h-auto absolute top-2 right-2 focus-ring p-1 rounded border-transparent
-  `,
+  popover: `relative rounded-xl bg-gray-900 text-gray-200 outline-none`,
+  content: `relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring`,
+  closeButton: `h-auto absolute top-2 right-2 focus-ring p-1 rounded border-transparent`,
+  arrow: `absolute bottom-[-17px] left-[10px] text-gray-900`,
 };
 
 export type PopoverProps = React.HTMLAttributes<Element> & {
   children: ReactNode;
   state: OverlayTriggerState;
   className?: string;
+  bg?: string;
 };
+
+type PopoverComponent = ForwardRefExoticComponent<
+  PropsWithoutRef<PopoverProps> & RefAttributes<HTMLDivElement>
+>;
 
 export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
   ({ state, className, ...props }, ref) => {
     const { children } = props;
     const innerRef = useRef<HTMLDivElement | null>(null);
+    const isOpen = state.isOpen;
     const { overlayProps } = useOverlay(
-      { isDismissable: true, isOpen: state.isOpen, onClose: state.close },
+      { isOpen, isDismissable: true, onClose: state.close },
       innerRef
     );
 
     const { modalProps } = useModal();
-    const { dialogProps } = useDialog(props as any, innerRef); // eslint-disable-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { dialogProps } = useDialog(props as any, innerRef);
 
-    if (!state.isOpen) return null;
+    if (!isOpen) return null;
     return (
       <OverlayContainer>
         <FocusScope restoreFocus autoFocus>
           <div
-            className={cx(className, style.popover)}
+            className={cx(style.popover, className)}
             ref={mergeRefs(ref, innerRef)}
             {...mergeProps(overlayProps, dialogProps, props, modalProps)}
           >
@@ -64,22 +70,34 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       </OverlayContainer>
     );
   }
-);
+) as PopoverComponent & {
+  Arrow: typeof PopoverArrow;
+};
+
+Popover.Arrow = PopoverArrow;
+
+function PopoverArrow({ className }: { className?: string }) {
+  return (
+    <div className={cx(className, style.arrow)}>
+      <MdOutlineArrowDropDown size={30} />
+    </div>
+  );
+}
 
 type UsePopoverProps = Pick<
   AriaPositionProps,
   "offset" | "placement" | "crossOffset"
 > & {
-  defaultOpen?: boolean;
+  isOpen?: boolean;
 };
 
 export function usePopover({
   offset = 5,
   placement = "top",
   crossOffset,
-  defaultOpen,
+  isOpen,
 }: UsePopoverProps = {}) {
-  const state = useOverlayTriggerState({ defaultOpen });
+  const state = useOverlayTriggerState({ defaultOpen: isOpen });
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
@@ -102,14 +120,11 @@ export function usePopover({
     ref: overlayRef,
   });
 
-  function getTriggerProps(props: ButtonProps = {}) {
-    return mergeProps(
-      props,
-      triggerBaseProps,
-      { ref: triggerRef },
-      { onPress: () => state.toggle() }
-    );
-  }
+  const triggerProps = mergeProps(
+    triggerBaseProps,
+    { ref: triggerRef },
+    { onClick: () => state.toggle() }
+  );
 
   return {
     ...state,
@@ -117,7 +132,7 @@ export function usePopover({
       state.close();
       triggerRef.current?.focus();
     },
-    getTriggerProps,
+    triggerProps,
     rootProps,
   };
 }

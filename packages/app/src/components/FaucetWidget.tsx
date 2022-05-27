@@ -5,15 +5,21 @@ import { FaFaucet } from "react-icons/fa";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
+import { Popover, usePopover } from "./Popover";
 
 import { RECAPTCHA_SITE_KEY } from "~/config";
 import { useFaucet } from "~/hooks/useFaucet";
 import { useUserInfo } from "~/hooks/useUserInfo";
 
 export function FaucetWidget() {
-  const dialog = useDialog();
-  const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useUserInfo();
+  const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
+  const dialog = useDialog();
+
+  const popover = usePopover({
+    offset: 55,
+    crossOffset: 140,
+  });
 
   const faucet = useFaucet({
     onSuccess: () => {
@@ -24,17 +30,17 @@ export function FaucetWidget() {
 
   useEffect(() => {
     if (userInfo.isNew) {
-      dialog.open();
+      popover.open();
     }
-  }, []);
+  }, [userInfo.isNew]);
 
   return (
     <div className="faucetWidget">
-      <Button size="md" {...dialog.openButtonProps}>
+      <Button {...dialog.openButtonProps} size="md">
         <FaFaucet />
         Faucet
       </Button>
-      <Dialog {...dialog.dialogProps} isBlocked={userInfo.isNew}>
+      <Dialog {...dialog.dialogProps}>
         <Dialog.Content className="faucetWidget--dialog">
           <Card>
             <Card.Title>
@@ -72,6 +78,19 @@ export function FaucetWidget() {
           </Card>
         </Dialog.Content>
       </Dialog>
+      <Popover {...popover.rootProps} className="bg-primary-600">
+        <div className="p-3 text-xs max-w-[150px] text-center text-white">
+          Since is your first access, you need to have some funds in your
+          wallet. Click above to mint ETH.
+        </div>
+        <Popover.Arrow className="text-primary-600" />
+      </Popover>
+      <div
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+        {...(popover.triggerProps as any)}
+        className="faucetWidget--tour"
+        aria-hidden
+      />
     </div>
   );
 }
