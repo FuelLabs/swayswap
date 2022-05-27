@@ -22,13 +22,6 @@ import type {
 import { forwardRef, useRef } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
-const style = {
-  popover: `relative rounded-xl bg-gray-900 text-gray-200 outline-none`,
-  content: `relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring`,
-  closeButton: `h-auto absolute top-2 right-2 focus-ring p-1 rounded border-transparent`,
-  arrow: `absolute bottom-[-17px] left-[10px] text-gray-900`,
-};
-
 export type PopoverProps = React.HTMLAttributes<Element> & {
   children: ReactNode;
   state: OverlayTriggerState;
@@ -59,7 +52,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       <OverlayContainer>
         <FocusScope restoreFocus autoFocus>
           <div
-            className={cx(style.popover, className)}
+            className={cx("popover", className)}
             ref={mergeRefs(ref, innerRef)}
             {...mergeProps(overlayProps, dialogProps, props, modalProps)}
           >
@@ -78,7 +71,7 @@ Popover.Arrow = PopoverArrow;
 
 function PopoverArrow({ className }: { className?: string }) {
   return (
-    <div className={cx(className, style.arrow)}>
+    <div className={cx(className, "popover--arrow")}>
       <MdOutlineArrowDropDown size={30} />
     </div>
   );

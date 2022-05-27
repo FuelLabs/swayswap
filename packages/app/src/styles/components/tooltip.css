@@ -1,0 +1,13 @@
+@layer components {
+  .tooltip {
+    @apply bg-gray-900 text-gray-900 text-xs text-center leading-relaxed rounded-lg py-2 px-3;
+  }
+
+  .tooltip--content {
+    @apply text-gray-300;
+  }
+
+  .tooltip--arrow {
+    @apply fill-current;
+  }
+}

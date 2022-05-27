@@ -15,6 +15,7 @@ export type ButtonProps = AriaButtonProps<"button"> & {
   isFull?: boolean;
   isDisabled?: boolean;
   isLoading?: boolean;
+  isReadOnly?: boolean;
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -26,13 +27,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       isFull,
       isDisabled,
       isLoading,
+      isReadOnly,
       ...props
     },
     ref
   ) => {
     const innerRef = useRef<HTMLButtonElement | null>(null);
     const { buttonProps, isPressed } = useButton(
-      { ...props, isDisabled },
+      {
+        ...props,
+        isDisabled,
+        onPress: isReadOnly ? () => null : props.onPress,
+      },
       innerRef
     );
 
@@ -46,6 +52,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       "button--base": variant === "base",
       "button--primary": variant === "primary",
       "button--ghost": variant === "ghost",
+      "button--readonly": isReadOnly,
     });
 
     const customProps = omit(["onPress"], props);
@@ -56,7 +63,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...mergeProps(customProps, buttonProps)}
         className={classes}
         aria-pressed={!isDisabled && isPressed}
-        disabled={isDisabled}
         aria-disabled={isDisabled}
       >
         {isLoading ? (

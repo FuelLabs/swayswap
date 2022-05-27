@@ -9,6 +9,8 @@
 @import "./components/dialog.css";
 @import "./components/faucet-widget.css";
 @import "./components/input.css";
+@import "./components/popover.css";
+@import "./components/tooltip.css";
 @import "./components/toast.css";
 
 @import "tailwindcss/utilities";

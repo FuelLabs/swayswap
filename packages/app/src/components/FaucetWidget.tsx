@@ -5,7 +5,8 @@ import { FaFaucet } from "react-icons/fa";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
-import { Popover, usePopover } from "./Popover";
+import { usePopover } from "./Popover";
+import { Tooltip } from "./Tooltip";
 
 import { RECAPTCHA_SITE_KEY } from "~/config";
 import { useFaucet } from "~/hooks/useFaucet";
@@ -29,17 +30,33 @@ export function FaucetWidget() {
   });
 
   useEffect(() => {
-    if (userInfo.isNew) {
-      popover.open();
-    }
+    if (userInfo.isNew) popover.open();
   }, [userInfo.isNew]);
+
+  const tour = (
+    <>
+      <div className="text-xs max-w-[170px] text-center">
+        Since is your first access, you need to have some funds in your wallet.{" "}
+        <br />
+        <b>Click above to mint ETH.</b>
+      </div>
+    </>
+  );
 
   return (
     <div className="faucetWidget">
-      <Button {...dialog.openButtonProps} size="md">
-        <FaFaucet />
-        Faucet
-      </Button>
+      <Tooltip
+        defaultOpen
+        sideOffset={5}
+        content={tour}
+        className="bg-primary-500 text-primary-500"
+        contentClassName="text-white"
+      >
+        <Button {...dialog.openButtonProps} size="md">
+          <FaFaucet />
+          Faucet
+        </Button>
+      </Tooltip>
       <Dialog {...dialog.dialogProps}>
         <Dialog.Content className="faucetWidget--dialog">
           <Card>
@@ -78,19 +95,6 @@ export function FaucetWidget() {
           </Card>
         </Dialog.Content>
       </Dialog>
-      <Popover {...popover.rootProps} className="bg-primary-600">
-        <div className="p-3 text-xs max-w-[150px] text-center text-white">
-          Since is your first access, you need to have some funds in your
-          wallet. Click above to mint ETH.
-        </div>
-        <Popover.Arrow className="text-primary-600" />
-      </Popover>
-      <div
-        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-        {...(popover.triggerProps as any)}
-        className="faucetWidget--tour"
-        aria-hidden
-      />
     </div>
   );
 }
