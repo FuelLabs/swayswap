@@ -6,7 +6,7 @@ import { Button } from "./Button";
 
 const style = {
   confirmButton: `
-    p-0 relative w-10 h-10 rounded-lg my-1 translate-x-[60px]
+    p-0 relative w-10 h-10 rounded-lg mb-3 mt-0 translate-x-[60px]
     border-2 border-gray-700 bg-gray-800 cursor-pointer text-gray-400
     sm:translate-x-0 sm:my-1 sm:w-12 sm:h-12 sm:rounded-2xl hover:text-gray-50`,
   icon: `transition-all`,

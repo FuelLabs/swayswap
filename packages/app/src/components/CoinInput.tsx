@@ -184,7 +184,9 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     return (
       <div className="coinInput">
         {isLoading ? (
-          <Spinner className="self-start mt-2 ml-2" variant="base" />
+          <div className="flex-1">
+            <Spinner className="self-start mt-2 ml-2" variant="base" />
+          </div>
         ) : (
           <NumberFormat
             {...props}

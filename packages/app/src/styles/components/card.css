@@ -9,15 +9,19 @@
   }
 
   .card--divider {
-    @apply border border-gray-700 border-b-0;
+    @apply border border-gray-700 border-b-0 my-3;
   }
 
   .card--title {
-    @apply px-5 flex justify-between text-xl;
+    @apply px-3 sm:px-5 flex justify-between text-xl;
 
     & > h2 {
       @apply flex items-center gap-2;
     }
+  }
+
+  .card--content {
+    @apply px-3 sm:px-5 pb-2;
   }
 
   .card--title {
