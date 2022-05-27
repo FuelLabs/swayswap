@@ -19,18 +19,6 @@ import { MdClose } from "react-icons/md";
 
 import { Button } from "./Button";
 
-const style = {
-  overlay: `
-    bg-black/40 fixed top-0 left-0 right-0 bottom-0 w-screen h-screen overflow-y-auto grid place-items-center
-  `,
-  content: `
-    relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring
-  `,
-  closeButton: `
-    h-auto absolute top-2 right-2 focus-ring p-1 rounded border-transparent
-  `,
-};
-
 type DialogContext = {
   state?: OverlayTriggerState;
   ref?: React.MutableRefObject<HTMLDivElement | null>;
@@ -38,6 +26,7 @@ type DialogContext = {
   modalProps?: ModalAriaProps;
   dialogProps?: React.HTMLAttributes<HTMLElement>;
   titleProps?: React.HTMLAttributes<HTMLElement>;
+  isBlocked?: boolean;
 };
 
 const ctx = createContext<DialogContext>({});
@@ -46,6 +35,7 @@ export type DialogProps = OverlayProps &
   AriaDialogProps & {
     children: ReactNode;
     state: OverlayTriggerState;
+    isBlocked?: boolean;
   };
 
 type DialogComponent = FC<DialogProps> & {
@@ -54,14 +44,14 @@ type DialogComponent = FC<DialogProps> & {
   Content: typeof DialogContent;
 };
 
-export const Dialog: DialogComponent = ({ state, ...props }) => {
+export const Dialog: DialogComponent = ({ state, isBlocked, ...props }) => {
   const { children } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const { overlayProps, underlayProps } = useOverlay(
     {
       ...props,
-      isDismissable: true,
-      isOpen: state.isOpen,
+      isDismissable: !isBlocked,
+      isOpen: isBlocked ? true : state.isOpen,
       onClose: state.close,
     },
     ref
@@ -77,12 +67,13 @@ export const Dialog: DialogComponent = ({ state, ...props }) => {
     modalProps,
     dialogProps,
     titleProps,
+    isBlocked,
   };
 
   if (!state.isOpen) return null;
   return (
     <OverlayContainer>
-      <div className={style.overlay} {...underlayProps}>
+      <div className="dialog--overlay" {...underlayProps}>
         <ctx.Provider value={ctxValue}>{children}</ctx.Provider>
       </div>
     </OverlayContainer>
@@ -128,17 +119,19 @@ function DialogContent({ children, className, onClose }: DialogContentProps) {
       {...props.dialogProps}
       {...props.modalProps}
       ref={props.ref}
-      className={cx(className, style.content)}
+      className={cx(className, "dialog")}
     >
       <FocusScope contain autoFocus>
-        <Button
-          size="sm"
-          ref={closeButtonRef}
-          onPress={handleClose}
-          className={style.closeButton}
-        >
-          <MdClose />
-        </Button>
+        {!props.isBlocked && (
+          <Button
+            size="sm"
+            ref={closeButtonRef}
+            onPress={handleClose}
+            className="dialog--closeBtn"
+          >
+            <MdClose />
+          </Button>
+        )}
         {children}
       </FocusScope>
     </div>

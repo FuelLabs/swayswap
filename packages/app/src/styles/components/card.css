@@ -1,0 +1,30 @@
+@layer components {
+  .card {
+    @apply bg-gray-800 rounded-xl py-3;
+    min-width: calc(100vw - 40px);
+
+    @media (min-width: 450px) {
+      min-width: 450px;
+    }
+  }
+
+  .card--divider {
+    @apply border border-gray-700 border-b-0 my-3;
+  }
+
+  .card--title {
+    @apply px-3 sm:px-5 flex justify-between text-xl;
+
+    & > h2 {
+      @apply flex items-center gap-2;
+    }
+  }
+
+  .card--content {
+    @apply px-3 sm:px-5 pb-2;
+  }
+
+  .card--title {
+    @apply flex items-center;
+  }
+}

@@ -54,7 +54,7 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
   return (
     <div>
       <div className="flex justify-center">
-        <BsArrowDown size={24} />
+        <BsArrowDown size={20} className="text-gray-400" />
       </div>
       <PreviewTable title="Expected out:" className="my-2">
         <PreviewItem
@@ -68,8 +68,8 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
         <PreviewItem
           title={`${
             direction === ActiveInput.from
-              ? "Minimum received after slippage"
-              : "Maximum sent after slippage"
+              ? "Min. received after slippage"
+              : "Max. sent after slippage"
           } (${slippage.formatted}):`}
           value={`${inputAmountWithSlippage} ${
             direction === ActiveInput.from ? coinTo.symbol : coinFrom.symbol

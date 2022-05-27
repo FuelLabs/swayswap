@@ -1,0 +1,13 @@
+@layer components {
+  .input {
+    @apply appearance-none w-full rounded-md bg-gray-700 px-4 py-2 outline-none;
+
+    &:not(.input--readOnly) {
+      @apply focus-ring text-gray-100;
+    }
+  }
+
+  .input--readOnly {
+    @apply opacity-60;
+  }
+}

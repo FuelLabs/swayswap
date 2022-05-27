@@ -143,7 +143,7 @@ export default function AddLiquidity() {
   }, [fromInput.amount, toInput.amount]);
 
   return (
-    <Card className={style.wrapper}>
+    <Card className="sm:min-w-[400px]">
       <Card.Title>Add Liquidity</Card.Title>
       {addLiquidityMutation.isLoading ? (
         <div className="mt-6 mb-8 flex justify-center">
@@ -162,16 +162,14 @@ export default function AddLiquidity() {
         </div>
       ) : (
         <>
-          <div className="mt-6 mb-4">
+          <div className="space-y-4 my-4">
             <CoinInput
+              autoFocus
               {...fromInput.getInputProps()}
               rightElement={
                 <CoinSelector {...fromInput.getCoinSelectorProps()} />
               }
-              autoFocus
             />
-          </div>
-          <div className="mb-6">
             <CoinInput
               {...toInput.getInputProps()}
               rightElement={

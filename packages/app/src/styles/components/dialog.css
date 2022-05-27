@@ -1,0 +1,12 @@
+@layer components {
+  .dialog--overlay {
+    @apply bg-black/70 fixed top-0 left-0 right-0 bottom-0 w-screen h-screen;
+    @apply overflow-y-auto grid place-items-center;
+  }
+  .dialog {
+    @apply relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring;
+  }
+  .dialog--closeBtn {
+    @apply h-auto absolute top-2 right-2 focus-ring p-1 rounded border-transparent;
+  }
+}

@@ -2,13 +2,6 @@ import cx from "classnames";
 import type { FC, ReactNode } from "react";
 import { Children } from "react";
 
-const style = {
-  divider: `border border-gray-700 border-b-0`,
-  content: `bg-gray-800 min-w-[400px] rounded-xl py-3`,
-  titleWrapper: `px-5 flex justify-between text-xl`,
-  title: `flex items-center`,
-};
-
 export type CardProps = {
   children: ReactNode;
   className?: string;
@@ -33,10 +26,10 @@ export const Card: CardComponent = ({ className, children }) => {
   );
 
   return (
-    <div className={cx(className, style.content, { "py-8": !title })}>
+    <div className={cx(className, "card", { "py-8": !title })}>
       {title}
-      {title && <div className={cx(style.divider, "my-3")} />}
-      <div className="px-5 pb-2">{customChildren}</div>
+      {title && <div className={cx("card--divider")} />}
+      <div className="card--content">{customChildren}</div>
     </div>
   );
 };
@@ -45,8 +38,8 @@ const CardTitle: FC<CardTitleProps> & { id: string } = ({
   children,
   elementRight,
 }) => (
-  <div className={style.titleWrapper}>
-    <h2 className="flex items-center gap-2">{children}</h2>
+  <div className="card--title">
+    <h2>{children}</h2>
     {elementRight}
   </div>
 );
