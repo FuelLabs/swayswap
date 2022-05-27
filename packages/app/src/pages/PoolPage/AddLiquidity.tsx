@@ -160,11 +160,11 @@ export default function AddLiquidity() {
         <>
           <div className="space-y-4 my-4">
             <CoinInput
+              autoFocus
               {...fromInput.getInputProps()}
               rightElement={
                 <CoinSelector {...fromInput.getCoinSelectorProps()} />
               }
-              autoFocus
             />
             <CoinInput
               {...toInput.getInputProps()}

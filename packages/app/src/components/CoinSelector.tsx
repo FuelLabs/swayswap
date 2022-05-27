@@ -69,7 +69,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
       <Button
         {...dialog.openButtonProps}
         size="md"
-        isDisabled={isReadOnly}
+        isReadOnly={isReadOnly}
         className={cx("coinSelector", {
           "coinSelector--empty": !selected,
         })}

@@ -2,7 +2,13 @@
   .button {
     @apply appearance-none transition-main inline-flex items-center rounded-md gap-2;
     @apply border focus-ring btn-active cursor-pointer;
-    @apply disabled:cursor-default disabled:opacity-50;
+
+    &[aria-disabled="true"] {
+      @apply cursor-default opacity-50;
+    }
+    &.button--readonly {
+      @apply cursor-default;
+    }
   }
   .button--sm {
     @apply text-sm px-2 h-8;
@@ -16,24 +22,41 @@
   .button--base {
     @apply text-gray-400 hover:text-primary-500  border-gray-700;
     @apply focus:border-primary-500 active:border-gray-700;
-    @apply disabled:border-transparent disabled:text-gray-400;
+
+    &.button--readonly,
+    &[aria-disabled="true"] {
+      @apply border-transparent text-gray-400;
+    }
   }
   .button--ghost {
     @apply text-gray-400 border-transparent hover:bg-white/5;
     @apply focus:border-primary-500 active:border-gray-700;
-    @apply disabled:border-transparent disabled:bg-white/0;
+
+    &.button--readonly,
+    &[aria-disabled="true"] {
+      @apply border-transparent bg-white/0;
+    }
   }
   .button--primary {
     @apply bg-primary-500 hover:bg-primary-600;
     @apply text-primary-100 font-semibold border-transparent;
     @apply focus:ring-primary-300 focus:border-primary-300;
-    @apply active:border-transparent disabled:bg-primary-500;
+    @apply active:border-transparent;
+
+    &.button--readonly,
+    &[aria-disabled="true"] {
+      @apply bg-primary-500;
+    }
   }
-  .btn-active {
-    @apply active:scale-[0.98] disabled:scale-100;
+  .btn-active:not([aria-disabled="true"]) {
+    @apply active:scale-[0.98];
   }
   *[aria-pressed="true"],
   *[data-pressed="true"] {
-    @apply scale-[0.9] disabled:scale-100;
+    @apply scale-[0.9];
+
+    &[aria-disabled="true"] {
+      @apply scale-100;
+    }
   }
 }

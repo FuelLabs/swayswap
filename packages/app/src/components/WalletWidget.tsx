@@ -46,7 +46,8 @@ export function WalletWidget() {
         <div className="flex items-center bg-gray-700 rounded-full">
           <ButtonGroup>
             <Button
-              {...popover.getTriggerProps({ isDisabled: !coins.length })}
+              {...popover.triggerProps}
+              isDisabled={!coins.length}
               className={cx(style.button, style.buttonLeft)}
             >
               {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}

@@ -5,15 +5,22 @@ import { FaFaucet } from "react-icons/fa";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
+import { usePopover } from "./Popover";
+import { Tooltip } from "./Tooltip";
 
 import { RECAPTCHA_SITE_KEY } from "~/config";
 import { useFaucet } from "~/hooks/useFaucet";
 import { useUserInfo } from "~/hooks/useUserInfo";
 
 export function FaucetWidget() {
-  const dialog = useDialog();
-  const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useUserInfo();
+  const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
+  const dialog = useDialog();
+
+  const popover = usePopover({
+    offset: 55,
+    crossOffset: 140,
+  });
 
   const faucet = useFaucet({
     onSuccess: () => {
@@ -23,18 +30,34 @@ export function FaucetWidget() {
   });
 
   useEffect(() => {
-    if (userInfo.isNew) {
-      dialog.open();
-    }
-  }, []);
+    if (userInfo.isNew) popover.open();
+  }, [userInfo.isNew]);
+
+  const tour = (
+    <>
+      <div className="text-xs max-w-[170px] text-center">
+        Since is your first access, you need to have some funds in your wallet.{" "}
+        <br />
+        <b>Click above to mint ETH.</b>
+      </div>
+    </>
+  );
 
   return (
     <div className="faucetWidget">
-      <Button size="md" {...dialog.openButtonProps}>
-        <FaFaucet />
-        Faucet
-      </Button>
-      <Dialog {...dialog.dialogProps} isBlocked={userInfo.isNew}>
+      <Tooltip
+        defaultOpen={userInfo.isNew}
+        sideOffset={5}
+        content={tour}
+        className="bg-primary-500 text-primary-500"
+        contentClassName="text-white"
+      >
+        <Button {...dialog.openButtonProps} size="md">
+          <FaFaucet />
+          Faucet
+        </Button>
+      </Tooltip>
+      <Dialog {...dialog.dialogProps}>
         <Dialog.Content className="faucetWidget--dialog">
           <Card>
             <Card.Title>

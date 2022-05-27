@@ -2,7 +2,7 @@
   .coinSelector {
     @apply h-10 px-2 rounded-xl gap-1 bg-gray-800;
   }
-  .coinSelector:not([aria-disabled="true"]) {
+  .coinSelector:not([aria-disabled="true"]):not(.button--readonly) {
     @apply hover:text-gray-300 hover:border-gray-600;
   }
   .coinSelector[aria-disabled="true"] {

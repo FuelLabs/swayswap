@@ -20,6 +20,7 @@
     "@headlessui/react": "^1.6.2",
     "@radix-ui/react-accordion": "^0.1.6",
     "@radix-ui/react-alert-dialog": "^0.1.7",
+    "@radix-ui/react-tooltip": "^0.1.7",
     "@react-aria/button": "^3.4.4",
     "@react-aria/dialog": "^3.1.9",
     "@react-aria/focus": "^3.5.5",

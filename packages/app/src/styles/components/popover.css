@@ -1,0 +1,8 @@
+@layer components {
+  .popover {
+    @apply relative rounded-xl bg-gray-900 text-gray-200 outline-none;
+  }
+  .popover--arrow {
+    @apply absolute bottom-[-17px] left-[10px] text-gray-900;
+  }
+}

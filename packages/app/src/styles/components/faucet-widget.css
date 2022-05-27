@@ -1,9 +1,14 @@
 @layer components {
   .faucetWidget {
     @apply p-4 pt-0;
+
     & > button {
       @apply bg-gray-800 rounded-full;
     }
+  }
+
+  .faucetWidget--tour {
+    @apply fixed bottom-5 left-5 outline-none;
   }
 
   .faucetWidget--dialog {
