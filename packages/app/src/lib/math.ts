@@ -1,7 +1,18 @@
 import * as ethers from '@ethersproject/units';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import { Decimal } from 'decimal.js';
 
 export const ZERO = toBigInt(0);
+
+export function toFixed(number: BigNumberish | null | undefined, maxDecimals: number = 3) {
+  const [amount, decimals] = String(number?.toString() || '0.0').split('.');
+  const minDecimals = decimals.split('').findIndex((u: string) => u !== '0');
+  const decimalFormatted = decimals.slice(
+    0,
+    minDecimals >= maxDecimals ? minDecimals + 1 : maxDecimals
+  );
+  return [amount || 0, '.', ...decimalFormatted].join('');
+}
 
 export function toNumber(number: BigNumberish | null | undefined) {
   return BigNumber.from(number || 0).toNumber();
@@ -20,13 +31,13 @@ export function formatUnits(number: BigNumberish, precision: number): string {
 }
 
 export function divideFn(value?: BigNumberish | null, by?: BigNumberish | null) {
-  return toNumber(value || 0) / toNumber(by || 0);
+  return new Decimal(value?.toString() || 0).div(by?.toString() || 0).toNumber();
 }
 
 export function divideFnValidOnly(value?: BigNumberish | null, by?: BigNumberish | null) {
   const result = divideFn(value || 0, by || 0);
 
-  return Number.isNaN(result) || !Number.isFinite(result) ? 0 : result;
+  return Number(Number.isNaN(result) || !Number.isFinite(result) ? 0 : result);
 }
 
 export function parseToFormattedNumber(value: string | BigNumberish, precision: number) {

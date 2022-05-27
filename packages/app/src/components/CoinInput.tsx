@@ -7,11 +7,12 @@ import type { CoinSelectorProps } from "./CoinSelector";
 import type { NumberInputProps } from "./NumberInput";
 import { Spinner } from "./Spinner";
 
-import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
+import { DECIMAL_UNITS, MAX_U64_VALUE, TOKEN_ID } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import { COIN_ETH } from "~/lib/constants";
 import { formatUnits, parseUnits, toBigInt } from "~/lib/math";
 import type { Coin } from "~/types";
+import { usePoolInfo } from "~/hooks/usePoolInfo";
 
 const style = {
   transferPropContainer: `flex bg-gray-700 rounded-2xl p-2 border border-gray-700`,
@@ -53,6 +54,7 @@ type DisplayType = "input" | "text";
 const parseValue = (value: string) => (value === "." ? "0." : value);
 
 const parseValueBigInt = (value: string) => {
+  console.log(value);
   if (value !== "") {
     const nextValue = parseValue(value);
     return toBigInt(parseUnits(nextValue, DECIMAL_UNITS));
@@ -103,6 +105,10 @@ export function useCoinInput({
     }
   };
 
+  const isAllowed = ({ value }: NumberFormatValues) => {
+    return parseValueBigInt(value) <= MAX_U64_VALUE;
+  };
+
   function getInputProps() {
     return {
       ...params,
@@ -112,8 +118,7 @@ export function useCoinInput({
       onInput,
       onChange: handleInputPropsChange,
       balance: formatValue(coinBalance?.amount || BigInt(0)),
-      isAllowed: ({ value }: NumberFormatValues) =>
-        parseValueBigInt(value) <= MAX_U64_VALUE,
+      isAllowed,
     } as CoinInputProps;
   }
 

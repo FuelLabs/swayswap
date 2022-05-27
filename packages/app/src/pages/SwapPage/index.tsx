@@ -24,7 +24,11 @@ import { useSlippage } from "~/hooks/useSlippage";
 import { ZERO, toNumber } from "~/lib/math";
 import { queryClient } from "~/lib/queryClient";
 import { isSwayInfinity, sleep } from "~/lib/utils";
-import type { PreviewInfo } from "~/types/contracts/Exchange_contractAbi";
+import type {
+  PoolInfo,
+  PreviewInfo,
+} from "~/types/contracts/Exchange_contractAbi";
+import { COIN_ETH } from "~/lib/constants";
 
 type StateParams = {
   swapState: SwapState | null;
@@ -83,12 +87,31 @@ const getValidationState = (stateParams: StateParams): ValidationStateEnum => {
   if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
+  if (!previewAmount) {
+    return ValidationStateEnum.InsufficientLiquidity;
+  }
   if (!swapState.hasBalance || hasBalanceWithSlippage(stateParams)) {
     return ValidationStateEnum.InsufficientBalance;
   }
   if (!hasLiquidity || isSwayInfinity(previewAmount))
     return ValidationStateEnum.InsufficientLiquidity;
   return ValidationStateEnum.Swap;
+};
+
+// If amount desired is bigger then
+// the reserves return
+const hasReserveAmount = (
+  swapState?: SwapState | null,
+  poolInfo?: PoolInfo
+) => {
+  if (swapState?.direction === ActiveInput.to) {
+    if (swapState.coinTo.assetId === COIN_ETH) {
+      return (swapState.amount || 0) < (poolInfo?.eth_reserve || 0);
+    } else {
+      return (swapState.amount || 0) < (poolInfo?.token_reserve || 0);
+    }
+  }
+  return true;
 };
 
 export default function SwapPage() {
@@ -122,12 +145,14 @@ export default function SwapPage() {
     ],
     async () => {
       if (!debouncedState?.amount) return null;
+      if (!hasReserveAmount(debouncedState)) return null;
       return queryPreviewAmount(contract, debouncedState);
     },
     {
       onSuccess: (preview) => {
-        if (preview == null) return;
-        if (isSwayInfinity(preview.amount)) {
+        if (preview == null) {
+          setPreviewInfo(null);
+        } else if (isSwayInfinity(preview.amount)) {
           setPreviewInfo(null);
           setHasLiquidity(false);
         } else {

@@ -2,7 +2,7 @@ import type { SwapInfo } from './types';
 import { ActiveInput } from './types';
 
 import { COIN_ETH } from '~/lib/constants';
-import { toNumber } from '~/lib/math';
+import { divideFnValidOnly, toNumber } from '~/lib/math';
 
 export function getPriceImpact(
   outputAmount: bigint,
@@ -10,9 +10,10 @@ export function getPriceImpact(
   reserveInput: bigint,
   reserveOutput: bigint
 ) {
-  const exchangeRateAfter = toNumber(inputAmount) / toNumber(outputAmount);
-  const exchangeRateBefore = toNumber(reserveInput) / toNumber(reserveOutput);
-  return ((exchangeRateAfter / exchangeRateBefore - 1) * 100).toFixed(2);
+  const exchangeRateAfter = divideFnValidOnly(inputAmount, outputAmount);
+  const exchangeRateBefore = divideFnValidOnly(reserveInput, reserveOutput);
+  const result = (exchangeRateAfter / exchangeRateBefore - 1) * 100;
+  return result > 100 ? 100 : result.toFixed(2);
 }
 
 export const calculatePriceImpact = ({

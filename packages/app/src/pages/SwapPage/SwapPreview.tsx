@@ -8,7 +8,7 @@ import { ActiveInput } from "./types";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { DECIMAL_UNITS, NETWORK_FEE } from "~/config";
 import { useSlippage } from "~/hooks/useSlippage";
-import { ZERO, formatUnits } from "~/lib/math";
+import { ZERO, formatUnits, toFixed } from "~/lib/math";
 
 type SwapPreviewProps = {
   swapInfo: SwapInfo;
@@ -32,10 +32,19 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
     return null;
   }
   // Expected amount of tokens to be received
-  const outputAmount = formatUnits(
-    direction === ActiveInput.from ? previewAmount : amount || ZERO,
-    DECIMAL_UNITS
+  const outputAmount = toFixed(
+    formatUnits(
+      direction === ActiveInput.from ? previewAmount : amount || ZERO,
+      DECIMAL_UNITS
+    )
   );
+  const inputAmountWithSlippage = toFixed(
+    formatUnits(
+      calculatePriceWithSlippage(previewAmount, slippage.value, direction),
+      DECIMAL_UNITS
+    )
+  );
+  const networkFee = toFixed(formatUnits(NETWORK_FEE, DECIMAL_UNITS));
 
   return (
     <div>
@@ -57,21 +66,14 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
               ? "Minimum received after slippage"
               : "Maximum sent after slippage"
           } (${slippage.formatted}):`}
-          value={`${formatUnits(
-            calculatePriceWithSlippage(
-              previewAmount,
-              slippage.value,
-              direction
-            ),
-            DECIMAL_UNITS
-          )} ${
+          value={`${inputAmountWithSlippage} ${
             direction === ActiveInput.from ? coinTo.symbol : coinFrom.symbol
           }`}
         />
         <PreviewItem
           className="text-gray-300"
           title={`Network Fee`}
-          value={`${formatUnits(NETWORK_FEE, DECIMAL_UNITS)} ETH`}
+          value={`${networkFee} ETH`}
         />
       </PreviewTable>
     </div>
