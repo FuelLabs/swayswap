@@ -1,11 +1,11 @@
-import { usePreviewAddLiquidity } from "./usePreviewAddLiquidity";
+import {usePreviewAddLiquidity} from "./usePreviewAddLiquidity";
 
-import type { UseCoinInput } from "~/components/CoinInput";
-import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
-import { TokenIcon } from "~/components/TokenIcon";
-import { useCoinMetadata } from "~/hooks/useCoinMetadata";
-import { ETH_DAI } from "~/lib/CoinsMetadata";
-import type { PoolInfo } from "~/types/contracts/Exchange_contractAbi";
+import type {UseCoinInput} from "~/components/CoinInput";
+import {PreviewItem, PreviewTable} from "~/components/PreviewTable";
+import {TokenIcon} from "~/components/TokenIcon";
+import {useCoinMetadata} from "~/hooks/useCoinMetadata";
+import {ETH_DAI} from "~/lib/CoinsMetadata";
+import type {PoolInfo} from "~/types/contracts/ExchangeContractAbi";
 
 export interface AddLiquidityPreviewProps {
   poolInfo?: PoolInfo;
@@ -16,11 +16,11 @@ export const AddLiquidityPreview = ({
   poolInfo,
   fromInput,
 }: AddLiquidityPreviewProps) => {
-  const { coinMetaData } = useCoinMetadata({ symbol: ETH_DAI.name });
+  const {coinMetaData} = useCoinMetadata({symbol: ETH_DAI.name});
   const coinFrom = coinMetaData?.pairOf?.[0];
   const coinTo = coinMetaData?.pairOf?.[1];
 
-  const { formattedPreviewTokens, formattedNextCurrentPoolShare } =
+  const {formattedPreviewTokens, formattedNextCurrentPoolShare} =
     usePreviewAddLiquidity({
       fromInput,
       poolInfo,

@@ -5,14 +5,14 @@
 
 // TODO: Remove this file after `forc` enabled deploy a contract to a custom url
 // https://github.com/FuelLabs/sway/issues/1308
-import { parseUnits, randomBytes } from 'ethers/lib/utils';
+import {parseUnits, randomBytes} from 'ethers/lib/utils';
 import fs from 'fs';
-import { ContractFactory, NativeAssetId, ScriptTransactionRequest, Wallet } from 'fuels';
-import type { Interface, JsonAbi } from 'fuels';
+import {ContractFactory, NativeAssetId, ScriptTransactionRequest, Wallet} from 'fuels';
+import type {Interface, JsonAbi} from 'fuels';
 import path from 'path';
 
 // @ts-ignore
-import { Exchange_contractAbi__factory, Token_contractAbi__factory } from '../src/types/contracts';
+import {ExchangeContractAbi__factory, TokenContractAbi__factory} from '../src/types/contracts';
 
 const tokenPath = path.join(
   __dirname,
@@ -51,7 +51,7 @@ async function deployContractBinary(
 ) {
   console.log(contextLog, 'Create wallet...');
   console.log(contextLog, 'connected to', providerUrl);
-  const wallet = Wallet.generate({ provider: providerUrl });
+  const wallet = Wallet.generate({provider: providerUrl});
 
   console.log(contextLog, 'Funding wallet with some coins');
   await seedWallet(wallet);
@@ -72,9 +72,9 @@ async function deployContractBinary(
     const contract = await deployContractBinary(
       'SwaySwap',
       contractPath,
-      Exchange_contractAbi__factory.abi
+      ExchangeContractAbi__factory.abi
     );
-    const token = await deployContractBinary('Token', tokenPath, Token_contractAbi__factory.abi);
+    const token = await deployContractBinary('Token', tokenPath, TokenContractAbi__factory.abi);
 
     console.log('SwaySwap Contract Id', contract.id);
     console.log('Token Contract Id', token.id);

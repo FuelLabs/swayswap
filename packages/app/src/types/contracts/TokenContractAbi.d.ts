@@ -20,7 +20,7 @@ export type AddressInput = { value: string };
 
 export type Address = { value: string };
 
-interface Token_contractAbiInterface extends Interface {
+interface TokenContractAbiInterface extends Interface {
   functions: {
     mint_coins: FunctionFragment;
     burn_coins: FunctionFragment;
@@ -51,8 +51,8 @@ interface Token_contractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'get_balance', data: BytesLike): DecodedValue;
 }
 
-export class Token_contractAbi extends Contract {
-  interface: Token_contractAbiInterface;
+export class TokenContractAbi extends Contract {
+  interface: TokenContractAbiInterface;
   functions: {
     mint_coins(
       mint_amount: BigNumberish,

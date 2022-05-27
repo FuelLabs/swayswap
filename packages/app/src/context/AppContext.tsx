@@ -1,19 +1,19 @@
-import { randomBytes } from "ethers/lib/utils";
-import type { TransactionResult } from "fuels";
-import { Wallet, ScriptTransactionRequest, CoinStatus, toBigInt } from "fuels";
-import { useAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
-import type { PropsWithChildren } from "react";
-import React, { useContext, useMemo } from "react";
+import {randomBytes} from "ethers/lib/utils";
+import type {TransactionResult} from "fuels";
+import {Wallet, ScriptTransactionRequest, CoinStatus, toBigInt} from "fuels";
+import {useAtom} from "jotai";
+import {atomWithStorage} from "jotai/utils";
+import type {PropsWithChildren} from "react";
+import React, {useContext, useMemo} from "react";
 
-import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "~/config";
-import { COIN_ETH, LocalStorageKey } from "~/lib/constants";
-import type { Exchange_contractAbi } from "~/types/contracts";
-import { Exchange_contractAbi__factory } from "~/types/contracts";
+import {CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL} from "~/config";
+import {COIN_ETH, LocalStorageKey} from "~/lib/constants";
+import type {ExchangeContractAbi} from "~/types/contracts";
+import {ExchangeContractAbi__factory} from "~/types/contracts";
 
 interface AppContextValue {
   wallet: Wallet | null;
-  contract: Exchange_contractAbi | null;
+  contract: ExchangeContractAbi | null;
   createWallet: () => void;
   faucet: () => Promise<TransactionResult<"success">>;
 }
@@ -28,12 +28,12 @@ export const AppContext = React.createContext<AppContextValue | null>(null);
 export const useAppContext = () => useContext(AppContext)!;
 
 export const useWallet = () => {
-  const { wallet } = useContext(AppContext)!;
+  const {wallet} = useContext(AppContext)!;
   return wallet;
 };
 
 export const useContract = () => {
-  const { contract } = useContext(AppContext)!;
+  const {contract} = useContext(AppContext)!;
   return contract;
 };
 
@@ -49,7 +49,7 @@ export const AppContextProvider = ({
 
   const contract = useMemo(() => {
     if (!wallet) return null;
-    return Exchange_contractAbi__factory.connect(CONTRACT_ID, wallet);
+    return ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
   }, [wallet]);
 
   return (
