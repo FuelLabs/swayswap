@@ -55,6 +55,7 @@ export function useAddLiquidity({
       // Create liquidity pool
       const liquidityTokens = await contract.functions.add_liquidity(1, DEADLINE, {
         variableOutputs: 2,
+        gasLimit: 100_000_000,
       });
       setStage((s) => s + 1);
 

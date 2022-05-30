@@ -180,7 +180,7 @@ export default function AddLiquidity() {
           <AddLiquidityPoolPrice
             coinFrom={coinFrom}
             coinTo={coinTo}
-            reservesFromToRatio={addLiquidityRatio || 1}
+            reservesFromToRatio={reservesFromToRatio || addLiquidityRatio || 1}
           />
           <Button
             isDisabled={!!errorsCreatePull.length}

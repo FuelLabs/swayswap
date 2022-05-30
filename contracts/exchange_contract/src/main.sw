@@ -25,7 +25,7 @@ const ETH_ID = 0x000000000000000000000000000000000000000000000000000000000000000
 
 /// Contract ID of the token on the other side of the pool.
 /// Modify at compile time for different pool.
-const TOKEN_ID = 0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c59e0;
+const TOKEN_ID = 0x5490ccd5425acac521924bd537e4a26b2124427f736a7e56da08c486dc676a25;
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
@@ -77,8 +77,9 @@ fn calculate_amount_with_fee(amount: u64) -> u64 {
 }
 
 fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
-    let calculation = (~U128::from(0, a) * ~U128::from(0, b)) / ~U128::from(0, c);
-    let result_wrapped = (calculation).to_u64();
+    let calculation = (~U128::from(0, a) * ~U128::from(0, b));
+    let result_wrapped = (calculation /  ~U128::from(0, c)).to_u64();
+
     // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
     match result_wrapped {
         Result::Ok(inner_value) => inner_value,

@@ -16,9 +16,7 @@ export const AddLiquidityPoolPrice = ({
   reservesFromToRatio,
 }: AddLiquidityPoolPriceProps) => {
   const oneAssetAmount = toNumber(ONE_ASSET);
-  // If reservers ratio is 0 then user
-  // is creating pool and the ratio is 1:1
-  const reservesRatio = reservesFromToRatio || 0.5;
+  const reservesRatio = reservesFromToRatio;
   const daiPrice = parseToFormattedNumber(
     Math.floor(oneAssetAmount / reservesRatio),
     DECIMAL_UNITS
