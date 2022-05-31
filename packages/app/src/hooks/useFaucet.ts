@@ -1,5 +1,7 @@
 import toast from 'react-hot-toast';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
+
+import { refreshBalances } from './useBalances';
 
 import { FUEL_FAUCET_URL } from '~/config';
 import { useWallet } from '~/context/AppContext';
@@ -11,7 +13,6 @@ type UseFaucetOpts = {
 
 export function useFaucet(opts: UseFaucetOpts = {}) {
   const wallet = useWallet();
-  const client = useQueryClient();
 
   const mutation = useMutation(
     async ({ captcha }: { captcha?: string | null } = {}) => {
@@ -38,7 +39,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
         toast.success('Faucet added successfully!');
-        client.refetchQueries(['AssetsPage-balances']);
+        refreshBalances();
         opts.onSuccess?.();
       },
     }

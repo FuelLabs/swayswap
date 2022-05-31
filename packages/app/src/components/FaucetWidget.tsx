@@ -10,6 +10,7 @@ import { Tooltip } from "./Tooltip";
 
 import { ENABLE_FAUCET_API, RECAPTCHA_SITE_KEY } from "~/config";
 import { useAppContext } from "~/context/AppContext";
+import { refreshBalances } from "~/hooks/useBalances";
 import { useFaucet } from "~/hooks/useFaucet";
 import { useUserInfo } from "~/hooks/useUserInfo";
 
@@ -53,6 +54,7 @@ export function FaucetWidget() {
     if (userInfo.isNew) setUserInfo({ isNew: false });
     await appContext.faucet();
     setLoading(false);
+    refreshBalances();
     toast.success("ETH add to your wallet!");
   }
 

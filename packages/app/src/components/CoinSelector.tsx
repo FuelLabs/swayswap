@@ -55,7 +55,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
 
     const balance = useMemo(
       () => formatValue(coinBalance?.amount || BigInt(0)),
-      [coinBalance?.assetId]
+      [coinBalance?.assetId, coinBalance?.amount]
     );
 
     function handleSelect(assetId: string) {
