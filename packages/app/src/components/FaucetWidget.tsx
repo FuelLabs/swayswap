@@ -8,7 +8,7 @@ import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
 import { Tooltip } from "./Tooltip";
 
-import { ENABLE_FAUCET_API, FAUCET_AMOUNT, RECAPTCHA_SITE_KEY } from "~/config";
+import { ENABLE_FAUCET_API, RECAPTCHA_SITE_KEY } from "~/config";
 import { useAppContext } from "~/context/AppContext";
 import { useFaucet } from "~/hooks/useFaucet";
 import { useUserInfo } from "~/hooks/useUserInfo";
@@ -53,7 +53,7 @@ export function FaucetWidget() {
     if (userInfo.isNew) setUserInfo({ isNew: false });
     await appContext.faucet();
     setLoading(false);
-    toast.success(`${FAUCET_AMOUNT} ETH add to your wallet!`);
+    toast.success("ETH add to your wallet!");
   }
 
   function handleClickFaucet() {
