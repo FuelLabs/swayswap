@@ -4,7 +4,7 @@
     grid-template-rows: auto 1fr auto;
   }
   .layout--wrapper {
-    @apply flex justify-center items-start h-full p-4 pt-14;
+    @apply flex justify-center items-start h-full p-4 sm:pt-14;
 
     place-self: center center;
   }
