@@ -13,7 +13,7 @@ import { CoinSelector } from "~/components/CoinSelector";
 import { NavigateBackButton } from "~/components/NavigateBackButton";
 import { CONTRACT_ID, DEADLINE } from "~/config";
 import { useContract } from "~/context/AppContext";
-import { useBalances } from "~/hooks/useBalances";
+import { refreshBalances } from "~/hooks/useBalances";
 import coins from "~/lib/CoinsMetadata";
 import { ZERO } from "~/lib/math";
 
@@ -22,7 +22,6 @@ export default function RemoveLiquidityPage() {
   const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>(
     []
   );
-  const balances = useBalances();
   const contract = useContract()!;
 
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
@@ -36,6 +35,7 @@ export default function RemoveLiquidityPage() {
       if (!amount) {
         throw new Error('"amount" is required');
       }
+
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
       await contract.submit.remove_liquidity(1, 1, DEADLINE, {
@@ -49,7 +49,7 @@ export default function RemoveLiquidityPage() {
         toast.success("Liquidity removed successfully!");
         tokenInput.setAmount(ZERO);
         navigate("../");
-        balances.refetch();
+        refreshBalances();
       },
       onError: (error: Error) => {
         toast.error(error.message);

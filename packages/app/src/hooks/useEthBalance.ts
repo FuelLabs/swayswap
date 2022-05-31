@@ -1,6 +1,5 @@
 import { useBalances } from './useBalances';
 
-import { DECIMAL_UNITS } from '~/config';
 import CoinsMetadata from '~/lib/CoinsMetadata';
 import { parseToFormattedNumber } from '~/lib/math';
 
@@ -11,6 +10,6 @@ export function useEthBalance() {
   const balance = balances?.find((item) => item.assetId === ETH_ID)?.amount;
   return {
     raw: balance,
-    formatted: balance && parseToFormattedNumber(balance, DECIMAL_UNITS),
+    formatted: balance && parseToFormattedNumber(balance),
   };
 }

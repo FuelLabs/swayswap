@@ -7,7 +7,7 @@ import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { Input } from "~/components/Input";
 import { NumberInput } from "~/components/NumberInput";
-import { DECIMAL_UNITS, MINT_AMOUNT, TOKEN_ID } from "~/config";
+import { MINT_AMOUNT, TOKEN_ID } from "~/config";
 import { useTokenMethods } from "~/hooks/useTokensMethods";
 import { parseUnits, toBigInt } from "~/lib/math";
 import { sleep } from "~/lib/utils";
@@ -19,7 +19,7 @@ export default function MintTokenPage() {
 
   const mintMutation = useMutation(
     async () => {
-      const mintAmount = toBigInt(parseUnits(amount, DECIMAL_UNITS));
+      const mintAmount = toBigInt(parseUnits(amount));
       await methods.mint(mintAmount);
       await methods.transferTo(mintAmount, { variableOutputs: 1 });
       await sleep(1000);

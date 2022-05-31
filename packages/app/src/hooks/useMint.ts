@@ -1,10 +1,13 @@
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
+import { refreshBalances } from './useBalances';
 import { useTokenMethods } from './useTokensMethods';
 
-import { DECIMAL_UNITS, TOKEN_ID } from '~/config';
+import { TOKEN_ID } from '~/config';
 import { parseUnits } from '~/lib/math';
+import { Pages } from '~/types/pages';
 
 type UseMintOpts = {
   tokenId: string;
@@ -13,10 +16,11 @@ type UseMintOpts = {
 
 export function useMint(opts: UseMintOpts) {
   const methods = useTokenMethods(TOKEN_ID);
+  const navigate = useNavigate();
 
   const mutation = useMutation(
     async (variables: { amount: string }) => {
-      const mintAmount = parseUnits(variables.amount, DECIMAL_UNITS).toBigInt();
+      const mintAmount = parseUnits(variables.amount).toBigInt();
       await methods.mint(mintAmount);
       await methods.transferTo(mintAmount, { variableOutputs: 1 });
     },
@@ -26,6 +30,8 @@ export function useMint(opts: UseMintOpts) {
         // https://github.com/FuelLabs/swayswap-demo/issues/40
         opts.onSuccess?.();
         toast.success(`Token minted successfully!`);
+        refreshBalances();
+        navigate(Pages.swap);
       },
     }
   );

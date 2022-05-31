@@ -9,7 +9,6 @@ import { Dialog, useDialog } from "./Dialog";
 import { TokenIcon } from "./TokenIcon";
 import { Tooltip } from "./Tooltip";
 
-import { DECIMAL_UNITS } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import CoinsMetadata from "~/lib/CoinsMetadata";
 import { formatUnits } from "~/lib/math";
@@ -17,7 +16,7 @@ import type { Coin } from "~/types";
 
 const formatValue = (amount: bigint | null | undefined) => {
   if (amount != null) {
-    return formatUnits(amount, DECIMAL_UNITS);
+    return formatUnits(amount);
   }
   // If amount is null return empty string
   return "";
@@ -55,7 +54,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
 
     const balance = useMemo(
       () => formatValue(coinBalance?.amount || BigInt(0)),
-      [coinBalance?.assetId]
+      [coinBalance?.assetId, coinBalance?.amount]
     );
 
     function handleSelect(assetId: string) {
