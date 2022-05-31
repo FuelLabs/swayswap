@@ -12,7 +12,7 @@ import type { Interface, JsonAbi } from 'fuels';
 import path from 'path';
 
 // @ts-ignore
-import { Exchange_contractAbi__factory, Token_contractAbi__factory } from '../src/types/contracts';
+import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../src/types/contracts';
 
 const tokenPath = path.join(
   __dirname,
@@ -72,9 +72,9 @@ async function deployContractBinary(
     const contract = await deployContractBinary(
       'SwaySwap',
       contractPath,
-      Exchange_contractAbi__factory.abi
+      ExchangeContractAbi__factory.abi
     );
-    const token = await deployContractBinary('Token', tokenPath, Token_contractAbi__factory.abi);
+    const token = await deployContractBinary('Token', tokenPath, TokenContractAbi__factory.abi);
 
     console.log('SwaySwap Contract Id', contract.id);
     console.log('Token Contract Id', token.id);

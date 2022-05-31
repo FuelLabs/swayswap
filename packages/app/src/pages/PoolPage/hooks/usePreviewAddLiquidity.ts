@@ -1,10 +1,8 @@
-import { toNumber } from 'fuels';
-
 import { useUserPositions } from '../../../hooks/useUserPositions';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { DECIMAL_UNITS } from '~/config';
-import { divideFnValidOnly, parseToFormattedNumber, toBigInt, ZERO } from '~/lib/math';
+import { divideFnValidOnly, parseToFormattedNumber, toBigInt, toNumber, ZERO } from '~/lib/math';
 import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
 
 export interface UsePreviewLiquidityProps {

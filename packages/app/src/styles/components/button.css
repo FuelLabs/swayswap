@@ -20,8 +20,10 @@
     @apply text-lg px-4 py-2;
   }
   .button--base {
-    @apply text-gray-400 hover:text-primary-500  border-gray-700;
-    @apply focus:border-primary-500 active:border-gray-700;
+    @apply text-gray-200 border-gray-300;
+    @apply hover:text-gray-100 hover:border-gray-200;
+    @apply focus:text-primary-400 focus:border-primary-500;
+    @apply active:text-primary-400 active:border-primary-500;
 
     &.button--readonly,
     &[aria-disabled="true"] {

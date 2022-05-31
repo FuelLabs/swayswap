@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { BiDollarCircle } from "react-icons/bi";
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import { PoolCurrentPosition } from "./PoolCurrentPosition";
 import { RemoveLiquidityPreview } from "./RemoveLiquidityPreview";
@@ -10,6 +10,7 @@ import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
+import { NavigateBackButton } from "~/components/NavigateBackButton";
 import { CONTRACT_ID, DEADLINE } from "~/config";
 import { useContract } from "~/context/AppContext";
 import { useBalances } from "~/hooks/useBalances";
@@ -17,6 +18,7 @@ import coins from "~/lib/CoinsMetadata";
 import { ZERO } from "~/lib/math";
 
 export default function RemoveLiquidityPage() {
+  const navigate = useNavigate();
   const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>(
     []
   );
@@ -45,6 +47,7 @@ export default function RemoveLiquidityPage() {
       onSuccess: () => {
         toast.success("Liquidity removed successfully!");
         tokenInput.setAmount(ZERO);
+        navigate("../");
         balances.refetch();
       },
       onError: (error: Error) => {
@@ -92,8 +95,10 @@ export default function RemoveLiquidityPage() {
   return (
     <Card>
       <Card.Title>
-        <BiDollarCircle className="text-primary-500" />
-        Remove Liquidity
+        <div className="flex items-center">
+          <NavigateBackButton />
+          Remove Liquidity
+        </div>
       </Card.Title>
       <div className="mt-4 mb-4">
         <CoinInput
