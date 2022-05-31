@@ -22,8 +22,8 @@ import useDebounce from "~/hooks/useDebounce";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useSlippage } from "~/hooks/useSlippage";
 import { COIN_ETH } from "~/lib/constants";
-import { ZERO, toNumber } from "~/lib/math";
-import { isSwayInfinity, sleep } from "~/lib/utils";
+import { ZERO, toNumber, isSwayInfinity } from "~/lib/math";
+import { sleep } from "~/lib/utils";
 import type {
   PoolInfo,
   PreviewInfo,

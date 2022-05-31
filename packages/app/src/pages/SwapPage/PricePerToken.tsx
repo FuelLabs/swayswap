@@ -6,8 +6,13 @@ import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
-import { ONE_ASSET } from "~/config";
-import { toNumber, divideFnValidOnly, ZERO, toFixed } from "~/lib/math";
+import {
+  toNumber,
+  divideFnValidOnly,
+  ZERO,
+  toFixed,
+  ONE_ASSET,
+} from "~/lib/math";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
@@ -21,7 +26,7 @@ function getPricePerToken(
   if (!toAmount || !fromAmount) return "";
   const ratio = divideFnValidOnly(toAmount, fromAmount);
   const price = ratio * toNumber(ONE_ASSET);
-  return (price / toNumber(ONE_ASSET)).toFixed(6);
+  return toFixed(price / toNumber(ONE_ASSET));
 }
 
 type PricePerTokenProps = {
@@ -73,9 +78,7 @@ export function PricePerToken({
 
   if (isTyping || isLoading) return null;
   if (!assetFrom?.amount || !assetTo?.amount) return null;
-  const pricePerToken = toFixed(
-    getPricePerToken(assetFrom.amount, assetTo.amount)
-  );
+  const pricePerToken = getPricePerToken(assetFrom.amount, assetTo.amount);
 
   return (
     <div className={style.wrapper} onClick={toggle}>

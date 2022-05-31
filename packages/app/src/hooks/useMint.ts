@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { refreshBalances } from './useBalances';
 import { useTokenMethods } from './useTokensMethods';
 
-import { DECIMAL_UNITS, TOKEN_ID } from '~/config';
+import { TOKEN_ID } from '~/config';
 import { parseUnits } from '~/lib/math';
 import { Pages } from '~/types/pages';
 
@@ -20,7 +20,7 @@ export function useMint(opts: UseMintOpts) {
 
   const mutation = useMutation(
     async (variables: { amount: string }) => {
-      const mintAmount = parseUnits(variables.amount, DECIMAL_UNITS).toBigInt();
+      const mintAmount = parseUnits(variables.amount).toBigInt();
       await methods.mint(mintAmount);
       await methods.transferTo(mintAmount, { variableOutputs: 1 });
     },

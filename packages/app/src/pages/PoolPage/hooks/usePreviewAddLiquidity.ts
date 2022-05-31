@@ -1,8 +1,14 @@
 import { useUserPositions } from '../../../hooks/useUserPositions';
 
 import type { UseCoinInput } from '~/components/CoinInput';
-import { DECIMAL_UNITS } from '~/config';
-import { divideFnValidOnly, parseToFormattedNumber, toBigInt, toNumber, ZERO } from '~/lib/math';
+import {
+  divideFnValidOnly,
+  parseToFormattedNumber,
+  toBigInt,
+  toFixed,
+  toNumber,
+  ZERO,
+} from '~/lib/math';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UsePreviewLiquidityProps {
@@ -17,11 +23,11 @@ export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewLiquid
   const nextTotalTokenSupply = previewTokens + toNumber(poolInfo?.lp_token_supply || BigInt(0));
   const nextCurrentPoolShare =
     divideFnValidOnly(BigInt(previewTokens) + poolTokensNum, BigInt(nextTotalTokenSupply)) || 1;
-  let formattedPreviewTokens = parseToFormattedNumber(previewTokens, DECIMAL_UNITS);
-  const formattedNextCurrentPoolShare = parseFloat((nextCurrentPoolShare * 100).toFixed(6));
+  let formattedPreviewTokens = parseToFormattedNumber(previewTokens);
+  const formattedNextCurrentPoolShare = toFixed(nextCurrentPoolShare * 100);
 
   if (poolInfo?.eth_reserve === ZERO) {
-    formattedPreviewTokens = parseToFormattedNumber(fromInput.amount || 0, DECIMAL_UNITS);
+    formattedPreviewTokens = parseToFormattedNumber(fromInput.amount || 0);
   }
 
   return {
