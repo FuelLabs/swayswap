@@ -20,8 +20,36 @@ export type AddressInput = { value: string };
 
 export type Address = { value: string };
 
-interface Token_contractAbiInterface extends Interface {
-  functions: {
+interface TokenContractAbiInterface extends Interface {
+  submit: {
+    mint_coins: FunctionFragment;
+    burn_coins: FunctionFragment;
+    force_transfer_coins: FunctionFragment;
+    transfer_coins_to_output: FunctionFragment;
+    get_balance: FunctionFragment;
+  };
+  submitResult: {
+    mint_coins: FunctionFragment;
+    burn_coins: FunctionFragment;
+    force_transfer_coins: FunctionFragment;
+    transfer_coins_to_output: FunctionFragment;
+    get_balance: FunctionFragment;
+  };
+  dryRun: {
+    mint_coins: FunctionFragment;
+    burn_coins: FunctionFragment;
+    force_transfer_coins: FunctionFragment;
+    transfer_coins_to_output: FunctionFragment;
+    get_balance: FunctionFragment;
+  };
+  dryRunResult: {
+    mint_coins: FunctionFragment;
+    burn_coins: FunctionFragment;
+    force_transfer_coins: FunctionFragment;
+    transfer_coins_to_output: FunctionFragment;
+    get_balance: FunctionFragment;
+  };
+  prepareCall: {
     mint_coins: FunctionFragment;
     burn_coins: FunctionFragment;
     force_transfer_coins: FunctionFragment;
@@ -51,9 +79,9 @@ interface Token_contractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'get_balance', data: BytesLike): DecodedValue;
 }
 
-export class Token_contractAbi extends Contract {
-  interface: Token_contractAbiInterface;
-  functions: {
+export class TokenContractAbi extends Contract {
+  interface: TokenContractAbiInterface;
+  submit: {
     mint_coins(
       mint_amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -84,7 +112,100 @@ export class Token_contractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<bigint>;
   };
-  callStatic: {
+  submitResult: {
+    mint_coins(
+      mint_amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    burn_coins(
+      burn_amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    force_transfer_coins(
+      coins: BigNumberish,
+      asset_id: ContractIdInput,
+      target: ContractIdInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    transfer_coins_to_output(
+      coins: BigNumberish,
+      asset_id: ContractIdInput,
+      recipient: AddressInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    get_balance(
+      target: ContractIdInput,
+      asset_id: ContractIdInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<bigint>;
+  };
+  dryRun: {
+    mint_coins(
+      mint_amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    burn_coins(
+      burn_amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    force_transfer_coins(
+      coins: BigNumberish,
+      asset_id: ContractIdInput,
+      target: ContractIdInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    transfer_coins_to_output(
+      coins: BigNumberish,
+      asset_id: ContractIdInput,
+      recipient: AddressInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    get_balance(
+      target: ContractIdInput,
+      asset_id: ContractIdInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<bigint>;
+  };
+  dryRunResult: {
+    mint_coins(
+      mint_amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    burn_coins(
+      burn_amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    force_transfer_coins(
+      coins: BigNumberish,
+      asset_id: ContractIdInput,
+      target: ContractIdInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    transfer_coins_to_output(
+      coins: BigNumberish,
+      asset_id: ContractIdInput,
+      recipient: AddressInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    get_balance(
+      target: ContractIdInput,
+      asset_id: ContractIdInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<bigint>;
+  };
+  prepareCall: {
     mint_coins(
       mint_amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }

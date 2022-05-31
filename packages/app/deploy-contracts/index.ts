@@ -7,7 +7,14 @@
 // https://github.com/FuelLabs/sway/issues/1308
 import { randomBytes } from '@ethersproject/random';
 import fs from 'fs';
-import { ContractFactory, NativeAssetId, ScriptTransactionRequest, Wallet, toBigInt } from 'fuels';
+import {
+  NativeAssetId,
+  ScriptTransactionRequest,
+  Wallet,
+  toBigInt,
+  ContractFactory,
+  ZeroBytes32,
+} from 'fuels';
 import type { Interface, JsonAbi } from 'fuels';
 import path from 'path';
 
@@ -27,7 +34,7 @@ const providerUrl = process.env.VITE_FUEL_PROVIDER_URL || 'https://node.swayswap
 const seedWallet = async (wallet: Wallet) => {
   const transactionRequest = new ScriptTransactionRequest({
     gasPrice: 0,
-    gasLimit: 1_000_000,
+    gasLimit: 100_000_000,
     script: '0x24400000',
     scriptData: randomBytes(32),
   });
@@ -35,10 +42,11 @@ const seedWallet = async (wallet: Wallet) => {
   transactionRequest.addCoin({
     id: '0x000000000000000000000000000000000000000000000000000000000000000000',
     assetId: NativeAssetId,
-    amount: toBigInt(5_000_000),
+    // @ts-ignore
+    amount: 100_000_000,
     owner: '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e',
   });
-  transactionRequest.addCoinOutput(wallet.address, toBigInt(5_000_000), NativeAssetId);
+  transactionRequest.addCoinOutput(wallet.address, toBigInt(100_000_000), NativeAssetId);
   const submit = await wallet.sendTransaction(transactionRequest);
 
   return submit.wait();
@@ -61,7 +69,10 @@ async function deployContractBinary(
   const bytecode = fs.readFileSync(binaryPath);
   console.log(contextLog, 'Deploy contract...');
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract([], NativeAssetId);
+  const contract = await factory.deployContract({
+    salt: ZeroBytes32,
+    stateRoot: ZeroBytes32,
+  });
 
   console.log(contextLog, 'Contract deployed...');
   return contract;
