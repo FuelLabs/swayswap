@@ -1,5 +1,3 @@
-import { formatUnits, parseUnits } from "ethers/lib/utils";
-import { toBigInt } from "fuels";
 import type { ReactNode } from "react";
 import { useMemo, forwardRef, useEffect, useState } from "react";
 import type { NumberFormatValues } from "react-number-format";
@@ -12,6 +10,7 @@ import { Spinner } from "./Spinner";
 import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import { COIN_ETH } from "~/lib/constants";
+import { formatUnits, parseUnits, toBigInt } from "~/lib/math";
 import type { Coin } from "~/types";
 
 type UseCoinParams = {
@@ -49,7 +48,7 @@ const parseValue = (value: string) => (value === "." ? "0." : value);
 const parseValueBigInt = (value: string) => {
   if (value !== "") {
     const nextValue = parseValue(value);
-    return parseUnits(nextValue, DECIMAL_UNITS).toBigInt();
+    return toBigInt(parseUnits(nextValue, DECIMAL_UNITS));
   }
   return toBigInt(0);
 };
@@ -97,6 +96,9 @@ export function useCoinInput({
     }
   };
 
+  const isAllowed = ({ value }: NumberFormatValues) =>
+    parseValueBigInt(value) <= MAX_U64_VALUE;
+
   function getInputProps() {
     return {
       ...params,
@@ -106,8 +108,7 @@ export function useCoinInput({
       onInput,
       onChange: handleInputPropsChange,
       balance: formatValue(coinBalance?.amount || BigInt(0)),
-      isAllowed: ({ value }: NumberFormatValues) =>
-        parseValueBigInt(value) <= MAX_U64_VALUE,
+      isAllowed,
     } as CoinInputProps;
   }
 

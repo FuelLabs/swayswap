@@ -1,6 +1,6 @@
 import { BsArrowDown } from "react-icons/bs";
 
-import { usePreviewRemoveLiquidity } from "./usePreviewRemoveLiquidity";
+import { usePreviewRemoveLiquidity } from "./hooks/usePreviewRemoveLiquidity";
 
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { TokenIcon } from "~/components/TokenIcon";

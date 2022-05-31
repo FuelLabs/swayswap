@@ -45,18 +45,19 @@ export function useAddLiquidity({
       // https://github.com/FuelLabs/swayswap-demo/issues/42
 
       // Deposit coins from
-      await contract.functions.deposit({
+      await contract.submit.deposit({
         forward: [fromAmount, coinFrom.assetId],
       });
       setStage((s) => s + 1);
       // Deposit coins to
-      await contract.functions.deposit({
+      await contract.submit.deposit({
         forward: [toAmount, coinTo.assetId],
       });
       setStage((s) => s + 1);
       // Create liquidity pool
-      const liquidityTokens = await contract.functions.add_liquidity(1, DEADLINE, {
+      const liquidityTokens = await contract.submit.add_liquidity(1, DEADLINE, {
         variableOutputs: 2,
+        gasLimit: 100_000_000,
       });
       setStage((s) => s + 1);
 

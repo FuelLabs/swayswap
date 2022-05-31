@@ -19,10 +19,10 @@ export function useTokenMethods(tokenId: string) {
       return wallet.getBalance(tokenId);
     },
     mint(amount: bigint) {
-      return contract.functions.mint_coins(amount);
+      return contract.submit.mint_coins(amount);
     },
     transferTo(amount: bigint, overrides: Overrides & { from?: string | Promise<string> } = {}) {
-      return contract.functions.transfer_coins_to_output(
+      return contract.submit.transfer_coins_to_output(
         amount,
         objectId(contract.id),
         objectId(wallet.address),

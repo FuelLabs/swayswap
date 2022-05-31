@@ -1,9 +1,9 @@
 import type { CoinQuantity } from 'fuels';
-import { toBigInt } from 'fuels';
 import { useQuery } from 'react-query';
 
 import { useWallet } from '~/context/AppContext';
 import CoinsMetadata, { ASSET_404 } from '~/lib/CoinsMetadata';
+import { toBigInt } from '~/lib/math';
 import type { Coin } from '~/types';
 
 type Asset = Coin & { amount: bigint };

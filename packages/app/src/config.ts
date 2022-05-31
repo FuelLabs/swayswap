@@ -1,4 +1,4 @@
-import { parseUnits } from 'ethers/lib/utils';
+import { parseUnits, toBigInt } from '~/lib/math';
 
 export const FUEL_PROVIDER_URL =
   process.env.VITE_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
@@ -8,8 +8,8 @@ export const FUEL_FAUCET_URL =
 
 export const CONTRACT_ID = process.env.VITE_CONTRACT_ID!;
 export const TOKEN_ID = process.env.VITE_TOKEN_ID!;
-export const DECIMAL_UNITS = 3;
-export const FAUCET_AMOUNT = parseUnits('0.5', DECIMAL_UNITS).toBigInt();
+export const DECIMAL_UNITS = 9;
+export const FAUCET_AMOUNT = toBigInt(parseUnits('1', DECIMAL_UNITS));
 export const MINT_AMOUNT = 2000;
 export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS).toBigInt();
 export const RECAPTCHA_SITE_KEY = process.env.VITE_RECAPTCHA_SITE_KEY!;

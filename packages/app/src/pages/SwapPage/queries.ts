@@ -8,7 +8,7 @@ const getSwapWithMaximumRequiredAmount = async (
   assetId: string,
   amount: bigint
 ) => {
-  const requiredAmount = await contract.callStatic.get_swap_with_maximum(amount, {
+  const requiredAmount = await contract.dryRun.get_swap_with_maximum(amount, {
     forward: [0, assetId],
   });
   return requiredAmount;
@@ -19,7 +19,7 @@ const getSwapWithMinimumMinAmount = async (
   assetId: string,
   amount: bigint
 ) => {
-  const minAmount = await contract.callStatic.get_swap_with_minimum(amount, {
+  const minAmount = await contract.dryRun.get_swap_with_minimum(amount, {
     forward: [0, assetId],
   });
   return minAmount;
@@ -58,7 +58,7 @@ export const swapTokens = async (
     if (!forwardAmount.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
     }
-    await contract.functions.swap_with_maximum(amount, DEADLINE, {
+    await contract.submit.swap_with_maximum(amount, DEADLINE, {
       forward: [forwardAmount.amount, coinFrom.assetId],
       variableOutputs: 1,
     });
@@ -67,7 +67,7 @@ export const swapTokens = async (
     if (!minValue.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
     }
-    await contract.functions.swap_with_minimum(minValue.amount, DEADLINE, {
+    await contract.submit.swap_with_minimum(minValue.amount, DEADLINE, {
       forward: [amount, coinFrom.assetId],
       variableOutputs: 1,
     });

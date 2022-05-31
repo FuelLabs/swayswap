@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 import classNames from "classnames";
-import { toNumber } from "fuels";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
@@ -19,14 +18,15 @@ import { Spinner } from "~/components/Spinner";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import assets from "~/lib/CoinsMetadata";
-import { divideFnValidOnly } from "~/lib/utils";
+import { ZERO, toBigInt, divideFnValidOnly, multiplyFn } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
+  wrapper: `self-start max-w-[500px] mt-24`,
   content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg max-w-[400px]`,
+  createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed
+  border-white/10 rounded-lg w-full`,
 };
 
 function PoolLoader({
@@ -78,8 +78,10 @@ export default function AddLiquidity() {
     fromInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const value = val || BigInt(0);
-      const newToValue = Math.ceil(toNumber(value) / reservesFromToRatio);
+      const value = val || ZERO;
+      const newToValue = Math.ceil(
+        divideFnValidOnly(value, reservesFromToRatio)
+      );
       toInput.setAmount(BigInt(newToValue));
     }
   };
@@ -88,8 +90,8 @@ export default function AddLiquidity() {
     toInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const value = val || BigInt(0);
-      const newFromValue = Math.floor(toNumber(value) * reservesFromToRatio);
+      const value = val || ZERO;
+      const newFromValue = Math.floor(multiplyFn(value, reservesFromToRatio));
       fromInput.setAmount(BigInt(newFromValue));
     }
   };
@@ -98,7 +100,7 @@ export default function AddLiquidity() {
     coin: coinFrom,
     disableWhenEth: true,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    gasFee: BigInt(1),
+    gasFee: toBigInt(1),
     onChange: handleChangeFromValue,
   });
 
@@ -109,11 +111,12 @@ export default function AddLiquidity() {
     onChange: handleChangeToValue,
   });
 
+  // If reserve didn't return a ratio them the current user
+  // Is creating the pool and the ratio is 1:1
   const reservesFromToRatio = divideFnValidOnly(
     poolInfo?.eth_reserve,
     poolInfo?.token_reserve
   );
-
   const addLiquidityRatio = divideFnValidOnly(fromInput.amount, toInput.amount);
 
   const {
@@ -179,16 +182,12 @@ export default function AddLiquidity() {
               }
             />
           </div>
-          {!!addLiquidityRatio && (
-            <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
-          )}
-          {!!(poolInfo && reservesFromToRatio) && (
-            <AddLiquidityPoolPrice
-              coinFrom={coinFrom}
-              coinTo={coinTo}
-              reservesFromToRatio={reservesFromToRatio}
-            />
-          )}
+          <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
+          <AddLiquidityPoolPrice
+            coinFrom={coinFrom}
+            coinTo={coinTo}
+            reservesFromToRatio={reservesFromToRatio || addLiquidityRatio || 1}
+          />
           <Button
             isDisabled={!!errorsCreatePull.length}
             isFull

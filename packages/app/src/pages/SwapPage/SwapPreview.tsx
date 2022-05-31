@@ -1,4 +1,3 @@
-import { formatUnits } from "ethers/lib/utils";
 import { BsArrowDown } from "react-icons/bs";
 
 import { calculatePriceImpact, calculatePriceWithSlippage } from "./helpers";
@@ -9,7 +8,7 @@ import { ActiveInput } from "./types";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
 import { DECIMAL_UNITS, NETWORK_FEE } from "~/config";
 import { useSlippage } from "~/hooks/useSlippage";
-import { ZERO } from "~/lib/constants";
+import { ZERO, parseToFormattedNumber, toFixed } from "~/lib/math";
 
 type SwapPreviewProps = {
   swapInfo: SwapInfo;
@@ -33,9 +32,23 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
     return null;
   }
   // Expected amount of tokens to be received
-  const outputAmount = formatUnits(
-    direction === ActiveInput.from ? previewAmount : amount || ZERO,
-    DECIMAL_UNITS
+  const outputAmount = toFixed(
+    parseToFormattedNumber(
+      direction === ActiveInput.from ? previewAmount : amount || ZERO,
+      DECIMAL_UNITS
+    ),
+    3
+  );
+  const inputAmountWithSlippage = toFixed(
+    parseToFormattedNumber(
+      calculatePriceWithSlippage(previewAmount, slippage.value, direction),
+      DECIMAL_UNITS
+    ),
+    3
+  );
+  const networkFee = toFixed(
+    parseToFormattedNumber(NETWORK_FEE, DECIMAL_UNITS),
+    3
   );
 
   return (
@@ -58,21 +71,14 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
               ? "Min. received after slippage"
               : "Max. sent after slippage"
           } (${slippage.formatted}):`}
-          value={`${formatUnits(
-            calculatePriceWithSlippage(
-              previewAmount,
-              slippage.value,
-              direction
-            ),
-            DECIMAL_UNITS
-          )} ${
+          value={`${inputAmountWithSlippage} ${
             direction === ActiveInput.from ? coinTo.symbol : coinFrom.symbol
           }`}
         />
         <PreviewItem
           className="text-gray-300"
           title={`Network Fee`}
-          value={`${formatUnits(NETWORK_FEE, DECIMAL_UNITS)} ETH`}
+          value={`${networkFee} ETH`}
         />
       </PreviewTable>
     </div>

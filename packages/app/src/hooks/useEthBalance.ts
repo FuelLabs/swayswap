@@ -2,7 +2,7 @@ import { useBalances } from './useBalances';
 
 import { DECIMAL_UNITS } from '~/config';
 import CoinsMetadata from '~/lib/CoinsMetadata';
-import { parseToFormattedNumber } from '~/lib/utils';
+import { parseToFormattedNumber } from '~/lib/math';
 
 const ETH_ID = CoinsMetadata.find((item) => item.symbol === 'ETH')?.assetId;
 

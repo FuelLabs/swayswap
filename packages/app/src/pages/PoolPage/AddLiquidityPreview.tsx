@@ -1,6 +1,6 @@
 import { BsArrowDown } from "react-icons/bs";
 
-import { usePreviewAddLiquidity } from "./usePreviewAddLiquidity";
+import { usePreviewAddLiquidity } from "./hooks/usePreviewAddLiquidity";
 
 import type { UseCoinInput } from "~/components/CoinInput";
 import { PreviewItem, PreviewTable } from "~/components/PreviewTable";
