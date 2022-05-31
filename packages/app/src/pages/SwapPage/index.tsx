@@ -28,7 +28,7 @@ import { isSwayInfinity, sleep } from "~/lib/utils";
 import type {
   PoolInfo,
   PreviewInfo,
-} from "~/types/contracts/Exchange_contractAbi";
+} from "~/types/contracts/ExchangeContractAbi";
 
 type StateParams = {
   swapState: SwapState | null;
