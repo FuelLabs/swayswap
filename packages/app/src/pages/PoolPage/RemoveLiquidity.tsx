@@ -41,6 +41,7 @@ export default function RemoveLiquidityPage() {
       await contract.submit.remove_liquidity(1, 1, DEADLINE, {
         forward: [amount, CONTRACT_ID],
         variableOutputs: 2,
+        gasLimit: 100_000_000,
       });
     },
     {

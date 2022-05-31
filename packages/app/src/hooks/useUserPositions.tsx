@@ -41,14 +41,8 @@ export function useUserPositions() {
     multiplyFn(poolTokensNum, ethReserve),
     totalLiquidity
   );
-  const formattedPooledDAI = parseToFormattedNumber(
-    BigInt(pooledDAI),
-    DECIMAL_UNITS
-  );
-  const formattedPooledETH = parseToFormattedNumber(
-    BigInt(pooledETH),
-    DECIMAL_UNITS
-  );
+  const formattedPooledDAI = parseToFormattedNumber(pooledDAI, DECIMAL_UNITS);
+  const formattedPooledETH = parseToFormattedNumber(pooledETH, DECIMAL_UNITS);
   const formattedPoolTokens = poolTokensNum
     ? parseToFormattedNumber(poolTokensNum, DECIMAL_UNITS)
     : "0";

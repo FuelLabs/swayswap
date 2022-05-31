@@ -44,7 +44,7 @@ export function divideFnValidOnly(value?: BigNumberish | null, by?: BigNumberish
 export function parseToFormattedNumber(value: string | BigNumberish, precision: number = 3) {
   let val = value;
   if (typeof value === 'number') {
-    val = BigInt(value);
+    val = BigInt(Math.trunc(value));
   }
   return ethers.commify(formatUnits(val, precision));
 }
