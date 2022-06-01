@@ -143,7 +143,7 @@ export default function AddLiquidity() {
   }, [fromInput.amount, toInput.amount]);
 
   return (
-    <Card className="sm:min-w-[400px]">
+    <Card className="max-w-[450px]">
       <Card.Title>
         <div className="flex items-center">
           <NavigateBackButton />

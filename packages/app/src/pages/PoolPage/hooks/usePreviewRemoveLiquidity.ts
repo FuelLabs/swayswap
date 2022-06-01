@@ -1,4 +1,3 @@
-import { DECIMAL_UNITS } from '~/config';
 import { useUserPositions } from '~/hooks/useUserPositions';
 import {
   divideFnValidOnly,
@@ -6,6 +5,7 @@ import {
   minimumZero,
   multiplyFn,
   parseToFormattedNumber,
+  toFixed,
   ZERO,
 } from '~/lib/math';
 
@@ -28,21 +28,16 @@ export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLi
     totalLiquidity
   );
   const formattedPreviewDAIRemoved = parseToFormattedNumber(
-    minimumZero(Math.floor(previewDAIRemoved)),
-    DECIMAL_UNITS
+    minimumZero(Math.floor(previewDAIRemoved))
   );
   const formattedPreviewETHRemoved = parseToFormattedNumber(
-    minimumZero(Math.floor(previewETHRemoved)),
-    DECIMAL_UNITS
+    minimumZero(Math.floor(previewETHRemoved))
   );
 
   const nextCurrentPoolTokens = minimumZero(poolTokensNum - amountToRemoveNum);
   const nextPoolShare = divideFnValidOnly(nextCurrentPoolTokens, totalLiquidity);
-  const formattedNextCurrentPoolTokens = parseToFormattedNumber(
-    minimumZero(nextCurrentPoolTokens),
-    DECIMAL_UNITS
-  );
-  const formattedNextPoolShare = parseFloat((nextPoolShare * 100).toFixed(6));
+  const formattedNextCurrentPoolTokens = parseToFormattedNumber(minimumZero(nextCurrentPoolTokens));
+  const formattedNextPoolShare = toFixed(nextPoolShare * 100, 6);
 
   return {
     previewDAIRemoved,

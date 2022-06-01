@@ -7,10 +7,10 @@ import type { CoinSelectorProps } from "./CoinSelector";
 import type { NumberInputProps } from "./NumberInput";
 import { Spinner } from "./Spinner";
 
-import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
+import { DECIMAL_UNITS } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import { COIN_ETH } from "~/lib/constants";
-import { formatUnits, parseUnits, toBigInt } from "~/lib/math";
+import { formatUnits, parseUnits, toBigInt, MAX_U64_VALUE } from "~/lib/math";
 import type { Coin } from "~/types";
 
 type UseCoinParams = {
@@ -48,14 +48,14 @@ const parseValue = (value: string) => (value === "." ? "0." : value);
 const parseValueBigInt = (value: string) => {
   if (value !== "") {
     const nextValue = parseValue(value);
-    return toBigInt(parseUnits(nextValue, DECIMAL_UNITS));
+    return toBigInt(parseUnits(nextValue));
   }
   return toBigInt(0);
 };
 
 const formatValue = (amount: bigint | null | undefined) => {
   if (amount != null) {
-    return formatUnits(amount, DECIMAL_UNITS);
+    return formatUnits(amount);
   }
   // If amount is null return empty string
   return "";

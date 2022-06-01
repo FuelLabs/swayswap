@@ -1,7 +1,6 @@
 import { useBalances } from "./useBalances";
 import { usePoolInfo } from "./usePoolInfo";
 
-import { DECIMAL_UNITS } from "~/config";
 import CoinsMetadata from "~/lib/CoinsMetadata";
 import {
   ZERO,
@@ -9,6 +8,7 @@ import {
   parseToFormattedNumber,
   toBigInt,
   multiplyFn,
+  toFixed,
 } from "~/lib/math";
 
 export function useUserPositions() {
@@ -27,11 +27,8 @@ export function useUserPositions() {
   const tokenReserve = toBigInt(info?.token_reserve || ZERO);
   const ethReserve = toBigInt(info?.eth_reserve || ZERO);
 
-  const formattedTokenReserve = parseToFormattedNumber(
-    tokenReserve,
-    DECIMAL_UNITS
-  );
-  const formattedEthReserve = parseToFormattedNumber(ethReserve, DECIMAL_UNITS);
+  const formattedTokenReserve = parseToFormattedNumber(tokenReserve);
+  const formattedEthReserve = parseToFormattedNumber(ethReserve);
 
   const pooledDAI = divideFnValidOnly(
     multiplyFn(poolTokensNum, tokenReserve),
@@ -41,14 +38,14 @@ export function useUserPositions() {
     multiplyFn(poolTokensNum, ethReserve),
     totalLiquidity
   );
-  const formattedPooledDAI = parseToFormattedNumber(pooledDAI, DECIMAL_UNITS);
-  const formattedPooledETH = parseToFormattedNumber(pooledETH, DECIMAL_UNITS);
+  const formattedPooledDAI = parseToFormattedNumber(pooledDAI);
+  const formattedPooledETH = parseToFormattedNumber(pooledETH);
   const formattedPoolTokens = poolTokensNum
-    ? parseToFormattedNumber(poolTokensNum, DECIMAL_UNITS)
+    ? parseToFormattedNumber(poolTokensNum)
     : "0";
 
   const poolShare = divideFnValidOnly(poolTokensNum, totalLiquidity);
-  const formattedPoolShare = parseFloat((poolShare * 100).toFixed(6));
+  const formattedPoolShare = toFixed(poolShare * 100);
   const hasPositions = poolTokensNum > ZERO;
 
   return {

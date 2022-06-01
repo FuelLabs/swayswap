@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import type { UseQueryResult } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { useBalances } from './useBalances';
+import { refreshBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { DEADLINE } from '~/config';
@@ -32,7 +32,6 @@ export function useAddLiquidity({
   const [errorsCreatePull, setErrorsCreatePull] = useState<string[]>([]);
   const contract = useContract()!;
   const [stage, setStage] = useState(0);
-  const balances = useBalances();
   const navigate = useNavigate();
 
   const mutation = useMutation(
@@ -95,9 +94,8 @@ export function useAddLiquidity({
       },
       onSettled: async () => {
         await poolInfoQuery.refetch();
-        await balances.refetch();
+        await refreshBalances();
         navigate('../');
-
         setStage(0);
       },
     }
