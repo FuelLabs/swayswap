@@ -8,6 +8,11 @@ ENV IP="${IP}"
 ENV PORT="${PORT}"
 ENV DB_PATH="${DB_PATH}"
 
+# Install curl to use on
+# healthcheck config
+RUN apt update
+RUN apt install curl -y
+
 WORKDIR /root/
 
 COPY chainConfig.json .

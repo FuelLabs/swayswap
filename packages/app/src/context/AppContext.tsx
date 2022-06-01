@@ -1,14 +1,11 @@
-import { randomBytes } from "@ethersproject/random";
-import type { TransactionResult } from "fuels";
-import { Wallet, ScriptTransactionRequest, CoinStatus } from "fuels";
+import { Wallet } from "fuels";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import type { PropsWithChildren } from "react";
 import React, { useContext, useMemo } from "react";
 
-import { CONTRACT_ID, FAUCET_AMOUNT, FUEL_PROVIDER_URL } from "~/config";
-import { COIN_ETH, LocalStorageKey } from "~/lib/constants";
-import { parseUnits, toBigInt } from "~/lib/math";
+import { CONTRACT_ID, FUEL_PROVIDER_URL } from "~/config";
+import { LocalStorageKey } from "~/lib/constants";
 import type { ExchangeContractAbi } from "~/types/contracts";
 import { ExchangeContractAbi__factory } from "~/types/contracts";
 
@@ -16,7 +13,6 @@ interface AppContextValue {
   wallet: Wallet | null;
   contract: ExchangeContractAbi | null;
   createWallet: () => void;
-  faucet: () => Promise<TransactionResult<"success">>;
 }
 
 const walletPrivateKeyState = atomWithStorage<string | null>(
@@ -64,29 +60,6 @@ export const AppContextProvider = ({
           });
           setPrivateKey(nextWallet.privateKey);
           return nextWallet;
-        },
-        faucet: async () => {
-          const transactionRequest = new ScriptTransactionRequest({
-            gasPrice: 0,
-            gasLimit: "0x0F4240",
-            script: "0x24400000",
-            scriptData: randomBytes(32),
-          });
-          const amount = parseUnits(String(FAUCET_AMOUNT)).toBigInt();
-          transactionRequest.addCoin({
-            id: "0x000000000000000000000000000000000000000000000000000000000000000000",
-            assetId: COIN_ETH,
-            amount,
-            owner:
-              "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
-            status: CoinStatus.Unspent,
-            maturity: toBigInt(0),
-            blockCreated: toBigInt(0),
-          });
-          transactionRequest.addCoinOutput(wallet!.address, amount, COIN_ETH);
-          const submit = await wallet!.sendTransaction(transactionRequest);
-
-          return submit.wait();
         },
       }}
     >

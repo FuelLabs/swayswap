@@ -9,5 +9,27 @@ services:
       - "4000:4000"
     volumes:
       - swayswap-fuel-core-db:/mnt/db
+    healthcheck:
+      test: curl --fail http://localhost:4000/health || exit 1
+      interval: 1s
+      timeout: 5s
+      retries: 10
+  swayswap-faucet:
+    links:
+      - swayswap-fuel-core
+    # See complete configurations;
+    # https://github.com/FuelLabs/faucet#configuration
+    environment:
+      - FUEL_NODE_URL=http://swayswap-fuel-core:4000/graphql
+      - PORT=4040
+      - FAUCET_DISPENSE_AMOUNT=1000000000
+    env_file:
+      - ./docker/fuel-core/.env.docker
+    image: ghcr.io/fuellabs/faucet:latest
+    ports:
+      - "4040:4040"
+    depends_on:
+      swayswap-fuel-core:
+        condition: service_healthy
 volumes:
   swayswap-fuel-core-db:

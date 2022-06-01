@@ -3,11 +3,10 @@
  * Deploy contract to SwaySwap node.
  */
 import fs from 'fs';
-import { NativeAssetId, ContractFactory, ZeroBytes32, TestUtils, Provider } from 'fuels';
-import type { Interface, JsonAbi, Wallet } from 'fuels';
+import type { Interface, JsonAbi } from 'fuels';
+import { NativeAssetId, ContractFactory, ZeroBytes32, TestUtils, Provider, Wallet } from 'fuels';
 import path from 'path';
 
-import config from '../../../docker/fuel-core/chainConfig.json';
 import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../src/types/contracts';
 
 const tokenPath = path.join(
@@ -18,10 +17,8 @@ const contractPath = path.join(
   __dirname,
   '../../../contracts/exchange_contract/out/debug/exchange_contract.bin'
 );
-const providerUrl = process.env.VITE_FUEL_PROVIDER_URL || 'https://node.swayswap.io/graphql';
-// Import the genesis privateKey and export it as environment variable
-// This is only sage on test environments
-process.env.GENESIS_SECRET = config.wallet.privateKey;
+const providerUrl = process.env.VITE_FUEL_PROVIDER_URL!;
+const walletSecret = process.env.WALLET_SECRET!;
 
 async function deployContractBinary(
   contextLog: string,
@@ -45,10 +42,16 @@ async function deployContractBinary(
 (async function main() {
   try {
     console.log('Create wallet...');
-    console.log('connected to', providerUrl);
+    console.log('Connected to', providerUrl);
     const provider = new Provider(providerUrl);
-    console.log('Funding wallet with some coins');
-    const wallet = await TestUtils.generateTestWallet(provider, [[100_000_000, NativeAssetId]]);
+    let wallet;
+    if (walletSecret) {
+      console.log('Using wallet secret');
+      wallet = new Wallet(walletSecret, provider);
+    } else {
+      console.log('Funding wallet with some coins');
+      wallet = await TestUtils.generateTestWallet(provider, [[100_000_000, NativeAssetId]]);
+    }
 
     const contract = await deployContractBinary(
       'SwaySwap',
