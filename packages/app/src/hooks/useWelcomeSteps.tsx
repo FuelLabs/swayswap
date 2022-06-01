@@ -39,7 +39,7 @@ function assignCurrent(id: number): any {
 // State Machine
 // ----------------------------------------------------------------------------
 
-type Step = {
+export type Step = {
   id: number;
   path: string | null;
 };
@@ -48,10 +48,7 @@ type MachineContext = {
   current: Step;
 };
 
-type MachineEvents =
-  | { type: "NEXT" }
-  | { type: "PREV" }
-  | { type: "SET_CURRENT"; value: number };
+type MachineEvents = { type: "NEXT" } | { type: "SET_CURRENT"; value: number };
 
 const welcomeStepsMachine = createMachine<MachineContext>({
   id: "welcomeSteps",

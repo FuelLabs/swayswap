@@ -1,7 +1,12 @@
 import { useSelector } from "@xstate/react";
 import cx from "classnames";
 
+import type { Step } from "~/hooks/useWelcomeSteps";
 import { stepsSelectors, useWelcomeSteps } from "~/hooks/useWelcomeSteps";
+
+function getClasses(id: number, current: Step) {
+  return cx({ done: current.id > id, active: current.id === id });
+}
 
 export function StepsIndicator() {
   const { service } = useWelcomeSteps();
@@ -9,13 +14,13 @@ export function StepsIndicator() {
 
   return (
     <ul className="stepsIndicator">
-      <li className={cx({ done: current.id > 0, active: current.id === 0 })}>
+      <li className={getClasses(0, current)}>
         <span>Create wallet</span>
       </li>
-      <li className={cx({ done: current.id > 1, active: current.id === 1 })}>
+      <li className={getClasses(1, current)}>
         <span>Add funds</span>
       </li>
-      <li className={cx({ done: current.id > 2, active: current.id === 2 })}>
+      <li className={getClasses(2, current)}>
         <span>Done</span>
       </li>
     </ul>
