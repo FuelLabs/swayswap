@@ -5,18 +5,11 @@ import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
 import { FaucetApp } from "./FaucetApp";
 
-import { ENABLE_FAUCET_API } from "~/config";
-import { useFaucet } from "~/hooks/useFaucet";
-
 export function FaucetWidget() {
   const dialog = useDialog();
-  const { directFaucet } = useFaucet();
 
   function handleClickFaucet() {
-    if (ENABLE_FAUCET_API) {
-      return dialog.openButtonProps.onPress();
-    }
-    directFaucet();
+    return dialog.openButtonProps.onPress();
   }
 
   return (

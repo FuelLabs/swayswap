@@ -52,10 +52,16 @@ pnpm build-contracts
 
 This command also builds Sway type information for the frontend to use. The types can be found in the `/packages/app/src/types` directory.
 
-Deploy the SwaySwap exhance and token contracts to the Fuel Network locally with:
+Deploy the SwaySwap exchange and token contracts to the Fuel Network locally with:
 
 ```sh
 pnpm deploy-contracts
+```
+
+You can also deploy using a wallet secret;
+
+```sh
+WALLET_SECRET=0x0...000 pnpm deploy-contracts
 ```
 
 This command also creates a temporary wallet and sends some coins to your wallet. Copy and paste the SwaySwap contract ID and token contract ID into the `.env.example` file.
@@ -70,9 +76,9 @@ After installing the client dependencies in `/packages/app` the contents of `.en
 
 - `VITE_TOKEN_ID=` - Id (address) of the deployed token contract
 
-- `VITE_RECAPTCHA_SITE_KEY` - The site key is used to invoke recaptcha service on the website
+- `VITE_RECAPTCHA_KEY` - The site key is used to invoke recaptcha service on the website
 
-- `VITE_FUEL_FAUCET_URL=` - Link for the fuel faucet
+- `VITE_FAUCET_URL=` - Link for the fuel faucet
 
 Before starting the development server make sure the contract ID and token ID environment variables are set to the corresponding contract addresses.
 

@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { refreshBalances } from './useBalances';
 
 import { FUEL_FAUCET_URL } from '~/config';
-import { useAppContext, useWallet } from '~/context/AppContext';
+import { useWallet } from '~/context/AppContext';
 import { sleep } from '~/lib/utils';
 
 type UseFaucetOpts = {
@@ -13,7 +13,6 @@ type UseFaucetOpts = {
 
 export function useFaucet(opts: UseFaucetOpts = {}) {
   const wallet = useWallet();
-  const appContext = useAppContext();
 
   const mutation = useMutation(
     async ({ captcha }: { captcha?: string | null } = {}) => {
@@ -50,16 +49,8 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
     mutation.mutate({ captcha });
   }
 
-  async function directFaucet() {
-    await appContext.faucet();
-    toast.success('ETH add to your wallet!');
-    refreshBalances();
-    opts.onSuccess?.();
-  }
-
   return {
     ...mutation,
     handleFaucet,
-    directFaucet,
   };
 }

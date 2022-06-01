@@ -7,9 +7,6 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 function getEnvName() {
-  if (process.env.VERCEL_ENV === 'preview') {
-    return '.env.preview';
-  }
   if (process.env.NODE_ENV === 'production') {
     return '.env.production';
   }
