@@ -46,8 +46,8 @@ jobs:
           CI: false
           PUBLIC_URL: "/${{ github.event.repository.name }}"
           VITE_FUEL_PROVIDER_URL: "https://node.swayswap.io/graphql"
-          VITE_CONTRACT_ID: "0xac01cffc1fe91976228834078e888efcd185d6792bd2138b09afbdf833599ef6"
-          VITE_TOKEN_ID: "0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c59e0"
+          VITE_CONTRACT_ID: "0x6698b28eb78517287de720a588c6db9922f562bee09225be10bfc2dc3a9e5ddd"
+          VITE_TOKEN_ID: "0x5490ccd5425acac521924bd537e4a26b2124427f736a7e56da08c486dc676a25"
         run: |
           pnpm build
 
