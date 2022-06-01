@@ -87,9 +87,7 @@ export default function MintTokenPage() {
         variant="primary"
         isDisabled={!amount || parseInt(amount, 2) <= 0}
         isLoading={mintMutation.isLoading}
-        onPress={() =>
-          !mintMutation.isLoading && mintMutation.mutate({ amount })
-        }
+        onPress={() => !mintMutation.isLoading && mintMutation.mutate()}
       >
         Mint
       </Button>
