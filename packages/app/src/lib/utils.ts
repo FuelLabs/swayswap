@@ -1,7 +1,5 @@
 import { urlJoin } from 'url-join-ts';
 
-const { PUBLIC_URL } = process.env;
-
 export const objectId = (value: string) => ({
   value,
 });
@@ -9,7 +7,9 @@ export const objectId = (value: string) => ({
 // eslint-disable-next-line no-promise-executor-return
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const relativeUrl = (path: string) => urlJoin(PUBLIC_URL || '/', path);
+// url-join-ts auto implements base url
+// but we should wrap urls using it to correct use PUBLIC_URL
+export const relativeUrl = (path: string) => urlJoin(path);
 
 export function omit<T>(list: string[], props: T) {
   return Object.entries(props).reduce((obj, [key, value]) => {
