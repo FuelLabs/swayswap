@@ -60,7 +60,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: install
-          args: forc fuel-core
+          args: forc
 
       - name: Create .env file
         run: |
@@ -68,6 +68,14 @@ jobs:
           mv packages/app/.env packages/app/.env.in
           sed -e 's+https://node.swayswap.io/graphql+http://localhost:4000/graphql+g' packages/app/.env.in > packages/app/.env
           rm -rf packages/app/.env.in
+
+      - name: Log Tools Version
+        run: |
+          node -v
+          pnpm --version
+          forc --version
+        env:
+          VITE_FUEL_PROVIDER_URL: http://localhost:4000/graphql
 
       - name: Lint & Test
         run: |
