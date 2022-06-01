@@ -19,8 +19,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo run dev --parallel",
     "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
     "ci:test-coverage": "run-s services:run contracts test:coverage services:clean",
     "ci:test": "run-s services:run contracts test services:clean",
     "contracts": "run-s contracts:*",
@@ -35,7 +35,7 @@
     "services:run": "make services-run",
     "test:clear": "jest --clearCache",
     "test:coverage": "turbo run test -- --collectCoverage",
-    "test": "turbo run test"
+    "test": "turbo run test -- --passWithNoTests"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
@@ -49,6 +49,7 @@
     "@types/react-dom": "^18.0.3",
     "dotenv": "^16.0.0",
     "eslint": "^8.15.0",
+    "husky": "^8.0.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
