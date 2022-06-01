@@ -3,14 +3,15 @@ import { useMemo } from 'react';
 
 import { objectId } from '../lib/utils';
 
-import { useWallet } from '~/hooks/useWallet';
-import { Token_contractAbi__factory } from '~/types/contracts';
+import { useWallet } from './useWallet';
+
+import { TokenContractAbi__factory } from '~/types/contracts';
 
 export function useTokenMethods(tokenId: string) {
-  const wallet = useWallet();
+  const wallet = useWallet()!;
   const contract = useMemo(
-    () => wallet && Token_contractAbi__factory.connect(tokenId, wallet),
-    [wallet?.address]
+    () => TokenContractAbi__factory.connect(tokenId, wallet),
+    [wallet.address]
   );
 
   return {
@@ -19,17 +20,15 @@ export function useTokenMethods(tokenId: string) {
       return wallet?.getBalance(tokenId);
     },
     mint(amount: bigint) {
-      return contract?.functions.mint_coins(amount);
+      return contract.submit.mint_coins(amount);
     },
     transferTo(amount: bigint, overrides: Overrides & { from?: string | Promise<string> } = {}) {
-      if (wallet?.address) {
-        return contract?.functions.transfer_coins_to_output(
-          amount,
-          objectId(contract.id),
-          objectId(wallet.address),
-          overrides
-        );
-      }
+      return contract.submit.transfer_coins_to_output(
+        amount,
+        objectId(contract.id),
+        objectId(wallet.address),
+        overrides
+      );
     },
   };
 }

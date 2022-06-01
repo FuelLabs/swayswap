@@ -1,5 +1,4 @@
 import type { CoinQuantity } from "fuels";
-import { toNumber } from "fuels";
 import { useSetAtom } from "jotai";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
@@ -17,15 +16,18 @@ import { ActiveInput, ValidationStateEnum } from "./types";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
-import { useBalances } from "~/hooks/useBalances";
+import { refreshBalances, useBalances } from "~/hooks/useBalances";
 import { useContract } from "~/hooks/useContract";
 import useDebounce from "~/hooks/useDebounce";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useSlippage } from "~/hooks/useSlippage";
-import { ZERO } from "~/lib/constants";
-import { queryClient } from "~/lib/queryClient";
-import { isSwayInfinity, sleep } from "~/lib/utils";
-import type { PreviewInfo } from "~/types/contracts/Exchange_contractAbi";
+import { COIN_ETH } from "~/lib/constants";
+import { ZERO, toNumber, isSwayInfinity } from "~/lib/math";
+import { sleep } from "~/lib/utils";
+import type {
+  PoolInfo,
+  PreviewInfo,
+} from "~/types/contracts/ExchangeContractAbi";
 
 type StateParams = {
   swapState: SwapState | null;
@@ -84,12 +86,30 @@ const getValidationState = (stateParams: StateParams): ValidationStateEnum => {
   if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
+  if (!previewAmount) {
+    return ValidationStateEnum.InsufficientLiquidity;
+  }
   if (!swapState.hasBalance || hasBalanceWithSlippage(stateParams)) {
     return ValidationStateEnum.InsufficientBalance;
   }
   if (!hasLiquidity || isSwayInfinity(previewAmount))
     return ValidationStateEnum.InsufficientLiquidity;
   return ValidationStateEnum.Swap;
+};
+
+// If amount desired is bigger then
+// the reserves return
+const hasReserveAmount = (
+  swapState?: SwapState | null,
+  poolInfo?: PoolInfo
+) => {
+  if (swapState?.direction === ActiveInput.to) {
+    if (swapState.coinTo.assetId === COIN_ETH) {
+      return (swapState.amount || 0) < (poolInfo?.eth_reserve || 0);
+    }
+    return (swapState.amount || 0) < (poolInfo?.token_reserve || 0);
+  }
+  return true;
 };
 
 export default function SwapPage() {
@@ -123,12 +143,14 @@ export default function SwapPage() {
     ],
     async () => {
       if (!debouncedState?.amount) return null;
+      if (!hasReserveAmount(debouncedState, poolInfo)) return null;
       return queryPreviewAmount(contract, debouncedState);
     },
     {
       onSuccess: (preview) => {
-        if (preview == null) return;
-        if (isSwayInfinity(preview.amount)) {
+        if (preview == null) {
+          setPreviewInfo(null);
+        } else if (isSwayInfinity(preview.amount)) {
           setPreviewInfo(null);
           setHasLiquidity(false);
         } else {
@@ -149,7 +171,7 @@ export default function SwapPage() {
       onSuccess: () => {
         setHasSwapped(true);
         toast.success("Swap made successfully!");
-        queryClient.refetchQueries(["AssetsPage-balances"]);
+        refreshBalances();
       },
     }
   );
@@ -170,7 +192,7 @@ export default function SwapPage() {
     isLoading || validationState !== ValidationStateEnum.Swap;
 
   return (
-    <Card className="self-start min-w-[450px] mt-24">
+    <Card className="sm:min-w-[450px]">
       <Card.Title>
         <MdSwapCalls className="text-primary-500" />
         Swap

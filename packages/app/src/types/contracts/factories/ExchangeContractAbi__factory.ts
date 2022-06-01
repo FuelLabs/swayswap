@@ -4,7 +4,7 @@
 
 import type { Provider, Wallet } from 'fuels';
 import { Interface, Contract } from 'fuels';
-import type { Exchange_contractAbi, Exchange_contractAbiInterface } from '../Exchange_contractAbi';
+import type { ExchangeContractAbi, ExchangeContractAbiInterface } from '../ExchangeContractAbi';
 const _abi = [
   {
     type: 'function',
@@ -38,7 +38,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -67,7 +67,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -267,12 +267,12 @@ const _abi = [
   },
 ];
 
-export class Exchange_contractAbi__factory {
+export class ExchangeContractAbi__factory {
   static readonly abi = _abi;
-  static createInterface(): Exchange_contractAbiInterface {
-    return new Interface(_abi) as Exchange_contractAbiInterface;
+  static createInterface(): ExchangeContractAbiInterface {
+    return new Interface(_abi) as ExchangeContractAbiInterface;
   }
-  static connect(id: string, walletOrProvider: Wallet | Provider): Exchange_contractAbi {
-    return new Contract(id, _abi, walletOrProvider) as Exchange_contractAbi;
+  static connect(id: string, walletOrProvider: Wallet | Provider): ExchangeContractAbi {
+    return new Contract(id, _abi, walletOrProvider) as ExchangeContractAbi;
   }
 }

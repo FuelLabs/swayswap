@@ -1,9 +1,8 @@
-import { toNumber } from 'fuels';
-
 import type { SwapInfo } from './types';
 import { ActiveInput } from './types';
 
 import { COIN_ETH } from '~/lib/constants';
+import { divideFnValidOnly, multiplyFn } from '~/lib/math';
 
 export function getPriceImpact(
   outputAmount: bigint,
@@ -11,9 +10,10 @@ export function getPriceImpact(
   reserveInput: bigint,
   reserveOutput: bigint
 ) {
-  const exchangeRateAfter = toNumber(inputAmount) / toNumber(outputAmount);
-  const exchangeRateBefore = toNumber(reserveInput) / toNumber(reserveOutput);
-  return ((exchangeRateAfter / exchangeRateBefore - 1) * 100).toFixed(2);
+  const exchangeRateAfter = divideFnValidOnly(inputAmount, outputAmount);
+  const exchangeRateBefore = divideFnValidOnly(reserveInput, reserveOutput);
+  const result = (exchangeRateAfter / exchangeRateBefore - 1) * 100;
+  return result > 100 ? 100 : result.toFixed(2);
 }
 
 export const calculatePriceImpact = ({
@@ -46,9 +46,9 @@ export const calculatePriceWithSlippage = (
 ) => {
   let total = 0;
   if (direction === ActiveInput.from) {
-    total = toNumber(amount) * (1 - slippage);
+    total = multiplyFn(amount, 1 - slippage);
   } else {
-    total = toNumber(amount) * (1 + slippage);
+    total = multiplyFn(amount, 1 + slippage);
   }
-  return Math.trunc(total);
+  return BigInt(Math.trunc(total));
 };

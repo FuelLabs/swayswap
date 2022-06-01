@@ -4,7 +4,7 @@
 
 import type { Provider, Wallet } from 'fuels';
 import { Interface, Contract } from 'fuels';
-import type { Token_contractAbi, Token_contractAbiInterface } from '../Token_contractAbi';
+import type { TokenContractAbi, TokenContractAbiInterface } from '../TokenContractAbi';
 const _abi = [
   {
     type: 'function',
@@ -20,7 +20,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -38,7 +38,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -78,7 +78,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -118,7 +118,7 @@ const _abi = [
       {
         name: '',
         type: '()',
-        components: null,
+        components: [],
       },
     ],
   },
@@ -159,12 +159,12 @@ const _abi = [
   },
 ];
 
-export class Token_contractAbi__factory {
+export class TokenContractAbi__factory {
   static readonly abi = _abi;
-  static createInterface(): Token_contractAbiInterface {
-    return new Interface(_abi) as Token_contractAbiInterface;
+  static createInterface(): TokenContractAbiInterface {
+    return new Interface(_abi) as TokenContractAbiInterface;
   }
-  static connect(id: string, walletOrProvider: Wallet | Provider): Token_contractAbi {
-    return new Contract(id, _abi, walletOrProvider) as Token_contractAbi;
+  static connect(id: string, walletOrProvider: Wallet | Provider): TokenContractAbi {
+    return new Contract(id, _abi, walletOrProvider) as TokenContractAbi;
   }
 }

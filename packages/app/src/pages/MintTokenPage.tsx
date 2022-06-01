@@ -1,17 +1,37 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { BiCoin } from "react-icons/bi";
+import { useMutation } from "react-query";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { Input } from "~/components/Input";
 import { NumberInput } from "~/components/NumberInput";
 import { MINT_AMOUNT, TOKEN_ID } from "~/config";
-import { useMint } from "~/hooks/useMint";
+import { useTokenMethods } from "~/hooks/useTokensMethods";
+import { parseUnits, toBigInt } from "~/lib/math";
+import { sleep } from "~/lib/utils";
 
 export default function MintTokenPage() {
   const [asset, setAsset] = useState(TOKEN_ID);
+  const methods = useTokenMethods(TOKEN_ID);
   const [amount, setAmount] = useState<string>(`${MINT_AMOUNT}`);
-  const mintMutation = useMint();
+
+  const mintMutation = useMutation(
+    async () => {
+      const mintAmount = toBigInt(parseUnits(amount));
+      await methods.mint(mintAmount);
+      await methods.transferTo(mintAmount, { variableOutputs: 1 });
+      await sleep(1000);
+    },
+    {
+      onSuccess: () => {
+        // Navigate to assets page to show new cons
+        // https://github.com/FuelLabs/swayswap-demo/issues/40
+        toast.success(`Token minted successfully!`);
+      },
+    }
+  );
 
   return (
     <Card>

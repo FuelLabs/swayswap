@@ -62,12 +62,14 @@ function PositionItem() {
         <PoolCurrentPosition />
         <div className="flex items-center justify-between gap-2 mt-3">
           <Button
+            variant="base"
             isFull
             onPress={() => navigate(`../${Pages["pool.addLiquidity"]}`)}
           >
             Add liquidity
           </Button>
           <Button
+            variant="base"
             isFull
             onPress={() => navigate(`../${Pages["pool.removeLiquidity"]}`)}
           >

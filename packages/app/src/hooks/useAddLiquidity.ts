@@ -1,17 +1,16 @@
-import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 import type { UseQueryResult } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
-import { useBalances } from './useBalances';
+import { refreshBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { DEADLINE } from '~/config';
 import { useContract } from '~/hooks/useContract';
-import { poolStageDoneAtom } from '~/pages/PoolPage/jotai';
 import type { Coin } from '~/types';
-import type { PoolInfo } from '~/types/contracts/Exchange_contractAbi';
+import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UseAddLiquidityProps {
   fromInput: UseCoinInput;
@@ -31,9 +30,9 @@ export function useAddLiquidity({
   reservesFromToRatio,
 }: UseAddLiquidityProps) {
   const [errorsCreatePull, setErrorsCreatePull] = useState<string[]>([]);
-  const [, setStage] = useAtom(poolStageDoneAtom);
-  const contract = useContract();
-  const balances = useBalances();
+  const contract = useContract()!;
+  const [stage, setStage] = useState(0);
+  const navigate = useNavigate();
 
   const mutation = useMutation(
     async () => {
@@ -49,18 +48,19 @@ export function useAddLiquidity({
       }
 
       // Deposit coins from
-      await contract?.functions.deposit({
+      await contract.submit.deposit({
         forward: [fromAmount, coinFrom.assetId],
       });
       setStage(1);
       // Deposit coins to
-      await contract?.functions.deposit({
+      await contract.submit.deposit({
         forward: [toAmount, coinTo.assetId],
       });
       setStage(2);
       // Create liquidity pool
-      const liquidityTokens = await contract?.functions.add_liquidity(1, DEADLINE, {
+      const liquidityTokens = await contract.submit.add_liquidity(1, DEADLINE, {
         variableOutputs: 2,
+        gasLimit: 100_000_000,
       });
       setStage(3);
 
@@ -98,7 +98,8 @@ export function useAddLiquidity({
       },
       onSettled: async () => {
         await poolInfoQuery.refetch();
-        await balances.refetch();
+        await refreshBalances();
+        navigate('../');
         setStage(0);
       },
     }
@@ -136,5 +137,6 @@ export function useAddLiquidity({
   return {
     mutation,
     errorsCreatePull,
+    stage,
   };
 }

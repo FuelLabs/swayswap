@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { BiDollarCircle } from "react-icons/bi";
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import { PoolCurrentPosition } from "./PoolCurrentPosition";
 import { RemoveLiquidityPreview } from "./RemoveLiquidityPreview";
@@ -10,16 +10,18 @@ import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
+import { NavigateBackButton } from "~/components/NavigateBackButton";
 import { CONTRACT_ID, DEADLINE } from "~/config";
-import { useBalances } from "~/hooks/useBalances";
+import { refreshBalances } from "~/hooks/useBalances";
 import { useContract } from "~/hooks/useContract";
 import coins from "~/lib/CoinsMetadata";
+import { ZERO } from "~/lib/math";
 
 export default function RemoveLiquidityPage() {
+  const navigate = useNavigate();
   const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>(
     []
   );
-  const balances = useBalances();
   const contract = useContract()!;
 
   const liquidityToken = coins.find((c) => c.assetId === CONTRACT_ID);
@@ -33,18 +35,21 @@ export default function RemoveLiquidityPage() {
       if (!amount) {
         throw new Error('"amount" is required');
       }
+
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
-      await contract.functions.remove_liquidity(1, 1, DEADLINE, {
+      await contract.submit.remove_liquidity(1, 1, DEADLINE, {
         forward: [amount, CONTRACT_ID],
         variableOutputs: 2,
+        gasLimit: 100_000_000,
       });
     },
     {
       onSuccess: () => {
         toast.success("Liquidity removed successfully!");
-        tokenInput.setAmount(BigInt(0));
-        balances.refetch();
+        tokenInput.setAmount(ZERO);
+        navigate("../");
+        refreshBalances();
       },
       onError: (error: Error) => {
         toast.error(error.message);
@@ -91,16 +96,18 @@ export default function RemoveLiquidityPage() {
   return (
     <Card>
       <Card.Title>
-        <BiDollarCircle className="text-primary-500" />
-        Remove Liquidity
+        <div className="flex items-center">
+          <NavigateBackButton />
+          Remove Liquidity
+        </div>
       </Card.Title>
       <div className="mt-4 mb-4">
         <CoinInput
+          autoFocus
           {...tokenInput.getInputProps()}
           rightElement={
             <CoinSelector {...tokenInput.getCoinSelectorProps()} isReadOnly />
           }
-          autoFocus
         />
       </div>
       <RemoveLiquidityPreview amount={amount} />

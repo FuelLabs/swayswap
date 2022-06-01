@@ -1,5 +1,3 @@
-import { formatUnits, parseUnits } from "ethers/lib/utils";
-import { toBigInt } from "fuels";
 import type { ReactNode } from "react";
 import { useMemo, forwardRef, useEffect, useState } from "react";
 import type { NumberFormatValues } from "react-number-format";
@@ -9,17 +7,11 @@ import type { CoinSelectorProps } from "./CoinSelector";
 import type { NumberInputProps } from "./NumberInput";
 import { Spinner } from "./Spinner";
 
-import { DECIMAL_UNITS, MAX_U64_VALUE } from "~/config";
+import { DECIMAL_UNITS } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import { COIN_ETH } from "~/lib/constants";
+import { formatUnits, parseUnits, toBigInt, MAX_U64_VALUE } from "~/lib/math";
 import type { Coin } from "~/types";
-
-const style = {
-  transferPropContainer: `flex bg-gray-700 rounded-2xl p-2 border border-gray-700`,
-  input: `mx-2 h-10 bg-transparent placeholder:text-gray-300 outline-none text-xl flex items-center`,
-  rightWrapper: `flex flex-1 flex-col items-end`,
-  maxButton: `text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800`,
-};
 
 type UseCoinParams = {
   /**
@@ -56,14 +48,14 @@ const parseValue = (value: string) => (value === "." ? "0." : value);
 const parseValueBigInt = (value: string) => {
   if (value !== "") {
     const nextValue = parseValue(value);
-    return parseUnits(nextValue, DECIMAL_UNITS).toBigInt();
+    return toBigInt(parseUnits(nextValue));
   }
   return toBigInt(0);
 };
 
 const formatValue = (amount: bigint | null | undefined) => {
   if (amount != null) {
-    return formatUnits(amount, DECIMAL_UNITS);
+    return formatUnits(amount);
   }
   // If amount is null return empty string
   return "";
@@ -104,6 +96,9 @@ export function useCoinInput({
     }
   };
 
+  const isAllowed = ({ value }: NumberFormatValues) =>
+    parseValueBigInt(value) <= MAX_U64_VALUE;
+
   function getInputProps() {
     return {
       ...params,
@@ -111,8 +106,8 @@ export function useCoinInput({
       displayType: (isReadOnly ? "text" : "input") as DisplayType,
       onInput,
       onChange: handleInputPropsChange,
-      isAllowed: ({ value }: NumberFormatValues) =>
-        parseValueBigInt(value) <= MAX_U64_VALUE,
+      balance: formatValue(coinBalance?.amount || BigInt(0)),
+      isAllowed,
     } as CoinInputProps;
   }
 
@@ -186,9 +181,11 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     }, [initialValue]);
 
     return (
-      <div className={style.transferPropContainer}>
+      <div className="coinInput">
         {isLoading ? (
-          <Spinner className="self-start mt-2 ml-2" variant="base" />
+          <div className="flex-1">
+            <Spinner className="self-start mt-2 ml-2" variant="base" />
+          </div>
         ) : (
           <NumberFormat
             {...props}
@@ -205,7 +202,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
             }}
             decimalScale={DECIMAL_UNITS}
             placeholder="0"
-            className={style.input}
+            className="coinInput--input"
             thousandSeparator={false}
             onInput={onInput}
           />

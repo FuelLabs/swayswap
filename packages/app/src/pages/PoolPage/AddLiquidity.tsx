@@ -1,46 +1,44 @@
 import classNames from "classnames";
-import { toNumber } from "fuels";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { RiCheckFill } from "react-icons/ri";
 
 import { AddLiquidityPoolPrice } from "./AddLiquidityPoolPrice";
 import { AddLiquidityPreview } from "./AddLiquidityPreview";
 import { PoolCurrentReserves } from "./PoolCurrentReserves";
-import {
-  poolStageDoneAtom,
-  poolFromAmountAtom,
-  poolToAmountAtom,
-} from "./jotai";
+import { poolFromAmountAtom, poolToAmountAtom } from "./jotai";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
+import { NavigateBackButton } from "~/components/NavigateBackButton";
 import { Spinner } from "~/components/Spinner";
 import { useAddLiquidity } from "~/hooks/useAddLiquidity";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import assets from "~/lib/CoinsMetadata";
-import { divideFnValidOnly } from "~/lib/utils";
+import { ZERO, toBigInt, divideFnValidOnly, multiplyFn } from "~/lib/math";
 import type { Coin } from "~/types";
 
 const style = {
-  wrapper: `w-screen flex flex-1 items-center justify-center pb-14`,
+  wrapper: `self-start max-w-[500px] mt-24`,
   content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed border-white/10 rounded-lg max-w-[400px]`,
+  createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed
+  border-white/10 rounded-lg w-full`,
 };
 
 function PoolLoader({
   loading,
+  step,
   steps,
 }: {
   coinFrom: Coin;
   coinTo: Coin;
   loading: boolean;
+  step: number;
   steps: string[];
 }) {
-  const step = useAtomValue(poolStageDoneAtom);
   return (
     <ul className="w-full rounded-lg border border-gray-600 text-gray-900">
       {steps.map((stepText, index) => (
@@ -91,8 +89,10 @@ export default function AddLiquidity() {
     fromInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const value = val || BigInt(0);
-      const newToValue = Math.ceil(toNumber(value) / reservesFromToRatio);
+      const value = val || ZERO;
+      const newToValue = Math.ceil(
+        divideFnValidOnly(value, reservesFromToRatio)
+      );
       toInput.setAmount(BigInt(newToValue));
     }
   };
@@ -101,8 +101,8 @@ export default function AddLiquidity() {
     toInput.setAmount(val);
 
     if (reservesFromToRatio) {
-      const value = val || BigInt(0);
-      const newFromValue = Math.floor(toNumber(value) * reservesFromToRatio);
+      const value = val || ZERO;
+      const newFromValue = Math.floor(multiplyFn(value, reservesFromToRatio));
       fromInput.setAmount(BigInt(newFromValue));
     }
   };
@@ -111,7 +111,7 @@ export default function AddLiquidity() {
     coin: coinFrom,
     disableWhenEth: true,
     onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    gasFee: BigInt(1),
+    gasFee: toBigInt(1),
     onChange: handleChangeFromValue,
   });
 
@@ -122,14 +122,19 @@ export default function AddLiquidity() {
     onChange: handleChangeToValue,
   });
 
+  // If reserve didn't return a ratio them the current user
+  // Is creating the pool and the ratio is 1:1
   const reservesFromToRatio = divideFnValidOnly(
     poolInfo?.eth_reserve,
     poolInfo?.token_reserve
   );
-
   const addLiquidityRatio = divideFnValidOnly(fromInput.amount, toInput.amount);
 
-  const { mutation: addLiquidityMutation, errorsCreatePull } = useAddLiquidity({
+  const {
+    mutation: addLiquidityMutation,
+    stage,
+    errorsCreatePull,
+  } = useAddLiquidity({
     fromInput,
     toInput,
     poolInfoQuery,
@@ -159,8 +164,13 @@ export default function AddLiquidity() {
   }, [fromInput.amount, toInput.amount]);
 
   return (
-    <Card>
-      <Card.Title>Add Liquidity</Card.Title>
+    <Card className="max-w-[450px]">
+      <Card.Title>
+        <div className="flex items-center">
+          <NavigateBackButton />
+          Add Liquidity
+        </div>
+      </Card.Title>
       {addLiquidityMutation.isLoading ? (
         <div className="mt-6 mb-8 flex justify-center">
           <PoolLoader
@@ -170,6 +180,7 @@ export default function AddLiquidity() {
               `Provide liquidity`,
               `Done`,
             ]}
+            step={stage}
             loading={addLiquidityMutation.isLoading}
             coinFrom={coinFrom}
             coinTo={coinTo}
@@ -177,19 +188,14 @@ export default function AddLiquidity() {
         </div>
       ) : (
         <>
-          <div className="mt-6 mb-4">
+          <div className="space-y-4 my-4">
             <CoinInput
-              aria-label="Coin From Input"
-              id="coinFrom"
-              name="coinFrom"
+              autoFocus
               {...fromInput.getInputProps()}
               rightElement={
                 <CoinSelector {...fromInput.getCoinSelectorProps()} />
               }
-              autoFocus
             />
-          </div>
-          <div className="mb-6">
             <CoinInput
               aria-label="Coin To Input"
               id="coinTo"
@@ -200,16 +206,12 @@ export default function AddLiquidity() {
               }
             />
           </div>
-          {!!addLiquidityRatio && (
-            <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
-          )}
-          {!!(poolInfo && reservesFromToRatio) && (
-            <AddLiquidityPoolPrice
-              coinFrom={coinFrom}
-              coinTo={coinTo}
-              reservesFromToRatio={reservesFromToRatio}
-            />
-          )}
+          <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
+          <AddLiquidityPoolPrice
+            coinFrom={coinFrom}
+            coinTo={coinTo}
+            reservesFromToRatio={reservesFromToRatio || addLiquidityRatio || 1}
+          />
           <Button
             data-testid="submit"
             isDisabled={!!errorsCreatePull.length}

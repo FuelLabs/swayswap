@@ -1,4 +1,3 @@
-import { toNumber } from "fuels";
 import { useEffect, useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 
@@ -7,12 +6,17 @@ import type { SwapState } from "./types";
 import { ActiveInput } from "./types";
 
 import { Button } from "~/components/Button";
-import { ONE_ASSET } from "~/config";
-import { ZERO } from "~/lib/constants";
-import { divideFnValidOnly } from "~/lib/utils";
+import {
+  toNumber,
+  divideFnValidOnly,
+  ZERO,
+  toFixed,
+  ONE_ASSET,
+} from "~/lib/math";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
+  priceContainer: `min-w-[150px] cursor-pointer`,
 };
 
 function getPricePerToken(
@@ -22,7 +26,7 @@ function getPricePerToken(
   if (!toAmount || !fromAmount) return "";
   const ratio = divideFnValidOnly(toAmount, fromAmount);
   const price = ratio * toNumber(ONE_ASSET);
-  return (price / toNumber(ONE_ASSET)).toFixed(6);
+  return toFixed(price / toNumber(ONE_ASSET));
 }
 
 type PricePerTokenProps = {
@@ -77,8 +81,8 @@ export function PricePerToken({
   const pricePerToken = getPricePerToken(assetFrom.amount, assetTo.amount);
 
   return (
-    <div className={style.wrapper}>
-      <div>
+    <div className={style.wrapper} onClick={toggle}>
+      <div className={style.priceContainer}>
         <span className="text-gray-200">1</span> {assetFrom.symbol} ={" "}
         <span className="text-gray-200">{pricePerToken}</span> {assetTo.symbol}
       </div>

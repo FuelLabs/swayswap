@@ -10,7 +10,7 @@ import { objectId } from "./utils";
 import Providers from "~/components/Providers";
 import { DECIMAL_UNITS, TOKEN_ID } from "~/config";
 import { faucet } from "~/context/AppContext";
-import { Token_contractAbi__factory } from "~/types/contracts";
+import { TokenContractAbi__factory } from "~/types/contracts";
 
 export function getLocationDisplay() {
   return new Promise<ReturnType<typeof screen.findByTestId>>(
@@ -38,9 +38,9 @@ export async function mint(
 ) {
   await faucet(parseUnits(faucetAmount, DECIMAL_UNITS).toBigInt(), wallet);
   const amount = parseUnits(mintAmount, DECIMAL_UNITS).toBigInt();
-  const contract = Token_contractAbi__factory.connect(TOKEN_ID, wallet);
-  await contract.functions.mint_coins(amount);
-  await contract.functions.transfer_coins_to_output(
+  const contract = TokenContractAbi__factory.connect(TOKEN_ID, wallet);
+  await contract.submit.mint_coins(amount);
+  await contract.submit.transfer_coins_to_output(
     amount,
     objectId(contract.id),
     objectId(wallet.address),

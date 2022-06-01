@@ -1,5 +1,4 @@
 import cx from "classnames";
-import { formatUnits } from "ethers/lib/utils";
 import type { ReactNode } from "react";
 import { useState, useEffect, forwardRef, useMemo } from "react";
 import { FiChevronDown } from "react-icons/fi";
@@ -10,19 +9,14 @@ import { Dialog, useDialog } from "./Dialog";
 import { TokenIcon } from "./TokenIcon";
 import { Tooltip } from "./Tooltip";
 
-import { DECIMAL_UNITS } from "~/config";
 import { useBalances } from "~/hooks/useBalances";
 import CoinsMetadata from "~/lib/CoinsMetadata";
+import { formatUnits } from "~/lib/math";
 import type { Coin } from "~/types";
-
-const style = {
-  root: `flex flex-1 flex-col items-end`,
-  maxButton: `text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800`,
-};
 
 const formatValue = (amount: bigint | null | undefined) => {
   if (amount != null) {
-    return formatUnits(amount, DECIMAL_UNITS);
+    return formatUnits(amount);
   }
   // If amount is null return empty string
   return "";
@@ -60,7 +54,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
 
     const balance = useMemo(
       () => formatValue(coinBalance?.amount || BigInt(0)),
-      [coinBalance?.assetId]
+      [coinBalance?.assetId, coinBalance?.amount]
     );
 
     function handleSelect(assetId: string) {
@@ -74,9 +68,9 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
       <Button
         {...dialog.openButtonProps}
         size="md"
-        isDisabled={isReadOnly}
-        className={cx("coin-selector", {
-          "coin-selector--empty": !selected,
+        isReadOnly={isReadOnly}
+        className={cx("coinSelector", {
+          "coinSelector--empty": !selected,
         })}
       >
         {selected &&
@@ -103,7 +97,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
     }, [coin]);
 
     return (
-      <div className={style.root} ref={ref}>
+      <div className="coinSelector--root" ref={ref}>
         {tooltipContent ? (
           <Tooltip content={tooltipContent}>{button}</Tooltip>
         ) : (
@@ -115,7 +109,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
           </Dialog.Content>
         </Dialog>
         {(showBalance || showMaxButton) && (
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-2 mt-2 whitespace-nowrap">
             {showBalance && (
               <div
                 className="text-xs text-gray-400"
@@ -128,7 +122,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
               <Button
                 size="sm"
                 onPress={onSetMaxBalance}
-                className={style.maxButton}
+                className="coinSelector--maxButton"
                 variant="ghost"
               >
                 Max

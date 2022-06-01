@@ -1,0 +1,69 @@
+@layer components {
+  .header {
+    @apply sticky grid p-4 pb-0;
+  }
+  .header--navContainer {
+    @apply px-1 gap-1 flex bg-gray-800 rounded-xl sm:rounded-3xl;
+  }
+  .header--navItem {
+    @apply py-1 px-3 my-1 text-base rounded-lg sm:rounded-full border-transparent;
+    @apply text-gray-400 hover:bg-gray-500/20 hover:text-gray-200;
+  }
+  .header--navItemActive {
+    @apply bg-gray-500/20 text-gray-200;
+  }
+
+  .header {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-row-gap: 10px;
+  }
+  .header img {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+  .header--wallet {
+    place-self: end;
+    grid-area: 1 / 1 / 2 / 3;
+  }
+  .header--nav {
+    grid-area: 2 / 1 / 2 / 3;
+  }
+
+  @media (min-width: 640px) {
+    .header {
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(1, 1fr);
+    }
+    .header img {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+    .header--wallet {
+      place-self: end;
+      grid-area: 1 / 4 / 2 / 9;
+    }
+    .header--nav {
+      margin-left: 60px;
+      place-self: start;
+      grid-area: 1 / 1 / 2 / 3;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .header {
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(1, 1fr);
+    }
+    .header img {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+    .header--wallet {
+      place-self: end;
+      grid-area: 1 / 4 / 2 / 9;
+    }
+    .header--nav {
+      margin-left: 0;
+      place-self: center;
+      grid-area: 1 / 4 / 2 / 6;
+    }
+  }
+}

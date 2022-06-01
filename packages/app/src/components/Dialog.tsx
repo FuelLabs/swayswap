@@ -1,6 +1,6 @@
 import { useDialog as useReactAriaDialog } from "@react-aria/dialog";
 import { FocusScope } from "@react-aria/focus";
-import type { OverlayProps, ModalAriaProps } from "@react-aria/overlays";
+import type { ModalAriaProps } from "@react-aria/overlays";
 import {
   useOverlay,
   usePreventScroll,
@@ -11,24 +11,13 @@ import {
 import type { OverlayTriggerState } from "@react-stately/overlays";
 import { useOverlayTriggerState } from "@react-stately/overlays";
 import type { AriaDialogProps } from "@react-types/dialog";
+import type { OverlayProps } from "@react-types/overlays";
 import cx from "classnames";
 import { createContext, useContext, useRef } from "react";
 import type { FC, ReactNode } from "react";
 import { MdClose } from "react-icons/md";
 
 import { Button } from "./Button";
-
-const style = {
-  overlay: `
-    bg-black/70 fixed top-0 left-0 right-0 bottom-0 w-screen h-screen overflow-y-auto grid place-items-center
-  `,
-  content: `
-    relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring
-  `,
-  closeButton: `
-    h-auto absolute top-2 right-2 focus-ring p-1 rounded border-transparent
-  `,
-};
 
 type DialogContext = {
   state?: OverlayTriggerState;
@@ -37,6 +26,7 @@ type DialogContext = {
   modalProps?: ModalAriaProps;
   dialogProps?: React.HTMLAttributes<HTMLElement>;
   titleProps?: React.HTMLAttributes<HTMLElement>;
+  isBlocked?: boolean;
 };
 
 const ctx = createContext<DialogContext>({});
@@ -45,6 +35,7 @@ export type DialogProps = OverlayProps &
   AriaDialogProps & {
     children: ReactNode;
     state: OverlayTriggerState;
+    isBlocked?: boolean;
   };
 
 type DialogComponent = FC<DialogProps> & {
@@ -53,14 +44,14 @@ type DialogComponent = FC<DialogProps> & {
   Content: typeof DialogContent;
 };
 
-export const Dialog: DialogComponent = ({ state, ...props }) => {
+export const Dialog: DialogComponent = ({ state, isBlocked, ...props }) => {
   const { children } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const { overlayProps, underlayProps } = useOverlay(
     {
       ...props,
-      isDismissable: true,
-      isOpen: state.isOpen,
+      isDismissable: !isBlocked,
+      isOpen: isBlocked ? true : state.isOpen,
       onClose: state.close,
     },
     ref
@@ -76,12 +67,13 @@ export const Dialog: DialogComponent = ({ state, ...props }) => {
     modalProps,
     dialogProps,
     titleProps,
+    isBlocked,
   };
 
   if (!state.isOpen) return null;
   return (
     <OverlayContainer>
-      <div className={style.overlay} {...underlayProps}>
+      <div className="dialog--overlay" {...underlayProps}>
         <ctx.Provider value={ctxValue}>{children}</ctx.Provider>
       </div>
     </OverlayContainer>
@@ -109,13 +101,15 @@ function DialogTitle({ children, className }: DialogTitleProps) {
 type DialogContentProps = {
   children: ReactNode;
   className?: string;
+  onClose?: () => void;
 };
 
-function DialogContent({ children, className }: DialogContentProps) {
+function DialogContent({ children, className, onClose }: DialogContentProps) {
   const props = useContext(ctx);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   function handleClose() {
+    onClose?.();
     props.state?.close();
   }
 
@@ -125,17 +119,19 @@ function DialogContent({ children, className }: DialogContentProps) {
       {...props.dialogProps}
       {...props.modalProps}
       ref={props.ref}
-      className={cx(className, style.content)}
+      className={cx(className, "dialog")}
     >
       <FocusScope contain autoFocus>
-        <Button
-          size="sm"
-          ref={closeButtonRef}
-          onPress={handleClose}
-          className={style.closeButton}
-        >
-          <MdClose />
-        </Button>
+        {!props.isBlocked && (
+          <Button
+            size="sm"
+            ref={closeButtonRef}
+            onPress={handleClose}
+            className="dialog--closeBtn"
+          >
+            <MdClose />
+          </Button>
+        )}
         {children}
       </FocusScope>
     </div>

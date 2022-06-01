@@ -4,7 +4,16 @@
 @import "tailwindcss/components";
 @import "./components/accordion.css";
 @import "./components/button.css";
+@import "./components/card.css";
+@import "./components/coin-input.css";
 @import "./components/coin-selector.css";
+@import "./components/dialog.css";
+@import "./components/faucet-widget.css";
+@import "./components/header.css";
+@import "./components/input.css";
+@import "./components/layout.css";
+@import "./components/popover.css";
+@import "./components/tooltip.css";
 @import "./components/toast.css";
 
 @import "tailwindcss/utilities";

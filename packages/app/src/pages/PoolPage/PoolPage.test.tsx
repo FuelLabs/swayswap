@@ -4,7 +4,7 @@ import { Wallet } from "fuels";
 import App from "~/App";
 import { CONTRACT_ID, FUEL_PROVIDER_URL } from "~/config";
 import { mint } from "~/lib/test-utils";
-import { Exchange_contractAbi__factory } from "~/types/contracts";
+import { ExchangeContractAbi__factory } from "~/types/contracts";
 
 const { privateKey } = Wallet.generate({ provider: FUEL_PROVIDER_URL });
 const wallet = new Wallet(privateKey, FUEL_PROVIDER_URL);
@@ -14,7 +14,7 @@ jest.mock("../../hooks/useWallet", () => ({
 }));
 
 jest.mock("../../hooks/useContract.ts", () => ({
-  useContract: () => Exchange_contractAbi__factory.connect(CONTRACT_ID, wallet),
+  useContract: () => ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet),
 }));
 
 describe("PoolPage", () => {

@@ -12,6 +12,7 @@ use std::{
     storage::*,
     token::*,
     result::*,
+    u128::U128,
 };
 use exchange_abi::{Exchange, PoolInfo, PreviewInfo, RemoveLiquidityReturn};
 
@@ -24,7 +25,7 @@ const ETH_ID = 0x000000000000000000000000000000000000000000000000000000000000000
 
 /// Contract ID of the token on the other side of the pool.
 /// Modify at compile time for different pool.
-const TOKEN_ID = 0xb72c566e5a9f69c98298a04d70a38cb32baca4d9b280da8590e0314fb00c59e0;
+const TOKEN_ID = 0x5490ccd5425acac521924bd537e4a26b2124427f736a7e56da08c486dc676a25;
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
@@ -75,26 +76,46 @@ fn calculate_amount_with_fee(amount: u64) -> u64 {
     amount - fee
 }
 
+fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
+    let calculation = (~U128::from(0, a) * ~U128::from(0, b));
+    let result_wrapped = (calculation /  ~U128::from(0, c)).to_u64();
+
+    // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
+    match result_wrapped {
+        Result::Ok(inner_value) => inner_value,
+        _ => revert(0),
+    }
+}
+
 /// Pricing function for converting between ETH and Tokens.
 fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -> u64 {
     assert(input_reserve > 0 && output_reserve > 0);
     let input_amount_with_fee: u64 = calculate_amount_with_fee(input_amount);
-    let numerator: u64 = input_amount_with_fee * output_reserve;
-    let denominator: u64 = input_reserve + input_amount_with_fee;
-    numerator / denominator
+    let numerator = ~U128::from(0, input_amount_with_fee) * ~U128::from(0, output_reserve);
+    let denominator = ~U128::from(0, input_reserve) + ~U128::from(0, input_amount_with_fee);
+    let result_wrapped = (numerator / denominator).to_u64();
+    // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
+    match result_wrapped {
+        Result::Ok(inner_value) => inner_value,
+        _ => revert(0),
+    }
 }
 
 /// Pricing function for converting between ETH and Tokens.
 fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64) -> u64 {
     assert(input_reserve > 0 && output_reserve > 0);
-    let numerator: u64 = input_reserve * output_amount;
-    let denominator: u64 = calculate_amount_with_fee(output_reserve - output_amount);
-    let result: u64 = numerator / denominator;
-    if denominator <= 0 || denominator > numerator {
+    let numerator = ~U128::from(0, input_reserve) * ~U128::from(0, output_amount);
+    let denominator = ~U128::from(0, calculate_amount_with_fee(output_reserve - output_amount));
+    let result_wrapped = (numerator / denominator).to_u64();
+    if denominator > numerator {
         // Emulate Infinity Value
-        18446744073709551615u64
+        ~u64::max()
     } else {
-        result + 1
+        // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
+        match result_wrapped {
+            Result::Ok(inner_value) => inner_value + 1,
+            _ => revert(0),
+        }
     }
 }
 
@@ -176,8 +197,8 @@ impl Exchange for Contract {
 
             let eth_reserve = get_current_reserve(ETH_ID);
             let token_reserve = get_current_reserve(TOKEN_ID);
-            let token_amount = (current_eth_amount * token_reserve) / eth_reserve;
-            let liquidity_minted = (current_eth_amount * total_liquidity) / eth_reserve;
+            let token_amount = mutiply_div(current_eth_amount, token_reserve, eth_reserve);
+            let liquidity_minted = mutiply_div(current_eth_amount, total_liquidity, eth_reserve);
 
             assert(liquidity_minted >= min_liquidity);
 
@@ -243,8 +264,8 @@ impl Exchange for Contract {
 
         let eth_reserve = get_current_reserve(ETH_ID);
         let token_reserve = get_current_reserve(TOKEN_ID);
-        let eth_amount = (msg_amount() * eth_reserve) / total_liquidity;
-        let token_amount = (msg_amount() * token_reserve) / total_liquidity;
+        let eth_amount = mutiply_div(msg_amount(), eth_reserve, total_liquidity);
+        let token_amount = mutiply_div(msg_amount(), token_reserve, total_liquidity);
 
         assert((eth_amount >= min_eth) && (token_amount >= min_tokens));
 
