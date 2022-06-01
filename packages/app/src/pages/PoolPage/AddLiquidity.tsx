@@ -190,6 +190,7 @@ export default function AddLiquidity() {
         <>
           <div className="space-y-4 my-4">
             <CoinInput
+              aria-label="Coin From Input"
               autoFocus
               {...fromInput.getInputProps()}
               rightElement={
