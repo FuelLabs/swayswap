@@ -1,0 +1,110 @@
+@layer components {
+  .welcomePage--layout {
+    @apply text-gray-100 min-h-screen;
+    @apply grid gap-8;
+    grid-template-columns: 300px 1fr;
+  }
+  .welcomePage--content {
+    @apply relative m-8 grid place-items-center;
+  }
+  /*
+    WelcomeSidebar
+  */
+  .welcomeSidebar {
+    @apply relative p-8 bg-gray-800 border-r border-gray-500 border-dashed;
+  }
+  .welcomeSidebar--logo {
+    @apply absolute top-8 left-8;
+  }
+  .welcomeSidebar--steps {
+    @apply flex items-center text-gray-500;
+    min-height: calc(100% - 50px);
+
+    nav {
+      @apply flex flex-col items-start gap-10;
+    }
+  }
+  /*
+    WelcomeNavItem
+  */
+  .welcomeNavItem {
+    @apply relative flex items-center gap-4;
+  }
+
+  .welcomeNavItem > .label {
+    @apply text-gray-300;
+  }
+
+  .welcomeNavItem > .bullet {
+    @apply z-10 relative w-5 h-5 bg-gray-800 rounded-full border-2 border-gray-500;
+  }
+
+  .welcomeNavItem:not(:last-child)::after {
+    @apply absolute block content-[""] w-[3px] h-[55px] bg-gray-700;
+    @apply top-[17px] left-[8px];
+  }
+
+  .welcomeNavItem.active > .bullet {
+    &::after {
+      @apply absolute block content-[""] w-2 h-2 bg-gray-300 rounded-full;
+      @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+    }
+  }
+
+  .welcomeNavItem.done > .bullet,
+  .welcomeNavItem.done::after {
+    @apply bg-primary-500 border-transparent;
+  }
+  .welcomeNavItem.done > .label {
+    @apply text-primary-500 font-semibold;
+  }
+
+  .welcomeNavItem.active {
+    @apply text-gray-300;
+  }
+
+  .welcomeNavItem.disabled > .label {
+    @apply text-gray-500;
+  }
+  .welcomeNavItem.disabled > .bullet {
+    @apply border-gray-700;
+  }
+  .welcomeNavItem.disabled::after {
+    @apply bg-gray-700;
+  }
+  /*
+    WelcomeStep
+  */
+  .welcomeStep {
+    @apply max-w-[350px] text-center text-gray-300;
+
+    h2 {
+      @apply text-white text-2xl mb-4;
+    }
+    img {
+      @apply mx-auto mb-5;
+    }
+  }
+  /*
+    StepsIndicator
+  */
+  .stepsIndicator {
+    @apply absolute bottom-0 left-[50%] -translate-x-1/2;
+    @apply flex gap-4;
+
+    li {
+      @apply bg-gray-500 w-16 h-2 rounded-full;
+
+      &.done {
+        @apply bg-primary-500;
+      }
+      &.active {
+        @apply bg-gray-300;
+      }
+    }
+
+    & span {
+      @apply hidden;
+    }
+  }
+}
