@@ -30,4 +30,14 @@
   .faucetWidget--label {
     @apply mb-2 flex text-sm;
   }
+
+  .faucetCaptcha {
+    @apply relative mt-4 mx-6 flex items-center justify-center;
+  }
+  .faucetCaptcha--back {
+    @apply absolute py-4;
+  }
+  .faucetCaptcha--front {
+    @apply z-10 relative;
+  }
 }
