@@ -40,7 +40,6 @@
     "@react-stately/overlays": "^3.2.0",
     "@react-stately/tooltip": "^3.0.9",
     "@react-stately/tree": "^3.2.4",
-    "@react-types/overlays": "^3.5.5",
     "@tailwindcss/typography": "^0.5.2",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",

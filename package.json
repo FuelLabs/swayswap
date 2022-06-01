@@ -33,6 +33,7 @@
     "prettier:format": "prettier --write .",
     "services:clean": "make services-clean",
     "services:run": "make services-run",
+    "test:clear": "jest --clearCache",
     "test:coverage": "turbo run test -- --collectCoverage",
     "test": "turbo run test"
   },
