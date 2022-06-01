@@ -60,7 +60,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: install
-          args: forc
+          args: forc fuel-core
 
       - name: Create .env file
         run: |
