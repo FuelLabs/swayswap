@@ -1,4 +1,4 @@
-import { urlJoin } from 'url-join-ts';
+import urlJoin from 'url-join';
 
 const { PUBLIC_URL } = process.env;
 

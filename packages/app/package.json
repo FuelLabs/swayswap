@@ -60,7 +60,7 @@
     "react-router-dom": "6",
     "react-use": "^17.4.0",
     "spinners-react": "^1.0.7",
-    "url-join-ts": "^1.0.5",
+    "url-join": "^5.0.0",
     "vite-tsconfig-paths": "^3.4.1",
     "web-vitals": "^2.1.4"
   },
