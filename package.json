@@ -27,8 +27,10 @@
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --write .",
     "test": "turbo run test -- --passWithNoTests",
-    "build-contracts": "pnpm run --filter swayswap-app build-contracts",
-    "deploy-contracts": "pnpm run --filter swayswap-app deploy-contracts"
+    "contracts:build": "pnpm run --filter swayswap-app build-contracts",
+    "contracts:deploy": "pnpm run --filter swayswap-app deploy-contracts",
+    "services:run": "make services-run",
+    "services:clean": "make services-clean"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
