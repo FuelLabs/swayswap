@@ -4,7 +4,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Button } from "./Button";
 import { Spinner } from "./Spinner";
 
-import { FUEL_FAUCET_URL, RECAPTCHA_KEY } from "~/config";
+import { RECAPTCHA_KEY } from "~/config";
 import { useFaucet } from "~/hooks/useFaucet";
 
 type FaucetAppProps = {
@@ -40,9 +40,9 @@ export function FaucetApp({ onSuccess }: FaucetAppProps) {
         size="lg"
         variant="primary"
         className="mt-5"
-        isDisabled={Boolean(FUEL_FAUCET_URL) && !faucetCaptcha}
         isLoading={faucet.isLoading}
         onPress={() => faucet.handleFaucet(faucetCaptcha)}
+        {...(RECAPTCHA_KEY && { isDisabled: !faucetCaptcha })}
       >
         Give me ETH
       </Button>

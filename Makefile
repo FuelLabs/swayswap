@@ -1,5 +1,5 @@
 services-run:
-	docker compose up -d
+	docker-compose up -d --build
 
 services-clean:
 	docker ps --filter name=swayswap* -aq | xargs docker stop | xargs docker rm -f
