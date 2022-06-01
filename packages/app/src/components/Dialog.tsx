@@ -36,6 +36,7 @@ export type DialogProps = OverlayProps &
     children: ReactNode;
     state: OverlayTriggerState;
     isBlocked?: boolean;
+    test?: boolean;
   };
 
 type DialogComponent = FC<DialogProps> & {
