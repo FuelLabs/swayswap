@@ -39,7 +39,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
       onSuccess: () => {
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
-        toast.success('Faucet added successfully!');
+        toast.success('ETH add to your wallet!');
         refreshBalances();
         opts.onSuccess?.();
       },
@@ -53,6 +53,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
   async function directFaucet() {
     await appContext.faucet();
     toast.success('ETH add to your wallet!');
+    refreshBalances();
     opts.onSuccess?.();
   }
 
