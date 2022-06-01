@@ -23,7 +23,7 @@ services:
       - FUEL_NODE_URL=http://swayswap-fuel-core:4000/graphql
       - PORT=4040
       - DISPENSE_AMOUNT=500000000
-    image: ghcr.io/fuellabs/faucet:85beca9
+    image: ghcr.io/fuellabs/faucet:v0.1.1
     ports:
       - "4040:4040"
     links:
