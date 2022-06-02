@@ -40,6 +40,6 @@ get_architecture() {
 get_architecture
 echo "$PLATFORM"
 echo "Download forc"
-curl -sL https://github.com/FuelLabs/sway/releases/download/v0.14.5/forc-binaries-$PLATFORM.tar.gz | tar -xvzf
+# curl -sL https://github.com/FuelLabs/sway/releases/download/v0.14.5/forc-binaries-$PLATFORM.tar.gz | tar -xvzf
 echo "Unpack forc"
-forc-binaries/forc --version
+# forc-binaries/forc --version
