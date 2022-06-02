@@ -50,19 +50,28 @@ describe("PoolPage", () => {
     expect(coinFromInput).toBeInTheDocument();
     expect(coinToInput).toBeInTheDocument();
 
-    await user.type(coinFromInput, "10");
+    const newCoinFromValue = "10";
+    await user.type(coinFromInput, newCoinFromValue);
+
+    await waitFor(async () => {
+      expect(coinFromInput).toHaveValue(newCoinFromValue);
+      // expect(coinToInput).toHaveValue("1000");
+      const submitBtn = await screen.findByText(/Enter DAI amount/);
+      expect(submitBtn).toBeInTheDocument();
+      expect(submitBtn).toBeDisabled();
+    });
 
     // throwing other user.type events are causing error with environment: "Warning: The current testing environment is not configured to support act(...) at button"
     // I think it's because when we type, there're side-effects to set the value of other input
-    // await user.type(coinToInput, "1000");
-    await waitFor(() => {
-      expect(coinFromInput).toHaveValue("10");
+    const newCoinToValue = "1000";
+    await user.type(coinToInput, newCoinToValue);
+    await waitFor(async () => {
+      expect(coinToInput).toHaveValue(newCoinToValue);
       // expect(coinToInput).toHaveValue("1000");
+      const submitBtn = await screen.findByText(/Insufficient Ether balance/);
+      expect(submitBtn).toBeInTheDocument();
+      expect(submitBtn).toBeDisabled();
     });
-
-    const submitBtn = await screen.findByText(/Enter DAI amount/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
 
     // Need this to reset global state
     // skip it for same "act error"
