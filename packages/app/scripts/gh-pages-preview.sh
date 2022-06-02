@@ -7,7 +7,7 @@ export BUILD_PATH="dist"$PUBLIC_URL
 rm -rf dist
 
 # Build folder with BASE_URL
-npx tsc && npx vite build &&
+pnpm exec tsc && pnpm exec vite build &&
 
 # Copy to inside folder
 cp $BUILD_PATH/index.html dist/404.html

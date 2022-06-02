@@ -1,5 +1,8 @@
+services-restart:
+	docker compose down && docker compose up -d
+
 services-run:
-	docker compose up -d
+	docker compose up --build -d
 
 services-clean:
 	docker ps --filter name=swayswap* -aq | xargs docker stop | xargs docker rm -f
