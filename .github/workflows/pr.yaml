@@ -11,6 +11,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: Setup forc
+        run: |
+          mkdir $HOME/forc
+          cd $HOME/forc
+          curl -o forc.tar.gz -sL https://github.com/FuelLabs/sway/releases/download/v0.14.5/forc-binaries-linux_arm64.tar.gz
+          tar -xvzf forc.tar.gz
+          export PATH=$PATH:$HOME/forc/forc-binaries
+          forc --version
 
       # - name: Pull request title check
       #   uses: amannn/action-semantic-pull-request@v4
@@ -22,15 +31,6 @@ jobs:
         with:
           node-version: "16"
           registry-url: "https://registry.npmjs.org"
-
-      - name: Setup forc
-        run: |
-          mkdir $HOME/forc
-          cd $HOME/forc
-          curl -o forc.tar.gz -sL https://github.com/FuelLabs/sway/releases/download/v0.14.5/forc-binaries-linux_arm64.tar.gz
-          tar -xvzf forc.tar.gz
-          export PATH=$PATH:$HOME/forc/forc-binaries
-          forc --version
 
       - name: Cache PNPM modules
         uses: actions/cache@v2
