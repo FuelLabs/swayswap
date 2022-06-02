@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { useMutation } from "react-query";
 
 import { WelcomeStep } from "./WelcomeStep";
@@ -13,7 +12,6 @@ export default function CreateWallet() {
 
   const createWalletMutation = useMutation(async () => createWallet(), {
     onSuccess: () => {
-      toast.success("Wallet created successfully!");
       next();
     },
   });

@@ -1,4 +1,3 @@
-import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 
 import { refreshBalances } from './useBalances';
@@ -38,7 +37,6 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
       onSuccess: () => {
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
-        toast.success('ETH add to your wallet!');
         refreshBalances();
         opts.onSuccess?.();
       },

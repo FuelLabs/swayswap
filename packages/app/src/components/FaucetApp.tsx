@@ -13,12 +13,7 @@ type FaucetAppProps = {
 
 export function FaucetApp({ onSuccess }: FaucetAppProps) {
   const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
-
-  const faucet = useFaucet({
-    onSuccess: () => {
-      onSuccess?.();
-    },
-  });
+  const faucet = useFaucet({ onSuccess });
 
   return (
     <>

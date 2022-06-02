@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { FaFaucet } from "react-icons/fa";
 
 import { Button } from "./Button";
@@ -25,7 +26,9 @@ export function FaucetWidget() {
               <FaFaucet className="text-primary-500" /> Faucet
             </Card.Title>
             <div>Click the button below to mint 0.5 ETH to your wallet.</div>
-            <FaucetApp />
+            <FaucetApp
+              onSuccess={() => toast.success("ETH add to your wallet!")}
+            />
           </Card>
         </Dialog.Content>
       </Dialog>

@@ -8,6 +8,7 @@ import { StepsIndicator } from "./StepsIndicator";
 import WelcomeDone from "./WelcomeDone";
 import { WelcomeSidebar } from "./WelcomeSidebar";
 
+import { useBreakpoint } from "~/hooks/useBreakpoint";
 import { stepsSelectors, useWelcomeSteps } from "~/hooks/useWelcomeSteps";
 import { Pages } from "~/types/pages";
 
@@ -15,6 +16,7 @@ export function WelcomePage() {
   const { service } = useWelcomeSteps();
   const isFinished = useSelector(service, stepsSelectors.isFinished);
   const location = useLocation();
+  const breakpoint = useBreakpoint();
 
   if (isFinished) {
     return <Navigate to={Pages.swap} replace />;
@@ -22,7 +24,7 @@ export function WelcomePage() {
 
   return (
     <div className="welcomePage--layout">
-      <WelcomeSidebar />
+      {breakpoint === "lg" && <WelcomeSidebar />}
       <section className="welcomePage--content">
         <AnimatePresence exitBeforeEnter>
           <Routes key={location.pathname} location={location}>

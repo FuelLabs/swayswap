@@ -2,7 +2,10 @@
   .welcomePage--layout {
     @apply text-gray-100 min-h-screen;
     @apply grid gap-8;
-    grid-template-columns: 300px 1fr;
+
+    @media (min-width: 1440px) {
+      grid-template-columns: 300px 1fr;
+    }
   }
   .welcomePage--content {
     @apply relative m-8 grid place-items-center;
