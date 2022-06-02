@@ -1,5 +1,6 @@
 #!/bin/sh
 
+ls
 # Import env variables
 source .env;
 # Import wallet secret from docker/fuel-core/.env.docker
