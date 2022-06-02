@@ -25,7 +25,14 @@ jobs:
 
       - name: Setup forc
         run: |
-          ./.github/workflows/scripts/install-forc.sh
+          ./.github/workflows/scripts/get-architecture.sh
+          echo $PLATFORM
+          mkdir $HOME/forc
+          cd $HOME/forc
+          curl -o forc.tar.gz -sL https://github.com/FuelLabs/sway/releases/download/v0.14.5/forc-binaries-$PLATFORM.tar.gz
+          tar -xvzf forc.tar.gz
+          $HOME/forc/forc-binaries/forc --version
+          cd $HOME
 
       - name: Cache PNPM modules
         uses: actions/cache@v2
