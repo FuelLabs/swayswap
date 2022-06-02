@@ -1,5 +1,6 @@
 import { useSelector } from "@xstate/react";
 import cx from "classnames";
+import { motion } from "framer-motion";
 
 import { stepsSelectors, useWelcomeSteps } from "~/hooks/useWelcomeSteps";
 
@@ -25,8 +26,25 @@ export function WelcomeNavItem({ id, label }: SidebarItemProps) {
         disabled: isDisabled,
       })}
     >
-      <span className="bullet" />
+      <span className="circle" />
       <span className="label">{label}</span>
+      <motion.span
+        className="done-line"
+        initial={isDone ? "done" : "active"}
+        animate={isDone ? "done" : "active"}
+        variants={{
+          active: {
+            height: 0,
+          },
+          done: {
+            height: 55,
+          },
+        }}
+        transition={{
+          ease: "easeOut",
+          duration: 1.5,
+        }}
+      />
     </div>
   );
 }

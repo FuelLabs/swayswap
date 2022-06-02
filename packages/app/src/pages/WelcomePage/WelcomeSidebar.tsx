@@ -1,4 +1,5 @@
 import { WelcomeNavItem } from "./WelcomeNavItem";
+import { WelcomeSidebarBullet } from "./WelcomeSidebarBullet";
 
 import fuelLogo from "~/assets/fuel-logo-512x512.png";
 
@@ -13,6 +14,7 @@ export function WelcomeSidebar() {
         width={50}
       />
       <div className="welcomeSidebar--steps">
+        <WelcomeSidebarBullet />
         <nav>
           <WelcomeNavItem id={0} label="Create wallet" />
           <WelcomeNavItem id={1} label="Add funds" />

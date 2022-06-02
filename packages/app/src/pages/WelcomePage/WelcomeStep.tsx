@@ -2,6 +2,7 @@ import { useSelector } from "@xstate/react";
 import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
+import { AnimatedPage } from "~/components/AnimatedPage";
 import { stepsSelectors, useWelcomeSteps } from "~/hooks/useWelcomeSteps";
 
 type WelcomeStepProps = {
@@ -17,5 +18,9 @@ export function WelcomeStep({ id, children }: WelcomeStepProps) {
     return <Navigate to={`/welcome/${current.path}`} replace />;
   }
 
-  return <div className="welcomeStep">{children}</div>;
+  return (
+    <AnimatedPage>
+      <div className="welcomeStep">{children}</div>
+    </AnimatedPage>
+  );
 }

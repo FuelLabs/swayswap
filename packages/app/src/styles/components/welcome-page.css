@@ -35,25 +35,26 @@
     @apply text-gray-300;
   }
 
-  .welcomeNavItem > .bullet {
-    @apply z-10 relative w-5 h-5 bg-gray-800 rounded-full border-2 border-gray-500;
+  .welcomeSidebar--bullet {
+    @apply z-30 absolute w-2 h-2 bg-primary-500 rounded-full;
   }
 
-  .welcomeNavItem:not(:last-child)::after {
+  .welcomeNavItem > .circle {
+    @apply z-20 w-5 h-5 bg-gray-800 rounded-full border-2 border-gray-500;
+  }
+
+  .welcomeNavItem:not(:last-child)::after,
+  .welcomeNavItem:not(:last-child) .done-line {
     @apply absolute block content-[""] w-[3px] h-[55px] bg-gray-700;
     @apply top-[17px] left-[8px];
   }
 
-  .welcomeNavItem.active > .bullet {
-    &::after {
-      @apply absolute block content-[""] w-2 h-2 bg-gray-300 rounded-full;
-      @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
-    }
+  .welcomeNavItem:not(:last-child) .done-line {
+    @apply z-10 bg-primary-500;
   }
 
-  .welcomeNavItem.done > .bullet,
-  .welcomeNavItem.done::after {
-    @apply bg-primary-500 border-transparent;
+  .welcomeNavItem.done > .circle {
+    @apply border-primary-500;
   }
   .welcomeNavItem.done > .label {
     @apply text-primary-500 font-semibold;
@@ -66,7 +67,7 @@
   .welcomeNavItem.disabled > .label {
     @apply text-gray-500;
   }
-  .welcomeNavItem.disabled > .bullet {
+  .welcomeNavItem.disabled > .circle {
     @apply border-gray-700;
   }
   .welcomeNavItem.disabled::after {
