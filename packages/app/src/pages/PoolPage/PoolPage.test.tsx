@@ -51,6 +51,7 @@ describe("PoolPage", () => {
     expect(coinToInput).toBeInTheDocument();
 
     await user.type(coinFromInput, "10");
+
     // throwing other user.type events are causing error with environment: "Warning: The current testing environment is not configured to support act(...) at button"
     // I think it's because when we type, there're side-effects to set the value of other input
     // await user.type(coinToInput, "1000");
