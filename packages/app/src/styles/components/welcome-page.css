@@ -3,7 +3,7 @@
     @apply text-gray-100 min-h-screen;
     @apply grid gap-8;
 
-    @media (min-width: 1440px) {
+    @media (min-width: 1024px) {
       grid-template-columns: 300px 1fr;
     }
   }
