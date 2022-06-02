@@ -36,7 +36,7 @@
     "services:restart": "make -C docker services-restart",
     "services:run": "make -C docker services-run",
     "test:clear": "jest --clearCache",
-    "test:coverage": "turbo run test -- --collectCoverage",
+    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests",
     "test": "turbo run test -- --passWithNoTests",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview"
   },
