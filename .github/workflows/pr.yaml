@@ -23,6 +23,10 @@ jobs:
           node-version: "16"
           registry-url: "https://registry.npmjs.org"
 
+      - name: Setup forc
+        run: |
+          ./.github/workflows/scripts/install-forc.sh
+
       - name: Cache PNPM modules
         uses: actions/cache@v2
         with:
@@ -43,24 +47,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: 1.61.0
-          override: true
-
-      - uses: Swatinem/rust-cache@v1
-
-      - name: Install rustfmt
-        run: rustup component add rustfmt
-
-      - name: Install Forc
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: forc
 
       - name: Create .env file
         run: |
