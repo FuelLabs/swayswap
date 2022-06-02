@@ -10,14 +10,14 @@ env:
   FORC_VERSION: 0.14.5
 
 jobs:
-  # validate-pr:
-  #   name: Validate PR title
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Pull request title check
-  #       uses: amannn/action-semantic-pull-request@v4
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  validate-pr:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull request title check
+        uses: amannn/action-semantic-pull-request@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-and-test:
     # needs: validate-pr

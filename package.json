@@ -21,7 +21,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "ci:test-coverage": "run-s services:clean-test services:run-test contracts test:coverage services:clean-test",
+    "ci:test-coverage": "run-s services:run-test contracts test:coverage services:clean-test",
     "ci:test": "run-s services:run contracts test services:clean",
     "contracts": "run-s contracts:*",
     "contracts:build": "pnpm run --filter swayswap-app contracts:build",
