@@ -35,7 +35,7 @@ export function FaucetApp({ onSuccess }: FaucetAppProps) {
         size="lg"
         variant="primary"
         className="mt-5"
-        isLoading={faucet.isLoading}
+        isLoading={faucet.mutation.isLoading}
         onPress={() => faucet.handleFaucet(faucetCaptcha)}
         {...(RECAPTCHA_KEY && { isDisabled: !faucetCaptcha })}
       >

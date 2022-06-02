@@ -6,8 +6,11 @@ import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
 import { FaucetApp } from "./FaucetApp";
 
+import { useFaucet } from "~/hooks/useFaucet";
+
 export function FaucetWidget() {
   const dialog = useDialog();
+  const faucet = useFaucet();
 
   function handleClickFaucet() {
     return dialog.openButtonProps.onPress();
@@ -25,7 +28,10 @@ export function FaucetWidget() {
             <Card.Title>
               <FaFaucet className="text-primary-500" /> Faucet
             </Card.Title>
-            <div>Click the button below to mint 0.5 ETH to your wallet.</div>
+            <div>
+              Click the button below to mint {faucet.faucetAmount} ETH to your
+              wallet.
+            </div>
             <FaucetApp
               onSuccess={() => toast.success("ETH add to your wallet!")}
             />
