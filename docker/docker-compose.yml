@@ -3,8 +3,8 @@ version: "3"
 services:
   swayswap-fuel-core:
     env_file:
-      - ./docker/fuel-core/.env.docker
-    build: ./docker/fuel-core
+      - ./fuel-core/.env.docker
+    build: ./fuel-core
     ports:
       - "4000:4000"
     volumes:
@@ -16,13 +16,9 @@ services:
       retries: 10
   swayswap-faucet:
     env_file:
-      - ./docker/fuel-core/.env.docker
-    # See complete configurations;
-    # https://github.com/FuelLabs/faucet#configuration
+      - ./fuel-faucet/.env.docker
     environment:
       - FUEL_NODE_URL=http://swayswap-fuel-core:4000/graphql
-      - PORT=4040
-      - DISPENSE_AMOUNT=500000000
     image: ghcr.io/fuellabs/faucet:v0.1.1
     ports:
       - "4040:4040"
