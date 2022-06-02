@@ -51,7 +51,7 @@ function replaceEnvFile(params: ReplaceEnvFileProps) {
   const newEnv = Object.entries(params).reduce((prev, [key, value]) => {
     const regex = new RegExp(`(${key}=).*`, 'gi');
 
-    return envFile.replace(regex, `$1${value}`);
+    return prev.replace(regex, `$1${value}`);
   }, envFile);
   fs.writeFileSync(envFilePath, newEnv);
 }
@@ -86,7 +86,10 @@ function replaceEnvFile(params: ReplaceEnvFileProps) {
     console.log('SwaySwap Contract Id', contract.id);
     console.log('Token Contract Id', token.id);
 
-    replaceEnvFile({ VITE_CONTRACT_ID: contract.id });
+    replaceEnvFile({
+      VITE_CONTRACT_ID: contract.id,
+      VITE_TOKEN_ID: token.id,
+    });
   } catch (err) {
     console.error(err);
   }
