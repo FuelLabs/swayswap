@@ -67,6 +67,7 @@ async function deployContractBinary(
     );
 
     console.log('SwaySwap Contract Id', contract.id);
+    // todo: change .env to - add log to updated
     console.log('Token Contract Id', token.id);
   } catch (err) {
     console.error(err);

@@ -64,10 +64,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          cp packages/app/.env.production packages/app/.env
-          mv packages/app/.env packages/app/.env.in
-          sed -e 's+https://node.swayswap.io/graphql+http://localhost:4000/graphql+g' packages/app/.env.in > packages/app/.env
-          rm -rf packages/app/.env.in
+          sed -e 's+https://node.swayswap.io/graphql+http://localhost:4000/graphql+g' packages/app/.env.production > packages/app/.env
 
       - name: Log Tools Version
         run: |
