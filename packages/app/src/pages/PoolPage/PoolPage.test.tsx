@@ -42,7 +42,9 @@ describe("PoolPage", () => {
     });
 
     await waitFor(async () => {
-      expect(await screen.findByText(/Enter Ether amount/)).toBeInTheDocument();
+      const submitBtn = await screen.findByText(/Enter Ether amount/);
+      expect(submitBtn).toBeInTheDocument();
+      expect(submitBtn).toBeDisabled();
     });
 
     const coinFromInput = screen.getByLabelText(/Coin From Input/);
