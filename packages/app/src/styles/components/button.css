@@ -20,8 +20,8 @@
     @apply text-lg px-4 py-2;
   }
   .button--base {
-    @apply text-gray-200 border-gray-300;
-    @apply hover:text-gray-100 hover:border-gray-200;
+    @apply text-gray-200 border-transparent;
+    @apply hover:text-gray-100 hover:border-gray-600;
     @apply focus:text-primary-400 focus:border-primary-500;
     @apply active:text-primary-400 active:border-primary-500;
 
