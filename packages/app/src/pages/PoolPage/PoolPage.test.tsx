@@ -65,6 +65,7 @@ describe("PoolPage", () => {
     // I think it's because when we type, there're side-effects to set the value of other input
     const newCoinToValue = "1000";
     await user.type(coinToInput, newCoinToValue);
+
     await waitFor(async () => {
       expect(coinToInput).toHaveValue(newCoinToValue);
       // expect(coinToInput).toHaveValue("1000");
