@@ -4,8 +4,8 @@
   },
   "redirects": [
     {
-      "source": "(.*)vercel.app(.*)",
-      "destination": "$1swayswap.io$2"
+      "source": "vercel.app",
+      "destination": "swayswap.io"
     }
   ]
 }
