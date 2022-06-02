@@ -2,9 +2,9 @@ import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 
 import { refreshBalances } from './useBalances';
+import { useWallet } from './useWallet';
 
 import { FUEL_FAUCET_URL } from '~/config';
-import { useWallet } from '~/context/AppContext';
 import { sleep } from '~/lib/utils';
 
 type UseFaucetOpts = {

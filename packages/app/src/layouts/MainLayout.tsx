@@ -6,7 +6,7 @@ import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
 import { FaucetWidget } from "~/components/FaucetWidget";
 import Header from "~/components/Header";
 import Skeleton from "~/components/Skeleton";
-import { useWallet } from "~/context/AppContext";
+import { useWallet } from "~/hooks/useWallet";
 import { Pages } from "~/types/pages";
 
 export function MainLayout() {

@@ -1,5 +1,3 @@
-import { Outlet } from "react-router-dom";
+import { PoolPage } from "./PoolPage";
 
-export default function PoolPage() {
-  return <Outlet />;
-}
+export default PoolPage;

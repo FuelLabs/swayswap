@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import classNames from "classnames";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -54,9 +53,21 @@ function PoolLoader({
             }
           )}
         >
-          <div className="flex-1">{stepText}</div>
+          <div
+            className="flex-1"
+            aria-label={`Loading step: ${stepText}`}
+            aria-disabled={step > index}
+          >
+            {stepText}
+          </div>
           {step === index && loading && <Spinner />}
-          {step > index && <RiCheckFill />}
+          {step > index && (
+            <RiCheckFill
+              data-testid={`step-done-icon-${step}`}
+              aria-label={`Step completed: ${stepText}`}
+              aria-hidden
+            />
+          )}
         </li>
       ))}
     </ul>
@@ -132,6 +143,16 @@ export default function AddLiquidity() {
     reservesFromToRatio,
   });
 
+  function getButtonText() {
+    if (isLoadingPoolInfo) {
+      return "Loading...";
+    }
+    if (errorsCreatePull.length) {
+      return errorsCreatePull[0];
+    }
+    return reservesFromToRatio ? "Add liquidity" : "Create liquidity";
+  }
+
   useEffect(() => {
     fromInput.setAmount(fromInitialAmount);
     toInput.setAmount(toInitialAmount);
@@ -169,6 +190,7 @@ export default function AddLiquidity() {
         <>
           <div className="space-y-4 my-4">
             <CoinInput
+              aria-label="Coin From Input"
               autoFocus
               {...fromInput.getInputProps()}
               rightElement={
@@ -176,6 +198,9 @@ export default function AddLiquidity() {
               }
             />
             <CoinInput
+              aria-label="Coin To Input"
+              id="coinTo"
+              name="coinTo"
               {...toInput.getInputProps()}
               rightElement={
                 <CoinSelector {...toInput.getCoinSelectorProps()} isReadOnly />
@@ -189,6 +214,7 @@ export default function AddLiquidity() {
             reservesFromToRatio={reservesFromToRatio || addLiquidityRatio || 1}
           />
           <Button
+            data-testid="submit"
             isDisabled={!!errorsCreatePull.length}
             isFull
             size="lg"
@@ -196,14 +222,12 @@ export default function AddLiquidity() {
             onPress={
               errorsCreatePull.length
                 ? undefined
-                : () => addLiquidityMutation.mutate()
+                : () => {
+                    addLiquidityMutation.mutate();
+                  }
             }
           >
-            {errorsCreatePull.length
-              ? errorsCreatePull[0]
-              : reservesFromToRatio
-              ? "Add liquidity"
-              : "Create liquidity"}
+            {getButtonText()}
           </Button>
           {!reservesFromToRatio && !isLoadingPoolInfo ? (
             <div className={style.createPoolInfo}>

@@ -17,6 +17,7 @@ const contractPath = path.join(
   __dirname,
   '../../../contracts/exchange_contract/out/debug/exchange_contract.bin'
 );
+const envFilePath = path.join(__dirname, '../.env');
 const providerUrl = process.env.VITE_FUEL_PROVIDER_URL!;
 const walletSecret = process.env.WALLET_SECRET!;
 
@@ -37,6 +38,22 @@ async function deployContractBinary(
   });
   console.log(contextLog, 'Contract deployed...');
   return contract;
+}
+
+interface ReplaceEnvFileProps {
+  [key: string]: string;
+}
+
+function replaceEnvFile(params: ReplaceEnvFileProps) {
+  const envFile = fs.readFileSync(envFilePath, 'utf8');
+  console.log(`Replacing .env file with props`, params);
+
+  const newEnv = Object.entries(params).reduce((prev, [key, value]) => {
+    const regex = new RegExp(`(${key}=).*`, 'gi');
+
+    return prev.replace(regex, `$1${value}`);
+  }, envFile);
+  fs.writeFileSync(envFilePath, newEnv);
 }
 
 (async function main() {
@@ -68,6 +85,11 @@ async function deployContractBinary(
 
     console.log('SwaySwap Contract Id', contract.id);
     console.log('Token Contract Id', token.id);
+
+    replaceEnvFile({
+      VITE_CONTRACT_ID: contract.id,
+      VITE_TOKEN_ID: token.id,
+    });
   } catch (err) {
     console.error(err);
   }

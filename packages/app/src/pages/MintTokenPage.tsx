@@ -45,20 +45,32 @@ export default function MintTokenPage() {
           {/* TODO: Add validation to match a valid address */}
           {/* https://github.com/FuelLabs/swayswap-demo/issues/41 */}
           <div>
-            <label className="mx-1 mb-2 flex text-gray-300">
+            <label
+              id="label-1"
+              className="mx-1 mb-2 flex text-gray-300"
+              htmlFor="contractId"
+            >
               Paste token contractId
             </label>
             <Input
+              aria-labelledby="label-1"
+              id="contractId"
               value={asset}
               placeholder="Type contract id"
               onChange={setAsset}
             />
           </div>
           <div>
-            <label className="mx-1 mb-2 flex text-gray-300">
+            <label
+              id="label-2"
+              className="mx-1 mb-2 flex text-gray-300"
+              htmlFor="amount"
+            >
               Amount to mint
             </label>
             <NumberInput
+              aria-labelledby="label-2"
+              id="amount"
               autoFocus
               className="px-2"
               value={amount}
@@ -69,6 +81,7 @@ export default function MintTokenPage() {
         </div>
       </div>
       <Button
+        data-testid="submit"
         isFull
         size="lg"
         variant="primary"

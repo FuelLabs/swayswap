@@ -102,7 +102,6 @@ export function useCoinInput({
   function getInputProps() {
     return {
       ...params,
-      coin,
       value: formatValue(amount),
       displayType: (isReadOnly ? "text" : "input") as DisplayType,
       onInput,
@@ -149,7 +148,6 @@ export function useCoinInput({
 type CoinInputProps = Omit<UseCoinParams, "onChange"> &
   NumberInputProps & {
     value: string;
-    balance?: string;
     displayType: DisplayType;
     autoFocus?: boolean;
     isLoading?: boolean;

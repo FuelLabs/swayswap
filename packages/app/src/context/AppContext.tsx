@@ -24,16 +24,6 @@ export const AppContext = React.createContext<AppContextValue | null>(null);
 
 export const useAppContext = () => useContext(AppContext)!;
 
-export const useWallet = () => {
-  const { wallet } = useContext(AppContext)!;
-  return wallet;
-};
-
-export const useContract = () => {
-  const { contract } = useContext(AppContext)!;
-  return contract;
-};
-
 export const AppContextProvider = ({
   children,
 }: PropsWithChildren<unknown>) => {
