@@ -1,0 +1,114 @@
+@layer components {
+  .welcomePage--layout {
+    @apply text-gray-100 min-h-screen;
+    @apply grid gap-8;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 300px 1fr;
+    }
+  }
+  .welcomePage--content {
+    @apply relative m-8 grid place-items-center;
+  }
+  /*
+    WelcomeSidebar
+  */
+  .welcomeSidebar {
+    @apply relative p-8 bg-gray-800 border-r border-gray-500 border-dashed;
+  }
+  .welcomeSidebar--logo {
+    @apply absolute top-8 left-8;
+  }
+  .welcomeSidebar--steps {
+    @apply flex items-center text-gray-500;
+    min-height: calc(100% - 50px);
+
+    nav {
+      @apply flex flex-col items-start gap-10;
+    }
+  }
+  /*
+    WelcomeNavItem
+  */
+  .welcomeNavItem {
+    @apply relative flex items-center gap-4;
+  }
+
+  .welcomeNavItem > .label {
+    @apply text-gray-300;
+  }
+
+  .welcomeSidebar--bullet {
+    @apply z-30 absolute w-2 h-2 bg-primary-500 rounded-full;
+  }
+
+  .welcomeNavItem > .circle {
+    @apply z-20 w-5 h-5 bg-gray-800 rounded-full border-2 border-gray-500;
+  }
+
+  .welcomeNavItem:not(:last-child)::after,
+  .welcomeNavItem:not(:last-child) .done-line {
+    @apply absolute block content-[""] w-[3px] h-[55px] bg-gray-700;
+    @apply top-[17px] left-[8px];
+  }
+
+  .welcomeNavItem:not(:last-child) .done-line {
+    @apply z-10 bg-primary-500;
+  }
+
+  .welcomeNavItem.done > .circle {
+    @apply border-primary-500;
+  }
+  .welcomeNavItem.done > .label {
+    @apply text-primary-500 font-semibold;
+  }
+
+  .welcomeNavItem.active {
+    @apply text-gray-300;
+  }
+
+  .welcomeNavItem.disabled > .label {
+    @apply text-gray-500;
+  }
+  .welcomeNavItem.disabled > .circle {
+    @apply border-gray-700;
+  }
+  .welcomeNavItem.disabled::after {
+    @apply bg-gray-700;
+  }
+  /*
+    WelcomeStep
+  */
+  .welcomeStep {
+    @apply max-w-[350px] text-center text-gray-300;
+
+    h2 {
+      @apply text-white text-2xl mb-4;
+    }
+    img {
+      @apply mx-auto mb-5;
+    }
+  }
+  /*
+    StepsIndicator
+  */
+  .stepsIndicator {
+    @apply absolute bottom-0 left-[50%] -translate-x-1/2;
+    @apply flex gap-4;
+
+    li {
+      @apply bg-gray-500 w-16 h-2 rounded-full;
+
+      &.done {
+        @apply bg-primary-500;
+      }
+      &.active {
+        @apply bg-gray-300;
+      }
+    }
+
+    & span {
+      @apply hidden;
+    }
+  }
+}

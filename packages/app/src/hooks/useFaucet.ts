@@ -1,11 +1,24 @@
-import toast from 'react-hot-toast';
-import { useMutation } from 'react-query';
+import { useMemo } from 'react';
+import { useMutation, useQuery } from 'react-query';
 
 import { refreshBalances } from './useBalances';
 import { useWallet } from './useWallet';
 
 import { FUEL_FAUCET_URL } from '~/config';
-import { sleep } from '~/lib/utils';
+import { parseToFormattedNumber } from '~/lib/math';
+import { Queries } from '~/types/queries';
+
+async function fetchFaucet(input: RequestInit) {
+  const res = await fetch(FUEL_FAUCET_URL, {
+    ...input,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return res.json();
+}
 
 type UseFaucetOpts = {
   onSuccess?: () => void;
@@ -16,41 +29,46 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
 
   const mutation = useMutation(
     async ({ captcha }: { captcha?: string | null } = {}) => {
-      const response = await fetch(FUEL_FAUCET_URL, {
+      const response = await fetchFaucet({
         method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           address: wallet?.address,
           captcha: captcha || '',
         }),
-      }).then((r) => r.json());
+      });
 
       if (response.status !== 'Success') {
         throw new Error(`Invalid faucet response: ${JSON.stringify(response)}`);
       }
-
-      await sleep(1000);
     },
     {
       onSuccess: () => {
         // Navigate to assets page to show new cons
-        // https://github.com/FuelLabs/swayswap-demo/issues/40
-        toast.success('Faucet added successfully!');
+        // https:// github.com/FuelLabs/swayswap-demo/issues/40
         refreshBalances();
         opts.onSuccess?.();
       },
     }
   );
 
+  const query = useQuery(Queries.FaucetQuery, async () => {
+    const res = fetchFaucet({ method: 'GET' });
+    return res;
+  });
+
   function handleFaucet(captcha: string | null) {
     mutation.mutate({ captcha });
   }
 
+  const faucetAmount = useMemo(() => {
+    const amount = query.data?.amount || BigInt(0);
+    return parseToFormattedNumber(amount);
+  }, [query.status]);
+
   return {
-    ...mutation,
+    query,
+    mutation,
     handleFaucet,
+    faucetAmount,
   };
 }

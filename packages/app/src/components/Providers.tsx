@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { Dialog } from "~/components/Dialog";
 import { Toaster } from "~/components/Toaster";
 import { AppContextProvider } from "~/context/AppContext";
+import { StepsProvider } from "~/hooks/useWelcomeSteps";
 import { queryClient } from "~/lib/queryClient";
 
 export const LocationDisplay = () => {
@@ -22,7 +23,9 @@ export default function Providers({ children }: AppProps) {
       <Toaster />
       <QueryClientProvider client={queryClient}>
         <Dialog.Provider>
-          <AppContextProvider>{children}</AppContextProvider>
+          <StepsProvider>
+            <AppContextProvider>{children}</AppContextProvider>
+          </StepsProvider>
         </Dialog.Provider>
       </QueryClientProvider>
       {process.env.NODE_ENV === "test" && <LocationDisplay />}

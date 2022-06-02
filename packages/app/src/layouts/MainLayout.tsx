@@ -14,16 +14,21 @@ export function MainLayout() {
   const location = useLocation();
   const path = useResolvedPath(location);
   const wallet = useWallet();
+  const isWelcome = path.pathname.includes(Pages.welcome);
+
+  if (isWelcome) {
+    return <Outlet />;
+  }
 
   return (
-    <div className="layout">
+    <main className="mainLayout">
       <Header />
-      <div className="layout--wrapper">
+      <div className="mainLayout--wrapper">
         <ErrorBoundary
           onReset={resetReactQuery}
           fallbackRender={({ error, resetErrorBoundary }) => (
             <div
-              className="layout--errorContent"
+              className="mainLayout--errorContent"
               style={{ textAlign: "center" }}
             >
               Error
@@ -32,7 +37,7 @@ export function MainLayout() {
               <br />
               <br />
               <button
-                className="layout--confirmBtn"
+                className="mainLayout--confirmBtn"
                 onClick={resetErrorBoundary}
               >
                 Reset
@@ -40,16 +45,12 @@ export function MainLayout() {
             </div>
           )}
         >
-          {path.pathname === Pages.createWallet ? (
+          <Suspense fallback={<Skeleton />}>
             <Outlet />
-          ) : (
-            <Suspense fallback={<Skeleton />}>
-              <Outlet />
-            </Suspense>
-          )}
+          </Suspense>
         </ErrorBoundary>
       </div>
       {wallet && <FaucetWidget />}
-    </div>
+    </main>
   );
 }

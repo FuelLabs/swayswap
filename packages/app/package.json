@@ -41,11 +41,13 @@
     "@react-stately/tree": "^3.2.4",
     "@react-types/overlays": "^3.5.5",
     "@tailwindcss/typography": "^0.5.2",
+    "@xstate/react": "^3.0.0",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
     "clipboard": "^2.0.11",
     "decimal.js": "^10.3.1",
     "ethers": "^5.6.5",
+    "framer-motion": "^6.3.6",
     "fuels": "0.0.0-master-6d89cda7",
     "graphql-request": "^4.2.0",
     "jotai": "^1.6.6",
@@ -63,7 +65,7 @@
     "spinners-react": "^1.0.7",
     "url-join-ts": "^1.0.5",
     "vite-tsconfig-paths": "^3.4.1",
-    "web-vitals": "^2.1.4"
+    "xstate": "^4.32.1"
   },
   "devDependencies": {
     "@react-types/button": "^3.4.5",

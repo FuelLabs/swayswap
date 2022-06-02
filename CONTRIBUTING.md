@@ -74,7 +74,7 @@ After installing the client dependencies in `/packages/app` the contents of `.en
 
 - `VITE_FUEL_FAUCET_URL=` - Link for the fuel faucet
 
-- `VITE_RECAPTCHA_KEY` - The site key is used to invoke recaptcha service on the website
+- `VITE_FAUCET_RECAPTCHA_KEY` - The site key is used to invoke recaptcha service on the website
 
 - `VITE_CONTRACT_ID` - Id (address) of the deployed swayswap contract
 
