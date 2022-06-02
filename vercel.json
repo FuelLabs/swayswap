@@ -2,7 +2,10 @@
   "github": {
     "silent": true
   },
-  "alias": [
-    "vercel.swayswap.io"
+  "redirects": [
+    {
+      "source": "(.*)vercel.app(.*)",
+      "destination": "$1swayswap.io$2"
+    }
   ]
 }
