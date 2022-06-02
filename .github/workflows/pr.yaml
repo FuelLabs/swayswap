@@ -9,10 +9,23 @@ env:
   FORC_VERSION: 0.14.5
 
 jobs:
-  setup-forc:
+  validate-pr:
+    name: Validate PR title
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Pull request title check
+        uses: amannn/action-semantic-pull-request@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-and-test:
+    needs: validate-pr
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -33,20 +46,7 @@ jobs:
           tar -xvf forc.tar.gz
           chmod +x forc-binaries/forc
           mv forc-binaries/forc /usr/local/bin/forc
-
-  validate:
-    needs: setup-forc
-    name: Validate PR title
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      # - name: Pull request title check
-      #   uses: amannn/action-semantic-pull-request@v4
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
