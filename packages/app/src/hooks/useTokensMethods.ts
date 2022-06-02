@@ -3,7 +3,8 @@ import { useMemo } from 'react';
 
 import { objectId } from '../lib/utils';
 
-import { useWallet } from '~/context/AppContext';
+import { useWallet } from './useWallet';
+
 import { TokenContractAbi__factory } from '~/types/contracts';
 
 export function useTokenMethods(tokenId: string) {
@@ -16,7 +17,7 @@ export function useTokenMethods(tokenId: string) {
   return {
     contract,
     getBalance() {
-      return wallet.getBalance(tokenId);
+      return wallet?.getBalance(tokenId);
     },
     mint(amount: bigint) {
       return contract.submit.mint_coins(amount);

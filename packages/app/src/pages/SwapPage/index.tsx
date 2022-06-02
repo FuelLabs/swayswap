@@ -16,8 +16,8 @@ import { ActiveInput, ValidationStateEnum } from "./types";
 
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
-import { useContract } from "~/context/AppContext";
 import { refreshBalances, useBalances } from "~/hooks/useBalances";
+import { useContract } from "~/hooks/useContract";
 import useDebounce from "~/hooks/useDebounce";
 import { usePoolInfo } from "~/hooks/usePoolInfo";
 import { useSlippage } from "~/hooks/useSlippage";

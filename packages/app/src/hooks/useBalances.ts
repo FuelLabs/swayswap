@@ -1,7 +1,8 @@
 import type { UseQueryOptions } from 'react-query';
 import { useQuery } from 'react-query';
 
-import { useWallet } from '~/context/AppContext';
+import { useWallet } from './useWallet';
+
 import { queryClient } from '~/lib/queryClient';
 import { Queries } from '~/types/queries';
 

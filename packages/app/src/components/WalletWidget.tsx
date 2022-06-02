@@ -8,9 +8,9 @@ import { ButtonGroup } from "./ButtonGroup";
 import { Popover, usePopover } from "./Popover";
 import { WalletInfo } from "./WalletInfo";
 
-import { useWallet } from "~/context/AppContext";
 import { useAssets } from "~/hooks/useAssets";
 import { useEthBalance } from "~/hooks/useEthBalance";
+import { useWallet } from "~/hooks/useWallet";
 
 const style = {
   wallet: `flex items-center gap-3 rounded-full text-gray-300 bg-gray-800 inner-shadow p-1`,
@@ -42,7 +42,9 @@ export function WalletWidget() {
       })}
     >
       <>
-        {ethBalance.formatted && <span>{ethBalance.formatted} ETH</span>}
+        {ethBalance.formatted && (
+          <span data-testid="wallet-balance">{ethBalance.formatted} ETH</span>
+        )}
         <div className="flex items-center bg-gray-700 rounded-full">
           <ButtonGroup>
             <Button

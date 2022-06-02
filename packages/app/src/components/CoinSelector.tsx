@@ -111,7 +111,12 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
         {(showBalance || showMaxButton) && (
           <div className="flex items-center gap-2 mt-2 whitespace-nowrap">
             {showBalance && (
-              <div className="text-xs text-gray-400">Balance: {balance}</div>
+              <div
+                className="text-xs text-gray-400"
+                aria-label={`${coin?.name} balance`}
+              >
+                Balance: {balance}
+              </div>
             )}
             {showMaxButton && (
               <Button

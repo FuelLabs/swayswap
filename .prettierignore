@@ -11,3 +11,4 @@ yarn-lock.yaml
 .github
 contracts/token_contract/.rustc_info.json
 contracts/**/out/**
+.pnpm-store

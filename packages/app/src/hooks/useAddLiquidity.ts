@@ -8,7 +8,7 @@ import { refreshBalances } from './useBalances';
 
 import type { UseCoinInput } from '~/components/CoinInput';
 import { DEADLINE } from '~/config';
-import { useContract } from '~/context/AppContext';
+import { useContract } from '~/hooks/useContract';
 import type { Coin } from '~/types';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
@@ -43,22 +43,26 @@ export function useAddLiquidity({
       // TODO: Combine all transactions on single tx leverage by scripts
       // https://github.com/FuelLabs/swayswap-demo/issues/42
 
+      if (!contract) {
+        throw new Error('Contract not found');
+      }
+
       // Deposit coins from
       await contract.submit.deposit({
         forward: [fromAmount, coinFrom.assetId],
       });
-      setStage((s) => s + 1);
+      setStage(1);
       // Deposit coins to
       await contract.submit.deposit({
         forward: [toAmount, coinTo.assetId],
       });
-      setStage((s) => s + 1);
+      setStage(2);
       // Create liquidity pool
       const liquidityTokens = await contract.submit.add_liquidity(1, DEADLINE, {
         variableOutputs: 2,
         gasLimit: 100_000_000,
       });
-      setStage((s) => s + 1);
+      setStage(3);
 
       return liquidityTokens;
     },
@@ -131,8 +135,8 @@ export function useAddLiquidity({
   ]);
 
   return {
-    stage,
     mutation,
     errorsCreatePull,
+    stage,
   };
 }

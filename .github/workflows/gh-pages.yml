@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "16"
           registry-url: "https://registry.npmjs.org"
 
       - name: Cache PNPM modules
@@ -36,17 +36,12 @@ jobs:
           version: 7.0.0
           run_install: true
 
-      - name: Lint & Test
-        run: |
-          pnpm lint
-          pnpm test
-
       - name: Build
         env:
           CI: false
           PUBLIC_URL: "/${{ github.event.repository.name }}"
           VITE_FUEL_PROVIDER_URL: "https://node.swayswap.io/graphql"
-          VITE_CONTRACT_ID: "0x6698b28eb78517287de720a588c6db9922f562bee09225be10bfc2dc3a9e5ddd"
+          VITE_CONTRACT_ID: "0x32aa46fbca80077804d74dcb2fbbe737b3d41a2ea3678b712cdd20525eae9911"
           VITE_TOKEN_ID: "0x5490ccd5425acac521924bd537e4a26b2124427f736a7e56da08c486dc676a25"
         run: |
           pnpm build

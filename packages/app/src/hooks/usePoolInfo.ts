@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 
-import { useContract } from '~/context/AppContext';
+import { useContract } from '~/hooks/useContract';
 
 export function usePoolInfo() {
   const contract = useContract();

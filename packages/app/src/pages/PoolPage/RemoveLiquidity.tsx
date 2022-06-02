@@ -12,8 +12,8 @@ import { CoinInput, useCoinInput } from "~/components/CoinInput";
 import { CoinSelector } from "~/components/CoinSelector";
 import { NavigateBackButton } from "~/components/NavigateBackButton";
 import { CONTRACT_ID, DEADLINE } from "~/config";
-import { useContract } from "~/context/AppContext";
 import { refreshBalances } from "~/hooks/useBalances";
+import { useContract } from "~/hooks/useContract";
 import coins from "~/lib/CoinsMetadata";
 import { ZERO } from "~/lib/math";
 
