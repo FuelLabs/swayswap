@@ -53,7 +53,6 @@ function replaceEnvFile(params: ReplaceEnvFileProps) {
 
     return envFile.replace(regex, `$1${value}`);
   }, envFile);
-
   fs.writeFileSync(envFilePath, newEnv);
 }
 
