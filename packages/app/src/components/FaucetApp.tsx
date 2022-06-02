@@ -1,10 +1,10 @@
-import { useState } from "react";
+import cx from "classnames";
 import ReCAPTCHA from "react-google-recaptcha";
 
 import { Button } from "./Button";
 import { Spinner } from "./Spinner";
 
-import { RECAPTCHA_KEY } from "~/config";
+import { useCaptcha } from "~/hooks/useCaptcha";
 import { useFaucet } from "~/hooks/useFaucet";
 
 type FaucetAppProps = {
@@ -12,23 +12,32 @@ type FaucetAppProps = {
 };
 
 export function FaucetApp({ onSuccess }: FaucetAppProps) {
-  const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
   const faucet = useFaucet({ onSuccess });
+  const captcha = useCaptcha();
 
   return (
     <>
-      {RECAPTCHA_KEY && (
+      {captcha.needToShow && (
         <div className="faucetCaptcha">
-          <div className="faucetCaptcha--front">
-            <ReCAPTCHA
-              theme="dark"
-              sitekey={RECAPTCHA_KEY}
-              onChange={setFaucetCaptcha}
-            />
+          {captcha.isLoading && (
+            <div className="faucetCaptcha--loading">
+              <Spinner />
+              Loading Captcha...
+            </div>
+          )}
+          <div
+            className={cx("faucetCaptcha--widget", {
+              "is-hidden": captcha.isLoading,
+            })}
+          >
+            <ReCAPTCHA {...captcha.getProps()} />
           </div>
-          <div className="faucetCaptcha--back">
-            <Spinner />
-          </div>
+          {captcha.isFailed && (
+            <div className="faucetCaptcha--error">
+              Sorry, something wrong happened here, please reload your this
+              page!
+            </div>
+          )}
         </div>
       )}
       <Button
@@ -36,8 +45,8 @@ export function FaucetApp({ onSuccess }: FaucetAppProps) {
         variant="primary"
         className="mt-5"
         isLoading={faucet.mutation.isLoading}
-        onPress={() => faucet.handleFaucet(faucetCaptcha)}
-        {...(RECAPTCHA_KEY && { isDisabled: !faucetCaptcha })}
+        onPress={() => faucet.handleFaucet(captcha.value)}
+        {...(captcha.needToShow && { isDisabled: !captcha.value })}
       >
         Give me ETH
       </Button>

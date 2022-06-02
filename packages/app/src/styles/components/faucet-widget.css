@@ -32,12 +32,19 @@
   }
 
   .faucetCaptcha {
-    @apply relative mt-4 mx-6 flex items-center justify-center;
+    @apply mt-4 mx-6 flex items-center justify-center;
   }
-  .faucetCaptcha--back {
-    @apply absolute py-4;
+  .faucetCaptcha--widget.is-hidden {
+    @apply absolute top-0 left-0 hidden h-0 w-0 overflow-hidden;
   }
-  .faucetCaptcha--front {
-    @apply z-10 relative;
+  .faucetCaptcha--loading {
+    @apply py-4 flex items-center justify-center gap-3;
+  }
+  .faucetCaptcha--error {
+    @apply relative mx-0 text-red-500;
+
+    &::before {
+      @apply absolute top-0 -left-5 block content-[""] w-[2px] h-full bg-red-900;
+    }
   }
 }
