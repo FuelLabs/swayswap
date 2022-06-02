@@ -38,24 +38,30 @@ You can install the project dependencies by running the following command in the
 pnpm install
 ```
 
-A Fuel node can be run locally with:
+A Fuel and Faucet node can be run locally with:
 
 ```sh
-docker compose up
+pnpm services:run
 ```
 
 Compile the Sway libraries and contracts located in the `/contracts` directory with:
 
 ```sh
-pnpm build-contracts
+pnpm contracts:build
 ```
 
 This command also builds Sway type information for the frontend to use. The types can be found in the `/packages/app/src/types` directory.
 
-Deploy the SwaySwap exhance and token contracts to the Fuel Network locally with:
+Deploy the SwaySwap exchange and token contracts to the Fuel Network locally with:
 
 ```sh
 pnpm contracts:deploy
+```
+
+You can also deploy using a wallet secret;
+
+```sh
+WALLET_SECRET=0x0...000 pnpm contracts:deploy
 ```
 
 This command also creates a temporary wallet and sends some coins to your wallet. Copy and paste the SwaySwap contract ID and token contract ID into the `.env.example` file.
@@ -66,13 +72,13 @@ After installing the client dependencies in `/packages/app` the contents of `.en
 
 - `VITE_FUEL_PROVIDER_URL` - Link for the fuel node
 
+- `VITE_FUEL_FAUCET_URL=` - Link for the fuel faucet
+
+- `VITE_RECAPTCHA_KEY` - The site key is used to invoke recaptcha service on the website
+
 - `VITE_CONTRACT_ID` - Id (address) of the deployed swayswap contract
 
 - `VITE_TOKEN_ID=` - Id (address) of the deployed token contract
-
-- `VITE_RECAPTCHA_SITE_KEY` - The site key is used to invoke recaptcha service on the website
-
-- `VITE_FUEL_FAUCET_URL=` - Link for the fuel faucet
 
 Before starting the development server make sure the contract ID and token ID environment variables are set to the corresponding contract addresses.
 

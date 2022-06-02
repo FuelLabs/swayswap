@@ -32,11 +32,14 @@
     "lint": "run-s lint:check prettier:check",
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --write .",
+    "services:build": "make -C docker services-build",
     "services:clean": "make services-clean",
+    "services:restart": "make -C docker services-restart",
     "services:run": "make services-run",
     "test:clear": "jest --clearCache",
     "test:coverage": "turbo run test -- --collectCoverage",
-    "test": "turbo run test -- --passWithNoTests"
+    "test": "turbo run test -- --passWithNoTests",
+    "gh-preview": "pnpm run --filter swayswap-app gh-preview"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",

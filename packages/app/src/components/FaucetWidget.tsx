@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import toast from "react-hot-toast";
 import { FaFaucet } from "react-icons/fa";
 
 import { Button } from "./Button";
@@ -8,19 +7,15 @@ import { Card } from "./Card";
 import { Dialog, useDialog } from "./Dialog";
 import { Tooltip } from "./Tooltip";
 
-import { ENABLE_FAUCET_API, RECAPTCHA_SITE_KEY } from "~/config";
-import { useAppContext } from "~/context/AppContext";
-import { refreshBalances } from "~/hooks/useBalances";
+import { RECAPTCHA_KEY } from "~/config";
 import { useFaucet } from "~/hooks/useFaucet";
 import { useUserInfo } from "~/hooks/useUserInfo";
 
 export function FaucetWidget() {
-  const appContext = useAppContext();
   const [userInfo, setUserInfo] = useUserInfo();
   const [faucetCaptcha, setFaucetCaptcha] = useState<string | null>(null);
   const dialog = useDialog();
   const [showTour, setShowTour] = useState(false);
-  const [isLoading, setLoading] = useState(false);
 
   const faucet = useFaucet({
     onSuccess: () => {
@@ -47,22 +42,8 @@ export function FaucetWidget() {
     </>
   );
 
-  async function directFaucet() {
-    // If faucet api is disable faucet without
-    // use API
-    setLoading(true);
-    if (userInfo.isNew) setUserInfo({ isNew: false });
-    await appContext.faucet();
-    setLoading(false);
-    refreshBalances();
-    toast.success("ETH add to your wallet!");
-  }
-
   function handleClickFaucet() {
-    if (ENABLE_FAUCET_API) {
-      return dialog.openButtonProps.onPress();
-    }
-    directFaucet();
+    return dialog.openButtonProps.onPress();
   }
 
   return (
@@ -102,19 +83,21 @@ export function FaucetWidget() {
               <div>Click the button below to mint 0.5 ETH to your wallet.</div>
             )}
             <div className="mt-4 mx-6 flex items-center justify-center">
-              <ReCAPTCHA
-                theme="dark"
-                sitekey={RECAPTCHA_SITE_KEY}
-                onChange={setFaucetCaptcha}
-              />
+              {RECAPTCHA_KEY && (
+                <ReCAPTCHA
+                  theme="dark"
+                  sitekey={RECAPTCHA_KEY}
+                  onChange={setFaucetCaptcha}
+                />
+              )}
             </div>
             <Button
               size="md"
               variant="primary"
               isFull
               className="mt-5"
-              isDisabled={!faucetCaptcha}
-              isLoading={isLoading || faucet.isLoading}
+              isDisabled={!faucetCaptcha && !!RECAPTCHA_KEY}
+              isLoading={faucet.isLoading}
               onPress={() => faucet.handleFaucet(faucetCaptcha)}
             >
               Give me ETH
