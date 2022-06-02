@@ -36,45 +36,6 @@ jobs:
           version: 7.0.0
           run_install: true
 
-      - name: Setup Docker
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: 1.61.0
-          override: true
-
-      - uses: Swatinem/rust-cache@v1
-
-      - name: Install rustfmt
-        run: rustup component add rustfmt
-
-      - name: Install Forc
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: forc --version 0.13.0
-
-      - name: Create .env file
-        run: |
-          cp packages/app/.env.production packages/app/.env
-          mv packages/app/.env packages/app/.env.in
-          sed -e 's+https://node.swayswap.io/graphql+http://localhost:4000+g' packages/app/.env.in > packages/app/.env
-          rm -rf packages/app/.env.in
-
-      - name: Lint & Test
-        run: |
-          pnpm lint
-          pnpm ci:test-coverage
-        env:
-          VITE_FUEL_PROVIDER_URL: http://localhost:4000/graphql
-
       - name: Build
         env:
           CI: false

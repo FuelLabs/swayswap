@@ -8,8 +8,6 @@ import { useAppContext } from "~/context/AppContext";
 import { Pages } from "~/types/pages";
 
 export default function CreateWallet() {
-  // const createWallet = useCreateWallet();
-
   const { createWallet } = useAppContext();
   const navigate = useNavigate();
 
