@@ -53,7 +53,7 @@ const captchaMachine = createMachine<MachineContext>({
       after: {
         60000: {
           target: 'failed',
-          cond: () => Boolean(IS_LOADED),
+          cond: () => !IS_LOADED,
         },
       },
     },
