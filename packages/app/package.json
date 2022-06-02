@@ -11,7 +11,7 @@
     "test:watch": "jest --watch --detectOpenHandles",
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
     "contracts:build": "sh ./scripts/build-contracts.sh",
-    "contracts:deploy": "sh ./scripts/deploy-contracts.sh",
+    "contracts:deploy": "./scripts/deploy-contracts.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "create404": "cp ./dist/index.html ./dist/404.html"
   },

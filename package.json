@@ -26,7 +26,6 @@
     "contracts": "run-s contracts:*",
     "contracts:build": "pnpm run --filter swayswap-app contracts:build",
     "contracts:deploy": "pnpm run --filter swayswap-app contracts:deploy",
-    "contracts:replace-env": "sed -e \"s+VITE_CONTRACT_ID=.*+VITE_CONTRACT_ID=$(echo `pnpm contracts:deploy` | sed -re 's/.*SwaySwap Contract Id (.*) Token.*/\\1/gi')+g\" packages/app/.env > packages/app/.env.in; mv -f packages/app/.env.in packages/app/.env",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "pnpm lint:check --fix",
     "lint": "run-s lint:check prettier:check",

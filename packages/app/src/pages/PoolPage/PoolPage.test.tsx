@@ -59,7 +59,7 @@ describe("PoolPage", () => {
       // expect(coinToInput).toHaveValue("1000");
     });
 
-    const submitBtn = await screen.findByText(/Insufficient Ether balance/);
+    const submitBtn = await screen.findByText(/Enter DAI amount/);
     expect(submitBtn).toBeInTheDocument();
     expect(submitBtn).toBeDisabled();
 
