@@ -8,7 +8,7 @@
     }
   }
   .welcomePage--content {
-    @apply relative m-8 grid place-items-center;
+    @apply relative m-8 grid place-items-center max-h-[100vh];
   }
   /*
     WelcomeSidebar
