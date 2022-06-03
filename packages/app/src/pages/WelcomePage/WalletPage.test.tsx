@@ -29,7 +29,6 @@ export const createWallet = async () => {
   await waitFor(async () => {
     const addFundsBtn = await screen.findByTestId("addFundsBtn");
     expect(addFundsBtn).toBeInTheDocument();
-    // this is throwing "Missing queryFn error", creaking tests
     fireEvent.click(addFundsBtn);
   });
 
