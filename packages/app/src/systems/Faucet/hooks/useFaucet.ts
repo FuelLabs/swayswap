@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 import { FUEL_FAUCET_URL } from '~/config';
-import { useWallet, refreshBalances } from '~/systems/Core';
+import { useBalances, useWallet } from '~/systems/Core';
 import { parseToFormattedNumber } from '~/systems/Core/utils/math';
 import { Queries } from '~/types';
 
@@ -24,6 +24,7 @@ type UseFaucetOpts = {
 
 export function useFaucet(opts: UseFaucetOpts = {}) {
   const wallet = useWallet();
+  const balances = useBalances();
 
   const mutation = useMutation(
     async ({ captcha }: { captcha?: string | null } = {}) => {
@@ -40,10 +41,10 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
       }
     },
     {
-      onSuccess: () => {
+      onSuccess: async () => {
         // Navigate to assets page to show new cons
         // https:// github.com/FuelLabs/swayswap-demo/issues/40
-        refreshBalances();
+        await balances.refetch();
         opts.onSuccess?.();
       },
     }

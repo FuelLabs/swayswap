@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { DEADLINE } from '~/config';
 import type { UseCoinInput } from '~/systems/Core';
-import { useContract, refreshBalances } from '~/systems/Core';
+import { useBalances, useContract } from '~/systems/Core';
 import type { Coin } from '~/types';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
@@ -31,6 +31,7 @@ export function useAddLiquidity({
   const contract = useContract()!;
   const [stage, setStage] = useState(0);
   const navigate = useNavigate();
+  const balances = useBalances();
 
   const mutation = useMutation(
     async () => {
@@ -96,7 +97,7 @@ export function useAddLiquidity({
       },
       onSettled: async () => {
         await poolInfoQuery.refetch();
-        await refreshBalances();
+        await balances.refetch();
         navigate('../');
         setStage(0);
       },
