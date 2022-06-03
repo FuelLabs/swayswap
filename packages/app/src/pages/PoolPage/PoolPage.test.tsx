@@ -57,17 +57,5 @@ describe("PoolPage", () => {
     const coinToInput = await screen.getByLabelText(/Coin To Input/);
     expect(coinFromInput).toBeInTheDocument();
     expect(coinToInput).toBeInTheDocument();
-
-    const newCoinFromValue = "10";
-    fireEvent.change(coinFromInput, {
-      target: { value: newCoinFromValue },
-    });
-
-    await waitFor(async () => {
-      expect(coinFromInput).toHaveValue(newCoinFromValue);
-      const submitBtn = await screen.findByText(/Insufficient Ether balance/);
-      expect(submitBtn).toBeInTheDocument();
-      expect(submitBtn).toBeDisabled();
-    });
   });
 });
