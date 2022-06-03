@@ -18,11 +18,15 @@ export interface UsePreviewAddLiquidityProps {
 
 export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewAddLiquidityProps) {
   const { totalLiquidity, poolTokensNum } = useUserPositions();
+
   const liquidityFactor = (fromInput.amount || ZERO) * toBigInt(totalLiquidity);
   const previewTokens = divideFnValidOnly(liquidityFactor, totalLiquidity);
   const nextTotalTokenSupply = previewTokens + toNumber(poolInfo?.lp_token_supply || BigInt(0));
-  const nextCurrentPoolShare =
-    divideFnValidOnly(BigInt(previewTokens) + poolTokensNum, BigInt(nextTotalTokenSupply)) || 1;
+  const nextCurrentPoolShare = divideFnValidOnly(
+    BigInt(previewTokens) + poolTokensNum,
+    BigInt(nextTotalTokenSupply)
+  );
+
   let formattedPreviewTokens = parseToFormattedNumber(previewTokens);
   const formattedNextCurrentPoolShare = toFixed(nextCurrentPoolShare * 100);
 
