@@ -2,13 +2,14 @@ import { useWelcomeSteps } from "../hooks";
 
 import { WelcomeStep } from "./WelcomeStep";
 
+import illustration from "~/assets/illustrations/add-funds.png";
 import { FaucetApp } from "~/systems/Faucet";
 
 export function AddFunds() {
   const { next } = useWelcomeSteps();
   return (
     <WelcomeStep id={1}>
-      <img src="/illustrations/add-funds.png" />
+      <img src={illustration} />
       <h2>Add some ETH to your wallet</h2>
       <p>
         To get started you&apos;ll need a wallet, <br />

@@ -4,6 +4,7 @@ import { useWelcomeSteps } from "../hooks";
 
 import { WelcomeStep } from "./WelcomeStep";
 
+import illustration from "~/assets/illustrations/create-wallet.png";
 import { useAppContext } from "~/systems/Core";
 import { Button } from "~/systems/UI";
 
@@ -23,7 +24,7 @@ export function CreateWallet() {
 
   return (
     <WelcomeStep id={0}>
-      <img src="/illustrations/create-wallet.png" />
+      <img src={illustration} />
       <h2>Welcome to SwaySwap</h2>
       <p className="my-5">
         To get started you&apos;ll need a wallet, <br />

@@ -4,6 +4,7 @@ import { useWelcomeSteps } from "../hooks";
 
 import { WelcomeStep } from "./WelcomeStep";
 
+import illustration from "~/assets/illustrations/done.png";
 import { Button } from "~/systems/UI";
 
 export function WelcomeDone() {
@@ -17,7 +18,7 @@ export function WelcomeDone() {
 
   return (
     <WelcomeStep id={2}>
-      <img src="/illustrations/done.png" width="70%" />
+      <img src={illustration} width="70%" />
       <h2>Done, congrats!</h2>
       <p className="my-5">
         Now you are done to swap your coins using the fatest modular execution
