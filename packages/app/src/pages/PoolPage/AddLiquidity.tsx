@@ -214,7 +214,7 @@ export default function AddLiquidity() {
             reservesFromToRatio={reservesFromToRatio || addLiquidityRatio || 1}
           />
           <Button
-            data-testid="submit"
+            data-testid="addLiquiditySubmitBtn"
             isDisabled={!!errorsCreatePull.length}
             isFull
             size="lg"

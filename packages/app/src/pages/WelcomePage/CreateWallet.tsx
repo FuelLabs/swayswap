@@ -28,7 +28,12 @@ export default function CreateWallet() {
         To get started you&apos;ll need a wallet, <br />
         click below to generate one.
       </p>
-      <Button variant="primary" size="lg" onPress={handleCreateWallet}>
+      <Button
+        variant="primary"
+        size="lg"
+        onPress={handleCreateWallet}
+        data-testid="createWalletBtn"
+      >
         Create wallet
       </Button>
     </WelcomeStep>

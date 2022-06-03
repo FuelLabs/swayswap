@@ -1,6 +1,6 @@
 import { useMachine } from "@xstate/react";
 import type { ReactNode } from "react";
-import { useContext, createContext } from "react";
+import { useMemo, useContext, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import type { InterpreterFrom, StateFrom } from "xstate";
 import { assign, createMachine } from "xstate";
@@ -139,16 +139,20 @@ export const stepsSelectors = {
 const ctx = createContext<Context>({} as Context);
 export function StepsProvider({ children }: WelcomeStepsProviderProps) {
   const navigate = useNavigate();
-  const [state, send, service] = useMachine<Machine>(
-    welcomeStepsMachine.withConfig({
-      actions: {
-        navigateTo: (context) => {
-          if (context.current.id > 2) return;
-          navigate?.(`/welcome/${context.current.path}`);
+
+  const machine = useMemo(
+    () =>
+      welcomeStepsMachine.withConfig({
+        actions: {
+          navigateTo: (context) => {
+            if (context.current.id > 2) return;
+            navigate(`/welcome/${context.current.path}`);
+          },
         },
-      },
-    })
+      }),
+    []
   );
+  const [state, send, service] = useMachine<Machine>(machine);
 
   function next() {
     send("NEXT");

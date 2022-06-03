@@ -38,8 +38,8 @@
     "services:run": "make -C docker services-run",
     "services:run-test": "make -C docker services-run-test",
     "test:clear": "jest --clearCache",
-    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --maxWorkers 2",
-    "test": "turbo run test -- --passWithNoTests",
+    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --maxWorkers 2 --runInBand",
+    "test": "turbo run test -- --passWithNoTests --runInBand",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview"
   },
   "devDependencies": {

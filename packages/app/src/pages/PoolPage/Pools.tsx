@@ -28,6 +28,7 @@ const SubpagesNav = () => {
         variant="primary"
         onPress={() => navigate(`../${Pages["pool.addLiquidity"]}`)}
         className={cx(style.button)}
+        data-testid="headerAddLiquidityBtn"
       >
         Add Liquidity
       </Button>
