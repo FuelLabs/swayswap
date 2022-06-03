@@ -65,7 +65,9 @@ jobs:
         uses: pnpm/action-setup@v2.1.0
         with:
           version: 7.0.0
-          run_install: true
+          run_install: |
+            - recursive: true
+              args: [--no-frozen-lockfile]
 
       - name: Setup Docker
         uses: docker/login-action@v1
