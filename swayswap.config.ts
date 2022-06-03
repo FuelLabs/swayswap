@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
+import { createConfig } from 'swayswap-scripts';
 
 dotenv.config({
   path: './docker/fuel-faucet/.env.docker',
 });
 
-export default {
+export default createConfig({
   types: {
     artifacts: './packages/contracts/**/out/debug/**.json',
     output: './packages/app/src/types/contracts',
@@ -22,4 +23,4 @@ export default {
   onSuccess: (command: string, data: string) => {
     console.log(command, data);
   },
-};
+});

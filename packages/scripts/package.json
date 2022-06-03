@@ -5,22 +5,22 @@
   "files": [
     "dist/"
   ],
-  "main": "src/index.ts",
+  "main": "./dist/index.js",
   "bin": {
-    "swayswap-scripts": "./dist/index.js"
+    "swayswap-scripts": "./dist/bin/index.js"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup"
   },
   "dependencies": {
     "bundle-require": "^3.0.4",
     "commander": "^9.3.0",
     "debug": "^4.3.4",
     "esbuild": "^0.14.42",
-    "fuels": "0.0.0-master-66111cd7",
+    "fuels": "0.0.0-master-1a1fb63d",
     "joycon": "^3.1.1",
     "typechain": "^8.0.0",
-    "typechain-target-fuels": "0.0.0-master-66111cd7",
+    "typechain-target-fuels": "0.0.0-master-1a1fb63d",
     "typescript": "^4.6.4"
   },
   "devDependencies": {
