@@ -1,11 +1,7 @@
-import Providers from "./components/Providers";
+import { routes } from "./routes";
 
-import AppRoutes from "~/AppRoutes";
+import { Providers } from "~/systems/Core";
 
 export default function App() {
-  return (
-    <Providers>
-      <AppRoutes />
-    </Providers>
-  );
+  return <Providers>{routes}</Providers>;
 }
