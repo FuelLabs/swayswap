@@ -14,6 +14,7 @@ import {
   swapTokens,
   getValidationState,
   getValidationText,
+  checkPairBalance,
 } from "../utils";
 
 import {
@@ -60,6 +61,12 @@ export function SwapPage() {
       debouncedState?.coinTo.assetId,
     ],
     async () => {
+      // This is a hard coded solution, need to be dynamic in future
+      if (!checkPairBalance(balances.data)) {
+        setHasLiquidity(false);
+        return;
+      }
+
       if (!debouncedState?.amount) return null;
       if (!hasReserveAmount(debouncedState, poolInfo)) return null;
       return queryPreviewAmount(contract, debouncedState);

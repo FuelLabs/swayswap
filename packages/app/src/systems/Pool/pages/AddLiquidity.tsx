@@ -29,7 +29,7 @@ const style = {
   wrapper: `self-start max-w-[500px] mt-24`,
   content: `bg-gray-800 w-[30rem] rounded-2xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  createPoolInfo: `font-mono my-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed
+  createPoolInfo: `font-mono mt-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed
   border-white/10 rounded-lg w-full`,
 };
 
