@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { createConfig } from 'swayswap-scripts';
+import { Commands, createConfig } from 'swayswap-scripts';
 
 dotenv.config({
   path: './docker/fuel-faucet/.env.docker',
@@ -20,7 +20,9 @@ export default createConfig({
       path: './packages/contracts/token_contract',
     },
   ],
-  onSuccess: (command: string, data: string) => {
-    console.log(command, data);
+  onSuccess: (event) => {
+    if (event.type === Commands.deploy || event.type === Commands.run) {
+      console.log(event.data);
+    }
   },
 });

@@ -4,6 +4,12 @@ This package create has toolings to help integrate Sway contracts
 on the SwaySwap application. It makes easier for developers to
 change contracts at the same time they build a nice UI
 
+### Execute
+
+```sh
+pnpm exec swayswap-scripts [command]
+```
+
 ### Options
 
 ```sh
@@ -25,10 +31,10 @@ Commands:
 
 ```
 {
-  onSuccess?: (contractsIds: string[]) => void;
-  onFailure?: (err: Error) => void;
+  onSuccess?: (event: Event) => void;
+  onFailure?: (err: unknown) => void;
   env?: {
-    [key: string]: string
+    [key: string]: string;
   };
   types: {
     artifacts: string;
@@ -38,8 +44,10 @@ Commands:
     name: string;
     path: string;
   }[];
-};
+}
 ```
+
+See complete [types here](./src/types.ts).
 
 ### Environment variables
 
