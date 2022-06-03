@@ -19,7 +19,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build && pnpm install",
     "dev": "turbo run dev --parallel",
     "ci:test-coverage": "run-s services:run-test contracts test:coverage services:clean-test",
     "ci:test": "run-s services:run contracts test services:clean",
