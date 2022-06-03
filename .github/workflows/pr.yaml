@@ -89,4 +89,4 @@ jobs:
       - name: Lint & Test
         run: |
           pnpm lint
-          pnpm ci:test-coverage
+          pnpm ci:test

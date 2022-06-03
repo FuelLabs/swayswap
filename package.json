@@ -22,7 +22,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "ci:test-coverage": "run-s services:run-test contracts test:coverage services:clean-test",
-    "ci:test": "run-s services:run contracts test services:clean",
+    "ci:test": "run-s services:run-test contracts test services:clean-test",
     "contracts": "run-s contracts:*",
     "contracts:build": "pnpm run --filter swayswap-app contracts:build",
     "contracts:deploy": "pnpm run --filter swayswap-app contracts:deploy",
@@ -38,7 +38,7 @@
     "services:run": "make -C docker services-run",
     "services:run-test": "make -C docker services-run-test",
     "test:clear": "jest --clearCache",
-    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --maxWorkers 2 --runInBand",
+    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --runInBand",
     "test": "turbo run test -- --passWithNoTests --runInBand",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview"
   },
