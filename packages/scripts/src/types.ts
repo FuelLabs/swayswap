@@ -1,14 +1,31 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export enum Commands {
   'build' = 'build',
   'deploy' = 'deploy',
   'run' = 'run',
 }
 
+export type BuildDeploy = {
+  name: string;
+  contractId: string;
+};
+
+export type Event =
+  | {
+      type: Commands.build;
+      data: unknown;
+    }
+  | {
+      type: Commands.deploy;
+      data: Array<BuildDeploy>;
+    }
+  | {
+      type: Commands.run;
+      data: Array<BuildDeploy>;
+    };
+
 export type Config = {
-  onSuccess?: (command: string, result: any) => void;
-  onFailure?: (command: string, err: unknown) => void;
+  onSuccess?: (event: Event) => void;
+  onFailure?: (err: unknown) => void;
   env?: {
     [key: string]: string;
   };

@@ -2,8 +2,7 @@ import { readFileSync } from 'fs';
 import type { Wallet } from 'fuels';
 import { CreateTransactionRequest, ZeroBytes32, ContractUtils } from 'fuels';
 import path from 'path';
-
-const log = console.log;
+import { log } from 'src/log';
 
 function getBinaryName(contractPath: string) {
   const fileName = contractPath.split('/').slice(-1);

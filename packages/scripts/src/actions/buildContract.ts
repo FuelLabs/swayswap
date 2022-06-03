@@ -1,6 +1,5 @@
 import { spawn } from 'child_process';
-
-const log = console.log;
+import { log } from 'src/log';
 
 // Build contracts using forc
 // We assume forc is install on the local

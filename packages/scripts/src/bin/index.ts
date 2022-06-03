@@ -4,23 +4,27 @@ import { Command } from 'commander';
 import { buildContracts } from 'src/actions/buildContracts.js';
 import { deployContracts } from 'src/actions/deployContracts.js';
 import { runAll } from 'src/actions/runAll.js';
-import type { Config } from 'src/types';
+import type { Config, Event } from 'src/types';
 import { Commands } from 'src/types';
 
 import { loadConfig } from './loader.js';
 
 const program = new Command();
 
-function action(command: string, func: (config: Config) => Promise<unknown | void>) {
+function action(command: string, func: (config: Config) => Promise<unknown>) {
   return async () => {
     const config = await loadConfig(process.cwd());
     try {
-      const result = await func(config);
-      await config.onSuccess?.(command, result);
+      const result: unknown = await func(config);
+      // @ts-ignore
+      config.onSuccess?.({
+        type: command as Commands,
+        data: result,
+      } as Event);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error((err as Error).message);
-      await config.onFailure?.(command, err);
+      config.onFailure?.(err);
       process.exit();
     }
   };

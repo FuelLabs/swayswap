@@ -1,6 +1,5 @@
 import { NativeAssetId, Provider, TestUtils, Wallet } from 'fuels';
-
-const log = console.log;
+import { log } from 'src/log';
 
 export async function getWalletInstance() {
   // Avoid early load of process env
