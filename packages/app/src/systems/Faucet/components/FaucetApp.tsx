@@ -6,10 +6,11 @@ import { useCaptcha, useFaucet } from "../hooks";
 import { Button, Spinner } from "~/systems/UI";
 
 type FaucetAppProps = {
+  isButtonFull?: boolean;
   onSuccess?: () => void;
 };
 
-export function FaucetApp({ onSuccess }: FaucetAppProps) {
+export function FaucetApp({ isButtonFull, onSuccess }: FaucetAppProps) {
   const faucet = useFaucet({ onSuccess });
   const captcha = useCaptcha();
 
@@ -39,6 +40,7 @@ export function FaucetApp({ onSuccess }: FaucetAppProps) {
         </div>
       )}
       <Button
+        isFull={isButtonFull}
         size="lg"
         variant="primary"
         className="mt-5"
