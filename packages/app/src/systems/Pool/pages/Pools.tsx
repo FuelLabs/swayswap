@@ -34,7 +34,7 @@ function WithoutPositions() {
   return (
     <p className="flex items-center gap-2 text-gray-300">
       <BiListUl />
-      You may have no open positions
+      You do not have any open positions
     </p>
   );
 }
