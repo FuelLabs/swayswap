@@ -17,8 +17,8 @@ export function MintPage() {
         Mint
       </Card.Title>
       <div className="text-gray-300">
-        Mint new token types for testing purposes by adding the contract Id and
-        amount below.
+        Receive new token types for testing purposes by adding the contract Id
+        and amount below.
       </div>
       <div className="faucetWidget--formRow">
         <label className="faucetWidget--label">Contract Id</label>
@@ -30,7 +30,7 @@ export function MintPage() {
         />
       </div>
       <div className="faucetWidget--formRow">
-        <label className="faucetWidget--label">Amount to mint</label>
+        <label className="faucetWidget--label">Amount to receive</label>
         <NumberInput
           className="px-2"
           value={amount}

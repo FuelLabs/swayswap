@@ -26,7 +26,7 @@ export function useMint(opts: UseMintOpts) {
         // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
         opts.onSuccess?.();
-        toast.success(`Token minted successfully!`);
+        toast.success(`Token received successfully!`);
         refreshBalances();
         navigate(Pages.swap);
       },
