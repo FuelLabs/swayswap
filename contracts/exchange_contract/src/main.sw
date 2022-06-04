@@ -42,8 +42,6 @@ const S_DEPOSITS: b256 = 0x00000000000000000000000000000000000000000000000000000
 
 storage {
     lp_token_supply: u64,
-    token_reserve: u64,
-    eth_reserve: u64,
     deposits: StorageMap<(Address,
     ContractId), u64>, 
 }
@@ -73,7 +71,6 @@ fn calculate_amount_with_fee(amount: u64) -> u64 {
     let fee: u64 = (amount / LIQUIDITY_MINER_FEE);
     amount - fee
 }
-
 
 fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
     let calculation = (~U128::from(0, a) * ~U128::from(0, b));
