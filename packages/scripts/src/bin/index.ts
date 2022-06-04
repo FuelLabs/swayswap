@@ -7,7 +7,7 @@ import { runAll } from 'src/actions/runAll.js';
 import type { Config, Event } from 'src/types';
 import { Commands } from 'src/types';
 
-import { loadConfig } from './loader.js';
+import { loadConfig } from '../helpers/loader.js';
 
 const program = new Command();
 

@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { Commands, createConfig } from 'swayswap-scripts';
+import { createConfig, replaceEventOnEnv } from 'swayswap-scripts';
 
 dotenv.config({
   path: './docker/fuel-faucet/.env.docker',
@@ -12,17 +12,15 @@ export default createConfig({
   },
   contracts: [
     {
-      name: 'ExchangeContract',
+      name: 'VITE_CONTRACT_ID',
       path: './packages/contracts/exchange_contract',
     },
     {
-      name: 'TokenContract',
+      name: 'VITE_TOKEN_ID',
       path: './packages/contracts/token_contract',
     },
   ],
   onSuccess: (event) => {
-    if (event.type === Commands.deploy || event.type === Commands.run) {
-      console.log(event.data);
-    }
+    replaceEventOnEnv('./packages/app/.env', event);
   },
 });
