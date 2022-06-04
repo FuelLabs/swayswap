@@ -106,10 +106,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create .env file
-        run: |
-          cp packages/app/.env.test packages/app/.env
-
       - name: Setup scripts
         run: |
           pnpm scripts:setup
