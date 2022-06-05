@@ -3,7 +3,6 @@ contract;
 use std::{
     address::*,
     assert::assert,
-    assert::require,
     block::*,
     chain::auth::*,
     context::{*, call_frames::*},
@@ -45,16 +44,6 @@ storage {
     lp_token_supply: u64,
     deposits: StorageMap<(Address,
     ContractId), u64>, 
-}
-
-enum Error {
-    AmounRequired: (),
-    AssetNotSupported: (),
-    DealineError: (),
-    ETHAmountZero: (),
-    MinLiquidityZero: (),
-    LiqudityLowerThenMinLiquidity: (),
-    ETHBalanceLowerThenMinLiquidity: (),
 }
 
 ////////////////////////////////////////
@@ -144,7 +133,6 @@ fn get_msg_sender_address_or_panic() -> Address {
 // ////////////////////////////////////////
 // // ABI definitions
 // ////////////////////////////////////////
-
 impl Exchange for Contract {
     fn get_balance(asset_id: ContractId) -> u64 {
         let sender = get_msg_sender_address_or_panic();
@@ -167,7 +155,7 @@ impl Exchange for Contract {
     }
 
     fn deposit() {
-        require(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == TOKEN_ID, 100);
+        assert(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == TOKEN_ID);
 
         let sender = get_msg_sender_address_or_panic();
 
@@ -176,7 +164,7 @@ impl Exchange for Contract {
     }
 
     fn withdraw(amount: u64, asset_id: ContractId) {
-        require(asset_id.into() == ETH_ID || asset_id.into() == TOKEN_ID, Error::AssetNotSupported);
+        assert(asset_id.into() == ETH_ID || asset_id.into() == TOKEN_ID);
 
         let sender = get_msg_sender_address_or_panic();
 
@@ -193,9 +181,6 @@ impl Exchange for Contract {
         assert(msg_amount() == 0);
         assert(deadline > height());
         assert(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == TOKEN_ID);
-        // require(msg_amount() == 0, Error::AmounRequired);
-        // require(deadline > height(), Error::DealineError);
-        // require(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == TOKEN_ID, Error::AssetNotSupported);
 
         let sender = get_msg_sender_address_or_panic();
 
@@ -204,18 +189,18 @@ impl Exchange for Contract {
         let current_eth_amount = storage.deposits.get((sender, ~ContractId::from(ETH_ID)));
         let current_token_amount = storage.deposits.get((sender, ~ContractId::from(TOKEN_ID)));
 
-        require(current_eth_amount > 0, Error::ETHAmountZero);
+        assert(current_eth_amount > 0);
 
         let mut minted: u64 = 0;
         if total_liquidity > 0 {
-            require(min_liquidity > 0, Error::MinLiquidityZero);
+            assert(min_liquidity > 0);
 
             let eth_reserve = get_current_reserve(ETH_ID);
             let token_reserve = get_current_reserve(TOKEN_ID);
             let token_amount = mutiply_div(current_eth_amount, token_reserve, eth_reserve);
             let liquidity_minted = mutiply_div(current_eth_amount, total_liquidity, eth_reserve);
 
-            require(liquidity_minted >= min_liquidity, Error::LiqudityLowerThenMinLiquidity);
+            assert(liquidity_minted >= min_liquidity);
 
             // if token ratio is correct, proceed with liquidity operation
             // otherwise, return current user balances in contract
@@ -242,7 +227,7 @@ impl Exchange for Contract {
                 minted = 0;
             }
         } else {
-            require(current_eth_amount > MINIMUM_LIQUIDITY, Error::ETHBalanceLowerThenMinLiquidity);
+            assert(current_eth_amount > MINIMUM_LIQUIDITY);
 
             let initial_liquidity = current_eth_amount;
 
@@ -341,7 +326,7 @@ impl Exchange for Contract {
 
         assert(deadline >= height());
         assert(amount > 0 && forwarded_amount > 0);
-        require(asset_id == ETH_ID || asset_id == TOKEN_ID, Error::AssetNotSupported);
+        assert(asset_id == ETH_ID || asset_id == TOKEN_ID);
 
         let sender = get_msg_sender_address_or_panic();
         let eth_reserve = get_current_reserve(ETH_ID);
