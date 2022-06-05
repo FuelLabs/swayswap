@@ -107,7 +107,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Install Compose v2.6.0
-        uses: ndeloof/install-docker-compose
+        uses: ndeloof/install-compose-action@v0.0.1
         with:
           version: v2.6.0
 
