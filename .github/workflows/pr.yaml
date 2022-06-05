@@ -71,7 +71,7 @@ jobs:
       - name: Test Contracts
         if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
         run: |
-          ./contracts/actions/test.sh
+          ./packages/contracts/actions/test.sh
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
