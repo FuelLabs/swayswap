@@ -1,8 +1,15 @@
 import dotenv from 'dotenv';
 import { createConfig, replaceEventOnEnv } from 'swayswap-scripts';
 
+function getEnvName() {
+  if (process.env.NODE_ENV === 'test') {
+    return '.env.test';
+  }
+  return '.env';
+}
+
 dotenv.config({
-  path: './docker/fuel-faucet/.env.docker',
+  path: `./docker/${getEnvName()}`,
 });
 
 export default createConfig({
@@ -21,6 +28,6 @@ export default createConfig({
     },
   ],
   onSuccess: (event) => {
-    replaceEventOnEnv('./packages/app/.env', event);
+    replaceEventOnEnv(`./packages/app/${getEnvName()}`, event);
   },
 });

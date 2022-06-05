@@ -100,15 +100,24 @@ jobs:
           pnpm lint
 
       - name: Setup Docker
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      # Make github action to use the latest version of
+      # docker compose without it docker compose down
+      # has issues with memory nil pointer
+      # https://github.com/docker/compose/pull/9354
+      - name: Install Compose v2.6.0
+        uses: ndeloof/install-compose-action@v0.0.1
+        with:
+          version: v2.6.0
 
-      - name: Create .env file
+      - name: Docker info
         run: |
-          cp packages/app/.env.test packages/app/.env
+          docker info
 
       - name: Setup scripts
         run: |
