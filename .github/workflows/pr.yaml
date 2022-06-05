@@ -10,6 +10,15 @@ env:
   FORC_VERSION: 0.14.5
 
 jobs:
+  cancel-previous-run:
+    name: Cancel previous actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: n1hility/cancel-previous-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   validate-pr:
     name: Validate PR title
     runs-on: ubuntu-latest
@@ -46,6 +55,24 @@ jobs:
           tar -xvf forc.tar.gz
           chmod +x forc-binaries/forc
           mv forc-binaries/forc /usr/local/bin/forc
+
+      # As contracts are really Heavy to build
+      # and test we only test it when some
+      # contract was updated on the PR
+      - name: Change contracts
+        id: changed-contracts
+        uses: tj-actions/changed-files@v22.2
+        with:
+          files: |
+            **/*.sw
+            **/*.rs
+            **/Cargo.toml
+            **/Forc.toml
+
+      - name: Test Contracts
+        if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
+        run: |
+          ./contracts/actions/test.sh
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
