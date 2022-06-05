@@ -106,6 +106,10 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Docker info
+        run: |
+          docker info
+
       - name: Setup scripts
         run: |
           pnpm scripts:setup
