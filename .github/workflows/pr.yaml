@@ -105,6 +105,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Install Compose v2.6.0
+        uses: ndeloof/install-docker-compose
+        with:
+          version: v2.6.0
 
       - name: Docker info
         run: |
