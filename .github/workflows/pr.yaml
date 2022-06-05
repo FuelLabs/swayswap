@@ -56,6 +56,9 @@ jobs:
           chmod +x forc-binaries/forc
           mv forc-binaries/forc /usr/local/bin/forc
 
+      # As contracts are really Heavy to build
+      # and test we only test it when some
+      # contract was updated on the PR
       - name: Change contracts
         id: changed-contracts
         uses: tj-actions/changed-files@v22.2
