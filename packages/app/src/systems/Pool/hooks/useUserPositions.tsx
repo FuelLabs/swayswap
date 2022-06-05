@@ -48,6 +48,8 @@ export function useUserPositions() {
   const formattedPoolShare = toFixed(poolShare * 100);
   const hasPositions = poolTokensNum > ZERO;
 
+  const poolRatio = divideFnValidOnly(ethReserve, tokenReserve);
+
   return {
     pooledDAI,
     pooledETH,
@@ -64,5 +66,6 @@ export function useUserPositions() {
     totalLiquidity,
     tokenReserve,
     ethReserve,
+    poolRatio,
   };
 }

@@ -1,61 +1,133 @@
 import "cross-fetch/polyfill";
-import { fireEvent, screen, waitFor } from "@fuels-ui/test-utils";
+import { renderWithRouter } from "@fuels-ui/test-utils";
+import { Wallet } from "fuels";
 
-import { createWallet } from "~/systems/Welcome/components/WelcomePage.test";
+import { mockEmptyLiquidityPool } from "../tests/mocks";
+import {
+  createLiquidity,
+  validateButtonInformFromAmount,
+  validateButtonInformToAmount,
+  validateButtonInputsRight,
+  validateButtonInsufficientFromBalance,
+  validateButtonInsufficientToBalance,
+  validateNewPoolInputsNoRatio,
+  validateNewPoolMessage,
+  validateNoOpenPosition,
+} from "../tests/tests";
 
-export const openPoolList = async () => {
-  await waitFor(async () => {
-    const poolMenuBtn = await screen.findByTestId("poolMenuBtn");
-    expect(poolMenuBtn).toBeInTheDocument();
-    fireEvent.click(poolMenuBtn);
-  });
+import App from "~/App";
+import {
+  CONTRACT_ID,
+  DECIMAL_UNITS,
+  FUEL_PROVIDER_URL,
+  TOKEN_ID,
+} from "~/config";
+import { COIN_ETH, ONE_ASSET, parseUnits } from "~/systems/Core";
+import { mockBalances } from "~/systems/Core/tests/mocks";
+import { faucet, mint } from "~/systems/Core/tests/tests";
+import { ExchangeContractAbi__factory } from "~/types/contracts";
 
-  await waitFor(async () => {
-    const headerAddLiquidityBtn = await screen.findByTestId(
-      "headerAddLiquidityBtn"
-    );
-    expect(headerAddLiquidityBtn).toBeInTheDocument();
-  });
-};
-
-export const openAddLiquidity = async () => {
-  await waitFor(async () => {
-    const headerAddLiquidityBtn = await screen.findByTestId(
-      "headerAddLiquidityBtn"
-    );
-    expect(headerAddLiquidityBtn).toBeInTheDocument();
-    fireEvent.click(headerAddLiquidityBtn);
-  });
-
-  await waitFor(async () => {
-    const addLiquiditySubmitBtn = await screen.findByTestId(
-      "addLiquiditySubmitBtn"
-    );
-    expect(addLiquiditySubmitBtn).toBeInTheDocument();
-  });
-};
+const { privateKey } = Wallet.generate({ provider: FUEL_PROVIDER_URL });
+const wallet = new Wallet(privateKey, FUEL_PROVIDER_URL);
+jest.mock("../../Core/hooks/useWallet.ts", () => ({
+  useWallet: jest.fn(() => wallet),
+}));
+jest.mock("../../Core/hooks/useContract.ts", () => ({
+  useContract: () => ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet),
+}));
 
 describe("PoolPage", () => {
-  it("should validate pool flow", async () => {
-    await createWallet();
-    await openPoolList();
+  beforeEach(() => {});
 
-    await waitFor(async () => {
-      const noPositions = await screen.findByText(/no open positions/i);
-      expect(noPositions).toBeInTheDocument();
+  describe("PoolPage -> List", () => {
+    it("should render with no position first", async () => {
+      await renderWithRouter(<App />, {
+        route: "/pool/list",
+      });
+      await validateNoOpenPosition();
     });
+  });
 
-    await openAddLiquidity();
+  describe("PoolPage -> Add Liquidity", () => {
+    describe("PoolPage -> Add Liquidity -> no liquidity yet", () => {
+      it("should see a 'new pool' message", async () => {
+        const unmock = mockEmptyLiquidityPool();
+        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+        validateNewPoolMessage();
+        unmock();
+      });
 
-    await waitFor(async () => {
-      const submitBtn = await screen.findByText(/Enter Ether amount/);
-      expect(submitBtn).toBeInTheDocument();
-      expect(submitBtn).toBeDisabled();
+      it("button message should ask to inform Ether amount", async () => {
+        const unmock = mockEmptyLiquidityPool();
+        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+        validateButtonInformFromAmount();
+        unmock();
+      });
+
+      it("button message should ask to inform DAI amount", async () => {
+        const unmock = mockEmptyLiquidityPool();
+        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+        validateButtonInformToAmount();
+        unmock();
+      });
+
+      it("button message should show insufficient balance if has no coinFrom balance", async () => {
+        const unmockEmpty = mockEmptyLiquidityPool();
+        const unmockBalances = mockBalances();
+
+        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+        validateButtonInsufficientFromBalance();
+
+        unmockEmpty();
+        unmockBalances();
+      });
+
+      it("button message should show insufficient balance if has no coinTo balance", async () => {
+        const unmockEmpty = mockEmptyLiquidityPool();
+        const unmockBalances = mockBalances();
+
+        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+        validateButtonInsufficientToBalance();
+
+        unmockEmpty();
+        unmockBalances();
+      });
+
+      it("should not set other input value", async () => {
+        const unmock = mockEmptyLiquidityPool();
+        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+        validateNewPoolInputsNoRatio();
+        unmock();
+      });
+
+      it("button message should enable if inputs are right", async () => {
+        const unmockEmpty = mockEmptyLiquidityPool();
+        const unmockBalances = mockBalances([
+          {
+            amount: ONE_ASSET,
+            assetId: COIN_ETH,
+          },
+          {
+            amount: parseUnits("4000", DECIMAL_UNITS).toBigInt(),
+            assetId: TOKEN_ID,
+          },
+        ]);
+
+        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+        validateButtonInputsRight();
+
+        unmockEmpty();
+        unmockBalances();
+      });
+
+      it("should be able to create liquidity", async () => {
+        await faucet(wallet, parseUnits("2000", DECIMAL_UNITS).toBigInt());
+        await mint(wallet, parseUnits("4000000", DECIMAL_UNITS).toBigInt());
+
+        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+
+        createLiquidity();
+      });
     });
-
-    const coinFromInput = await screen.getByLabelText(/Coin From Input/);
-    const coinToInput = await screen.getByLabelText(/Coin To Input/);
-    expect(coinFromInput).toBeInTheDocument();
-    expect(coinToInput).toBeInTheDocument();
   });
 });

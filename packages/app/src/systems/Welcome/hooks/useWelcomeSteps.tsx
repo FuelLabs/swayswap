@@ -5,28 +5,30 @@ import { useNavigate } from "react-router-dom";
 import type { InterpreterFrom, StateFrom } from "xstate";
 import { assign, createMachine } from "xstate";
 
+import { useWallet } from "~/systems/Core";
 import { Pages } from "~/types";
 
-const LOCALSTORAGE_KEY = "fuel--welcomeStep";
-const STEPS = [
+export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
+export const STEPS = [
   { id: 0, path: Pages["welcome.createWallet"] },
   { id: 1, path: Pages["welcome.addFunds"] },
   { id: 2, path: Pages["welcome.done"] },
   { id: 3, path: null },
 ];
 
-function getCurrent() {
+export function getCurrent() {
   try {
-    const curr = localStorage.getItem(LOCALSTORAGE_KEY);
+    const curr = localStorage.getItem(LOCALSTORAGE_WELCOME_KEY);
+
     return curr ? JSON.parse(curr) : STEPS[0];
   } catch (_) {
     return STEPS[0];
   }
 }
 
-function setCurrent(id: number) {
+export function setCurrent(id: number) {
   const current = STEPS[id];
-  localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(current));
+  localStorage.setItem(LOCALSTORAGE_WELCOME_KEY, JSON.stringify(current));
   return current;
 }
 
@@ -139,13 +141,15 @@ export const stepsSelectors = {
 const ctx = createContext<Context>({} as Context);
 export function StepsProvider({ children }: WelcomeStepsProviderProps) {
   const navigate = useNavigate();
+  const wallet = useWallet();
 
   const machine = useMemo(
     () =>
       welcomeStepsMachine.withConfig({
         actions: {
           navigateTo: (context) => {
-            if (context.current.id > 2) return;
+            if (context.current.id > 2 || (wallet && !context.current.id))
+              return;
             navigate(`/welcome/${context.current.path}`);
           },
         },
