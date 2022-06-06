@@ -2,7 +2,7 @@
 
 ## Requirements
 
-This project includes Front-End and Contracts because of this we expect the current development workspace to have installed;
+This project includes Front-End and Contracts because of this we expect the current development workspace to be installed;
 
 - [Node.js v16.15.0 or latest stable](https://nodejs.org/en/) we recommend use [nvm](https://github.com/nvm-sh/nvm) to install.
 - [PNPM v7.1.7 or latest stable](https://pnpm.io/installation/)
@@ -53,10 +53,9 @@ pnpm dev
 
 ### ✨ - First steps
 
-This is guided step-by-step tutorial to create your first pool and be able to
-play around on the application
+This guided step-by-step tutorial will allow you to create your first liquidity pool and play around with the application
 
-1. As you go trough the `Welcome page` you have already mint some `ETH`, you can get more by clicking on the `faucet button`;
+1. As you go trough the `Welcome page` you should have already mintrf some `ETH`, you can get more by clicking on the `faucet button`;
 2. Go to [http://localhost:3000/mint](http://localhost:4000/mint) and mint some DAI by clicking `Mint tokens`;
 3. Now you need to create a pool, you can navigate by clicking `pool` and `add liquidity` or access [http://localhost:3000/pool/add-liquidity](http://localhost:3000/pool/add-liquidity);
 4. Set the inputs with some `ETH` and `DAI` and click `Create liquidity`.
@@ -69,13 +68,13 @@ This section has a brief description of each directory, more details can be foun
 - [packages/app](../packages/app/) Front-end SwaySwap Application
 - [packages/contracts](../packages/contracts/) 🌴 Sway Contracts
 - [packages/scripts](../packages/scripts/) SwaySwap scripts CLI
-- [packages/test-utils](../packages/test-utils/) Test utilities to Jest
+- [packages/test-utils](../packages/test-utils/) Test utilities for Jest
 - [packages/config](../packages/config/) Build configurations
 - [docker](../docker/) Network configurations
 
 ## 🧰 Useful scripts
 
-To make life easier we try to add as much scripts as possible to our [package.json](../package.json), this are some of the most used during development;
+To make life easier we added as many useful scripts as possible to our [package.json](../package.json). These are some of the most used during development:
 
 ```sh
 pnpm <command name>

@@ -30,8 +30,8 @@ Built with an entirely new language ([Sway](https://fuellabs.github.io/sway/late
 
 ## 🧰 SwaySwap Features
 
-- Faucet coins; Use the faucet API to send some EThs to your wallet
-- Mint tokens; Use the Token Contract to mint some EThs to your wallet
+- Faucet coins; Use the faucet API to send ETH to your wallet
+- Mint tokens; Use the Token Contract to mint DAI to your wallet
 - Create a liquidity pool
 - Swap tokens
 - View current pool positions
