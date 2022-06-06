@@ -14,13 +14,11 @@ export const createWallet = async () => {
   expect(createWalletBtn).toBeInTheDocument();
   fireEvent.click(createWalletBtn);
 
-  await waitFor(async () => {
-    const addFundsBtn = await screen.findByRole("button", {
-      name: "Give me ETH",
-    });
-    expect(addFundsBtn).toBeInTheDocument();
-    fireEvent.click(addFundsBtn);
+  const addFundsBtn = await screen.findByRole("button", {
+    name: "Give me ETH",
   });
+  expect(addFundsBtn).toBeInTheDocument();
+  fireEvent.click(addFundsBtn);
 
   const goToSwapBtn = await screen.findByRole("button", {
     name: "Go to Swap",
