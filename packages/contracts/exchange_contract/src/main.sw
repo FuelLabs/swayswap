@@ -26,7 +26,7 @@ const ETH_ID = 0x000000000000000000000000000000000000000000000000000000000000000
 
 /// Contract ID of the token on the other side of the pool.
 /// Modify at compile time for different pool.
-const TOKEN_ID = 0xe786e6dedb77b4fd51e05d51fdd3d24dbd1daeed3f793e4c9df93552f3c803b0;
+const TOKEN_ID = 0xf7a2eb8a271a3ea73d6fb8756e272f4a1687d9522acf2ded4454f5d0d5f6a660;
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
