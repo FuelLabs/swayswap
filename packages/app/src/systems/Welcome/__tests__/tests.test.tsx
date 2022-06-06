@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { fireEvent, screen, waitFor } from "@fuels-ui/test-utils";
 
 export const checkFirstLoad = async () => {

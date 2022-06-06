@@ -89,7 +89,8 @@ export function AddLiquidity() {
 
   const poolInfoQuery = usePoolInfo();
   const { data: poolInfo, isLoading: isLoadingPoolInfo } = poolInfoQuery;
-  const { poolRatio } = useUserPositions();
+  const userPositions = useUserPositions();
+  const { poolRatio } = userPositions;
 
   const handleChangeFromValue = (val: bigint | null) => {
     fromInput.setAmount(val);

@@ -5,7 +5,7 @@ import { objectId } from '../utils';
 import { FUEL_FAUCET_URL, TOKEN_ID } from '~/config';
 import { TokenContractAbi__factory } from '~/types/contracts';
 
-export async function faucet(wallet: Wallet, faucetAmount: bigint, captcha?: string | null) {
+export async function faucet(wallet: Wallet, captcha?: string | null) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const response: any = await (
     await fetch(FUEL_FAUCET_URL, {
@@ -20,7 +20,6 @@ export async function faucet(wallet: Wallet, faucetAmount: bigint, captcha?: str
       },
     })
   ).json();
-  console.log(`response`, response);
 
   if (response.status !== 'Success') {
     throw new Error(`Invalid faucet response: ${JSON.stringify(response)}`);

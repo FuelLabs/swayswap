@@ -1,55 +1,42 @@
 import { fireEvent, screen, waitFor } from "@fuels-ui/test-utils";
 
 export const openPoolList = async () => {
-  // start point: initial(swap) page
-  await waitFor(async () => {
-    const poolMenuBtn = await screen.findByTestId("poolMenuBtn");
-    expect(poolMenuBtn).toBeInTheDocument();
-    fireEvent.click(poolMenuBtn);
-  });
+  // start point: initial page
+  const poolMenuBtn = await screen.findByTestId("poolMenuBtn");
+  expect(poolMenuBtn).toBeInTheDocument();
+  fireEvent.click(poolMenuBtn);
 
-  await waitFor(async () => {
-    const headerAddLiquidityBtn = await screen.findByTestId(
-      "headerAddLiquidityBtn"
-    );
-    expect(headerAddLiquidityBtn).toBeInTheDocument();
-  });
+  const headerAddLiquidityBtn = await screen.findByTestId(
+    "headerAddLiquidityBtn"
+  );
+  expect(headerAddLiquidityBtn).toBeInTheDocument();
 };
 
 export const openAddLiquidity = async () => {
   // start point: pool list
-  await waitFor(async () => {
-    const headerAddLiquidityBtn = await screen.findByTestId(
-      "headerAddLiquidityBtn"
-    );
-    expect(headerAddLiquidityBtn).toBeInTheDocument();
-    fireEvent.click(headerAddLiquidityBtn);
-  });
+  const headerAddLiquidityBtn = await screen.findByTestId(
+    "headerAddLiquidityBtn"
+  );
+  expect(headerAddLiquidityBtn).toBeInTheDocument();
+  fireEvent.click(headerAddLiquidityBtn);
 
-  await waitFor(async () => {
-    const addLiquiditySubmitBtn = await screen.findByTestId(
-      "addLiquiditySubmitBtn"
-    );
-    expect(addLiquiditySubmitBtn).toBeInTheDocument();
-  });
+  const addLiquiditySubmitBtn = await screen.findByTestId(
+    "addLiquiditySubmitBtn"
+  );
+  expect(addLiquiditySubmitBtn).toBeInTheDocument();
 };
 
 export const validateNoOpenPosition = async () => {
   // start point: pool list
-  await waitFor(async () => {
-    const noPositions = await screen.findByText(/no open positions/i);
-    await expect(noPositions).toBeInTheDocument();
-  });
+  const noPositions = await screen.findByText(/no open positions/i);
+  await expect(noPositions).toBeInTheDocument();
 };
 
 export const validateNewPoolMessage = async () => {
   // start point: add liquidity
-  await waitFor(async () => {
-    const newPoolMessage = await screen.findByText(
-      /You are creating a new pool/
-    );
-    expect(newPoolMessage).toBeInTheDocument();
-  });
+
+  const newPoolMessage = await screen.findByText(/You are creating a new pool/);
+  expect(newPoolMessage).toBeInTheDocument();
 };
 
 export const validateNewPoolInputsNoRatio = async () => {
@@ -79,11 +66,9 @@ export const validateNewPoolInputsNoRatio = async () => {
 
 export const validateButtonInformFromAmount = async () => {
   // start point: add liquidity
-  await waitFor(async () => {
-    const submitBtn = await screen.findByText(/Enter Ether amount/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
-  });
+  const submitBtn = await screen.findByText(/Enter Ether amount/);
+  expect(submitBtn).toBeInTheDocument();
+  expect(submitBtn).toBeDisabled();
 };
 
 export const validateButtonInformToAmount = async () => {
@@ -94,11 +79,10 @@ export const validateButtonInformToAmount = async () => {
       value: "10",
     },
   });
-  await waitFor(async () => {
-    const submitBtn = await screen.findByText(/Enter DAI amount/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
-  });
+
+  const submitBtn = await screen.findByText(/Enter DAI amount/);
+  expect(submitBtn).toBeInTheDocument();
+  expect(submitBtn).toBeDisabled();
 };
 
 export const validateButtonInsufficientFromBalance = async () => {
@@ -115,11 +99,10 @@ export const validateButtonInsufficientFromBalance = async () => {
       value: "1000",
     },
   });
-  await waitFor(async () => {
-    const submitBtn = await screen.findByText(/Insufficient Ether balance/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
-  });
+
+  const submitBtn = await screen.findByText(/Insufficient Ether balance/);
+  expect(submitBtn).toBeInTheDocument();
+  expect(submitBtn).toBeDisabled();
 };
 
 export const validateButtonInsufficientToBalance = async () => {
@@ -136,11 +119,10 @@ export const validateButtonInsufficientToBalance = async () => {
       value: "1000",
     },
   });
-  await waitFor(async () => {
-    const submitBtn = await screen.findByText(/Insufficient DAI balance/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
-  });
+
+  const submitBtn = await screen.findByText(/Insufficient DAI balance/);
+  expect(submitBtn).toBeInTheDocument();
+  expect(submitBtn).toBeDisabled();
 };
 
 export const validateButtonInputsRight = async () => {
@@ -157,49 +139,45 @@ export const validateButtonInputsRight = async () => {
       value: "2000",
     },
   });
-  await waitFor(async () => {
-    const submitBtn = await screen.findByText(/Create liquidity/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
-  });
+
+  const submitBtn = await screen.findByText(/Create liquidity/);
+  expect(submitBtn).toBeInTheDocument();
 };
 
 export const createLiquidity = async () => {
   // start point: add liquidity
 
-  console.log("start create");
-  const noPositions = await screen.queryByText(/You are creating a new pool/i);
-  if (!noPositions) {
-    console.log("liquidity already exists");
+  let hasPoolCreated;
+
+  try {
+    await screen.findByText(/Current pool reserves/i);
+    hasPoolCreated = true;
+  } catch (e) {
+    hasPoolCreated = false;
+  }
+  if (hasPoolCreated) {
     expect(true);
     return;
   }
 
-  console.log("no liquidity yet");
-
-  const coinFromInput = screen.getByLabelText(/Coin From Input/);
+  const coinFromInput = await screen.findByLabelText(/Coin From Input/);
   await fireEvent.change(coinFromInput, {
     target: {
-      value: "1999",
+      value: "0.1",
     },
   });
-  const coinToInput = screen.getByLabelText(/Coin To Input/);
+  const coinToInput = await screen.findByLabelText(/Coin To Input/);
   await fireEvent.change(coinToInput, {
     target: {
-      value: "4000000",
+      value: "500",
     },
-  });
-  await waitFor(async () => {
-    const submitBtn = await screen.findByText(/Create liquidity/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
   });
 
   const submitBtn = await screen.findByText(/Create liquidity/);
+  expect(submitBtn).toBeInTheDocument();
+
   fireEvent.click(submitBtn);
 
-  await waitFor(async () => {
-    const successFeedback = await screen.findByText(/New pool created/);
-    expect(successFeedback).toBeInTheDocument();
-  });
+  const successFeedback = await screen.findByText(/New pool created/);
+  expect(successFeedback).toBeInTheDocument();
 };

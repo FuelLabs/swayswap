@@ -3,17 +3,22 @@ import { renderWithRouter } from "@fuels-ui/test-utils";
 
 import App from "./App";
 import {
+  createLiquidity,
   openAddLiquidity,
   openPoolList,
   validateButtonInformFromAmount,
   validateButtonInformToAmount,
+  validateButtonInputsRight,
   validateButtonInsufficientFromBalance,
   validateButtonInsufficientToBalance,
   validateNewPoolInputsNoRatio,
   validateNewPoolMessage,
   validateNoOpenPosition,
-} from "./systems/Pool/tests/tests";
-import { checkFirstLoad, createWallet } from "./systems/Welcome/tests/tests";
+} from "./systems/Pool/__tests__/tests.test";
+import {
+  checkFirstLoad,
+  createWallet,
+} from "./systems/Welcome/__tests__/tests.test";
 
 describe("AppPage", () => {
   it("should validate whole app flow", async () => {
@@ -29,5 +34,9 @@ describe("AppPage", () => {
     await validateButtonInsufficientFromBalance();
     await validateButtonInsufficientToBalance();
     await validateNewPoolInputsNoRatio();
+
+    // TODO: need to create mint tests first
+    // await validateButtonInputsRight();
+    // await createLiquidity();
   });
 });

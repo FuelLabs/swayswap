@@ -2,7 +2,8 @@ import "cross-fetch/polyfill";
 import { renderWithRouter } from "@fuels-ui/test-utils";
 import { Wallet } from "fuels";
 
-import { mockEmptyLiquidityPool } from "../tests/mocks";
+// import { mockEmptyLiquidityPool } from "../__tests__/mocks";
+import { mockEmptyLiquidityPool } from "../__tests__/mocks";
 import {
   createLiquidity,
   validateButtonInformFromAmount,
@@ -13,7 +14,7 @@ import {
   validateNewPoolInputsNoRatio,
   validateNewPoolMessage,
   validateNoOpenPosition,
-} from "../tests/tests";
+} from "../__tests__/tests.test";
 
 import App from "~/App";
 import {
@@ -22,9 +23,9 @@ import {
   FUEL_PROVIDER_URL,
   TOKEN_ID,
 } from "~/config";
-import { COIN_ETH, ONE_ASSET, parseUnits } from "~/systems/Core";
-import { mockBalances } from "~/systems/Core/tests/mocks";
-import { faucet, mint } from "~/systems/Core/tests/tests";
+import { ONE_ASSET, parseUnits } from "~/systems/Core";
+import { mockBalances } from "~/systems/Core/__tests__/mocks";
+import { faucet, mint } from "~/systems/Core/__tests__/utils";
 import { ExchangeContractAbi__factory } from "~/types/contracts";
 
 const { privateKey } = Wallet.generate({ provider: FUEL_PROVIDER_URL });
@@ -36,10 +37,28 @@ jest.mock("../../Core/hooks/useContract.ts", () => ({
   useContract: () => ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet),
 }));
 
+jest.mock("../hooks/useUserPositions.ts", () => {
+  const originalModule = jest.requireActual("../hooks/useUserPositions.ts");
+
+  return {
+    ...jest.requireActual("../hooks/useUserPositions.ts"),
+    useUserPositions: jest.fn(originalModule.useUserPositions),
+  };
+});
+
+jest.mock("../../Core/hooks/useBalances.ts", () => {
+  const originalModule = jest.requireActual("../../Core/hooks/useBalances.ts");
+
+  return {
+    ...jest.requireActual("../../Core/hooks/useBalances.ts"),
+    useBalances: jest.fn(originalModule.useBalances),
+  };
+});
+
 describe("PoolPage", () => {
   beforeEach(() => {});
 
-  describe("PoolPage -> List", () => {
+  describe("List", () => {
     it("should render with no position first", async () => {
       await renderWithRouter(<App />, {
         route: "/pool/list",
@@ -48,64 +67,61 @@ describe("PoolPage", () => {
     });
   });
 
-  describe("PoolPage -> Add Liquidity", () => {
-    describe("PoolPage -> Add Liquidity -> no liquidity yet", () => {
+  describe("Add Liquidity", () => {
+    it("should be able to create liquidity", async () => {
+      await faucet(wallet);
+      await mint(wallet, parseUnits("2000", DECIMAL_UNITS).toBigInt());
+
+      renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+
+      await createLiquidity();
+    });
+
+    describe("no liquidity yet", () => {
+      beforeEach(() => {
+        mockEmptyLiquidityPool();
+      });
+
       it("should see a 'new pool' message", async () => {
-        const unmock = mockEmptyLiquidityPool();
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        validateNewPoolMessage();
-        unmock();
+        await validateNewPoolMessage();
       });
 
       it("button message should ask to inform Ether amount", async () => {
-        const unmock = mockEmptyLiquidityPool();
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        validateButtonInformFromAmount();
-        unmock();
+        await validateButtonInformFromAmount();
       });
 
       it("button message should ask to inform DAI amount", async () => {
-        const unmock = mockEmptyLiquidityPool();
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        validateButtonInformToAmount();
-        unmock();
+        await validateButtonInformToAmount();
       });
 
       it("button message should show insufficient balance if has no coinFrom balance", async () => {
-        const unmockEmpty = mockEmptyLiquidityPool();
-        const unmockBalances = mockBalances();
+        mockBalances();
 
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        validateButtonInsufficientFromBalance();
-
-        unmockEmpty();
-        unmockBalances();
+        await validateButtonInsufficientFromBalance();
       });
 
       it("button message should show insufficient balance if has no coinTo balance", async () => {
-        const unmockEmpty = mockEmptyLiquidityPool();
-        const unmockBalances = mockBalances();
+        mockBalances();
 
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        validateButtonInsufficientToBalance();
-
-        unmockEmpty();
-        unmockBalances();
+        await validateButtonInsufficientToBalance();
       });
 
       it("should not set other input value", async () => {
-        const unmock = mockEmptyLiquidityPool();
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        validateNewPoolInputsNoRatio();
-        unmock();
+        await validateNewPoolInputsNoRatio();
       });
 
       it("button message should enable if inputs are right", async () => {
-        const unmockEmpty = mockEmptyLiquidityPool();
-        const unmockBalances = mockBalances([
+        mockBalances([
           {
             amount: ONE_ASSET,
-            assetId: COIN_ETH,
+            assetId:
+              "0x0000000000000000000000000000000000000000000000000000000000000000",
           },
           {
             amount: parseUnits("4000", DECIMAL_UNITS).toBigInt(),
@@ -114,19 +130,7 @@ describe("PoolPage", () => {
         ]);
 
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        validateButtonInputsRight();
-
-        unmockEmpty();
-        unmockBalances();
-      });
-
-      it("should be able to create liquidity", async () => {
-        await faucet(wallet, parseUnits("2000", DECIMAL_UNITS).toBigInt());
-        await mint(wallet, parseUnits("4000000", DECIMAL_UNITS).toBigInt());
-
-        renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-
-        createLiquidity();
+        await validateButtonInputsRight();
       });
     });
   });
