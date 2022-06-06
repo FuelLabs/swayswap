@@ -10,7 +10,7 @@ const _abi = [
     type: 'function',
     inputs: [
       {
-        name: 'token',
+        name: 'asset_id',
         type: 'struct ContractId',
         components: [
           {
@@ -22,6 +22,52 @@ const _abi = [
       },
     ],
     name: 'get_balance',
+    outputs: [
+      {
+        name: '',
+        type: 'u64',
+        components: null,
+      },
+    ],
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'get_pool_info',
+    outputs: [
+      {
+        name: '',
+        type: 'struct PoolInfo',
+        components: [
+          {
+            name: 'eth_reserve',
+            type: 'u64',
+            components: null,
+          },
+          {
+            name: 'token_reserve',
+            type: 'u64',
+            components: null,
+          },
+          {
+            name: 'lp_token_supply',
+            type: 'u64',
+            components: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'eth_amount',
+        type: 'u64',
+        components: null,
+      },
+    ],
+    name: 'get_add_liquidity_token_amount',
     outputs: [
       {
         name: '',
@@ -117,7 +163,7 @@ const _abi = [
     outputs: [
       {
         name: '',
-        type: 'struct RemoveLiquidityReturn',
+        type: 'struct RemoveLiquidityInfo',
         components: [
           {
             name: 'eth_amount',
@@ -176,34 +222,6 @@ const _abi = [
         name: '',
         type: 'u64',
         components: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'get_info',
-    outputs: [
-      {
-        name: '',
-        type: 'struct PoolInfo',
-        components: [
-          {
-            name: 'eth_reserve',
-            type: 'u64',
-            components: null,
-          },
-          {
-            name: 'token_reserve',
-            type: 'u64',
-            components: null,
-          },
-          {
-            name: 'lp_token_supply',
-            type: 'u64',
-            components: null,
-          },
-        ],
       },
     ],
   },

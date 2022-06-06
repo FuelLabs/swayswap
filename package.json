@@ -36,7 +36,7 @@
     "services:clean": "make -C docker services-clean",
     "services:clean-test": "make -C docker services-clean-test",
     "services:run": "make -C docker services-run",
-    "services:setup": "run-s services:run contracts",
+    "services:setup": "run-s scripts:setup services:run contracts",
     "services:run-test": "make -C docker services-run-test",
     "test:clear": "jest --clearCache",
     "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --maxWorkers 2",
