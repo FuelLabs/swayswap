@@ -10,6 +10,15 @@ env:
   FORC_VERSION: 0.14.5
 
 jobs:
+  cancel-previous-run:
+    name: Cancel previous actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: n1hility/cancel-previous-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   validate-pr:
     name: Validate PR title
     runs-on: ubuntu-latest
@@ -20,7 +29,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-and-test:
-    # needs: validate-pr
     name: Build and test
     runs-on: ubuntu-latest
     steps:
@@ -47,6 +55,24 @@ jobs:
           chmod +x forc-binaries/forc
           mv forc-binaries/forc /usr/local/bin/forc
 
+      # As contracts are really Heavy to build
+      # and test we only test it when some
+      # contract was updated on the PR
+      - name: Change contracts
+        id: changed-contracts
+        uses: tj-actions/changed-files@v22.2
+        with:
+          files: |
+            **/*.sw
+            **/*.rs
+            **/Cargo.toml
+            **/Forc.toml
+
+      - name: Test Contracts
+        if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
+        run: |
+          ./packages/contracts/actions/test.sh
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -69,24 +95,36 @@ jobs:
             - recursive: true
               args: [--no-frozen-lockfile]
 
+      # Check lint as early as possible to avoid
+      # Long fail CI and fail on this step
+      - name: Lint
+        run: |
+          pnpm lint
+
       - name: Setup Docker
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      # Make github action to use the latest version of
+      # docker compose without it docker compose down
+      # has issues with memory nil pointer
+      # https://github.com/docker/compose/pull/9354
+      - name: Install Compose v2.6.0
+        uses: ndeloof/install-compose-action@v0.0.1
+        with:
+          version: v2.6.0
 
-      - name: Create .env file
+      - name: Docker info
         run: |
-          cp packages/app/.env.test packages/app/.env
+          docker info
 
-      - name: Log Tools Version
+      - name: Setup scripts
         run: |
-          node -v
-          pnpm --version
-          forc --version
+          pnpm scripts:setup
 
-      - name: Lint & Test
+      - name: Run test
         run: |
-          pnpm lint
           pnpm ci:test
