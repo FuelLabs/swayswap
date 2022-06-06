@@ -13,6 +13,8 @@ This project is just a simple ViteJS boilerplate ready to go.
 
 ## Getting Started
 
+> ⚠️ If is your first time running the project you should start on [here](../../docs/GETTING_STARTED.md)
+
 Install all dependencies with `pnpm`:
 
 ```sh
@@ -33,10 +35,15 @@ You can start editing the pages by modifying `src/pages`. The page auto-updates 
 
 ## Project Structure
 
-`/deploy-contracts` contains code to deploy the swayswap and token contracts, and create and fund a wallet.
+- [/public](./public/) contains publicly accessible assets;
+- [/src](./src/) contains frontend code (assets, components, hooks, etc).
 
-`/public` contains publicly accessible assets.
+### Environment variables
 
-`/scripts` contains shell scripts for building and deploying Sway contracts.
-
-`/src` contains frontend code (assets, components, hooks, etc).
+| name                      | description                                                                   |
+| ------------------------- | ----------------------------------------------------------------------------- |
+| VITE_FUEL_PROVIDER_URL    | Fuel-core network url normally set as `http://localhost:4000` for development |
+| VITE_FUEL_FAUCET_URL      | Faucet API url normally set as `http://localhost:4040` for development        |
+| VITE_FAUCET_RECAPTCHA_KEY | Recaptcha key used only on live environment                                   |
+| VITE_CONTRACT_ID          | Exchange contract id this is automatically set by the `swayswap-scripts`      |
+| VITE_TOKEN_ID             | Token contract id this is automatically set by the `swayswap-scripts`         |

@@ -32,7 +32,6 @@
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --write .",
     "scripts:setup": "turbo run build --filter=swayswap-scripts && pnpm install",
-    "services:build": "make -C docker services-build",
     "services:clean": "make -C docker services-clean",
     "services:clean-test": "make -C docker services-clean-test",
     "services:run": "make -C docker services-run",
