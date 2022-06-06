@@ -2,27 +2,30 @@ import { fireEvent, screen, waitFor } from "@fuels-ui/test-utils";
 
 export const openPoolList = async () => {
   // start point: initial page
-  const poolMenuBtn = await screen.findByTestId("poolMenuBtn");
+
+  const poolMenuBtn = await screen.findByRole("button", {
+    name: "Pool",
+  });
   expect(poolMenuBtn).toBeInTheDocument();
   fireEvent.click(poolMenuBtn);
 
-  const headerAddLiquidityBtn = await screen.findByTestId(
-    "headerAddLiquidityBtn"
-  );
+  const headerAddLiquidityBtn = await screen.findByRole("button", {
+    name: "header-add-liquidity-btn",
+  });
   expect(headerAddLiquidityBtn).toBeInTheDocument();
 };
 
 export const openAddLiquidity = async () => {
   // start point: pool list
-  const headerAddLiquidityBtn = await screen.findByTestId(
-    "headerAddLiquidityBtn"
-  );
+  const headerAddLiquidityBtn = await screen.findByRole("button", {
+    name: "header-add-liquidity-btn",
+  });
   expect(headerAddLiquidityBtn).toBeInTheDocument();
   fireEvent.click(headerAddLiquidityBtn);
 
-  const addLiquiditySubmitBtn = await screen.findByTestId(
-    "addLiquiditySubmitBtn"
-  );
+  const addLiquiditySubmitBtn = await screen.findByRole("button", {
+    name: "add-liquidity-submit-btn",
+  });
   expect(addLiquiditySubmitBtn).toBeInTheDocument();
 };
 

@@ -24,12 +24,7 @@ export function WelcomeDone() {
         Now you are done to swap your coins using the fatest modular execution
         layer
       </p>
-      <Button
-        size="lg"
-        variant="primary"
-        onPress={handleDone}
-        data-testid="goToSwapBtn"
-      >
+      <Button size="lg" variant="primary" onPress={handleDone}>
         Go to Swap
       </Button>
     </WelcomeStep>

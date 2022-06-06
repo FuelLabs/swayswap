@@ -143,20 +143,16 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
   const navigate = useNavigate();
   const wallet = useWallet();
 
-  const machine = useMemo(
-    () =>
-      welcomeStepsMachine.withConfig({
-        actions: {
-          navigateTo: (context) => {
-            if (context.current.id > 2 || (wallet && !context.current.id))
-              return;
-            navigate(`/welcome/${context.current.path}`);
-          },
+  const [state, send, service] = useMachine<Machine>(() =>
+    welcomeStepsMachine.withConfig({
+      actions: {
+        navigateTo: (context) => {
+          if (context.current.id > 2 || (wallet && !context.current.id)) return;
+          navigate(`/welcome/${context.current.path}`);
         },
-      }),
-    []
+      },
+    })
   );
-  const [state, send, service] = useMachine<Machine>(machine);
 
   function next() {
     send("NEXT");

@@ -34,7 +34,7 @@ export function CreateWallet() {
         variant="primary"
         size="lg"
         onPress={handleCreateWallet}
-        data-testid="createWalletBtn"
+        aria-label="welcome-create-wallet-btn"
       >
         Create wallet
       </Button>

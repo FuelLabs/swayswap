@@ -23,7 +23,7 @@ const SubpagesNav = () => {
         variant="primary"
         onPress={() => navigate(`../${Pages["pool.addLiquidity"]}`)}
         className={cx(style.button)}
-        data-testid="headerAddLiquidityBtn"
+        aria-label="header-add-liquidity-btn"
       >
         Add Liquidity
       </Button>

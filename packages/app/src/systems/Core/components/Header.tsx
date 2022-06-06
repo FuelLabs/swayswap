@@ -69,7 +69,6 @@ export const Header = () => {
                 icon={MdSwapCalls}
                 onPress={() => navigate(Pages.swap)}
                 isActive={location.pathname === Pages.swap}
-                data-testid="swapMenuBtn"
               >
                 Swap
               </HeaderNav>
@@ -77,7 +76,6 @@ export const Header = () => {
                 icon={BiDollarCircle}
                 onPress={() => navigate(Pages.pool)}
                 isActive={location.pathname.includes(Pages.pool)}
-                data-testid="poolMenuBtn"
               >
                 Pool
               </HeaderNav>

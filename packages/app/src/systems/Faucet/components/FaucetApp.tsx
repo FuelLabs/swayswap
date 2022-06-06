@@ -46,7 +46,6 @@ export function FaucetApp({ isButtonFull, onSuccess }: FaucetAppProps) {
         className="mt-5"
         isLoading={faucet.mutation.isLoading}
         onPress={() => faucet.handleFaucet(captcha.value)}
-        data-testid="addFundsBtn"
         {...(captcha.needToShow && { isDisabled: !captcha.value })}
       >
         Give me ETH

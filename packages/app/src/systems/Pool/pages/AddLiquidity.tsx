@@ -68,7 +68,6 @@ function PoolLoader({
           {step === index && loading && <Spinner />}
           {step > index && (
             <RiCheckFill
-              data-testid={`step-done-icon-${step}`}
               aria-label={`Step completed: ${stepText}`}
               aria-hidden
             />
@@ -215,7 +214,7 @@ export function AddLiquidity() {
             reservesFromToRatio={poolRatio || addLiquidityRatio || 1}
           />
           <Button
-            data-testid="addLiquiditySubmitBtn"
+            aria-label="add-liquidity-submit-btn"
             isDisabled={!!errorsCreatePull.length}
             isFull
             size="lg"
