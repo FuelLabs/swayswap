@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@fuels-ui/test-utils";
+import { fireEvent, screen } from "@fuels-ui/test-utils";
 
 export const checkFirstLoad = async () => {
   const createWalletBtn = await screen.findByRole("button", {
@@ -32,8 +32,6 @@ export const createWallet = async () => {
 
   fireEvent.click(goToSwapBtn);
 
-  await waitFor(async () => {
-    const swapBtn = await screen.findByText(/Enter amount/i);
-    expect(swapBtn).toBeInTheDocument();
-  });
+  const swapBtn = await screen.findByText(/Enter amount/i);
+  expect(swapBtn).toBeInTheDocument();
 };
