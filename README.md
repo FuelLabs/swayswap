@@ -1,33 +1,48 @@
-# ⚡️ [SwaySwap](https://fuellabs.github.io/swayswap) ⚡️
-
 [![build](https://github.com/FuelLabs/swayswap/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/FuelLabs/swayswap/actions/workflows/gh-pages.yml)
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 ![twitter](https://img.shields.io/twitter/follow/SwayLang?style=social)
 
-## Live links
+## 🌴💰 SwaySwap 💰🌴
 
-- [Latest release](https://fuellabs.github.io/swayswap)
-- [Master branch](https://swayswap.vercel.app/)
+Built with an entirely new language ([Sway](https://fuellabs.github.io/sway/latest/index.html)), virtual machine ([FuelVM](https://github.com/FuelLabs/fuel-specs)), and UTXO-based blockchain ([Fuel](https://fuel-labs.ghost.io/introducing-fuel-the-fastest-modular-execution-layer/)), you can now experience a demonstration of the next generation of scaling beyond layer-2s and monolithic design.
 
-## About the Project
+[![launch app button](docs/assets/launch-button.png)](https://fuellabs.github.io/swayswap)
 
-SwaySwap is a decentralized application that takes advantage of Fuel's lightning fast TS SDK, Rust SDK, and [Sway](https://github.com/FuelLabs/sway) language. Create a wallet, acquire funds from a faucet and start exchanging assets with the world's fastest modular stack.
+[Next version](https://swayswap.vercel.app/), see all current changes from the master branch. Note: this is the **WIP** changes and can be unstable.
 
-## Getting Started
+## 📗 Table of contents
 
-View the current deployment of SwaySwap on GitHub pages, [here](https://fuellabs.github.io/swayswap). Alternatively, view the `Contributing` documentation below for information on setup, installation and our developmental procedure.
+- [SwaySwap Features](#-swayswap-features)
+- [Getting Started](docs/GETTING_STARTED.md)
+  - [Requirements](docs/GETTING_STARTED.md#requirements)
+  - [Running project locally](docs/GETTING_STARTED.md#running-project-locally)
+    - [📚 - Getting the Repository](docs/GETTING_STARTED.md#---getting-the-repository)
+    - [📦 - Install dependencies](docs/GETTING_STARTED.md#---install-dependencies)
+    - [📒 - Run Local Node](docs/GETTING_STARTED.md#---run-local-node)
+    - [💻 - Run Web App](docs/GETTING_STARTED.md#---run-web-app)
+    - [✨ - First steps](docs/GETTING_STARTED.md#---first-steps)
+  - [📗 Project overview](docs/GETTING_STARTED.md#-project-overview)
+  - [🧰 Useful scripts](docs/GETTING_STARTED.md#-useful-scripts)
+- [Contribution Guide](docs/CONTRIBUTE_GUIDE.md)
+  - [Finding Something to Work On](docs/CONTRIBUTE_GUIDE.md#finding-something-to-work-on)
+  - [Contribution Flow](docs/CONTRIBUTE_GUIDE.md#contribution-flow)
+- [License](#license)
 
-## Contributing
+## 🧰 SwaySwap Features
 
-Please read our [`CONTRIBUTING`](./CONTRIBUTING.md) doc to get started.
+- Faucet coins; Use the faucet API to send ETH to your wallet
+- Mint tokens; Use the Token Contract to mint DAI to your wallet
+- Create a liquidity pool
+- Swap tokens
+- View current pool positions
+- Remove liquidity
 
-## Project Structure
-
-`/contracts` contains all of the Sway libraries and contracts used in this project.
-
-`/docker` contains the files necessary to run a fuel node locally.
-
-`/packages` contains the directories necessary to run the client.
+<!-- Add some more space on the top of the gif -->
+<br />
+<br />
+<p align="center">
+  <img alt="preview pages" width="800" src="docs/assets/preview-pages.gif">
+</p>
 
 ## License
 

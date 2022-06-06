@@ -12,8 +12,3 @@ We enable developers to run locally a entire env with a
 | FUEL_CORE_PORT   | 4000        | Fuel network PORT                                                                                                    |
 | FUEL_FAUCET_PORT | 4040        | Faucet API PORT                                                                                                      |
 | DISPENSE_AMOUNT  | 50000000    | Faucet dispense amount                                                                                               |
-
-Other configurations can be found on;
-
-- [fuel-core](./fuel-core/.env)
-- [fuel-faucet](https://github.com/FuelLabs/faucet#configuration)

@@ -258,6 +258,7 @@ importers:
       fuels: 0.0.0-master-1a1fb63d
       glob: ^8.0.3
       joycon: ^3.1.1
+      prettier: ^2.6.2
       tsup: link:@fuels-ui/config/tsup
       typechain: ^8.0.0
       typechain-target-fuels: 0.0.0-master-1a1fb63d
@@ -269,6 +270,7 @@ importers:
       esbuild: 0.14.42
       fuels: 0.0.0-master-1a1fb63d
       joycon: 3.1.1
+      prettier: 2.6.2
       typechain: 8.0.0_typescript@4.7.2
       typechain-target-fuels: 0.0.0-master-1a1fb63d
       typescript: 4.7.2

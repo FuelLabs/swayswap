@@ -23,12 +23,7 @@ export function useTokenMethods(tokenId: string) {
       return contract.submit.mint_coins(amount);
     },
     transferTo(amount: bigint, overrides: Overrides & { from?: string | Promise<string> } = {}) {
-      return contract.submit.transfer_coins_to_output(
-        amount,
-        objectId(contract.id),
-        objectId(wallet.address),
-        overrides
-      );
+      return contract.submit.transfer_coins(amount, objectId(wallet.address), overrides);
     },
   };
 }
