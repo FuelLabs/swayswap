@@ -37,7 +37,12 @@ Built with an entirely new language ([Sway](https://fuellabs.github.io/sway/late
 - View current pool positions
 - Remove liquidity
 
-![launch app button](docs/assets/preview-pages.gif)
+<!-- Add some more space on the top of the gif -->
+<br />
+<br />
+<p align="center">
+  <img alt="preview pages" width="800" src="docs/assets/preview-pages.gif">
+</p>
 
 ## License
 
