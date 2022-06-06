@@ -9,6 +9,10 @@ impl Token for Contract {
         balance_of(contract_id(), contract_id())
     }
 
+    fn get_token_balance(asset_id: ContractId) -> u64 {
+        balance_of(asset_id, contract_id())
+    }
+
     fn mint_coins(mint_amount: u64) {
         mint(mint_amount);
     }
@@ -22,6 +26,6 @@ impl Token for Contract {
     }
 
     fn transfer_token_to_output(coins: u64, asset_id: ContractId, address: Address) {
-        transfer_to_output(coins, contract_id(), address);
+        transfer_to_output(coins, asset_id, address);
     }
 }
