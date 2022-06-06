@@ -3,12 +3,10 @@ import { renderWithRouter } from "@fuels-ui/test-utils";
 
 import App from "./App";
 import {
-  createLiquidity,
   openAddLiquidity,
   openPoolList,
   validateButtonInformFromAmount,
   validateButtonInformToAmount,
-  validateButtonInputsRight,
   validateButtonInsufficientFromBalance,
   validateButtonInsufficientToBalance,
   validateNewPoolInputsNoRatio,
