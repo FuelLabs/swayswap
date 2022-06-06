@@ -19,6 +19,8 @@ services:
       WALLET_SECRET_KEY: ${WALLET_SECRET}
       DISPENSE_AMOUNT: ${DISPENSE_AMOUNT}
       FUEL_NODE_URL: http://swayswap-fuel-core-${ENVIRONMENT:-development}:4000/graphql
+    # Other configurations can be found at;
+    # https://github.com/FuelLabs/faucet#configuration
     image: ghcr.io/fuellabs/faucet:v0.1.1
     ports:
       - "${FUEL_FAUCET_PORT:-4040}:3000"
