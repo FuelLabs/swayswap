@@ -8,6 +8,42 @@ import type { TokenContractAbi, TokenContractAbiInterface } from '../TokenContra
 const _abi = [
   {
     type: 'function',
+    inputs: [],
+    name: 'get_balance',
+    outputs: [
+      {
+        name: '',
+        type: 'u64',
+        components: null,
+      },
+    ],
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'asset_id',
+        type: 'struct ContractId',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+            components: null,
+          },
+        ],
+      },
+    ],
+    name: 'get_token_balance',
+    outputs: [
+      {
+        name: '',
+        type: 'u64',
+        components: null,
+      },
+    ],
+  },
+  {
+    type: 'function',
     inputs: [
       {
         name: 'mint_amount',
@@ -51,19 +87,8 @@ const _abi = [
         components: null,
       },
       {
-        name: 'asset_id',
-        type: 'struct ContractId',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-          },
-        ],
-      },
-      {
-        name: 'target',
-        type: 'struct ContractId',
+        name: 'address',
+        type: 'struct Address',
         components: [
           {
             name: 'value',
@@ -73,7 +98,7 @@ const _abi = [
         ],
       },
     ],
-    name: 'force_transfer_coins',
+    name: 'transfer_coins',
     outputs: [
       {
         name: '',
@@ -102,7 +127,7 @@ const _abi = [
         ],
       },
       {
-        name: 'recipient',
+        name: 'address',
         type: 'struct Address',
         components: [
           {
@@ -113,47 +138,12 @@ const _abi = [
         ],
       },
     ],
-    name: 'transfer_coins_to_output',
+    name: 'transfer_token_to_output',
     outputs: [
       {
         name: '',
         type: '()',
         components: [],
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: 'target',
-        type: 'struct ContractId',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-          },
-        ],
-      },
-      {
-        name: 'asset_id',
-        type: 'struct ContractId',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-          },
-        ],
-      },
-    ],
-    name: 'get_balance',
-    outputs: [
-      {
-        name: '',
-        type: 'u64',
-        components: null,
       },
     ],
   },

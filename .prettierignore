@@ -9,5 +9,6 @@ storybook-static
 pnpm-lock.yaml
 yarn-lock.yaml
 .github
-contracts
+packages/contracts
 .pnpm-store
+.env

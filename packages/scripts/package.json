@@ -19,6 +19,7 @@
     "esbuild": "^0.14.42",
     "fuels": "0.0.0-master-1a1fb63d",
     "joycon": "^3.1.1",
+    "prettier": "^2.6.2",
     "typechain": "^8.0.0",
     "typechain-target-fuels": "0.0.0-master-1a1fb63d",
     "typescript": "^4.6.4"

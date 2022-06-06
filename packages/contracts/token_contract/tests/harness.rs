@@ -1,4 +1,4 @@
-use fuel_tx::AssetId;
+use fuel_tx::{AssetId, ContractId};
 use fuels::prelude::*;
 use fuels_abigen_macro::abigen;
 
@@ -19,14 +19,14 @@ async fn token_contract() {
     // Setup contracts
     ////////////////////////////////////////////////////////
 
-    let token_asset_id = Contract::deploy(
+    let token_contract_id = Contract::deploy(
         "../token_contract/out/debug/token_contract.bin",
         &wallet,
         TxParameters::default(),
     )
     .await
     .unwrap();
-    let token_instance = TestToken::new(token_asset_id.to_string(), wallet.clone());
+    let token_instance = TestToken::new(token_contract_id.to_string(), wallet.clone());
 
     ////////////////////////////////////////////////////////
     // Test Token Contract
@@ -62,10 +62,56 @@ async fn token_contract() {
     assert_eq!(result.value, token_mint_amount - wallet_token_amount);
 
     // Inspect the wallet for alt tokens
-    let alt_token_id = AssetId::from(*token_asset_id.clone());
+    let alt_token_id = AssetId::from(*token_contract_id.clone());
     let coins = wallet
         .get_spendable_coins(&alt_token_id, wallet_token_amount)
         .await
         .unwrap();
     assert_eq!(coins[0].amount, wallet_token_amount.into());
+
+    ////////////////////////////////////////////////////////
+    // Deposit and transfer ETH on the contract
+    ////////////////////////////////////////////////////////
+
+    let wallet_native_balance_before = wallet
+        .get_asset_balance(&NATIVE_ASSET_ID)
+        .await
+        .unwrap();
+    let send_native_token_amount = 100;
+
+    // Send native tokens to the contract
+    let contract_native_token_balance = token_instance
+        .get_token_balance(ContractId::from(*NATIVE_ASSET_ID))
+        .call_params(CallParameters::new(
+            Some(send_native_token_amount),
+            None,
+        ))
+        .call()
+        .await
+        .unwrap();
+    assert_eq!(contract_native_token_balance.value, send_native_token_amount);
+
+    // Check user balance didn't has the sent native tokens
+    let wallet_native_balance_after = wallet
+        .get_asset_balance(&NATIVE_ASSET_ID)
+        .await
+        .unwrap();
+    assert_eq!(wallet_native_balance_after, wallet_native_balance_before - send_native_token_amount);
+
+    // Transfer coins back to the wallet from the contract
+    token_instance
+        .transfer_token_to_output(
+            send_native_token_amount,
+            ContractId::from(*NATIVE_ASSET_ID),
+            wallet.address()
+        )
+        .append_variable_outputs(1)
+        .call()
+        .await
+        .unwrap();
+    let wallet_native_balance_after = wallet
+        .get_asset_balance(&NATIVE_ASSET_ID)
+        .await
+        .unwrap();
+    assert_eq!(wallet_native_balance_before, wallet_native_balance_after);
 }

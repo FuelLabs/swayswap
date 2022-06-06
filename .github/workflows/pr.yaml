@@ -8,6 +8,9 @@ on:
 env:
   RUST_VERSION: 1.61.0
   FORC_VERSION: 0.14.5
+  NODE_VERSION: 16
+  PNPM_VERSION: 7.0.0
+  COMPOSE_VERSION: 2.6.0
 
 jobs:
   cancel-previous-run:
@@ -76,7 +79,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: "https://registry.npmjs.org"
 
       - name: Cache PNPM modules
@@ -90,7 +93,7 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@v2.1.0
         with:
-          version: 7.0.0
+          version: ${{ env.PNPM_VERSION }}
           run_install: true
 
       # Check lint as early as possible to avoid
@@ -110,10 +113,10 @@ jobs:
       # docker compose without it docker compose down
       # has issues with memory nil pointer
       # https://github.com/docker/compose/pull/9354
-      - name: Install Compose v2.6.0
+      - name: Install Compose
         uses: ndeloof/install-compose-action@v0.0.1
         with:
-          version: v2.6.0
+          version: v${{ env.COMPOSE_VERSION }}
 
       - name: Docker info
         run: |
