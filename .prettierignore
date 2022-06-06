@@ -11,3 +11,4 @@ yarn-lock.yaml
 .github
 packages/contracts
 .pnpm-store
+.env
