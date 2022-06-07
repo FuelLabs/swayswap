@@ -2,11 +2,10 @@ version: "3"
 
 services:
   swayswap-fuel-core:
-    env_file:
-      - ./fuel-core/.env.docker
+    container_name: "swayswap-fuel-core-${ENVIRONMENT:-development}"
     build: ./fuel-core
     ports:
-      - "4000:4000"
+      - "${FUEL_CORE_PORT:-4000}:4000"
     volumes:
       - swayswap-fuel-core-db:/mnt/db
     healthcheck:
@@ -15,17 +14,22 @@ services:
       timeout: 5s
       retries: 10
   swayswap-faucet:
-    env_file:
-      - ./fuel-faucet/.env.docker
+    container_name: "swayswap-faucet-${ENVIRONMENT:-development}"
     environment:
-      - FUEL_NODE_URL=http://swayswap-fuel-core:4000/graphql
+      WALLET_SECRET_KEY: ${WALLET_SECRET}
+      DISPENSE_AMOUNT: ${DISPENSE_AMOUNT}
+      FUEL_NODE_URL: http://swayswap-fuel-core-${ENVIRONMENT:-development}:4000/graphql
+    # Other configurations can be found at;
+    # https://github.com/FuelLabs/faucet#configuration
     image: ghcr.io/fuellabs/faucet:v0.1.1
     ports:
-      - "4040:4040"
+      - "${FUEL_FAUCET_PORT:-4040}:3000"
     links:
       - swayswap-fuel-core
     depends_on:
       swayswap-fuel-core:
         condition: service_healthy
+
 volumes:
   swayswap-fuel-core-db:
+    name: "fuel-core-db-${ENVIRONMENT:-development}"

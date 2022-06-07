@@ -10,7 +10,7 @@ import { StepsProvider } from "~/systems/Welcome";
 
 export const LocationDisplay = () => {
   const location = useLocation();
-  return <div data-testid="location-display">{location.pathname}</div>;
+  return <div>{location.pathname}</div>;
 };
 
 type AppProps = {
@@ -23,9 +23,9 @@ export function Providers({ children }: AppProps) {
       <Toaster />
       <QueryClientProvider client={queryClient}>
         <Dialog.Provider>
-          <StepsProvider>
-            <AppContextProvider>{children}</AppContextProvider>
-          </StepsProvider>
+          <AppContextProvider>
+            <StepsProvider>{children}</StepsProvider>
+          </AppContextProvider>
         </Dialog.Provider>
       </QueryClientProvider>
       {process.env.NODE_ENV === "test" && <LocationDisplay />}

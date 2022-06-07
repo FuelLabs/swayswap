@@ -1,21 +1,9 @@
 import react from '@vitejs/plugin-react';
-import { config } from 'dotenv';
 import jotaiDebugLabel from 'jotai/babel/plugin-debug-label';
 import jotaiReactRefresh from 'jotai/babel/plugin-react-refresh';
-import { resolve } from 'path';
+import './load.envs.ts';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
-function getEnvName() {
-  if (process.env.NODE_ENV === 'production') {
-    return '.env.production';
-  }
-  return '.env';
-}
-
-config({
-  path: resolve(__dirname, getEnvName()),
-});
 
 // https://vitejs.dev/config/
 export default defineConfig({
