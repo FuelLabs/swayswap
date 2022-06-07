@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 import { useQueryErrorResetBoundary } from "react-query";
 import { Outlet, useLocation, useResolvedPath } from "react-router-dom";
 
 import { useWallet } from "../hooks";
 
+import { ErrorBoundary } from "./ErrorBoundary";
 import { Header } from "./Header";
 
 import { FaucetWidget } from "~/systems/Faucet";
@@ -26,27 +26,7 @@ export function MainLayout() {
     <main className="mainLayout">
       <Header />
       <div className="mainLayout--wrapper">
-        <ErrorBoundary
-          onReset={resetReactQuery}
-          fallbackRender={({ error, resetErrorBoundary }) => (
-            <div
-              className="mainLayout--errorContent"
-              style={{ textAlign: "center" }}
-            >
-              Error
-              <br />
-              {error.message}
-              <br />
-              <br />
-              <button
-                className="mainLayout--confirmBtn"
-                onClick={resetErrorBoundary}
-              >
-                Reset
-              </button>
-            </div>
-          )}
-        >
+        <ErrorBoundary onReset={resetReactQuery}>
           <Suspense fallback={<Skeleton />}>
             <Outlet />
           </Suspense>

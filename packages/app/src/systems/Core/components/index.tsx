@@ -3,6 +3,7 @@ export * from "./AssetItem";
 export * from "./CoinInput";
 export * from "./CoinSelector";
 export * from "./CoinsListDialog";
+export * from "./ErrorBoundary";
 export * from "./Header";
 export * from "./MainLayout";
 export * from "./NavigateBackButton";
