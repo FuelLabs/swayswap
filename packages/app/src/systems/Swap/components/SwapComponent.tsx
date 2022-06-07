@@ -11,13 +11,7 @@ import {
 import type { SwapState } from "../types";
 import { ActiveInput } from "../types";
 
-import { NETWORK_FEE } from "~/config";
-import {
-  CoinInput,
-  useCoinInput,
-  CoinSelector,
-  toBigInt,
-} from "~/systems/Core";
+import { CoinInput, useCoinInput, CoinSelector } from "~/systems/Core";
 import { InvertButton } from "~/systems/UI";
 import type { Coin } from "~/types";
 
@@ -27,6 +21,7 @@ const style = {
 
 type SwapComponentProps = {
   previewAmount?: bigint | null;
+  networkFee?: bigint | null;
   onChange?: (swapState: SwapState) => void;
   isLoading?: boolean;
 };
@@ -35,6 +30,7 @@ export function SwapComponent({
   onChange,
   isLoading,
   previewAmount,
+  networkFee,
 }: SwapComponentProps) {
   const [initialAmount, setInitialAmount] = useAtom(swapAmountAtom);
   const [activeInput, setActiveInput] = useAtom(swapActiveInputAtom);
@@ -65,7 +61,7 @@ export function SwapComponent({
   const fromInput = useCoinInput({
     coin: coinFrom,
     disableWhenEth: true,
-    gasFee: toBigInt(NETWORK_FEE),
+    gasFee: networkFee,
     onChangeCoin: (coin: Coin) => {
       setCoins([coin, coinTo]);
     },

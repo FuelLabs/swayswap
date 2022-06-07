@@ -25,7 +25,7 @@ type UseCoinParams = {
    */
   amount?: bigint | null;
   coin?: Coin | null;
-  gasFee?: bigint;
+  gasFee?: bigint | null;
   isReadOnly?: boolean;
   onInput?: (...args: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
   onChange?: (val: bigint | null) => void;

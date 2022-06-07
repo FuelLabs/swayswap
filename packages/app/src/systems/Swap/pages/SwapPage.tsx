@@ -14,6 +14,7 @@ import {
   swapTokens,
   getValidationState,
   getValidationText,
+  queryNetworkFee,
 } from "../utils";
 
 import {
@@ -79,10 +80,23 @@ export function SwapPage() {
     }
   );
 
-  const { mutate: swap, isLoading: isSwaping } = useMutation(
+  const { isLoading: feeIsLoading, data: networkFee } = useQuery(
+    [],
+    async () => {
+      try {
+        return await queryNetworkFee(contract, swapState?.direction);
+      } catch (err) {
+        return null;
+      }
+    },
+    { enabled: true }
+  );
+
+  const { mutate: swap, isLoading: isSwapping } = useMutation(
     async () => {
       if (!swapState) return;
-      await swapTokens(contract, swapState);
+      if (!networkFee) return;
+      await swapTokens(contract, swapState, networkFee);
       await sleep(1000);
     },
     {
@@ -99,6 +113,7 @@ export function SwapPage() {
   }
 
   const validationState = getValidationState({
+    networkFee,
     swapState,
     balances,
     slippage: slippage.value,
@@ -116,19 +131,24 @@ export function SwapPage() {
         Swap
       </Card.Title>
       <SwapComponent
+        networkFee={networkFee}
         previewAmount={previewAmount}
         onChange={handleSwap}
         isLoading={isLoading}
       />
-      <SwapPreview isLoading={isLoading} swapInfo={swapInfo} />
+      <SwapPreview
+        networkFee={networkFee}
+        isLoading={isLoading}
+        swapInfo={swapInfo}
+      />
       <PricePerToken
         swapState={swapState}
         previewAmount={previewAmount}
-        isLoading={isLoading}
+        isLoading={feeIsLoading || isLoading}
       />
       <Button
         isFull
-        isLoading={isSwaping}
+        isLoading={feeIsLoading || isSwapping}
         size="lg"
         variant="primary"
         isDisabled={shouldDisableSwap}

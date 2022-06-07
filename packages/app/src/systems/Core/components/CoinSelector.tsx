@@ -4,7 +4,7 @@ import { useState, useEffect, forwardRef, useMemo } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 import { useBalances } from "../hooks";
-import { TOKENS, formatUnits } from "../utils";
+import { TOKENS, formatUnits, COIN_ETH } from "../utils";
 
 import { CoinsListDialog } from "./CoinsListDialog";
 import { TokenIcon } from "./TokenIcon";
@@ -111,20 +111,26 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
             {showBalance && (
               <div
                 className="text-xs text-gray-400"
-                aria-label={`${coin?.name} balance`}
+                aria-label={`${coin?.symbol} balance`}
               >
                 Balance: {balance}
               </div>
             )}
             {showMaxButton && (
-              <Button
-                size="sm"
-                onPress={onSetMaxBalance}
-                className="coinSelector--maxButton"
-                variant="ghost"
+              <Tooltip
+                content={`Set: max ${coin?.symbol} balance ${
+                  coin?.assetId === COIN_ETH ? " - network_fee" : ""
+                }`}
               >
-                Max
-              </Button>
+                <Button
+                  size="sm"
+                  onPress={onSetMaxBalance}
+                  className="coinSelector--maxButton"
+                  variant="ghost"
+                >
+                  Max
+                </Button>
+              </Tooltip>
             )}
           </div>
         )}
