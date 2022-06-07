@@ -1,21 +1,15 @@
 #!/bin/sh
 
-# Env file
+# Load env_template
 APP_TEST_ENV=./packages/app/.env.test
 TEST_CREATED=0
-
-env_template () {
-    echo "VITE_FUEL_PROVIDER_URL=http://localhost:$1/graphql" > $3
-    echo "VITE_FUEL_FAUCET_URL=http://localhost:$2/dispense" >> $3
-    echo "VITE_CONTRACT_ID=0x0000000000000000000000000000000000000000000000000000000000000000" >> $3
-    echo "VITE_TOKEN_ID=0x0000000000000000000000000000000000000000000000000000000000000000" >> $3
-}
 
 # If packages/app/.env.test not exists
 # create it
 if [ ! -f "$APP_TEST_ENV" ]; then
-    env_template 4001 4041 $APP_TEST_ENV
-    TEST_CREATED=1
+    echo "Create $APP_TEST_ENV";
+    ./scripts/create-test-env.sh 4001 4041 $APP_TEST_ENV;
+    TEST_CREATED=1;
 fi
 
 # Run setup

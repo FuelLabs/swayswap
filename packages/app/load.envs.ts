@@ -5,7 +5,7 @@ function getEnvName() {
   if (process.env.NODE_ENV === 'production') {
     return '.env.production';
   }
-  if (process.env.NODE_ENV === 'test' && process.env.CI === 'true') {
+  if (process.env.NODE_ENV === 'test') {
     return '.env.test';
   }
 }
