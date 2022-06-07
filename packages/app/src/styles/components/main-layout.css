@@ -1,8 +1,12 @@
 @layer components {
   .mainLayout {
-    @apply grid gap-8;
+    @apply flex flex-col gap-4;
     @apply min-h-screen text-gray-100;
-    grid-template-rows: auto 1fr auto;
+
+    @media (min-width: 600px) {
+      @apply grid gap-8;
+      grid-template-rows: auto 1fr auto;
+    }
   }
   .mainLayout--wrapper {
     @apply flex justify-center items-start h-full p-4 sm:pt-14;

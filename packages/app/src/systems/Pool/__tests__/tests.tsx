@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@fuels-ui/test-utils";
+import { fireEvent, screen, waitFor } from "@swayswap/test-utils";
 
 export const openPoolList = async () => {
   // start point: initial page
@@ -31,8 +31,10 @@ export const openAddLiquidity = async () => {
 
 export const testNoOpenPosition = async () => {
   // start point: pool list
-  const noPositions = await screen.findByText(/no open positions/i);
-  await expect(noPositions).toBeInTheDocument();
+  const noPositions = await screen.findByText(
+    /you do not have any open positions/i
+  );
+  expect(noPositions).toBeInTheDocument();
 };
 
 export const testNewPoolMessage = async () => {

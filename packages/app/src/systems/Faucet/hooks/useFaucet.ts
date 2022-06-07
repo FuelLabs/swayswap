@@ -41,10 +41,10 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
       }
     },
     {
-      onSuccess: () => {
+      onSuccess: async () => {
         // Navigate to assets page to show new cons
         // https:// github.com/FuelLabs/swayswap-demo/issues/40
-        balances.refetch();
+        await balances.refetch();
         opts.onSuccess?.();
       },
     }

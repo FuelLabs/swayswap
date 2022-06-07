@@ -1,5 +1,5 @@
 import "cross-fetch/polyfill";
-import { renderWithRouter } from "@fuels-ui/test-utils";
+import { renderWithRouter } from "@swayswap/test-utils";
 
 import App from "./App";
 import {
