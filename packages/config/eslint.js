@@ -77,7 +77,7 @@ module.exports = {
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   overrides: [
     {
-      files: ['*.test.{ts,tsx}'],
+      files: ['*.test.{ts,tsx}', 'tests.tsx'],
       env: {
         jest: true,
       },
