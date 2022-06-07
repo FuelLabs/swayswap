@@ -64,6 +64,7 @@ importers:
       '@fontsource/fira-code': ^4.5.10
       '@fontsource/inter': ^4.5.11
       '@headlessui/react': ^1.6.4
+      '@jest/globals': ^28.1.0
       '@radix-ui/react-accordion': ^0.1.6
       '@radix-ui/react-alert-dialog': ^0.1.7
       '@radix-ui/react-tooltip': ^0.1.7
@@ -181,6 +182,7 @@ importers:
       vite-tsconfig-paths: 3.5.0_vite@2.9.10
       xstate: 4.32.1
     devDependencies:
+      '@jest/globals': 28.1.1
       '@react-types/button': 3.5.0_react@18.1.0
       '@react-types/dialog': 3.4.0_react@18.1.0
       '@react-types/link': 3.3.0_react@18.1.0

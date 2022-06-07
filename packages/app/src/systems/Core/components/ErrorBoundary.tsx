@@ -5,7 +5,7 @@ import { ErrorBoundary as Root } from "react-error-boundary";
 type ErrorBoundaryProps = Pick<RootProps, "onReset"> & { children: ReactNode };
 
 export function ErrorBoundary({ children, onReset }: ErrorBoundaryProps) {
-  if (process.env.NODE_ENV === "test") return <>children</>;
+  if (process.env.NODE_ENV === "test") return <>{children}</>;
   return (
     <Root
       onReset={onReset}
