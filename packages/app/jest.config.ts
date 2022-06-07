@@ -9,6 +9,7 @@ const configJest: Config.InitialOptions = {
   ...baseConfig,
   rootDir: __dirname,
   displayName: pkg.name,
+  testSequencer: '<rootDir>/jest.sequence.js',
 };
 
 export default configJest;

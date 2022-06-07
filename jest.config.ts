@@ -10,7 +10,6 @@ export const config: Config.InitialOptions = {
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/**/?(*.)+(spec|test).[jt]s?(x)'],
   testPathIgnorePatterns: ['__tests__', 'dist/*'],
-  testSequencer: '<rootDir>/jest.sequence.js',
   reporters: ['default', 'github-actions'],
   setupFiles: ['dotenv/config'],
   setupFilesAfterEnv: ['@fuels-ui/test-utils/setup.ts'],
