@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
-    "@fuels-ui/test-utils": "workspace:*",
+    "@swayswap/test-utils": "workspace:*",
     "swayswap-scripts": "workspace:*",
     "@jest/types": "^28.1.0",
     "@swc/core": "^1.2.179",

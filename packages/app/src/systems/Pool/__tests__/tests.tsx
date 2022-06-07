@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@fuels-ui/test-utils";
+import { fireEvent, screen, waitFor } from "@swayswap/test-utils";
 
 export const openPoolList = async () => {
   // start point: initial page

@@ -1,5 +1,5 @@
 import "cross-fetch/polyfill";
-import { renderWithRouter } from "@fuels-ui/test-utils";
+import { renderWithRouter } from "@swayswap/test-utils";
 
 import { testCheckFirstLoad, testCreateWallet } from "../__tests__/tests";
 

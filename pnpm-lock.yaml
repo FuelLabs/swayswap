@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@babel/core': ^7.17.10
-      '@fuels-ui/test-utils': workspace:*
+      '@swayswap/test-utils': workspace:*
       '@jest/types': ^28.1.0
       '@swc/core': ^1.2.179
       '@swc/jest': ^0.2.21
@@ -31,7 +31,7 @@ importers:
       typescript: ^4.6.4
     devDependencies:
       '@babel/core': 7.18.2
-      '@fuels-ui/test-utils': link:packages/test-utils
+      '@swayswap/test-utils': link:packages/test-utils
       '@jest/types': 28.1.0
       '@swc/core': 1.2.197
       '@swc/jest': 0.2.21_@swc+core@1.2.197

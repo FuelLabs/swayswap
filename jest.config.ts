@@ -12,7 +12,7 @@ export const config: Config.InitialOptions = {
   testPathIgnorePatterns: ['__tests__', 'dist/*'],
   reporters: ['default', 'github-actions'],
   setupFiles: ['dotenv/config'],
-  setupFilesAfterEnv: ['@fuels-ui/test-utils/setup.ts'],
+  setupFilesAfterEnv: ['@swayswap/test-utils/setup.ts'],
   collectCoverageFrom: [
     '<rootDir>/**/*.{js,ts,tsx}',
     '!**/*test.{js,ts,tsx}',
