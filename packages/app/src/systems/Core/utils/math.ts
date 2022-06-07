@@ -61,9 +61,7 @@ export function parseToFormattedNumber(
   if (typeof value === 'number') {
     val = BigInt(Math.trunc(value));
   }
-  const result = ethers.commify(toFixed(formatUnits(val, precision), FIXED_UNITS));
-  const decimal = new Decimal(result.replaceAll(',', ''));
-  return decimal.lessThanOrEqualTo('0.0001') ? '0' : result;
+  return ethers.commify(toFixed(formatUnits(val, precision), FIXED_UNITS));
 }
 
 export function multiplyFn(value?: BigNumberish | null, by?: BigNumberish | null) {
