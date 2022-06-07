@@ -3,6 +3,9 @@ version: "3"
 services:
   swayswap-fuel-core:
     container_name: "swayswap-fuel-core-${ENVIRONMENT:-development}"
+    environment:
+      MIN_GAS_PRICE: ${GAS_PRICE}
+      MIN_BYTE_PRICE: ${BYTE_PRICE}
     build: ./fuel-core
     ports:
       - "${FUEL_CORE_PORT:-4000}:4000"
@@ -16,6 +19,8 @@ services:
   swayswap-faucet:
     container_name: "swayswap-faucet-${ENVIRONMENT:-development}"
     environment:
+      MIN_GAS_PRICE: ${GAS_PRICE}
+      MIN_BYTE_PRICE: ${BYTE_PRICE}
       WALLET_SECRET_KEY: ${WALLET_SECRET}
       DISPENSE_AMOUNT: ${DISPENSE_AMOUNT}
       FUEL_NODE_URL: http://swayswap-fuel-core-${ENVIRONMENT:-development}:4000/graphql
