@@ -126,6 +126,6 @@ jobs:
         run: |
           pnpm scripts:setup
 
-      - name: Run test coverage
+      - name: Run test
         run: |
-          pnpm ci:test-coverage
+          pnpm ci:test

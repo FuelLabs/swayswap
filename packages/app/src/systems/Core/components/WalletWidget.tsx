@@ -39,9 +39,7 @@ export function WalletWidget() {
       })}
     >
       <>
-        {ethBalance.formatted && (
-          <span data-testid="wallet-balance">{ethBalance.formatted} ETH</span>
-        )}
+        {ethBalance.formatted && <span>{ethBalance.formatted} ETH</span>}
         <div className="flex items-center bg-gray-700 rounded-full">
           <ButtonGroup>
             <Button

@@ -8,7 +8,7 @@ import {
   AddLiquidityPreview,
   PoolCurrentReserves,
 } from "../components";
-import { usePoolInfo, useAddLiquidity } from "../hooks";
+import { usePoolInfo, useAddLiquidity, useUserPositions } from "../hooks";
 import { poolFromAmountAtom, poolToAmountAtom } from "../state";
 
 import {
@@ -68,7 +68,6 @@ function PoolLoader({
           {step === index && loading && <Spinner />}
           {step > index && (
             <RiCheckFill
-              data-testid={`step-done-icon-${step}`}
               aria-label={`Step completed: ${stepText}`}
               aria-hidden
             />
@@ -89,15 +88,15 @@ export function AddLiquidity() {
 
   const poolInfoQuery = usePoolInfo();
   const { data: poolInfo, isLoading: isLoadingPoolInfo } = poolInfoQuery;
+  const userPositions = useUserPositions();
+  const { poolRatio } = userPositions;
 
   const handleChangeFromValue = (val: bigint | null) => {
     fromInput.setAmount(val);
 
-    if (reservesFromToRatio) {
+    if (poolRatio) {
       const value = val || ZERO;
-      const newToValue = Math.ceil(
-        divideFnValidOnly(value, reservesFromToRatio)
-      );
+      const newToValue = Math.ceil(divideFnValidOnly(value, poolRatio));
       toInput.setAmount(BigInt(newToValue));
     }
   };
@@ -105,9 +104,9 @@ export function AddLiquidity() {
   const handleChangeToValue = (val: bigint | null) => {
     toInput.setAmount(val);
 
-    if (reservesFromToRatio) {
+    if (poolRatio) {
       const value = val || ZERO;
-      const newFromValue = Math.floor(multiplyFn(value, reservesFromToRatio));
+      const newFromValue = Math.floor(multiplyFn(value, poolRatio));
       fromInput.setAmount(BigInt(newFromValue));
     }
   };
@@ -129,10 +128,7 @@ export function AddLiquidity() {
 
   // If reserve didn't return a ratio them the current user
   // Is creating the pool and the ratio is 1:1
-  const reservesFromToRatio = divideFnValidOnly(
-    poolInfo?.eth_reserve,
-    poolInfo?.token_reserve
-  );
+
   const addLiquidityRatio = divideFnValidOnly(fromInput.amount, toInput.amount);
 
   const {
@@ -145,7 +141,6 @@ export function AddLiquidity() {
     poolInfoQuery,
     coinFrom,
     coinTo,
-    reservesFromToRatio,
   });
 
   function getButtonText() {
@@ -155,7 +150,7 @@ export function AddLiquidity() {
     if (errorsCreatePull.length) {
       return errorsCreatePull[0];
     }
-    return reservesFromToRatio ? "Add liquidity" : "Create liquidity";
+    return poolRatio ? "Add liquidity" : "Create liquidity";
   }
 
   useEffect(() => {
@@ -216,10 +211,10 @@ export function AddLiquidity() {
           <AddLiquidityPoolPrice
             coinFrom={coinFrom}
             coinTo={coinTo}
-            reservesFromToRatio={reservesFromToRatio || addLiquidityRatio || 1}
+            reservesFromToRatio={poolRatio || addLiquidityRatio || 1}
           />
           <Button
-            data-testid="submit"
+            aria-label="add-liquidity-submit-btn"
             isDisabled={!!errorsCreatePull.length}
             isFull
             size="lg"
@@ -234,7 +229,7 @@ export function AddLiquidity() {
           >
             {getButtonText()}
           </Button>
-          {!reservesFromToRatio && !isLoadingPoolInfo ? (
+          {!poolRatio && !isLoadingPoolInfo ? (
             <div className={style.createPoolInfo}>
               <h4 className="text-orange-400 mb-2 font-bold">
                 You are creating a new pool
@@ -245,7 +240,7 @@ export function AddLiquidity() {
               </div>
             </div>
           ) : null}
-          {!!(poolInfo && reservesFromToRatio) && <PoolCurrentReserves />}
+          {!!(poolInfo && poolRatio) && <PoolCurrentReserves />}
         </>
       )}
     </Card>

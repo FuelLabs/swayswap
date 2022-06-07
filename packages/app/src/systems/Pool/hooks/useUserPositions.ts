@@ -1,4 +1,4 @@
-import { usePoolInfo } from "./usePoolInfo";
+import { usePoolInfo } from './usePoolInfo';
 
 import {
   TOKENS,
@@ -9,17 +9,15 @@ import {
   toBigInt,
   multiplyFn,
   toFixed,
-} from "~/systems/Core";
+} from '~/systems/Core';
 
 export function useUserPositions() {
   const { data: info } = usePoolInfo();
   const { data: balances } = useBalances();
 
-  const lpToken = TOKENS.find((c) => c.symbol === "ETH/DAI");
+  const lpToken = TOKENS.find((c) => c.symbol === 'ETH/DAI');
 
-  const poolTokens = balances?.find(
-    (coin) => coin.assetId === lpToken?.assetId
-  )?.amount;
+  const poolTokens = balances?.find((coin) => coin.assetId === lpToken?.assetId)?.amount;
   const poolTokensNum = poolTokens || ZERO;
 
   // info?.token_reserve
@@ -30,23 +28,17 @@ export function useUserPositions() {
   const formattedTokenReserve = parseToFormattedNumber(tokenReserve);
   const formattedEthReserve = parseToFormattedNumber(ethReserve);
 
-  const pooledDAI = divideFnValidOnly(
-    multiplyFn(poolTokensNum, tokenReserve),
-    totalLiquidity
-  );
-  const pooledETH = divideFnValidOnly(
-    multiplyFn(poolTokensNum, ethReserve),
-    totalLiquidity
-  );
+  const pooledDAI = divideFnValidOnly(multiplyFn(poolTokensNum, tokenReserve), totalLiquidity);
+  const pooledETH = divideFnValidOnly(multiplyFn(poolTokensNum, ethReserve), totalLiquidity);
   const formattedPooledDAI = parseToFormattedNumber(pooledDAI);
   const formattedPooledETH = parseToFormattedNumber(pooledETH);
-  const formattedPoolTokens = poolTokensNum
-    ? parseToFormattedNumber(poolTokensNum)
-    : "0";
+  const formattedPoolTokens = poolTokensNum ? parseToFormattedNumber(poolTokensNum) : '0';
 
   const poolShare = divideFnValidOnly(poolTokensNum, totalLiquidity);
   const formattedPoolShare = toFixed(poolShare * 100);
   const hasPositions = poolTokensNum > ZERO;
+
+  const poolRatio = divideFnValidOnly(ethReserve, tokenReserve);
 
   return {
     pooledDAI,
@@ -64,5 +56,6 @@ export function useUserPositions() {
     totalLiquidity,
     tokenReserve,
     ethReserve,
+    poolRatio,
   };
 }
