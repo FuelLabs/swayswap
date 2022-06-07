@@ -29,20 +29,20 @@ export const openAddLiquidity = async () => {
   expect(addLiquiditySubmitBtn).toBeInTheDocument();
 };
 
-export const validateNoOpenPosition = async () => {
+export const testNoOpenPosition = async () => {
   // start point: pool list
   const noPositions = await screen.findByText(/no open positions/i);
   await expect(noPositions).toBeInTheDocument();
 };
 
-export const validateNewPoolMessage = async () => {
+export const testNewPoolMessage = async () => {
   // start point: add liquidity
 
   const newPoolMessage = await screen.findByText(/You are creating a new pool/);
   expect(newPoolMessage).toBeInTheDocument();
 };
 
-export const validateNewPoolInputsNoRatio = async () => {
+export const testNewPoolInputsNoRatio = async () => {
   // start point: add liquidity
   const coinFromInput = screen.getByLabelText(/Coin From Input/);
   const coinToInput = screen.getByLabelText(/Coin To Input/);
@@ -67,14 +67,14 @@ export const validateNewPoolInputsNoRatio = async () => {
   });
 };
 
-export const validateButtonInformFromAmount = async () => {
+export const testButtonInformFromAmount = async () => {
   // start point: add liquidity
   const submitBtn = await screen.findByText(/Enter Ether amount/);
   expect(submitBtn).toBeInTheDocument();
   expect(submitBtn).toBeDisabled();
 };
 
-export const validateButtonInformToAmount = async () => {
+export const testButtonInformToAmount = async () => {
   // start point: add liquidity
   const coinFromInput = screen.getByLabelText(/Coin From Input/);
   await fireEvent.change(coinFromInput, {
@@ -88,7 +88,7 @@ export const validateButtonInformToAmount = async () => {
   expect(submitBtn).toBeDisabled();
 };
 
-export const validateButtonInsufficientFromBalance = async () => {
+export const testButtonInsufficientFromBalance = async () => {
   // start point: add liquidity
   const coinFromInput = screen.getByLabelText(/Coin From Input/);
   await fireEvent.change(coinFromInput, {
@@ -108,7 +108,7 @@ export const validateButtonInsufficientFromBalance = async () => {
   expect(submitBtn).toBeDisabled();
 };
 
-export const validateButtonInsufficientToBalance = async () => {
+export const testButtonInsufficientToBalance = async () => {
   // start point: add liquidity
   const coinFromInput = screen.getByLabelText(/Coin From Input/);
   await fireEvent.change(coinFromInput, {
@@ -128,7 +128,7 @@ export const validateButtonInsufficientToBalance = async () => {
   expect(submitBtn).toBeDisabled();
 };
 
-export const validateButtonInputsRight = async () => {
+export const testButtonInputsRight = async () => {
   // start point: add liquidity
   const coinFromInput = screen.getByLabelText(/Coin From Input/);
   await fireEvent.change(coinFromInput, {
@@ -147,7 +147,7 @@ export const validateButtonInputsRight = async () => {
   expect(submitBtn).toBeInTheDocument();
 };
 
-export const createLiquidity = async () => {
+export const testCreateLiquidity = async () => {
   // start point: add liquidity
 
   let hasPoolCreated;

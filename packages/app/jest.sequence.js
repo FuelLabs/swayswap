@@ -3,6 +3,7 @@ const Sequencer = require('@jest/test-sequencer').default;
 class CustomSequencer extends Sequencer {
   /**
    * Sort test to determine order of execution
+   * App.test needs to run first, as it's an end-to-end test supposed to run from a scratch api (fuel-core node)
    */
   sort(tests) {
     // Test structure information

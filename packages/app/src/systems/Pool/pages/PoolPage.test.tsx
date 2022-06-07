@@ -5,15 +5,15 @@ import { Wallet } from "fuels";
 // import { mockEmptyLiquidityPool } from "../__tests__/mocks";
 import { mockEmptyLiquidityPool } from "../__tests__/mocks";
 import {
-  createLiquidity,
-  validateButtonInformFromAmount,
-  validateButtonInformToAmount,
-  validateButtonInputsRight,
-  validateButtonInsufficientFromBalance,
-  validateButtonInsufficientToBalance,
-  validateNewPoolInputsNoRatio,
-  validateNewPoolMessage,
-  validateNoOpenPosition,
+  testCreateLiquidity,
+  testButtonInformFromAmount,
+  testButtonInformToAmount,
+  testButtonInputsRight,
+  testButtonInsufficientFromBalance,
+  testButtonInsufficientToBalance,
+  testNewPoolInputsNoRatio,
+  testNewPoolMessage,
+  testNoOpenPosition,
 } from "../__tests__/tests";
 
 import App from "~/App";
@@ -56,14 +56,12 @@ jest.mock("../../Core/hooks/useBalances.ts", () => {
 });
 
 describe("PoolPage", () => {
-  beforeEach(() => {});
-
   describe("List", () => {
     it("should render with no position first", async () => {
       await renderWithRouter(<App />, {
         route: "/pool/list",
       });
-      await validateNoOpenPosition();
+      await testNoOpenPosition();
     });
   });
 
@@ -74,7 +72,7 @@ describe("PoolPage", () => {
 
       renderWithRouter(<App />, { route: "/pool/add-liquidity" });
 
-      await createLiquidity();
+      await testCreateLiquidity();
     });
 
     describe("no liquidity yet", () => {
@@ -84,36 +82,36 @@ describe("PoolPage", () => {
 
       it("should see a 'new pool' message", async () => {
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        await validateNewPoolMessage();
+        await testNewPoolMessage();
       });
 
       it("button message should ask to inform Ether amount", async () => {
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        await validateButtonInformFromAmount();
+        await testButtonInformFromAmount();
       });
 
       it("button message should ask to inform DAI amount", async () => {
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        await validateButtonInformToAmount();
+        await testButtonInformToAmount();
       });
 
       it("button message should show insufficient balance if has no coinFrom balance", async () => {
         mockBalances();
 
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        await validateButtonInsufficientFromBalance();
+        await testButtonInsufficientFromBalance();
       });
 
       it("button message should show insufficient balance if has no coinTo balance", async () => {
         mockBalances();
 
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        await validateButtonInsufficientToBalance();
+        await testButtonInsufficientToBalance();
       });
 
       it("should not set other input value", async () => {
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        await validateNewPoolInputsNoRatio();
+        await testNewPoolInputsNoRatio();
       });
 
       it("button message should enable if inputs are right", async () => {
@@ -130,7 +128,7 @@ describe("PoolPage", () => {
         ]);
 
         renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-        await validateButtonInputsRight();
+        await testButtonInputsRight();
       });
     });
   });

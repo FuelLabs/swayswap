@@ -5,33 +5,33 @@ import App from "./App";
 import {
   openAddLiquidity,
   openPoolList,
-  validateButtonInformFromAmount,
-  validateButtonInformToAmount,
-  validateButtonInsufficientFromBalance,
-  validateButtonInsufficientToBalance,
-  validateNewPoolInputsNoRatio,
-  validateNewPoolMessage,
-  validateNoOpenPosition,
+  testButtonInformFromAmount,
+  testButtonInformToAmount,
+  testButtonInsufficientFromBalance,
+  testButtonInsufficientToBalance,
+  testNewPoolInputsNoRatio,
+  testNewPoolMessage,
+  testNoOpenPosition,
 } from "./systems/Pool/__tests__/tests";
 import {
-  checkFirstLoad,
-  createWallet,
+  testCheckFirstLoad,
+  testCreateWallet,
 } from "./systems/Welcome/__tests__/tests";
 
 describe("AppPage", () => {
   it("should validate whole app flow", async () => {
     await renderWithRouter(<App />, { route: "/pool/list" });
-    await checkFirstLoad();
-    await createWallet();
+    await testCheckFirstLoad();
+    await testCreateWallet();
     await openPoolList();
-    await validateNoOpenPosition();
+    await testNoOpenPosition();
     await openAddLiquidity();
-    await validateNewPoolMessage();
-    await validateButtonInformFromAmount();
-    await validateButtonInformToAmount();
-    await validateButtonInsufficientFromBalance();
-    await validateButtonInsufficientToBalance();
-    await validateNewPoolInputsNoRatio();
+    await testNewPoolMessage();
+    await testButtonInformFromAmount();
+    await testButtonInformToAmount();
+    await testButtonInsufficientFromBalance();
+    await testButtonInsufficientToBalance();
+    await testNewPoolInputsNoRatio();
 
     // TODO: need to create mint tests first
     // await validateButtonInputsRight();

@@ -1,13 +1,13 @@
 import { fireEvent, screen, waitFor } from "@fuels-ui/test-utils";
 
-export const checkFirstLoad = async () => {
+export const testCheckFirstLoad = async () => {
   const createWalletBtn = await screen.findByRole("button", {
     name: "welcome-create-wallet-btn",
   });
   expect(createWalletBtn).toBeInTheDocument();
 };
 
-export const createWallet = async () => {
+export const testCreateWallet = async () => {
   const createWalletBtn = await screen.findByRole("button", {
     name: "welcome-create-wallet-btn",
   });
