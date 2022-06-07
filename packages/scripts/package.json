@@ -17,18 +17,18 @@
     "commander": "^9.3.0",
     "debug": "^4.3.4",
     "esbuild": "^0.14.42",
-    "fuels": "0.0.0-master-1a1fb63d",
+    "fuels": "0.0.0-master-0b31360c",
     "joycon": "^3.1.1",
     "prettier": "^2.6.2",
     "typechain": "^8.0.0",
-    "typechain-target-fuels": "0.0.0-master-1a1fb63d",
-    "typescript": "^4.6.4"
+    "typechain-target-fuels": "0.0.0-master-0b31360c",
+    "typescript": "^4.7.3"
   },
   "devDependencies": {
-    "@fuels-ui/config": "workspace:*",
+    "@swayswap/config": "workspace:*",
     "@types/debug": "^4.1.7",
     "@types/glob": "^7.2.0",
     "glob": "^8.0.3",
-    "tsup": "link:@fuels-ui/config/tsup"
+    "tsup": "^6.1.0"
   }
 }
