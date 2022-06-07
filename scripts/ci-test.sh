@@ -4,7 +4,7 @@
 APP_TEST_ENV=./packages/app/.env.test
 TEST_CREATED=0
 
-function env_template() {
+function env_template {
     echo "VITE_FUEL_PROVIDER_URL=http://localhost:$1/graphql" > $3
     echo "VITE_FUEL_FAUCET_URL=http://localhost:$2/dispense" >> $3
     echo "VITE_CONTRACT_ID=0x0000000000000000000000000000000000000000000000000000000000000000" >> $3
