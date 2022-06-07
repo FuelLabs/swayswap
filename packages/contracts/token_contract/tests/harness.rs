@@ -36,6 +36,8 @@ async fn token_contract() {
     let token_mint_amount = 10000;
     // Amount of tokens given to the wallet
     let wallet_token_amount = 1000;
+    // Amount of tokens given to the wallet
+    let final_wallet_token_amount = 2000;
 
     // Mint some alt tokens
     token_instance
@@ -48,7 +50,7 @@ async fn token_contract() {
     let result = token_instance.get_balance().call().await.unwrap();
     assert_eq!(result.value, token_mint_amount);
 
-    // Transfer some alt tokens to the wallet
+    // Transfer tokens to the wallet
     let address = wallet.address();
     token_instance
         .transfer_coins(wallet_token_amount, address.clone())
@@ -56,18 +58,47 @@ async fn token_contract() {
         .call()
         .await
         .unwrap();
+    // Check the balance of the contract of its own asset
+    let result = token_instance.get_balance().call().await.unwrap();
+    let contract_balance = token_mint_amount - wallet_token_amount;
+    assert_eq!(result.value, contract_balance);
+
+    // Burn all minted coins
+    token_instance
+        .burn_coins(contract_balance)
+        .call()
+        .await
+        .unwrap();
 
     // Check the balance of the contract of its own asset
     let result = token_instance.get_balance().call().await.unwrap();
-    assert_eq!(result.value, token_mint_amount - wallet_token_amount);
+    assert_eq!(result.value, 0);
+
+    ////////////////////////////////////////////////////////
+    // Test mint and transfer to address
+    ////////////////////////////////////////////////////////
+
+    // Mint and transfer some alt tokens to the wallet
+    let address = wallet.address();
+    token_instance
+        .mint_and_transfer_coins(wallet_token_amount, address.clone())
+        .append_variable_outputs(1)
+        .call()
+        .await
+        .unwrap();
+
+    // As we mint and transfer the contract balance should be 0
+    let result = token_instance.get_balance().call().await.unwrap();
+    assert_eq!(result.value, 0);
 
     // Inspect the wallet for alt tokens
     let alt_token_id = AssetId::from(*token_contract_id.clone());
-    let coins = wallet
-        .get_spendable_coins(&alt_token_id, wallet_token_amount)
+    let alt_token_balance = wallet
+        .get_asset_balance(&alt_token_id)
         .await
         .unwrap();
-    assert_eq!(coins[0].amount, wallet_token_amount.into());
+    // The wallet shall received the tokens minted
+    assert_eq!(alt_token_balance, final_wallet_token_amount);
 
     ////////////////////////////////////////////////////////
     // Deposit and transfer ETH on the contract

@@ -116,6 +116,35 @@ const _abi = [
         components: null,
       },
       {
+        name: 'address',
+        type: 'struct Address',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+            components: null,
+          },
+        ],
+      },
+    ],
+    name: 'mint_and_transfer_coins',
+    outputs: [
+      {
+        name: '',
+        type: '()',
+        components: [],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'coins',
+        type: 'u64',
+        components: null,
+      },
+      {
         name: 'asset_id',
         type: 'struct ContractId',
         components: [

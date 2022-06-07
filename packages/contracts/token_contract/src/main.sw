@@ -25,6 +25,10 @@ impl Token for Contract {
         transfer_to_output(coins, contract_id(), address);
     }
 
+    fn mint_and_transfer_coins(coins: u64, address: Address) {
+        mint_to_address(coins, address);
+    }
+
     fn transfer_token_to_output(coins: u64, asset_id: ContractId, address: Address) {
         transfer_to_output(coins, asset_id, address);
     }
