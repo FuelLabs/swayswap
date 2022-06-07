@@ -21,8 +21,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "ci:test-coverage": "NODE_ENV=test run-s services:run-test contracts test:coverage services:clean-test",
-    "ci:test": "NODE_ENV=test run-s services:run-test contracts test services:clean-test",
+    "ci:test-coverage": "NODE_ENV=test CI=true run-s services:run-test contracts test:coverage services:clean-test",
+    "ci:test": "NODE_ENV=test CI=true run-s services:run-test contracts test services:clean-test",
     "contracts": "pnpm exec swayswap-scripts run",
     "contracts:build": "pnpm exec swayswap-scripts build",
     "contracts:deploy": "pnpm exec swayswap-scripts deploy",
@@ -38,8 +38,8 @@
     "services:setup": "run-s scripts:setup services:run contracts",
     "services:run-test": "make -C docker services-run-test",
     "test:clear": "jest --clearCache",
-    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --maxWorkers 2",
-    "test": "turbo run test -- --passWithNoTests",
+    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --runInBand",
+    "test": "turbo run test -- --passWithNoTests --runInBand",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview"
   },
   "devDependencies": {
