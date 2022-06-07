@@ -14,7 +14,7 @@ import {
   validateNewPoolInputsNoRatio,
   validateNewPoolMessage,
   validateNoOpenPosition,
-} from "../__tests__/tests.test";
+} from "../__tests__/tests";
 
 import App from "~/App";
 import {

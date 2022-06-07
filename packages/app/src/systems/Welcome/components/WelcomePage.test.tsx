@@ -1,7 +1,7 @@
 import "cross-fetch/polyfill";
 import { renderWithRouter } from "@fuels-ui/test-utils";
 
-import { checkFirstLoad, createWallet } from "../__tests__/tests.test";
+import { checkFirstLoad, createWallet } from "../__tests__/tests";
 
 import App from "~/App";
 

@@ -12,11 +12,11 @@ import {
   validateNewPoolInputsNoRatio,
   validateNewPoolMessage,
   validateNoOpenPosition,
-} from "./systems/Pool/__tests__/tests.test";
+} from "./systems/Pool/__tests__/tests";
 import {
   checkFirstLoad,
   createWallet,
-} from "./systems/Welcome/__tests__/tests.test";
+} from "./systems/Welcome/__tests__/tests";
 
 describe("AppPage", () => {
   it("should validate whole app flow", async () => {
