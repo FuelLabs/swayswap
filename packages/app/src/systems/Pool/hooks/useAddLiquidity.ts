@@ -4,9 +4,11 @@ import { useMutation } from 'react-query';
 import type { UseQueryResult } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
+import { useUserPositions } from './useUserPositions';
+
 import { DEADLINE } from '~/config';
 import type { UseCoinInput } from '~/systems/Core';
-import { useContract, refreshBalances } from '~/systems/Core';
+import { useBalances, useContract } from '~/systems/Core';
 import type { Coin } from '~/types';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
@@ -16,7 +18,6 @@ export interface UseAddLiquidityProps {
   poolInfoQuery: UseQueryResult<PoolInfo | undefined, unknown>;
   coinFrom: Coin;
   coinTo: Coin;
-  reservesFromToRatio: number;
 }
 
 export function useAddLiquidity({
@@ -25,12 +26,13 @@ export function useAddLiquidity({
   poolInfoQuery,
   coinFrom,
   coinTo,
-  reservesFromToRatio,
 }: UseAddLiquidityProps) {
   const [errorsCreatePull, setErrorsCreatePull] = useState<string[]>([]);
   const contract = useContract()!;
   const [stage, setStage] = useState(0);
   const navigate = useNavigate();
+  const balances = useBalances();
+  const { poolRatio } = useUserPositions();
 
   const mutation = useMutation(
     async () => {
@@ -67,10 +69,10 @@ export function useAddLiquidity({
     {
       onSuccess: (liquidityTokens) => {
         if (liquidityTokens) {
-          toast.success(reservesFromToRatio ? 'Added liquidity to the pool.' : 'New pool created.');
+          toast.success(poolRatio ? 'Added liquidity to the pool.' : 'New pool created.');
         } else {
           toast.error(
-            `Error when trying to ${reservesFromToRatio ? 'add liquidity to' : 'create'} this pool.`
+            `Error when trying to ${poolRatio ? 'add liquidity to' : 'create'} this pool.`
           );
         }
         fromInput.setAmount(BigInt(0));
@@ -84,19 +86,19 @@ export function useAddLiquidity({
           if (errors[0].message === 'enough coins could not be found') {
             toast.error(
               `Not enough balance in your wallet to ${
-                reservesFromToRatio ? 'add liquidity to' : 'create'
+                poolRatio ? 'add liquidity to' : 'create'
               } this pool.`
             );
           }
         } else {
           toast.error(
-            `Error when trying to ${reservesFromToRatio ? 'add liquidity to' : 'create'} this pool.`
+            `Error when trying to ${poolRatio ? 'add liquidity to' : 'create'} this pool.`
           );
         }
       },
       onSettled: async () => {
         await poolInfoQuery.refetch();
-        await refreshBalances();
+        await balances.refetch();
         navigate('../');
         setStage(0);
       },
@@ -129,7 +131,7 @@ export function useAddLiquidity({
     toInput.amount,
     fromInput.hasEnoughBalance,
     toInput.hasEnoughBalance,
-    reservesFromToRatio,
+    poolRatio,
   ]);
 
   return {

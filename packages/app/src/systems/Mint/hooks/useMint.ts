@@ -3,7 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { TOKEN_ID } from '~/config';
-import { refreshBalances, useTokenMethods, parseUnits } from '~/systems/Core';
+import { useTokenMethods, parseUnits, useBalances } from '~/systems/Core';
 import { Pages } from '~/types';
 
 type UseMintOpts = {
@@ -15,6 +15,7 @@ type UseMintOpts = {
 export function useMint(opts: UseMintOpts) {
   const methods = useTokenMethods(TOKEN_ID);
   const navigate = useNavigate();
+  const balances = useBalances();
 
   const mintPreview = useQuery(['MintPreviewNetwork', opts.amount], async () => {
     const amount = parseUnits(opts.amount || '0').toBigInt();
@@ -30,12 +31,12 @@ export function useMint(opts: UseMintOpts) {
       });
     },
     {
-      onSuccess: () => {
-        // Navigate to assets page to show new coins
+      onSuccess: async () => {
+        // Navigate to assets page to show new cons
         // https://github.com/FuelLabs/swayswap-demo/issues/40
         opts.onSuccess?.();
         toast.success(`Token received successfully!`);
-        refreshBalances();
+        await balances.refetch();
         navigate(Pages.swap);
       },
     }

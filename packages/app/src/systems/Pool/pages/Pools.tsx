@@ -23,6 +23,7 @@ const SubpagesNav = () => {
         variant="primary"
         onPress={() => navigate(`../${Pages["pool.addLiquidity"]}`)}
         className={cx(style.button)}
+        aria-label="header-add-liquidity-btn"
       >
         Add Liquidity
       </Button>
@@ -34,7 +35,7 @@ function WithoutPositions() {
   return (
     <p className="flex items-center gap-2 text-gray-300">
       <BiListUl />
-      You may have no open positions
+      You do not have any open positions
     </p>
   );
 }

@@ -92,3 +92,40 @@ pnpm <command name>
 | services:setup   | Run the local network, setup `swayswap-scripts` and build&deploy contracts normally used on the first run            |
 
 > Other scripts can be found at the [package.json](../package.json).
+
+# Running tests
+
+Please make sure you have follow the steps;
+
+- [📚 - Getting the Repository](docs/GETTING_STARTED.md#---getting-the-repository)
+- [📦 - Install dependencies](docs/GETTING_STARTED.md#---install-dependencies)
+- [📒 - Run Local Node](docs/GETTING_STARTED.md#---run-local-node)
+
+## Run tests
+
+We are going to run all tests, against the node and contract configured on the `packages/app/.env` or `packages/app/.env.test` if the file exists.
+
+```
+pnpm test
+```
+
+## Run tests on a Local TEST Environment
+
+With this command we are going to;
+
+- launch a local `test` specific `fuel-core` node;
+- launch a local `test` specific `faucet` API;
+- Setup `swayswap-scripts`;
+- Build and Deploy the `swayswap contracts` to the `test` node.
+- Create a `packages/app/.env.test`
+- Run all tests against the configs `packages/app/.env.test`
+- Delete the local `test` specific `fuel-core` node;
+- Delete the local `test` specific `faucet` API;
+- Delete `packages/app/.env.test`
+
+> !Note
+> We don't delete `.env.test` you can delete it manually or edit
+
+```
+pnpm ci:test
+```

@@ -39,13 +39,18 @@ export function SwapPreview({
   ) {
     return null;
   }
+
   // Expected amount of tokens to be received
-  const outputAmount = parseToFormattedNumber(
-    direction === ActiveInput.from ? previewAmount : amount || ZERO
+  const nextAmount =
+    direction === ActiveInput.from ? previewAmount : amount || ZERO;
+
+  const outputAmount = parseToFormattedNumber(nextAmount);
+  const priceWithSlippage = calculatePriceWithSlippage(
+    previewAmount,
+    slippage.value,
+    direction
   );
-  const inputAmountWithSlippage = parseToFormattedNumber(
-    calculatePriceWithSlippage(previewAmount, slippage.value, direction)
-  );
+  const inputAmountWithSlippage = parseToFormattedNumber(priceWithSlippage);
 
   return (
     <div>

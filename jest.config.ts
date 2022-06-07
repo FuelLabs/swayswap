@@ -9,9 +9,10 @@ export const config: Config.InitialOptions = {
   },
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/**/?(*.)+(spec|test).[jt]s?(x)'],
+  testPathIgnorePatterns: ['__tests__', 'dist/*'],
   reporters: ['default', 'github-actions'],
   setupFiles: ['dotenv/config'],
-  setupFilesAfterEnv: ['@fuels-ui/test-utils/setup.ts'],
+  setupFilesAfterEnv: ['@swayswap/test-utils/setup.ts'],
   collectCoverageFrom: [
     '<rootDir>/**/*.{js,ts,tsx}',
     '!**/*test.{js,ts,tsx}',

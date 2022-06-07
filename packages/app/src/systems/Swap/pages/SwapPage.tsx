@@ -15,11 +15,11 @@ import {
   getValidationState,
   getValidationText,
   queryNetworkFee,
+  checkPairBalance,
 } from "../utils";
 
 import {
   useDebounce,
-  refreshBalances,
   useBalances,
   useContract,
   useSlippage,
@@ -48,8 +48,9 @@ export function SwapPage() {
     }),
     [poolInfo, previewInfo, swapState]
   );
+
   const slippage = useSlippage();
-  const { data: balances } = useBalances();
+  const balances = useBalances();
   const setHasSwapped = useSetAtom(swapHasSwappedAtom);
 
   const { isLoading } = useQuery(
@@ -61,6 +62,11 @@ export function SwapPage() {
       debouncedState?.coinTo.assetId,
     ],
     async () => {
+      // This is a hard coded solution, need to be dynamic in future
+      if (!checkPairBalance(balances.data)) {
+        setHasLiquidity(false);
+        return;
+      }
       if (!debouncedState?.amount) return null;
       if (!hasReserveAmount(debouncedState, poolInfo)) return null;
       return queryPreviewAmount(contract, debouncedState);
@@ -100,10 +106,10 @@ export function SwapPage() {
       await sleep(1000);
     },
     {
-      onSuccess: () => {
+      onSuccess: async () => {
         setHasSwapped(true);
         toast.success("Swap made successfully!");
-        refreshBalances();
+        await balances.refetch();
       },
     }
   );
@@ -113,12 +119,11 @@ export function SwapPage() {
   }
 
   const validationState = getValidationState({
-    networkFee,
     swapState,
-    balances,
-    slippage: slippage.value,
     previewAmount,
     hasLiquidity,
+    balances: balances.data,
+    slippage: slippage.value,
   });
 
   const shouldDisableSwap =

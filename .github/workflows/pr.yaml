@@ -74,7 +74,7 @@ jobs:
       - name: Test Contracts
         if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
         run: |
-          ./packages/contracts/actions/test.sh
+          ./packages/scripts/test-contracts.sh
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -126,6 +126,6 @@ jobs:
         run: |
           pnpm scripts:setup
 
-      - name: Run test coverage
+      - name: Run test
         run: |
-          pnpm ci:test-coverage
+          pnpm ci:test

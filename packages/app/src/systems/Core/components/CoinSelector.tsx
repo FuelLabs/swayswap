@@ -4,21 +4,13 @@ import { useState, useEffect, forwardRef, useMemo } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 import { useBalances } from "../hooks";
-import { TOKENS, formatUnits, COIN_ETH } from "../utils";
+import { TOKENS, parseToFormattedNumber, COIN_ETH } from "../utils";
 
 import { CoinsListDialog } from "./CoinsListDialog";
 import { TokenIcon } from "./TokenIcon";
 
 import { Button, Dialog, Tooltip, useDialog } from "~/systems/UI";
 import type { Coin } from "~/types";
-
-const formatValue = (amount: bigint | null | undefined) => {
-  if (amount != null) {
-    return formatUnits(amount);
-  }
-  // If amount is null return empty string
-  return "";
-};
 
 export type CoinSelectorProps = {
   coin?: Coin | null;
@@ -51,7 +43,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
     );
 
     const balance = useMemo(
-      () => formatValue(coinBalance?.amount || BigInt(0)),
+      () => parseToFormattedNumber(coinBalance?.amount || BigInt(0)),
       [coinBalance?.assetId, coinBalance?.amount]
     );
 

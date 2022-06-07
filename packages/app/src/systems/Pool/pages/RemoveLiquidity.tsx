@@ -11,24 +11,21 @@ import {
   useCoinInput,
   CoinSelector,
   NavigateBackButton,
-  refreshBalances,
   useContract,
   ZERO,
   TOKENS,
+  useBalances,
 } from "~/systems/Core";
 import { Button, Card } from "~/systems/UI";
 
 export function RemoveLiquidityPage() {
   const navigate = useNavigate();
-  const [errorsRemoveLiquidity, setErrorsRemoveLiquidity] = useState<string[]>(
-    []
-  );
+  const [errors, setErrors] = useState<string[]>([]);
   const contract = useContract()!;
+  const balances = useBalances();
 
   const liquidityToken = TOKENS.find((c) => c.assetId === CONTRACT_ID);
-  const tokenInput = useCoinInput({
-    coin: liquidityToken,
-  });
+  const tokenInput = useCoinInput({ coin: liquidityToken });
   const amount = tokenInput.amount;
 
   const removeLiquidityMutation = useMutation(
@@ -46,11 +43,11 @@ export function RemoveLiquidityPage() {
       });
     },
     {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success("Liquidity removed successfully!");
         tokenInput.setAmount(ZERO);
+        await balances.refetch();
         navigate("../");
-        refreshBalances();
       },
       onError: (error: Error) => {
         toast.error(error.message);
@@ -63,28 +60,28 @@ export function RemoveLiquidityPage() {
   }
 
   const validateRemoveLiquidity = () => {
-    const errors = [];
+    const errorList = [];
 
     if (!tokenInput.amount) {
-      errors.push(`Enter ${liquidityToken.name} amount`);
+      errorList.push(`Enter ${liquidityToken.name} amount`);
     }
     if (!tokenInput.hasEnoughBalance) {
-      errors.push(`Insufficient ${liquidityToken.name} balance`);
+      errorList.push(`Insufficient ${liquidityToken.name} balance`);
     }
 
-    return errors;
+    return errorList;
   };
 
   useEffect(() => {
-    setErrorsRemoveLiquidity(validateRemoveLiquidity());
+    setErrors(validateRemoveLiquidity());
   }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
 
   const isRemoveButtonDisabled =
-    !!errorsRemoveLiquidity.length || removeLiquidityMutation.isLoading;
+    !!errors.length || removeLiquidityMutation.isLoading;
 
   const getButtonText = () => {
-    if (errorsRemoveLiquidity.length) {
-      return errorsRemoveLiquidity[0];
+    if (errors.length) {
+      return errors[0];
     }
 
     if (removeLiquidityMutation.isLoading) {
