@@ -5,12 +5,15 @@ function getEnvName() {
   if (process.env.NODE_ENV === 'production') {
     return '.env.production';
   }
-  if (process.env.NODE_ENV === 'test' && process.env.CI === 'true') {
+  if (process.env.NODE_ENV === 'test') {
     return '.env.test';
   }
-  return '.env';
 }
 
-config({
-  path: resolve(process.cwd(), getEnvName()),
+// Load from more specific env file to generic ->
+[getEnvName(), '.env'].forEach((envFile) => {
+  if (!envFile) return;
+  config({
+    path: resolve(process.cwd(), envFile),
+  });
 });
