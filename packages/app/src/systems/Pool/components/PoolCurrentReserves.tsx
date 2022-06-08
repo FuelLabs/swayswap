@@ -15,7 +15,11 @@ export const PoolCurrentReserves = () => {
   const coinTo = coinMetaData?.pairOf?.[1];
 
   return (
-    <PreviewTable title="Current pool reserves" className="mt-4">
+    <PreviewTable
+      title="Current pool reserves"
+      className="mt-4"
+      aria-label="pool-reserves"
+    >
       <PreviewItem
         title={
           <div className="inline-flex items-center gap-2">
