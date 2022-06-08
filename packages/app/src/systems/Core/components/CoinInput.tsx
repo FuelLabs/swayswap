@@ -199,7 +199,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
             getInputRef={ref}
             allowNegative={false}
             defaultValue={initialValue}
-            value={value}
+            value={value === "0.0" ? "0" : value}
             displayType={displayType}
             isAllowed={isAllowed}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

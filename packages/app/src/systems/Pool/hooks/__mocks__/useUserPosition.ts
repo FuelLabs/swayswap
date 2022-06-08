@@ -1,7 +1,16 @@
-import { useUserPositions } from '../hooks';
+import { Wallet } from 'fuels';
 
-export const mockEmptyLiquidityPool = () => {
-  (useUserPositions as jest.Mock).mockImplementation(() => ({
+import * as useUserPositions from '../useUserPositions';
+
+import { FUEL_PROVIDER_URL } from '~/config';
+
+export function createWallet() {
+  const { privateKey } = Wallet.generate({ provider: FUEL_PROVIDER_URL });
+  return new Wallet(privateKey, FUEL_PROVIDER_URL);
+}
+
+export function mockUseUserPosition() {
+  return jest.spyOn(useUserPositions, 'useUserPositions').mockImplementation(() => ({
     ethReserve: BigInt(0),
     formattedEthReserve: '0.0',
     formattedPoolShare: '0.0',
@@ -19,4 +28,4 @@ export const mockEmptyLiquidityPool = () => {
     tokenReserve: BigInt(0),
     totalLiquidity: BigInt(0),
   }));
-};
+}

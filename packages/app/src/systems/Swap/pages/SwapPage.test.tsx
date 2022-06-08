@@ -4,11 +4,7 @@ import { renderWithRouter, screen, waitFor } from "@swayswap/test-utils";
 import type { Wallet } from "fuels";
 
 import App from "~/App";
-import {
-  createWallet,
-  mockUseWallet,
-  mockUseContract,
-} from "~/systems/Core/hooks/__mocks__";
+import { createWallet, mockUseWallet } from "~/systems/Core/hooks/__mocks__";
 import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
 
 describe("SwapPage", () => {
@@ -17,7 +13,6 @@ describe("SwapPage", () => {
   beforeAll(() => {
     wallet = createWallet();
     mockUseWallet(wallet);
-    mockUseContract(wallet);
   });
 
   it("should swap button be disabled", async () => {
@@ -34,7 +29,7 @@ describe("SwapPage", () => {
     renderWithRouter(<App />, { route: "/swap" });
 
     await waitFor(async () => {
-      const btn = screen.getByText("Balance: 1.0");
+      const btn = await screen.findByText("Balance: 1.0");
       expect(btn).toBeInTheDocument();
     });
   });

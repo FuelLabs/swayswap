@@ -87,29 +87,9 @@ export function AddLiquidity() {
   ]);
 
   const poolInfoQuery = usePoolInfo();
-  const { data: poolInfo, isLoading: isLoadingPoolInfo } = poolInfoQuery;
   const userPositions = useUserPositions();
+  const { data: poolInfo, isLoading: isLoadingPoolInfo } = poolInfoQuery;
   const { poolRatio } = userPositions;
-
-  const handleChangeFromValue = (val: bigint | null) => {
-    fromInput.setAmount(val);
-
-    if (poolRatio) {
-      const value = val || ZERO;
-      const newToValue = Math.ceil(divideFnValidOnly(value, poolRatio));
-      toInput.setAmount(BigInt(newToValue));
-    }
-  };
-
-  const handleChangeToValue = (val: bigint | null) => {
-    toInput.setAmount(val);
-
-    if (poolRatio) {
-      const value = val || ZERO;
-      const newFromValue = Math.floor(multiplyFn(value, poolRatio));
-      fromInput.setAmount(BigInt(newFromValue));
-    }
-  };
 
   const fromInput = useCoinInput({
     coin: coinFrom,
@@ -128,7 +108,6 @@ export function AddLiquidity() {
 
   // If reserve didn't return a ratio them the current user
   // Is creating the pool and the ratio is 1:1
-
   const addLiquidityRatio = divideFnValidOnly(fromInput.amount, toInput.amount);
 
   const {
@@ -151,6 +130,26 @@ export function AddLiquidity() {
       return errorsCreatePull[0];
     }
     return poolRatio ? "Add liquidity" : "Create liquidity";
+  }
+
+  function handleChangeFromValue(val: bigint | null) {
+    fromInput.setAmount(val);
+
+    if (poolRatio) {
+      const value = val || ZERO;
+      const newToValue = Math.ceil(divideFnValidOnly(value, poolRatio));
+      toInput.setAmount(BigInt(newToValue));
+    }
+  }
+
+  function handleChangeToValue(val: bigint | null) {
+    toInput.setAmount(val);
+
+    if (poolRatio) {
+      const value = val || ZERO;
+      const newFromValue = Math.floor(multiplyFn(value, poolRatio));
+      fromInput.setAmount(BigInt(newFromValue));
+    }
   }
 
   useEffect(() => {
@@ -214,7 +213,7 @@ export function AddLiquidity() {
             reservesFromToRatio={poolRatio || addLiquidityRatio || 1}
           />
           <Button
-            aria-label="add-liquidity-submit-btn"
+            aria-label="Add Liquidity Button"
             isDisabled={!!errorsCreatePull.length}
             isFull
             size="lg"

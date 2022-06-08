@@ -6,7 +6,7 @@ import { useBalances, useWallet } from '~/systems/Core';
 import { parseToFormattedNumber } from '~/systems/Core/utils/math';
 import { Queries } from '~/types';
 
-async function fetchFaucet(input: RequestInit) {
+export async function fetchFaucet(input: RequestInit) {
   const res = await fetch(FUEL_FAUCET_URL, {
     ...input,
     headers: {

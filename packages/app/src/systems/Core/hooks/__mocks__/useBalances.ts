@@ -1,14 +1,9 @@
 import type { CoinQuantity } from 'fuels';
 
-import { ONE_ASSET } from '../../utils';
+import { COIN_ETH, ONE_ASSET } from '../../utils';
 import * as useBalances from '../useBalances';
 
-const FAKE_BALANCE = [
-  {
-    amount: ONE_ASSET,
-    assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-  },
-];
+const FAKE_BALANCE = [{ amount: ONE_ASSET, assetId: COIN_ETH }];
 
 export function mockUseBalances(balances?: CoinQuantity[]) {
   const mock = {

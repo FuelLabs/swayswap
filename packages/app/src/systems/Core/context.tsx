@@ -6,13 +6,10 @@ import React, { useContext, useMemo } from "react";
 
 import { LocalStorageKey } from "./utils";
 
-import { CONTRACT_ID, FUEL_PROVIDER_URL } from "~/config";
-import type { ExchangeContractAbi } from "~/types/contracts";
-import { ExchangeContractAbi__factory } from "~/types/contracts";
+import { FUEL_PROVIDER_URL } from "~/config";
 
 interface AppContextValue {
   wallet: Wallet | null;
-  contract: ExchangeContractAbi | null;
   createWallet: () => void;
 }
 
@@ -35,16 +32,10 @@ export const AppContextProvider = ({
     return new Wallet(privateKey, FUEL_PROVIDER_URL);
   }, [privateKey]);
 
-  const contract = useMemo(() => {
-    if (!wallet) return null;
-    return ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
-  }, [wallet]);
-
   return (
     <AppContext.Provider
       value={{
         wallet,
-        contract,
         createWallet: () => {
           const nextWallet = Wallet.generate({
             provider: FUEL_PROVIDER_URL,
