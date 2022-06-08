@@ -21,6 +21,7 @@ import {
   divideFnValidOnly,
   multiplyFn,
   TOKENS,
+  useBalances,
 } from "~/systems/Core";
 import { Button, Card, Spinner } from "~/systems/UI";
 import type { Coin } from "~/types";
@@ -86,6 +87,7 @@ export function AddLiquidity() {
     TOKENS[1],
   ]);
 
+  const balances = useBalances();
   const poolInfoQuery = usePoolInfo();
   const userPositions = useUserPositions();
   const { data: poolInfo, isLoading: isLoadingPoolInfo } = poolInfoQuery;
@@ -117,9 +119,12 @@ export function AddLiquidity() {
   } = useAddLiquidity({
     fromInput,
     toInput,
-    poolInfoQuery,
     coinFrom,
     coinTo,
+    onSettle: async () => {
+      await poolInfoQuery.refetch();
+      await balances.refetch();
+    },
   });
 
   function getButtonText() {

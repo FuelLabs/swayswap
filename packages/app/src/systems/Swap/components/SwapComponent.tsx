@@ -142,6 +142,7 @@ export function SwapComponent({
     <>
       <div className="mt-4">
         <CoinInput
+          aria-label="Coin from input"
           {...fromInput.getInputProps()}
           {...(activeInput === ActiveInput.to && { isLoading })}
           autoFocus={activeInput === ActiveInput.from}
@@ -153,6 +154,7 @@ export function SwapComponent({
       </div>
       <div className="mb-4">
         <CoinInput
+          aria-label="Coin to input"
           {...toInput.getInputProps()}
           {...(activeInput === ActiveInput.from && { isLoading })}
           autoFocus={activeInput === ActiveInput.to}

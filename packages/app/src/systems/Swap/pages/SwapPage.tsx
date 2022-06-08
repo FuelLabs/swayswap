@@ -36,6 +36,7 @@ export function SwapPage() {
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
   const { data: poolInfo } = usePoolInfo();
+
   const previewAmount = previewInfo?.amount || ZERO;
   const swapInfo = useMemo<SwapInfo>(
     () => ({
@@ -116,6 +117,8 @@ export function SwapPage() {
   const shouldDisableSwap =
     isLoading || validationState !== ValidationStateEnum.Swap;
 
+  const btnText = getValidationText(validationState, swapState);
+
   return (
     <Card className="sm:min-w-[450px]">
       <Card.Title>
@@ -140,8 +143,9 @@ export function SwapPage() {
         variant="primary"
         isDisabled={shouldDisableSwap}
         onPress={() => swap()}
+        aria-label="Swap button"
       >
-        {getValidationText(validationState, swapState)}
+        {btnText}
       </Button>
     </Card>
   );
