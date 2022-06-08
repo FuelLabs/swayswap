@@ -51,7 +51,7 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
   const networkFee = parseToFormattedNumber(NETWORK_FEE);
 
   return (
-    <div>
+    <div aria-label="preview-swap-output">
       <div className="flex justify-center">
         <BsArrowDown size={20} className="text-gray-400" />
       </div>

@@ -134,6 +134,7 @@ export function SwapPage() {
         isLoading={isLoading}
       />
       <Button
+        aria-label="swap-submit-button"
         isFull
         isLoading={isSwaping}
         size="lg"
