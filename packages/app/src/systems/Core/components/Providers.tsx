@@ -15,15 +15,16 @@ export const LocationDisplay = () => {
 
 type AppProps = {
   children?: ReactNode;
+  justContent?: boolean;
 };
 
-export function Providers({ children }: AppProps) {
+export function Providers({ children, justContent }: AppProps) {
   return (
     <>
       <Toaster />
       <QueryClientProvider client={queryClient}>
         <Dialog.Provider>
-          <AppContextProvider>
+          <AppContextProvider justContent={justContent}>
             <StepsProvider>{children}</StepsProvider>
           </AppContextProvider>
         </Dialog.Provider>

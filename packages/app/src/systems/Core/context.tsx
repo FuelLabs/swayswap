@@ -1,7 +1,7 @@
 import { Wallet } from "fuels";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import type { PropsWithChildren } from "react";
+import type { ReactNode } from "react";
 import React, { useContext, useMemo } from "react";
 
 import { LocalStorageKey } from "./utils";
@@ -9,6 +9,7 @@ import { LocalStorageKey } from "./utils";
 import { FUEL_PROVIDER_URL } from "~/config";
 
 interface AppContextValue {
+  justContent?: boolean;
   wallet: Wallet | null;
   createWallet: () => void;
 }
@@ -22,9 +23,15 @@ export const AppContext = React.createContext<AppContextValue | null>(null);
 
 export const useAppContext = () => useContext(AppContext)!;
 
+type ProviderProps = {
+  children: ReactNode;
+  justContent?: boolean;
+};
+
 export const AppContextProvider = ({
+  justContent,
   children,
-}: PropsWithChildren<unknown>) => {
+}: ProviderProps) => {
   const [privateKey, setPrivateKey] = useAtom(walletPrivateKeyState);
 
   const wallet = useMemo(() => {
@@ -35,6 +42,7 @@ export const AppContextProvider = ({
   return (
     <AppContext.Provider
       value={{
+        justContent,
         wallet,
         createWallet: () => {
           const nextWallet = Wallet.generate({

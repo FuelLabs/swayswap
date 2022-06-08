@@ -4,7 +4,6 @@ import { MdClose } from "react-icons/md";
 import { Button } from "./Button";
 
 export function Toaster() {
-  if (process.env.NODE_ENV === "test") return null;
   return (
     <Root position="bottom-right">
       {(t) => (

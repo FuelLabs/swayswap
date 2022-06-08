@@ -12,12 +12,13 @@ import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
 import { App } from "~/App";
 import { DECIMAL_UNITS, TOKEN_ID } from "~/config";
 import { COIN_ETH, ONE_ASSET } from "~/systems/Core";
-import { createWallet, mockUseWallet } from "~/systems/Core/hooks/__mocks__";
 import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
+import {
+  createWallet,
+  mockUseWallet,
+} from "~/systems/Core/hooks/__mocks__/useWallet";
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
 import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
-
-const MINT_VALUE = parseUnits("4000", DECIMAL_UNITS).toBigInt();
 
 let wallet: Wallet;
 
@@ -36,21 +37,21 @@ describe("Add Liquidity", () => {
   });
 
   it("should see a 'new pool' message", async () => {
-    renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+    renderWithRouter(<App justContent />, { route: "/pool/add-liquidity" });
 
     const newPoolMessage = await screen.findByText(/new pool/);
     expect(newPoolMessage).toBeInTheDocument();
   });
 
   it("should enter amount button be disabled by default", async () => {
-    renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+    renderWithRouter(<App justContent />, { route: "/pool/add-liquidity" });
     const submitBtn = await screen.findByText(/Enter Ether amount/);
     expect(submitBtn).toBeInTheDocument();
     expect(submitBtn).toBeDisabled();
   });
 
   it("should submit button ask to inform DAI", async () => {
-    renderWithRouter(<App />, {
+    renderWithRouter(<App justContent />, {
       route: "/pool/add-liquidity",
     });
     const coinFromInput = screen.getByLabelText(/Coin From Input/);
@@ -69,7 +70,7 @@ describe("Add Liquidity", () => {
 
   it("should show insufficient warning if has no coinFrom balance", async () => {
     mockUseBalances();
-    renderWithRouter(<App />, {
+    renderWithRouter(<App justContent />, {
       route: "/pool/add-liquidity",
     });
 
@@ -93,7 +94,7 @@ describe("Add Liquidity", () => {
 
   it("should show insufficient warning if has no coinTo balance", async () => {
     mockUseBalances();
-    renderWithRouter(<App />, {
+    renderWithRouter(<App justContent />, {
       route: "/pool/add-liquidity",
     });
 
@@ -116,7 +117,7 @@ describe("Add Liquidity", () => {
   });
 
   it("should be able to set coin to input values if no liquidity added", async () => {
-    renderWithRouter(<App />, {
+    renderWithRouter(<App justContent />, {
       route: "/pool/add-liquidity",
     });
 
@@ -137,13 +138,15 @@ describe("Add Liquidity", () => {
     expect(coinToInput).toHaveValue("1000");
   });
 
+  const MINT_VALUE = parseUnits("4000", DECIMAL_UNITS).toBigInt();
+
   it("should be able to click on submit button if inputs are right", async () => {
     mockUseBalances([
       { amount: ONE_ASSET, assetId: COIN_ETH },
       { amount: MINT_VALUE, assetId: TOKEN_ID },
     ]);
 
-    renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+    renderWithRouter(<App justContent />, { route: "/pool/add-liquidity" });
 
     const coinFromInput = screen.getByLabelText(/Coin From Input/);
     fireEvent.change(coinFromInput, {
@@ -168,7 +171,7 @@ describe("Add Liquidity", () => {
 
     await faucet(wallet);
     await mint(wallet, MINT_VALUE);
-    const { user } = renderWithRouter(<App />, {
+    const { user } = renderWithRouter(<App justContent />, {
       route: "/pool/add-liquidity",
     });
 

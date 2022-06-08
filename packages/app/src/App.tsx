@@ -2,6 +2,9 @@ import { routes } from "./routes";
 
 import { Providers } from "~/systems/Core";
 
-export function App() {
-  return <Providers>{routes}</Providers>;
+type AppProps = {
+  justContent?: boolean;
+};
+export function App({ justContent = false }: AppProps) {
+  return <Providers justContent={justContent}>{routes}</Providers>;
 }
