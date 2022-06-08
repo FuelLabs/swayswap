@@ -9,6 +9,7 @@ export const config: Config.InitialOptions = {
   },
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/**/?(*.)+(spec|test).[jt]s?(x)'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist'],
   reporters: ['default', 'github-actions'],
   setupFiles: ['dotenv/config'],
   setupFilesAfterEnv: ['@swayswap/test-utils/setup.ts'],

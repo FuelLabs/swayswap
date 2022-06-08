@@ -1,9 +1,7 @@
-import "cross-fetch/polyfill";
-
 import { renderWithRouter, screen, waitFor } from "@swayswap/test-utils";
 import type { Wallet } from "fuels";
 
-import App from "~/App";
+import { App } from "~/App";
 import { createWallet, mockUseWallet } from "~/systems/Core/hooks/__mocks__";
 import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
 

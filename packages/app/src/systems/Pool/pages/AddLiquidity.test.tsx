@@ -1,4 +1,3 @@
-import "cross-fetch/polyfill";
 import { parseUnits } from "@ethersproject/units";
 import {
   screen,
@@ -10,7 +9,7 @@ import type { Wallet } from "fuels";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
 
-import App from "~/App";
+import { App } from "~/App";
 import { DECIMAL_UNITS, TOKEN_ID } from "~/config";
 import { COIN_ETH, ONE_ASSET } from "~/systems/Core";
 import { createWallet, mockUseWallet } from "~/systems/Core/hooks/__mocks__";

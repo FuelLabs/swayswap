@@ -1,3 +1,4 @@
+import fetch from 'cross-fetch';
 import { useMemo } from 'react';
 import { useMutation, useQuery } from 'react-query';
 

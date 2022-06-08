@@ -1,7 +1,6 @@
-import "cross-fetch/polyfill";
 import { renderWithRouter, screen } from "@swayswap/test-utils";
 
-import App from "~/App";
+import { App } from "~/App";
 
 describe("WalletPage", () => {
   it("should always be redirect to welcome", async () => {
