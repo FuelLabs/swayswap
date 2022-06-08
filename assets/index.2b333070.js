@@ -1,1 +1,0 @@
-import{b as e,z as h}from"./index.187397a2.js";globalThis.jotaiAtomCache=globalThis.jotaiAtomCache||{cache:new Map,get(t,a){return this.cache.has(t)?this.cache.get(t):(this.cache.set(t,a),a)}};function c(){return e(h,{})}export{c as default};
