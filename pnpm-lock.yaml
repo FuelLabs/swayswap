@@ -106,7 +106,6 @@ importers:
       decimal.js: ^10.3.1
       dotenv: ^16.0.1
       eslint: ^8.17.0
-      eslint-plugin-cypress: ^2.12.1
       ethers: ^5.6.8
       framer-motion: ^6.3.10
       fuels: 0.0.0-master-0b31360c
@@ -202,7 +201,6 @@ importers:
       cypress: 10.0.3
       dotenv: 16.0.1
       eslint: 8.17.0
-      eslint-plugin-cypress: 2.12.1_eslint@8.17.0
       postcss: 8.4.14
       postcss-import: 14.1.0_postcss@8.4.14
       tailwindcss: 3.0.24
@@ -217,6 +215,7 @@ importers:
       eslint-config-airbnb-base: ^15.0.0
       eslint-config-airbnb-typescript: ^17.0.0
       eslint-config-prettier: ^8.5.0
+      eslint-plugin-cypress: ^2.12.1
       eslint-plugin-eslint-comments: ^3.2.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-jest-dom: ^4.0.2
@@ -238,6 +237,7 @@ importers:
       eslint-config-airbnb-base: 15.0.0_3yxiwxzsqipdmy4jwrlv6vgfmy
       eslint-config-airbnb-typescript: 17.0.0_tp6b2m7mjearuulyvjl6n6zeka
       eslint-config-prettier: 8.5.0_eslint@8.17.0
+      eslint-plugin-cypress: 2.12.1_eslint@8.17.0
       eslint-plugin-eslint-comments: 3.2.0_eslint@8.17.0
       eslint-plugin-import: 2.26.0_pv5w3e62ssxduf5aiwxbc3knra
       eslint-plugin-jest-dom: 4.0.2_eslint@8.17.0
@@ -3983,7 +3983,7 @@ packages:
   /@types/jest/28.1.1:
     resolution: {integrity: sha512-C2p7yqleUKtCkVjlOur9BWVA4HgUQmEj/HWCt5WzZ5mLXrWnyIfl0wGuArc+kBXsy0ZZfLp+7dywB4HtSVYGVA==}
     dependencies:
-      jest-matcher-utils: 27.5.1
+      jest-matcher-utils: 27.0.2
       pretty-format: 27.5.1
 
   /@types/js-cookie/2.2.7:
@@ -6441,7 +6441,7 @@ packages:
     dependencies:
       eslint: 8.17.0
       globals: 11.12.0
-    dev: true
+    dev: false
 
   /eslint-plugin-eslint-comments/3.2.0_eslint@8.17.0:
     resolution: {integrity: sha512-0jkOl0hfojIHHmEHgmNdqv4fmh7300NdpA9FFpF7zaoLvB/QeXOGNLIo86oAveJFrfB1p05kC8hpEMHM8DwWVQ==}
@@ -7588,7 +7588,6 @@ packages:
   /globals/11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
     engines: {node: '>=4'}
-    dev: true
 
   /globals/12.4.0:
     resolution: {integrity: sha512-BWICuzzDvDoH54NHKCseDanAhE3CeDorgDL5MT6LMXXj2WCnd9UC2szdk4AWLfjdgNBCXLUanXYcpBBKOSWGwg==}
@@ -8785,16 +8784,6 @@ packages:
 
   /jest-matcher-utils/27.0.2:
     resolution: {integrity: sha512-Qczi5xnTNjkhcIB0Yy75Txt+Ez51xdhOxsukN7awzq2auZQGPHcQrJ623PZj0ECDEMOk2soxWx05EXdXGd1CbA==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    dependencies:
-      chalk: 4.1.2
-      jest-diff: 27.5.1
-      jest-get-type: 27.5.1
-      pretty-format: 27.5.1
-    dev: false
-
-  /jest-matcher-utils/27.5.1:
-    resolution: {integrity: sha512-z2uTx/T6LBaCoNWNFWwChLBKYxTMcGBRjAt+2SbP929/Fflb9aa5LGma654Rz8z9HLxsrUaYzxE9T/EFIL/PAw==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       chalk: 4.1.2

@@ -3,7 +3,7 @@ describe('App flow', () => {
     cy.visit('http://localhost:3000');
 
     // create a wallet and fund it
-    cy.contains('button', 'Create wallet').click();
+    cy.contains('button', /Create wallet/i).click();
     cy.contains('button', 'Give me ETH').click();
     cy.contains('button', 'Go to Swap').click();
     cy.contains('Enter amount');

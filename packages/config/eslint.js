@@ -14,7 +14,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ['@typescript-eslint', 'testing-library', 'jest-dom'],
+  plugins: ['@typescript-eslint', 'testing-library', 'jest-dom', 'cypress'],
   extends: [
     'airbnb-base',
     'airbnb-typescript/base',
