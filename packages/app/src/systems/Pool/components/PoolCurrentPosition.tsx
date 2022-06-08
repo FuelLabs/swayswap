@@ -15,7 +15,7 @@ export const PoolCurrentPosition = () => {
   const coinTo = coinMetaData?.pairOf?.[1];
 
   return (
-    <PreviewTable className="my-2">
+    <PreviewTable className="my-2" aria-label="pool-current-position">
       <PreviewItem
         title="Pooled DAI"
         value={

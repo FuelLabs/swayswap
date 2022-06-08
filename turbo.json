@@ -10,6 +10,9 @@
     },
     "dev": {
       "cache": false
+    },
+    "test:end-to-end": {
+      "cache": false
     }
   }
 }

@@ -230,7 +230,7 @@ export function AddLiquidity() {
             {getButtonText()}
           </Button>
           {!poolRatio && !isLoadingPoolInfo ? (
-            <div className={style.createPoolInfo}>
+            <div className={style.createPoolInfo} aria-label="create-pool">
               <h4 className="text-orange-400 mb-2 font-bold">
                 You are creating a new pool
               </h4>
