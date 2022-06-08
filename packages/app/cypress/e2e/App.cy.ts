@@ -1,5 +1,5 @@
 describe('App flow', () => {
-  it('valida whole app flow', async () => {
+  it('should execute whole app flow', () => {
     cy.visit('http://localhost:3000');
 
     // create a wallet and fund it
@@ -28,8 +28,14 @@ describe('App flow', () => {
       .then(($body) => {
         if ($body.find(creatingPoolSelector).length) return creatingPoolSelector;
         if ($body.find(addingLiquiditySelector).length) return addingLiquiditySelector;
+        return '';
       })
-      .then((selector) => {
+      .then((selector: string) => {
+        if (!selector) {
+          // should break test
+          cy.contains(creatingPoolSelector);
+        }
+
         const hasPoolCreated = selector === addingLiquiditySelector;
 
         if (hasPoolCreated) {
@@ -71,7 +77,7 @@ describe('App flow', () => {
         cy.contains('[aria-label="swap-submit-button"]', 'Swap').click();
         cy.contains('Swap made successfully!');
 
-        //validate remove liquidity
+        // validate remove liquidity
         cy.contains('button', 'Pool').click();
         cy.contains('button', 'Remove liquidity').click();
         cy.get('.coinSelector--maxButton').click();

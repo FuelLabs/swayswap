@@ -20,8 +20,7 @@ import {
 
 describe("AppPage", () => {
   it("should validate whole app flow", async () => {
-    expect(true);
-    // await renderWithRouter(<App />, { route: "/pool/list" });
+    await renderWithRouter(<App />, { route: "/pool/list" });
     await testCheckFirstLoad();
     await testCreateWallet();
     await openPoolList();
