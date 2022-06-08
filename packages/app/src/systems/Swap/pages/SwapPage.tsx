@@ -14,7 +14,6 @@ import {
   swapTokens,
   getValidationState,
   getValidationText,
-  checkPairBalance,
 } from "../utils";
 
 import {
@@ -26,7 +25,7 @@ import {
   isSwayInfinity,
   sleep,
 } from "~/systems/Core";
-import { usePoolInfo } from "~/systems/Pool";
+import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { Button, Card } from "~/systems/UI";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
 
@@ -51,6 +50,7 @@ export function SwapPage() {
   const slippage = useSlippage();
   const balances = useBalances();
   const setHasSwapped = useSetAtom(swapHasSwappedAtom);
+  const { poolRatio } = useUserPositions();
 
   const { isLoading } = useQuery(
     [
@@ -62,7 +62,7 @@ export function SwapPage() {
     ],
     async () => {
       // This is a hard coded solution, need to be dynamic in future
-      if (!checkPairBalance(balances.data)) {
+      if (!poolRatio) {
         setHasLiquidity(false);
         return;
       }
