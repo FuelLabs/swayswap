@@ -2,7 +2,7 @@ import { renderWithRouter, screen } from "@swayswap/test-utils";
 
 import { App } from "~/App";
 
-describe("WalletPage", () => {
+describe("WelcomePage", () => {
   it("should always be redirect to welcome", async () => {
     renderWithRouter(<App />, { route: "/pool/list" });
     expect(await screen.findByText(/Welcome to SwaySwap/)).toBeInTheDocument();
