@@ -1,5 +1,5 @@
-describe('empty spec', () => {
-  it('passes', async () => {
+describe('App flow', () => {
+  it('valida whole app flow', async () => {
     cy.visit('http://localhost:3000');
 
     // create a wallet and fund it
