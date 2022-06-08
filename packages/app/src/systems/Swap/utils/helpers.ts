@@ -3,7 +3,6 @@ import type { CoinQuantity } from 'fuels';
 import type { SwapInfo, SwapState } from '../types';
 import { ActiveInput, ValidationStateEnum } from '../types';
 
-import { TOKENS } from '~/systems/Core';
 import { COIN_ETH } from '~/systems/Core/utils/constants';
 import {
   ZERO,
@@ -139,8 +138,3 @@ export const hasReserveAmount = (swapState?: SwapState | null, poolInfo?: PoolIn
   }
   return true;
 };
-
-export function checkPairBalance(balances?: CoinQuantity[] | null) {
-  const pairId = TOKENS.find((t) => t.symbol === 'ETH/DAI')?.assetId;
-  return balances?.some((t) => t.assetId === pairId);
-}
