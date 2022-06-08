@@ -11,7 +11,7 @@
     "dev": {
       "cache": false
     },
-    "cypress": {
+    "test:end-to-end": {
       "cache": false
     }
   }

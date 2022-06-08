@@ -41,7 +41,7 @@
     "services:run-test": "make -C docker services-run-test",
     "test:clear": "jest --clearCache",
     "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --runInBand",
-    "test:end-to-end": "turbo run cypress",
+    "test:end-to-end": "turbo run test:end-to-end",
     "test": "turbo run test -- --passWithNoTests --runInBand",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview"
   },

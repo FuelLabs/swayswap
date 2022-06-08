@@ -6,12 +6,12 @@
   "scripts": {
     "build": "tsc && vite build && pnpm create404",
     "create404": "cp ./dist/index.html ./dist/404.html",
-    "cypress": "cypress open",
     "dev": "vite",
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "preview": "vite preview",
     "test": "jest",
+    "test:end-to-end": "cypress open",
     "test:watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {
