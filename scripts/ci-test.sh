@@ -21,8 +21,8 @@ echo $1
 # Run test
 if [ "$1" = "--coverage" ]; then
     pnpm test:coverage
-elif [ "$1" = "--end-to-end" ]; then
-    pnpm test:end-to-end
+elif [ "$1" = "--e2e" ]; then
+    NODE_ENV=test pnpm test:e2e
 else
     pnpm test
 fi
@@ -32,6 +32,6 @@ pnpm services:clean-test
 
 # After run the tests delete .env.test
 # If it was created
-if [  $TEST_CREATED == 1 ]; then
+if [ $TEST_CREATED == 1 ]; then
     rm $APP_TEST_ENV
 fi

@@ -23,11 +23,14 @@
     "dev": "turbo run dev --parallel",
     "ci:test": "./scripts/ci-test.sh",
     "ci:test:coverage": "./scripts/ci-test.sh --coverage",
-    "ci:test:end-to-end": "./scripts/ci-test.sh --end-to-end",
+    "ci:test:e2e": "./scripts/ci-test.sh --e2e",
     "create:test-env": "./scripts/create-test-env.sh 4001 4041 ./packages/app/.env.test",
     "contracts": "pnpm exec swayswap-scripts run",
     "contracts:build": "pnpm exec swayswap-scripts build",
     "contracts:deploy": "pnpm exec swayswap-scripts deploy",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --headless",
+    "gh-preview": "pnpm run --filter swayswap-app gh-preview",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "pnpm lint:check --fix",
     "lint": "run-s lint:check prettier:check",
@@ -45,9 +48,7 @@
     "test": "turbo run test -- --passWithNoTests --runInBand",
     "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --runInBand",
     "test:clear": "jest --clearCache",
-    "test:e2e": "turbo run test:e2e",
-    "test:end-to-end": "turbo run test:end-to-end",
-    "gh-preview": "pnpm run --filter swayswap-app gh-preview"
+    "test:e2e": "run-p --race dev cy:run"
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",

@@ -40,11 +40,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # - name: Install Cypress dependencies
-      #   run: |
-      #     apt-get update -y
-      #     apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -140,14 +135,15 @@ jobs:
           install: false
           # command-prefix: cd packages/app &&
           # command: cd packages/app && npm cy:run
-          # command: pnpm --dir packages/app/ cy:run
-          start: pnpm dev
+          command: pnpm ci:test:e2e
+          start: 
+          # start: pnpm dev
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
           browser: chrome
           # record: true
           # spec: packages/app/cypress/e2e/*
-          config-file: packages/app/cypress.config.ts
+          # config-file: cypress.config.ts
         env:
           # CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

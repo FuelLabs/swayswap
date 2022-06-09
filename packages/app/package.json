@@ -6,15 +6,11 @@
   "scripts": {
     "build": "tsc && vite build && pnpm create404",
     "create404": "cp ./dist/index.html ./dist/404.html",
-    "cy:open": "cypress open",
-    "cy:run": "cypress run --headless",
     "dev": "vite",
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "preview": "vite preview",
     "test": "jest",
-    "test:e2e": "run-p --race dev cy:run",
-    "test:end-to-end": "cypress open",
     "test:watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {
@@ -71,7 +67,6 @@
     "xstate": "^4.32.1"
   },
   "devDependencies": {
-    "@cypress/react": "^5.12.5",
     "@jest/globals": "^28.1.0",
     "@react-types/button": "^3.5.0",
     "@react-types/dialog": "^3.4.0",
@@ -85,7 +80,6 @@
     "@types/react-helmet": "^6.1.5",
     "@vitejs/plugin-react": "^1.3.2",
     "autoprefixer": "^10.4.7",
-    "cypress": "^10.0.3",
     "dotenv": "^16.0.1",
     "eslint": "^8.17.0",
     "eslint-plugin-cypress": "^2.12.1",
