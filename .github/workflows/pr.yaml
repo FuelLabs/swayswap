@@ -108,7 +108,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       # Make github action to use the latest version of
       # docker compose without it docker compose down
       # has issues with memory nil pointer
@@ -128,4 +128,4 @@ jobs:
 
       - name: Run test
         run: |
-          pnpm ci:test
+          pnpm ci:test-coverage
