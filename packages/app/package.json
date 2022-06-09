@@ -10,9 +10,9 @@
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "preview": "vite preview",
-    "test": "jest",
-    "test:e2e": "cypress open",
-    "test:watch": "jest --watch --detectOpenHandles"
+    "test": "jest --verbose",
+    "test:watch": "jest --watch --detectOpenHandles",
+    "test:e2e": "cypress open"
   },
   "dependencies": {
     "@ethersproject/bignumber": "^5.6.2",

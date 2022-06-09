@@ -41,10 +41,10 @@
     "services:setup-test": "NODE_ENV=test run-s scripts:setup create:test-env services:run-test contracts",
     "services:run-test": "make -C docker services-run-test",
     "services:reset-test": "NODE_ENV=test run-s services:clean-test services:run-test contracts",
-    "test:clear": "jest --clearCache",
-    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test -- --coverage",
     "test:e2e": "turbo run test:e2e",
-    "test": "turbo run test -- --passWithNoTests",
+    "test:clear": "jest --clearCache",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview"
   },
   "devDependencies": {
