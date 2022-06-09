@@ -1,6 +1,6 @@
 describe('App flow', () => {
   it('should execute whole app flow', () => {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
 
     // create a wallet and fund it
     cy.contains('button', /Create wallet/i).click();
@@ -9,7 +9,7 @@ describe('App flow', () => {
     cy.contains('Enter amount');
 
     // mint tokens
-    cy.visit('http://localhost:3000/mint');
+    cy.visit('/mint');
     cy.contains('button', 'Mint tokens').click();
     cy.contains('Token received successfully!');
     // wait to be redirected to swap page after minting
