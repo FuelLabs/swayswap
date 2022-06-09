@@ -10,8 +10,10 @@
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "preview": "vite preview",
-    "test": "jest",
-    "test:end-to-end": "cypress open",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --headless",
+    "test:e2e": "run-p --race dev cy:run",
+    "test": "jest --verbose",
     "test:watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {
@@ -69,6 +71,7 @@
   },
   "devDependencies": {
     "@cypress/react": "^5.12.5",
+    "@jest/globals": "^28.1.0",
     "@react-types/button": "^3.5.0",
     "@react-types/dialog": "^3.4.0",
     "@react-types/link": "^3.3.0",
@@ -84,7 +87,6 @@
     "cypress": "^10.0.3",
     "dotenv": "^16.0.1",
     "eslint": "^8.17.0",
-    "eslint-plugin-cypress": "^2.12.1",
     "postcss": "^8.4.14",
     "postcss-import": "^14.1.0",
     "tailwindcss": "^3.0.24",

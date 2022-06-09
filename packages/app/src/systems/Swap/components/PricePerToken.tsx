@@ -81,12 +81,21 @@ export function PricePerToken({
   const pricePerToken = getPricePerToken(assetFrom.amount, assetTo.amount);
 
   return (
-    <div className={style.wrapper} onClick={toggle}>
+    <div
+      className={style.wrapper}
+      onClick={toggle}
+      aria-label="Price per token"
+    >
       <div className={style.priceContainer}>
         <span className="text-gray-200">1</span> {assetFrom.symbol} ={" "}
         <span className="text-gray-200">{pricePerToken}</span> {assetTo.symbol}
       </div>
-      <Button size="sm" className="h-auto p-0 border-none" onPress={toggle}>
+      <Button
+        size="sm"
+        className="h-auto p-0 border-none"
+        onPress={toggle}
+        aria-label="Invert token price"
+      >
         <AiOutlineSwap size={20} />
       </Button>
     </div>

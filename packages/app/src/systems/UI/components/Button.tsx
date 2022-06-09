@@ -64,9 +64,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={classes}
         aria-pressed={!isDisabled && isPressed}
         aria-disabled={isDisabled}
+        aria-busy={isLoading}
       >
         {isLoading ? (
-          <Spinner size={size === "sm" ? 16 : 22} variant="base" />
+          <Spinner
+            size={size === "sm" ? 16 : 22}
+            variant="base"
+            aria-label="Loading"
+          />
         ) : (
           props.children
         )}
