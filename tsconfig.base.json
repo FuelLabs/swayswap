@@ -19,7 +19,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es5"
+    "target": "ES6"
   },
   "exclude": ["**/dist", "**/build", "node_modules", "**/node_modules"]
 }

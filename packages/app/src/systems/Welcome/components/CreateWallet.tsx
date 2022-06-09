@@ -30,13 +30,8 @@ export function CreateWallet() {
         To get started you&apos;ll need a wallet, <br />
         click below to generate one.
       </p>
-      <Button
-        variant="primary"
-        size="lg"
-        onPress={handleCreateWallet}
-        aria-label="welcome-create-wallet-btn"
-      >
-        Create wallet
+      <Button variant="primary" size="lg" onPress={handleCreateWallet}>
+        Create Wallet
       </Button>
     </WelcomeStep>
   );

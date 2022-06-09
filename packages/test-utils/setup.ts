@@ -24,6 +24,7 @@ if (typeof window.matchMedia !== 'function') {
 failOnConsole({
   silenceMessage: (msg) => {
     if (msg.includes('toHexString')) return true;
+    if (msg.includes('ReactDOM.render is no longer supported in React 18')) return true;
     return false;
   },
 });

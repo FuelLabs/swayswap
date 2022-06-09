@@ -1,37 +1,34 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
-import type { UseQueryResult } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { useUserPositions } from './useUserPositions';
 
 import { DEADLINE } from '~/config';
 import type { UseCoinInput } from '~/systems/Core';
-import { useBalances, useContract } from '~/systems/Core';
+import { useContract } from '~/systems/Core';
 import type { Coin } from '~/types';
-import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UseAddLiquidityProps {
   fromInput: UseCoinInput;
   toInput: UseCoinInput;
-  poolInfoQuery: UseQueryResult<PoolInfo | undefined, unknown>;
   coinFrom: Coin;
   coinTo: Coin;
+  onSettle?: () => void;
 }
 
 export function useAddLiquidity({
   fromInput,
   toInput,
-  poolInfoQuery,
   coinFrom,
   coinTo,
+  onSettle,
 }: UseAddLiquidityProps) {
   const [errorsCreatePull, setErrorsCreatePull] = useState<string[]>([]);
   const contract = useContract()!;
   const [stage, setStage] = useState(0);
   const navigate = useNavigate();
-  const balances = useBalances();
   const { poolRatio } = useUserPositions();
 
   const mutation = useMutation(
@@ -97,8 +94,7 @@ export function useAddLiquidity({
         }
       },
       onSettled: async () => {
-        await poolInfoQuery.refetch();
-        await balances.refetch();
+        onSettle?.();
         navigate('../');
         setStage(0);
       },

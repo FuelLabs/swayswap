@@ -36,7 +36,11 @@ export const AddLiquidityPreview = ({
       <div className="flex justify-center">
         <BsArrowDown size={20} className="text-gray-400" />
       </div>
-      <PreviewTable title="Expected output:" className="mt-2 mb-4">
+      <PreviewTable
+        title="Expected output:"
+        className="mt-2 mb-4"
+        aria-label="preview-add-liquidity-output"
+      >
         <PreviewItem
           title="Pool tokens you'll receive:"
           value={

@@ -1,4 +1,5 @@
 import { useMachine } from "@xstate/react";
+import type { Wallet } from "fuels";
 import type { ReactNode } from "react";
 import { useContext, createContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +49,7 @@ export type Step = {
 
 type MachineContext = {
   current: Step;
+  wallet?: Wallet | null;
 };
 
 type MachineEvents = { type: "NEXT" } | { type: "SET_CURRENT"; value: number };
@@ -65,6 +67,13 @@ const welcomeStepsMachine = createMachine<MachineContext>({
   states: {
     init: {
       always: [
+        /**
+         * This is mainly used for tests purposes
+         */
+        {
+          target: "finished",
+          cond: (ctx) => Boolean(ctx.wallet && !ctx.current.id),
+        },
         {
           target: "creatingWallet",
           cond: (ctx) => ctx.current.id === 0,
@@ -144,14 +153,19 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
   const wallet = useWallet();
 
   const [state, send, service] = useMachine<Machine>(() =>
-    welcomeStepsMachine.withConfig({
-      actions: {
-        navigateTo: (context) => {
-          if (context.current.id > 2 || (wallet && !context.current.id)) return;
-          navigate(`/welcome/${context.current.path}`);
+    welcomeStepsMachine
+      .withContext({
+        wallet,
+        current: getCurrent(),
+      })
+      .withConfig({
+        actions: {
+          navigateTo: (context) => {
+            if (context.current.id > 2) return;
+            navigate(`/welcome/${context.current.path}`);
+          },
         },
-      },
-    })
+      })
   );
 
   function next() {

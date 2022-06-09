@@ -34,7 +34,11 @@ export const RemoveLiquidityPreview = ({
       <div className="flex justify-center">
         <BsArrowDown size={24} />
       </div>
-      <PreviewTable title="Expected output:" className="my-2 mb-4">
+      <PreviewTable
+        title="Expected output:"
+        className="my-2 mb-4"
+        aria-label="preview-remove-liquidity-output"
+      >
         <PreviewItem
           title="DAI:"
           value={

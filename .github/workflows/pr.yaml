@@ -4,7 +4,6 @@ on:
   pull_request:
     types: [opened, synchronize, ready_for_review, edited, closed]
 
-
 env:
   RUST_VERSION: 1.61.0
   FORC_VERSION: 0.14.5
@@ -108,7 +107,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       # Make github action to use the latest version of
       # docker compose without it docker compose down
       # has issues with memory nil pointer
@@ -126,6 +125,6 @@ jobs:
         run: |
           pnpm scripts:setup
 
-      - name: Run test
+      - name: Integration & Unit Test
         run: |
-          pnpm ci:test
+          pnpm ci:test-coverage

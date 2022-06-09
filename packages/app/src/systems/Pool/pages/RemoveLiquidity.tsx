@@ -101,6 +101,7 @@ export function RemoveLiquidityPage() {
       </Card.Title>
       <div className="mt-4 mb-4">
         <CoinInput
+          aria-label="LP Token Input"
           autoFocus
           {...tokenInput.getInputProps()}
           rightElement={

@@ -10,6 +10,7 @@ import {
   parseUnits,
   toBigInt,
   MAX_U64_VALUE,
+  parseToFormattedNumber,
 } from "../utils";
 
 import type { CoinSelectorProps } from "./CoinSelector";
@@ -151,6 +152,11 @@ export function useCoinInput({
   };
 }
 
+function getRightValue(value: string, displayType: string) {
+  if (displayType === "text") return parseToFormattedNumber(value);
+  return value === "0.0" ? "0" : value;
+}
+
 type CoinInputProps = Omit<UseCoinParams, "onChange"> &
   NumberInputProps & {
     value: string;
@@ -199,7 +205,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
             getInputRef={ref}
             allowNegative={false}
             defaultValue={initialValue}
-            value={value}
+            value={getRightValue(value || "", displayType)}
             displayType={displayType}
             isAllowed={isAllowed}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

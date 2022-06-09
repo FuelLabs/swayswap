@@ -53,7 +53,7 @@ export function SwapPreview({
   const inputAmountWithSlippage = parseToFormattedNumber(priceWithSlippage);
 
   return (
-    <div>
+    <div aria-label="preview-swap-output">
       <div className="flex justify-center">
         <BsArrowDown size={20} className="text-gray-400" />
       </div>

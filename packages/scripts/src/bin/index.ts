@@ -1,15 +1,14 @@
-#!/usr/bin/env node
+import { Commands } from '../types';
+import type { Config } from '../types';
 
-import { Command } from 'commander';
-import { buildContracts } from 'src/actions/buildContracts.js';
-import { deployContracts } from 'src/actions/deployContracts.js';
-import { runAll } from 'src/actions/runAll.js';
-import type { Config, Event } from 'src/types';
-import { Commands } from 'src/types';
+const { Command } = require('commander');
 
-import { loadConfig } from '../helpers/loader.js';
+const { buildContracts } = require('../actions/buildContracts.js');
+const { deployContracts } = require('../actions/deployContracts.js');
+const { runAll } = require('../actions/runAll.js');
+const { loadConfig } = require('../helpers/loader.js');
 
-const program = new Command();
+const program = new Command('swayswap');
 
 function action(command: string, func: (config: Config) => Promise<unknown>) {
   return async () => {
@@ -32,21 +31,14 @@ function action(command: string, func: (config: Config) => Promise<unknown>) {
 
 program
   .name('SwaySwap Scripts')
-  .description('Utility to build, deploy and generate types for Sway Contracts');
-
-program
+  .description('Utility to build, deploy and generate types for Sway Contracts')
   .command(Commands.build)
   .description('Build sway contracts and generate type')
-  .action(action(Commands.build, async (config) => buildContracts(config)));
-
-program
+  .action(action(Commands.build, async (config) => buildContracts(config)))
   .command(Commands.deploy)
   .description('deploy contract to fuel network')
-  .action(action(Commands.deploy, (config) => deployContracts(config)));
-
-program
+  .action(action(Commands.deploy, (config) => deployContracts(config)))
   .command(Commands.run)
   .description('build and deploy contracts to fuel network')
-  .action(action(Commands.run, (config) => runAll(config)));
-
-program.parse();
+  .action(action(Commands.run, (config) => runAll(config)))
+  .parse(process.argv);

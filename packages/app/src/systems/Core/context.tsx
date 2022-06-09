@@ -1,18 +1,16 @@
 import { Wallet } from "fuels";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import type { PropsWithChildren } from "react";
+import type { ReactNode } from "react";
 import React, { useContext, useMemo } from "react";
 
 import { LocalStorageKey } from "./utils";
 
-import { CONTRACT_ID, FUEL_PROVIDER_URL } from "~/config";
-import type { ExchangeContractAbi } from "~/types/contracts";
-import { ExchangeContractAbi__factory } from "~/types/contracts";
+import { FUEL_PROVIDER_URL } from "~/config";
 
 interface AppContextValue {
+  justContent?: boolean;
   wallet: Wallet | null;
-  contract: ExchangeContractAbi | null;
   createWallet: () => void;
 }
 
@@ -25,9 +23,15 @@ export const AppContext = React.createContext<AppContextValue | null>(null);
 
 export const useAppContext = () => useContext(AppContext)!;
 
+type ProviderProps = {
+  children: ReactNode;
+  justContent?: boolean;
+};
+
 export const AppContextProvider = ({
+  justContent,
   children,
-}: PropsWithChildren<unknown>) => {
+}: ProviderProps) => {
   const [privateKey, setPrivateKey] = useAtom(walletPrivateKeyState);
 
   const wallet = useMemo(() => {
@@ -35,16 +39,11 @@ export const AppContextProvider = ({
     return new Wallet(privateKey, FUEL_PROVIDER_URL);
   }, [privateKey]);
 
-  const contract = useMemo(() => {
-    if (!wallet) return null;
-    return ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
-  }, [wallet]);
-
   return (
     <AppContext.Provider
       value={{
+        justContent,
         wallet,
-        contract,
         createWallet: () => {
           const nextWallet = Wallet.generate({
             provider: FUEL_PROVIDER_URL,

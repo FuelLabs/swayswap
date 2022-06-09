@@ -115,11 +115,11 @@ export const getValidationState = (stateParams: StateParams): ValidationStateEnu
   if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
-  if (!previewAmount) {
-    return ValidationStateEnum.InsufficientLiquidity;
-  }
   if (!swapState.hasBalance || hasBalanceWithSlippage(stateParams)) {
     return ValidationStateEnum.InsufficientBalance;
+  }
+  if (!previewAmount) {
+    return ValidationStateEnum.InsufficientLiquidity;
   }
   if (!hasLiquidity || isSwayInfinity(previewAmount)) {
     return ValidationStateEnum.InsufficientLiquidity;

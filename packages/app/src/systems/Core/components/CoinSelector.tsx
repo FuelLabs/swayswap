@@ -56,6 +56,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
 
     const button = (
       <Button
+        aria-label="Coin Selector"
         {...dialog.openButtonProps}
         size="md"
         isReadOnly={isReadOnly}
