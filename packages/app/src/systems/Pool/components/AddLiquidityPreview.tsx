@@ -4,6 +4,7 @@ import { usePreviewAddLiquidity } from "../hooks";
 
 import type { UseCoinInput } from "~/systems/Core";
 import {
+  parseToFormattedNumber,
   PreviewItem,
   PreviewTable,
   TokenIcon,
@@ -15,11 +16,13 @@ import type { PoolInfo } from "~/types/contracts/ExchangeContractAbi";
 export interface AddLiquidityPreviewProps {
   poolInfo?: PoolInfo;
   fromInput: UseCoinInput;
+  networkFee?: bigint | null;
 }
 
 export const AddLiquidityPreview = ({
   poolInfo,
   fromInput,
+  networkFee,
 }: AddLiquidityPreviewProps) => {
   const { coinMetaData } = useCoinMetadata({ symbol: ETH_DAI.name });
   const coinFrom = coinMetaData?.pairOf?.[0];
@@ -54,6 +57,13 @@ export const AddLiquidityPreview = ({
           title={"Your share of current pool:"}
           value={`${formattedNextCurrentPoolShare}%`}
         />
+        {networkFee ? (
+          <PreviewItem
+            className="text-gray-300"
+            title={`Network Fee`}
+            value={`~ ${parseToFormattedNumber(networkFee)} ETH`}
+          />
+        ) : null}
       </PreviewTable>
     </>
   );
