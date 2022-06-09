@@ -7,6 +7,11 @@ import { Queries } from '~/types';
 
 export function useBalances(opts: UseQueryOptions = {}) {
   const wallet = useWallet();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return useQuery(Queries.UserQueryBalances, () => wallet?.getBalances(), opts as any);
+
+  return useQuery(
+    Queries.UserQueryBalances,
+    async () => wallet?.getBalances(),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    opts as any
+  );
 }

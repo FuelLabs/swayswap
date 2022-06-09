@@ -193,9 +193,7 @@ describe("Add Liquidity", () => {
     expect(submitBtn).toBeInTheDocument();
     await user.click(submitBtn);
 
-    const successFeedback = await screen.findByLabelText(
-      /step completed: provide/i
-    );
+    const successFeedback = await screen.findByText(/New pool created/i);
     expect(successFeedback).toBeInTheDocument();
   });
 });

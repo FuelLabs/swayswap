@@ -23,7 +23,6 @@ import {
   useSlippage,
   ZERO,
   isSwayInfinity,
-  sleep,
 } from "~/systems/Core";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { Button, Card } from "~/systems/UI";
@@ -90,8 +89,7 @@ export function SwapPage() {
   const { mutate: swap, isLoading: isSwaping } = useMutation(
     async () => {
       if (!swapState) return;
-      await swapTokens(contract, swapState);
-      await sleep(1000);
+      return swapTokens(contract, swapState);
     },
     {
       onSuccess: async () => {

@@ -7,7 +7,7 @@ import { TokenContractAbi__factory } from '~/types/contracts';
 export async function mint(wallet: Wallet, mintAmount: bigint) {
   const contract = TokenContractAbi__factory.connect(TOKEN_ID, wallet);
   await contract.submit.mint_coins(mintAmount);
-  await contract.submit.transfer_token_to_output(
+  return contract.submit.transfer_token_to_output(
     mintAmount,
     objectId(contract.id),
     objectId(wallet.address),

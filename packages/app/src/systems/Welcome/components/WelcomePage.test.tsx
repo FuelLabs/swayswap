@@ -1,11 +1,16 @@
-import { renderWithRouter, screen } from "@swayswap/test-utils";
+import { renderWithRouter, screen, waitFor } from "@swayswap/test-utils";
 
 import { App } from "~/App";
 
 describe("WelcomePage", () => {
   it("should always be redirect to welcome", async () => {
-    renderWithRouter(<App />, { route: "/pool/list" });
-    expect(await screen.findByText(/Welcome to SwaySwap/)).toBeInTheDocument();
+    renderWithRouter(<App justContent />, { route: "/swap" });
+
+    await waitFor(async () => {
+      expect(
+        await screen.findByText(/Welcome to SwaySwap/)
+      ).toBeInTheDocument();
+    });
   });
 
   it("should be able to do all welcome steps and see swap page after", async () => {
@@ -43,9 +48,7 @@ describe("WelcomePage", () => {
     /**
      * Finished: go to swap
      */
-    const swapBtn = await screen.findByRole("button", {
-      name: /Enter amount/i,
-    });
+    const swapBtn = await screen.findByLabelText(/swap button/i);
     expect(swapBtn).toBeInTheDocument();
   });
 });

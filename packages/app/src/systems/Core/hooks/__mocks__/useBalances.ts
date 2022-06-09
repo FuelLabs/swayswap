@@ -1,9 +1,11 @@
 import type { CoinQuantity } from 'fuels';
 
-import { COIN_ETH, ONE_ASSET } from '../../utils';
+import { COIN_ETH, parseUnits } from '../../utils';
 import * as useBalances from '../useBalances';
 
-const FAKE_BALANCE = [{ amount: ONE_ASSET, assetId: COIN_ETH }];
+import { DECIMAL_UNITS } from '~/config';
+
+const FAKE_BALANCE = [{ amount: parseUnits('3', DECIMAL_UNITS).toBigInt(), assetId: COIN_ETH }];
 
 export function mockUseBalances(balances?: CoinQuantity[]) {
   const mock = {

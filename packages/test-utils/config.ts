@@ -7,6 +7,7 @@ export const config: Config.InitialOptions = {
       useESM: true,
     },
   },
+  testTimeout: 20000,
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/**/?(*.)+(spec|test).[jt]s?(x)'],
   testPathIgnorePatterns: ['/node_modules/', '/dist'],

@@ -4,7 +4,10 @@ import type { Wallet } from "fuels";
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
 
 import { App } from "~/App";
-import { createWallet, mockUseWallet } from "~/systems/Core/hooks/__mocks__";
+import {
+  createWallet,
+  mockUseWallet,
+} from "~/systems/Core/hooks/__mocks__/useWallet";
 
 let wallet: Wallet;
 
