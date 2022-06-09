@@ -34,7 +34,7 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     container:
-      image: node16.14.0-chrome99-ff97
+      image: cypress/browsers:node16.14.0-chrome99-ff97
       # options: --user 1001
     steps:
       - name: Checkout
