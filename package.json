@@ -21,8 +21,9 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "ci:test-coverage": "./scripts/ci-test.sh --coverage",
     "ci:test": "./scripts/ci-test.sh",
+    "ci:test:coverage": "./scripts/ci-test.sh --coverage",
+    "ci:test:end-to-end": "./scripts/ci-test.sh --end-to-end",
     "create:test-env": "./scripts/create-test-env.sh 4001 4041 ./packages/app/.env.test",
     "contracts": "pnpm exec swayswap-scripts run",
     "contracts:build": "pnpm exec swayswap-scripts build",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",
+    "@cypress/react": "^5.12.5",
     "@jest/types": "^28.1.1",
     "@swayswap/test-utils": "workspace:*",
     "@swc/core": "^1.2.197",
@@ -55,6 +57,7 @@
     "@types/node": "^17.0.41",
     "@types/react": "^18.0.12",
     "@types/react-dom": "^18.0.5",
+    "cypress": "^10.0.3",
     "dotenv": "^16.0.1",
     "eslint": "^8.17.0",
     "husky": "^8.0.1",

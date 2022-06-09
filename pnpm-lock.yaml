@@ -5,6 +5,7 @@ importers:
   .:
     specifiers:
       '@babel/core': ^7.18.2
+      '@cypress/react': ^5.12.5
       '@jest/types': ^28.1.1
       '@swayswap/test-utils': workspace:*
       '@swc/core': ^1.2.197
@@ -13,6 +14,7 @@ importers:
       '@types/node': ^17.0.41
       '@types/react': ^18.0.12
       '@types/react-dom': ^18.0.5
+      cypress: ^10.0.3
       dotenv: ^16.0.1
       eslint: ^8.17.0
       husky: ^8.0.1
@@ -31,6 +33,7 @@ importers:
       typescript: ^4.7.3
     devDependencies:
       '@babel/core': 7.18.2
+      '@cypress/react': 5.12.5_xnclbota6xqhewrneeghwd2w6u
       '@jest/types': 28.1.1
       '@swayswap/test-utils': link:packages/test-utils
       '@swc/core': 1.2.197
@@ -39,6 +42,7 @@ importers:
       '@types/node': 17.0.41
       '@types/react': 18.0.12
       '@types/react-dom': 18.0.5
+      cypress: 10.0.3
       dotenv: 16.0.1
       eslint: 8.17.0
       husky: 8.0.1
@@ -1646,6 +1650,46 @@ packages:
       find-yarn-workspace-root: 2.0.0
       react: 18.1.0
       react-dom: 18.1.0_react@18.1.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@cypress/react/5.12.5_xnclbota6xqhewrneeghwd2w6u:
+    resolution: {integrity: sha512-9ARxdLMVrrmh853xe6j9gNdXdh+vqM7lMrvJ+MGoT4Wae+nE0q3guNgotFZjFot0ZP/npw8r3NFyJO216ddbEA==}
+    peerDependencies:
+      '@babel/core': '>=7'
+      '@babel/preset-env': '>=7'
+      '@cypress/webpack-dev-server': '*'
+      '@types/react': ^16.9.16 || ^17.0.0
+      babel-loader: '>=8'
+      cypress: '*'
+      next: '>=8'
+      react: ^=16.x || ^=17.x
+      react-dom: ^=16.x || ^=17.x
+      webpack: '>=4'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@babel/preset-env':
+        optional: true
+      '@cypress/webpack-dev-server':
+        optional: true
+      '@types/react':
+        optional: true
+      babel-loader:
+        optional: true
+      next:
+        optional: true
+      webpack:
+        optional: true
+    dependencies:
+      '@babel/core': 7.18.2
+      '@cypress/mount-utils': 1.0.2
+      '@types/react': 18.0.12
+      cypress: 10.0.3
+      debug: 4.3.4
+      find-webpack: 2.2.1
+      find-yarn-workspace-root: 2.0.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -11727,7 +11771,7 @@ packages:
     dev: false
 
   /source-map/0.5.7:
-    resolution: {integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=}
+    resolution: {integrity: sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -11853,7 +11897,7 @@ packages:
     dev: false
 
   /static-extend/0.1.2:
-    resolution: {integrity: sha1-YICcOcv/VTNyJv1eC1IPNB8ftcY=}
+    resolution: {integrity: sha512-72E9+uLc27Mt718pMHt9VMNiAL4LMsmDbBva8mxWUCkT07fSzEGMYUCk0XWY6lp0j6RBAG4cJ3mWuZv2OE3s0g==}
     engines: {node: '>=0.10.0'}
     dependencies:
       define-property: 0.2.5

@@ -19,8 +19,10 @@ pnpm services:setup-test
 echo $1
 
 # Run test
-if [ "$1" == "--coverage" ]; then
+if [ "$1" = "--coverage" ]; then
     pnpm test:coverage
+elif [ "$1" = "--end-to-end" ]; then
+    pnpm test:end-to-end
 else
     pnpm test
 fi
