@@ -112,7 +112,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
             {showMaxButton && (
               <Tooltip
                 content={`Set: max ${coin?.symbol} balance ${
-                  coin?.assetId === COIN_ETH ? " - network_fee" : ""
+                  coin?.assetId === COIN_ETH ? " - network fee" : ""
                 }`}
               >
                 <Button

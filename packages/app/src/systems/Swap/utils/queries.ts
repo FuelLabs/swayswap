@@ -1,8 +1,9 @@
 import type { SwapState } from '../types';
 import { ActiveInput } from '../types';
 
-import { COIN_ETH, ZERO } from '~/systems/Core';
-import { getGasFee, getOverrides } from '~/systems/Core/utils/gas';
+import { COIN_ETH } from '~/systems/Core';
+import type { TransactionCost } from '~/systems/Core/utils/gas';
+import { getOverrides, getTransactionCost } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 
 const getSwapWithMaximumRequiredAmount = async (
@@ -49,7 +50,7 @@ export const queryPreviewAmount = async (
 export const swapTokens = async (
   contract: ExchangeContractAbi,
   { coinFrom, direction, amount }: SwapState,
-  gasLimit: bigint
+  txCost: TransactionCost
 ) => {
   const DEADLINE = 1000;
   if (direction === ActiveInput.to && amount) {
@@ -66,7 +67,7 @@ export const swapTokens = async (
       DEADLINE,
       getOverrides({
         forward: [forwardAmount.amount, coinFrom.assetId],
-        gasLimit,
+        gasLimit: txCost.gas,
         variableOutputs: 1,
       })
     );
@@ -80,31 +81,31 @@ export const swapTokens = async (
       DEADLINE,
       getOverrides({
         forward: [amount, coinFrom.assetId],
-        gasLimit,
+        gasLimit: txCost.total,
         variableOutputs: 1,
       })
     );
   }
 };
 
-export const queryNetworkFee = async (contract: ExchangeContractAbi, direction?: ActiveInput) => {
+export const queryNetworkFee = async (
+  contract: ExchangeContractAbi,
+  direction?: ActiveInput
+): Promise<TransactionCost> => {
   const DEADLINE = 1000;
   const directionValue = direction || ActiveInput.from;
   if (directionValue === ActiveInput.to) {
-    return getGasFee(
-      await contract.simulateResult.swap_with_maximum(1, DEADLINE, {
-        forward: [1, COIN_ETH],
-        variableOutputs: 1,
-      })
-    );
+    const request = contract.prepareCall.swap_with_maximum(1, DEADLINE, {
+      forward: [1, COIN_ETH],
+      variableOutputs: 1,
+      gasLimit: 1000000,
+    });
+    return getTransactionCost(request);
   }
-  if (directionValue === ActiveInput.from) {
-    return getGasFee(
-      await contract.simulateResult.swap_with_minimum(1, DEADLINE, {
-        forward: [1, COIN_ETH],
-        variableOutputs: 1,
-      })
-    );
-  }
-  return ZERO;
+  const request = contract.prepareCall.swap_with_minimum(1, DEADLINE, {
+    forward: [1, COIN_ETH],
+    variableOutputs: 1,
+    gasLimit: 1000000,
+  });
+  return getTransactionCost(request);
 };

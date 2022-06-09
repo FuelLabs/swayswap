@@ -66,6 +66,7 @@ interface TokenContractAbiInterface extends Interface {
     mint_coins: FunctionFragment;
     burn_coins: FunctionFragment;
     transfer_coins: FunctionFragment;
+    mint_and_transfer_coins: FunctionFragment;
     transfer_token_to_output: FunctionFragment;
   };
   simulateResult: {
@@ -74,6 +75,7 @@ interface TokenContractAbiInterface extends Interface {
     mint_coins: FunctionFragment;
     burn_coins: FunctionFragment;
     transfer_coins: FunctionFragment;
+    mint_and_transfer_coins: FunctionFragment;
     transfer_token_to_output: FunctionFragment;
   };
   prepareCall: {
@@ -290,6 +292,12 @@ export class TokenContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
+    mint_and_transfer_coins(
+      coins: BigNumberish,
+      address: AddressInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
     transfer_token_to_output(
       coins: BigNumberish,
       asset_id: ContractIdInput,
@@ -353,6 +361,12 @@ export class TokenContractAbi extends Contract {
     ): Promise<void>;
 
     transfer_coins(
+      coins: BigNumberish,
+      address: AddressInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    mint_and_transfer_coins(
       coins: BigNumberish,
       address: AddressInput,
       overrides?: Overrides & { from?: string | Promise<string> }

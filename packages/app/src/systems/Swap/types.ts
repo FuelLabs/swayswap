@@ -28,5 +28,6 @@ export enum ValidationStateEnum {
   InsufficientBalance = 2,
   InsufficientAmount = 3,
   InsufficientLiquidity = 4,
-  Swap = 5,
+  InsufficientFeeBalance = 5,
+  Swap = 6,
 }

@@ -4,6 +4,7 @@ import type { SwapInfo, SwapState } from '../types';
 import { ActiveInput, ValidationStateEnum } from '../types';
 
 import { COIN_ETH } from '~/systems/Core/utils/constants';
+import type { TransactionCost } from '~/systems/Core/utils/gas';
 import {
   ZERO,
   toNumber,
@@ -68,6 +69,7 @@ type StateParams = {
   hasLiquidity: boolean;
   slippage: number;
   balances?: CoinQuantity[];
+  txCost?: TransactionCost;
 };
 
 export const getValidationText = (state: ValidationStateEnum, swapState: SwapState | null) => {
@@ -82,19 +84,22 @@ export const getValidationText = (state: ValidationStateEnum, swapState: SwapSta
       return `Insufficient amount to swap`;
     case ValidationStateEnum.InsufficientLiquidity:
       return 'Insufficient liquidity';
+    case ValidationStateEnum.InsufficientFeeBalance:
+      return 'Insufficient ETH for gas';
     default:
       return 'Swap';
   }
 };
 
-export const hasBalanceWithSlippage = ({
+export const notHasBalanceWithSlippage = ({
   swapState,
   previewAmount,
   slippage,
   balances,
+  txCost,
 }: StateParams) => {
   if (swapState!.direction === ActiveInput.to) {
-    const amountWithSlippage = calculatePriceWithSlippage(
+    let amountWithSlippage = calculatePriceWithSlippage(
       previewAmount || ZERO,
       slippage,
       swapState!.direction
@@ -102,9 +107,21 @@ export const hasBalanceWithSlippage = ({
     const currentBalance = toNumber(
       balances?.find((coin) => coin.assetId === swapState!.coinFrom.assetId)?.amount || ZERO
     );
+
+    if (swapState!.coinFrom.assetId === COIN_ETH) {
+      amountWithSlippage += txCost?.total || ZERO;
+    }
+
     return amountWithSlippage > currentBalance;
   }
   return false;
+};
+
+const hasEthForNetworkFee = ({ balances, txCost }: StateParams) => {
+  const currentBalance = toNumber(
+    balances?.find((coin) => coin.assetId === COIN_ETH)?.amount || ZERO
+  );
+  return currentBalance > (txCost?.total || ZERO);
 };
 
 export const getValidationState = (stateParams: StateParams): ValidationStateEnum => {
@@ -115,7 +132,7 @@ export const getValidationState = (stateParams: StateParams): ValidationStateEnu
   if (!swapState?.amount) {
     return ValidationStateEnum.EnterAmount;
   }
-  if (!swapState.hasBalance || hasBalanceWithSlippage(stateParams)) {
+  if (!swapState.hasBalance || notHasBalanceWithSlippage(stateParams)) {
     return ValidationStateEnum.InsufficientBalance;
   }
   if (!previewAmount) {
@@ -123,6 +140,9 @@ export const getValidationState = (stateParams: StateParams): ValidationStateEnu
   }
   if (!hasLiquidity || isSwayInfinity(previewAmount)) {
     return ValidationStateEnum.InsufficientLiquidity;
+  }
+  if (!hasEthForNetworkFee(stateParams)) {
+    return ValidationStateEnum.InsufficientFeeBalance;
   }
   return ValidationStateEnum.Swap;
 };

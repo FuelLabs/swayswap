@@ -24,6 +24,7 @@ import {
   useSlippage,
   ZERO,
   isSwayInfinity,
+  useEthBalance,
 } from "~/systems/Core";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { Button, Card } from "~/systems/UI";
@@ -36,6 +37,7 @@ export function SwapPage() {
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
   const { data: poolInfo } = usePoolInfo();
+  const ethBalance = useEthBalance();
 
   const previewAmount = previewInfo?.amount || ZERO;
   const swapInfo = useMemo<SwapInfo>(
@@ -86,23 +88,23 @@ export function SwapPage() {
     }
   );
 
-  const { isLoading: feeIsLoading, data: networkFee } = useQuery(
-    [],
-    async () => {
-      try {
-        return await queryNetworkFee(contract, swapState?.direction);
-      } catch (err) {
-        return null;
-      }
-    },
+  const { isLoading: feeIsLoading, data: txCost } = useQuery(
+    [
+      "SwapPage-networkFee",
+      swapState?.direction,
+      swapState?.amount?.toString(),
+      ethBalance.formatted,
+    ],
+    async () => queryNetworkFee(contract, swapState?.direction),
     { enabled: true }
   );
 
   const { mutate: swap, isLoading: isSwapping } = useMutation(
     async () => {
       if (!swapState) return;
-      if (!networkFee) return;
-      await swapTokens(contract, swapState, networkFee);
+      if (!txCost?.gas || txCost.error) return;
+      setHasSwapped(false);
+      await swapTokens(contract, swapState, txCost);
     },
     {
       onSuccess: async () => {
@@ -123,6 +125,7 @@ export function SwapPage() {
     hasLiquidity,
     balances: balances.data,
     slippage: slippage.value,
+    txCost,
   });
 
   const shouldDisableSwap =
@@ -137,13 +140,13 @@ export function SwapPage() {
         Swap
       </Card.Title>
       <SwapComponent
-        networkFee={networkFee}
+        networkFee={txCost?.total}
         previewAmount={previewAmount}
         onChange={handleSwap}
         isLoading={isLoading}
       />
       <SwapPreview
-        networkFee={networkFee}
+        networkFee={txCost?.total}
         isLoading={isLoading}
         swapInfo={swapInfo}
       />

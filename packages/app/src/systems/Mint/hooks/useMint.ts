@@ -3,7 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { TOKEN_ID } from '~/config';
-import { useTokenMethods, parseUnits, useBalances } from '~/systems/Core';
+import { useTokenMethods, parseUnits, useBalances, useEthBalance } from '~/systems/Core';
 import { Pages } from '~/types';
 
 type UseMintOpts = {
@@ -16,17 +16,21 @@ export function useMint(opts: UseMintOpts) {
   const methods = useTokenMethods(TOKEN_ID);
   const navigate = useNavigate();
   const balances = useBalances();
+  const ethBalance = useEthBalance();
 
-  const mintPreview = useQuery(['MintPreviewNetwork', opts.amount], async () => {
-    const amount = parseUnits(opts.amount || '0').toBigInt();
-    return methods.mintGasFee(amount, { variableOutputs: 1 });
-  });
+  const { data: txCost } = useQuery(
+    ['MintPreview--networkFee', opts.amount, ethBalance.formatted],
+    async () => {
+      const amount = parseUnits(opts.amount || '0').toBigInt();
+      return methods.queryNetworkFee(amount, { variableOutputs: 1 });
+    }
+  );
 
   const mutation = useMutation(
     async (variables: { amount: string }) => {
       const mintAmount = parseUnits(variables.amount).toBigInt();
       await methods.mint(mintAmount, {
-        gasLimit: mintPreview.data,
+        gasLimit: txCost?.total,
         variableOutputs: 1,
       });
     },
@@ -48,7 +52,7 @@ export function useMint(opts: UseMintOpts) {
 
   return {
     ...mutation,
-    networkFee: mintPreview.data,
+    txCost,
     handleMint,
   };
 }
