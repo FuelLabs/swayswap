@@ -11,7 +11,11 @@
     "dev": {
       "cache": false
     },
+<<<<<<< HEAD
     "test:end-to-end": {
+=======
+    "test:e2e": {
+>>>>>>> 9e11472777e2090fb75480702c70ced546e25245
       "cache": false
     }
   }

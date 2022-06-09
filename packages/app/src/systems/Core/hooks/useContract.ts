@@ -1,8 +1,9 @@
-import { useContext } from 'react';
+import { useWallet } from './useWallet';
 
-import { AppContext } from '../context';
+import { CONTRACT_ID } from '~/config';
+import { ExchangeContractAbi__factory } from '~/types/contracts';
 
 export const useContract = () => {
-  const context = useContext(AppContext);
-  return context?.contract;
+  const wallet = useWallet();
+  return wallet && ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
 };

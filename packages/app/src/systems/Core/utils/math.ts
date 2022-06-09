@@ -58,6 +58,9 @@ export function parseToFormattedNumber(
   precision: number = DECIMAL_UNITS
 ) {
   let val = value;
+  if (typeof value === 'string') {
+    return parseFloat(val as string).toFixed(FIXED_UNITS);
+  }
   if (typeof value === 'number') {
     val = BigInt(Math.trunc(value));
   }

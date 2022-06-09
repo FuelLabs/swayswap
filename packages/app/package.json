@@ -72,6 +72,7 @@
   },
   "devDependencies": {
     "@cypress/react": "^5.12.5",
+    "@jest/globals": "^28.1.0",
     "@react-types/button": "^3.5.0",
     "@react-types/dialog": "^3.4.0",
     "@react-types/link": "^3.3.0",

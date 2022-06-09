@@ -23,7 +23,6 @@ import {
   useSlippage,
   ZERO,
   isSwayInfinity,
-  sleep,
 } from "~/systems/Core";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { Button, Card } from "~/systems/UI";
@@ -36,6 +35,7 @@ export function SwapPage() {
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
   const { data: poolInfo } = usePoolInfo();
+
   const previewAmount = previewInfo?.amount || ZERO;
   const swapInfo = useMemo<SwapInfo>(
     () => ({
@@ -89,8 +89,7 @@ export function SwapPage() {
   const { mutate: swap, isLoading: isSwaping } = useMutation(
     async () => {
       if (!swapState) return;
-      await swapTokens(contract, swapState);
-      await sleep(1000);
+      return swapTokens(contract, swapState);
     },
     {
       onSuccess: async () => {
@@ -115,6 +114,8 @@ export function SwapPage() {
 
   const shouldDisableSwap =
     isLoading || validationState !== ValidationStateEnum.Swap;
+
+  const btnText = getValidationText(validationState, swapState);
 
   return (
     <Card className="sm:min-w-[450px]">
@@ -141,8 +142,9 @@ export function SwapPage() {
         variant="primary"
         isDisabled={shouldDisableSwap}
         onPress={() => swap()}
+        aria-label="Swap button"
       >
-        {getValidationText(validationState, swapState)}
+        {btnText}
       </Button>
     </Card>
   );

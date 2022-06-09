@@ -1,15 +1,14 @@
-#!/usr/bin/env node
+import { Commands } from '../types';
+import type { Config } from '../types';
 
-import { Command } from 'commander';
-import { buildContracts } from 'src/actions/buildContracts.js';
-import { deployContracts } from 'src/actions/deployContracts.js';
-import { runAll } from 'src/actions/runAll.js';
-import type { Config, Event } from 'src/types';
-import { Commands } from 'src/types';
+const { Command } = require('commander');
 
-import { loadConfig } from '../helpers/loader.js';
+const { buildContracts } = require('../actions/buildContracts.js');
+const { deployContracts } = require('../actions/deployContracts.js');
+const { runAll } = require('../actions/runAll.js');
+const { loadConfig } = require('../helpers/loader.js');
 
-const program = new Command();
+const program = new Command('swayswap');
 
 function action(command: string, func: (config: Config) => Promise<unknown>) {
   return async () => {
@@ -49,4 +48,4 @@ program
   .description('build and deploy contracts to fuel network')
   .action(action(Commands.run, (config) => runAll(config)));
 
-program.parse();
+program.parse(process.argv);

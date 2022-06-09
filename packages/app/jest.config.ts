@@ -1,15 +1,14 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import type { Config } from '@jest/types';
-
-import baseConfig from '../../jest.config';
+import baseConfig from '@swayswap/test-utils/config';
 
 import './load.envs.ts';
 import pkg from './package.json';
 
-const configJest: Config.InitialOptions = {
+const config: Config.InitialOptions = {
   ...baseConfig,
   rootDir: __dirname,
   displayName: pkg.name,
-  testSequencer: '<rootDir>/jest.sequence.js',
 };
 
-export default configJest;
+export default config;
