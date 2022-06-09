@@ -136,8 +136,7 @@ jobs:
           # command-prefix: cd packages/app &&
           # command: cd packages/app && npm cy:run
           command: pnpm ci:test:e2e
-          start: 
-          # start: pnpm dev
+          start: pnpm dev
           wait-on: "http://localhost:3001"
           wait-on-timeout: 120
           browser: chrome
@@ -151,6 +150,7 @@ jobs:
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: "cypress:server:*"
+          NODE_ENV: "test"
           # DEBUG: "cypress:server:args"
 
       # - name: Run test
