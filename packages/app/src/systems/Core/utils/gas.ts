@@ -15,7 +15,7 @@ export function getGasFee(simulateResult: CallResult) {
   if (scriptResult?.type === ReceiptType.ScriptResult) {
     return scriptResult.gasUsed;
   }
-  return toBigInt(1);
+  return ZERO;
 }
 
 export type TransactionCost = {

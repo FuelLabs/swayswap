@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import { PoolCurrentPosition, RemoveLiquidityPreview } from "../components";
@@ -15,7 +15,9 @@ import {
   ZERO,
   TOKENS,
   useBalances,
+  useEthBalance,
 } from "~/systems/Core";
+import { getOverrides, getTransactionCost } from "~/systems/Core/utils/gas";
 import { Button, Card } from "~/systems/UI";
 
 export function RemoveLiquidityPage() {
@@ -23,10 +25,23 @@ export function RemoveLiquidityPage() {
   const [errors, setErrors] = useState<string[]>([]);
   const contract = useContract()!;
   const balances = useBalances();
+  const ethBalance = useEthBalance();
 
   const liquidityToken = TOKENS.find((c) => c.assetId === CONTRACT_ID);
   const tokenInput = useCoinInput({ coin: liquidityToken });
   const amount = tokenInput.amount;
+
+  const { data: txCost } = useQuery(
+    ["RemoveLiquidity-networkFee", ethBalance.formatted],
+    () =>
+      getTransactionCost(
+        contract.prepareCall.remove_liquidity(1, 1, DEADLINE, {
+          forward: [1, CONTRACT_ID],
+          variableOutputs: 2,
+          gasLimit: 100_000_000,
+        })
+      )
+  );
 
   const removeLiquidityMutation = useMutation(
     async () => {
@@ -36,11 +51,16 @@ export function RemoveLiquidityPage() {
 
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
-      await contract.submit.remove_liquidity(1, 1, DEADLINE, {
-        forward: [amount, CONTRACT_ID],
-        variableOutputs: 2,
-        gasLimit: 100_000_000,
-      });
+      await contract.submit.remove_liquidity(
+        1,
+        1,
+        DEADLINE,
+        getOverrides({
+          forward: [amount, CONTRACT_ID],
+          variableOutputs: 2,
+          gasLimit: txCost?.total,
+        })
+      );
     },
     {
       onSuccess: async () => {
@@ -76,12 +96,20 @@ export function RemoveLiquidityPage() {
     setErrors(validateRemoveLiquidity());
   }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
 
+  const hasEnoughBalance = (ethBalance.raw || ZERO) > (txCost?.total || ZERO);
   const isRemoveButtonDisabled =
-    !!errors.length || removeLiquidityMutation.isLoading;
+    !!errors.length ||
+    removeLiquidityMutation.isLoading ||
+    !hasEnoughBalance ||
+    !!txCost?.error;
 
   const getButtonText = () => {
     if (errors.length) {
       return errors[0];
+    }
+
+    if (!hasEnoughBalance) {
+      return "Insufficient ETH for gas";
     }
 
     if (removeLiquidityMutation.isLoading) {
@@ -109,16 +137,12 @@ export function RemoveLiquidityPage() {
           }
         />
       </div>
-      <RemoveLiquidityPreview amount={amount} />
+      <RemoveLiquidityPreview networkFee={txCost?.total} amount={amount} />
       <Button
         isFull
         size="lg"
         variant="primary"
-        onPress={
-          isRemoveButtonDisabled
-            ? undefined
-            : () => removeLiquidityMutation.mutate()
-        }
+        onPress={() => removeLiquidityMutation.mutate()}
         isDisabled={isRemoveButtonDisabled}
       >
         {getButtonText()}

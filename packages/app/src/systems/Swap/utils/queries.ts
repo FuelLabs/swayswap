@@ -67,7 +67,7 @@ export const swapTokens = async (
       DEADLINE,
       getOverrides({
         forward: [forwardAmount.amount, coinFrom.assetId],
-        gasLimit: txCost.gas,
+        gasLimit: txCost.total,
         variableOutputs: 1,
       })
     );
