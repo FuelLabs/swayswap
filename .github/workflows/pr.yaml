@@ -146,7 +146,7 @@ jobs:
           wait-on-timeout: 120
           browser: chrome
           # record: true
-          spec: packages/app/cypress/e2e/*
+          # spec: packages/app/cypress/e2e/*
           config-file: packages/app/cypress.config.ts
         env:
           # CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
