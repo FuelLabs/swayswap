@@ -33,7 +33,7 @@ jobs:
 
   build-and-test:
     name: Build and test
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     container:
       image: cypress/base:16.14.0
       # options: --user 1001
@@ -155,7 +155,8 @@ jobs:
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: "cypress:server:args"
+          DEBUG: "cypress:server:*"
+          # DEBUG: "cypress:server:args"
 
       # - name: Run test
       #   run: |
