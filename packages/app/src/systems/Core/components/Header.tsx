@@ -6,10 +6,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { useBreakpoint } from "../hooks/useBreakpoint";
 import { useWallet } from "../hooks/useWallet";
+import { relativeUrl } from "../utils";
 
 import { WalletWidget } from "./WalletWidget";
 
-import fuelLogo from "~/assets/fuel-logo-512x512.png";
 import type { ButtonProps } from "~/systems/UI";
 import { ButtonGroup, Button } from "~/systems/UI";
 import { Pages } from "~/types";
@@ -55,7 +55,12 @@ export const Header = () => {
 
   return (
     <div className="header">
-      <img src={fuelLogo} alt="swayswap" height={40} width={40} />
+      <img
+        src={relativeUrl("/fuel-logo-512x512.png")}
+        alt="swayswap"
+        height={40}
+        width={40}
+      />
       {wallet && (
         <div className="header--wallet">
           <WalletWidget />

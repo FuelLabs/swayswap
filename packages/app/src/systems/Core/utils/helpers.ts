@@ -2,9 +2,7 @@ import { urlJoin } from 'url-join-ts';
 
 const { PUBLIC_URL } = process.env;
 
-export const objectId = (value: string) => ({
-  value,
-});
+export const objectId = (value: string) => ({ value });
 
 // eslint-disable-next-line no-promise-executor-return
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
