@@ -4,7 +4,7 @@ import { App } from "~/App";
 
 describe("WelcomePage", () => {
   it("should always be redirect to welcome", async () => {
-    renderWithRouter(<App justContent />, { route: "/swap" });
+    renderWithRouter(<App />, { route: "/swap" });
 
     await waitFor(async () => {
       expect(

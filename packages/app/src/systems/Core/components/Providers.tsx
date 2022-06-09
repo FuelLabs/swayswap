@@ -15,21 +15,22 @@ export const LocationDisplay = () => {
 
 type AppProps = {
   children?: ReactNode;
-  justContent?: boolean;
 };
 
-export function Providers({ children, justContent }: AppProps) {
+const IS_TEST = process.env.NODE_ENV === "test";
+
+export function Providers({ children }: AppProps) {
   return (
     <>
       <Toaster />
       <QueryClientProvider client={queryClient}>
         <Dialog.Provider>
-          <AppContextProvider justContent={justContent}>
+          <AppContextProvider justContent={IS_TEST}>
             <StepsProvider>{children}</StepsProvider>
           </AppContextProvider>
         </Dialog.Provider>
       </QueryClientProvider>
-      {process.env.NODE_ENV === "test" && <LocationDisplay />}
+      {IS_TEST && <LocationDisplay />}
     </>
   );
 }

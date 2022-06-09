@@ -53,7 +53,7 @@ describe("SwapPage", () => {
     });
 
     it("should swap button be disabled", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       const submitBtn = await findSwapBtn();
       expect(submitBtn).toBeDisabled();
@@ -61,7 +61,7 @@ describe("SwapPage", () => {
     });
 
     it("should show balance correclty", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       const balances = await screen.findAllByText(/(balance:)\s([1-9])/i);
       expect(balances[0].textContent).toMatch("1.0");
@@ -72,7 +72,7 @@ describe("SwapPage", () => {
     }
 
     it("should invert coin selector when click on invert", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       const invertBtn = screen.getByLabelText("Invert coins");
       await waitFor(async () => expect(invertBtn).toBeInTheDocument());
@@ -84,7 +84,7 @@ describe("SwapPage", () => {
     });
 
     it("should show insufficient token amount if try to input more than balance", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       await waitFor(async () => {
         const coinFrom = screen.getByLabelText(/Coin from input/i);
@@ -98,7 +98,7 @@ describe("SwapPage", () => {
     });
 
     it("should fill input value with max balance when click on max", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       await clickOnMaxBalance();
       const coinFrom = screen.getByLabelText(/Coin from input/i);
@@ -107,7 +107,7 @@ describe("SwapPage", () => {
     });
 
     it("should show insufficient liquidity message when there is no pool reserve", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       await waitFor(async () => {
         const coinFrom = screen.getByLabelText(/Coin from input/i);
@@ -135,7 +135,7 @@ describe("SwapPage", () => {
     });
 
     it("should show expected output after input value", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       await waitFor(async () => {
         const coinFrom = screen.getByLabelText(/Coin from input/i);
@@ -146,7 +146,7 @@ describe("SwapPage", () => {
     });
 
     it("should show price per token information", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       await clickOnMaxBalance();
 
@@ -165,7 +165,7 @@ describe("SwapPage", () => {
     });
 
     it("should set automatically coin to input based on coin from value", async () => {
-      renderWithRouter(<App justContent />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap" });
 
       await waitFor(async () => {
         const coinFrom = screen.getByLabelText(/Coin from input/i);
@@ -180,7 +180,7 @@ describe("SwapPage", () => {
       const spy = jest.spyOn(toast, "success");
       expect(await getFormattedBalance(wallet)).toBe("1.5");
 
-      renderWithRouter(<App justContent />, {
+      renderWithRouter(<App />, {
         route: "/swap",
       });
 

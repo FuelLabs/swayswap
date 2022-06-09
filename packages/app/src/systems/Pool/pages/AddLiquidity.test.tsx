@@ -37,21 +37,21 @@ describe("Add Liquidity", () => {
   });
 
   it("should see a 'new pool' message", async () => {
-    renderWithRouter(<App justContent />, { route: "/pool/add-liquidity" });
+    renderWithRouter(<App />, { route: "/pool/add-liquidity" });
 
     const newPoolMessage = await screen.findByText(/new pool/);
     expect(newPoolMessage).toBeInTheDocument();
   });
 
   it("should enter amount button be disabled by default", async () => {
-    renderWithRouter(<App justContent />, { route: "/pool/add-liquidity" });
+    renderWithRouter(<App />, { route: "/pool/add-liquidity" });
     const submitBtn = await screen.findByText(/Enter Ether amount/);
     expect(submitBtn).toBeInTheDocument();
     expect(submitBtn).toBeDisabled();
   });
 
   it("should submit button ask to inform DAI", async () => {
-    renderWithRouter(<App justContent />, {
+    renderWithRouter(<App />, {
       route: "/pool/add-liquidity",
     });
     const coinFromInput = screen.getByLabelText(/Coin From Input/);
@@ -70,7 +70,7 @@ describe("Add Liquidity", () => {
 
   it("should show insufficient warning if has no coinFrom balance", async () => {
     mockUseBalances();
-    renderWithRouter(<App justContent />, {
+    renderWithRouter(<App />, {
       route: "/pool/add-liquidity",
     });
 
@@ -94,7 +94,7 @@ describe("Add Liquidity", () => {
 
   it("should show insufficient warning if has no coinTo balance", async () => {
     mockUseBalances();
-    renderWithRouter(<App justContent />, {
+    renderWithRouter(<App />, {
       route: "/pool/add-liquidity",
     });
 
@@ -117,7 +117,7 @@ describe("Add Liquidity", () => {
   });
 
   it("should be able to set coin to input values if no liquidity added", async () => {
-    renderWithRouter(<App justContent />, {
+    renderWithRouter(<App />, {
       route: "/pool/add-liquidity",
     });
 
@@ -146,7 +146,7 @@ describe("Add Liquidity", () => {
       { amount: MINT_VALUE, assetId: TOKEN_ID },
     ]);
 
-    renderWithRouter(<App justContent />, { route: "/pool/add-liquidity" });
+    renderWithRouter(<App />, { route: "/pool/add-liquidity" });
 
     const coinFromInput = screen.getByLabelText(/Coin From Input/);
     fireEvent.change(coinFromInput, {
@@ -171,7 +171,7 @@ describe("Add Liquidity", () => {
 
     await faucet(wallet);
     await mint(wallet, MINT_VALUE);
-    const { user } = renderWithRouter(<App justContent />, {
+    const { user } = renderWithRouter(<App />, {
       route: "/pool/add-liquidity",
     });
 
