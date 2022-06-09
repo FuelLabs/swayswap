@@ -31,14 +31,21 @@ function action(command: string, func: (config: Config) => Promise<unknown>) {
 
 program
   .name('SwaySwap Scripts')
-  .description('Utility to build, deploy and generate types for Sway Contracts')
+  .description('Utility to build, deploy and generate types for Sway Contracts');
+
+program
   .command(Commands.build)
   .description('Build sway contracts and generate type')
-  .action(action(Commands.build, async (config) => buildContracts(config)))
+  .action(action(Commands.build, async (config) => buildContracts(config)));
+
+program
   .command(Commands.deploy)
   .description('deploy contract to fuel network')
-  .action(action(Commands.deploy, (config) => deployContracts(config)))
+  .action(action(Commands.deploy, (config) => deployContracts(config)));
+
+program
   .command(Commands.run)
   .description('build and deploy contracts to fuel network')
-  .action(action(Commands.run, (config) => runAll(config)))
-  .parse(process.argv);
+  .action(action(Commands.run, (config) => runAll(config)));
+
+program.parse(process.argv);
