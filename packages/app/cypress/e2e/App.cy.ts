@@ -1,26 +1,15 @@
 describe('App flow', () => {
   it('should execute whole app flow', () => {
-<<<<<<< HEAD
-    cy.visit('http://localhost:3000');
-
-    // create a wallet and fund it
-    cy.contains('button', 'Create wallet').click();
-=======
     cy.visit('/');
 
     // create a wallet and fund it
     cy.contains('button', /Create wallet/i).click();
->>>>>>> 9e11472777e2090fb75480702c70ced546e25245
     cy.contains('button', 'Give me ETH').click();
     cy.contains('button', 'Go to Swap').click();
     cy.contains('Enter amount');
 
     // mint tokens
-<<<<<<< HEAD
-    cy.visit('http://localhost:3000/mint');
-=======
     cy.visit('/mint');
->>>>>>> 9e11472777e2090fb75480702c70ced546e25245
     cy.contains('button', 'Mint tokens').click();
     cy.contains('Token received successfully!');
     // wait to be redirected to swap page after minting
@@ -85,11 +74,7 @@ describe('App flow', () => {
         cy.get('[aria-label="preview-swap-output"]');
 
         // make sure "swap" button comes from inside swap page only
-<<<<<<< HEAD
-        cy.contains('[aria-label="swap-submit-button"]', 'Swap').click();
-=======
         cy.contains('[aria-label="Swap button"]', 'Swap').click();
->>>>>>> 9e11472777e2090fb75480702c70ced546e25245
         cy.contains('Swap made successfully!');
 
         // validate remove liquidity
