@@ -6,7 +6,6 @@ import { AppContextProvider } from "../context";
 import { queryClient } from "../utils";
 
 import { Toaster, Dialog } from "~/systems/UI";
-import { StepsProvider } from "~/systems/Welcome";
 
 export const LocationDisplay = () => {
   const location = useLocation();
@@ -26,7 +25,7 @@ export function Providers({ children }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Dialog.Provider>
           <AppContextProvider justContent={IS_TEST}>
-            <StepsProvider>{children}</StepsProvider>
+            {children}
           </AppContextProvider>
         </Dialog.Provider>
       </QueryClientProvider>
