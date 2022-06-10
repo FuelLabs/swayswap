@@ -22,6 +22,7 @@ import {
   useContract,
   useSlippage,
   ZERO,
+  MainLayout,
   isSwayInfinity,
 } from "~/systems/Core";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
@@ -118,33 +119,35 @@ export function SwapPage() {
   const btnText = getValidationText(validationState, swapState);
 
   return (
-    <Card className="sm:min-w-[450px]">
-      <Card.Title>
-        <MdSwapCalls className="text-primary-500" />
-        Swap
-      </Card.Title>
-      <SwapComponent
-        previewAmount={previewAmount}
-        onChange={handleSwap}
-        isLoading={isLoading}
-      />
-      <SwapPreview isLoading={isLoading} swapInfo={swapInfo} />
-      <PricePerToken
-        swapState={swapState}
-        previewAmount={previewAmount}
-        isLoading={isLoading}
-      />
-      <Button
-        isFull
-        isLoading={isSwaping}
-        size="lg"
-        variant="primary"
-        isDisabled={shouldDisableSwap}
-        onPress={() => swap()}
-        aria-label="Swap button"
-      >
-        {btnText}
-      </Button>
-    </Card>
+    <MainLayout>
+      <Card className="sm:min-w-[450px]">
+        <Card.Title>
+          <MdSwapCalls className="text-primary-500" />
+          Swap
+        </Card.Title>
+        <SwapComponent
+          previewAmount={previewAmount}
+          onChange={handleSwap}
+          isLoading={isLoading}
+        />
+        <SwapPreview isLoading={isLoading} swapInfo={swapInfo} />
+        <PricePerToken
+          swapState={swapState}
+          previewAmount={previewAmount}
+          isLoading={isLoading}
+        />
+        <Button
+          isFull
+          isLoading={isSwaping}
+          size="lg"
+          variant="primary"
+          isDisabled={shouldDisableSwap}
+          onPress={() => swap()}
+          aria-label="Swap button"
+        >
+          {btnText}
+        </Button>
+      </Card>
+    </MainLayout>
   );
 }

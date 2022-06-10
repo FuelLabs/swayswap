@@ -11,7 +11,7 @@ import {
 } from "../components";
 import { useWelcomeSteps, stepsSelectors } from "../hooks";
 
-import { useBreakpoint } from "~/systems/Core";
+import { MainLayout, useBreakpoint } from "~/systems/Core";
 import { Pages } from "~/types";
 
 export function WelcomePage() {
@@ -25,26 +25,28 @@ export function WelcomePage() {
   }
 
   return (
-    <div className="welcomePage--layout">
-      {breakpoint === "lg" && <WelcomeSidebar />}
-      <section className="welcomePage--content">
-        <AnimatePresence exitBeforeEnter>
-          <Routes key={location.pathname} location={location}>
-            <Route
-              index
-              element={<Navigate to={Pages["welcome.createWallet"]} />}
-            />
-            <Route
-              path={Pages["welcome.createWallet"]}
-              element={<CreateWallet />}
-            />
-            <Route path={Pages["welcome.addFunds"]} element={<AddFunds />} />
-            <Route path={Pages["welcome.done"]} element={<WelcomeDone />} />
-          </Routes>
-        </AnimatePresence>
-        <Outlet />
-        <StepsIndicator />
-      </section>
-    </div>
+    <MainLayout>
+      <div className="welcomePage--layout">
+        {breakpoint === "lg" && <WelcomeSidebar />}
+        <section className="welcomePage--content">
+          <AnimatePresence exitBeforeEnter>
+            <Routes key={location.pathname} location={location}>
+              <Route
+                index
+                element={<Navigate to={Pages["welcome.createWallet"]} />}
+              />
+              <Route
+                path={Pages["welcome.createWallet"]}
+                element={<CreateWallet />}
+              />
+              <Route path={Pages["welcome.addFunds"]} element={<AddFunds />} />
+              <Route path={Pages["welcome.done"]} element={<WelcomeDone />} />
+            </Routes>
+          </AnimatePresence>
+          <Outlet />
+          <StepsIndicator />
+        </section>
+      </div>
+    </MainLayout>
   );
 }
