@@ -10,6 +10,11 @@ env:
   NODE_VERSION: 16
   PNPM_VERSION: 7.0.0
   COMPOSE_VERSION: 2.6.0
+  CHROME_VERSION: 95.0.4638.69
+  # "fake" dbus address to prevent errors
+  # https://github.com/SeleniumHQ/docker-selenium/issues/87
+  DBUS_SESSION_BUS_ADDRESS: /dev/null
+  TERM: xterm
 
 jobs:
   cancel-previous-run:
@@ -33,12 +38,53 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:node16.5.0-chrome97-ff96
+    # container:
+    #   image: cypress/browsers:node16.5.0-chrome97-ff96
       # options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Install Cypress Dependencies
+        run: |
+          apt-get update \
+            apt-get install --no-install-recommends -y \
+            libgtk2.0-0 \
+            libgtk-3-0 \
+            libnotify-dev \
+            libgconf-2-4 \
+            libgbm-dev \
+            libnss3 \
+            libxss1 \
+            libasound2 \
+            libxtst6 \
+            xauth \
+            xvfb \
+            # install text editors
+            vim-tiny \
+            nano \
+            # install emoji font
+            fonts-noto-color-emoji \
+            # install Chinese fonts
+            # this list was copied from https://github.com/jim3ma/docker-leanote
+            fonts-arphic-bkai00mp \
+            fonts-arphic-bsmi00lp \
+            fonts-arphic-gbsn00lp \
+            fonts-arphic-gkai00mp \
+            fonts-arphic-ukai \
+            fonts-arphic-uming \
+            ttf-wqy-zenhei \
+            ttf-wqy-microhei \
+            xfonts-wqy \
+            fonts-liberation \
+            libappindicator3-1 \
+            xdg-utils \
+            zip
+          wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb" && \
+            dpkg -i /usr/src/google-chrome-stable_current_amd64.deb ; \
+            apt-get install -f -y && \
+            rm -f /usr/src/google-chrome-stable_current_amd64.deb
+          google-chrome --version
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
