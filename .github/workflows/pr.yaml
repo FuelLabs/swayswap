@@ -86,7 +86,7 @@ jobs:
           sudo wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${{ env.CHROME_VERSION }}-1_amd64.deb"
           sudo dpkg -i /usr/src/google-chrome-stable_current_amd64.deb
           sudo apt-get install -f -y
-          rm -f /usr/src/google-chrome-stable_current_amd64.deb
+          sudo rm -rf /usr/src/google-chrome-stable_current_amd64.deb
           google-chrome --version
 
       - name: Install toolchain
