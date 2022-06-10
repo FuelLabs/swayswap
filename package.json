@@ -29,7 +29,7 @@
     "contracts:build": "pnpm exec swayswap-scripts build",
     "contracts:deploy": "pnpm exec swayswap-scripts deploy",
     "cy:open": "cypress open",
-    "cy:run": "cypress run --headless",
+    "cy:run": "cypress run --headless --headed",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "pnpm lint:check --fix",
