@@ -22,7 +22,8 @@ echo $1
 if [ "$1" = "--coverage" ]; then
     pnpm test:coverage
 elif [ "$1" = "--e2e" ]; then
-    NODE_ENV=test pnpm test:e2e
+    NODE_ENV=test pnpm cy:run
+    # NODE_ENV=test pnpm test:e2e
 else
     pnpm test
 fi
