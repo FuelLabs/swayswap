@@ -1,6 +1,8 @@
 describe('App flow', () => {
   it('should execute whole app flow', () => {
-    cy.visit('/');
+    cy.visit('/ ');
+
+    cy.contains('button', /Launch app/i).click();
 
     // create a wallet and fund it
     cy.contains('button', /Create wallet/i).click();
