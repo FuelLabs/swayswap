@@ -195,7 +195,8 @@ jobs:
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: "cypress:server:args"
+          DEBUG: "cypress:server:*"
+          # DEBUG: "cypress:server:args"
           NODE_ENV: "test"
 
       - name: Run test
