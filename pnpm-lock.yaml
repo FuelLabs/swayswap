@@ -33,7 +33,7 @@ importers:
       typescript: ^4.7.3
     devDependencies:
       '@babel/core': 7.18.2
-      '@cypress/react': 5.12.5_xnclbota6xqhewrneeghwd2w6u
+      '@cypress/react': 5.12.5_ffamunvexibplb3jif5xuixfmm
       '@jest/types': 28.1.1
       '@swayswap/test-utils': link:packages/test-utils
       '@swc/core': 1.2.197
@@ -42,7 +42,7 @@ importers:
       '@types/node': 17.0.41
       '@types/react': 18.0.12
       '@types/react-dom': 18.0.5
-      cypress: 10.0.3
+      cypress: 10.1.0
       dotenv: 16.0.1
       eslint: 8.17.0
       husky: 8.0.1
@@ -56,7 +56,7 @@ importers:
       swayswap-scripts: link:packages/scripts
       ts-jest: 28.0.4_ighm2axwo4w2kweegjclfnfl74
       ts-node: 10.8.1_vslk2fq76uzvudesky66pvr6g4
-      tsup: 6.1.0_7byub6guob4umnoh7kaog5fh7u
+      tsup: 6.1.2_7byub6guob4umnoh7kaog5fh7u
       turbo: 1.2.16
       typescript: 4.7.3
 
@@ -111,8 +111,9 @@ importers:
       eslint-plugin-cypress: ^2.12.1
       ethers: ^5.6.8
       framer-motion: ^6.3.10
-      fuels: 0.0.0-master-0b31360c
+      fuels: 0.0.0-master-3caba861
       graphql-request: ^4.3.0
+      http-server: ^14.1.1
       jotai: ^1.7.1
       postcss: ^8.4.14
       postcss-import: ^14.1.0
@@ -159,7 +160,7 @@ importers:
       '@react-stately/tooltip': 3.1.0_react@18.1.0
       '@react-stately/tree': 3.3.0_react@18.1.0
       '@react-types/overlays': 3.6.0_react@18.1.0
-      '@tailwindcss/typography': 0.5.2_tailwindcss@3.1.1
+      '@tailwindcss/typography': 0.5.2_tailwindcss@3.1.2
       '@xstate/react': 3.0.0_nxaw3aggewkk2xco2xus35m4sq
       bignumber.js: 9.0.2
       classnames: 2.3.1
@@ -168,9 +169,9 @@ importers:
       decimal.js: 10.3.1
       ethers: 5.6.8
       framer-motion: 6.3.11_ef5jwxihqo6n7gxfmzogljlgcm
-      fuels: 0.0.0-master-0b31360c
+      fuels: 0.0.0-master-3caba861
       graphql-request: 4.3.0
-      jotai: 1.7.1_2jlcqljsajnujrum4ztt4u63b4
+      jotai: 1.7.2_2jlcqljsajnujrum4ztt4u63b4
       react: 18.1.0
       react-content-loader: 6.2.0_react@18.1.0
       react-dom: 18.1.0_react@18.1.0
@@ -184,7 +185,7 @@ importers:
       react-use: 17.4.0_ef5jwxihqo6n7gxfmzogljlgcm
       spinners-react: 1.0.7_zlkrlo2xsersbascmmsr65fm34
       url-join-ts: 1.0.5
-      vite-tsconfig-paths: 3.5.0_vite@2.9.10
+      vite-tsconfig-paths: 3.5.0_vite@2.9.12
       xstate: 4.32.1
     devDependencies:
       '@jest/globals': 28.1.1
@@ -203,11 +204,12 @@ importers:
       dotenv: 16.0.1
       eslint: 8.17.0
       eslint-plugin-cypress: 2.12.1_eslint@8.17.0
+      http-server: 14.1.1
       postcss: 8.4.14
       postcss-import: 14.1.0_postcss@8.4.14
-      tailwindcss: 3.1.1
+      tailwindcss: 3.1.2
       typescript: 4.7.3
-      vite: 2.9.10
+      vite: 2.9.12
 
   packages/config:
     specifiers:
@@ -253,7 +255,7 @@ importers:
       react-dom: 18.1.0_react@18.1.0
     devDependencies:
       tsdx: 0.14.1
-      tsup: 6.1.0_typescript@4.7.3
+      tsup: 6.1.2_typescript@4.7.3
       typescript: 4.7.3
 
   packages/scripts:
@@ -265,31 +267,31 @@ importers:
       commander: ^9.3.0
       debug: ^4.3.4
       esbuild: ^0.14.42
-      fuels: 0.0.0-master-0b31360c
+      fuels: 0.0.0-master-3caba861
       glob: ^8.0.3
       joycon: ^3.1.1
       prettier: ^2.6.2
       tsup: ^6.1.0
       typechain: ^8.0.0
-      typechain-target-fuels: 0.0.0-master-0b31360c
+      typechain-target-fuels: 0.0.0-master-3caba861
       typescript: ^4.7.3
     dependencies:
       bundle-require: 3.0.4_esbuild@0.14.43
       commander: 9.3.0
       debug: 4.3.4
       esbuild: 0.14.43
-      fuels: 0.0.0-master-0b31360c
+      fuels: 0.0.0-master-3caba861
       joycon: 3.1.1
       prettier: 2.6.2
       typechain: 8.1.0_typescript@4.7.3
-      typechain-target-fuels: 0.0.0-master-0b31360c
+      typechain-target-fuels: 0.0.0-master-3caba861
       typescript: 4.7.3
     devDependencies:
       '@swayswap/config': link:../config
       '@types/debug': 4.1.7
       '@types/glob': 7.2.0
       glob: 8.0.3
-      tsup: 6.1.0_typescript@4.7.3
+      tsup: 6.1.2_typescript@4.7.3
 
   packages/test-utils:
     specifiers:
@@ -1613,7 +1615,7 @@ packages:
     resolution: {integrity: sha512-Fn3fdTiyayHoy8Ol0RSu4MlBH2maQ2ZEXeEVKl/zHHXEQpld5HX3vdNLhK5YLij8cLynA4DxOT/nO9iEnIiOXw==}
     dev: true
 
-  /@cypress/react/5.12.5_xnclbota6xqhewrneeghwd2w6u:
+  /@cypress/react/5.12.5_ffamunvexibplb3jif5xuixfmm:
     resolution: {integrity: sha512-9ARxdLMVrrmh853xe6j9gNdXdh+vqM7lMrvJ+MGoT4Wae+nE0q3guNgotFZjFot0ZP/npw8r3NFyJO216ddbEA==}
     peerDependencies:
       '@babel/core': '>=7'
@@ -1645,7 +1647,7 @@ packages:
       '@babel/core': 7.18.2
       '@cypress/mount-utils': 1.0.2
       '@types/react': 18.0.12
-      cypress: 10.0.3
+      cypress: 10.1.0
       debug: 4.3.4
       find-webpack: 2.2.1
       find-yarn-workspace-root: 2.0.0
@@ -2071,119 +2073,119 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@fuel-ts/abi-coder/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-SsVjCEKbUE0ySx1qm6oOB8yyQwkjo91/Znk17hrljxjeaNPCYRHEnNvLhx4t5CkxqZ/ytXTnZ61QvjJC7+uNSw==}
+  /@fuel-ts/abi-coder/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-YRAlwVu4C/141I9C2Fk0mFNndQLjGKI+yMHM1iIBAGH34kNGzYMujhnjRSKhTU0b2r+3zLAztTCmezUnKauMhQ==}
     dependencies:
       '@ethersproject/abi': 5.6.3
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
       '@ethersproject/sha2': 5.6.1
       '@ethersproject/strings': 5.6.1
-      '@fuel-ts/math': 0.0.0-master-0b31360c
+      '@fuel-ts/math': 0.0.0-master-3caba861
       type-fest: 2.13.0
     dev: false
 
-  /@fuel-ts/constants/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-6ifpW1arwEIMZEI4xGpZ4klwggwvrqL5iRwKcdQqPrAVp7YL80kl2eFrkY1A9HSN/n+qBnhg6CX6wR3QHOpN9w==}
+  /@fuel-ts/constants/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-SGgy3HsMhtl1vkCDVy1tr2SfrDtqzdKdjT910ntdOki8QxizjYuYdcOg6tTxxM0vjk3O3W1Orf8O+qxof+b9rw==}
     dev: false
 
-  /@fuel-ts/contract/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-V65Ba+deqeSkTxgnHe871gvVLWILmwILGTfL179Shp2hmTebSFpD9A2on4yS4mOLZAL4IZHGjO+luYLtfUzQ+A==}
+  /@fuel-ts/contract/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-ourFKLQuskCb4X8koQgOTAjpu6b+Q7zrghC726J80ex8Ez9bk7Rsg1hYGQq0p2aezun0BA5fN6Gl4YrQYXKk6g==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/abi-coder': 0.0.0-master-0b31360c
-      '@fuel-ts/constants': 0.0.0-master-0b31360c
-      '@fuel-ts/interfaces': 0.0.0-master-0b31360c
-      '@fuel-ts/keystore': 0.0.0-master-0b31360c
-      '@fuel-ts/math': 0.0.0-master-0b31360c
-      '@fuel-ts/merkle': 0.0.0-master-0b31360c
-      '@fuel-ts/providers': 0.0.0-master-0b31360c
-      '@fuel-ts/script': 0.0.0-master-0b31360c
-      '@fuel-ts/wallet': 0.0.0-master-0b31360c
+      '@fuel-ts/abi-coder': 0.0.0-master-3caba861
+      '@fuel-ts/constants': 0.0.0-master-3caba861
+      '@fuel-ts/interfaces': 0.0.0-master-3caba861
+      '@fuel-ts/keystore': 0.0.0-master-3caba861
+      '@fuel-ts/math': 0.0.0-master-3caba861
+      '@fuel-ts/merkle': 0.0.0-master-3caba861
+      '@fuel-ts/providers': 0.0.0-master-3caba861
+      '@fuel-ts/script': 0.0.0-master-3caba861
+      '@fuel-ts/wallet': 0.0.0-master-3caba861
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/hasher/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-MPGz3yGActcX3bDY97MuGIn0bj1agUQFoUBCeKjJVTIfHDi9nFLbI7jtH1P4h4jHIVpSXp5Xc1TLucbhzvN+SA==}
+  /@fuel-ts/hasher/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-ZKNkMpquubJjbPlJuuFcZj2pCzv980TfvyoeOx6ht+/Y7zNWFL/VVSherUeXpu+kL4c/HGEMnHpFqsUKvb+uLA==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/constants': 0.0.0-master-0b31360c
-      '@fuel-ts/providers': 0.0.0-master-0b31360c
+      '@fuel-ts/constants': 0.0.0-master-3caba861
+      '@fuel-ts/providers': 0.0.0-master-3caba861
       lodash.clonedeep: 4.5.0
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/hdwallet/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-vE8RNVTbU63bNCI+i9Rno8Ewf2rvpZelY4dOcTjkNlF1HTUYyPciGJOFsZ0jPeyqX419RhE5UyFffYlBdAm++Q==}
+  /@fuel-ts/hdwallet/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-qSYDhPEecaKjK2+33EUrgy+nwd02XZvIxcELrP7JeJLGQ2apr/jEnMaLQMhlrSO6cyBz6GbSq4kdGTf+9MDC9w==}
     dependencies:
       '@ethersproject/basex': 5.6.1
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/math': 0.0.0-master-0b31360c
-      '@fuel-ts/mnemonic': 0.0.0-master-0b31360c
-      '@fuel-ts/signer': 0.0.0-master-0b31360c
+      '@fuel-ts/math': 0.0.0-master-3caba861
+      '@fuel-ts/mnemonic': 0.0.0-master-3caba861
+      '@fuel-ts/signer': 0.0.0-master-3caba861
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/interfaces/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-AnpsujYGZejGtCmB9l9+jHxo6ZGYTOOHKDj7/1J7vUxUlFsxqWTOhv3aI0E3GnvNk7lD8yYxVriQwMV0fQUkeA==}
+  /@fuel-ts/interfaces/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-LJsLuPXorVmYDHt62Pm2mCXNhK/8FCYpjgdSruHUFZEF6hxDvbn32rs3YxmM7SUo8KBzbmRIueuHgfzYaPWhmA==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
     dev: false
 
-  /@fuel-ts/keystore/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-dob6wWciCCLs2RabWEEVyWjk83gyv9W1FY0DJqen6h20SHlYfdrZ0+CeF6vomRKhxAFz37ssPO1FO1j6dmPZAA==}
+  /@fuel-ts/keystore/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-GZOLEm1E6EHoSucp34p4pPct1blfZJk5iZt7mFmd5jZ+ces3mMN1k2nYg+61zMDCwPLmxX/wUq6D6FcVY+X2LA==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.1
     dev: false
 
-  /@fuel-ts/math/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-Jke/r6ohDBT/Tb1uXYiGqs1ylv+jppFJrslIJiELidnHFcsYhKDUkzrAR/4l2vwK3Uv+4xEWPB7yjSuYy43w/w==}
+  /@fuel-ts/math/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-lZfew/NVLACULgAtc9RNQrsB8RG8amn/g1lIFPMq94d4dgPLbz75s9CGFGds4vmi/dDAzuXz+cuFlAuI/9EVLA==}
     dev: false
 
-  /@fuel-ts/merkle-shared/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-9i7rs6owxR1tdIzlgoCiVkjc7ixJpZO/r1rGI+YoUEFcXW88tS72wELPVL00JW9elZ0G+MAUwKQUj5E63b1Vwg==}
+  /@fuel-ts/merkle-shared/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-lpdYd3CmmOnO1AP6+umRDnIvmmLN8NOMKmZGUJpAp0TxuN2ymWOpYD01e26h/xA0JTfpa0qq1n4PfjxbnD5ukA==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/math': 0.0.0-master-0b31360c
+      '@fuel-ts/math': 0.0.0-master-3caba861
     dev: false
 
-  /@fuel-ts/merkle/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-disrrI9nfua8isLkxih/tIf9OzwRC+F+Dp/YCNQvYQiN0M6H3agEi3PPftUzjq8f/EuPokr5LGtFautuHd8kKQ==}
+  /@fuel-ts/merkle/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-bOY+B62+C6hRPZGZhKYsPnAgW4NFmbnUq0O8nATFwxOSquhDJH3FHk+jEJZYQEl6Jk290UVwZn1eWi/ybI3e1w==}
     dependencies:
-      '@fuel-ts/merkle-shared': 0.0.0-master-0b31360c
+      '@fuel-ts/merkle-shared': 0.0.0-master-3caba861
     dev: false
 
-  /@fuel-ts/mnemonic/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-5W+jlyjM7DDrnRLgUXL1SGJgU/2oqvypuj4n5z4V8E5oaBn96zhKrZEnlGk8ai6BjXVAlOvjZMJPUJkhWrOixA==}
+  /@fuel-ts/mnemonic/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-Mgu263V0aLQYqvYBJqvTUULpPSlf4xXqS9QNIUpGiuWFaovst1NNQ71bYhOmawLiw3GqmJVVXMPkVgNpfVR/KA==}
     dependencies:
       '@ethersproject/basex': 5.6.1
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.1
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/keystore': 0.0.0-master-0b31360c
-      '@fuel-ts/wordlists': 0.0.0-master-0b31360c
+      '@fuel-ts/keystore': 0.0.0-master-3caba861
+      '@fuel-ts/wordlists': 0.0.0-master-3caba861
     dev: false
 
-  /@fuel-ts/providers/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-WyYqcZYfGvC/RXOxnuE3p+wgP7dvEbQFpXGgxKtKqE/4RYP4Ih98OJqyiYBN6p/9Iosa24B5WPr06lcEZD1jPg==}
+  /@fuel-ts/providers/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-ge0/OGX7ewOxdqYaOAavZumanI8ti/Cxrmpn4dC6R8jrhe6iF0+rndXfs6MkjrqQ4KyfAnAetw3Uhqye9csXMA==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/networks': 5.6.3
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/constants': 0.0.0-master-0b31360c
-      '@fuel-ts/interfaces': 0.0.0-master-0b31360c
-      '@fuel-ts/keystore': 0.0.0-master-0b31360c
-      '@fuel-ts/math': 0.0.0-master-0b31360c
-      '@fuel-ts/transactions': 0.0.0-master-0b31360c
+      '@fuel-ts/constants': 0.0.0-master-3caba861
+      '@fuel-ts/interfaces': 0.0.0-master-3caba861
+      '@fuel-ts/keystore': 0.0.0-master-3caba861
+      '@fuel-ts/math': 0.0.0-master-3caba861
+      '@fuel-ts/transactions': 0.0.0-master-3caba861
       graphql: 15.8.0
       graphql-request: 3.7.0_graphql@15.8.0
       graphql-tag: 2.12.6_graphql@15.8.0
@@ -2191,56 +2193,56 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/script/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-zfABzxS9xXxXS9dy/8rlmzsX34UpJv/9mzdvFf61EkixjtScdVNn1k0NYAGHrRjdDPGZx7fDIKyzK/8ydgfr8w==}
+  /@fuel-ts/script/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-WVqcnkPrcn3as37mvXirj2mp3qlyR4H/2T5kVFbZlxHoZtLMWhYG8kihuIDxiMuaBx56/uTk9eID9gUaBClYcw==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@fuel-ts/abi-coder': 0.0.0-master-0b31360c
-      '@fuel-ts/constants': 0.0.0-master-0b31360c
-      '@fuel-ts/providers': 0.0.0-master-0b31360c
-      '@fuel-ts/wallet': 0.0.0-master-0b31360c
+      '@fuel-ts/abi-coder': 0.0.0-master-3caba861
+      '@fuel-ts/constants': 0.0.0-master-3caba861
+      '@fuel-ts/providers': 0.0.0-master-3caba861
+      '@fuel-ts/wallet': 0.0.0-master-3caba861
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/signer/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-lb3Irf6N90IzyH7CQFoPcSOjTMKGMlHkyNHNKbxqDmDIIO5kJfxmXSAhVXGsLjeMDYRm9fUCpGYCcq4+RVfgnA==}
+  /@fuel-ts/signer/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-vj5rK4+cUIpDjSZvvGbQ246yuBPyUwkLSXExfLsrcEc94ktv2PF/mele35XH0PIEAaMkc1WZKGYX5RLEqa0+4Q==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/hasher': 0.0.0-master-0b31360c
-      '@fuel-ts/keystore': 0.0.0-master-0b31360c
+      '@fuel-ts/hasher': 0.0.0-master-3caba861
+      '@fuel-ts/keystore': 0.0.0-master-3caba861
       elliptic: 6.5.4
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/transactions/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-x3B9Ro55QZACKWjAdmv4k4iS11ylxJ3Af93AstNnZTSVMHOzZ7zn0yT4tyT9GXDiF2FtgHqt9G/U+rU/2e9P5w==}
+  /@fuel-ts/transactions/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-YmL+Z1/Km/vDNYl9DtbdqkTAIvucDENPVHCvQxnuPoNzmA5Zq8YjRFtkY9V2g4GNq7FsCtXOxfgxEjCDqhAm5g==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@fuel-ts/abi-coder': 0.0.0-master-0b31360c
-      '@fuel-ts/constants': 0.0.0-master-0b31360c
+      '@fuel-ts/abi-coder': 0.0.0-master-3caba861
+      '@fuel-ts/constants': 0.0.0-master-3caba861
     dev: false
 
-  /@fuel-ts/wallet/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-xstWS/8MshqdtsiDFW3VwcqWEA0txW5XTtU7cKT76uZgWYxycVKmG3n+35pi6AWF17+3CqMgwPe5SDE+J28s/w==}
+  /@fuel-ts/wallet/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-510SwSLMjEklQHnJKhrLpTdzTS7GCjSUO9b8frRi9nsYbqmQg34L1OOaHevstyby9nhejpzYB/nVKYXTh/+28Q==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@fuel-ts/constants': 0.0.0-master-0b31360c
-      '@fuel-ts/hasher': 0.0.0-master-0b31360c
-      '@fuel-ts/hdwallet': 0.0.0-master-0b31360c
-      '@fuel-ts/interfaces': 0.0.0-master-0b31360c
-      '@fuel-ts/math': 0.0.0-master-0b31360c
-      '@fuel-ts/mnemonic': 0.0.0-master-0b31360c
-      '@fuel-ts/providers': 0.0.0-master-0b31360c
-      '@fuel-ts/signer': 0.0.0-master-0b31360c
+      '@fuel-ts/constants': 0.0.0-master-3caba861
+      '@fuel-ts/hasher': 0.0.0-master-3caba861
+      '@fuel-ts/hdwallet': 0.0.0-master-3caba861
+      '@fuel-ts/interfaces': 0.0.0-master-3caba861
+      '@fuel-ts/math': 0.0.0-master-3caba861
+      '@fuel-ts/mnemonic': 0.0.0-master-3caba861
+      '@fuel-ts/providers': 0.0.0-master-3caba861
+      '@fuel-ts/signer': 0.0.0-master-3caba861
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@fuel-ts/wordlists/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-jav0iK4FJyO0Acd3mdxkGFSp8YQSUXPKvOCiHJmAwUguafbE9EHiVBLslRhnXR1i52Z85AKhFecGO22RDl/riw==}
+  /@fuel-ts/wordlists/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-grWj1NhxL3X8et/4ehMPI7ItB/KMTdHKP/6qAKdeP+rEcvTtBfuQJ8UxNrjUsLnsky2y1uT8XRJaG6uCuJQb7Q==}
     dev: false
 
   /@headlessui/react/1.6.4_ef5jwxihqo6n7gxfmzogljlgcm:
@@ -3774,7 +3776,7 @@ packages:
       '@swc/core': 1.2.197
     dev: true
 
-  /@tailwindcss/typography/0.5.2_tailwindcss@3.1.1:
+  /@tailwindcss/typography/0.5.2_tailwindcss@3.1.2:
     resolution: {integrity: sha512-coq8DBABRPFcVhVIk6IbKyyHUt7YTEC/C992tatFB+yEx5WGBQrCgsSFjxHUr8AWXphWckadVJbominEduYBqw==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || insiders'
@@ -3782,7 +3784,7 @@ packages:
       lodash.castarray: 4.4.0
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
-      tailwindcss: 3.1.1
+      tailwindcss: 3.1.2
     dev: false
 
   /@testing-library/dom/8.13.0:
@@ -4702,6 +4704,12 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /async/2.6.4:
+    resolution: {integrity: sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==}
+    dependencies:
+      lodash: 4.17.21
+    dev: true
+
   /async/3.2.4:
     resolution: {integrity: sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==}
     dev: true
@@ -5013,6 +5021,13 @@ packages:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
     dev: true
 
+  /basic-auth/2.0.1:
+    resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
+    engines: {node: '>= 0.8'}
+    dependencies:
+      safe-buffer: 5.1.2
+    dev: true
+
   /bcrypt-pbkdf/1.0.2:
     resolution: {integrity: sha512-qeFIXtP4MSoi6NLqO12WfqARWWuCKi2Rn/9hJLEmtB5yTNr9DqFWkJRCf2qShWzPeAMRnOgCrq0sg/KLv5ES9w==}
     dependencies:
@@ -5122,7 +5137,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001352
-      electron-to-chromium: 1.4.151
+      electron-to-chromium: 1.4.152
       escalade: 3.1.1
       node-releases: 2.0.5
       picocolors: 1.0.0
@@ -5544,6 +5559,11 @@ packages:
     resolution: {integrity: sha512-3lqz5YjWTYnW6dlDa5TLaTCcShfar1e40rmcJVwCBJC6mWlFuj0eCHIElmG1g5kyuJ/GD+8Wn4FFCcz4gJPfaQ==}
     dev: true
 
+  /corser/2.0.1:
+    resolution: {integrity: sha512-utCYNzRSQIZNPIcGZdQc92UVJYAhtGAteCFg0yRaFm8f0P+CPtyGyHXJcGXnffjCybUCEx3FQ2G7U3/o9eIkVQ==}
+    engines: {node: '>= 0.4.0'}
+    dev: true
+
   /cosmiconfig/6.0.0:
     resolution: {integrity: sha512-xb3ZL6+L8b9JLLCx3ZdoZy4+2ECphCMo2PwqgP1tlfVq6M6YReyzBJtvWWtbDSpNr9hn96pkCiZqUcFEc+54Qg==}
     engines: {node: '>=8'}
@@ -5647,8 +5667,8 @@ packages:
   /csstype/3.1.0:
     resolution: {integrity: sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==}
 
-  /cypress/10.0.3:
-    resolution: {integrity: sha512-8C82XTybsEmJC9POYSNITGUhMLCRwB9LadP0x33H+52QVoBjhsWvIzrI+ybCe0+TyxaF0D5/9IL2kSTgjqCB9A==}
+  /cypress/10.1.0:
+    resolution: {integrity: sha512-aQ4JVZVib4Xd9FZW8IRZfKelUvqF4y5A+oUbNvn8TlsBmEfIg3m5Xd6Mt6PVU/jHiVJ9Psl905B3ZPnrDcmyuQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     requiresBuild: true
@@ -5979,8 +5999,8 @@ packages:
       safer-buffer: 2.1.2
     dev: true
 
-  /electron-to-chromium/1.4.151:
-    resolution: {integrity: sha512-XaG2LpZi9fdiWYOqJh0dJy4SlVywCvpgYXhzOlZTp4JqSKqxn5URqOjbm9OMYB3aInA2GuHQiem1QUOc1yT0Pw==}
+  /electron-to-chromium/1.4.152:
+    resolution: {integrity: sha512-jk4Ju5SGZAQQJ1iI4Rgru7dDlvkQPLpNPWH9gIZmwCD4YteA5Bbk1xPcPDUf5jUYs3e1e80RXdi8XgKQZaigeg==}
     dev: true
 
   /elliptic/6.5.4:
@@ -6943,6 +6963,10 @@ packages:
     resolution: {integrity: sha512-bXE7Dyc1i6oQElDG0jMRZJrRAn9QR2xyyFGmBdZleNmyQX0FqGYmhZIrIrpPfm/w//LTo4tVQGOGQcGCb5q9uw==}
     dev: true
 
+  /eventemitter3/4.0.7:
+    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
+    dev: true
+
   /exec-sh/0.3.6:
     resolution: {integrity: sha512-nQn+hI3yp+oD0huYhKwvYI32+JFeq+XkNcD1GAo3Y/MjxsfVGmrrzrnzjWiNY6f+pUCP440fThsFh5gZrRAU/w==}
     dev: true
@@ -7300,6 +7324,16 @@ packages:
   /flatted/3.2.5:
     resolution: {integrity: sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==}
 
+  /follow-redirects/1.15.1:
+    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: true
+
   /for-in/1.0.2:
     resolution: {integrity: sha512-7EwmXrOjyL+ChxMhmG5lnW9MPt1aIeZEwKhQzoBUdTV0N3zuwWDZYVJatDvZ2OyzPUvdIAZDsCetk3coyMfcnQ==}
     engines: {node: '>=0.10.0'}
@@ -7423,18 +7457,18 @@ packages:
     dev: true
     optional: true
 
-  /fuels/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-b7cawyAinTJzNRA7Y2wrlNgbKP7Y3qMVsANcYSlpmzNPl4g+ng6lP15VcQPqs7Gvo44khJx9Ex8kTdupFhRVQQ==}
+  /fuels/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-shiqHGtWKYe0YjH5X4b85CgfyF8VRlIO1VNDIafvm+Z5OgmGvVhnaXs1Hnuyz+h8WqwgH6kVRExtK5t99pKT8A==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@fuel-ts/abi-coder': 0.0.0-master-0b31360c
-      '@fuel-ts/constants': 0.0.0-master-0b31360c
-      '@fuel-ts/contract': 0.0.0-master-0b31360c
-      '@fuel-ts/keystore': 0.0.0-master-0b31360c
-      '@fuel-ts/math': 0.0.0-master-0b31360c
-      '@fuel-ts/providers': 0.0.0-master-0b31360c
-      '@fuel-ts/transactions': 0.0.0-master-0b31360c
-      '@fuel-ts/wallet': 0.0.0-master-0b31360c
+      '@fuel-ts/abi-coder': 0.0.0-master-3caba861
+      '@fuel-ts/constants': 0.0.0-master-3caba861
+      '@fuel-ts/contract': 0.0.0-master-3caba861
+      '@fuel-ts/keystore': 0.0.0-master-3caba861
+      '@fuel-ts/math': 0.0.0-master-3caba861
+      '@fuel-ts/providers': 0.0.0-master-3caba861
+      '@fuel-ts/transactions': 0.0.0-master-3caba861
+      '@fuel-ts/wallet': 0.0.0-master-3caba861
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -7781,6 +7815,11 @@ packages:
       minimalistic-assert: 1.0.1
     dev: false
 
+  /he/1.2.0:
+    resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
+    hasBin: true
+    dev: true
+
   /hey-listen/1.0.8:
     resolution: {integrity: sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==}
     dev: false
@@ -7834,6 +7873,40 @@ packages:
       agent-base: 6.0.2
       debug: 4.3.4
     transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /http-proxy/1.18.1:
+    resolution: {integrity: sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      eventemitter3: 4.0.7
+      follow-redirects: 1.15.1
+      requires-port: 1.0.0
+    transitivePeerDependencies:
+      - debug
+    dev: true
+
+  /http-server/14.1.1:
+    resolution: {integrity: sha512-+cbxadF40UXd9T01zUHgA+rlo2Bg1Srer4+B4NwIHdaGxAGGv59nYRnGGDJ9LBk7alpS0US+J+bLLdQOOkJq4A==}
+    engines: {node: '>=12'}
+    hasBin: true
+    dependencies:
+      basic-auth: 2.0.1
+      chalk: 4.1.2
+      corser: 2.0.1
+      he: 1.2.0
+      html-encoding-sniffer: 3.0.0
+      http-proxy: 1.18.1
+      mime: 1.6.0
+      minimist: 1.2.6
+      opener: 1.5.2
+      portfinder: 1.0.28
+      secure-compare: 3.0.1
+      union: 0.5.0
+      url-join: 4.0.1
+    transitivePeerDependencies:
+      - debug
       - supports-color
     dev: true
 
@@ -9286,8 +9359,8 @@ packages:
       - ts-node
     dev: true
 
-  /jotai/1.7.1_2jlcqljsajnujrum4ztt4u63b4:
-    resolution: {integrity: sha512-Ucighxm0GwjvMpnLn7//CrHFSgLoL7LxHhXm7ofUNIktsRE4TAAhzrwsBb0LjJ0DuBJqQEJq9/jbHFfjO0ylYQ==}
+  /jotai/1.7.2_2jlcqljsajnujrum4ztt4u63b4:
+    resolution: {integrity: sha512-ksvpW1Wu+/HwW1iDYq23PpXLu2df5Vv+eWw70jRAx7IEY4c+qRsORULnqPFurSy/X8LSoPcRhVDJx/cyf8jjMg==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
       '@babel/core': '*'
@@ -9895,6 +9968,12 @@ packages:
     dependencies:
       mime-db: 1.52.0
 
+  /mime/1.6.0:
+    resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
+    engines: {node: '>=4'}
+    hasBin: true
+    dev: true
+
   /mimic-fn/1.2.0:
     resolution: {integrity: sha512-jf84uxzwiuiIVKiOLpfYk7N46TSy8ubTonmneY9vrpHNAnp0QBt2BxWV9dO3/j+BoVAb+a5G6YDPW3M5HOdMWQ==}
     engines: {node: '>=4'}
@@ -10271,6 +10350,11 @@ packages:
       mimic-fn: 4.0.0
     dev: true
 
+  /opener/1.5.2:
+    resolution: {integrity: sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==}
+    hasBin: true
+    dev: true
+
   /optionator/0.8.3:
     resolution: {integrity: sha512-+IW9pACdk3XWmmTXG8m3upGUJst5XRGzxMRjXzAuJ1XnIFNvfhjjIuYkDvysnPQ7qzqVzLt78BCruntqRhWQbA==}
     engines: {node: '>= 0.8.0'}
@@ -10522,6 +10606,17 @@ packages:
       tslib: 2.4.0
     dev: false
 
+  /portfinder/1.0.28:
+    resolution: {integrity: sha512-Se+2isanIcEqf2XMHjyUKskczxbPH7dQnlMjXX6+dybayyHvAf/TCgyMRlzf/B6QDhAEFOGes0pzRo3by4AbMA==}
+    engines: {node: '>= 0.12.0'}
+    dependencies:
+      async: 2.6.4
+      debug: 3.2.7
+      mkdirp: 0.5.6
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /posix-character-classes/0.1.1:
     resolution: {integrity: sha512-xTgYBc3fuo7Yt7JbiuFxSYGToMoz8fLoE6TC9Wx1P/u+LfeThMOAqmuyECnlBaaJb+u1m9hHiXUEtwW4OzfUJg==}
     engines: {node: '>=0.10.0'}
@@ -10735,6 +10830,13 @@ packages:
   /punycode/2.1.1:
     resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
     engines: {node: '>=6'}
+
+  /qs/6.10.5:
+    resolution: {integrity: sha512-O5RlPh0VFtR78y79rgcgKK4wbAI0C5zGVLztOIdpWX6ep368q5Hv6XRxDvXuZ9q3C6v+e3n8UfZZJw7IIG27eQ==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: 1.0.4
+    dev: true
 
   /qs/6.5.3:
     resolution: {integrity: sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==}
@@ -11233,6 +11335,10 @@ packages:
     engines: {node: '>=0.10.5'}
     dev: false
 
+  /requires-port/1.0.0:
+    resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
+    dev: true
+
   /resize-observer-polyfill/1.5.1:
     resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
     dev: false
@@ -11501,6 +11607,10 @@ packages:
   /scrypt-js/3.0.1:
     resolution: {integrity: sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==}
     dev: false
+
+  /secure-compare/3.0.1:
+    resolution: {integrity: sha512-AckIIV90rPDcBcglUwXPF3kg0P0qmPsPXAj6BBEENQE1p5yA1xfmDJzfi1Tappj37Pv2mVbKpL3Z1T+Nn7k1Qw==}
+    dev: true
 
   /select/1.1.2:
     resolution: {integrity: sha512-OwpTSOfy6xSs1+pwcNrv0RBMOzI39Lp3qQKUTPVVPRjCdNa5JH/oPRiqsesIskK8TVgmRiHwO4KXlV2Li9dANA==}
@@ -12108,8 +12218,8 @@ packages:
       string-width: 3.1.0
     dev: true
 
-  /tailwindcss/3.1.1:
-    resolution: {integrity: sha512-F5VFj5FiS4QZqdXPE6T6RJFqbsmISQ2KBUp9bOQyws9TleGToHsa54X8kwXwVdHMQhNeXOlxI47lrRICEVuOvg==}
+  /tailwindcss/3.1.2:
+    resolution: {integrity: sha512-yJ6L5s1U5AeS5g7HHy212zdQfjwD426FBfm59pet/JsyneuZuD4C2W7PpJEg4ppisiB21uLqtNagv8KXury3+Q==}
     engines: {node: '>=12.13.0'}
     hasBin: true
     dependencies:
@@ -12168,10 +12278,10 @@ packages:
     dev: true
 
   /text-table/0.2.0:
-    resolution: {integrity: sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=}
+    resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
 
   /thenify-all/1.6.0:
-    resolution: {integrity: sha1-GhkY1ALY/D+Y+/I02wvMjMEOlyY=}
+    resolution: {integrity: sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==}
     engines: {node: '>=0.8'}
     dependencies:
       thenify: 3.3.1
@@ -12197,11 +12307,11 @@ packages:
     dev: false
 
   /throttleit/1.0.0:
-    resolution: {integrity: sha1-nnhYNtr0Z0MUWlmEtiaNgoUorGw=}
+    resolution: {integrity: sha512-rkTVqu6IjfQ/6+uNuuc3sZek4CEYxTJom3IktzgdSxcZqdARuebbA/f4QmAxMQIxqq9ZLEUkSYqvuk1I6VKq4g==}
     dev: true
 
   /through/2.3.8:
-    resolution: {integrity: sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=}
+    resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
     dev: true
 
   /tiny-emitter/2.1.0:
@@ -12238,19 +12348,19 @@ packages:
     dev: true
 
   /to-fast-properties/2.0.0:
-    resolution: {integrity: sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4=}
+    resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
     engines: {node: '>=4'}
     dev: true
 
   /to-object-path/0.3.0:
-    resolution: {integrity: sha1-KXWIt7Dn4KwI4E5nL4XB9JmeF68=}
+    resolution: {integrity: sha512-9mWHdnGRuh3onocaHzukyvCZhzvr6tiflAy/JRFXcJX0TjgfWA9pk9t8CMbzmBE4Jfw58pXbkngtBtqYxzNEyg==}
     engines: {node: '>=0.10.0'}
     dependencies:
       kind-of: 3.2.2
     dev: true
 
   /to-regex-range/2.1.1:
-    resolution: {integrity: sha1-fIDBe53+vlmeJzZ+DU3VWQFB2zg=}
+    resolution: {integrity: sha512-ZZWNfCjUokXXDGXFpZehJIkZqq91BcULFq/Pi7M5i4JnxXdhMKAK682z8bCW3o8Hj1wuuzoKcW3DfVzaP6VuNg==}
     engines: {node: '>=0.10.0'}
     dependencies:
       is-number: 3.0.0
@@ -12274,7 +12384,7 @@ packages:
     dev: true
 
   /toggle-selection/1.0.6:
-    resolution: {integrity: sha1-bkWxJj8gF/oKzH2J14sVuL932jI=}
+    resolution: {integrity: sha512-BiZS+C1OS8g/q2RRbJmy59xpyghNBqrr6k5L/uKBGRsTfxmu3ffiRnd8mlGPUVayg8pvfi5urfnu8TU7DVOkLQ==}
     dev: false
 
   /tough-cookie/2.5.0:
@@ -12304,11 +12414,11 @@ packages:
     dev: true
 
   /tr46/0.0.3:
-    resolution: {integrity: sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=}
+    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: false
 
   /tr46/1.0.1:
-    resolution: {integrity: sha1-qLE/1r/SSJUZZ0zN5VujaTtwbQk=}
+    resolution: {integrity: sha512-dTpowEjclQ7Kgx5SdBkqRzVhERQXov8/l9Ft9dVM9fmg0W0KQSVaXX9T4i6twCPNtYiZM53lpSSUAwJbFPOHxA==}
     dependencies:
       punycode: 2.1.1
     dev: true
@@ -12542,8 +12652,8 @@ packages:
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
 
-  /tsup/6.1.0_7byub6guob4umnoh7kaog5fh7u:
-    resolution: {integrity: sha512-kKSzFbX996OXkbQif23LV0xDDvxnhH95Hw39ku7Kx1NEfJxcxvqexGGEDgRyd5dlzIJI4U8mySfPeq5iExYwnw==}
+  /tsup/6.1.2_7byub6guob4umnoh7kaog5fh7u:
+    resolution: {integrity: sha512-Hw4hKDHaAQkm2eVavlArEOrAPA93bziRDamdfwaNs0vXQdUUFfItvUWY0L/F6oQQMVh6GvjQq1+HpDXw8UKtPA==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
@@ -12579,8 +12689,8 @@ packages:
       - ts-node
     dev: true
 
-  /tsup/6.1.0_typescript@4.7.3:
-    resolution: {integrity: sha512-kKSzFbX996OXkbQif23LV0xDDvxnhH95Hw39ku7Kx1NEfJxcxvqexGGEDgRyd5dlzIJI4U8mySfPeq5iExYwnw==}
+  /tsup/6.1.2_typescript@4.7.3:
+    resolution: {integrity: sha512-Hw4hKDHaAQkm2eVavlArEOrAPA93bziRDamdfwaNs0vXQdUUFfItvUWY0L/F6oQQMVh6GvjQq1+HpDXw8UKtPA==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
@@ -12811,8 +12921,8 @@ packages:
     engines: {node: '>=12.20'}
     dev: false
 
-  /typechain-target-fuels/0.0.0-master-0b31360c:
-    resolution: {integrity: sha512-UJ9m4Z5DtsNQ3wpj5a9fTizh/TaKG6DzOtanEvGCrfEF87LrHdFWGfjIR46T6B4Zh8k+GTLdU6DcfloNfiX0Jg==}
+  /typechain-target-fuels/0.0.0-master-3caba861:
+    resolution: {integrity: sha512-BEbIcc7O0PBZP8M03tEpIOanvvGup1xDrgs8+dFH6g5uYoB5aLSOe7s/gKHG1LUgqxKCO/5L/AfKq4absE1s3Q==}
     dependencies:
       ts-essentials: 9.1.2_typescript@4.7.3
       typechain: 8.1.0_typescript@4.7.3
@@ -12910,6 +13020,13 @@ packages:
       set-value: 2.0.1
     dev: true
 
+  /union/0.5.0:
+    resolution: {integrity: sha512-N6uOhuW6zO95P3Mel2I2zMsbsanvvtgn6jVqJv4vbVcz/JN0OkL9suomjQGmWtxJQXOCqUJvquc1sMeNz/IwlA==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      qs: 6.10.5
+    dev: true
+
   /universalify/0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
@@ -12952,6 +13069,10 @@ packages:
   /url-join-ts/1.0.5:
     resolution: {integrity: sha512-u+5gi7JyOwhj58ZKwkmkzFGHuepTpmwjqfUDGVjsJJstsCz63CJAINixgJaDcMbmuyWPJIxbtBpIfaDgOQ9KMQ==}
     dev: false
+
+  /url-join/4.0.1:
+    resolution: {integrity: sha512-jk1+QP6ZJqyOiuEI9AEWQfju/nB2Pw466kbA0LEZljHwKeMgd9WrAEgEGxjPDD2+TNbbb37rTyhEfrCXfuKXnA==}
+    dev: true
 
   /use-callback-ref/1.3.0_cbpnieqasrszcwkqeh5i7z7nse:
     resolution: {integrity: sha512-3FT9PRuRdbB9HfXhEq35u4oZkvpJ5kuYbpqhCfmiZyReuRgpnhDlbr2ZEnnuS0RrJAPn6l23xjFg9kpDM+Ms7w==}
@@ -13066,7 +13187,7 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-tsconfig-paths/3.5.0_vite@2.9.10:
+  /vite-tsconfig-paths/3.5.0_vite@2.9.12:
     resolution: {integrity: sha512-NKIubr7gXgh/3uniQaOytSg+aKWPrjquP6anAy+zCWEn6h9fB8z2/qdlfQrTgZWaXJ2pHVlllrSdRZltHn9P4g==}
     peerDependencies:
       vite: '>2.0.0-0'
@@ -13075,13 +13196,13 @@ packages:
       globrex: 0.1.2
       recrawl-sync: 2.2.2
       tsconfig-paths: 4.0.0
-      vite: 2.9.10
+      vite: 2.9.12
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /vite/2.9.10:
-    resolution: {integrity: sha512-TwZRuSMYjpTurLqXspct+HZE7ONiW9d+wSWgvADGxhDPPyoIcNywY+RX4ng+QpK30DCa1l/oZgi2PLZDibhzbQ==}
+  /vite/2.9.12:
+    resolution: {integrity: sha512-suxC36dQo9Rq1qMB2qiRorNJtJAdxguu5TMvBHOc/F370KvqAe9t48vYp+/TbPKRNrMh/J55tOUmkuIqstZaew==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:

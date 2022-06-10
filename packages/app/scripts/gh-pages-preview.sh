@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export PUBLIC_URL="/swayswap"
+export PUBLIC_URL="/swayswap/"
 export BUILD_PATH="dist"$PUBLIC_URL
 
 # Clean dist folder
@@ -13,4 +13,4 @@ pnpm exec tsc && pnpm exec vite build &&
 cp $BUILD_PATH/index.html dist/404.html
 
 # Run server and open on browser
-npx http-server dist -o $PUBLIC_URL -c-1
+pnpm exec http-server dist -o $PUBLIC_URL -c-1

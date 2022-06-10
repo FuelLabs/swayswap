@@ -45,7 +45,7 @@ describe("SwapPage", () => {
   describe("without liquidity", () => {
     beforeAll(async () => {
       const wallet = await createAndMockWallet();
-      await faucet(wallet);
+      await faucet(wallet, 3);
     });
 
     afterAll(() => {
@@ -60,11 +60,11 @@ describe("SwapPage", () => {
       expect(submitBtn.textContent).toMatch(/enter amount/i);
     });
 
-    it("should show balance correclty", async () => {
+    it("should show balance correctly", async () => {
       renderWithRouter(<App />, { route: "/swap" });
 
       const balances = await screen.findAllByText(/(balance:)\s([1-9])/i);
-      expect(balances[0].textContent).toMatch("1.0");
+      expect(balances[0].textContent).toMatch("1");
     });
 
     function getFirstCoinSelectTextContent() {
@@ -103,7 +103,7 @@ describe("SwapPage", () => {
       await clickOnMaxBalance();
       const coinFrom = screen.getByLabelText(/Coin from input/i);
       const inputValue = coinFrom.getAttribute("value");
-      expect(inputValue).toMatch(/0.99/);
+      expect(inputValue).toMatch(/1/);
     });
 
     it("should show insufficient liquidity message when there is no pool reserve", async () => {
@@ -178,7 +178,12 @@ describe("SwapPage", () => {
 
     it("should swap between two tokens", async () => {
       const spy = jest.spyOn(toast, "success");
-      expect(await getFormattedBalance(wallet)).toBe("1.5");
+      const amount = 0.5;
+      // As we don't have a way to access a good estimate of gas fee
+      // we use a max gas cost
+      const gasFeeEstimateMax = 0.01;
+      const currentBalance = Number(await getFormattedBalance(wallet));
+      expect(currentBalance).toBeGreaterThan(1);
 
       renderWithRouter(<App />, {
         route: "/swap",
@@ -186,8 +191,8 @@ describe("SwapPage", () => {
 
       await waitFor(async () => {
         const coinFrom = await screen.findByLabelText(/Coin from input/i);
-        fireEvent.change(coinFrom, { target: { value: "0.5" } });
-        expect(coinFrom.getAttribute("value")).toBe("0.5");
+        fireEvent.change(coinFrom, { target: { value: String(amount) } });
+        expect(coinFrom.getAttribute("value")).toBe(String(amount));
 
         const swapBtn = await screen.findByLabelText(/swap button/i);
         expect(swapBtn).not.toBeDisabled();
@@ -197,7 +202,10 @@ describe("SwapPage", () => {
 
       await waitFor(async () => {
         expect(spy).toBeCalled();
-        expect(await getFormattedBalance(wallet)).toBe("1.0");
+        const afterBalance = Number(await getFormattedBalance(wallet));
+        expect(afterBalance).toBeGreaterThan(
+          currentBalance - amount - gasFeeEstimateMax
+        );
       });
     });
   });

@@ -11,6 +11,7 @@ import {
   toBigInt,
   MAX_U64_VALUE,
   parseToFormattedNumber,
+  ZERO,
 } from "../utils";
 
 import type { CoinSelectorProps } from "./CoinSelector";
@@ -26,7 +27,7 @@ type UseCoinParams = {
    */
   amount?: bigint | null;
   coin?: Coin | null;
-  gasFee?: bigint;
+  gasFee?: bigint | null;
   isReadOnly?: boolean;
   onInput?: (...args: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
   onChange?: (val: bigint | null) => void;
@@ -42,6 +43,7 @@ type UseCoinParams = {
 export type UseCoinInput = {
   amount: bigint | null;
   setAmount: React.Dispatch<React.SetStateAction<bigint | null>>;
+  setGasFee: React.Dispatch<React.SetStateAction<bigint | null>>;
   getInputProps: () => CoinInputProps;
   getCoinSelectorProps: () => CoinSelectorProps;
   formatted: string;
@@ -57,7 +59,7 @@ const parseValueBigInt = (value: string) => {
     const nextValue = parseValue(value);
     return toBigInt(parseUnits(nextValue));
   }
-  return toBigInt(0);
+  return ZERO;
 };
 
 const formatValue = (amount: bigint | null | undefined) => {
@@ -72,7 +74,7 @@ export function useCoinInput({
   amount: initialAmount,
   onChange,
   coin,
-  gasFee,
+  gasFee: initialGasFee,
   isReadOnly,
   onInput,
   showBalance,
@@ -82,15 +84,22 @@ export function useCoinInput({
   ...params
 }: UseCoinParams): UseCoinInput {
   const [amount, setAmount] = useState<bigint | null>(null);
+  const [gasFee, setGasFee] = useState<bigint | null>(initialGasFee || ZERO);
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
   const isEth = useMemo(() => coin?.assetId === COIN_ETH, [coin?.assetId]);
 
+  useEffect(() => {
+    if (initialGasFee) setGasFee(initialGasFee);
+  }, [initialGasFee]);
+
   // TODO: consider real gas fee, replacing GAS_FEE variable.
   // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.
   function getSafeMaxBalance() {
-    const next = coinBalance?.amount || BigInt(0);
-    return next > BigInt(0) ? next - (gasFee || BigInt(0)) : next;
+    const next = coinBalance?.amount || ZERO;
+    const value = next > ZERO ? next - (gasFee || ZERO) : next;
+    if (value < ZERO) return ZERO;
+    return value;
   }
 
   const handleInputPropsChange = (val: string) => {
@@ -113,7 +122,7 @@ export function useCoinInput({
       displayType: (isReadOnly ? "text" : "input") as DisplayType,
       onInput,
       onChange: handleInputPropsChange,
-      balance: formatValue(coinBalance?.amount || BigInt(0)),
+      balance: formatValue(coinBalance?.amount || ZERO),
       isAllowed,
     } as CoinInputProps;
   }
@@ -145,10 +154,11 @@ export function useCoinInput({
   return {
     amount,
     setAmount,
+    setGasFee,
     getInputProps,
     getCoinSelectorProps,
     formatted: formatValue(amount),
-    hasEnoughBalance: getSafeMaxBalance() >= (amount || BigInt(0)),
+    hasEnoughBalance: getSafeMaxBalance() >= (amount || ZERO),
   };
 }
 

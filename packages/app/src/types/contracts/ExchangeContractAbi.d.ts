@@ -254,13 +254,15 @@ export class ExchangeContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<TransactionResult<any>>;
 
-    deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
+    deposit(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<TransactionResult<any>>;
 
     withdraw(
       amount: BigNumberish,
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    ): Promise<TransactionResult<any>>;
 
     add_liquidity(
       min_liquidity: BigNumberish,
@@ -366,13 +368,13 @@ export class ExchangeContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
 
-    deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
+    deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<CallResult>;
 
     withdraw(
       amount: BigNumberish,
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    ): Promise<CallResult>;
 
     add_liquidity(
       min_liquidity: BigNumberish,
@@ -424,13 +426,15 @@ export class ExchangeContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ScriptTransactionRequest>;
 
-    deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
+    deposit(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ScriptTransactionRequest>;
 
     withdraw(
       amount: BigNumberish,
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    ): Promise<ScriptTransactionRequest>;
 
     add_liquidity(
       min_liquidity: BigNumberish,
@@ -536,13 +540,13 @@ export class ExchangeContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
 
-    deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<void>;
+    deposit(overrides?: Overrides & { from?: string | Promise<string> }): Promise<CallResult>;
 
     withdraw(
       amount: BigNumberish,
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    ): Promise<CallResult>;
 
     add_liquidity(
       min_liquidity: BigNumberish,

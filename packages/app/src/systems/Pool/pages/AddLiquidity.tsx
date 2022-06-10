@@ -115,6 +115,7 @@ export function AddLiquidity() {
   const {
     mutation: addLiquidityMutation,
     stage,
+    networkFee,
     errorsCreatePull,
   } = useAddLiquidity({
     fromInput,
@@ -211,7 +212,11 @@ export function AddLiquidity() {
               }
             />
           </div>
-          <AddLiquidityPreview poolInfo={poolInfo} fromInput={fromInput} />
+          <AddLiquidityPreview
+            poolInfo={poolInfo}
+            fromInput={fromInput}
+            networkFee={networkFee}
+          />
           <AddLiquidityPoolPrice
             coinFrom={coinFrom}
             coinTo={coinTo}

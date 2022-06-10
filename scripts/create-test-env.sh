@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $# == 0 ]; then
     echo "Expect 3 args received $#"

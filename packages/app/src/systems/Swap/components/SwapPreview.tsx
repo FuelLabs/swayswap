@@ -5,21 +5,26 @@ import type { SwapInfo } from "../types";
 import { ActiveInput } from "../types";
 import { calculatePriceWithSlippage, calculatePriceImpact } from "../utils";
 
-import { NETWORK_FEE } from "~/config";
 import {
   PreviewItem,
   PreviewTable,
   useSlippage,
   ZERO,
   parseToFormattedNumber,
+  NetworkFeePreviewItem,
 } from "~/systems/Core";
 
 type SwapPreviewProps = {
   swapInfo: SwapInfo;
   isLoading: boolean;
+  networkFee?: bigint | null;
 };
 
-export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
+export function SwapPreview({
+  swapInfo,
+  networkFee,
+  isLoading,
+}: SwapPreviewProps) {
   const { amount, previewAmount, direction, coinFrom, coinTo } = swapInfo;
   const isTyping = useValueIsTyping();
   const slippage = useSlippage();
@@ -46,9 +51,7 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
     slippage.value,
     direction
   );
-
   const inputAmountWithSlippage = parseToFormattedNumber(priceWithSlippage);
-  const networkFee = parseToFormattedNumber(NETWORK_FEE);
 
   return (
     <div aria-label="preview-swap-output">
@@ -74,11 +77,7 @@ export function SwapPreview({ swapInfo, isLoading }: SwapPreviewProps) {
             direction === ActiveInput.from ? coinTo.symbol : coinFrom.symbol
           }`}
         />
-        <PreviewItem
-          className="text-gray-300"
-          title={`Network Fee`}
-          value={`${networkFee} ETH`}
-        />
+        <NetworkFeePreviewItem networkFee={networkFee} />
       </PreviewTable>
     </div>
   );

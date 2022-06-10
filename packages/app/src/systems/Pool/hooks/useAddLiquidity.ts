@@ -7,7 +7,8 @@ import { useUserPositions } from './useUserPositions';
 
 import { DEADLINE } from '~/config';
 import type { UseCoinInput } from '~/systems/Core';
-import { useContract } from '~/systems/Core';
+import { useContract, toBigInt } from '~/systems/Core';
+import { getOverrides } from '~/systems/Core/utils/gas';
 import type { Coin } from '~/types';
 
 export interface UseAddLiquidityProps {
@@ -30,6 +31,18 @@ export function useAddLiquidity({
   const [stage, setStage] = useState(0);
   const navigate = useNavigate();
   const { poolRatio } = useUserPositions();
+  // Add liquidity is a multi step process
+  // Trying to calculate gas fee on add_liquidity
+  // is a very inaccurate without the two deposits
+  // to have this in a better way we should first have
+  // multi-call on fuels-ts for now we are using
+  // the local tx measures with a + 50% margin to avoid issues
+  // TODO: https://github.com/FuelLabs/swayswap-demo/issues/42
+  const networkFee = toBigInt(2000000);
+
+  useEffect(() => {
+    fromInput.setGasFee(networkFee);
+  }, []);
 
   const mutation = useMutation(
     async () => {
@@ -45,20 +58,30 @@ export function useAddLiquidity({
       }
 
       // Deposit coins from
-      await contract.submit.deposit({
-        forward: [fromAmount, coinFrom.assetId],
-      });
+      await contract.submit.deposit(
+        getOverrides({
+          forward: [fromAmount, coinFrom.assetId],
+          gasLimit: toBigInt(30000),
+        })
+      );
       setStage(1);
       // Deposit coins to
-      await contract.submit.deposit({
-        forward: [toAmount, coinTo.assetId],
-      });
+      await contract.submit.deposit(
+        getOverrides({
+          forward: [toAmount, coinTo.assetId],
+          gasLimit: toBigInt(30000),
+        })
+      );
       setStage(2);
       // Create liquidity pool
-      const liquidityTokens = await contract.submit.add_liquidity(1, DEADLINE, {
-        variableOutputs: 2,
-        gasLimit: 100_000_000,
-      });
+      const liquidityTokens = await contract.submit.add_liquidity(
+        1,
+        DEADLINE,
+        getOverrides({
+          variableOutputs: 2,
+          gasLimit: toBigInt(1500000),
+        })
+      );
       setStage(3);
 
       return liquidityTokens;
@@ -67,13 +90,14 @@ export function useAddLiquidity({
       onSuccess: (liquidityTokens) => {
         if (liquidityTokens) {
           toast.success(poolRatio ? 'Added liquidity to the pool.' : 'New pool created.');
+          fromInput.setAmount(BigInt(0));
+          toInput.setAmount(BigInt(0));
+          navigate('../');
         } else {
           toast.error(
             `Error when trying to ${poolRatio ? 'add liquidity to' : 'create'} this pool.`
           );
         }
-        fromInput.setAmount(BigInt(0));
-        toInput.setAmount(BigInt(0));
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError: (e: any) => {
@@ -133,6 +157,7 @@ export function useAddLiquidity({
   return {
     mutation,
     errorsCreatePull,
+    networkFee,
     stage,
   };
 }

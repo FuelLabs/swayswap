@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Load env_template
 APP_TEST_ENV=./packages/app/.env.test
@@ -21,10 +21,13 @@ echo $1
 # Run test
 if [ "$1" = "--coverage" ]; then
     pnpm test:coverage
+    TEST_RESULT=$?
 elif [ "$1" = "--e2e" ]; then
     pnpm test:e2e
+    TEST_RESULT=$?
 else
     pnpm test
+    TEST_RESULT=$?
 fi
 
 # Run cleanup
@@ -35,3 +38,5 @@ pnpm services:clean-test
 if [ $TEST_CREATED == 1 ]; then
     rm $APP_TEST_ENV
 fi
+
+exit $TEST_RESULT
