@@ -47,8 +47,8 @@ jobs:
 
       - name: Install Cypress Dependencies
         run: |
-          apt-get update \
-            apt-get install --no-install-recommends -y \
+          apt-get update
+          apt-get install --no-install-recommends -y \
             libgtk2.0-0 \
             libgtk-3-0 \
             libnotify-dev \
@@ -60,13 +60,9 @@ jobs:
             libxtst6 \
             xauth \
             xvfb \
-            # install text editors
             vim-tiny \
             nano \
-            # install emoji font
             fonts-noto-color-emoji \
-            # install Chinese fonts
-            # this list was copied from https://github.com/jim3ma/docker-leanote
             fonts-arphic-bkai00mp \
             fonts-arphic-bsmi00lp \
             fonts-arphic-gbsn00lp \
