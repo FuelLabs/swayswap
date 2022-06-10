@@ -101,8 +101,7 @@ jobs:
       # # Check lint as early as possible to avoid
       # # Long fail CI and fail on this step
       # - name: Lint
-      #   run: |
-      #     pnpm lint
+      #   run: pnpm lint
 
       # - name: Setup Docker
       #   uses: docker/login-action@v2
@@ -125,24 +124,19 @@ jobs:
       #     docker info
 
       - name: Setup scripts
-        run: |
-          pnpm scripts:setup
+        run: pnpm scripts:setup
 
       - name: "End-to-end tests"
         uses: cypress-io/github-action@v4
         with:
-          # skip install, cypress doesnt support pnpm yet https://github.com/cypress-io/github-action/issues/145
+          # skip install, as 1 - we're doing in other step; 2 - cypress doesnt support pnpm yet https://github.com/cypress-io/github-action/issues/145
           install: false
-          # command-prefix: cd packages/app &&
-          # command: cd packages/app && npm cy:run
           command: pnpm ci:test:e2e
           start: pnpm dev
           wait-on: "http://localhost:3001"
           wait-on-timeout: 120
           browser: chrome
-          # record: true
-          # spec: packages/app/cypress/e2e/*
-          # config-file: cypress.config.ts
+          # record: true # TODO: setup cypress dashboard, then enable record
         env:
           # CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -154,4 +148,4 @@ jobs:
 
       # - name: Run test
       #   run: |
-      #     pnpm ci:test-coverage
+      #     pnpm ci:test:coverage
