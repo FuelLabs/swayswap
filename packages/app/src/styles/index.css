@@ -16,6 +16,7 @@
 @import "./components/tooltip.css";
 @import "./components/toast.css";
 @import "./components/welcome-page.css";
+@import "./components/home-page.css";
 
 @import "tailwindcss/utilities";
 @import "./utilities.css";
