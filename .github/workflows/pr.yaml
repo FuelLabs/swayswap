@@ -31,16 +31,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/setup-forc.yml
+      - uses: ./.github/workflows/setup-forc.yaml
         id: setup-forc
-        secrets: inherit
 
       - name: Test Contracts
         if: ${{ steps.setup-forc.steps.changed-contracts.outputs.any_changed == 'true' }}
         run: |
           ./scripts/test-contracts.sh
 
-      - uses: ./.github/workflows/setup-node
+      - uses: ./.github/workflows/setup-node.yaml
 
       # Check lint as early as possible to avoid
       # Long fail CI and fail on this step
