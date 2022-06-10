@@ -186,8 +186,8 @@ jobs:
           command: pnpm ci:test:e2e
           # start: pnpm dev-test
           # start: 
-          wait-on: "http://localhost:3001"
-          wait-on-timeout: 120
+          # wait-on: "http://localhost:3001"
+          # wait-on-timeout: 120
           browser: chrome
           record: false
         env:
