@@ -20,7 +20,7 @@
     "@ethersproject/bignumber": "^5.6.2",
     "@ethersproject/random": "^5.6.1",
     "@ethersproject/units": "^5.6.1",
-    "@fontsource/fira-code": "^4.5.10",
+    "@fontsource/raleway": "^4.5.9",
     "@fontsource/inter": "^4.5.11",
     "@headlessui/react": "^1.6.4",
     "@radix-ui/react-accordion": "^0.1.6",

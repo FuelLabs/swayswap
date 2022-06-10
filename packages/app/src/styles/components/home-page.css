@@ -1,0 +1,29 @@
+@layer components {
+  .homePage {
+    @apply p-6 flex flex-col h-[100vh] justify-between bg-cover;
+    background-image: url("/lp-bg.jpg");
+  }
+
+  .homePage--header {
+    @apply flex justify-between font-semibold;
+  }
+
+  .homePage--menu {
+    @apply flex items-center gap-4 lg:gap-6 text-lg;
+
+    & a {
+      @apply text-gray-200;
+    }
+  }
+
+  .homePage--hero {
+    @apply p-4 lg:p-10 text-gray-100 max-w-[500px] lg:max-w-[700px];
+
+    h1 {
+      @apply text-3xl sm:text-4xl font-bold font-display;
+    }
+    p {
+      @apply text-gray-300 my-6;
+    }
+  }
+}

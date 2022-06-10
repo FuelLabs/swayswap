@@ -38,7 +38,7 @@ module.exports = {
     },
     fontFamily: {
       sans: ['InterVariable', 'sans-serif'],
-      mono: '"Fira Code", monospace',
+      display: ['RalewayVariable', 'sans-serif'],
     },
   },
   variants: {
