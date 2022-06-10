@@ -3,7 +3,7 @@ import { BiCoin } from "react-icons/bi";
 import { BsArrowDown } from "react-icons/bs";
 
 import { TOKEN_ID, MINT_AMOUNT, DECIMAL_UNITS } from "~/config";
-import { formatUnits, PreviewItem, PreviewTable } from "~/systems/Core";
+import { NetworkFeePreviewItem, PreviewTable } from "~/systems/Core";
 import { useMint } from "~/systems/Mint";
 import { Button, Card, Input, NumberInput } from "~/systems/UI";
 
@@ -11,8 +11,7 @@ export function MintPage() {
   const [tokenId, setTokenId] = useState(TOKEN_ID);
   const [amount, setAmount] = useState<string>(`${MINT_AMOUNT}`);
   const mint = useMint({ tokenId, amount });
-  const shouldDisableMint =
-    !mint.txCost || !mint.txCost.total || !!mint.txCost.error;
+  const shouldDisableMint = !mint.txCost.total || !!mint.txCost.error;
 
   return (
     <Card className="min-w-[auto] max-w-[400px]">
@@ -49,11 +48,7 @@ export function MintPage() {
             <BsArrowDown size={20} className="text-gray-400" />
           </div>
           <PreviewTable className="mt-2 bg-transparent">
-            <PreviewItem
-              className="text-gray-300 text-sm"
-              title="Network fee:"
-              value={`${formatUnits(mint.txCost?.total || 0)} ETH`}
-            />
+            <NetworkFeePreviewItem networkFee={mint.txCost.total} />
           </PreviewTable>
         </>
       )}

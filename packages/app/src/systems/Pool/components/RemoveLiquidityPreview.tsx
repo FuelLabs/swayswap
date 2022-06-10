@@ -8,7 +8,7 @@ import {
   TokenIcon,
   useCoinMetadata,
   ETH_DAI,
-  parseToFormattedNumber,
+  NetworkFeePreviewItem,
 } from "~/systems/Core";
 
 export interface RemoveLiquidityPreviewProps {
@@ -73,13 +73,7 @@ export const RemoveLiquidityPreview = ({
           title="Pool share after:"
           value={`${formattedNextPoolShare}%`}
         />
-        {networkFee ? (
-          <PreviewItem
-            className="text-gray-300"
-            title={`Network Fee`}
-            value={`~ ${parseToFormattedNumber(networkFee)} ETH`}
-          />
-        ) : null}
+        <NetworkFeePreviewItem networkFee={networkFee} />
       </PreviewTable>
     </>
   );

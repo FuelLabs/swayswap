@@ -11,6 +11,7 @@ import {
   useSlippage,
   ZERO,
   parseToFormattedNumber,
+  NetworkFeePreviewItem,
 } from "~/systems/Core";
 
 type SwapPreviewProps = {
@@ -76,13 +77,7 @@ export function SwapPreview({
             direction === ActiveInput.from ? coinTo.symbol : coinFrom.symbol
           }`}
         />
-        {networkFee ? (
-          <PreviewItem
-            className="text-gray-300"
-            title={`Network Fee`}
-            value={`~ ${parseToFormattedNumber(networkFee)} ETH`}
-          />
-        ) : null}
+        <NetworkFeePreviewItem networkFee={networkFee} />
       </PreviewTable>
     </div>
   );
