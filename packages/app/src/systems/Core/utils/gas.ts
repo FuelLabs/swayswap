@@ -3,10 +3,7 @@ import { arrayify, Provider, ReceiptType } from 'fuels';
 
 import { toBigInt, toNumber, ZERO } from './math';
 
-import { FUEL_PROVIDER_URL } from '~/config';
-
-const BYTE_PRICE = 1;
-const GAS_PRICE = 1;
+import { BYTE_PRICE, FUEL_PROVIDER_URL, GAS_PRICE } from '~/config';
 
 export function getGasFee(simulateResult: CallResult) {
   const scriptResult = simulateResult.receipts.find(

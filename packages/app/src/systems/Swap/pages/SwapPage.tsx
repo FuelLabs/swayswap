@@ -15,6 +15,7 @@ import {
   getValidationState,
   getValidationText,
   queryNetworkFee,
+  SwapQueries,
 } from "../utils";
 
 import {
@@ -56,7 +57,7 @@ export function SwapPage() {
 
   const { isLoading } = useQuery(
     [
-      "SwapPage-inactiveAmount",
+      SwapQueries.SwapPreview,
       debouncedState?.amount?.toString(),
       debouncedState?.direction,
       debouncedState?.coinFrom.assetId,
@@ -88,11 +89,8 @@ export function SwapPage() {
   );
 
   const txCost = useTransactionCost(
-    ["SwapPage-networkFee", swapState?.direction],
-    () => queryNetworkFee(contract, swapState?.direction),
-    {
-      enabled: true,
-    }
+    [SwapQueries.NetworkFee, swapState?.direction],
+    () => queryNetworkFee(contract, swapState?.direction)
   );
 
   const { mutate: swap, isLoading: isSwapping } = useMutation(

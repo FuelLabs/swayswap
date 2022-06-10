@@ -8,6 +8,11 @@ import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 
+export enum SwapQueries {
+  SwapPreview = 'SwapPage-SwapPreview',
+  NetworkFee = 'SwapPage-NetworkFee',
+}
+
 const getSwapWithMaximumRequiredAmount = async (
   contract: ExchangeContractAbi,
   assetId: string,
