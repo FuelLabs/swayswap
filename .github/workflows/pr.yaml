@@ -53,30 +53,30 @@ jobs:
       - name: Set git config
         run: |
           git config --global core.bigfilethreshold 100m
-      # - name: Install Forc
-      #   run: |
-      #     curl -sSLf https://github.com/FuelLabs/sway/releases/download/v${{ env.FORC_VERSION }}/forc-binaries-linux_amd64.tar.gz -L -o forc.tar.gz
-      #     tar -xvf forc.tar.gz
-      #     chmod +x forc-binaries/forc
-      #     mv forc-binaries/forc /usr/local/bin/forc
+      - name: Install Forc
+        run: |
+          curl -sSLf https://github.com/FuelLabs/sway/releases/download/v${{ env.FORC_VERSION }}/forc-binaries-linux_amd64.tar.gz -L -o forc.tar.gz
+          tar -xvf forc.tar.gz
+          chmod +x forc-binaries/forc
+          mv forc-binaries/forc /usr/local/bin/forc
 
       # As contracts are really Heavy to build
       # and test we only test it when some
       # contract was updated on the PR
-      # - name: Change contracts
-      #   id: changed-contracts
-      #   uses: tj-actions/changed-files@v22.2
-      #   with:
-      #     files: |
-      #       **/*.sw
-      #       **/*.rs
-      #       **/Cargo.toml
-      #       **/Forc.toml
+      - name: Change contracts
+        id: changed-contracts
+        uses: tj-actions/changed-files@v22.2
+        with:
+          files: |
+            **/*.sw
+            **/*.rs
+            **/Cargo.toml
+            **/Forc.toml
 
-      # - name: Test Contracts
-      #   if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
-      #   run: |
-      #     ./packages/scripts/test-contracts.sh
+      - name: Test Contracts
+        if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
+        run: |
+          ./packages/scripts/test-contracts.sh
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -100,28 +100,28 @@ jobs:
 
       # # Check lint as early as possible to avoid
       # # Long fail CI and fail on this step
-      # - name: Lint
-      #   run: pnpm lint
+      - name: Lint
+        run: pnpm lint
 
-      # - name: Setup Docker
-      #   uses: docker/login-action@v2
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.repository_owner }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Docker
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       # Make github action to use the latest version of
       # docker compose without it docker compose down
       # has issues with memory nil pointer
       # https://github.com/docker/compose/pull/9354
-      # - name: Install Compose
-      #   uses: ndeloof/install-compose-action@v0.0.1
-      #   with:
-      #     version: v${{ env.COMPOSE_VERSION }}
+      - name: Install Compose
+        uses: ndeloof/install-compose-action@v0.0.1
+        with:
+          version: v${{ env.COMPOSE_VERSION }}
 
-      # - name: Docker info
-      #   run: |
-      #     docker info
+      - name: Docker info
+        run: |
+          docker info
 
       - name: Setup scripts
         run: pnpm scripts:setup
@@ -146,6 +146,6 @@ jobs:
           DEBUG: "cypress:server:args"
           NODE_ENV: "test"
 
-      # - name: Run test
-      #   run: |
-      #     pnpm ci:test:coverage
+      - name: Run test
+        run: |
+          pnpm ci:test:coverage
