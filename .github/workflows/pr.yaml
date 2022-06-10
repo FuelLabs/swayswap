@@ -187,16 +187,17 @@ jobs:
           start: pnpm dev-test
           wait-on: "http://localhost:3001"
           wait-on-timeout: 120
-          # browser: chrome
-          # record: true # TODO: setup cypress dashboard, then enable record
+          browser: chrome
+          record: false
         env:
           # CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: "cypress:server:*"
+          # DEBUG: "cypress:server:*"
           # DEBUG: "cypress:server:args"
+          DEBUG: "cypress:server:request"
           NODE_ENV: "test"
 
       - name: Run test

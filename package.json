@@ -28,7 +28,7 @@
     "contracts:build": "pnpm exec swayswap-scripts build",
     "contracts:deploy": "pnpm exec swayswap-scripts deploy",
     "cy:open": "cypress open",
-    "cy:run": "cypress run --headed",
+    "cy:run": "cypress run --headless",
     "dev": "turbo run dev --parallel",
     "dev-test": "NODE_ENV=test pnpm dev",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview",
