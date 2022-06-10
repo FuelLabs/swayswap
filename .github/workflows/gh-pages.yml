@@ -5,36 +5,15 @@ on:
     types: [published]
   workflow_dispatch:
 
-env:
-  NODE_VERSION: "16"
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Cache PNPM modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2.1.0
-        with:
-          version: 7.0.0
-          run_install: true
+      - uses: ./.github/workflows/setup-node
 
       - name: Build
         env:
