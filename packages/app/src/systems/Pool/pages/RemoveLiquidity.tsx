@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import { PoolCurrentPosition, RemoveLiquidityPreview } from "../components";
@@ -17,7 +17,8 @@ import {
   useBalances,
   useEthBalance,
 } from "~/systems/Core";
-import { getOverrides, getTransactionCost } from "~/systems/Core/utils/gas";
+import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
+import { getOverrides } from "~/systems/Core/utils/gas";
 import { Button, Card } from "~/systems/UI";
 
 export function RemoveLiquidityPage() {
@@ -31,16 +32,12 @@ export function RemoveLiquidityPage() {
   const tokenInput = useCoinInput({ coin: liquidityToken });
   const amount = tokenInput.amount;
 
-  const { data: txCost } = useQuery(
-    ["RemoveLiquidity-networkFee", ethBalance.formatted],
-    () =>
-      getTransactionCost(
-        contract.prepareCall.remove_liquidity(1, 1, DEADLINE, {
-          forward: [1, CONTRACT_ID],
-          variableOutputs: 2,
-          gasLimit: 100_000_000,
-        })
-      )
+  const txCost = useTransactionCost(["RemoveLiquidity-networkFee"], () =>
+    contract.prepareCall.remove_liquidity(1, 1, DEADLINE, {
+      forward: [1, CONTRACT_ID],
+      variableOutputs: 2,
+      gasLimit: 100_000_000,
+    })
   );
 
   const removeLiquidityMutation = useMutation(
@@ -58,7 +55,7 @@ export function RemoveLiquidityPage() {
         getOverrides({
           forward: [amount, CONTRACT_ID],
           variableOutputs: 2,
-          gasLimit: txCost?.total,
+          gasLimit: txCost.total,
         })
       );
     },
@@ -96,7 +93,7 @@ export function RemoveLiquidityPage() {
     setErrors(validateRemoveLiquidity());
   }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
 
-  const hasEnoughBalance = (ethBalance.raw || ZERO) > (txCost?.total || ZERO);
+  const hasEnoughBalance = (ethBalance.raw || ZERO) > txCost.total;
   const isRemoveButtonDisabled =
     !!errors.length ||
     removeLiquidityMutation.isLoading ||

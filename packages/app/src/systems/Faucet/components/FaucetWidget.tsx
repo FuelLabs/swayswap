@@ -33,7 +33,10 @@ export function FaucetWidget() {
             </div>
             <FaucetApp
               isButtonFull
-              onSuccess={() => toast.success("ETH add to your wallet!")}
+              onSuccess={() => {
+                toast.success("ETH add to your wallet!");
+                dialog.close();
+              }}
             />
           </Card>
         </Dialog.Content>
