@@ -10,7 +10,7 @@
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "preview": "vite preview",
-    "test": "jest",
+    "test": "jest --verbose",
     "test:watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {

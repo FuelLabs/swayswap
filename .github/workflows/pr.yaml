@@ -10,11 +10,6 @@ env:
   NODE_VERSION: 16
   PNPM_VERSION: 7.0.0
   COMPOSE_VERSION: 2.6.0
-  CHROME_VERSION: 95.0.4638.69
-  # "fake" dbus address to prevent errors
-  # https://github.com/SeleniumHQ/docker-selenium/issues/87
-  DBUS_SESSION_BUS_ADDRESS: /dev/null
-  TERM: xterm
 
 jobs:
   cancel-previous-run:
@@ -38,9 +33,6 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    # container:
-    #   image: cypress/browsers:node16.5.0-chrome97-ff96
-      # options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -78,18 +70,6 @@ jobs:
             xdg-utils \
             zip
 
-      # # using same chrome install method from cypress/browsers:node16.5.0-chrome97-ff96 ... not using directly the container because we still need ubuntu-latest preset
-      # - name: Install Chrome
-      #   # first remove chrome from ubuntu-lates, then install new one
-      #   # TODO: just use default chrome from ubuntu-latest. we're changing it because of https://github.com/cypress-io/cypress/discussions/22128
-      #   run: |
-      #     sudo apt purge google-chrome-stable -y
-      #     sudo wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${{ env.CHROME_VERSION }}-1_amd64.deb"
-      #     sudo dpkg -i /usr/src/google-chrome-stable_current_amd64.deb
-      #     sudo apt-get install -f -y
-      #     sudo rm -rf /usr/src/google-chrome-stable_current_amd64.deb
-      #     google-chrome --version
-
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -103,6 +83,7 @@ jobs:
       - name: Set git config
         run: |
           git config --global core.bigfilethreshold 100m
+
       - name: Install Forc
         run: |
           curl -sSLf https://github.com/FuelLabs/sway/releases/download/v${{ env.FORC_VERSION }}/forc-binaries-linux_amd64.tar.gz -L -o forc.tar.gz
@@ -148,8 +129,8 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
 
-      # # Check lint as early as possible to avoid
-      # # Long fail CI and fail on this step
+      # Check lint as early as possible to avoid
+      # Long fail CI and fail on this step
       - name: Lint
         run: |
           pnpm lint
@@ -181,23 +162,15 @@ jobs:
       - name: "End-to-end tests"
         uses: cypress-io/github-action@v4
         with:
-          # skip install, as 1 - we're doing in other step; 2 - cypress doesnt support pnpm yet https://github.com/cypress-io/github-action/issues/145
+          # skip install, as: 1 - we're doing in other step; 2 - cypress doesnt support pnpm yet https://github.com/cypress-io/github-action/issues/145
           install: false
           command: pnpm ci:test:e2e
-          # start: pnpm dev-test
-          # start: 
-          # wait-on: "http://localhost:3001"
-          # wait-on-timeout: 120
           browser: chrome
           record: false
         env:
-          # CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # DEBUG: "cypress:server:*"
-          # DEBUG: "cypress:server:args"
           DEBUG: "cypress:server:request"
           NODE_ENV: "test"
 
