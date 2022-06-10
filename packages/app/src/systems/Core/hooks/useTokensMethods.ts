@@ -20,14 +20,9 @@ export function useTokenMethods(tokenId: string) {
       return wallet?.getBalance(tokenId);
     },
     async queryNetworkFee(amount: bigint) {
-      return contract.prepareCall.mint_and_transfer_coins(
-        amount,
-        objectId(wallet.address),
-        {
-          variableOutputs: 1,
-        }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ) as any;
+      return contract.prepareCall.mint_and_transfer_coins(amount, objectId(wallet.address), {
+        variableOutputs: 1,
+      });
     },
     mint(amount: bigint, gasLimit: bigint) {
       return contract.submit.mint_and_transfer_coins(
