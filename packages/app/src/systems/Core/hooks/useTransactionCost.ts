@@ -3,7 +3,7 @@ import type { UseQueryOptions } from 'react-query';
 import { useQuery } from 'react-query';
 
 import type { TransactionCost } from '../utils/gas';
-import { getTransactionCost } from '../utils/gas';
+import { emptyTransactionCost, getTransactionCost } from '../utils/gas';
 
 import { useEthBalance } from './useEthBalance';
 
@@ -24,5 +24,5 @@ export function useTransactionCost(
     options
   );
 
-  return data;
+  return data || emptyTransactionCost();
 }

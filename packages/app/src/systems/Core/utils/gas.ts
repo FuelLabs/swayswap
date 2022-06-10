@@ -34,11 +34,24 @@ export function transactionByteSize(request: ScriptTransactionRequest) {
   return byteSize - witnessesByteSize;
 }
 
+export function emptyTransactionCost(error?: string) {
+  return {
+    total: ZERO,
+    gas: ZERO,
+    byte: ZERO,
+    error,
+  };
+}
+
 export async function getTransactionCost(
   requestPromise: Promise<ScriptTransactionRequest>
 ): Promise<TransactionCost> {
   try {
     const request = await requestPromise;
+    // Set gasPrice and bytePrice to ZERO to
+    // measure gasUsed without needing to have balance
+    request.gasPrice = ZERO;
+    request.bytePrice = ZERO;
     const provider = new Provider(FUEL_PROVIDER_URL);
     const dryRunResult = await provider.call(request);
     const gasFee = getGasFee(dryRunResult) * toBigInt(GAS_PRICE);
@@ -53,12 +66,7 @@ export async function getTransactionCost(
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    return {
-      total: ZERO,
-      gas: ZERO,
-      byte: ZERO,
-      error: err?.message,
-    };
+    return emptyTransactionCost(err?.message);
   }
 }
 
