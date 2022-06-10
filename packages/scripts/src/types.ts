@@ -1,6 +1,7 @@
 export enum Commands {
   'build' = 'build',
   'deploy' = 'deploy',
+  'types' = 'types',
   'run' = 'run',
 }
 
