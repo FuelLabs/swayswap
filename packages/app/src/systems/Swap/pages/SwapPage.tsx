@@ -14,6 +14,8 @@ import {
   swapTokens,
   getValidationState,
   getValidationText,
+  queryNetworkFee,
+  SwapQueries,
 } from "../utils";
 
 import {
@@ -24,6 +26,7 @@ import {
   ZERO,
   isSwayInfinity,
 } from "~/systems/Core";
+import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { Button, Card } from "~/systems/UI";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
@@ -54,7 +57,7 @@ export function SwapPage() {
 
   const { isLoading } = useQuery(
     [
-      "SwapPage-inactiveAmount",
+      SwapQueries.SwapPreview,
       debouncedState?.amount?.toString(),
       debouncedState?.direction,
       debouncedState?.coinFrom.assetId,
@@ -66,7 +69,6 @@ export function SwapPage() {
         setHasLiquidity(false);
         return;
       }
-
       if (!debouncedState?.amount) return null;
       if (!hasReserveAmount(debouncedState, poolInfo)) return null;
       return queryPreviewAmount(contract, debouncedState);
@@ -86,10 +88,17 @@ export function SwapPage() {
     }
   );
 
-  const { mutate: swap, isLoading: isSwaping } = useMutation(
+  const txCost = useTransactionCost(
+    [SwapQueries.NetworkFee, swapState?.direction],
+    () => queryNetworkFee(contract, swapState?.direction)
+  );
+
+  const { mutate: swap, isLoading: isSwapping } = useMutation(
     async () => {
       if (!swapState) return;
-      return swapTokens(contract, swapState);
+      if (!txCost?.gas || txCost.error) return;
+      setHasSwapped(false);
+      await swapTokens(contract, swapState, txCost);
     },
     {
       onSuccess: async () => {
@@ -110,6 +119,7 @@ export function SwapPage() {
     hasLiquidity,
     balances: balances.data,
     slippage: slippage.value,
+    txCost,
   });
 
   const shouldDisableSwap =
@@ -124,11 +134,16 @@ export function SwapPage() {
         Swap
       </Card.Title>
       <SwapComponent
+        networkFee={txCost?.total}
         previewAmount={previewAmount}
         onChange={handleSwap}
         isLoading={isLoading}
       />
-      <SwapPreview isLoading={isLoading} swapInfo={swapInfo} />
+      <SwapPreview
+        networkFee={txCost?.total}
+        isLoading={isLoading}
+        swapInfo={swapInfo}
+      />
       <PricePerToken
         swapState={swapState}
         previewAmount={previewAmount}
@@ -136,7 +151,7 @@ export function SwapPage() {
       />
       <Button
         isFull
-        isLoading={isSwaping}
+        isLoading={isSwapping}
         size="lg"
         variant="primary"
         isDisabled={shouldDisableSwap}

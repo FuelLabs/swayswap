@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Load env_template
 APP_TEST_ENV=./packages/app/.env.test
@@ -21,8 +21,10 @@ echo $1
 # Run test
 if [ "$1" == "--coverage" ]; then
     pnpm test:coverage
+    TEST_RESULT=$?
 else
     pnpm test
+    TEST_RESULT=$?
 fi
 
 # Run cleanup
@@ -30,6 +32,8 @@ pnpm services:clean-test
 
 # After run the tests delete .env.test
 # If it was created
-if [  $TEST_CREATED == 1 ]; then
+if [ $TEST_CREATED == 1 ]; then
     rm $APP_TEST_ENV
 fi
+
+exit $TEST_RESULT

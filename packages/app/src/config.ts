@@ -21,3 +21,7 @@ export const NETWORK_FEE = 1;
 export const DEADLINE = 5000;
 /** Max presentation units to avoid show 9 decimals on screen */
 export const FIXED_UNITS = 3;
+/** Min gas price required from the fuel-core */
+export const GAS_PRICE = 1;
+/** Min byte price required from the fuel-core */
+export const BYTE_PRICE = 1;

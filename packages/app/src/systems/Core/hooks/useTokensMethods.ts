@@ -1,7 +1,7 @@
-import type { Overrides } from 'fuels';
 import { useMemo } from 'react';
 
 import { objectId } from '../utils';
+import { getOverrides } from '../utils/gas';
 
 import { useWallet } from './useWallet';
 
@@ -19,11 +19,20 @@ export function useTokenMethods(tokenId: string) {
     getBalance() {
       return wallet?.getBalance(tokenId);
     },
-    mint(amount: bigint) {
-      return contract.submit.mint_coins(amount);
+    async queryNetworkFee(amount: bigint) {
+      return contract.prepareCall.mint_and_transfer_coins(amount, objectId(wallet.address), {
+        variableOutputs: 1,
+      });
     },
-    transferTo(amount: bigint, overrides: Overrides & { from?: string | Promise<string> } = {}) {
-      return contract.submit.transfer_coins(amount, objectId(wallet.address), overrides);
+    mint(amount: bigint, gasLimit: bigint) {
+      return contract.submit.mint_and_transfer_coins(
+        amount,
+        objectId(wallet.address),
+        getOverrides({
+          variableOutputs: 1,
+          gasLimit,
+        })
+      );
     },
   };
 }
