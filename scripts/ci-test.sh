@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Load env_template
 APP_TEST_ENV=./packages/app/.env.test
@@ -32,7 +32,7 @@ pnpm services:clean-test
 
 # After run the tests delete .env.test
 # If it was created
-if [  $TEST_CREATED == 1 ]; then
+if [ $TEST_CREATED == 1 ]; then
     rm $APP_TEST_ENV
 fi
 
