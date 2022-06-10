@@ -19,7 +19,10 @@ export function Header() {
         <Link isExternal href="https://github.com/FuelLabs/swayswap">
           Github
         </Link>
-        <Link isExternal href="https://github.com/FuelLabs/swayswap/README.md">
+        <Link
+          isExternal
+          href="https://github.com/FuelLabs/swayswap/blob/master/README.md"
+        >
           Docs
         </Link>
         <Button
