@@ -79,13 +79,14 @@ jobs:
             zip
 
       # using same chrome install method from cypress/browsers:node16.5.0-chrome97-ff96 ... not using directly the container because we still need ubuntu-latest preset
-      # - name: Install Chrome
-      #   run: |
-      #     sudo wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${{ env.CHROME_VERSION }}-1_amd64.deb" && \
-      #       dpkg -i /usr/src/google-chrome-stable_current_amd64.deb ; \
-      #       apt-get install -f -y && \
-      #       rm -f /usr/src/google-chrome-stable_current_amd64.deb
-      #     google-chrome --version
+      - name: Install Chrome
+        run: |
+          sudo apt purge google-chrome-stable -y
+          sudo wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${{ env.CHROME_VERSION }}-1_amd64.deb" && \
+            dpkg -i /usr/src/google-chrome-stable_current_amd64.deb ; \
+            apt-get install -f -y && \
+            rm -f /usr/src/google-chrome-stable_current_amd64.deb
+          google-chrome --version
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
