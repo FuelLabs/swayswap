@@ -1,13 +1,13 @@
 import { WelcomeNavItem } from "./WelcomeNavItem";
 import { WelcomeSidebarBullet } from "./WelcomeSidebarBullet";
 
-import fuelLogo from "~/assets/fuel-logo-512x512.png";
+import { relativeUrl } from "~/systems/Core";
 
 export function WelcomeSidebar() {
   return (
     <aside className="welcomeSidebar">
       <img
-        src={fuelLogo}
+        src={relativeUrl("/fuel-logo-512x512.png")}
         className="welcomeSidebar--logo"
         alt="swayswap"
         height={50}

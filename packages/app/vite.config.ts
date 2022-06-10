@@ -5,12 +5,10 @@ import './load.envs.ts';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-const ENV_VARS = Object.entries(process.env).reduce((obj, [key, val]) => {
-  if (key.startsWith('VITE_') || key === 'NODE_ENV') {
-    return { ...obj, [key]: val };
-  }
-  return obj;
-}, {});
+const WHITELIST = ['NODE_ENV', 'PUBLIC_URL'];
+const ENV_VARS = Object.entries(process.env).filter(([key]) =>
+  WHITELIST.some((k) => k === key || key.match(/^VITE_/))
+);
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,6 +24,6 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   define: {
-    'process.env': ENV_VARS,
+    'process.env': Object.fromEntries(ENV_VARS),
   },
 });
