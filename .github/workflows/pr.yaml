@@ -2,7 +2,7 @@ name: "CI"
 
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, edited, closed, draft]
+    types: [opened, synchronize, ready_for_review, edited, closed]
 
 env:
   RUST_VERSION: 1.61.0
@@ -78,6 +78,7 @@ jobs:
             zip
 
       - name: Install Chrome
+        run: |
           wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb" && \
             dpkg -i /usr/src/google-chrome-stable_current_amd64.deb ; \
             apt-get install -f -y && \
