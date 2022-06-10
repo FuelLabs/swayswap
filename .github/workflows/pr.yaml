@@ -12,23 +12,23 @@ env:
   COMPOSE_VERSION: 2.6.0
 
 jobs:
-  # cancel-previous-run:
-  #   name: Cancel previous actions
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: n1hility/cancel-previous-runs@v2
-  #       with:
-  #         token: ${{ secrets.GITHUB_TOKEN }}
+  cancel-previous-run:
+    name: Cancel previous actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: n1hility/cancel-previous-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-  # validate-pr:
-  #   name: Validate PR title
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Pull request title check
-  #       uses: amannn/action-semantic-pull-request@v4
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  validate-pr:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull request title check
+        uses: amannn/action-semantic-pull-request@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-and-test:
     name: Build and test
