@@ -184,7 +184,7 @@ jobs:
           # skip install, as 1 - we're doing in other step; 2 - cypress doesnt support pnpm yet https://github.com/cypress-io/github-action/issues/145
           install: false
           command: pnpm ci:test:e2e
-          start: pnpm dev
+          start: NODE_ENV=test pnpm dev
           wait-on: "http://localhost:3001"
           wait-on-timeout: 120
           # browser: chrome

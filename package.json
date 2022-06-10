@@ -20,7 +20,6 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
     "ci:test": "./scripts/ci-test.sh",
     "ci:test:coverage": "./scripts/ci-test.sh --coverage",
     "ci:test:e2e": "./scripts/ci-test.sh --e2e",
@@ -30,6 +29,7 @@
     "contracts:deploy": "pnpm exec swayswap-scripts deploy",
     "cy:open": "cypress open",
     "cy:run": "cypress run --headed",
+    "dev": "turbo run dev --parallel",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "pnpm lint:check --fix",
