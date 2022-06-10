@@ -2,7 +2,7 @@ name: "CI"
 
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, edited, closed]
+    types: [opened, synchronize, ready_for_review, edited, closed, draft]
 
 env:
   RUST_VERSION: 1.61.0
