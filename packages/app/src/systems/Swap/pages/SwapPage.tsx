@@ -24,8 +24,8 @@ import {
   useSlippage,
   ZERO,
   isSwayInfinity,
-  useEthBalance,
 } from "~/systems/Core";
+import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { Button, Card } from "~/systems/UI";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
@@ -37,7 +37,6 @@ export function SwapPage() {
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
   const { data: poolInfo } = usePoolInfo();
-  const ethBalance = useEthBalance();
 
   const previewAmount = previewInfo?.amount || ZERO;
   const swapInfo = useMemo<SwapInfo>(
@@ -88,15 +87,12 @@ export function SwapPage() {
     }
   );
 
-  const { isLoading: feeIsLoading, data: txCost } = useQuery(
-    [
-      "SwapPage-networkFee",
-      swapState?.direction,
-      swapState?.amount?.toString(),
-      ethBalance.formatted,
-    ],
-    async () => queryNetworkFee(contract, swapState?.direction),
-    { enabled: true }
+  const txCost = useTransactionCost(
+    ["SwapPage-networkFee", swapState?.direction],
+    () => queryNetworkFee(contract, swapState?.direction),
+    {
+      enabled: true,
+    }
   );
 
   const { mutate: swap, isLoading: isSwapping } = useMutation(
@@ -153,11 +149,11 @@ export function SwapPage() {
       <PricePerToken
         swapState={swapState}
         previewAmount={previewAmount}
-        isLoading={feeIsLoading || isLoading}
+        isLoading={isLoading}
       />
       <Button
         isFull
-        isLoading={feeIsLoading || isSwapping}
+        isLoading={isSwapping}
         size="lg"
         variant="primary"
         isDisabled={shouldDisableSwap}

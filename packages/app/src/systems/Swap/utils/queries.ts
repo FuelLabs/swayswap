@@ -1,9 +1,11 @@
+import type { ScriptTransactionRequest } from 'fuels';
+
 import type { SwapState } from '../types';
 import { ActiveInput } from '../types';
 
 import { COIN_ETH } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
-import { getOverrides, getTransactionCost } from '~/systems/Core/utils/gas';
+import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 
 const getSwapWithMaximumRequiredAmount = async (
@@ -91,21 +93,19 @@ export const swapTokens = async (
 export const queryNetworkFee = async (
   contract: ExchangeContractAbi,
   direction?: ActiveInput
-): Promise<TransactionCost> => {
+): Promise<ScriptTransactionRequest> => {
   const DEADLINE = 1000;
   const directionValue = direction || ActiveInput.from;
   if (directionValue === ActiveInput.to) {
-    const request = contract.prepareCall.swap_with_maximum(1, DEADLINE, {
+    return contract.prepareCall.swap_with_maximum(1, DEADLINE, {
       forward: [1, COIN_ETH],
       variableOutputs: 1,
       gasLimit: 1000000,
     });
-    return getTransactionCost(request);
   }
-  const request = contract.prepareCall.swap_with_minimum(1, DEADLINE, {
+  return contract.prepareCall.swap_with_minimum(1, DEADLINE, {
     forward: [1, COIN_ETH],
     variableOutputs: 1,
     gasLimit: 1000000,
   });
-  return getTransactionCost(request);
 };
