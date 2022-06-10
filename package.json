@@ -30,6 +30,7 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run --headed",
     "dev": "turbo run dev --parallel",
+    "dev-test": "NODE_ENV=test pnpm dev",
     "gh-preview": "pnpm run --filter swayswap-app gh-preview",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "pnpm lint:check --fix",
