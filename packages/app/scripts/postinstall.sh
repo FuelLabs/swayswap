@@ -1,6 +1,6 @@
 #!/bin/sh
 
-FILE=.env
+ENV_FILE=.env
 if [ ! -f "$FILE" ]; then
-    cp .env.example .env
+    cp .env.example $ENV_FILE
 fi

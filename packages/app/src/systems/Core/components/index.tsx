@@ -13,3 +13,4 @@ export * from "./Providers";
 export * from "./TokenIcon";
 export * from "./WalletInfo";
 export * from "./WalletWidget";
+export * from "./NetworkFeePreviewItem";

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 CURRENT_PATH=$(pwd)
 cd $CURRENT_PATH/packages/contracts/token_contract && forc test

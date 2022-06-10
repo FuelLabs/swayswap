@@ -8,14 +8,17 @@ import {
   TokenIcon,
   useCoinMetadata,
   ETH_DAI,
+  NetworkFeePreviewItem,
 } from "~/systems/Core";
 
 export interface RemoveLiquidityPreviewProps {
   amount: bigint | null;
+  networkFee?: bigint | null;
 }
 
 export const RemoveLiquidityPreview = ({
   amount,
+  networkFee,
 }: RemoveLiquidityPreviewProps) => {
   const { coinMetaData } = useCoinMetadata({ symbol: ETH_DAI.name });
   const coinFrom = coinMetaData?.pairOf?.[0];
@@ -70,6 +73,7 @@ export const RemoveLiquidityPreview = ({
           title="Pool share after:"
           value={`${formattedNextPoolShare}%`}
         />
+        <NetworkFeePreviewItem networkFee={networkFee} />
       </PreviewTable>
     </>
   );

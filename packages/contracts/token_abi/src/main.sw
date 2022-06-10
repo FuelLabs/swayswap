@@ -13,6 +13,8 @@ abi Token {
     fn burn_coins(burn_amount: u64);
     // Transfer a contract coins to a given output
     fn transfer_coins(coins: u64, address: Address);
+    // Mint and transfer coins to a given output
+    fn mint_and_transfer_coins(coins: u64, address: Address);
     // Transfer a specified token from the contract
     // to a given output
     fn transfer_token_to_output(coins: u64, asset_id: ContractId, recipient: Address);
