@@ -172,7 +172,7 @@ describe("SwapPage", () => {
         fireEvent.change(coinFrom, { target: { value: "0.5" } });
         const coinTo = screen.getByLabelText(/Coin to input/i);
         const value = parseFloat(coinTo.getAttribute("value") || "0");
-        expect(value).toBeGreaterThan(10);
+        expect(value).toBeGreaterThan(1);
       });
     });
 
