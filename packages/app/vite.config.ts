@@ -31,4 +31,5 @@ export default defineConfig({
   define: {
     'process.env': ENV_VARS,
   },
+  ...(Boolean(process.env.CI) && { logLevel: 'silent' }),
 });
