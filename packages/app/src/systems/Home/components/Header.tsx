@@ -16,8 +16,12 @@ export function Header() {
         width={40}
       />
       <nav className="homePage--menu">
-        <Link isExternal>Github</Link>
-        <Link isExternal>Docs</Link>
+        <Link isExternal href="https://github.com/FuelLabs/swayswap">
+          Github
+        </Link>
+        <Link isExternal href="https://github.com/FuelLabs/swayswap/README.md">
+          Docs
+        </Link>
         <Button
           size={breakpoint === "sm" ? "sm" : "lg"}
           variant="primary"
