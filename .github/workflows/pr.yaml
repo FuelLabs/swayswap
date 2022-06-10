@@ -78,16 +78,17 @@ jobs:
             xdg-utils \
             zip
 
-      # using same chrome install method from cypress/browsers:node16.5.0-chrome97-ff96 ... not using directly the container because we still need ubuntu-latest preset
-      - name: Install Chrome
-        # first remove chrome from ubuntu-lates, then install new one
-        run: |
-          sudo apt purge google-chrome-stable -y
-          sudo wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${{ env.CHROME_VERSION }}-1_amd64.deb"
-          sudo dpkg -i /usr/src/google-chrome-stable_current_amd64.deb
-          sudo apt-get install -f -y
-          sudo rm -rf /usr/src/google-chrome-stable_current_amd64.deb
-          google-chrome --version
+      # # using same chrome install method from cypress/browsers:node16.5.0-chrome97-ff96 ... not using directly the container because we still need ubuntu-latest preset
+      # - name: Install Chrome
+      #   # first remove chrome from ubuntu-lates, then install new one
+      #   # TODO: just use default chrome from ubuntu-latest. we're changing it because of https://github.com/cypress-io/cypress/discussions/22128
+      #   run: |
+      #     sudo apt purge google-chrome-stable -y
+      #     sudo wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${{ env.CHROME_VERSION }}-1_amd64.deb"
+      #     sudo dpkg -i /usr/src/google-chrome-stable_current_amd64.deb
+      #     sudo apt-get install -f -y
+      #     sudo rm -rf /usr/src/google-chrome-stable_current_amd64.deb
+      #     google-chrome --version
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
@@ -186,7 +187,7 @@ jobs:
           start: pnpm dev
           wait-on: "http://localhost:3001"
           wait-on-timeout: 120
-          browser: chrome
+          # browser: chrome
           # record: true # TODO: setup cypress dashboard, then enable record
         env:
           # CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
