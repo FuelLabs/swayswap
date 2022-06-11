@@ -46,6 +46,7 @@ export function RemoveLiquidityPage() {
       if (!amount) {
         throw new Error('"amount" is required');
       }
+      if (!txCost.total) return;
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
       await submitRemoveLiquidity(contract, amount, txCost);
