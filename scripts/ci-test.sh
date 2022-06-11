@@ -13,14 +13,17 @@ if [ ! -f "$APP_TEST_ENV" ]; then
 fi
 
 # Run setup
-NODE_ENV=test
+export NODE_ENV=test
 pnpm services:setup-test
 
 echo $1
 
 # Run test
-if [ "$1" == "--coverage" ]; then
+if [ "$1" = "--coverage" ]; then
     pnpm test:coverage
+    TEST_RESULT=$?
+elif [ "$1" = "--e2e" ]; then
+    pnpm test:e2e
     TEST_RESULT=$?
 else
     pnpm test

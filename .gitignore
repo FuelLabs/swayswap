@@ -41,6 +41,7 @@ node_modules
 
 # testing
 coverage
+cypress
 
 # next.js
 .next/
