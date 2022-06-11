@@ -37,39 +37,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # using same dependencies from cypress/browsers:node16.5.0-chrome97-ff96 ... not using directly the container because we still need ubuntu-latest preset
-      - name: Install Cypress Dependencies
-        run: |
-          sudo apt-get update && \
-            sudo apt-get install --no-install-recommends -y \
-            libgtk2.0-0 \
-            libgtk-3-0 \
-            libnotify-dev \
-            libgconf-2-4 \
-            libgbm-dev \
-            libnss3 \
-            libxss1 \
-            libasound2 \
-            libxtst6 \
-            xauth \
-            xvfb \
-            vim-tiny \
-            nano \
-            fonts-noto-color-emoji \
-            fonts-arphic-bkai00mp \
-            fonts-arphic-bsmi00lp \
-            fonts-arphic-gbsn00lp \
-            fonts-arphic-gkai00mp \
-            fonts-arphic-ukai \
-            fonts-arphic-uming \
-            ttf-wqy-zenhei \
-            ttf-wqy-microhei \
-            xfonts-wqy \
-            fonts-liberation \
-            libappindicator3-1 \
-            xdg-utils \
-            zip
-
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -158,6 +125,40 @@ jobs:
       - name: Setup scripts
         run: |
           pnpm scripts:setup
+      
+      # using same dependencies from cypress/browsers:node16.5.0-chrome97-ff96 ...
+      # not using directly the container because we still need ubuntu-latest preset
+      - name: Install Cypress Dependencies
+        run: |
+          sudo apt-get update && \
+            sudo apt-get install --no-install-recommends -y \
+            libgtk2.0-0 \
+            libgtk-3-0 \
+            libnotify-dev \
+            libgconf-2-4 \
+            libgbm-dev \
+            libnss3 \
+            libxss1 \
+            libasound2 \
+            libxtst6 \
+            xauth \
+            xvfb \
+            vim-tiny \
+            nano \
+            fonts-noto-color-emoji \
+            fonts-arphic-bkai00mp \
+            fonts-arphic-bsmi00lp \
+            fonts-arphic-gbsn00lp \
+            fonts-arphic-gkai00mp \
+            fonts-arphic-ukai \
+            fonts-arphic-uming \
+            ttf-wqy-zenhei \
+            ttf-wqy-microhei \
+            xfonts-wqy \
+            fonts-liberation \
+            libappindicator3-1 \
+            xdg-utils \
+            zip
 
       - name: "End-to-end tests"
         uses: cypress-io/github-action@v4
