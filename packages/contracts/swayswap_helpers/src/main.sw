@@ -2,16 +2,11 @@ library swayswap_helpers;
 
 use std::{
     address::*,
-    assert::assert,
     block::*,
     chain::auth::*,
     context::{*, call_frames::*},
-    contract_id::ContractId,
-    hash::*,
     result::*,
     revert::revert,
-    storage::*,
-    token::*,
     identity::Identity,
 };
 

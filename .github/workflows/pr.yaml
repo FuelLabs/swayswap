@@ -2,11 +2,11 @@ name: "CI"
 
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, edited, closed]
+    types: [opened, synchronize, edited, closed]
 
 env:
   RUST_VERSION: 1.61.0
-  FORC_VERSION: 0.14.5
+  FORC_VERSION: 0.15.2
   NODE_VERSION: 16
   PNPM_VERSION: 7.0.0
   COMPOSE_VERSION: 2.6.0

@@ -2,41 +2,33 @@ contract;
 
 use std::{
     address::*,
-    assert::assert,
     assert::require,
-    block::*,
-    chain::auth::*,
     context::{*, call_frames::*},
     contract_id::ContractId,
-    hash::*,
-    result::*,
-    revert::revert,
     storage::*,
     token::*,
-    identity::Identity,
 };
 use token_abi::Token;
 use swayswap_helpers::{get_msg_sender_address_or_panic};
 
+const ZERO_B256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
+
 storage {
-    owner: b256,
+    owner: Address,
     mint_amount: u64,
     mint_list: StorageMap<Address, bool>,
 }
 
-const ZERO_B256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
-
 enum Error {
     AddressAlreadyMint: (),
     CannotReinitialize: (),
-    MintAmountCanotBeZero: (),
-    NotInitialized: (),
+    MintIsClosed: (),
     NotOwner: (),
 }
 
 fn validate_owner() {
     let sender = get_msg_sender_address_or_panic();
-    require(storage.owner == sender.into(), Error::NotOwner);
+    require(storage.owner == sender, Error::NotOwner);
 }
 
 impl Token for Contract {
@@ -44,14 +36,13 @@ impl Token for Contract {
     // Owner methods
     //////////////////////////////////////
     fn initialize(mint_amount: u64, address: Address) {
-        require(storage.owner == ZERO_B256, Error::NotInitialized);
+        require(storage.owner.into() == ZERO_B256, Error::CannotReinitialize);
         // Start the next message to be signed
-        storage.owner = address.into();
+        storage.owner = address;
         storage.mint_amount = mint_amount;
     }
 
     fn set_mint_amount(mint_amount: u64) {
-        require(mint_amount > 0, Error::MintAmountCanotBeZero);
         validate_owner();
         storage.mint_amount = mint_amount;
     }
@@ -80,7 +71,7 @@ impl Token for Contract {
     // Mint public method
     //////////////////////////////////////
     fn mint() {
-        require(storage.mint_amount > 0, Error::NotInitialized);
+        require(storage.mint_amount > 0, Error::MintIsClosed);
 
         // Enable a address to mint only once
         let sender = get_msg_sender_address_or_panic();

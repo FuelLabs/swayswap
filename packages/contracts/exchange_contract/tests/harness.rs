@@ -105,23 +105,16 @@ async fn exchange_contract() {
     let wallet_token_amount = 20000;
 
     // Initialize token contract
-    let result = token_instance
-        .initialize(wallet_token_amount, wallet.address())
+    token_instance
+        .initialize(wallet_token_amount, address)
         .call()
         .await
         .unwrap();
-
-        let result = token_instance
-        .get_mint_amount()
-        .call()
-        .await
-        .unwrap();
-    
-    println!("{:?}", result.value);
 
     // Mint some alt tokens
     token_instance
         .mint()
+        .append_variable_outputs(1)
         .call()
         .await
         .unwrap();
