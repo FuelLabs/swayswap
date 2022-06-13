@@ -1,12 +1,12 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useRef } from 'react';
 
-import { ActiveInput } from './types';
+import { SwapDirection } from './types';
 
 import { TOKENS } from '~/systems/Core';
 import type { Coin, Maybe } from '~/types';
 
-export const swapActiveInputAtom = atom<ActiveInput>(ActiveInput.from);
+export const swapActiveInputAtom = atom<SwapDirection>(SwapDirection.fromTo);
 export const swapCoinsAtom = atom<[Coin, Coin]>([TOKENS[0], TOKENS[1]]);
 export const swapIsTypingAtom = atom<boolean>(false);
 

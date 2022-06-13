@@ -2,7 +2,7 @@ import { BsArrowDown } from "react-icons/bs";
 
 import { useValueIsTyping } from "../state";
 import type { SwapInfo } from "../types";
-import { ActiveInput } from "../types";
+import { SwapDirection } from "../types";
 import { calculatePriceWithSlippage, calculatePriceImpact } from "../utils";
 
 import {
@@ -44,7 +44,7 @@ export function SwapPreview({
 
   // Expected amount of tokens to be received
   const nextAmount =
-    direction === ActiveInput.from ? previewAmount : amount || ZERO;
+    direction === SwapDirection.fromTo ? previewAmount : amount || ZERO;
 
   const outputAmount = parseToFormattedNumber(nextAmount);
   const priceWithSlippage = calculatePriceWithSlippage(
@@ -70,12 +70,12 @@ export function SwapPreview({
         />
         <PreviewItem
           title={`${
-            direction === ActiveInput.from
+            direction === SwapDirection.fromTo
               ? "Min. received after slippage"
               : "Max. sent after slippage"
           } (${slippage.formatted}):`}
           value={`${inputAmountWithSlippage} ${
-            direction === ActiveInput.from ? coinTo.symbol : coinFrom.symbol
+            direction === SwapDirection.fromTo ? coinTo.symbol : coinFrom.symbol
           }`}
         />
         <NetworkFeePreviewItem networkFee={networkFee} />

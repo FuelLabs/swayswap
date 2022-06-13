@@ -3,7 +3,7 @@ import { AiOutlineSwap } from "react-icons/ai";
 
 import { useValueIsTyping } from "../state";
 import type { SwapState } from "../types";
-import { ActiveInput } from "../types";
+import { SwapDirection } from "../types";
 
 import {
   toNumber,
@@ -60,7 +60,7 @@ export function PricePerToken({
   const isTyping = useValueIsTyping();
 
   useEffect(() => {
-    if (swapState?.direction === ActiveInput.from) {
+    if (swapState?.direction === SwapDirection.fromTo) {
       setAssets([
         createAsset(swapState.coinFrom.symbol, swapState.amount),
         createAsset(swapState.coinTo.symbol, previewAmount),

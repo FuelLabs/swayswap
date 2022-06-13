@@ -1,13 +1,13 @@
 import type { Coin, Maybe } from '~/types';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
-export enum ActiveInput {
-  'from' = 'from',
-  'to' = 'to',
+export enum SwapDirection {
+  'fromTo' = 'from',
+  'toFrom' = 'to',
 }
 
 export type SwapState = {
-  direction: ActiveInput;
+  direction: SwapDirection;
   coinFrom: Coin;
   coinTo: Coin;
   amount: Maybe<bigint>;

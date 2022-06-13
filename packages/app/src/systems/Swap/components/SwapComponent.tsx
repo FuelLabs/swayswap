@@ -9,7 +9,7 @@ import {
   useSetIsTyping,
 } from "../state";
 import type { SwapState } from "../types";
-import { ActiveInput } from "../types";
+import { SwapDirection } from "../types";
 
 import { CoinInput, useCoinInput, CoinSelector } from "~/systems/Core";
 import { InvertButton } from "~/systems/UI";
@@ -40,17 +40,17 @@ export function SwapComponent({
 
   const handleInvertCoins = () => {
     setTyping(true);
-    if (activeInput === ActiveInput.to) {
+    if (activeInput === SwapDirection.toFrom) {
       const from = fromInput.amount;
       startTransition(() => {
-        setActiveInput(ActiveInput.from);
+        setActiveInput(SwapDirection.fromTo);
         fromInput.setAmount(toInput.amount);
         toInput.setAmount(from);
       });
     } else {
       const to = toInput.amount;
       startTransition(() => {
-        setActiveInput(ActiveInput.to);
+        setActiveInput(SwapDirection.toFrom);
         toInput.setAmount(fromInput.amount);
         fromInput.setAmount(to);
       });
@@ -67,7 +67,7 @@ export function SwapComponent({
     },
     onInput: () => {
       setTyping(true);
-      setActiveInput(ActiveInput.from);
+      setActiveInput(SwapDirection.fromTo);
     },
   });
 
@@ -79,12 +79,12 @@ export function SwapComponent({
     },
     onInput: () => {
       setTyping(true);
-      setActiveInput(ActiveInput.to);
+      setActiveInput(SwapDirection.toFrom);
     },
   });
 
   useEffect(() => {
-    if (activeInput === ActiveInput.to) {
+    if (activeInput === SwapDirection.toFrom) {
       toInput.setAmount(initialAmount);
     } else {
       fromInput.setAmount(initialAmount);
@@ -92,14 +92,15 @@ export function SwapComponent({
   }, []);
 
   useEffect(() => {
-    const currentInput = activeInput === ActiveInput.from ? fromInput : toInput;
+    const currentInput =
+      activeInput === SwapDirection.fromTo ? fromInput : toInput;
     const amount = currentInput.amount;
 
     // This is used to reset preview amount when set first input value for null
-    if (activeInput === ActiveInput.from && amount === null) {
+    if (activeInput === SwapDirection.fromTo && amount === null) {
       toInput.setAmount(null);
     }
-    if (activeInput === ActiveInput.to && amount === null) {
+    if (activeInput === SwapDirection.toFrom && amount === null) {
       fromInput.setAmount(null);
     }
 
@@ -120,7 +121,7 @@ export function SwapComponent({
   }, [fromInput.amount, toInput.amount, coinFrom, coinTo]);
 
   useEffect(() => {
-    if (activeInput === ActiveInput.from) {
+    if (activeInput === SwapDirection.fromTo) {
       toInput.setAmount(previewAmount || null);
     } else {
       fromInput.setAmount(previewAmount || null);
@@ -140,8 +141,8 @@ export function SwapComponent({
         <CoinInput
           aria-label="Coin From Input"
           {...fromInput.getInputProps()}
-          {...(activeInput === ActiveInput.to && { isLoading })}
-          autoFocus={activeInput === ActiveInput.from}
+          {...(activeInput === SwapDirection.toFrom && { isLoading })}
+          autoFocus={activeInput === SwapDirection.fromTo}
           rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
         />
       </div>
@@ -152,8 +153,8 @@ export function SwapComponent({
         <CoinInput
           aria-label="Coin To Input"
           {...toInput.getInputProps()}
-          {...(activeInput === ActiveInput.from && { isLoading })}
-          autoFocus={activeInput === ActiveInput.to}
+          {...(activeInput === SwapDirection.fromTo && { isLoading })}
+          autoFocus={activeInput === SwapDirection.toFrom}
           rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
         />
       </div>

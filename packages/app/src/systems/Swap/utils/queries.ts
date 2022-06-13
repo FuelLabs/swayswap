@@ -1,7 +1,7 @@
 import type { ScriptTransactionRequest } from 'fuels';
 
 import type { SwapState } from '../types';
-import { ActiveInput } from '../types';
+import { SwapDirection } from '../types';
 
 import { COIN_ETH } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
@@ -39,7 +39,7 @@ export const queryPreviewAmount = async (
   contract: ExchangeContractAbi,
   { amount, direction, coinFrom }: SwapState
 ) => {
-  if (direction === ActiveInput.to && amount) {
+  if (direction === SwapDirection.toFrom && amount) {
     const previewAmount = await getSwapWithMaximumRequiredAmount(
       contract,
       coinFrom.assetId,
@@ -60,7 +60,7 @@ export const swapTokens = async (
   txCost: TransactionCost
 ) => {
   const DEADLINE = 1000;
-  if (direction === ActiveInput.to && amount) {
+  if (direction === SwapDirection.toFrom && amount) {
     const forwardAmount = await getSwapWithMaximumRequiredAmount(
       contract,
       coinFrom.assetId,
@@ -78,7 +78,7 @@ export const swapTokens = async (
         variableOutputs: 1,
       })
     );
-  } else if (direction === ActiveInput.from && amount) {
+  } else if (direction === SwapDirection.fromTo && amount) {
     const minValue = await getSwapWithMinimumMinAmount(contract, coinFrom.assetId, amount);
     if (!minValue.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
@@ -97,11 +97,11 @@ export const swapTokens = async (
 
 export const queryNetworkFee = async (
   contract: ExchangeContractAbi,
-  direction?: ActiveInput
+  direction?: SwapDirection
 ): Promise<ScriptTransactionRequest> => {
   const DEADLINE = 1000;
-  const directionValue = direction || ActiveInput.from;
-  if (directionValue === ActiveInput.to) {
+  const directionValue = direction || SwapDirection.fromTo;
+  if (directionValue === SwapDirection.toFrom) {
     return contract.prepareCall.swap_with_maximum(1, DEADLINE, {
       forward: [1, COIN_ETH],
       variableOutputs: 1,

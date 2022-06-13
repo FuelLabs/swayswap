@@ -1,7 +1,7 @@
 import type { CoinQuantity } from 'fuels';
 
 import type { SwapInfo, SwapState } from '../types';
-import { ActiveInput, ValidationStateEnum } from '../types';
+import { SwapDirection, ValidationStateEnum } from '../types';
 
 import { COIN_ETH } from '~/systems/Core/utils/constants';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
@@ -38,7 +38,7 @@ export const calculatePriceImpact = ({
   // If any value is 0 return 0
   if (!previewAmount || !amount || !token_reserve || !eth_reserve) return '0';
 
-  if (direction === ActiveInput.from) {
+  if (direction === SwapDirection.fromTo) {
     if (coinFrom?.assetId !== COIN_ETH) {
       return getPriceImpact(previewAmount, amount, token_reserve, eth_reserve);
     }
@@ -53,10 +53,10 @@ export const calculatePriceImpact = ({
 export const calculatePriceWithSlippage = (
   amount: bigint,
   slippage: number,
-  direction: ActiveInput
+  direction: SwapDirection
 ) => {
   let total = 0;
-  if (direction === ActiveInput.from) {
+  if (direction === SwapDirection.fromTo) {
     total = multiplyFn(amount, 1 - slippage);
   } else {
     total = multiplyFn(amount, 1 + slippage);
@@ -99,7 +99,7 @@ export const notHasBalanceWithSlippage = ({
   balances,
   txCost,
 }: StateParams) => {
-  if (swapState!.direction === ActiveInput.to) {
+  if (swapState!.direction === SwapDirection.toFrom) {
     let amountWithSlippage = calculatePriceWithSlippage(
       previewAmount || ZERO,
       slippage,
@@ -151,7 +151,7 @@ export const getValidationState = (stateParams: StateParams): ValidationStateEnu
 // If amount desired is bigger then
 // the reserves return
 export const hasReserveAmount = (swapState?: Maybe<SwapState>, poolInfo?: PoolInfo) => {
-  if (swapState?.direction === ActiveInput.to) {
+  if (swapState?.direction === SwapDirection.toFrom) {
     if (swapState.coinTo.assetId === COIN_ETH) {
       return (swapState.amount || 0) < (poolInfo?.eth_reserve || 0);
     }
