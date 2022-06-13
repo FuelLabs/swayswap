@@ -1,5 +1,9 @@
 import { urlJoin } from 'url-join-ts';
 
+import { COIN_ETH } from './constants';
+
+import type { Coin, Maybe } from '~/types';
+
 const { PUBLIC_URL } = process.env;
 
 export const objectId = (value: string) => ({ value });
@@ -14,4 +18,8 @@ export function omit<T>(list: string[], props: T) {
     if (list.some((k) => k === key)) return obj;
     return { ...obj, [key]: value };
   }, {} as T) as T;
+}
+
+export function isCoinEth(coin: Maybe<Coin>) {
+  return coin?.assetId === COIN_ETH;
 }

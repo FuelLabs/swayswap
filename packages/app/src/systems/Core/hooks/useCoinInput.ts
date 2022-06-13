@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { useMemo, useEffect, useState } from 'react';
 import type { NumberFormatValues } from 'react-number-format';
 
-import { COIN_ETH, formatUnits, MAX_U64_VALUE, parseInputValueBigInt, ZERO } from '../utils';
+import { formatUnits, isCoinEth, MAX_U64_VALUE, parseInputValueBigInt, ZERO } from '../utils';
 
 import { useBalances } from './useBalances';
 
@@ -82,7 +82,7 @@ export function useCoinInput({
   const [gasFee, setGasFee] = useState<Maybe<bigint>>(initialGasFee || ZERO);
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
-  const isEth = useMemo(() => coin?.assetId === COIN_ETH, [coin?.assetId]);
+  const isEth = useMemo(() => isCoinEth(coin), [coin?.assetId]);
 
   useEffect(() => {
     if (initialGasFee) setGasFee(initialGasFee);

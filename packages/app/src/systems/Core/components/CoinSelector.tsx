@@ -4,7 +4,7 @@ import { FiChevronDown } from "react-icons/fi";
 
 import { useBalances } from "../hooks";
 import type { CoinSelectorProps } from "../hooks/useCoinInput";
-import { TOKENS, parseToFormattedNumber, COIN_ETH } from "../utils";
+import { TOKENS, parseToFormattedNumber, isCoinEth } from "../utils";
 
 import { CoinsListDialog } from "./CoinsListDialog";
 import { TokenIcon } from "./TokenIcon";
@@ -102,7 +102,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
             {showMaxButton && (
               <Tooltip
                 content={`Set: max ${coin?.symbol} balance ${
-                  coin?.assetId === COIN_ETH ? " - network fee" : ""
+                  isCoinEth(coin) ? " - network fee" : ""
                 }`}
               >
                 <Button

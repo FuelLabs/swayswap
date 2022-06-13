@@ -1,5 +1,6 @@
-import { toNumber, ZERO } from './math';
+import { toNumber } from 'fuels';
 
+import { ZERO } from '~/systems/Core';
 import type { Maybe } from '~/types';
 
 export const calculateRatio = (
@@ -9,6 +10,5 @@ export const calculateRatio = (
   const fromAmount = initialFromAmount || ZERO;
   const toAmount = initialToAmount || ZERO;
   const ratio = toNumber(fromAmount) / toNumber(toAmount);
-
   return Number.isNaN(ratio) || !Number.isFinite(ratio) ? 0 : ratio;
 };

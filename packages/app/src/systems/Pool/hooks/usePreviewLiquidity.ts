@@ -1,5 +1,7 @@
+import { calculateRatio } from '../utils/helpers';
+
 import type { UseCoinInput } from '~/systems/Core';
-import { useBalances, calculateRatio, ZERO, toBigInt, toNumber } from '~/systems/Core';
+import { useBalances, ZERO, toBigInt, toNumber } from '~/systems/Core';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UsePreviewLiquidityProps {

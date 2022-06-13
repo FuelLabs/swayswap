@@ -4,14 +4,9 @@ import { AiOutlineSwap } from "react-icons/ai";
 import { useValueIsTyping } from "../state";
 import type { SwapState } from "../types";
 import { SwapDirection } from "../types";
+import { getPricePerToken } from "../utils/helpers";
 
-import {
-  toNumber,
-  divideFnValidOnly,
-  ZERO,
-  toFixed,
-  ONE_ASSET,
-} from "~/systems/Core";
+import { ZERO } from "~/systems/Core";
 import { Button } from "~/systems/UI";
 import type { Maybe } from "~/types";
 
@@ -19,16 +14,6 @@ const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
   priceContainer: `min-w-[150px] cursor-pointer`,
 };
-
-function getPricePerToken(
-  fromAmount?: Maybe<bigint>,
-  toAmount?: Maybe<bigint>
-) {
-  if (!toAmount || !fromAmount) return "";
-  const ratio = divideFnValidOnly(toAmount, fromAmount);
-  const price = ratio * toNumber(ONE_ASSET);
-  return toFixed(price / toNumber(ONE_ASSET));
-}
 
 type PricePerTokenProps = {
   swapState?: Maybe<SwapState>;
