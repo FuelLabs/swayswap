@@ -21,18 +21,20 @@ export function MainLayout({ children }: MainLayoutProps) {
   const ctx = useContext(AppContext);
 
   return (
-    <main className="mainLayout">
-      {!ctx?.justContent && <Header />}
-      <div className="mainLayout--wrapper">
-        <ErrorBoundary onReset={resetReactQuery}>
-          {process.env.NODE_ENV !== "test" ? (
-            <Suspense fallback={<Skeleton />}>{children}</Suspense>
-          ) : (
-            children
-          )}
-        </ErrorBoundary>
-      </div>
+    <>
+      <main className="mainLayout">
+        {!ctx?.justContent && <Header />}
+        <div className="mainLayout--wrapper">
+          <ErrorBoundary onReset={resetReactQuery}>
+            {process.env.NODE_ENV !== "test" ? (
+              <Suspense fallback={<Skeleton />}>{children}</Suspense>
+            ) : (
+              children
+            )}
+          </ErrorBoundary>
+        </div>
+      </main>
       {wallet && !ctx?.justContent && <FaucetWidget />}
-    </main>
+    </>
   );
 }
