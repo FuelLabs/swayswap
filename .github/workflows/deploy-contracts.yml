@@ -122,10 +122,10 @@ jobs:
         run: |
           pnpm exec swayswap-scripts run
 
-      - name: Initiate pool
+      - name: Initiate token contract and liquidity pool
         if: ${{ github.event.inputs.initiate_supply }}
         run: |
-          pnpm initiate:pool
+          pnpm contracts:init-pool
         env:
           NODE_ENV: production
 

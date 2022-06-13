@@ -14,6 +14,6 @@ function getEnvName() {
 [getEnvName(), '.env'].forEach((envFile) => {
   if (!envFile) return;
   config({
-    path: resolve(process.cwd(), envFile),
+    path: resolve(__dirname, envFile),
   });
 });
