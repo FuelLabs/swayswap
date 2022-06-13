@@ -10,10 +10,11 @@ import {
   ETH_DAI,
   NetworkFeePreviewItem,
 } from "~/systems/Core";
+import type { Maybe } from "~/types";
 
 export interface RemoveLiquidityPreviewProps {
-  amount: bigint | null;
-  networkFee?: bigint | null;
+  amount: Maybe<bigint>;
+  networkFee?: Maybe<bigint>;
 }
 
 export const RemoveLiquidityPreview = ({

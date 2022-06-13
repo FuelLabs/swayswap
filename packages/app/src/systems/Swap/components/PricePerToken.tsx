@@ -13,6 +13,7 @@ import {
   ONE_ASSET,
 } from "~/systems/Core";
 import { Button } from "~/systems/UI";
+import type { Maybe } from "~/types";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
@@ -20,8 +21,8 @@ const style = {
 };
 
 function getPricePerToken(
-  fromAmount?: bigint | null,
-  toAmount?: bigint | null
+  fromAmount?: Maybe<bigint>,
+  toAmount?: Maybe<bigint>
 ) {
   if (!toAmount || !fromAmount) return "";
   const ratio = divideFnValidOnly(toAmount, fromAmount);
@@ -30,8 +31,8 @@ function getPricePerToken(
 }
 
 type PricePerTokenProps = {
-  swapState?: SwapState | null;
-  previewAmount?: bigint | null;
+  swapState?: Maybe<SwapState>;
+  previewAmount?: Maybe<bigint>;
   isLoading?: boolean;
 };
 
@@ -41,8 +42,8 @@ type Asset = {
 };
 
 const createAsset = (
-  symbol?: string | null,
-  amount?: bigint | null
+  symbol?: Maybe<string>,
+  amount?: Maybe<bigint>
 ): Asset => ({
   symbol: symbol || "",
   amount: amount || ZERO,
@@ -54,7 +55,7 @@ export function PricePerToken({
   isLoading,
 }: PricePerTokenProps) {
   const [[assetFrom, assetTo], setAssets] = useState<
-    [Asset | null, Asset | null]
+    [Maybe<Asset>, Maybe<Asset>]
   >([null, null]);
   const isTyping = useValueIsTyping();
 

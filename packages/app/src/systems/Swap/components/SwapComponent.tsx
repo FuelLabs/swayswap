@@ -13,15 +13,15 @@ import { ActiveInput } from "../types";
 
 import { CoinInput, useCoinInput, CoinSelector } from "~/systems/Core";
 import { InvertButton } from "~/systems/UI";
-import type { Coin } from "~/types";
+import type { Coin, Maybe } from "~/types";
 
 const style = {
   switchDirection: `flex items-center sm:justify-center -my-5`,
 };
 
 type SwapComponentProps = {
-  previewAmount?: bigint | null;
-  networkFee?: bigint | null;
+  previewAmount?: Maybe<bigint>;
+  networkFee?: Maybe<bigint>;
   onChange?: (swapState: SwapState) => void;
   isLoading?: boolean;
 };

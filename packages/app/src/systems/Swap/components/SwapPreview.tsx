@@ -13,11 +13,12 @@ import {
   parseToFormattedNumber,
   NetworkFeePreviewItem,
 } from "~/systems/Core";
+import type { Maybe } from "~/types";
 
 type SwapPreviewProps = {
   swapInfo: SwapInfo;
   isLoading: boolean;
-  networkFee?: bigint | null;
+  networkFee?: Maybe<bigint>;
 };
 
 export function SwapPreview({

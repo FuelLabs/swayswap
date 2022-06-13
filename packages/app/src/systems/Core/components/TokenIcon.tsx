@@ -1,6 +1,6 @@
 import cx from "classnames";
 
-import type { Coin } from "~/types";
+import type { Coin, Maybe } from "~/types";
 
 const style = {
   icon: `inline-flex rounded-full border-2 border-transparent`,
@@ -8,8 +8,8 @@ const style = {
 };
 
 type TokenIconProps = {
-  coinFrom?: Coin | null;
-  coinTo?: Coin | null;
+  coinFrom?: Maybe<Coin>;
+  coinTo?: Maybe<Coin>;
   size?: number;
 };
 

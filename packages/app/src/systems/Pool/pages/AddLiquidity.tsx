@@ -24,7 +24,7 @@ import {
   useBalances,
 } from "~/systems/Core";
 import { Button, Card, Spinner } from "~/systems/UI";
-import type { Coin } from "~/types";
+import type { Coin, Maybe } from "~/types";
 
 const style = {
   wrapper: `self-start max-w-[500px] mt-24`,
@@ -138,7 +138,7 @@ export function AddLiquidity() {
     return poolRatio ? "Add liquidity" : "Create liquidity";
   }
 
-  function handleChangeFromValue(val: bigint | null) {
+  function handleChangeFromValue(val: Maybe<bigint>) {
     fromInput.setAmount(val);
 
     if (poolRatio) {
@@ -148,7 +148,7 @@ export function AddLiquidity() {
     }
   }
 
-  function handleChangeToValue(val: bigint | null) {
+  function handleChangeToValue(val: Maybe<bigint>) {
     toInput.setAmount(val);
 
     if (poolRatio) {

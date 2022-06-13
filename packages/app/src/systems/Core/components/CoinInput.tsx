@@ -19,18 +19,18 @@ import type { CoinSelectorProps } from "./CoinSelector";
 import { DECIMAL_UNITS } from "~/config";
 import type { NumberInputProps } from "~/systems/UI";
 import { Spinner } from "~/systems/UI";
-import type { Coin } from "~/types";
+import type { Coin, Maybe } from "~/types";
 
 type UseCoinParams = {
   /**
    * Props for <CoinInput />
    */
-  amount?: bigint | null;
-  coin?: Coin | null;
-  gasFee?: bigint | null;
+  amount?: Maybe<bigint>;
+  coin?: Maybe<Coin>;
+  gasFee?: Maybe<bigint>;
   isReadOnly?: boolean;
   onInput?: (...args: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
-  onChange?: (val: bigint | null) => void;
+  onChange?: (val: Maybe<bigint>) => void;
   /**
    * Coins for <CoinSelector />
    */
@@ -41,9 +41,9 @@ type UseCoinParams = {
 };
 
 export type UseCoinInput = {
-  amount: bigint | null;
-  setAmount: React.Dispatch<React.SetStateAction<bigint | null>>;
-  setGasFee: React.Dispatch<React.SetStateAction<bigint | null>>;
+  amount: Maybe<bigint>;
+  setAmount: React.Dispatch<React.SetStateAction<Maybe<bigint>>>;
+  setGasFee: React.Dispatch<React.SetStateAction<Maybe<bigint>>>;
   getInputProps: () => CoinInputProps;
   getCoinSelectorProps: () => CoinSelectorProps;
   formatted: string;
@@ -62,7 +62,7 @@ const parseValueBigInt = (value: string) => {
   return ZERO;
 };
 
-const formatValue = (amount: bigint | null | undefined) => {
+const formatValue = (amount: Maybe<bigint>) => {
   if (amount != null) {
     return formatUnits(amount);
   }
@@ -83,8 +83,8 @@ export function useCoinInput({
   disableWhenEth,
   ...params
 }: UseCoinParams): UseCoinInput {
-  const [amount, setAmount] = useState<bigint | null>(null);
-  const [gasFee, setGasFee] = useState<bigint | null>(initialGasFee || ZERO);
+  const [amount, setAmount] = useState<Maybe<bigint>>(null);
+  const [gasFee, setGasFee] = useState<Maybe<bigint>>(initialGasFee || ZERO);
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
   const isEth = useMemo(() => coin?.assetId === COIN_ETH, [coin?.assetId]);

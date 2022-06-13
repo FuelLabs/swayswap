@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { ActiveInput } from './types';
 
 import { TOKENS } from '~/systems/Core';
-import type { Coin } from '~/types';
+import type { Coin, Maybe } from '~/types';
 
 export const swapActiveInputAtom = atom<ActiveInput>(ActiveInput.from);
 export const swapCoinsAtom = atom<[Coin, Coin]>([TOKENS[0], TOKENS[1]]);
@@ -29,4 +29,4 @@ export const useSetIsTyping = () => {
 };
 
 export const swapHasSwappedAtom = atom<boolean>(false);
-export const swapAmountAtom = atom<bigint | null>(null);
+export const swapAmountAtom = atom<Maybe<bigint>>(null);

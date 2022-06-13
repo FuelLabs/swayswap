@@ -12,6 +12,7 @@ import {
   divideFnValidOnly,
   multiplyFn,
 } from '~/systems/Core/utils/math';
+import type { Maybe } from '~/types';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export function getPriceImpact(
@@ -64,15 +65,15 @@ export const calculatePriceWithSlippage = (
 };
 
 type StateParams = {
-  swapState: SwapState | null;
-  previewAmount: bigint | null;
+  swapState: Maybe<SwapState>;
+  previewAmount: Maybe<bigint>;
   hasLiquidity: boolean;
   slippage: number;
   balances?: CoinQuantity[];
   txCost?: TransactionCost;
 };
 
-export const getValidationText = (state: ValidationStateEnum, swapState: SwapState | null) => {
+export const getValidationText = (state: ValidationStateEnum, swapState: Maybe<SwapState>) => {
   switch (state) {
     case ValidationStateEnum.SelectToken:
       return 'Select token';
@@ -149,7 +150,7 @@ export const getValidationState = (stateParams: StateParams): ValidationStateEnu
 
 // If amount desired is bigger then
 // the reserves return
-export const hasReserveAmount = (swapState?: SwapState | null, poolInfo?: PoolInfo) => {
+export const hasReserveAmount = (swapState?: Maybe<SwapState>, poolInfo?: PoolInfo) => {
   if (swapState?.direction === ActiveInput.to) {
     if (swapState.coinTo.assetId === COIN_ETH) {
       return (swapState.amount || 0) < (poolInfo?.eth_reserve || 0);

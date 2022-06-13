@@ -10,10 +10,10 @@ import { CoinsListDialog } from "./CoinsListDialog";
 import { TokenIcon } from "./TokenIcon";
 
 import { Button, Dialog, Tooltip, useDialog } from "~/systems/UI";
-import type { Coin } from "~/types";
+import type { Coin, Maybe } from "~/types";
 
 export type CoinSelectorProps = {
-  coin?: Coin | null;
+  coin?: Maybe<Coin>;
   isReadOnly?: boolean;
   showBalance?: boolean;
   showMaxButton?: boolean;
@@ -35,7 +35,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
     },
     ref
   ) => {
-    const [selected, setSelected] = useState<Coin | null>(null);
+    const [selected, setSelected] = useState<Maybe<Coin>>(null);
     const dialog = useDialog();
     const { data: balances } = useBalances({ enabled: showBalance });
     const coinBalance = balances?.find(

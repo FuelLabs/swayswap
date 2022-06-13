@@ -1,8 +1,10 @@
 import { toNumber, ZERO } from './math';
 
+import type { Maybe } from '~/types';
+
 export const calculateRatio = (
-  initialFromAmount?: bigint | null,
-  initialToAmount?: bigint | null
+  initialFromAmount?: Maybe<bigint>,
+  initialToAmount?: Maybe<bigint>
 ) => {
   const fromAmount = initialFromAmount || ZERO;
   const toAmount = initialToAmount || ZERO;

@@ -2,6 +2,8 @@ import cx from "classnames";
 import type { NumberFormatProps } from "react-number-format";
 import NumberFormat from "react-number-format";
 
+import type { Maybe } from "~/types";
+
 const style = {
   transferPropContainer: `bg-gray-700 rounded-lg px-4 py-2 border border-gray-700 flex justify-between`,
   transferPropInput: `bg-transparent placeholder:text-gray-300 outline-none w-full`,
@@ -9,7 +11,7 @@ const style = {
 
 export type NumberInputProps = Omit<NumberFormatProps, "onChange"> & {
   disabled?: boolean;
-  value?: number | string | null;
+  value?: number | Maybe<string>;
   onChange?: (value: string) => void;
   className?: string;
 };

@@ -1,4 +1,4 @@
-import type { Coin } from '~/types';
+import type { Coin, Maybe } from '~/types';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export enum ActiveInput {
@@ -10,15 +10,15 @@ export type SwapState = {
   direction: ActiveInput;
   coinFrom: Coin;
   coinTo: Coin;
-  amount: bigint | null;
-  amountFrom: bigint | null;
+  amount: Maybe<bigint>;
+  amountFrom: Maybe<bigint>;
   hasBalance: boolean;
 };
 
 export type SwapInfo = Partial<
   SwapState &
     PoolInfo & {
-      previewAmount: bigint | null;
+      previewAmount: Maybe<bigint>;
     }
 >;
 

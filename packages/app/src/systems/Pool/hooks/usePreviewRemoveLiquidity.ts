@@ -9,9 +9,10 @@ import {
   toFixed,
   ZERO,
 } from '~/systems/Core';
+import type { Maybe } from '~/types';
 
 export interface UsePreviewRemoveLiquidity {
-  amountToRemove?: bigint | null;
+  amountToRemove?: Maybe<bigint>;
 }
 
 export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLiquidity) {

@@ -10,6 +10,13 @@ import {
   multiplyFn,
   toFixed,
 } from '~/systems/Core';
+import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
+
+function getPoolRatio(info?: PoolInfo) {
+  const tokenReserve = toBigInt(info?.token_reserve || ZERO);
+  const ethReserve = toBigInt(info?.eth_reserve || ZERO);
+  return divideFnValidOnly(ethReserve, tokenReserve);
+}
 
 export function useUserPositions() {
   const { data: info } = usePoolInfo();
@@ -27,6 +34,7 @@ export function useUserPositions() {
 
   const formattedTokenReserve = parseToFormattedNumber(tokenReserve);
   const formattedEthReserve = parseToFormattedNumber(ethReserve);
+  const poolRatio = getPoolRatio(info);
 
   const pooledDAI = divideFnValidOnly(multiplyFn(poolTokensNum, tokenReserve), totalLiquidity);
   const pooledETH = divideFnValidOnly(multiplyFn(poolTokensNum, ethReserve), totalLiquidity);
@@ -37,8 +45,6 @@ export function useUserPositions() {
   const poolShare = divideFnValidOnly(poolTokensNum, totalLiquidity);
   const formattedPoolShare = toFixed(poolShare * 100);
   const hasPositions = poolTokensNum > ZERO;
-
-  const poolRatio = divideFnValidOnly(ethReserve, tokenReserve);
 
   return {
     pooledDAI,

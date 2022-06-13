@@ -29,12 +29,13 @@ import {
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { Button, Card } from "~/systems/UI";
+import type { Maybe } from "~/types";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
 
 export function SwapPage() {
   const contract = useContract()!;
-  const [previewInfo, setPreviewInfo] = useState<PreviewInfo | null>(null);
-  const [swapState, setSwapState] = useState<SwapState | null>(null);
+  const [previewInfo, setPreviewInfo] = useState<Maybe<PreviewInfo>>(null);
+  const [swapState, setSwapState] = useState<Maybe<SwapState>>(null);
   const [hasLiquidity, setHasLiquidity] = useState(true);
   const debouncedState = useDebounce(swapState);
   const { data: poolInfo } = usePoolInfo();
