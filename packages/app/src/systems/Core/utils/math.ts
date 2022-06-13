@@ -33,6 +33,14 @@ export function parseUnits(number: string, precision: number = DECIMAL_UNITS) {
   return ethers.parseUnits(number, precision);
 }
 
+export function parseInputValueBigInt(value: string) {
+  if (value !== '') {
+    const nextValue = value === '.' ? '0.' : value;
+    return toBigInt(parseUnits(nextValue));
+  }
+  return ZERO;
+}
+
 export function toBigInt(number: BigNumberish) {
   return BigNumber.from(number).toBigInt();
 }

@@ -1,6 +1,7 @@
 export * from './useAssets';
 export * from './useBalances';
 export * from './useBreakpoint';
+export * from './useCoinInput';
 export * from './useCoinMetadata';
 export * from './useContract';
 export * from './useCreateWallet';
@@ -8,4 +9,5 @@ export * from './useDebounce';
 export * from './useEthBalance';
 export * from './useSlippage';
 export * from './useTokensMethods';
+export * from './useTransactionCost';
 export * from './useWallet';

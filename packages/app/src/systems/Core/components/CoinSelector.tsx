@@ -1,9 +1,9 @@
 import cx from "classnames";
-import type { ReactNode } from "react";
 import { useState, useEffect, forwardRef, useMemo } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 import { useBalances } from "../hooks";
+import type { CoinSelectorProps } from "../hooks/useCoinInput";
 import { TOKENS, parseToFormattedNumber, COIN_ETH } from "../utils";
 
 import { CoinsListDialog } from "./CoinsListDialog";
@@ -11,16 +11,6 @@ import { TokenIcon } from "./TokenIcon";
 
 import { Button, Dialog, Tooltip, useDialog } from "~/systems/UI";
 import type { Coin, Maybe } from "~/types";
-
-export type CoinSelectorProps = {
-  coin?: Maybe<Coin>;
-  isReadOnly?: boolean;
-  showBalance?: boolean;
-  showMaxButton?: boolean;
-  onChange?: (coin: Coin) => void;
-  onSetMaxBalance?: () => void;
-  tooltip?: ReactNode;
-};
 
 export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
   (

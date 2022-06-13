@@ -1,4 +1,6 @@
-import { CoinInput, useCoinInput } from "./CoinInput";
+import { useCoinInput } from "../hooks/useCoinInput";
+
+import { CoinInput } from "./CoinInput";
 import { CoinSelector } from "./CoinSelector";
 
 import type { Coin } from "~/types";
