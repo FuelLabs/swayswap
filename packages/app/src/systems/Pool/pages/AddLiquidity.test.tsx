@@ -170,7 +170,7 @@ describe("Add Liquidity", () => {
     jest.unmock("../hooks/useUserPositions.ts");
 
     await faucet(wallet);
-    await mint(wallet, MINT_VALUE);
+    await mint(wallet);
     const { user } = renderWithRouter(<App />, {
       route: "/pool/add-liquidity",
     });
