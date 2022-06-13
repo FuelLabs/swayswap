@@ -7,7 +7,7 @@ This project includes Front-End and Contracts because of this we expect the curr
 - [Node.js v16.15.0 or latest stable](https://nodejs.org/en/) we recommend use [nvm](https://github.com/nvm-sh/nvm) to install.
 - [PNPM v7.1.7 or latest stable](https://pnpm.io/installation/)
 - [Rust toolchain v0.16.0 or latest stable](https://www.rust-lang.org/tools/install)
-- [Forc v0.14.5 or latest stable](https://fuellabs.github.io/sway/latest/introduction/installation.html)
+- [Forc v0.15.2](https://fuellabs.github.io/sway/latest/introduction/installation.html)
 - [Docker v0.8.2 or latest stable](https://docs.docker.com/get-docker/)
 - [Docker Compose v2.6.0 or latest stable](https://docs.docker.com/get-docker/)
 
@@ -36,7 +36,9 @@ In this step, we are going to;
 - launch a local `fuel-core` node;
 - launch a local `faucet` API;
 - Setup `swayswap-scripts`;
-- Build and Deploy the `swayswap contracts`.
+- Build and Deploy the `swayswap contracts`;
+- Initialize `token contract`;
+- Initialize pool with liquidity `ETH <> DAI`.
 
 ```sh
 pnpm services:setup
@@ -50,16 +52,6 @@ you browser [http://localhost:3000](http://localhost:3000).
 ```
 pnpm dev
 ```
-
-### ✨ - First steps
-
-This guided step-by-step tutorial will allow you to create your first liquidity pool and play around with the application
-
-1. As you go trough the `Welcome page` you should have already mintrf some `ETH`, you can get more by clicking on the `faucet button`;
-2. Go to [http://localhost:3000/mint](http://localhost:4000/mint) and mint some DAI by clicking `Mint tokens`;
-3. Now you need to create a pool, you can navigate by clicking `pool` and `add liquidity` or access [http://localhost:3000/pool/add-liquidity](http://localhost:3000/pool/add-liquidity);
-4. Set the inputs with some `ETH` and `DAI` and click `Create liquidity`.
-5. 🎉🎉 You are all set! Now you can go back to the swap page or add more liquidity, have fun!
 
 ## 📗 Project overview
 
@@ -101,7 +93,7 @@ Please make sure you have follow the steps;
 - [📦 - Install dependencies](docs/GETTING_STARTED.md#---install-dependencies)
 - [📒 - Run Local Node](docs/GETTING_STARTED.md#---run-local-node)
 
-## Run tests
+## Run tests on development mode
 
 We are going to run all tests, against the node and contract configured on the `packages/app/.env` or `packages/app/.env.test` if the file exists.
 
@@ -117,6 +109,7 @@ With this command we are going to;
 - launch a local `test` specific `faucet` API;
 - Setup `swayswap-scripts`;
 - Build and Deploy the `swayswap contracts` to the `test` node.
+- Initialize `token contract` deployed on the `test` node.
 - Create a `packages/app/.env.test`
 - Run all tests against the configs `packages/app/.env.test`
 - Delete the local `test` specific `fuel-core` node;
