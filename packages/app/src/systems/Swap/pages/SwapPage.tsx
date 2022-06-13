@@ -24,6 +24,7 @@ import {
   useContract,
   useSlippage,
   ZERO,
+  MainLayout,
   isSwayInfinity,
 } from "~/systems/Core";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
@@ -129,38 +130,40 @@ export function SwapPage() {
   const btnText = getValidationText(validationState, swapState);
 
   return (
-    <Card className="sm:min-w-[450px]">
-      <Card.Title>
-        <MdSwapCalls className="text-primary-500" />
-        Swap
-      </Card.Title>
-      <SwapComponent
-        networkFee={txCost?.total}
-        previewAmount={previewAmount}
-        onChange={handleSwap}
-        isLoading={isLoading}
-      />
-      <SwapPreview
-        networkFee={txCost?.total}
-        isLoading={isLoading}
-        swapInfo={swapInfo}
-      />
-      <PricePerToken
-        swapState={swapState}
-        previewAmount={previewAmount}
-        isLoading={isLoading}
-      />
-      <Button
-        isFull
-        isLoading={isSwapping}
-        size="lg"
-        variant="primary"
-        isDisabled={shouldDisableSwap}
-        onPress={() => swap()}
-        aria-label="Swap button"
-      >
-        {btnText}
-      </Button>
-    </Card>
+    <MainLayout>
+      <Card className="sm:min-w-[450px]">
+        <Card.Title>
+          <MdSwapCalls className="text-primary-500" />
+          Swap
+        </Card.Title>
+        <SwapComponent
+          networkFee={txCost?.total}
+          previewAmount={previewAmount}
+          onChange={handleSwap}
+          isLoading={isLoading}
+        />
+        <SwapPreview
+          networkFee={txCost?.total}
+          isLoading={isLoading}
+          swapInfo={swapInfo}
+        />
+        <PricePerToken
+          swapState={swapState}
+          previewAmount={previewAmount}
+          isLoading={isLoading}
+        />
+        <Button
+          isFull
+          isLoading={isSwapping}
+          size="lg"
+          variant="primary"
+          isDisabled={shouldDisableSwap}
+          onPress={() => swap()}
+          aria-label="Swap button"
+        >
+          {btnText}
+        </Button>
+      </Card>
+    </MainLayout>
   );
 }

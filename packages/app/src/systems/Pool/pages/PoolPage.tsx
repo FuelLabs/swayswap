@@ -1,5 +1,11 @@
 import { Outlet } from "react-router-dom";
 
+import { MainLayout } from "~/systems/Core";
+
 export function PoolPage() {
-  return <Outlet />;
+  return (
+    <MainLayout>
+      <Outlet />
+    </MainLayout>
+  );
 }

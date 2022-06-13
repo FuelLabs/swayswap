@@ -6,3 +6,4 @@ name = "token_contract"
 
 [dependencies]
 token_abi = { path = "../token_abi" }
+swayswap_helpers = { path = "../swayswap_helpers" }

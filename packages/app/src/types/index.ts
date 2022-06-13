@@ -9,6 +9,7 @@ export interface Coin {
 }
 
 export enum Pages {
+  'home' = '/',
   'mint' = '/mint',
   'swap' = '/swap',
   'pool' = '/pool',

@@ -41,6 +41,7 @@ node_modules
 
 # testing
 coverage
+cypress
 
 # next.js
 .next/
@@ -74,3 +75,6 @@ storybook-static
 # general
 contracts/token_contract/.rustc_info.json
 .vercel
+
+# Local actions to test CI using ACT
+act-actions

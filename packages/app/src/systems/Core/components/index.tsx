@@ -8,6 +8,7 @@ export * from "./Header";
 export * from "./MainLayout";
 export * from "./NavigateBackButton";
 export * from "./PreviewTable";
+export * from "./PrivateRoute";
 export * from "./Providers";
 export * from "./TokenIcon";
 export * from "./WalletInfo";
