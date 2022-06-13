@@ -8,8 +8,7 @@ import type { Wallet } from "fuels";
 import toast from "react-hot-toast";
 
 import { App } from "~/App";
-import { DECIMAL_UNITS } from "~/config";
-import { parseToFormattedNumber, parseUnits } from "~/systems/Core";
+import { parseToFormattedNumber } from "~/systems/Core";
 import {
   createWallet,
   mockUseWallet,
@@ -120,13 +119,12 @@ describe("SwapPage", () => {
   });
 
   describe("with liquidity created", () => {
-    const mintValue = parseUnits("2000", DECIMAL_UNITS).toBigInt();
     let wallet: Wallet;
 
     beforeAll(async () => {
       wallet = await createAndMockWallet();
       await faucet(wallet, 4);
-      await mint(wallet, mintValue);
+      await mint(wallet);
       await addLiquidity(wallet, "0.5", "1000");
     });
 

@@ -102,18 +102,18 @@ async fn exchange_contract() {
     ////////////////////////////////////////////////////////
 
     // Get the contract ID and a handle to it
-    let wallet_token_amount = 10000;
+    let wallet_token_amount = 20000;
 
-    // Mint some alt tokens
+    // Initialize token contract
     token_instance
-        .mint_coins(wallet_token_amount)
+        .initialize(wallet_token_amount, address)
         .call()
         .await
         .unwrap();
 
-    // Transfer some alt tokens to the wallet
+    // Mint some alt tokens
     token_instance
-        .transfer_coins(wallet_token_amount, address.clone())
+        .mint()
         .append_variable_outputs(1)
         .call()
         .await

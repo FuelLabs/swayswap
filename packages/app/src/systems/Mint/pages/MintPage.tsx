@@ -1,51 +1,41 @@
-import { useState } from "react";
 import { BiCoin } from "react-icons/bi";
 import { BsArrowDown } from "react-icons/bs";
 
-import { TOKEN_ID, MINT_AMOUNT, DECIMAL_UNITS } from "~/config";
 import {
   MainLayout,
   NetworkFeePreviewItem,
+  parseToFormattedNumber,
   PreviewTable,
 } from "~/systems/Core";
 import { useMint } from "~/systems/Mint";
-import { Button, Card, Input, NumberInput } from "~/systems/UI";
+import { Button, Card } from "~/systems/UI";
 
 export function MintPage() {
-  const [tokenId, setTokenId] = useState(TOKEN_ID);
-  const [amount, setAmount] = useState<string>(`${MINT_AMOUNT}`);
-  const mint = useMint({ tokenId, amount });
-  const shouldDisableMint = !mint.txCost.total || !!mint.txCost.error;
+  const mint = useMint();
+  const shouldDisableMint =
+    !mint.txCost.total || !!mint.txCost.error || !mint.mintAmount;
+
+  const getTextButton = () => {
+    if (!mint.mintAmount) return "Mint is closed!";
+    if (!mint.txCost.total) return "Not enough ETH to pay gas fee";
+    return "Mint tokens";
+  };
 
   return (
     <MainLayout>
-      <Card className="min-w-[auto] max-w-[400px]">
+      <Card className="sm:min-w-[450px]">
         <Card.Title>
           <BiCoin className="text-primary-500" />
           Mint
         </Card.Title>
         <div className="text-gray-300">
-          Receive new token types for testing purposes by adding the contract Id
-          and amount below.
+          You can mint some DAI once per address only.
         </div>
-        <div className="faucetWidget--formRow">
-          <label className="faucetWidget--label">Contract Id</label>
-          <Input
-            isReadOnly
-            value={tokenId}
-            placeholder="Type contract id"
-            onChange={setTokenId}
-          />
-        </div>
-        <div className="faucetWidget--formRow">
-          <label className="faucetWidget--label">Amount to receive</label>
-          <NumberInput
-            className="px-2"
-            value={amount}
-            onChange={setAmount}
-            decimalScale={DECIMAL_UNITS}
-            isAllowed={(values) => (values.floatValue || 0) <= MINT_AMOUNT}
-          />
+        <div className="text-gray-300">
+          <div className="text-sm mr-2 mt-2">Amount:</div>
+          <div className="font-bold text-gray-100 text-lg">
+            {parseToFormattedNumber(mint.mintAmount)}
+          </div>
         </div>
         {!shouldDisableMint && (
           <>
@@ -64,9 +54,9 @@ export function MintPage() {
           className="mt-4"
           isDisabled={shouldDisableMint}
           isLoading={mint.isLoading}
-          onPress={() => mint.handleMint(amount)}
+          onPress={() => mint.handleMint()}
         >
-          Mint tokens
+          {getTextButton()}
         </Button>
       </Card>
     </MainLayout>

@@ -1,6 +1,6 @@
 describe('App flow', () => {
   it('should execute whole app flow', () => {
-    cy.visit('/ ');
+    cy.visit('/');
 
     cy.contains('button', /Launch app/i).click();
 

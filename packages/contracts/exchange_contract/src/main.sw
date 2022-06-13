@@ -16,6 +16,7 @@ use std::{
 };
 
 use exchange_abi::{Exchange, PoolInfo, PreviewInfo, PositionInfo, RemoveLiquidityInfo};
+use swayswap_helpers::{get_msg_sender_address_or_panic};
 
 ////////////////////////////////////////
 // Constants
@@ -26,7 +27,7 @@ const ETH_ID = 0x000000000000000000000000000000000000000000000000000000000000000
 
 /// Contract ID of the token on the other side of the pool.
 /// Modify at compile time for different pool.
-const TOKEN_ID = 0x5ab3cc04063b151674a0bbf95fc949b459fcd07425da22077cb72c14f52ee271;
+const TOKEN_ID = 0xe3ee9322336a734296dd53afe9b90b1bfc7c716762844669b7895ca9ad438b88;
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
@@ -110,24 +111,6 @@ fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64)
             Result::Ok(inner_value) => inner_value + 1, _ => revert(0), 
         }
     }
-}
-
-/// Return the sender as an Address or panic
-fn get_msg_sender_address_or_panic() -> Address {
-    let result: Result<Sender, AuthError> = msg_sender();
-    let mut ret = ~Address::from(0x0000000000000000000000000000000000000000000000000000000000000000);
-    if result.is_err() {
-        revert(0);
-    } else {
-        let unwrapped = result.unwrap();
-        if let Sender::Address(v) = unwrapped {
-            ret = v;
-        } else {
-            revert(0);
-        };
-    };
-
-    ret
 }
 
 // ////////////////////////////////////////

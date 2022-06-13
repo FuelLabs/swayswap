@@ -3,7 +3,6 @@ name: GitHub Pages
 on:
   release:
     types: [published]
-  workflow_dispatch:
 
 env:
   NODE_VERSION: "16"
@@ -41,8 +40,8 @@ jobs:
           CI: false
           PUBLIC_URL: "/${{ github.event.repository.name }}"
           VITE_FUEL_PROVIDER_URL: "https://node.swayswap.io/graphql"
-          VITE_CONTRACT_ID: "0x67ae68ddea9f9212d96c7b0f1ece1db522b0cfd688d96ed0bdd7d171b789e593"
-          VITE_TOKEN_ID: "0xf7a2eb8a271a3ea73d6fb8756e272f4a1687d9522acf2ded4454f5d0d5f6a660"
+          VITE_CONTRACT_ID: "0x4d7e56f79ad160ecd8f0da0833edd62044026bdab65275fa3a34e6a855b96ccc"
+          VITE_TOKEN_ID: "0xe3ee9322336a734296dd53afe9b90b1bfc7c716762844669b7895ca9ad438b88"
         run: |
           pnpm build
 
