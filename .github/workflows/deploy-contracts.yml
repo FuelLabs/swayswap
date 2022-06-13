@@ -1,0 +1,137 @@
+name: "Deploy Contracts"
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider_url:
+        description: 'Provider url'
+        required: true
+        default: 'https://node.swayswap.io/graphql' 
+        type: string
+      wallet_secret:
+        description: 'Wallet secret used to deploy and provide initial liquidity'
+        type: string
+      byte_price:
+        description: 'Min byte price required from the provider'
+        type: number
+      gas_price:
+        description: 'Min gas price required from the provider'
+        type: number
+      initiate_supply:
+        description: 'Should initialize the pool?'
+        required: true
+        default: true
+        type: boolean
+      commit_changes:
+        description: 'If true if will commit .env.production on the branch'
+        required: true
+        default: true
+        type: boolean
+
+env:
+  RUST_VERSION: 1.61.0
+  FORC_VERSION: 0.15.2
+  NODE_VERSION: 16
+  PNPM_VERSION: 7.0.0
+  COMPOSE_VERSION: 2.6.0
+  WALLET_SECRET: ${{ github.event.inputs.wallet_secret || secrets.WALLET_SECRET }}
+  PROVIDER_URL: ${{ github.event.inputs.provider_url || 'https://node.swayswap.io/graphql' }}
+  BYTE_PRICE: ${{ github.event.inputs.byte_price || 1 }}
+  GAS_PRICE: ${{ github.event.inputs.gas_price || 1 }}
+  TOKEN_AMOUNT: ${{ github.event.inputs.token_amount }}
+  ETH_AMOUNT: ${{ github.event.inputs.eth_amount }}
+  OUTPUT_ENV: .env.production
+
+jobs:
+  cancel-previous-run:
+    name: Cancel previous actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: n1hility/cancel-previous-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  test_inputs:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Check provider_url format
+          run: |
+            if ! [[ "${{ github.event.inputs.provider_url }}" =~ ^https?:\/\/([a-z0-9\.-]){1,}(:[0-9]{1,4})?\/graphql$ ]]; then
+              echo "Provider url is not valid";
+              process 1;
+            fi
+          shell: bash
+
+  build-and-deploy:
+    needs: test_inputs
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ env.RUST_VERSION }}
+          override: true
+        # selecting a toolchain either by action or manual `rustup` calls should happen
+        # before the cache plugin, as it uses the current rustc version as its cache key
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Set git config
+        run: |
+          git config --global core.bigfilethreshold 100m
+
+      - name: Install Forc
+        run: |
+          curl -sSLf https://github.com/FuelLabs/sway/releases/download/v${{ env.FORC_VERSION }}/forc-binaries-linux_amd64.tar.gz -L -o forc.tar.gz
+          tar -xvf forc.tar.gz
+          chmod +x forc-binaries/forc
+          mv forc-binaries/forc /usr/local/bin/forc
+        shell: bash
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Cache PNPM modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
+
+      - name: Setup scripts
+        run: |
+          pnpm scripts:setup
+
+      - name: Deploy contracts
+        run: |
+          pnpm exec swayswap-scripts run
+
+      - name: Initiate pool
+        if: ${{ github.event.inputs.initiate_supply }}
+        run: |
+          pnpm initiate:pool
+        env:
+          NODE_ENV: production
+
+      - name: Commit .env.production
+        if: ${{ github.event.inputs.commit_changes }}
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'chore: update contract ids'
+          add: './packages/app/.env.production'

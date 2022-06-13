@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
 import { createConfig, replaceEventOnEnv } from 'swayswap-scripts';
 
+const { NODE_ENV, OUTPUT_ENV } = process.env;
+
 function getEnvName() {
-  if (process.env.NODE_ENV === 'test') {
+  if (NODE_ENV === 'test') {
     return '.env.test';
   }
   return '.env';
@@ -28,6 +30,6 @@ export default createConfig({
     },
   ],
   onSuccess: (event) => {
-    replaceEventOnEnv(`./packages/app/${getEnvName()}`, event);
+    replaceEventOnEnv(`./packages/app/${OUTPUT_ENV || getEnvName()}`, event);
   },
 });
