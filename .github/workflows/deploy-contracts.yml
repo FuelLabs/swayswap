@@ -23,7 +23,7 @@ on:
         default: true
         type: boolean
       commit_changes:
-        description: 'If true if will commit .env.production on the branch'
+        description: 'Commit .env.production on the current branch'
         required: true
         default: true
         type: boolean
