@@ -40,7 +40,7 @@ export const RemoveLiquidityPreview = ({
       <PreviewTable
         title="Expected output:"
         className="my-2 mb-4"
-        aria-label="preview-remove-liquidity-output"
+        aria-label="Preview Remove Liquidity Output"
       >
         <PreviewItem
           title="DAI:"

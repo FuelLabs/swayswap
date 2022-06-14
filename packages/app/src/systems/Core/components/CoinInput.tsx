@@ -14,6 +14,7 @@ import {
   ZERO,
 } from "../utils";
 
+import type { CoinBalanceProps } from "./CoinBalance";
 import type { CoinSelectorProps } from "./CoinSelector";
 
 import { DECIMAL_UNITS } from "~/config";
@@ -34,8 +35,6 @@ type UseCoinParams = {
   /**
    * Coins for <CoinSelector />
    */
-  showBalance?: boolean;
-  showMaxButton?: boolean;
   onChangeCoin?: (coin: Coin) => void;
   disableWhenEth?: boolean;
 };
@@ -46,6 +45,7 @@ export type UseCoinInput = {
   setGasFee: React.Dispatch<React.SetStateAction<bigint | null>>;
   getInputProps: () => CoinInputProps;
   getCoinSelectorProps: () => CoinSelectorProps;
+  getCoinBalanceProps: () => CoinBalanceProps;
   formatted: string;
   hasEnoughBalance: boolean;
 };
@@ -77,8 +77,6 @@ export function useCoinInput({
   gasFee: initialGasFee,
   isReadOnly,
   onInput,
-  showBalance,
-  showMaxButton,
   onChangeCoin,
   disableWhenEth,
   ...params
@@ -131,19 +129,24 @@ export function useCoinInput({
     return {
       coin,
       isReadOnly,
-      showBalance,
-      showMaxButton,
       onChange: onChangeCoin,
-      onSetMaxBalance: () => {
-        onInput?.();
-        handleInputPropsChange(formatValue(getSafeMaxBalance()));
-      },
       ...(disableWhenEth &&
         isEth && {
           isReadOnly: true,
           tooltip: "Currently, we only support ETH to TOKEN.",
         }),
     } as CoinSelectorProps;
+  }
+
+  function getCoinBalanceProps() {
+    return {
+      coin,
+      gasFee,
+      onSetMaxBalance: () => {
+        onInput?.();
+        handleInputPropsChange(formatValue(getSafeMaxBalance()));
+      },
+    } as CoinBalanceProps;
   }
 
   useEffect(() => {
@@ -157,6 +160,7 @@ export function useCoinInput({
     setGasFee,
     getInputProps,
     getCoinSelectorProps,
+    getCoinBalanceProps,
     formatted: formatValue(amount),
     hasEnoughBalance: getSafeMaxBalance() >= (amount || ZERO),
   };
@@ -173,9 +177,10 @@ type CoinInputProps = Omit<UseCoinParams, "onChange"> &
     displayType: DisplayType;
     autoFocus?: boolean;
     isLoading?: boolean;
-    rightElement?: ReactNode;
     isAllowed?: (values: NumberFormatValues) => boolean;
     onChange?: (val: string) => void;
+    rightElement?: ReactNode;
+    bottomElement?: ReactNode;
   };
 
 export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
@@ -189,6 +194,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
       autoFocus,
       isLoading,
       rightElement,
+      bottomElement,
       ...props
     },
     ref
@@ -204,32 +210,35 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
 
     return (
       <div className="coinInput">
-        {isLoading ? (
-          <div className="flex-1">
-            <Spinner className="self-start mt-2 ml-2" variant="base" />
-          </div>
-        ) : (
-          <NumberFormat
-            {...props}
-            autoFocus={autoFocus}
-            getInputRef={ref}
-            allowNegative={false}
-            defaultValue={initialValue}
-            value={getRightValue(value || "", displayType)}
-            displayType={displayType}
-            isAllowed={isAllowed}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              onChange?.(e.target.value);
-              setValue(e.target.value);
-            }}
-            decimalScale={DECIMAL_UNITS}
-            placeholder="0"
-            className="coinInput--input"
-            thousandSeparator={false}
-            onInput={onInput}
-          />
-        )}
-        {rightElement}
+        <div className="flex">
+          {isLoading ? (
+            <div className="flex-1">
+              <Spinner className="self-start mt-2 ml-2" variant="base" />
+            </div>
+          ) : (
+            <NumberFormat
+              {...props}
+              autoFocus={autoFocus}
+              getInputRef={ref}
+              allowNegative={false}
+              defaultValue={initialValue}
+              value={getRightValue(value || "", displayType)}
+              displayType={displayType}
+              isAllowed={isAllowed}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                onChange?.(e.target.value);
+                setValue(e.target.value);
+              }}
+              decimalScale={DECIMAL_UNITS}
+              placeholder="0"
+              className="coinInput--input"
+              thousandSeparator={false}
+              onInput={onInput}
+            />
+          )}
+          {rightElement}
+        </div>
+        {bottomElement}
       </div>
     );
   }
