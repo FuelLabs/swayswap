@@ -82,7 +82,7 @@ describe('App flow', () => {
         // validate remove liquidity
         cy.contains('button', 'Pool').click();
         cy.contains('button', 'Remove liquidity').click();
-        cy.get('.coinSelector--maxButton').click();
+        cy.get('.coinBalance--maxButton').click();
         // make sure preview output box shows up
         cy.get('[aria-label="preview-remove-liquidity-output"]');
         // make sure current positions box shows up

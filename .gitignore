@@ -41,7 +41,8 @@ node_modules
 
 # testing
 coverage
-cypress
+cypress/videos
+cypress/screenshots
 
 # next.js
 .next/

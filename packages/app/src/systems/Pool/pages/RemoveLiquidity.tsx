@@ -22,6 +22,7 @@ import {
   useBalances,
   useEthBalance,
 } from "~/systems/Core";
+import { CoinBalance } from "~/systems/Core/components/CoinBalance";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { Button, Card } from "~/systems/UI";
 
@@ -124,6 +125,7 @@ export function RemoveLiquidityPage() {
           rightElement={
             <CoinSelector {...tokenInput.getCoinSelectorProps()} isReadOnly />
           }
+          bottomElement={<CoinBalance {...tokenInput.getCoinBalanceProps()} />}
         />
       </div>
       <RemoveLiquidityPreview networkFee={txCost?.total} amount={amount} />

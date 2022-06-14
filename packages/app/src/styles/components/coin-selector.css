@@ -11,7 +11,4 @@
   .coinSelector--root {
     @apply flex flex-col items-end;
   }
-  .coinSelector--maxButton {
-    @apply text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800;
-  }
 }
