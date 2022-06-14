@@ -1,4 +1,4 @@
-describe('End-to-end Test: Happy Path', () => {
+describe('End-to-end Test: 😁 Happy Path', () => {
   it('should execute whole app basic flow', () => {
     cy.visit('/');
 
