@@ -9,6 +9,10 @@
   }
   .welcomePage--content {
     @apply relative m-8 grid place-items-center max-h-[100vh];
+
+    @media (max-width: 640px) {
+      @apply m-0 my-4;
+    }
   }
   /*
     WelcomeSidebar
