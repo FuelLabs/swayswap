@@ -20,12 +20,13 @@ export const CoinBalance = ({
   gasFee,
 }: CoinBalanceProps) => {
   const { data: balances } = useBalances({ enabled: true });
-  const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
 
-  const balance = useMemo(
-    () => parseToFormattedNumber(coinBalance?.amount || BigInt(0)),
-    [coinBalance?.assetId, coinBalance?.amount]
-  );
+  const balance = useMemo(() => {
+    const coinBalance = balances?.find(
+      (item) => item.assetId === coin?.assetId
+    );
+    return parseToFormattedNumber(coinBalance?.amount || BigInt(0));
+  }, [coin?.assetId]);
 
   return (
     <div className="flex items-center justify-end gap-2 mt-2 whitespace-nowrap">
