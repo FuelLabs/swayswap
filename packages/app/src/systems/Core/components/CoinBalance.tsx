@@ -26,7 +26,7 @@ export const CoinBalance = ({
       (item) => item.assetId === coin?.assetId
     );
     return parseToFormattedNumber(coinBalance?.amount || BigInt(0));
-  }, [coin?.assetId]);
+  }, [balances, coin?.assetId]);
 
   return (
     <div className="flex items-center justify-end gap-2 mt-2 whitespace-nowrap">
