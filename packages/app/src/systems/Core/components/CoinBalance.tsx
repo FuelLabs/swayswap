@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from "react";
+import { useMemo } from "react";
 
 import { useBalances } from "../hooks";
 import { parseToFormattedNumber } from "../utils";
