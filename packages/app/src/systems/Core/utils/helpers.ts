@@ -1,17 +1,13 @@
-import { urlJoin } from 'url-join-ts';
-
-import { COIN_ETH } from './constants';
+import { TOKENS } from './tokenList';
 
 import type { Coin, Maybe } from '~/types';
 
-const { PUBLIC_URL } = process.env;
-
 export const objectId = (value: string) => ({ value });
 
-// eslint-disable-next-line no-promise-executor-return
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export const relativeUrl = (path: string) => urlJoin(window.location.origin, PUBLIC_URL, path);
+export const sleep = (ms: number) => {
+  // eslint-disable-next-line no-promise-executor-return
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 export function omit<T>(list: string[], props: T) {
   return Object.entries(props).reduce((obj, [key, value]) => {
@@ -21,5 +17,5 @@ export function omit<T>(list: string[], props: T) {
 }
 
 export function isCoinEth(coin: Maybe<Coin>) {
-  return coin?.assetId === COIN_ETH;
+  return coin?.assetId === TOKENS[0].assetId;
 }

@@ -1,4 +1,4 @@
-import { relativeUrl } from './helpers';
+import { relativeUrl } from './relativeUrl';
 
 import { CONTRACT_ID, TOKEN_ID } from '~/config';
 import type { Coin } from '~/types';
