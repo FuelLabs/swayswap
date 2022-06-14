@@ -40,9 +40,10 @@ export const CoinBalance = forwardRef<HTMLDivElement, CoinBalanceProps>(
             }`}
           >
             <Button
+              aria-label="Set Maximun Balance"
               size="sm"
               onPress={onSetMaxBalance}
-              className="coinBalance--maxButton"
+              className="text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800"
               variant="ghost"
             >
               Max

@@ -1,5 +1,5 @@
-describe('App flow', () => {
-  it('should execute whole app flow', () => {
+describe('End-to-end Test: Happy Path', () => {
+  it('should execute whole app basic flow', () => {
     cy.visit('/');
 
     cy.contains('button', /Launch app/i).click();
@@ -43,25 +43,25 @@ describe('App flow', () => {
         if (hasPoolCreated) {
           // validate add liquidity
           cy.contains('Enter Ether amount');
-          cy.get('[aria-label="Coin From Input"]').type('0.2');
+          cy.getByAriaLabel('Coin From Input').type('0.2');
 
           // make sure preview output box shows up
-          cy.get('[aria-label="preview-add-liquidity-output"]');
+          cy.getByAriaLabel('Preview Add Liquidity Output');
 
           // make sure pool price box shows up
-          cy.get('[aria-label="pool-price"]');
+          cy.getByAriaLabel('Pool Price Box');
           cy.contains('button', 'Add liquidity').click();
         } else {
           // validate create pool
           cy.contains('Enter Ether amount');
-          cy.get('[aria-label="Coin From Input"]').type('0.2');
-          cy.get('[aria-label="Coin To Input"]').type('190');
+          cy.getByAriaLabel('Coin From Input').type('0.2');
+          cy.getByAriaLabel('Coin To Input').type('190');
 
           // make sure preview output box shows up
-          cy.get('[aria-label="preview-add-liquidity-output"]');
+          cy.getByAriaLabel('Preview Add Liquidity Output');
 
           // make sure pool price box shows up
-          cy.get('[aria-label="pool-price"]');
+          cy.getByAriaLabel('Pool Price Box');
           cy.contains('button', 'Create liquidity').click();
         }
 
@@ -71,22 +71,23 @@ describe('App flow', () => {
         // validate swap
         cy.contains('button', 'Swap').click();
         cy.contains('Enter amount');
-        cy.get('[aria-label="Coin From Input"]').type('0.1');
+        cy.getByAriaLabel('Coin From Input').type('0.1');
         // make sure preview output box shows up
-        cy.get('[aria-label="preview-swap-output"]');
+        cy.getByAriaLabel('Preview Swap Output');
 
-        // make sure "swap" button comes from inside swap page only
-        cy.contains('[aria-label="Swap button"]', 'Swap').click();
+        // execute swap operation
+        cy.getByAriaLabel('Swap button').click();
         cy.contains('Swap made successfully!');
 
         // validate remove liquidity
         cy.contains('button', 'Pool').click();
         cy.contains('button', 'Remove liquidity').click();
-        cy.get('.coinBalance--maxButton').click();
+        cy.getByAriaLabel('Set Maximun Balance').click();
+        //
         // make sure preview output box shows up
-        cy.get('[aria-label="preview-remove-liquidity-output"]');
+        cy.getByAriaLabel('Preview Remove Liquidity Output');
         // make sure current positions box shows up
-        cy.get('[aria-label="pool-current-position"]');
+        cy.getByAriaLabel('Pool Current Position');
         cy.contains('button', 'Remove liquidity').click();
         cy.contains('Liquidity removed successfully!');
       });
