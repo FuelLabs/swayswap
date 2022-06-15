@@ -57,7 +57,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               setValue(e.target.value);
             }}
             decimalScale={DECIMAL_UNITS}
-            placeholder="0"
+            placeholder={props.placeholder || "0"}
             className="coinInput--input"
             thousandSeparator={false}
             onInput={onInput}

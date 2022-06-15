@@ -1,21 +1,57 @@
-import type { CoinQuantity } from 'fuels';
+import type { CoinAmount, SwapMachineContext } from '../types';
+import { SwapDirection } from '../types';
 
-import type { SwapInfo, SwapState } from '../types';
-import { SwapDirection, ValidationStateEnum } from '../types';
-
+import { DECIMAL_UNITS } from '~/config';
 import { isCoinEth } from '~/systems/Core';
-import type { TransactionCost } from '~/systems/Core/utils/gas';
 import {
   ZERO,
   toNumber,
-  isSwayInfinity,
   divideFnValidOnly,
   multiplyFn,
   ONE_ASSET,
   toFixed,
+  parseInputValueBigInt,
+  formatUnits,
+  parseToFormattedNumber,
+  toBigInt,
 } from '~/systems/Core/utils/math';
 import type { Maybe } from '~/types';
-import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
+
+export const ZERO_AMOUNT = { value: '', raw: ZERO };
+
+/**
+ * This function returns amounts that are used inside SwapMachine
+ *
+ * Should return ZERO_AMOUNT if value doesn't exist or is less than zero
+ * Should do rightly formatter according to type
+ *
+ * @param value Maybe<bigint | string>
+ * @returns CoinAmount
+ */
+export function createAmount(value: Maybe<bigint | string | number>): CoinAmount {
+  if (!value) return ZERO_AMOUNT;
+  if (typeof value === 'bigint' && value < ZERO) return ZERO_AMOUNT;
+  if (typeof value === 'number' && value < 0) return ZERO_AMOUNT;
+  if (typeof value === 'bigint') {
+    return {
+      value: formatUnits(value, DECIMAL_UNITS),
+      raw: value,
+    };
+  }
+  if (typeof value === 'string') {
+    return {
+      value,
+      raw: parseInputValueBigInt(value),
+    };
+  }
+  if (typeof value === 'number') {
+    return {
+      value: parseToFormattedNumber(value),
+      raw: toBigInt(Math.ceil(value)),
+    };
+  }
+  return ZERO_AMOUNT;
+}
 
 export function getPricePerToken(fromAmount?: Maybe<bigint>, toAmount?: Maybe<bigint>) {
   if (!toAmount || !fromAmount) return '';
@@ -32,123 +68,85 @@ function getPriceImpact(amounts: bigint[], reserves: bigint[]) {
 }
 
 export const calculatePriceImpact = ({
-  direction,
-  amount,
   coinFrom,
-  previewAmount,
-  token_reserve,
-  eth_reserve,
-}: SwapInfo) => {
+  direction,
+  poolInfo,
+  fromAmount,
+  toAmount,
+}: SwapMachineContext) => {
   // If any value is 0 return 0
-  if (!previewAmount || !amount || !token_reserve || !eth_reserve) return '0';
+  const ethReserve = poolInfo?.eth_reserve;
+  const tokenReserve = poolInfo?.token_reserve;
+  if (!fromAmount?.raw || !toAmount?.raw || !ethReserve || !tokenReserve) {
+    return '0';
+  }
+
   const isFrom = direction === SwapDirection.fromTo;
   const isEth = isCoinEth(coinFrom);
-  const amounts = isFrom ? [previewAmount, amount] : [amount, previewAmount];
-  const reserves = isEth ? [eth_reserve, token_reserve] : [token_reserve, eth_reserve];
-
+  const amounts = isFrom ? [fromAmount.raw, toAmount.raw] : [toAmount.raw, fromAmount.raw];
+  const reserves = isEth ? [ethReserve, tokenReserve] : [tokenReserve, ethReserve];
   return getPriceImpact(amounts, reserves);
 };
 
 export const calculatePriceWithSlippage = (
   amount: bigint,
-  slippage: number,
-  direction: SwapDirection
+  direction: SwapDirection,
+  slippage: number
 ) => {
   const isFrom = direction === SwapDirection.fromTo;
   const total = multiplyFn(amount, isFrom ? 1 - slippage : 1 + slippage);
   return BigInt(Math.trunc(total));
 };
 
-type StateParams = {
-  swapState: Maybe<SwapState>;
-  previewAmount: Maybe<bigint>;
-  hasLiquidity: boolean;
-  slippage: number;
-  balances?: CoinQuantity[];
-  txCost?: TransactionCost;
-};
+export function notHasEnoughBalance(amount: Maybe<bigint>, balance: Maybe<bigint>) {
+  return Boolean(amount && balance && amount > balance);
+}
 
-export const getValidationText = (state: ValidationStateEnum, swapState: Maybe<SwapState>) => {
-  switch (state) {
-    case ValidationStateEnum.SelectToken:
-      return 'Select token';
-    case ValidationStateEnum.EnterAmount:
-      return 'Enter amount';
-    case ValidationStateEnum.InsufficientBalance:
-      return `Insufficient ${swapState?.coinFrom.symbol || ''} balance`;
-    case ValidationStateEnum.InsufficientAmount:
-      return `Insufficient amount to swap`;
-    case ValidationStateEnum.InsufficientLiquidity:
-      return 'Insufficient liquidity';
-    case ValidationStateEnum.InsufficientFeeBalance:
-      return 'Insufficient ETH for gas';
-    default:
-      return 'Swap';
-  }
-};
+// TODO: Add unit tests on this
+export function notHasLiquidityForSwap({
+  poolInfo,
+  coinFrom,
+  fromAmount,
+  coinTo,
+  toAmount,
+}: SwapMachineContext) {
+  if (!coinFrom || !coinTo) return false;
 
-export const notHasBalanceWithSlippage = ({
-  swapState,
-  previewAmount,
-  slippage,
-  balances,
-  txCost,
-}: StateParams) => {
-  if (swapState!.direction === SwapDirection.toFrom) {
-    let amountWithSlippage = calculatePriceWithSlippage(
-      previewAmount || ZERO,
-      slippage,
-      swapState!.direction
-    );
-    const currentBalance = toNumber(
-      balances?.find((coin) => coin.assetId === swapState!.coinFrom.assetId)?.amount || ZERO
-    );
+  const ethReserve = poolInfo?.eth_reserve || ZERO;
+  const tokenReserve = poolInfo?.token_reserve || ZERO;
+  const fromIsETH = isCoinEth(coinFrom);
+  const toIsETH = isCoinEth(coinTo);
+  const fromBN = fromAmount?.raw || ZERO;
+  const toBN = toAmount?.raw || ZERO;
 
-    if (isCoinEth(swapState!.coinFrom)) {
-      amountWithSlippage += txCost?.total || ZERO;
-    }
+  return (
+    (fromIsETH && (fromBN > ethReserve || toBN > tokenReserve)) ||
+    (toIsETH && (toBN > ethReserve || fromBN > tokenReserve))
+  );
+}
 
-    return amountWithSlippage > currentBalance;
-  }
-  return false;
-};
+export const hasEthForNetworkFee = (params: SwapMachineContext) => {
+  const { ethBalance, direction, coinFrom, fromAmount, txCost, amountPlusSlippage } = params;
+  const balance = ethBalance || ZERO;
+  const txCostTotal = txCost?.total || ZERO;
+  const plusSlippage = amountPlusSlippage?.raw || ZERO;
+  const fromAmountRaw = fromAmount?.raw || ZERO;
+  const isFrom = direction === SwapDirection.fromTo;
 
-const hasEthForNetworkFee = ({ balances, txCost }: StateParams) => {
-  const currentBalance = toNumber(balances?.find(isCoinEth)?.amount || ZERO);
-  return currentBalance > (txCost?.total || ZERO);
-};
-
-export const getValidationState = (stateParams: StateParams): ValidationStateEnum => {
-  const { swapState, previewAmount, hasLiquidity } = stateParams;
-  if (!swapState?.coinFrom || !swapState?.coinTo) {
-    return ValidationStateEnum.SelectToken;
+  /**
+   * When coinFrom is ETH and we wan't to buy tokens if exact amount of ETH
+   */
+  if (isCoinEth(coinFrom) && isFrom) {
+    return fromAmountRaw + txCostTotal <= balance;
   }
-  if (!swapState?.amount) {
-    return ValidationStateEnum.EnterAmount;
+  /**
+   * When coinFrom is ETH and we wan't to buy exact amount of token
+   */
+  if (isCoinEth(coinFrom) && !isFrom) {
+    return plusSlippage + txCostTotal <= balance;
   }
-  if (!swapState.hasBalance || notHasBalanceWithSlippage(stateParams)) {
-    return ValidationStateEnum.InsufficientBalance;
-  }
-  if (!previewAmount) {
-    return ValidationStateEnum.InsufficientLiquidity;
-  }
-  if (!hasLiquidity || isSwayInfinity(previewAmount)) {
-    return ValidationStateEnum.InsufficientLiquidity;
-  }
-  if (!hasEthForNetworkFee(stateParams)) {
-    return ValidationStateEnum.InsufficientFeeBalance;
-  }
-  return ValidationStateEnum.Swap;
-};
-
-// If amount desired is bigger then
-// the reserves return
-export const hasReserveAmount = (swapState?: Maybe<SwapState>, poolInfo?: PoolInfo) => {
-  if (swapState?.direction === SwapDirection.toFrom) {
-    if (isCoinEth(swapState.coinTo)) {
-      return (swapState.amount || 0) < (poolInfo?.eth_reserve || 0);
-    }
-    return (swapState.amount || 0) < (poolInfo?.token_reserve || 0);
-  }
-  return true;
+  /**
+   * When coinFrom isn't ETH but you need to pay gas fee
+   */
+  return balance > txCostTotal;
 };

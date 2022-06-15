@@ -1,3 +1,5 @@
+import { getPoolRatio } from '../utils/helpers';
+
 import { usePoolInfo } from './usePoolInfo';
 
 import {
@@ -10,13 +12,6 @@ import {
   multiplyFn,
   toFixed,
 } from '~/systems/Core';
-import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
-
-function getPoolRatio(info?: PoolInfo) {
-  const tokenReserve = toBigInt(info?.token_reserve || ZERO);
-  const ethReserve = toBigInt(info?.eth_reserve || ZERO);
-  return divideFnValidOnly(ethReserve, tokenReserve);
-}
 
 export function useUserPositions() {
   const { data: info } = usePoolInfo();

@@ -1,58 +1,27 @@
 import { BsArrowDown } from "react-icons/bs";
 
-import { useValueIsTyping } from "../state";
-import type { SwapInfo } from "../types";
+import { useSwap } from "../hooks/useSwap";
+import { useSwapPreview } from "../hooks/useSwapPreview";
 import { SwapDirection } from "../types";
-import { calculatePriceWithSlippage, calculatePriceImpact } from "../utils";
 
 import {
   PreviewItem,
   PreviewTable,
-  useSlippage,
-  ZERO,
-  parseToFormattedNumber,
   NetworkFeePreviewItem,
 } from "~/systems/Core";
-import type { Maybe } from "~/types";
 
-type SwapPreviewProps = {
-  swapInfo: SwapInfo;
-  isLoading: boolean;
-  networkFee?: Maybe<bigint>;
-};
+export function SwapPreview() {
+  const { state } = useSwap();
+  const preview = useSwapPreview();
 
-export function SwapPreview({
-  swapInfo,
-  networkFee,
-  isLoading,
-}: SwapPreviewProps) {
-  const { amount, previewAmount, direction, coinFrom, coinTo } = swapInfo;
-  const isTyping = useValueIsTyping();
-  const slippage = useSlippage();
+  const { slippage } = preview;
+  const { coinTo, coinFrom, direction, txCost } = state;
 
-  if (
-    !coinFrom ||
-    !coinTo ||
-    !previewAmount ||
-    !direction ||
-    !amount ||
-    isLoading ||
-    isTyping
-  ) {
-    return null;
-  }
-
-  // Expected amount of tokens to be received
-  const nextAmount =
-    direction === SwapDirection.fromTo ? previewAmount : amount || ZERO;
-
-  const outputAmount = parseToFormattedNumber(nextAmount);
-  const priceWithSlippage = calculatePriceWithSlippage(
-    previewAmount,
-    slippage.value,
-    direction
-  );
-  const inputAmountWithSlippage = parseToFormattedNumber(priceWithSlippage);
+  const isFrom = direction === SwapDirection.fromTo;
+  const inputSymbol = isFrom ? coinTo?.symbol : coinFrom?.symbol;
+  const inputText = isFrom
+    ? "Min. received after slippage"
+    : "Max. sent after slippage";
 
   return (
     <div aria-label="preview-swap-output">
@@ -62,23 +31,17 @@ export function SwapPreview({
       <PreviewTable title="Expected out:" className="my-2">
         <PreviewItem
           title={"You'll receive:"}
-          value={`${outputAmount} ${coinTo.symbol}`}
+          value={`${preview.outputAmount} ${coinTo?.symbol}`}
         />
         <PreviewItem
           title={"Price impact: "}
-          value={`${calculatePriceImpact(swapInfo)}%`}
+          value={`${preview.priceImpact}%`}
         />
         <PreviewItem
-          title={`${
-            direction === SwapDirection.fromTo
-              ? "Min. received after slippage"
-              : "Max. sent after slippage"
-          } (${slippage.formatted}):`}
-          value={`${inputAmountWithSlippage} ${
-            direction === SwapDirection.fromTo ? coinTo.symbol : coinFrom.symbol
-          }`}
+          title={`${inputText} (${slippage?.formatted}):`}
+          value={`${preview.inputAmount} ${inputSymbol}`}
         />
-        <NetworkFeePreviewItem networkFee={networkFee} />
+        <NetworkFeePreviewItem networkFee={txCost?.total} />
       </PreviewTable>
     </div>
   );

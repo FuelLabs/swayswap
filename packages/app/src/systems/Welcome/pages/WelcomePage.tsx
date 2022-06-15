@@ -31,10 +31,6 @@ export function WelcomePage() {
         <AnimatePresence exitBeforeEnter>
           <Routes key={location.pathname} location={location}>
             <Route
-              index
-              element={<Navigate to={Pages["welcome.createWallet"]} />}
-            />
-            <Route
               path={Pages["welcome.createWallet"]}
               element={<CreateWallet />}
             />
