@@ -128,11 +128,11 @@ export const swapMachine =
                   target: '#(machine).invalid.withoutCoinTo',
                 },
                 {
-                  target: 'checkPoolCreated',
+                  target: 'fetchingPoolInfo',
                 },
               ],
             },
-            checkPoolCreated: {
+            fetchingPoolInfo: {
               invoke: {
                 src: 'fetchPoolRatio',
                 onDone: [

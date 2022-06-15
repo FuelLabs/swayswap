@@ -12,11 +12,11 @@ export interface Typegen0 {
     toastErrorMessage:
       | 'error.platform.(machine).fetchingBalances:invocation[0]'
       | 'error.platform.(machine).fetchingResources.fetchingTxCost:invocation[0]'
-      | 'error.platform.(machine).fetchingResources.checkPoolCreated:invocation[0]'
+      | 'error.platform.(machine).fetchingResources.fetchingPoolInfo:invocation[0]'
       | 'error.platform.(machine).fetchingResources.fetchingPreview:invocation[0]'
       | 'error.platform.(machine).readyToSwap.swapping:invocation[0]';
     setTxCost: 'done.invoke.(machine).fetchingResources.fetchingTxCost:invocation[0]';
-    setPoolInfo: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
+    setPoolInfo: 'done.invoke.(machine).fetchingResources.fetchingPoolInfo:invocation[0]';
     setPreviewInfo: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
     setOppositeValue: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
     setValuesWithSlippage: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
@@ -41,8 +41,8 @@ export interface Typegen0 {
       type: 'error.platform.(machine).fetchingResources.fetchingTxCost:invocation[0]';
       data: unknown;
     };
-    'error.platform.(machine).fetchingResources.checkPoolCreated:invocation[0]': {
-      type: 'error.platform.(machine).fetchingResources.checkPoolCreated:invocation[0]';
+    'error.platform.(machine).fetchingResources.fetchingPoolInfo:invocation[0]': {
+      type: 'error.platform.(machine).fetchingResources.fetchingPoolInfo:invocation[0]';
       data: unknown;
     };
     'error.platform.(machine).fetchingResources.fetchingPreview:invocation[0]': {
@@ -58,8 +58,8 @@ export interface Typegen0 {
       data: unknown;
       __tip: 'See the XState TS docs to learn how to strongly type this.';
     };
-    'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]': {
-      type: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
+    'done.invoke.(machine).fetchingResources.fetchingPoolInfo:invocation[0]': {
+      type: 'done.invoke.(machine).fetchingResources.fetchingPoolInfo:invocation[0]';
       data: unknown;
       __tip: 'See the XState TS docs to learn how to strongly type this.';
     };
@@ -75,7 +75,7 @@ export interface Typegen0 {
   invokeSrcNameMap: {
     fetchBalances: 'done.invoke.(machine).fetchingBalances:invocation[0]';
     fetchTxCost: 'done.invoke.(machine).fetchingResources.fetchingTxCost:invocation[0]';
-    fetchPoolRatio: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
+    fetchPoolRatio: 'done.invoke.(machine).fetchingResources.fetchingPoolInfo:invocation[0]';
     fetchPreview: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
     swap: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
   };
@@ -92,7 +92,7 @@ export interface Typegen0 {
       | 'done.invoke.(machine).fetchingBalances:invocation[0]'
       | 'xstate.after(600)#(machine).debouncing';
     fetchPoolRatio: '';
-    fetchPreview: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
+    fetchPreview: 'done.invoke.(machine).fetchingResources.fetchingPoolInfo:invocation[0]';
     swap: 'SWAP';
   };
   eventsCausingGuards: {
@@ -102,7 +102,7 @@ export interface Typegen0 {
     notHasAmount: '';
     notHasCoinFrom: '';
     notHasCoinTo: '';
-    notHasPoolRatio: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
+    notHasPoolRatio: 'done.invoke.(machine).fetchingResources.fetchingPoolInfo:invocation[0]';
     noLiquidity: '';
     notHasCoinFromBalance: '';
   };
@@ -112,7 +112,7 @@ export interface Typegen0 {
     | 'fetchingResources'
     | 'fetchingResources.fetchingTxCost'
     | 'fetchingResources.validatingInputs'
-    | 'fetchingResources.checkPoolCreated'
+    | 'fetchingResources.fetchingPoolInfo'
     | 'fetchingResources.fetchingPreview'
     | 'fetchingResources.settingAmounts'
     | 'fetchingResources.validatingSwap'
@@ -134,7 +134,7 @@ export interface Typegen0 {
         fetchingResources?:
           | 'fetchingTxCost'
           | 'validatingInputs'
-          | 'checkPoolCreated'
+          | 'fetchingPoolInfo'
           | 'fetchingPreview'
           | 'settingAmounts'
           | 'validatingSwap'
