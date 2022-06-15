@@ -168,7 +168,17 @@ export function useCoinInput({
 
 function getRightValue(value: string, displayType: string) {
   if (displayType === "text") return parseToFormattedNumber(value);
-  return value === "0.0" ? "0" : value;
+
+  switch (value) {
+    case "0.0":
+      return "0";
+
+    case ".":
+      return "0.";
+
+    default:
+      return value;
+  }
 }
 
 type CoinInputProps = Omit<UseCoinParams, "onChange"> &
