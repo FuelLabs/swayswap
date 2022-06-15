@@ -3,25 +3,30 @@ import type { ScriptTransactionRequest } from 'fuels';
 import type { SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 
-import { COIN_ETH, ZERO } from '~/systems/Core';
+import { ZERO } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 
+const DEADLINE = 1000;
+
 export const queryNetworkFeeOnSwap = async (
-  contract: ExchangeContractAbi,
-  direction?: SwapDirection
+  params: SwapMachineContext
 ): Promise<ScriptTransactionRequest> => {
-  const DEADLINE = 1000;
+  const { direction, contract, coinFrom } = params;
+  if (!contract || !coinFrom) {
+    throw new Error('Contract not found');
+  }
+
   const directionValue = direction || SwapDirection.fromTo;
   if (directionValue === SwapDirection.toFrom) {
     return contract.prepareCall.swap_with_maximum(1, DEADLINE, {
-      forward: [1, COIN_ETH],
-      variableOutputs: 1,
+      forward: [1, coinFrom.assetId],
+      variableOutputs: 2,
       gasLimit: 1000000,
     });
   }
   return contract.prepareCall.swap_with_minimum(1, DEADLINE, {
-    forward: [1, COIN_ETH],
+    forward: [1, coinFrom.assetId],
     variableOutputs: 1,
     gasLimit: 1000000,
   });
@@ -65,7 +70,6 @@ export const queryPreviewAmount = async (params: SwapMachineContext) => {
   }
 };
 
-const DEADLINE = 1000;
 export const swapTokens = async (params: SwapMachineContext) => {
   const {
     contract,
@@ -78,17 +82,18 @@ export const swapTokens = async (params: SwapMachineContext) => {
     amountLessSlippage,
     amountPlusSlippage,
   } = params;
-  if (!contract || !coinFrom || !coinTo || !toAmount) {
+
+  if (!contract || !coinFrom || !coinTo || !toAmount || !fromAmount || !txCost?.total) {
     throw new Error('Missing some parameters');
   }
 
-  if (direction === SwapDirection.fromTo && fromAmount && toAmount) {
+  if (direction === SwapDirection.fromTo) {
     return contract.submit.swap_with_minimum(
       amountLessSlippage?.raw || ZERO,
       DEADLINE,
       getOverrides({
         forward: [fromAmount.raw, coinFrom.assetId],
-        gasLimit: txCost?.total,
+        gasLimit: txCost.total,
         variableOutputs: 1,
       })
     );
@@ -99,8 +104,8 @@ export const swapTokens = async (params: SwapMachineContext) => {
     DEADLINE,
     getOverrides({
       forward: [amountPlusSlippage?.raw || ZERO, coinFrom.assetId],
-      gasLimit: txCost?.total,
-      variableOutputs: 1,
+      gasLimit: txCost.total,
+      variableOutputs: 2,
     })
   );
 };

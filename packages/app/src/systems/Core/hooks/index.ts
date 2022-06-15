@@ -8,6 +8,7 @@ export * from './useCreateWallet';
 export * from './useDebounce';
 export * from './useEthBalance';
 export * from './useSlippage';
+export * from './usePubSub';
 export * from './useTokensMethods';
 export * from './useTransactionCost';
 export * from './useWallet';

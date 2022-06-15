@@ -5,7 +5,6 @@ import { FROM_TO, TO_FROM, isLoadingState } from "../machines/swapMachine";
 
 import { useSwap, useSwapContext } from "./useSwap";
 
-// TODO: add tests for all this cases
 const selectors = {
   buttonText: (state: SwapMachineState) => {
     const ctx = state.context;
@@ -14,11 +13,14 @@ const selectors = {
     if (isLoadingState(state)) {
       return "Loading...";
     }
+    if (state.hasTag("isSwapping")) {
+      return "Swapping...";
+    }
     if (state.hasTag("needSelectToken")) {
       const opposite = ctx.direction === FROM_TO ? TO_FROM : FROM_TO;
       return `Select ${opposite} token`;
     }
-    if (!ctx.poolRatio) {
+    if (state.hasTag("noPoolFound")) {
       return "No pool found";
     }
     if (state.hasTag("notHasCoinFromBalance")) {
@@ -42,14 +44,13 @@ const selectors = {
 
 export function useSwapButton() {
   const { service } = useSwapContext();
-  const { state, onSwap } = useSwap();
+  const { onSwap } = useSwap();
   const text = useSelector(service, selectors.buttonText);
   const canSwap = useSelector(service, selectors.canSwap);
 
   return {
     text,
     props: {
-      isLoading: state.isLoading,
       isDisabled: !canSwap,
       onPress: onSwap,
     },

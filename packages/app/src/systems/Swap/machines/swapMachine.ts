@@ -33,12 +33,18 @@ export const TO_FROM = SwapDirection.toFrom;
 type MachineEvents =
   | { type: 'INVERT_COINS' }
   | { type: 'SELECT_COIN'; data: { direction: SwapDirection; coin: Coin } }
-  | { type: 'SET_INPUT_VALUE'; data: { direction: SwapDirection; value: string } }
+  | { type: 'INPUT_CHANGE'; data: { direction: SwapDirection; value: string } }
   | { type: 'SET_MAX_VALUE'; data: { direction: SwapDirection } }
   | { type: 'SET_BALANCES'; data: Maybe<CoinQuantity[]> }
   | { type: 'SWAP' };
 
 type MachineServices = {
+  fetchBalances: {
+    data: Maybe<CoinQuantity[]>;
+  };
+  refetchBalances: {
+    data: void;
+  };
   fetchTxCost: {
     data: TransactionCost;
   };
@@ -54,13 +60,10 @@ type MachineServices = {
   swap: {
     data: Maybe<bigint>;
   };
-  refetchBalances: {
-    data: void;
-  };
 };
 
 export const swapMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SwO4EMAOA6AZmALgMYAWAlgHZQBKcA9gK4BOhcuBJFUAQmgDZrkWsAMQRa5MFgoA3WgGtJqTGyJlKNWA2as8qzj36C4CGbUJp8pcQG0ADAF1EoDLVilL4pyAAeiAMwA7ACMWEG2gQAsAKwRAJwATLax0QA0IACeiPEAHBFYMbZRUQHZfrYAbLG5AL7VaUrYuhzqdExCKs1QACreAMKu+KLikqYKWA0datSt2rCTnD39sPgm5LLmHuR2jkggLm6bXr4IAbFRoUGxfqWVAVGxtkFpmQg5eQVFJWWVNXUgE00photO0SGBCHIAAq0Wi8XqMMAWSBDCRSNbyRToRrsIEzUHEcFQmFwhFIiCrdYWKxbBxefbualHRBBeLxELlPxRR4BCI8iJBPwRZ5ZAK2LC2CKFbJBLl+WLlCLZcq1epY+YtTRtOAoxT4JHjNWAzjArXwXb0w67Y6nWKhWKxGVVeL3CKpDKICJ+EJhAI5cqigVJALKv4TdAMygAQQAtgxyPgsGCIZxhHTXAzPFbEFFyuKAgHAuUZUk-OVhQhpQFQrZ4n45XXAjmIir-mrw5Yo7H6PGsBAwAAjOOEFPeZb6tA4fBgRgACnKtlsAEphGG0BGoDG4wm+4Pu8PKGmDoyswgvfEsNkHbZTuEIpU2eWgizz6zinLLl6ooEW6v15vuwmRqUJCCLSKQYAoDqaKyGMv4dhuXY9kBUAgWAYEQRSZhUjYtLmumlqgNaRShKcPJslET41o+tjZNkWDxJU0Qyl+5TOj+bZrvB-49kmcgGAIQiRuQEAADKkAAjvQpAQO46SpnhR6ZoRzLhLaCTBrW8QlDWsTlpW1asva15lPazahhxf6IYMADKACiXQAPoAJIAHKQgAqo5ABqkYie5tmHhm5BMq8NH0eUl5xEqWk1gE5b3LmCqXokzp1g6sTsco7acNxNn2Q5ACykYABoOT5fkBQpQUhYqWDlDmsTBM6MSSs6Qrugg9xVq6gpKtkhQBNcfiZRgwiuV5tlUI5vQAPKudZgUET4iDZDmWD2jkpaVA8m3loNWB3jRUSrcd-JnPEI3CHZIm2b001zS5i3HspCCMReMqsZF5T+lpe1+Ad86rSduSXFEF0tuQtB9mayCGjixp4jo8OUPxRgw3s+HPctCACnkRZXINTXJD85ZaeeHxxPmq3fY1I3qtMmqzPTiwDE9SnY2+F6rQurWDV+2Sk76+SSmD8qKrWNx08hJpM7x0KwvCiJThAbPBSeTp1VyCoLsd+btS8ZPC4U200ZeOZS8jDMgqwsD0IQQjoxaWPHEEEQMetQSfZ7d7e7pHXxFU4oi27q2BGlZmqso0uI47mPsy7YR1R+hMssTVSPo1QcRRR1wS1c2R09lnZbomBLJgeVVLS7SRYHy8RxA8BTZPEf25jKvI0WycTg5H2BFwhJc7kOnCqyF9p1Tz14CkEpz14+T7nKKFRnH4bUxMN5lZZxOVWVgKDuMQDD4Llo8noK5yujy9xFJy0Q8uW8qJYUd7JHWhQ5IX2-FwBe8H0f-QUAAGKMFoNGU+L06x0SuJcWirFfS1iiHpViE8YgBxno1MIGVN59y-gPH++98CH3oPgAB5Aui0HAdjXq9FXxVCqEWIIl4H6uxQbyCK-JHilk-pZEuyFULoRQJQ44io8jOm+jpQItYaLUQeBcDkOdBSCgCNwriu9eKo0EsJMSklpKySEYgUUtoigzzrMGVi0R9YrUTvOVBnCtq8hUTvEuBCiH4G0VJGS+AXjODjmrF6Ap5T0WuDPCiCpnQByQeeGx-IybFHCMo7Be9cG5V-oQ-+tAgEgOjBosA+icZynOLeB0WlSxFFYswvGz9gwg04SGXuSSeH4L-sQ0h5Ccl5NdhKLAq8igB39KKFqD9vqsOCaKT0DpHHfx4gIayWIOlnQvA6IaNFFT9T8PPGUtcFyVC-GvT0ky8HxjyfXTWtwWRFFdDWGI8Unya1CRFGmAcogjTyWKeqZzmqXLausjqABaW5uzIrN36iHe0tRahAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOgDMwAXHAqAIXQBt19M4BiCAe0JIIDcuAazAk0WPIVIVqk+kxZtYCAV0zpKuHgG0ADAF1EoAA5dYuTTyMgAHogCsAZgCMJABzOATPef37ANjcATl1ggBoQAE9ER3sAFhIgpKDPOLdHRwB2N11-AF88iPEaKXIqEvlmVg4wACdarlqSY2ZKMkbUMQwS4jLZWgYqpRV8QXVLfD1DJBBTcwnrOwQXfxJnTKDAt28ff0z-COiET0ddEjjnf2c4oLj7XUzLtwKi7slemQqAJTguAFdako+hUACo2ADCZkonB4olUIi6EgIH3Kch+sH+gLgwLkYMhsEoIzGGi0kwM1jmFlJi0QzlybncbmyTluQTc-iyhwcaRITjicV0ujiqTSTJeIGK72kqNo6MxQM+uIhUPYdQaTRaGnatU6kuR0v6+CgcoBCplRrxUKJahJOnJM0pCxmS3Z9l5bOC9jc9hSws8XIQ-ISukccUcwSuXs8t0y4r1pUVst+pux-CYuAgJKNAEl8MY-pRYOwKWYqVZnbSTo5ef57v4OUF7KkOQH-JsSJlMgLBZ5HgE4299TikxiU7ASDgwJghAAFLhcRjg2pgDSQGG8eGieMow3G5NY8eT6dzhdLleUSDW8akqYl+bUisIS4+EhtkKnAV93T2Vvtzvd3Re18fxdGcAckQTc091HA8J2wKdZ3nRdl1XCBVXqRpmlabVdUHSDdxNWCj0Q08UIvCAr1tMlphMUsnVAJZfBfPw9hOJJO1DH8okQYU3QCTsY3-R5HHAnoDW+fczV3Gdl34XAwAAd3XOFRmELc8J3CSYKkioZLAOTFMoiZbwdOiHwYxBPF0dsMiCfYLhCbtMgDPkSBDMM2VAttLhEwoJQ08S0Uk7FEyNPSDKUtVMM1NoOkRMThyNQidLkcL5IUoyb3tWj73LCyn29IISFDOkrNiO56QDXiawEuJOy7YTRKlRLoPlbFYCoTQjQAQVQf58ELYtTNy-AaWOL0iv5IJw3We4u2uFzAjc0NHHrOJ-DDQUwL87dApHNrxzTRgMyzKAAGUFPQYwhpystRsfS5BVfPYNl43sqwDLxvzWFw7guLwAmcIImqHULWrHZSSAJVd4uasHkrgO87rGk50hIVIrPrDJ-Cs5wA2mzJ0aZDx1nScMhRB0oIDAAAjfrMFodgbGhi8SHQMgL1qZAQN0Ih2F2khqbpv5WFoJH6NsHjprcnJrh9Lsrjs5zuIQJw3Xc8NQzbEn8h2gKSBQiBIhBLgLquvgIEYMB2DOgB1bqZ3F8zJeOOWfvrL07iBzYuKOL6Eg5OX-u8RXKd6Q3jdNy7jCh6PjEZ7gN1UhEBYjk2zZj2A49oTK7Ro2YzLyl3UkuDtcmmkDYh9eJPqszxX1+8N9mjDJPDD0g06j82s6u+OjXQ9UsK1OLU5XI30+j2Pe5z1Rrzzp2i6WTxUY7ZefTDTHvU+6yGUD4UNniXs4nbm2AFEQQAfTobqABluoAOXBU+zoX+78uuFx0dFXIsmcP+gYDL2Ds9YXrrT-o4JIJ8zqnxvqfcEl9wQAHlsz31fmNWs5wQJPGcEyE4Tg8YqyrucZIPgcgnEFPsE+KCABqp8vgIOQffF+w1kaPhxsVWIPlbjenrIBQBpxziXDKk3TI9hHhtz1hBYgZ9L4AFluoAA0L7UNvgAVVPmgx83pzjWQCKBVkOM3BxADPsVYdlAK9lAlZBWVD74zlUQggAEg-AA4holhEslgAFoNro02B-f6mRvC9iqhyXkK1tg4wuCBZ44p8BcGpvAGYAswaDEUIjDxzsl6NmKp4EmECThBgIUcUM9dkj+I8FcMMsTXhSL2klYK44waWgJJo-KRiEgNU8HsH0QpsgHBVk4VYGt0jrTZH-WMkiErw0aSQI6J0upQFzPmQsbSXZeEyGcRs-EQhCi9EExarg+QXCyMKcMdl24tQRoeeCx4kJnlQmsxiTgzibPuI2IJwRNnKyOEM5a1StbjMuJcmZ2kQpQTSopJ5tJ0gMjSLcdaFjsirRcqtf5msxk6xBVBa5UNOq0F6v1VZmTF6WWjGUwIIDvRhiyP6QZaKRmApJpM2p0ycWzPmZmRZGdoXHDbKsRwnhnAQLZF2UCvsHBXHCfyYVXZUYXKmXDdlYLxywD+JgJQSTbqeMskEYV7h9hBJSOyHBhzpUnLlecmp-k6lXMaby7Yry6rdNEY5fpAZYj134h4b0gqmzL0uULemYsSVv2LmyNyYiXBBKqW4FyeTzUhgEjNXyrLmqdwzhbK2vK66rGFR7EM6RDGfSBrvX6dU7irT-sfRVQ4M2Tx7sYPuUAc2pDOG4dkONjW+CriWkIDdrhCpyNsAIEi011rHpHTNy5UkKGqFqguI0UY+gZB6XwU1VpiJLUEgdQZvQ63sJc+tV0c09ndrWQtq08nb28Lu7IP9QJilraUAQ6YIAkAUhYbA-xKCEpFpQXla1irpCVnsTYoQBl+3DHmlwsQIFjOApc19x132fsoN+gskICAADEGioEA8EDsPhfBCN7B4CVT5UgMmFTRnyG1RFIdGG+j9X6f1YfwCbQDSRloY3WIY3wJa6Q-WuN6B4DlD3Pt6MhjMLH0M-pPIwL4tpAO+M1qBjYMTIO0mjcJsj1Lax1UY5y2TGHKA31wAARz+BmCwRxtVZMQEBtTnYwOae3hcYTPhmRYJuEZ5jaHTPsdw1wVAaTqgqfrjg9kNwi3PjpUcOykXy29g5KIu4fmUMmZ-afdD2HGj3yoApRoQhsNgDAIBn0wGIEuY0xB7dRUaN3GXikLITgMsZkA7EKr6nwPsgDMEBrv1RHxD8F2Gt46pC8q8R2vxVSSrrGCT82kdxBFVMCE2B4EDYkFCAA */
   createMachine(
     {
       tsTypes: {} as import('./swapMachine.typegen').Typegen0,
@@ -69,15 +72,25 @@ export const swapMachine =
         events: {} as MachineEvents,
         services: {} as MachineServices,
       },
-      initial: 'fetchingResources',
+      id: '(machine)',
+      initial: 'fetchingBalances',
       states: {
-        debouncing: {
-          tags: 'loading',
-          after: {
-            1000: {
-              target: 'fetchingResources',
-            },
+        fetchingBalances: {
+          invoke: {
+            src: 'fetchBalances',
+            onDone: [
+              {
+                actions: 'setBalances',
+                target: 'fetchingResources',
+              },
+            ],
+            onError: [
+              {
+                actions: 'toastErrorMessage',
+              },
+            ],
           },
+          tags: 'loading',
         },
         fetchingResources: {
           tags: 'loading',
@@ -89,95 +102,162 @@ export const swapMachine =
                 onDone: [
                   {
                     actions: 'setTxCost',
-                    target: 'checkPoolCreated',
+                    target: 'validatingInputs',
+                  },
+                ],
+                onError: [
+                  {
+                    actions: 'toastErrorMessage',
                   },
                 ],
               },
+            },
+            validatingInputs: {
+              always: [
+                {
+                  cond: 'notHasAmount',
+                  target: '#(machine).invalid.withoutAmount',
+                },
+                {
+                  cond: 'notHasCoinFrom',
+                  target: '#(machine).invalid.withoutCoinFrom',
+                },
+                {
+                  cond: 'notHasCoinTo',
+                  target: '#(machine).invalid.withoutCoinTo',
+                },
+                {
+                  target: 'checkPoolCreated',
+                },
+              ],
             },
             checkPoolCreated: {
               invoke: {
                 src: 'fetchPoolRatio',
                 onDone: [
                   {
-                    actions: ['setPoolInfo', 'setPoolRatio'],
-                    target: 'success',
+                    cond: 'notHasPoolRatio',
+                    target: '#(machine).invalid.withoutPoolRatio',
+                  },
+                  {
+                    actions: 'setPoolInfo',
+                    target: 'fetchingPreview',
+                  },
+                ],
+                onError: [
+                  {
+                    actions: 'toastErrorMessage',
                   },
                 ],
               },
             },
-            success: {
-              type: 'final',
-            },
-          },
-          onDone: {
-            target: 'checking',
-          },
-        },
-        checking: {
-          always: [
-            {
-              cond: 'notHasAmount',
-              target: 'withoutAmount',
-            },
-            {
-              cond: 'notHasCoinFrom',
-              target: 'withoutCoinFrom',
-            },
-            {
-              cond: 'notHasCoinTo',
-              target: 'withoutCoinTo',
-            },
-            {
-              target: 'preparingToSwap',
-            },
-          ],
-        },
-        waitingBalances: {
-          tags: 'loading',
-        },
-        withoutCoinFrom: {
-          tags: 'needSelectToken',
-        },
-        withoutCoinTo: {
-          tags: 'needSelectToken',
-        },
-        withoutAmount: {
-          tags: 'needEnterAmount',
-        },
-        preparingToSwap: {
-          initial: 'fetchingPreview',
-          states: {
             fetchingPreview: {
               invoke: {
                 src: 'fetchPreview',
                 onDone: [
                   {
                     actions: ['setPreviewInfo', 'setOppositeValue'],
-                    target: 'checking',
+                    target: 'settingAmounts',
+                  },
+                ],
+                onError: [
+                  {
+                    actions: 'toastErrorMessage',
                   },
                 ],
               },
-              tags: 'loading',
             },
-            checking: {
-              entry: ['setValuesWithSlippage'],
+            settingAmounts: {
+              entry: 'setValuesWithSlippage',
+              always: {
+                target: 'validatingSwap',
+              },
+            },
+            validatingSwap: {
               always: [
                 {
                   cond: 'noLiquidity',
-                  target: 'withoutLiquidity',
+                  target: '#(machine).invalid.withoutLiquidity',
                 },
                 {
                   cond: 'notHasCoinFromBalance',
-                  target: 'withoutCoinFromBalance',
+                  target: '#(machine).invalid.withoutCoinFromBalance',
                 },
                 {
                   cond: 'notHasEthForNetworkFee',
-                  target: 'withoutEthForNetworkFee',
+                  target: '#(machine).invalid.withoutEthForNetworkFee',
                 },
                 {
-                  target: 'canSwap',
+                  target: 'success',
                 },
               ],
+            },
+            success: {
+              type: 'final',
+            },
+          },
+          onDone: {
+            target: 'readyToSwap',
+          },
+        },
+        debouncing: {
+          tags: 'loading',
+          after: {
+            '600': {
+              target: 'fetchingResources',
+            },
+          },
+        },
+        readyToSwap: {
+          initial: 'idle',
+          states: {
+            idle: {
+              tags: 'canSwap',
+              on: {
+                SWAP: {
+                  target: 'swapping',
+                },
+              },
+            },
+            swapping: {
+              invoke: {
+                src: 'swap',
+                onDone: [
+                  {
+                    actions: 'toastSwapSuccess',
+                    target: 'refetchingBalances',
+                  },
+                ],
+                onError: [
+                  {
+                    actions: 'toastErrorMessage',
+                  },
+                ],
+              },
+              tags: 'isSwapping',
+            },
+            refetchingBalances: {
+              entry: 'clearContext',
+              invoke: {
+                src: 'refetchBalances',
+              },
+              tags: 'swapSuccess',
+            },
+          },
+        },
+        invalid: {
+          states: {
+            withoutAmount: {
+              tags: 'needEnterAmount',
+            },
+            withoutCoinFrom: {
+              tags: 'needSelectToken',
+            },
+            withoutCoinTo: {
+              tags: 'needSelectToken',
+            },
+            withoutPoolRatio: {
+              tags: 'noPoolFound',
             },
             withoutLiquidity: {
               tags: 'notHasLiquidity',
@@ -188,84 +268,55 @@ export const swapMachine =
             withoutEthForNetworkFee: {
               tags: 'notHasEthForNetworkFee',
             },
-            canSwap: {
-              tags: 'canSwap',
-              on: {
-                SWAP: {
-                  target: 'swapping',
-                },
-              },
-            },
-            swapping: {
-              tags: 'loading',
-              invoke: {
-                src: 'swap',
-                onDone: {
-                  target: 'success',
-                },
-              },
-            },
-            success: {
-              tags: 'swapSuccess',
-              type: 'final',
-              entry: () => {
-                toast.success('Swap made succesfully!');
-              },
-            },
-          },
-          onDone: {
-            actions: ['clearContext'],
-            target: 'updateBalances',
-          },
-        },
-        updateBalances: {
-          tags: 'loading',
-          invoke: {
-            src: 'refetchBalances',
-            onDone: {
-              target: 'fetchingResources',
-            },
           },
         },
       },
       on: {
-        INVERT_COINS: {
-          actions: 'invertDirection',
-          target: '.fetchingResources',
+        SET_BALANCES: {
+          actions: 'setBalances',
         },
         SELECT_COIN: {
           actions: 'selectCoin',
-          target: '.fetchingResources',
+          target: '.fetchingBalances',
         },
-        SET_BALANCES: {
-          actions: ['setBalances'],
-          target: '.updateBalances',
+        INVERT_COINS: {
+          actions: 'invertDirection',
+          target: '.fetchingBalances',
         },
-        SET_MAX_VALUE: {
-          actions: 'setMaxValue',
-          target: '.fetchingResources',
-          internal: false,
-        },
-        SET_INPUT_VALUE: [
+        SET_MAX_VALUE: [
+          {
+            actions: 'setMaxValue',
+            cond: 'notHasOppositeCoin',
+            target: '.invalid.withoutAmount',
+          },
+          {
+            actions: 'setMaxValue',
+            target: '.fetchingResources',
+          },
+        ],
+        INPUT_CHANGE: [
           {
             actions: 'setInputValue',
-            target: '.debouncing',
             cond: 'inputIsNotEmpty',
+            target: '.debouncing',
           },
           {
             actions: 'clearContext',
-            target: '.withoutAmount',
+            target: '.invalid.withoutAmount',
           },
         ],
       },
     },
     {
       services: {
+        fetchBalances: async ({ client }) => {
+          return client?.fetchQuery<CoinQuantity[]>(Queries.UserQueryBalances);
+        },
+        refetchBalances: async ({ client }) => {
+          client?.refetchQueries(Queries.UserQueryBalances);
+        },
         fetchTxCost: async (ctx) => {
-          if (!ctx.contract) {
-            throw new Error('Contract not found');
-          }
-          const networkFee = queryNetworkFeeOnSwap(ctx.contract, ctx.direction);
+          const networkFee = queryNetworkFeeOnSwap(ctx);
           const txCost = getTransactionCost(networkFee);
           return txCost || emptyTransactionCost();
         },
@@ -286,11 +337,17 @@ export const swapMachine =
         swap: async (ctx) => {
           return swapTokens(ctx);
         },
-        refetchBalances: async (ctx) => {
-          return ctx.client?.refetchQueries(Queries.UserQueryBalances);
-        },
       },
       actions: {
+        setTxCost: assign({
+          txCost: (_, ev) => ev.data,
+        }),
+        setPoolInfo: assign({
+          poolInfo: (_, ev) => ev.data.info,
+        }),
+        setPreviewInfo: assign({
+          previewInfo: (_, ev) => ev.data,
+        }),
         setBalances: assign((ctx, ev) => {
           const balances = ev.data || [];
           const fromId = ctx.coinFrom?.assetId;
@@ -303,18 +360,6 @@ export const swapMachine =
             coinToBalance: toBalance?.amount || ZERO,
             ethBalance: ethBalance?.amount || ZERO,
           };
-        }),
-        setTxCost: assign({
-          txCost: (_, ev) => ev.data as TransactionCost,
-        }),
-        setPoolInfo: assign({
-          poolInfo: (_, ev) => ev.data.info,
-        }),
-        setPoolRatio: assign({
-          poolRatio: (_, ev) => ev.data.ratio,
-        }),
-        setPreviewInfo: assign({
-          previewInfo: (_, ev) => ev.data,
         }),
         selectCoin: assign((ctx, ev) => ({
           ...ctx,
@@ -340,10 +385,10 @@ export const swapMachine =
           const next = createAmount(ev.data.value);
           return {
             ...ctx,
+            direction: ev.data.direction,
             ...(isFrom
               ? { fromAmount: next, toAmount: ZERO_AMOUNT }
               : { toAmount: next, fromAmount: ZERO_AMOUNT }),
-            direction: ev.data.direction,
           };
         }),
         setOppositeValue: assign((ctx, ev) => {
@@ -351,7 +396,7 @@ export const swapMachine =
           const amount = createAmount(ev.data?.amount);
           return {
             ...ctx,
-            ...(isFrom ? { toAmount: amount } : { fromAmount: amount }),
+            [isFrom ? 'toAmount' : 'fromAmount']: amount,
           };
         }),
         setMaxValue: assign((ctx, { data: { direction } }) => {
@@ -363,16 +408,18 @@ export const swapMachine =
 
           return {
             ...ctx,
+            direction,
             ...(isFrom
               ? { fromAmount: amount, toAmount: ZERO_AMOUNT }
               : { toAmount: amount, fromAmount: ZERO_AMOUNT }),
-            direction,
           };
         }),
         setValuesWithSlippage: assign((ctx) => {
           const slippage = ctx.slippage || 0;
-          const amountLessSlippage = createAmount(toNumber(ctx.toAmount?.raw) * (1 - slippage));
-          const amountPlusSlippage = createAmount(toNumber(ctx.fromAmount?.raw) * (1 + slippage));
+          const lessSlippage = toNumber(ctx.toAmount?.raw) * (1 - slippage);
+          const plusSlippage = toNumber(ctx.fromAmount?.raw) * (1 + slippage);
+          const amountLessSlippage = createAmount(lessSlippage);
+          const amountPlusSlippage = createAmount(plusSlippage);
 
           return {
             ...ctx,
@@ -386,12 +433,29 @@ export const swapMachine =
           toAmount: ZERO_AMOUNT,
           amountLessSlippage: ZERO_AMOUNT,
           amountPlusSlippage: ZERO_AMOUNT,
+          poolInfo: null,
           previewInfo: null,
         })),
+        /**
+         * Notifications actions using toast()
+         */
+        toastSwapSuccess() {
+          toast.success('Swap made successfully');
+        },
       },
       guards: {
         inputIsNotEmpty: (_, ev) => {
           return parseInputValueBigInt(ev.data?.value) > 0;
+        },
+        notHasCoinFrom: (ctx) => {
+          return !ctx.coinFrom;
+        },
+        notHasCoinTo: (ctx) => {
+          return !ctx.coinTo;
+        },
+        notHasOppositeCoin: (ctx) => {
+          const isFrom = ctx.direction === SwapDirection.fromTo;
+          return isFrom ? !ctx.coinTo?.assetId : !ctx.coinFrom?.assetId;
         },
         notHasAmount: (ctx) => {
           return (
@@ -399,13 +463,13 @@ export const swapMachine =
             (ctx.direction === SwapDirection.toFrom && !ctx.toAmount?.raw)
           );
         },
-        notHasCoinFrom: (ctx) => !ctx.coinFrom,
-        notHasCoinTo: (ctx) => !ctx.coinTo,
+        notHasPoolRatio: (_, ev) => {
+          return !ev.data.ratio;
+        },
         noLiquidity: (ctx) => {
           return !ctx.previewInfo?.has_liquidity || notHasLiquidityForSwap(ctx);
         },
         notHasCoinFromBalance: (ctx) => {
-          // console.log(ctx);
           const isFrom = ctx.direction === SwapDirection.fromTo;
           return isFrom
             ? notHasEnoughBalance(ctx.fromAmount?.raw, ctx.coinFromBalance)

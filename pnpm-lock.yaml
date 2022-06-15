@@ -116,6 +116,7 @@ importers:
       graphql-request: ^4.3.0
       http-server: ^14.1.1
       jotai: ^1.7.1
+      mitt: ^3.0.0
       postcss: ^8.4.14
       postcss-import: ^14.1.0
       react: ^18.1.0
@@ -129,7 +130,6 @@ importers:
       react-query: ^3.39.1
       react-router-dom: '6'
       react-use: ^17.4.0
-      spacefold: 0.0.1-alpha.4
       spinners-react: ^1.0.7
       tailwindcss: ^3.0.24
       ts-node: ^10.8.1
@@ -175,6 +175,7 @@ importers:
       fuels: 0.0.0-master-3caba861
       graphql-request: 4.3.0
       jotai: 1.7.2_2jlcqljsajnujrum4ztt4u63b4
+      mitt: 3.0.0
       react: 18.1.0
       react-content-loader: 6.2.0_react@18.1.0
       react-dom: 18.1.0_react@18.1.0
@@ -186,7 +187,6 @@ importers:
       react-query: 3.39.1_ef5jwxihqo6n7gxfmzogljlgcm
       react-router-dom: 6.3.0_ef5jwxihqo6n7gxfmzogljlgcm
       react-use: 17.4.0_ef5jwxihqo6n7gxfmzogljlgcm
-      spacefold: 0.0.1-alpha.4
       spinners-react: 1.0.7_zlkrlo2xsersbascmmsr65fm34
       url-join-ts: 1.0.5
       vite-tsconfig-paths: 3.5.0_vite@2.9.12
@@ -10035,6 +10035,10 @@ packages:
   /minimist/1.2.6:
     resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
 
+  /mitt/3.0.0:
+    resolution: {integrity: sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==}
+    dev: false
+
   /mixin-deep/1.3.2:
     resolution: {integrity: sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==}
     engines: {node: '>=0.10.0'}
@@ -10886,17 +10890,6 @@ packages:
       react: 18.1.0
     dev: false
 
-  /react-dom/17.0.2_react@17.0.2:
-    resolution: {integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==}
-    peerDependencies:
-      react: 17.0.2
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react: 17.0.2
-      scheduler: 0.20.2
-    dev: false
-
   /react-dom/18.1.0_react@18.1.0:
     resolution: {integrity: sha512-fU1Txz7Budmvamp7bshe4Zi32d0ll7ect+ccxNu9FlObT605GOEB8BfO4tmRJ39R5Zj831VCpvQ05QPBW5yb+w==}
     peerDependencies:
@@ -11112,14 +11105,6 @@ packages:
       throttle-debounce: 3.0.1
       ts-easing: 0.2.0
       tslib: 2.4.0
-    dev: false
-
-  /react/17.0.2:
-    resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
     dev: false
 
   /react/18.1.0:
@@ -11614,13 +11599,6 @@ packages:
       xmlchars: 2.2.0
     dev: true
 
-  /scheduler/0.20.2:
-    resolution: {integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==}
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
-    dev: false
-
   /scheduler/0.22.0:
     resolution: {integrity: sha512-6QAm1BgQI88NPYymgGQLCZgvep4FyePDWFpXVK+zNSUgHwlqpJy8VEh8Et0KxTACS4VWwMousBElAZOH9nkkoQ==}
     dependencies:
@@ -11886,13 +11864,6 @@ packages:
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
-
-  /spacefold/0.0.1-alpha.4:
-    resolution: {integrity: sha512-gK76jEidgtUpIZZfaRNEsXKDXhPJcKgoMQTm0xdOVGIeJOrpls+qoT7ChaBzk/EXlJnGhPvCjkN2oA14LMb7yw==}
-    dependencies:
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-    dev: false
 
   /spdx-correct/3.1.1:
     resolution: {integrity: sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==}

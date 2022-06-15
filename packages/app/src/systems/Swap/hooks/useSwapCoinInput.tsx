@@ -21,30 +21,33 @@ const selectors = {
     const { coinFrom, coinTo } = state.context;
     return (dir === FROM_TO && !coinFrom) || (dir === TO_FROM && !coinTo);
   },
+  isLoading: (dir: SwapDirection) => (state: SwapMachineState) => {
+    const { direction, fromAmount, toAmount } = state.context;
+    const amount = direction === FROM_TO ? fromAmount?.raw : toAmount?.raw;
+    return Boolean(state.hasTag("loading") && dir !== direction && amount);
+  },
 };
 
 type UseCoinInputReturn = CoinInputProps & {
   ref: React.ForwardedRef<HTMLInputElement>;
 };
 
-// TODO: check useCoinInput on CoinInput to find missing pieces
 export function useSwapCoinInput(direction: SwapDirection): UseCoinInputReturn {
   const { service, send } = useSwapContext();
   const ref = useRef<HTMLInputElement | null>(null);
   const isFrom = direction === FROM_TO;
-  const coinAmount = useSelector(
-    service,
-    isFrom ? selectors.fromAmount : selectors.toAmount
-  );
+  const amountSelector = isFrom ? selectors.fromAmount : selectors.toAmount;
+  const coinAmount = useSelector(service, amountSelector);
   const activeDir = useSelector(service, selectors.activeDir);
   const isDisabled = useSelector(service, selectors.isDisabled(direction));
+  const isLoading = useSelector(service, selectors.isLoading(direction));
 
   const isAllowed = ({ value: val }: NumberFormatValues) => {
     return parseInputValueBigInt(val) <= MAX_U64_VALUE;
   };
 
   function onChange(value: string) {
-    send({ type: "SET_INPUT_VALUE", data: { direction, value } });
+    send({ type: "INPUT_CHANGE", data: { direction, value } });
   }
 
   useEffect(() => {
@@ -57,6 +60,7 @@ export function useSwapCoinInput(direction: SwapDirection): UseCoinInputReturn {
     ref,
     isAllowed,
     onChange,
+    isLoading,
     value: coinAmount,
     displayType: "input",
     disabled: isDisabled,

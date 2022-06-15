@@ -4,7 +4,6 @@ import { atom, useAtom } from "jotai";
 import type { ReactNode } from "react";
 import { useEffect, createContext, useContext } from "react";
 import { useQueryClient } from "react-query";
-import { sub, pub, useSub } from "spacefold";
 
 import type {
   SwapMachineService,
@@ -16,8 +15,12 @@ import { SwapDirection } from "../types";
 
 import { useCoinByParam } from "./useCoinByParam";
 
-import { useWallet, useContract, useSlippage } from "~/systems/Core";
-import type { Maybe } from "~/types";
+import {
+  useWallet,
+  useContract,
+  useSlippage,
+  useSubscriber,
+} from "~/systems/Core";
 
 const selectors = {
   isLoading: isLoadingState,
@@ -39,16 +42,12 @@ export function useSwapGlobalState() {
 }
 
 // ----------------------------------------------------------------------------
-// Subscribers
+// PubSub
 // ----------------------------------------------------------------------------
 
-export const swapEvts = {
-  refetchBalances: pub<Maybe<CoinQuantity[]>>(),
-};
-
-const swapSub = sub({
-  register: [swapEvts.refetchBalances],
-});
+export enum SwapEvents {
+  "refetchBalances" = "refetchBalances",
+}
 
 // ----------------------------------------------------------------------------
 // SwapContext
@@ -108,7 +107,6 @@ export function SwapProvider({ children }: SwapProviderProps) {
   const slippage = useSlippage();
   const coinFrom = useCoinByParam("coinFrom");
   const coinTo = useCoinByParam("coinTo");
-  const subscriber = useSub(swapSub);
 
   const [state, send, service] = useMachine(swapMachine, {
     context: {
@@ -121,24 +119,25 @@ export function SwapProvider({ children }: SwapProviderProps) {
       fromAmount: globalState.fromAmount,
       toAmount: globalState.toAmount,
       slippage: slippage.value,
-    },
-  });
+    } as SwapMachineContext,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any);
 
   /**
    * This effect is a machine context subscription in order to keep
    * a global state data and persist it between page navigation
    */
   useEffect(() => {
-    const subscription = service.subscribe((item) => {
-      setGlobalState(item.context);
-    });
-    return subscription.unsubscribe;
+    const sub = service.subscribe((item) => setGlobalState(item.context));
+    return sub.unsubscribe;
   }, []);
 
-  subscriber.on(swapEvts.refetchBalances, (data) => {
-    if (!state.matches("updateBalances")) {
-      send("SET_BALANCES", { data });
-    }
+  /**
+   * This subscriber is need because there's a lot of times the balance
+   * is updated outside the machine
+   */
+  useSubscriber<CoinQuantity[]>(SwapEvents.refetchBalances, (data) => {
+    send("SET_BALANCES", { data });
   });
 
   return (

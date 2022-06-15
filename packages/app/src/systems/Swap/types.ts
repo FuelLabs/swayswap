@@ -36,7 +36,6 @@ export type SwapMachineContext = {
   fromAmount?: Maybe<CoinAmount>;
   toAmount?: Maybe<CoinAmount>;
   poolInfo?: Maybe<PoolInfo>;
-  poolRatio?: Maybe<number>;
   txCost?: TransactionCost;
   slippage?: number;
   previewInfo?: Maybe<PreviewInfo>;

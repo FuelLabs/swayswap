@@ -3,20 +3,56 @@
 export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
-    invertDirection: 'INVERT_COINS';
+    setBalances: 'SET_BALANCES' | 'done.invoke.(machine).fetchingBalances:invocation[0]';
     selectCoin: 'SELECT_COIN';
-    setBalances: 'SET_BALANCES';
+    invertDirection: 'INVERT_COINS';
     setMaxValue: 'SET_MAX_VALUE';
-    setInputValue: 'SET_INPUT_VALUE';
-    clearContext: 'SET_INPUT_VALUE' | 'done.state.(machine).preparingToSwap';
+    setInputValue: 'INPUT_CHANGE';
+    clearContext: 'INPUT_CHANGE' | 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
+    toastErrorMessage:
+      | 'error.platform.(machine).fetchingBalances:invocation[0]'
+      | 'error.platform.(machine).fetchingResources.fetchingTxCost:invocation[0]'
+      | 'error.platform.(machine).fetchingResources.checkPoolCreated:invocation[0]'
+      | 'error.platform.(machine).fetchingResources.fetchingPreview:invocation[0]'
+      | 'error.platform.(machine).readyToSwap.swapping:invocation[0]';
     setTxCost: 'done.invoke.(machine).fetchingResources.fetchingTxCost:invocation[0]';
     setPoolInfo: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
-    setPoolRatio: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
-    setPreviewInfo: 'done.invoke.(machine).preparingToSwap.fetchingPreview:invocation[0]';
-    setOppositeValue: 'done.invoke.(machine).preparingToSwap.fetchingPreview:invocation[0]';
-    setValuesWithSlippage: 'done.invoke.(machine).preparingToSwap.fetchingPreview:invocation[0]';
+    setPreviewInfo: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
+    setOppositeValue: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
+    toastSwapSuccess: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
+    setValuesWithSlippage: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
   };
   internalEvents: {
+    'done.invoke.(machine).fetchingBalances:invocation[0]': {
+      type: 'done.invoke.(machine).fetchingBalances:invocation[0]';
+      data: unknown;
+      __tip: 'See the XState TS docs to learn how to strongly type this.';
+    };
+    'done.invoke.(machine).readyToSwap.swapping:invocation[0]': {
+      type: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
+      data: unknown;
+      __tip: 'See the XState TS docs to learn how to strongly type this.';
+    };
+    'error.platform.(machine).fetchingBalances:invocation[0]': {
+      type: 'error.platform.(machine).fetchingBalances:invocation[0]';
+      data: unknown;
+    };
+    'error.platform.(machine).fetchingResources.fetchingTxCost:invocation[0]': {
+      type: 'error.platform.(machine).fetchingResources.fetchingTxCost:invocation[0]';
+      data: unknown;
+    };
+    'error.platform.(machine).fetchingResources.checkPoolCreated:invocation[0]': {
+      type: 'error.platform.(machine).fetchingResources.checkPoolCreated:invocation[0]';
+      data: unknown;
+    };
+    'error.platform.(machine).fetchingResources.fetchingPreview:invocation[0]': {
+      type: 'error.platform.(machine).fetchingResources.fetchingPreview:invocation[0]';
+      data: unknown;
+    };
+    'error.platform.(machine).readyToSwap.swapping:invocation[0]': {
+      type: 'error.platform.(machine).readyToSwap.swapping:invocation[0]';
+      data: unknown;
+    };
     'done.invoke.(machine).fetchingResources.fetchingTxCost:invocation[0]': {
       type: 'done.invoke.(machine).fetchingResources.fetchingTxCost:invocation[0]';
       data: unknown;
@@ -27,100 +63,103 @@ export interface Typegen0 {
       data: unknown;
       __tip: 'See the XState TS docs to learn how to strongly type this.';
     };
-    'done.invoke.(machine).preparingToSwap.fetchingPreview:invocation[0]': {
-      type: 'done.invoke.(machine).preparingToSwap.fetchingPreview:invocation[0]';
+    'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]': {
+      type: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
       data: unknown;
       __tip: 'See the XState TS docs to learn how to strongly type this.';
     };
-    'done.invoke.(machine).preparingToSwap.swapping:invocation[0]': {
-      type: 'done.invoke.(machine).preparingToSwap.swapping:invocation[0]';
-      data: unknown;
-      __tip: 'See the XState TS docs to learn how to strongly type this.';
-    };
-    'xstate.after(1000)#(machine).debouncing': { type: 'xstate.after(1000)#(machine).debouncing' };
-    'done.invoke.(machine).updateBalances:invocation[0]': {
-      type: 'done.invoke.(machine).updateBalances:invocation[0]';
-      data: unknown;
-      __tip: 'See the XState TS docs to learn how to strongly type this.';
-    };
+    'xstate.after(600)#(machine).debouncing': { type: 'xstate.after(600)#(machine).debouncing' };
     '': { type: '' };
     'xstate.init': { type: 'xstate.init' };
   };
   invokeSrcNameMap: {
+    fetchBalances: 'done.invoke.(machine).fetchingBalances:invocation[0]';
     fetchTxCost: 'done.invoke.(machine).fetchingResources.fetchingTxCost:invocation[0]';
     fetchPoolRatio: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
-    fetchPreview: 'done.invoke.(machine).preparingToSwap.fetchingPreview:invocation[0]';
-    swap: 'done.invoke.(machine).preparingToSwap.swapping:invocation[0]';
-    refetchBalances: 'done.invoke.(machine).updateBalances:invocation[0]';
+    fetchPreview: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
+    swap: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
+    refetchBalances: 'done.invoke.(machine).readyToSwap.refetchingBalances:invocation[0]';
   };
   missingImplementations: {
-    actions: never;
+    actions: 'toastErrorMessage';
     services: never;
     guards: never;
     delays: never;
   };
   eventsCausingServices: {
+    fetchBalances: 'SELECT_COIN' | 'INVERT_COINS';
     fetchTxCost:
-      | 'INVERT_COINS'
-      | 'SELECT_COIN'
       | 'SET_MAX_VALUE'
-      | 'xstate.after(1000)#(machine).debouncing'
-      | 'done.invoke.(machine).updateBalances:invocation[0]';
-    refetchBalances: 'SET_BALANCES' | 'done.state.(machine).preparingToSwap';
-    fetchPoolRatio: 'done.invoke.(machine).fetchingResources.fetchingTxCost:invocation[0]';
-    fetchPreview: '';
+      | 'done.invoke.(machine).fetchingBalances:invocation[0]'
+      | 'xstate.after(600)#(machine).debouncing';
+    fetchPoolRatio: '';
+    fetchPreview: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
     swap: 'SWAP';
+    refetchBalances: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
   };
   eventsCausingGuards: {
-    inputIsNotEmpty: 'SET_INPUT_VALUE';
+    notHasOppositeCoin: 'SET_MAX_VALUE';
+    inputIsNotEmpty: 'INPUT_CHANGE';
     notHasAmount: '';
     notHasCoinFrom: '';
     notHasCoinTo: '';
+    notHasPoolRatio: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
     noLiquidity: '';
     notHasCoinFromBalance: '';
     notHasEthForNetworkFee: '';
   };
   eventsCausingDelays: {};
   matchesStates:
-    | 'debouncing'
+    | 'fetchingBalances'
     | 'fetchingResources'
     | 'fetchingResources.fetchingTxCost'
+    | 'fetchingResources.validatingInputs'
     | 'fetchingResources.checkPoolCreated'
+    | 'fetchingResources.fetchingPreview'
+    | 'fetchingResources.settingAmounts'
+    | 'fetchingResources.validatingSwap'
     | 'fetchingResources.success'
-    | 'checking'
-    | 'waitingBalances'
-    | 'withoutCoinFrom'
-    | 'withoutCoinTo'
-    | 'withoutAmount'
-    | 'preparingToSwap'
-    | 'preparingToSwap.fetchingPreview'
-    | 'preparingToSwap.checking'
-    | 'preparingToSwap.withoutLiquidity'
-    | 'preparingToSwap.withoutCoinFromBalance'
-    | 'preparingToSwap.withoutEthForNetworkFee'
-    | 'preparingToSwap.canSwap'
-    | 'preparingToSwap.swapping'
-    | 'preparingToSwap.success'
-    | 'updateBalances'
+    | 'debouncing'
+    | 'readyToSwap'
+    | 'readyToSwap.idle'
+    | 'readyToSwap.swapping'
+    | 'readyToSwap.refetchingBalances'
+    | 'invalid'
+    | 'invalid.withoutAmount'
+    | 'invalid.withoutCoinFrom'
+    | 'invalid.withoutCoinTo'
+    | 'invalid.withoutPoolRatio'
+    | 'invalid.withoutLiquidity'
+    | 'invalid.withoutCoinFromBalance'
+    | 'invalid.withoutEthForNetworkFee'
     | {
-        fetchingResources?: 'fetchingTxCost' | 'checkPoolCreated' | 'success';
-        preparingToSwap?:
+        fetchingResources?:
+          | 'fetchingTxCost'
+          | 'validatingInputs'
+          | 'checkPoolCreated'
           | 'fetchingPreview'
-          | 'checking'
+          | 'settingAmounts'
+          | 'validatingSwap'
+          | 'success';
+        readyToSwap?: 'idle' | 'swapping' | 'refetchingBalances';
+        invalid?:
+          | 'withoutAmount'
+          | 'withoutCoinFrom'
+          | 'withoutCoinTo'
+          | 'withoutPoolRatio'
           | 'withoutLiquidity'
           | 'withoutCoinFromBalance'
-          | 'withoutEthForNetworkFee'
-          | 'canSwap'
-          | 'swapping'
-          | 'success';
+          | 'withoutEthForNetworkFee';
       };
   tags:
     | 'loading'
-    | 'needSelectToken'
+    | 'canSwap'
+    | 'isSwapping'
+    | 'swapSuccess'
     | 'needEnterAmount'
+    | 'needSelectToken'
+    | 'noPoolFound'
     | 'notHasLiquidity'
     | 'notHasCoinFromBalance'
-    | 'notHasEthForNetworkFee'
-    | 'canSwap'
-    | 'swapSuccess';
+    | 'notHasEthForNetworkFee';
 }
