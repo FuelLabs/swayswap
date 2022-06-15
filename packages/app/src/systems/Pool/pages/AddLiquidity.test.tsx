@@ -196,4 +196,23 @@ describe("Add Liquidity", () => {
     const successFeedback = await screen.findByText(/New pool created/i);
     expect(successFeedback).toBeInTheDocument();
   });
+
+  it("should show '0.' if typed only '.' in the input", async () => {
+    jest.unmock("../hooks/useUserPositions.ts");
+
+    renderWithRouter(<App />, {
+      route: "/pool/add-liquidity",
+    });
+
+    const coinFromInput = screen.getByLabelText(/Coin From Input/);
+    fireEvent.change(coinFromInput, {
+      target: {
+        value: ".",
+      },
+    });
+
+    await waitFor(() => {
+      expect(coinFromInput).toHaveValue("0.");
+    });
+  });
 });
