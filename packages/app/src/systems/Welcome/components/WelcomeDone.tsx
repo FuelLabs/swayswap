@@ -25,6 +25,8 @@ export function WelcomeDone() {
       </p>
       <div className="flex justify-center items-center mb-6">
         <input
+          aria-label="Accept the use agreement"
+          id="accept-agreement"
           checked={state.context.acceptAgreement}
           onChange={(e) => {
             send("ACCEPT_AGREEMENT", {
@@ -34,14 +36,14 @@ export function WelcomeDone() {
           className="h-5 w-5 mr-3 cursor-pointer"
           type="checkbox"
         />
-        <span>
+        <label htmlFor="accept-agreement">
           {" "}
           I agree to the{" "}
           <Link isExternal href={DISCLAIMER_URL}>
             (legal disclaimer)
           </Link>
           .
-        </span>
+        </label>
       </div>
       <Button
         size="lg"
