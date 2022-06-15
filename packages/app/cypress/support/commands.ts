@@ -35,3 +35,7 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('getByAriaLabel', (selector, options) =>
+  cy.get(`[aria-label="${selector}"]`, options)
+);

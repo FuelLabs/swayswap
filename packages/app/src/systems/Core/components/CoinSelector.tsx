@@ -1,10 +1,9 @@
 import cx from "classnames";
 import type { ReactNode } from "react";
-import { useState, useEffect, forwardRef, useMemo } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
-import { useBalances } from "../hooks";
-import { TOKENS, parseToFormattedNumber, COIN_ETH } from "../utils";
+import { TOKENS } from "../utils";
 
 import { CoinsListDialog } from "./CoinsListDialog";
 import { TokenIcon } from "./TokenIcon";
@@ -15,37 +14,14 @@ import type { Coin } from "~/types";
 export type CoinSelectorProps = {
   coin?: Coin | null;
   isReadOnly?: boolean;
-  showBalance?: boolean;
-  showMaxButton?: boolean;
   onChange?: (coin: Coin) => void;
-  onSetMaxBalance?: () => void;
   tooltip?: ReactNode;
 };
 
 export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
-  (
-    {
-      coin,
-      isReadOnly,
-      showBalance = true,
-      showMaxButton = true,
-      onChange,
-      onSetMaxBalance,
-      tooltip: tooltipContent,
-    },
-    ref
-  ) => {
+  ({ coin, isReadOnly, onChange, tooltip: tooltipContent }, ref) => {
     const [selected, setSelected] = useState<Coin | null>(null);
     const dialog = useDialog();
-    const { data: balances } = useBalances({ enabled: showBalance });
-    const coinBalance = balances?.find(
-      (item) => item.assetId === coin?.assetId
-    );
-
-    const balance = useMemo(
-      () => parseToFormattedNumber(coinBalance?.amount || BigInt(0)),
-      [coinBalance?.assetId, coinBalance?.amount]
-    );
 
     function handleSelect(assetId: string) {
       const next = TOKENS.find((item) => item.assetId === assetId)!;
@@ -99,34 +75,6 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
             <CoinsListDialog onSelect={handleSelect} />
           </Dialog.Content>
         </Dialog>
-        {(showBalance || showMaxButton) && (
-          <div className="flex items-center gap-2 mt-2 whitespace-nowrap">
-            {showBalance && (
-              <div
-                className="text-xs text-gray-400"
-                aria-label={`${coin?.symbol} balance`}
-              >
-                Balance: {balance}
-              </div>
-            )}
-            {showMaxButton && (
-              <Tooltip
-                content={`Set: max ${coin?.symbol} balance ${
-                  coin?.assetId === COIN_ETH ? " - network fee" : ""
-                }`}
-              >
-                <Button
-                  size="sm"
-                  onPress={onSetMaxBalance}
-                  className="coinSelector--maxButton"
-                  variant="ghost"
-                >
-                  Max
-                </Button>
-              </Tooltip>
-            )}
-          </div>
-        )}
       </div>
     );
   }
