@@ -98,13 +98,13 @@ export interface Typegen0 {
   eventsCausingGuards: {
     notHasOppositeCoin: 'SET_MAX_VALUE';
     inputIsNotEmpty: 'INPUT_CHANGE';
+    notHasEthForNetworkFee: '';
     notHasAmount: '';
     notHasCoinFrom: '';
     notHasCoinTo: '';
     notHasPoolRatio: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
     noLiquidity: '';
     notHasCoinFromBalance: '';
-    notHasEthForNetworkFee: '';
   };
   eventsCausingDelays: {};
   matchesStates:

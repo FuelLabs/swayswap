@@ -112,6 +112,10 @@ export const swapMachine =
             validatingInputs: {
               always: [
                 {
+                  cond: 'notHasEthForNetworkFee',
+                  target: '#(machine).invalid.withoutEthForNetworkFee',
+                },
+                {
                   cond: 'notHasAmount',
                   target: '#(machine).invalid.withoutAmount',
                 },
@@ -177,12 +181,12 @@ export const swapMachine =
                   target: '#(machine).invalid.withoutLiquidity',
                 },
                 {
-                  cond: 'notHasCoinFromBalance',
-                  target: '#(machine).invalid.withoutCoinFromBalance',
-                },
-                {
                   cond: 'notHasEthForNetworkFee',
                   target: '#(machine).invalid.withoutEthForNetworkFee',
+                },
+                {
+                  cond: 'notHasCoinFromBalance',
+                  target: '#(machine).invalid.withoutCoinFromBalance',
                 },
                 {
                   target: 'success',
