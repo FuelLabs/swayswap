@@ -19,8 +19,8 @@ export interface Typegen0 {
     setPoolInfo: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
     setPreviewInfo: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
     setOppositeValue: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
-    toastSwapSuccess: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
     setValuesWithSlippage: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
+    toastSwapSuccess: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
   };
   internalEvents: {
     'done.invoke.(machine).fetchingBalances:invocation[0]': {
@@ -68,8 +68,8 @@ export interface Typegen0 {
       data: unknown;
       __tip: 'See the XState TS docs to learn how to strongly type this.';
     };
-    'xstate.after(600)#(machine).debouncing': { type: 'xstate.after(600)#(machine).debouncing' };
     '': { type: '' };
+    'xstate.after(600)#(machine).debouncing': { type: 'xstate.after(600)#(machine).debouncing' };
     'xstate.init': { type: 'xstate.init' };
   };
   invokeSrcNameMap: {
@@ -78,16 +78,15 @@ export interface Typegen0 {
     fetchPoolRatio: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
     fetchPreview: 'done.invoke.(machine).fetchingResources.fetchingPreview:invocation[0]';
     swap: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
-    refetchBalances: 'done.invoke.(machine).readyToSwap.refetchingBalances:invocation[0]';
   };
   missingImplementations: {
-    actions: 'toastErrorMessage';
+    actions: never;
     services: never;
     guards: never;
     delays: never;
   };
   eventsCausingServices: {
-    fetchBalances: 'SELECT_COIN' | 'INVERT_COINS';
+    fetchBalances: 'SELECT_COIN' | 'INVERT_COINS' | '';
     fetchTxCost:
       | 'SET_MAX_VALUE'
       | 'done.invoke.(machine).fetchingBalances:invocation[0]'
@@ -95,7 +94,6 @@ export interface Typegen0 {
     fetchPoolRatio: '';
     fetchPreview: 'done.invoke.(machine).fetchingResources.checkPoolCreated:invocation[0]';
     swap: 'SWAP';
-    refetchBalances: 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
   };
   eventsCausingGuards: {
     notHasOppositeCoin: 'SET_MAX_VALUE';
@@ -123,7 +121,7 @@ export interface Typegen0 {
     | 'readyToSwap'
     | 'readyToSwap.idle'
     | 'readyToSwap.swapping'
-    | 'readyToSwap.refetchingBalances'
+    | 'readyToSwap.success'
     | 'invalid'
     | 'invalid.withoutAmount'
     | 'invalid.withoutCoinFrom'
@@ -141,7 +139,7 @@ export interface Typegen0 {
           | 'settingAmounts'
           | 'validatingSwap'
           | 'success';
-        readyToSwap?: 'idle' | 'swapping' | 'refetchingBalances';
+        readyToSwap?: 'idle' | 'swapping' | 'success';
         invalid?:
           | 'withoutAmount'
           | 'withoutCoinFrom'
@@ -155,7 +153,6 @@ export interface Typegen0 {
     | 'loading'
     | 'canSwap'
     | 'isSwapping'
-    | 'swapSuccess'
     | 'needEnterAmount'
     | 'needSelectToken'
     | 'noPoolFound'

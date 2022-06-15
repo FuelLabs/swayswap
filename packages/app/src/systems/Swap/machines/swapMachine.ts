@@ -16,7 +16,7 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import { isCoinEth, parseInputValueBigInt, toNumber, ZERO } from '~/systems/Core';
+import { handleError, isCoinEth, parseInputValueBigInt, toNumber, ZERO } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
 import { getPoolRatio } from '~/systems/Pool';
@@ -41,9 +41,6 @@ type MachineEvents =
 type MachineServices = {
   fetchBalances: {
     data: Maybe<CoinQuantity[]>;
-  };
-  refetchBalances: {
-    data: void;
   };
   fetchTxCost: {
     data: TransactionCost;
@@ -224,8 +221,7 @@ export const swapMachine =
                 src: 'swap',
                 onDone: [
                   {
-                    actions: 'toastSwapSuccess',
-                    target: 'refetchingBalances',
+                    target: 'success',
                   },
                 ],
                 onError: [
@@ -236,12 +232,11 @@ export const swapMachine =
               },
               tags: 'isSwapping',
             },
-            refetchingBalances: {
-              entry: 'clearContext',
-              invoke: {
-                src: 'refetchBalances',
+            success: {
+              entry: ['clearContext', 'toastSwapSuccess'],
+              always: {
+                target: '#(machine).fetchingBalances',
               },
-              tags: 'swapSuccess',
             },
           },
         },
@@ -311,9 +306,6 @@ export const swapMachine =
       services: {
         fetchBalances: async ({ client }) => {
           return client?.fetchQuery<CoinQuantity[]>(Queries.UserQueryBalances);
-        },
-        refetchBalances: async ({ client }) => {
-          client?.refetchQueries(Queries.UserQueryBalances);
         },
         fetchTxCost: async (ctx) => {
           const networkFee = queryNetworkFeeOnSwap(ctx);
@@ -441,6 +433,11 @@ export const swapMachine =
          */
         toastSwapSuccess() {
           toast.success('Swap made successfully');
+        },
+        toastErrorMessage(_, ev) {
+          handleError(ev.data);
+          // eslint-disable-next-line no-console
+          console.error(ev.data);
         },
       },
       guards: {
