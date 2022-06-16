@@ -7,7 +7,8 @@ describe('End-to-end Test: 😁 Happy Path', () => {
     // create a wallet and fund it
     cy.contains('button', /Create wallet/i).click();
     cy.contains('button', 'Give me ETH').click();
-    cy.contains('button', 'Go to Swap').click();
+    cy.getByAriaLabel('Accept the use agreement').check();
+    cy.contains('button', 'Get Swapping!').click();
     cy.contains('Enter amount');
 
     // mint tokens

@@ -10,12 +10,21 @@ import { useWallet } from "~/systems/Core";
 import { Pages } from "~/types";
 
 export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
+export const LOCALSTORAGE_AGREEMENT_KEY = "fuel--agreement";
 export const STEPS = [
   { id: 0, path: Pages["welcome.createWallet"] },
   { id: 1, path: Pages["welcome.addFunds"] },
   { id: 2, path: Pages["welcome.done"] },
   { id: 3, path: null },
 ];
+
+export function getAgreement() {
+  return localStorage.getItem(LOCALSTORAGE_AGREEMENT_KEY) === "true";
+}
+
+export function setAgreement(accept: boolean) {
+  localStorage.setItem(LOCALSTORAGE_AGREEMENT_KEY, String(accept));
+}
 
 export function getCurrent() {
   try {
@@ -49,6 +58,7 @@ export type Step = {
 
 type MachineContext = {
   current: Step;
+  acceptAgreement: boolean;
   wallet?: Wallet | null;
 };
 
@@ -63,6 +73,7 @@ const welcomeStepsMachine = createMachine<MachineContext>({
   },
   context: {
     current: getCurrent(),
+    acceptAgreement: getAgreement(),
   },
   states: {
     init: {
@@ -84,9 +95,12 @@ const welcomeStepsMachine = createMachine<MachineContext>({
         },
         {
           target: "done",
-          cond: (ctx) => ctx.current.id === 2,
+          cond: (ctx) =>
+            ctx.current.id === 2 ||
+            (ctx.current.id >= 2 && !ctx.acceptAgreement),
         },
         {
+          cond: (ctx) => ctx.current.id === 3 && ctx.acceptAgreement,
           target: "finished",
         },
       ],
@@ -110,6 +124,9 @@ const welcomeStepsMachine = createMachine<MachineContext>({
     done: {
       entry: [assignCurrent(2), "navigateTo"],
       on: {
+        ACCEPT_AGREEMENT: {
+          actions: ["acceptAgreement"],
+        },
         FINISH: {
           target: "finished",
         },
@@ -157,6 +174,7 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
       .withContext({
         wallet,
         current: getCurrent(),
+        acceptAgreement: getAgreement(),
       })
       .withConfig({
         actions: {
@@ -164,6 +182,13 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
             if (context.current.id > 2) return;
             navigate(`/welcome/${context.current.path}`);
           },
+          acceptAgreement: assign((context, event) => {
+            setAgreement(event.value);
+            return {
+              ...context,
+              acceptAgreement: event.value,
+            };
+          }),
         },
       })
   );
