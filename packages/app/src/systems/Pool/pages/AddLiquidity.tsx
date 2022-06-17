@@ -16,12 +16,12 @@ import {
   useCoinInput,
   CoinSelector,
   NavigateBackButton,
-  ZERO,
   toBigInt,
   divideFnValidOnly,
   multiplyFn,
   TOKENS,
   useBalances,
+  safeBigInt,
 } from "~/systems/Core";
 import { CoinBalance } from "~/systems/Core/components/CoinBalance";
 import { Button, Card, Spinner } from "~/systems/UI";
@@ -143,7 +143,7 @@ export function AddLiquidity() {
     fromInput.setAmount(val);
 
     if (poolRatio) {
-      const value = val || ZERO;
+      const value = safeBigInt(val);
       const newToValue = Math.ceil(divideFnValidOnly(value, poolRatio));
       toInput.setAmount(BigInt(newToValue));
     }
@@ -153,7 +153,7 @@ export function AddLiquidity() {
     toInput.setAmount(val);
 
     if (poolRatio) {
-      const value = val || ZERO;
+      const value = safeBigInt(val);
       const newFromValue = Math.floor(multiplyFn(value, poolRatio));
       fromInput.setAmount(BigInt(newFromValue));
     }

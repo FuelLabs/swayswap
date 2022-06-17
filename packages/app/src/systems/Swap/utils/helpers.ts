@@ -14,6 +14,7 @@ import {
   formatUnits,
   parseToFormattedNumber,
   toBigInt,
+  safeBigInt,
 } from '~/systems/Core/utils/math';
 import type { Maybe } from '~/types';
 
@@ -112,12 +113,12 @@ export function notHasLiquidityForSwap({
 }: SwapMachineContext) {
   if (!coinFrom || !coinTo) return false;
 
-  const ethReserve = poolInfo?.eth_reserve || ZERO;
-  const tokenReserve = poolInfo?.token_reserve || ZERO;
+  const ethReserve = safeBigInt(poolInfo?.eth_reserve);
+  const tokenReserve = safeBigInt(poolInfo?.token_reserve);
   const fromIsETH = isCoinEth(coinFrom);
   const toIsETH = isCoinEth(coinTo);
-  const fromBN = fromAmount?.raw || ZERO;
-  const toBN = toAmount?.raw || ZERO;
+  const fromBN = safeBigInt(fromAmount?.raw);
+  const toBN = safeBigInt(toAmount?.raw);
 
   return (
     (fromIsETH && (fromBN > ethReserve || toBN > tokenReserve)) ||
@@ -127,10 +128,10 @@ export function notHasLiquidityForSwap({
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {
   const { ethBalance, direction, coinFrom, fromAmount, txCost, amountPlusSlippage } = params;
-  const balance = ethBalance || ZERO;
-  const txCostTotal = txCost?.total || ZERO;
-  const plusSlippage = amountPlusSlippage?.raw || ZERO;
-  const fromAmountRaw = fromAmount?.raw || ZERO;
+  const balance = safeBigInt(ethBalance);
+  const txCostTotal = safeBigInt(txCost?.total);
+  const plusSlippage = safeBigInt(amountPlusSlippage?.raw);
+  const fromAmountRaw = safeBigInt(fromAmount?.raw);
   const isFrom = direction === SwapDirection.fromTo;
 
   /**

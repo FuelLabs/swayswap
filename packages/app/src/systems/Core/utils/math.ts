@@ -88,3 +88,7 @@ export function maxAmount(value: number | bigint, max: number | bigint) {
 export function isSwayInfinity(value: Maybe<BigNumberish>) {
   return value?.toString() === MAX_U64_STRING;
 }
+
+export function safeBigInt(value?: Maybe<bigint>, defaultValue?: number) {
+  return value || toBigInt(defaultValue || 0);
+}

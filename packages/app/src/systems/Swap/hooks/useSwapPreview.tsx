@@ -6,19 +6,23 @@ import { calculatePriceImpact, calculatePriceWithSlippage } from "../utils";
 
 import { useSwapContext } from "./useSwap";
 
-import { parseToFormattedNumber, useSlippage, ZERO } from "~/systems/Core";
+import {
+  parseToFormattedNumber,
+  safeBigInt,
+  useSlippage,
+} from "~/systems/Core";
 
 const selectors = {
   hasPreview: (state: SwapMachineState) => {
     return !state.hasTag("loading") && state.context.previewInfo;
   },
   outputAmount: ({ context: ctx }: SwapMachineState) => {
-    const amount = ctx.toAmount?.raw || ZERO;
+    const amount = safeBigInt(ctx.toAmount?.raw);
     return parseToFormattedNumber(amount);
   },
   inputAmount: ({ context: ctx }: SwapMachineState) => {
     const isFrom = ctx.direction === SwapDirection.fromTo;
-    const amount = (isFrom ? ctx.toAmount : ctx.fromAmount)?.raw || ZERO;
+    const amount = safeBigInt((isFrom ? ctx.toAmount : ctx.fromAmount)?.raw);
     const price = calculatePriceWithSlippage(
       amount,
       ctx.direction,

@@ -7,7 +7,7 @@ import { getPricePerToken } from "../utils";
 
 import { useSwapContext } from "./useSwap";
 
-import { ZERO } from "~/systems/Core";
+import { safeBigInt } from "~/systems/Core";
 
 const selectors = {
   hasPreview: (state: SwapMachineState) => {
@@ -16,13 +16,13 @@ const selectors = {
   coinFrom: ({ context: ctx }: SwapMachineState) => {
     return {
       symbol: ctx.coinFrom?.symbol || "",
-      amount: ctx.fromAmount?.raw || ZERO,
+      amount: safeBigInt(ctx.fromAmount?.raw),
     };
   },
   coinTo: ({ context: ctx }: SwapMachineState) => {
     return {
       symbol: ctx.coinTo?.symbol || "",
-      amount: ctx.toAmount?.raw || ZERO,
+      amount: safeBigInt(ctx.toAmount?.raw),
     };
   },
   isFrom: ({ context: ctx }: SwapMachineState) => {

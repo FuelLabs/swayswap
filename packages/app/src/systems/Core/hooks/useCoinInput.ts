@@ -3,7 +3,14 @@ import { useMemo, useEffect, useState } from 'react';
 import type { NumberFormatValues } from 'react-number-format';
 
 import type { CoinBalanceProps } from '../components/CoinBalance';
-import { formatUnits, isCoinEth, MAX_U64_VALUE, parseInputValueBigInt, ZERO } from '../utils';
+import {
+  formatUnits,
+  isCoinEth,
+  MAX_U64_VALUE,
+  parseInputValueBigInt,
+  safeBigInt,
+  ZERO,
+} from '../utils';
 
 import { useBalances } from './useBalances';
 
@@ -78,7 +85,7 @@ export function useCoinInput({
   ...params
 }: UseCoinParams): UseCoinInput {
   const [amount, setAmount] = useState<Maybe<bigint>>(null);
-  const [gasFee, setGasFee] = useState<Maybe<bigint>>(initialGasFee || ZERO);
+  const [gasFee, setGasFee] = useState<Maybe<bigint>>(safeBigInt(initialGasFee));
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
   const isEth = useMemo(() => isCoinEth(coin), [coin?.assetId]);
@@ -86,8 +93,8 @@ export function useCoinInput({
   // TODO: consider real gas fee, replacing GAS_FEE variable.
   // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.
   function getSafeMaxBalance() {
-    const next = coinBalance?.amount || ZERO;
-    const value = next > ZERO ? next - (gasFee || ZERO) : next;
+    const next = safeBigInt(coinBalance?.amount);
+    const value = next > ZERO ? next - safeBigInt(gasFee) : next;
     if (value < ZERO) return ZERO;
     return value;
   }
@@ -113,7 +120,7 @@ export function useCoinInput({
       displayType: (isReadOnly ? 'text' : 'input') as DisplayType,
       onInput,
       onChange: handleInputPropsChange,
-      balance: formatValue(coinBalance?.amount || ZERO),
+      balance: formatValue(safeBigInt(coinBalance?.amount)),
       isAllowed,
     } as CoinInputProps;
   }
@@ -163,6 +170,6 @@ export function useCoinInput({
     getCoinSelectorProps,
     getCoinBalanceProps,
     formatted: formatValue(amount),
-    hasEnoughBalance: getSafeMaxBalance() >= (amount || ZERO),
+    hasEnoughBalance: getSafeMaxBalance() >= safeBigInt(amount),
   };
 }

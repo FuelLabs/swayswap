@@ -3,7 +3,7 @@ import type { ScriptTransactionRequest } from 'fuels';
 import type { SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 
-import { ZERO } from '~/systems/Core';
+import { safeBigInt } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 
@@ -63,10 +63,10 @@ export const queryPreviewAmount = async (params: SwapMachineContext) => {
   const amount = isFrom ? fromAmount : toAmount;
 
   if (direction === SwapDirection.toFrom) {
-    return getSwapWithMaximumRequiredAmount(contract, coinId, amount?.raw || ZERO);
+    return getSwapWithMaximumRequiredAmount(contract, coinId, safeBigInt(amount?.raw));
   }
   if (direction === SwapDirection.fromTo) {
-    return getSwapWithMinimumMinAmount(contract, coinId, amount?.raw || ZERO);
+    return getSwapWithMinimumMinAmount(contract, coinId, safeBigInt(amount?.raw));
   }
 };
 
@@ -89,7 +89,7 @@ export const swapTokens = async (params: SwapMachineContext) => {
 
   if (direction === SwapDirection.fromTo) {
     return contract.submit.swap_with_minimum(
-      amountLessSlippage?.raw || ZERO,
+      safeBigInt(amountLessSlippage?.raw),
       DEADLINE,
       getOverrides({
         forward: [fromAmount.raw, coinFrom.assetId],
@@ -103,7 +103,7 @@ export const swapTokens = async (params: SwapMachineContext) => {
     toAmount.raw,
     DEADLINE,
     getOverrides({
-      forward: [amountPlusSlippage?.raw || ZERO, coinFrom.assetId],
+      forward: [safeBigInt(amountPlusSlippage?.raw), coinFrom.assetId],
       gasLimit: txCost.total,
       variableOutputs: 2,
     })

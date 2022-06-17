@@ -16,7 +16,14 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import { handleError, isCoinEth, parseInputValueBigInt, toNumber, ZERO } from '~/systems/Core';
+import {
+  handleError,
+  isCoinEth,
+  parseInputValueBigInt,
+  safeBigInt,
+  toNumber,
+  ZERO,
+} from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
 import { getPoolRatio } from '~/systems/Pool';
@@ -352,9 +359,9 @@ export const swapMachine =
           const toBalance = balances.find((c) => c.assetId === toId);
           const ethBalance = balances.find(isCoinEth);
           return {
-            coinFromBalance: fromBalance?.amount || ZERO,
-            coinToBalance: toBalance?.amount || ZERO,
-            ethBalance: ethBalance?.amount || ZERO,
+            coinFromBalance: safeBigInt(fromBalance?.amount),
+            coinToBalance: safeBigInt(toBalance?.amount),
+            ethBalance: safeBigInt(ethBalance?.amount),
           };
         }),
         selectCoin: assign((ctx, ev) => ({
@@ -397,8 +404,8 @@ export const swapMachine =
         }),
         setMaxValue: assign((ctx, { data: { direction } }) => {
           const isFrom = direction === FROM_TO;
-          const balance = (isFrom ? ctx.coinFromBalance : ctx.coinToBalance) || ZERO;
-          const networkFee = ctx.txCost?.total || ZERO;
+          const balance = safeBigInt(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
+          const networkFee = safeBigInt(ctx.txCost?.total);
           const nextValue = balance > ZERO ? balance - networkFee : balance;
           const amount = createAmount(nextValue);
 
