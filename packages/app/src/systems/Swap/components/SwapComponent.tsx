@@ -12,6 +12,7 @@ import type { SwapState } from "../types";
 import { SwapDirection } from "../types";
 
 import { CoinInput, useCoinInput, CoinSelector } from "~/systems/Core";
+import { CoinBalance } from "~/systems/Core/components/CoinBalance";
 import { InvertButton } from "~/systems/UI";
 import type { Coin, Maybe } from "~/types";
 
@@ -144,6 +145,7 @@ export function SwapComponent({
           {...(activeInput === SwapDirection.toFrom && { isLoading })}
           autoFocus={activeInput === SwapDirection.fromTo}
           rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
+          bottomElement={<CoinBalance {...fromInput.getCoinBalanceProps()} />}
         />
       </div>
       <div className={style.switchDirection}>
@@ -156,6 +158,7 @@ export function SwapComponent({
           {...(activeInput === SwapDirection.fromTo && { isLoading })}
           autoFocus={activeInput === SwapDirection.toFrom}
           rightElement={<CoinSelector {...toInput.getCoinSelectorProps()} />}
+          bottomElement={<CoinBalance {...toInput.getCoinBalanceProps()} />}
         />
       </div>
     </>

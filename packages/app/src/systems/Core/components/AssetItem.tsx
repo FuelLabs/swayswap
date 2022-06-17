@@ -15,8 +15,6 @@ export function AssetItem({ coin }: AssetItemProps) {
     coin,
     amount: coin.amount,
     isReadOnly: true,
-    showBalance: false,
-    showMaxButton: false,
   });
 
   return (

@@ -43,7 +43,7 @@ export const AddLiquidityPreview = ({
       <PreviewTable
         title="Expected output:"
         className="mt-2 mb-4"
-        aria-label="preview-add-liquidity-output"
+        aria-label="Preview Add Liquidity Output"
       >
         <PreviewItem
           title="Pool tokens you'll receive:"

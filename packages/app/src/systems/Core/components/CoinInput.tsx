@@ -9,7 +9,17 @@ import { Spinner } from "~/systems/UI";
 
 function getRightValue(value: string, displayType: string) {
   if (displayType === "text") return parseToFormattedNumber(value);
-  return value === "0.0" ? "0" : value;
+
+  switch (value) {
+    case "0.0":
+      return "0";
+
+    case ".":
+      return "0.";
+
+    default:
+      return value;
+  }
 }
 
 export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
@@ -23,6 +33,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
       autoFocus,
       isLoading,
       rightElement,
+      bottomElement,
       ...props
     },
     ref
@@ -38,32 +49,35 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
 
     return (
       <div className="coinInput">
-        {isLoading ? (
-          <div className="flex-1">
-            <Spinner className="self-start mt-2 ml-2" variant="base" />
-          </div>
-        ) : (
-          <NumberFormat
-            {...props}
-            autoFocus={autoFocus}
-            getInputRef={ref}
-            allowNegative={false}
-            defaultValue={initialValue}
-            value={getRightValue(value || "", displayType)}
-            displayType={displayType}
-            isAllowed={isAllowed}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              onChange?.(e.target.value);
-              setValue(e.target.value);
-            }}
-            decimalScale={DECIMAL_UNITS}
-            placeholder={props.placeholder || "0"}
-            className="coinInput--input"
-            thousandSeparator={false}
-            onInput={onInput}
-          />
-        )}
-        {rightElement}
+        <div className="flex">
+          {isLoading ? (
+            <div className="flex-1">
+              <Spinner className="self-start mt-2 ml-2" variant="base" />
+            </div>
+          ) : (
+            <NumberFormat
+              {...props}
+              className="coinInput--input"
+              autoFocus={autoFocus}
+              getInputRef={ref}
+              allowNegative={false}
+              defaultValue={initialValue}
+              value={getRightValue(value || "", displayType)}
+              displayType={displayType}
+              isAllowed={isAllowed}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                onChange?.(e.target.value);
+                setValue(e.target.value);
+              }}
+              decimalScale={DECIMAL_UNITS}
+              placeholder={props.placeholder || "0"}
+              thousandSeparator={false}
+              onInput={onInput}
+            />
+          )}
+          {rightElement}
+        </div>
+        {bottomElement}
       </div>
     );
   }

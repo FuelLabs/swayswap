@@ -24,7 +24,7 @@ export function SwapPreview() {
     : "Max. sent after slippage";
 
   return (
-    <div aria-label="preview-swap-output">
+    <div aria-label="Preview Swap Output">
       <div className="flex justify-center">
         <BsArrowDown size={20} className="text-gray-400" />
       </div>

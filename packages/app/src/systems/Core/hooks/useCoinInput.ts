@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useMemo, useEffect, useState } from 'react';
 import type { NumberFormatValues } from 'react-number-format';
 
+import type { CoinBalanceProps } from '../components/CoinBalance';
 import { formatUnits, isCoinEth, MAX_U64_VALUE, parseInputValueBigInt, ZERO } from '../utils';
 
 import { useBalances } from './useBalances';
@@ -22,8 +23,6 @@ export type UseCoinParams = {
   /**
    * Coins for <CoinSelector />
    */
-  showBalance?: boolean;
-  showMaxButton?: boolean;
   onChangeCoin?: (coin: Coin) => void;
   disableWhenEth?: boolean;
 };
@@ -34,6 +33,7 @@ export type UseCoinInput = {
   setGasFee: React.Dispatch<React.SetStateAction<Maybe<bigint>>>;
   getInputProps: () => CoinInputProps;
   getCoinSelectorProps: () => CoinSelectorProps;
+  getCoinBalanceProps: () => CoinBalanceProps;
   formatted: string;
   hasEnoughBalance: boolean;
 };
@@ -45,6 +45,7 @@ export type CoinInputProps = Omit<UseCoinParams, 'onChange'> &
     autoFocus?: boolean;
     isLoading?: boolean;
     rightElement?: ReactNode;
+    bottomElement?: ReactNode;
     isAllowed?: (values: NumberFormatValues) => boolean;
     onChange?: (val: string) => void;
   };
@@ -72,8 +73,6 @@ export function useCoinInput({
   gasFee: initialGasFee,
   isReadOnly,
   onInput,
-  showBalance,
-  showMaxButton,
   onChangeCoin,
   disableWhenEth,
   ...params
@@ -84,10 +83,6 @@ export function useCoinInput({
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
   const isEth = useMemo(() => isCoinEth(coin), [coin?.assetId]);
 
-  useEffect(() => {
-    if (initialGasFee) setGasFee(initialGasFee);
-  }, [initialGasFee]);
-
   // TODO: consider real gas fee, replacing GAS_FEE variable.
   // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.
   function getSafeMaxBalance() {
@@ -97,7 +92,7 @@ export function useCoinInput({
     return value;
   }
 
-  const handleInputPropsChange = (val: string) => {
+  function handleInputPropsChange(val: string) {
     if (isReadOnly) return;
     const next = val !== '' ? parseInputValueBigInt(val) : null;
     if (typeof onChange === 'function') {
@@ -105,11 +100,11 @@ export function useCoinInput({
     } else {
       setAmount(next);
     }
-  };
+  }
 
-  const isAllowed = ({ value }: NumberFormatValues) => {
+  function isAllowed({ value }: NumberFormatValues) {
     return parseInputValueBigInt(value) <= MAX_U64_VALUE;
-  };
+  }
 
   function getInputProps() {
     return {
@@ -127,8 +122,6 @@ export function useCoinInput({
     return {
       coin,
       isReadOnly,
-      showBalance,
-      showMaxButton,
       onChange: onChangeCoin,
       onSetMaxBalance: () => {
         onInput?.();
@@ -142,6 +135,21 @@ export function useCoinInput({
     } as CoinSelectorProps;
   }
 
+  function getCoinBalanceProps() {
+    return {
+      coin,
+      gasFee,
+      onSetMaxBalance: () => {
+        onInput?.();
+        handleInputPropsChange(formatValue(getSafeMaxBalance()));
+      },
+    } as CoinBalanceProps;
+  }
+
+  useEffect(() => {
+    if (initialGasFee) setGasFee(initialGasFee);
+  }, [initialGasFee]);
+
   useEffect(() => {
     // Enable value initialAmount to be null
     if (initialAmount !== undefined) setAmount(initialAmount);
@@ -153,6 +161,7 @@ export function useCoinInput({
     setGasFee,
     getInputProps,
     getCoinSelectorProps,
+    getCoinBalanceProps,
     formatted: formatValue(amount),
     hasEnoughBalance: getSafeMaxBalance() >= (amount || ZERO),
   };

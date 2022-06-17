@@ -23,6 +23,7 @@ import {
   TOKENS,
   useBalances,
 } from "~/systems/Core";
+import { CoinBalance } from "~/systems/Core/components/CoinBalance";
 import { Button, Card, Spinner } from "~/systems/UI";
 import type { Coin, Maybe } from "~/types";
 
@@ -201,6 +202,9 @@ export function AddLiquidity() {
               rightElement={
                 <CoinSelector {...fromInput.getCoinSelectorProps()} />
               }
+              bottomElement={
+                <CoinBalance {...fromInput.getCoinBalanceProps()} />
+              }
             />
             <CoinInput
               aria-label="Coin To Input"
@@ -210,6 +214,7 @@ export function AddLiquidity() {
               rightElement={
                 <CoinSelector {...toInput.getCoinSelectorProps()} isReadOnly />
               }
+              bottomElement={<CoinBalance {...toInput.getCoinBalanceProps()} />}
             />
           </div>
           <AddLiquidityPreview
