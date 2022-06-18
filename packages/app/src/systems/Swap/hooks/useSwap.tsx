@@ -1,4 +1,4 @@
-import { useMachine, useSelector } from "@xstate/react";
+import { useActor, useInterpret, useSelector } from "@xstate/react";
 import type { CoinQuantity } from "fuels";
 import { atom, useAtom } from "jotai";
 import type { ReactNode } from "react";
@@ -53,20 +53,34 @@ export enum SwapEvents {
 // SwapContext
 // ----------------------------------------------------------------------------
 
-type Context = {
-  state: SwapMachineState;
-  send: SwapMachineService["send"];
-  service: SwapMachineService;
-};
+const serviceMap = new Map();
+const isProd = process.env.NODE_ENV === "production";
 
-const swapContext = createContext({} as Context);
+const swapServiceContext = createContext<SwapMachineService>(
+  // @ts-ignore
+  null as SwapMachineService
+);
+
+export function useSwapService() {
+  let service = useContext(swapServiceContext);
+  /**
+   * Need this because of React.context that updates for null on each refresh
+   * Causing an error in useActor. But it's on development
+   */
+  if (!service && !isProd) {
+    service = serviceMap.get("service");
+  }
+  return service;
+}
 
 export function useSwapContext() {
-  return useContext(swapContext);
+  const service = useSwapService();
+  const [state] = useActor(service);
+  return { state, service, send: service.send };
 }
 
 export function useSwap() {
-  const { send, service } = useContext(swapContext);
+  const service = useSwapService();
   const isLoading = useSelector(service, selectors.isLoading);
   const canSwap = useSelector(service, selectors.canSwap);
   const coinFrom = useSelector(service, selectors.coinFrom);
@@ -75,10 +89,10 @@ export function useSwap() {
   const txCost = useSelector(service, selectors.txCost);
 
   function onInvertCoins() {
-    send("INVERT_COINS");
+    service.send("INVERT_COINS");
   }
   function onSwap() {
-    send("SWAP");
+    service.send("SWAP");
   }
 
   return {
@@ -108,7 +122,7 @@ export function SwapProvider({ children }: SwapProviderProps) {
   const coinFrom = useCoinByParam("coinFrom");
   const coinTo = useCoinByParam("coinTo");
 
-  const [state, send, service] = useMachine(swapMachine, {
+  const service = useInterpret(swapMachine, {
     context: {
       client,
       wallet,
@@ -122,6 +136,10 @@ export function SwapProvider({ children }: SwapProviderProps) {
     } as SwapMachineContext,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any);
+
+  if (!isProd) {
+    serviceMap.set("service", service);
+  }
 
   /**
    * This effect is a machine context subscription in order to keep
@@ -137,12 +155,12 @@ export function SwapProvider({ children }: SwapProviderProps) {
    * is updated outside the machine
    */
   useSubscriber<CoinQuantity[]>(SwapEvents.refetchBalances, (data) => {
-    send("SET_BALANCES", { data });
+    service.send("SET_BALANCES", { data });
   });
 
   return (
-    <swapContext.Provider value={{ state, send, service }}>
+    <swapServiceContext.Provider value={service}>
       {children}
-    </swapContext.Provider>
+    </swapServiceContext.Provider>
   );
 }

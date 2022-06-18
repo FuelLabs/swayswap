@@ -14,24 +14,27 @@ import {
 
 const selectors = {
   hasPreview: (state: SwapMachineState) => {
-    return !state.hasTag("loading") && state.context.previewInfo;
+    return !state.hasTag("loading") && state.context?.previewInfo;
   },
-  outputAmount: ({ context: ctx }: SwapMachineState) => {
-    const amount = safeBigInt(ctx.toAmount?.raw);
+  outputAmount: (state: SwapMachineState) => {
+    const ctx = state.context;
+    const amount = safeBigInt(ctx?.toAmount?.raw);
     return parseToFormattedNumber(amount);
   },
-  inputAmount: ({ context: ctx }: SwapMachineState) => {
-    const isFrom = ctx.direction === SwapDirection.fromTo;
-    const amount = safeBigInt((isFrom ? ctx.toAmount : ctx.fromAmount)?.raw);
+  inputAmount: (state: SwapMachineState) => {
+    const ctx = state.context;
+    const isFrom = ctx?.direction === SwapDirection.fromTo;
+    const amount = safeBigInt((isFrom ? ctx?.toAmount : ctx?.fromAmount)?.raw);
     const price = calculatePriceWithSlippage(
       amount,
-      ctx.direction,
-      ctx.slippage || 0
+      ctx?.direction,
+      ctx?.slippage || 0
     );
     return parseToFormattedNumber(price);
   },
-  priceImpact: ({ context: ctx }: SwapMachineState) => {
-    return calculatePriceImpact(ctx);
+  priceImpact: (state: SwapMachineState) => {
+    const ctx = state.context;
+    return ctx && calculatePriceImpact(ctx);
   },
 };
 

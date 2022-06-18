@@ -8,7 +8,7 @@ import { useSwap, useSwapContext } from "./useSwap";
 const selectors = {
   buttonText: (state: SwapMachineState) => {
     const ctx = state.context;
-    const { coinFrom } = ctx;
+    const coinFrom = ctx?.coinFrom;
 
     if (isLoadingState(state)) {
       return "Loading...";
@@ -17,7 +17,7 @@ const selectors = {
       return "Swapping...";
     }
     if (state.hasTag("needSelectToken")) {
-      const opposite = ctx.direction === FROM_TO ? TO_FROM : FROM_TO;
+      const opposite = ctx?.direction === FROM_TO ? TO_FROM : FROM_TO;
       return `Select ${opposite} token`;
     }
     if (state.hasTag("noPoolFound")) {
