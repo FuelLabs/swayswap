@@ -136,13 +136,13 @@ export function SwapPage() {
           Swap
         </Card.Title>
         <SwapComponent
-          networkFee={txCost?.total}
+          networkFee={txCost?.fee}
           previewAmount={previewAmount}
           onChange={handleSwap}
           isLoading={isLoading}
         />
         <SwapPreview
-          networkFee={txCost?.total}
+          networkFee={txCost?.fee}
           isLoading={isLoading}
           swapInfo={swapInfo}
         />

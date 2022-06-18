@@ -1,11 +1,11 @@
 import type { CallResult, Overrides, ScriptTransactionRequest } from 'fuels';
 import { arrayify, Provider, ReceiptType } from 'fuels';
 
-import { toBigInt, toNumber, ZERO } from './math';
+import { divideFnValidOnly, toBigInt, toNumber, ZERO } from './math';
 
 import { BYTE_PRICE, FUEL_PROVIDER_URL, GAS_PRICE } from '~/config';
 
-export function getGasFee(simulateResult: CallResult) {
+export function getGasUsed(simulateResult: CallResult) {
   const scriptResult = simulateResult.receipts.find(
     (receipt) => receipt.type === ReceiptType.ScriptResult
   );
@@ -15,29 +15,90 @@ export function getGasFee(simulateResult: CallResult) {
   return ZERO;
 }
 
+export type ChainConfig = {
+  nodeInfo: {
+    minGasPrice: string;
+    minBytePrice: string;
+  };
+  chain: {
+    consensusParameters: {
+      gasPriceFactor: string;
+    };
+    latestBlock: {
+      height: string;
+    };
+  };
+};
+
+export async function getChainConfig(): Promise<ChainConfig> {
+  // TODO: replace this for a SDK provider query
+  const chainConfigQuery = `query {
+    nodeInfo {
+      minGasPrice
+      minBytePrice
+    }
+    chain {
+      consensusParameters {
+        gasPriceFactor
+      }
+      latestBlock {
+        height
+      }
+    }
+  }`;
+  const chainConfigResponse = await fetch(FUEL_PROVIDER_URL, {
+    method: 'POST',
+    headers: {
+      accept: '*/*',
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      operationName: null,
+      variables: {},
+      query: chainConfigQuery,
+    }),
+  }).then<{ data: ChainConfig }>((resp) => resp.json());
+  return chainConfigResponse.data;
+}
+
 export type TransactionCost = {
   gas: bigint;
   byte: bigint;
   total: bigint;
+  fee: bigint;
   error?: string;
 };
 
 export function transactionByteSize(request: ScriptTransactionRequest) {
-  const byteSize = toBigInt(request.toTransactionBytes().length * BYTE_PRICE);
-  const witnessesByteSize = toBigInt(
-    request.witnesses.reduce((t, witnesses) => t + arrayify(witnesses).length, 0)
+  const byteSize = request.toTransactionBytes().length;
+  const witnessesByteSize = request.witnesses.reduce(
+    (t, witnesses) => t + arrayify(witnesses).length,
+    0
   );
-
-  return byteSize - witnessesByteSize;
+  return toBigInt(byteSize - witnessesByteSize);
 }
 
 export function emptyTransactionCost(error?: string) {
   return {
+    fee: ZERO,
     total: ZERO,
     gas: ZERO,
     byte: ZERO,
     error,
   };
+}
+
+function getPriceByFactor(total: bigint, chainConfig: ChainConfig) {
+  return toBigInt(
+    Math.ceil(divideFnValidOnly(total, chainConfig.chain.consensusParameters.gasPriceFactor))
+  );
+}
+
+export function getTotalFee(gasUsed: bigint, byteSize: bigint, chainConfig?: ChainConfig) {
+  if (!chainConfig) return ZERO;
+  const gasFee = gasUsed * toBigInt(chainConfig.nodeInfo.minGasPrice);
+  const byteFee = byteSize * toBigInt(chainConfig.nodeInfo.minBytePrice);
+  return getPriceByFactor(gasFee, chainConfig) + getPriceByFactor(byteFee, chainConfig);
 }
 
 export async function getTransactionCost(
@@ -49,17 +110,19 @@ export async function getTransactionCost(
     // measure gasUsed without needing to have balance
     request.gasPrice = ZERO;
     request.bytePrice = ZERO;
+    const chainConfig = await getChainConfig();
     const provider = new Provider(FUEL_PROVIDER_URL);
     const dryRunResult = await provider.call(request);
-    const gasFee = getGasFee(dryRunResult) * toBigInt(GAS_PRICE);
+    const gasUsed = getGasUsed(dryRunResult);
     const byte = transactionByteSize(request);
-    const gas = toBigInt(Math.ceil(toNumber(gasFee) * 1.1));
+    const gas = toBigInt(Math.ceil(toNumber(gasUsed) * 1.1));
     const total = gas + byte;
 
     return {
-      total,
       gas,
       byte,
+      total,
+      fee: getTotalFee(gasUsed, byte, chainConfig),
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {

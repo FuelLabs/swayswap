@@ -9,3 +9,4 @@ export * from './useEthBalance';
 export * from './useSlippage';
 export * from './useTokensMethods';
 export * from './useWallet';
+export * from './useChainConfig';
