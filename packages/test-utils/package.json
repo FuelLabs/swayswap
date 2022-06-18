@@ -25,22 +25,22 @@
   },
   "dependencies": {
     "@chakra-ui/utils": "2.0.2",
-    "@testing-library/dom": "^8.13.0",
+    "@testing-library/dom": "^8.14.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
-    "@testing-library/react-hooks": "^8.0.0",
-    "@testing-library/user-event": "^14.2.0",
-    "@types/testing-library__jest-dom": "^5.14.3",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.2.1",
+    "@types/testing-library__jest-dom": "^5.14.4",
     "jest-axe": "^6.0.0",
     "jest-fail-on-console": "^2.4.2",
     "jest-matcher-utils": "^28.1.1",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@swayswap/config": "workspace:*",
-    "@types/jest-axe": "^3.5.3"
+    "@types/jest-axe": "^3.5.4"
   },
   "peerDependencies": {
     "react": ">=18"
