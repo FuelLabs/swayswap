@@ -86,7 +86,7 @@ export function RemoveLiquidityPage() {
     setErrors(validateRemoveLiquidity());
   }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
 
-  const hasEnoughBalance = (ethBalance.raw || ZERO) > txCost.total;
+  const hasEnoughBalance = (ethBalance.raw || ZERO) > txCost.fee;
   const isRemoveButtonDisabled =
     !!errors.length ||
     removeLiquidityMutation.isLoading ||
@@ -128,7 +128,7 @@ export function RemoveLiquidityPage() {
           bottomElement={<CoinBalance {...tokenInput.getCoinBalanceProps()} />}
         />
       </div>
-      <RemoveLiquidityPreview networkFee={txCost?.total} amount={amount} />
+      <RemoveLiquidityPreview networkFee={txCost.fee} amount={amount} />
       <Button
         isFull
         size="lg"
