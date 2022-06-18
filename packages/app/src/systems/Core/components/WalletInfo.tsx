@@ -15,7 +15,7 @@ export function WalletInfo({ onClose }: WalletInfoProps) {
   const { coins, isLoading } = useAssets();
 
   return (
-    <Card className="min-w-[300px]">
+    <Card className="min-w-[350px]">
       <Card.Title>
         <div className="flex items-center gap-2 mr-2">
           <BiWallet className="text-primary-500" />

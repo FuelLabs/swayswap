@@ -2,24 +2,14 @@ import { forwardRef, useEffect, useState } from "react";
 import NumberFormat from "react-number-format";
 
 import type { CoinInputProps } from "../hooks/useCoinInput";
-import { parseToFormattedNumber } from "../utils";
 
 import { DECIMAL_UNITS } from "~/config";
 import { Spinner } from "~/systems/UI";
 
 function getRightValue(value: string, displayType: string) {
-  if (displayType === "text") return parseToFormattedNumber(value);
-
-  switch (value) {
-    case "0.0":
-      return "0";
-
-    case ".":
-      return "0.";
-
-    default:
-      return value;
-  }
+  if (displayType === "text") return value;
+  if (value === "0.0") return "0";
+  return value === "." ? "0." : value;
 }
 
 export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(

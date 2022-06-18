@@ -22,8 +22,8 @@ import {
   TOKENS,
   useBalances,
   safeBigInt,
+  CoinBalance,
 } from "~/systems/Core";
-import { CoinBalance } from "~/systems/Core/components/CoinBalance";
 import { Button, Card, Spinner } from "~/systems/UI";
 import type { Coin, Maybe } from "~/types";
 

@@ -13,6 +13,7 @@ import {
 import { CONTRACT_ID } from "~/config";
 import {
   CoinInput,
+  CoinBalance,
   useCoinInput,
   CoinSelector,
   NavigateBackButton,
@@ -23,7 +24,6 @@ import {
   useEthBalance,
   safeBigInt,
 } from "~/systems/Core";
-import { CoinBalance } from "~/systems/Core/components/CoinBalance";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { Button, Card } from "~/systems/UI";
 

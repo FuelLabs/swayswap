@@ -1,9 +1,10 @@
 import { useSwap } from "../hooks/useSwap";
 import { useSwapCoinInput } from "../hooks/useSwapCoinInput";
 import { useSwapCoinSelector } from "../hooks/useSwapCoinSelector";
+import { useSwapMaxButton } from "../hooks/useSwapMaxButton";
 import { FROM_TO, TO_FROM } from "../machines/swapMachine";
 
-import { CoinInput, CoinSelector } from "~/systems/Core";
+import { CoinBalance, CoinInput, CoinSelector } from "~/systems/Core";
 import { InvertButton } from "~/systems/UI";
 
 export function SwapWidget() {
@@ -12,6 +13,8 @@ export function SwapWidget() {
   const coinSelectorToProps = useSwapCoinSelector(TO_FROM);
   const coinInputFromProps = useSwapCoinInput(FROM_TO);
   const coinInputToProps = useSwapCoinInput(TO_FROM);
+  const coinFromMaxButtonProps = useSwapMaxButton(FROM_TO);
+  const coinToMaxButtonProps = useSwapMaxButton(TO_FROM);
 
   return (
     <>
@@ -19,6 +22,7 @@ export function SwapWidget() {
         <CoinInput
           {...coinInputFromProps}
           rightElement={<CoinSelector {...coinSelectorFromProps} />}
+          bottomElement={<CoinBalance {...coinFromMaxButtonProps} />}
         />
       </div>
       <div className="flex items-center sm:justify-center -my-5">
@@ -28,6 +32,7 @@ export function SwapWidget() {
         <CoinInput
           {...coinInputToProps}
           rightElement={<CoinSelector {...coinSelectorToProps} />}
+          bottomElement={<CoinBalance {...coinToMaxButtonProps} />}
         />
       </div>
     </>

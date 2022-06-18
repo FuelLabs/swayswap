@@ -1,5 +1,6 @@
 export * from "./AnimatedPage";
 export * from "./AssetItem";
+export * from "./CoinBalance";
 export * from "./CoinInput";
 export * from "./CoinSelector";
 export * from "./CoinsListDialog";

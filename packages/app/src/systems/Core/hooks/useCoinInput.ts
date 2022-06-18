@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { useMemo, useEffect, useState } from 'react';
 import type { NumberFormatValues } from 'react-number-format';
 
-import type { CoinBalanceProps } from '../components/CoinBalance';
 import {
   formatUnits,
   isCoinEth,
@@ -60,11 +59,16 @@ export type CoinInputProps = Omit<UseCoinParams, 'onChange'> &
 export type CoinSelectorProps = {
   coin?: Maybe<Coin>;
   isReadOnly?: boolean;
+  onChange?: (coin: Coin) => void;
+  tooltip?: ReactNode;
+};
+
+export type CoinBalanceProps = {
+  coin?: Maybe<Coin>;
+  gasFee?: Maybe<bigint>;
   showBalance?: boolean;
   showMaxButton?: boolean;
-  onChange?: (coin: Coin) => void;
   onSetMaxBalance?: () => void;
-  tooltip?: ReactNode;
 };
 
 type DisplayType = 'input' | 'text';
