@@ -21,7 +21,13 @@ export function SwapWidget() {
       <div className="mt-4">
         <CoinInput
           {...coinInputFromProps}
-          rightElement={<CoinSelector {...coinSelectorFromProps} />}
+          aria-label="Coin from input"
+          rightElement={
+            <CoinSelector
+              aria-label="Coin selector from"
+              {...coinSelectorFromProps}
+            />
+          }
           bottomElement={<CoinBalance {...coinFromMaxButtonProps} />}
         />
       </div>
@@ -31,7 +37,13 @@ export function SwapWidget() {
       <div className="mb-4">
         <CoinInput
           {...coinInputToProps}
-          rightElement={<CoinSelector {...coinSelectorToProps} />}
+          aria-label="Coin to input"
+          rightElement={
+            <CoinSelector
+              aria-label="Coin selector to"
+              {...coinSelectorToProps}
+            />
+          }
           bottomElement={<CoinBalance {...coinToMaxButtonProps} />}
         />
       </div>

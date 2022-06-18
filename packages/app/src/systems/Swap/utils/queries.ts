@@ -27,7 +27,7 @@ export const queryNetworkFeeOnSwap = async (
   }
   return contract.prepareCall.swap_with_minimum(1, DEADLINE, {
     forward: [1, coinFrom.assetId],
-    variableOutputs: 1,
+    variableOutputs: 2,
     gasLimit: 1000000,
   });
 };

@@ -4,10 +4,10 @@ import type { Coin, Maybe } from '~/types';
 
 export const objectId = (value: string) => ({ value });
 
-export const sleep = (ms: number) => {
+export function sleep(ms: number) {
   // eslint-disable-next-line no-promise-executor-return
   return new Promise((resolve) => setTimeout(resolve, ms));
-};
+}
 
 export function omit<T>(list: string[], props: T) {
   return Object.entries(props).reduce((obj, [key, value]) => {

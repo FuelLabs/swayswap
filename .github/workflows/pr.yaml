@@ -108,7 +108,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       # Make github action to use the latest version of
       # docker compose without it docker compose down
       # has issues with memory nil pointer
@@ -125,7 +125,11 @@ jobs:
       - name: Setup scripts
         run: |
           pnpm scripts:setup
-      
+
+      - name: Run test
+        run: |
+          pnpm ci:test:coverage
+
       # using same dependencies from cypress/browsers:node16.5.0-chrome97-ff96 ...
       # not using directly the container because we still need ubuntu-latest preset
       - name: Install Cypress Dependencies
@@ -174,7 +178,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: "cypress:server:*"
           NODE_ENV: "test"
-
-      - name: Run test
-        run: |
-          pnpm ci:test:coverage

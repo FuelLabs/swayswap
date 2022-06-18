@@ -99,31 +99,38 @@ export const calculatePriceWithSlippage = (
   return BigInt(Math.trunc(total));
 };
 
-export function notHasEnoughBalance(amount: Maybe<bigint>, balance: Maybe<bigint>) {
-  return Boolean(amount && balance && amount > balance);
+export function hasEnoughBalance(amount: Maybe<bigint>, balance: Maybe<bigint>) {
+  return Boolean(amount && balance && amount < balance);
 }
 
 // TODO: Add unit tests on this
-export function notHasLiquidityForSwap({
+export function hasLiquidityForSwap({
+  direction,
   poolInfo,
   coinFrom,
   fromAmount,
   coinTo,
   toAmount,
+  txCost,
+  amountPlusSlippage,
 }: SwapMachineContext) {
-  if (!coinFrom || !coinTo) return false;
+  if (!coinFrom || !coinTo || !txCost?.total) return false;
 
+  const isFrom = direction === SwapDirection.fromTo;
   const ethReserve = safeBigInt(poolInfo?.eth_reserve);
   const tokenReserve = safeBigInt(poolInfo?.token_reserve);
-  const fromIsETH = isCoinEth(coinFrom);
-  const toIsETH = isCoinEth(coinTo);
-  const fromBN = safeBigInt(fromAmount?.raw);
-  const toBN = safeBigInt(toAmount?.raw);
+  const fromAmountRaw = safeBigInt(fromAmount?.raw);
+  const toAmountRaw = safeBigInt(toAmount?.raw);
+  const txCostTotal = safeBigInt(txCost?.total);
+  const plusSlippage = safeBigInt(amountPlusSlippage?.raw);
 
-  return (
-    (fromIsETH && (fromBN > ethReserve || toBN > tokenReserve)) ||
-    (toIsETH && (toBN > ethReserve || fromBN > tokenReserve))
-  );
+  if (isCoinEth(coinFrom) && isFrom) {
+    return fromAmountRaw + txCostTotal < ethReserve && toAmountRaw < tokenReserve;
+  }
+  if (isCoinEth(coinFrom) && !isFrom) {
+    return plusSlippage + txCostTotal < ethReserve && toAmountRaw < tokenReserve;
+  }
+  return fromAmountRaw < tokenReserve && toAmountRaw + txCostTotal < ethReserve;
 }
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {

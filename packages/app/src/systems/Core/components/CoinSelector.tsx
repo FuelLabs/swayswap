@@ -12,7 +12,7 @@ import { Button, Dialog, Tooltip, useDialog } from "~/systems/UI";
 import type { Coin, Maybe } from "~/types";
 
 export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
-  ({ coin, isReadOnly, onChange, tooltip: tooltipContent }, ref) => {
+  ({ coin, isReadOnly, onChange, tooltip: tooltipContent, ...props }, ref) => {
     const [selected, setSelected] = useState<Maybe<Coin>>(null);
     const dialog = useDialog();
 
@@ -25,7 +25,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
 
     const button = (
       <Button
-        aria-label="Coin Selector"
+        aria-label={props["aria-label"] || "Coin Selector"}
         {...dialog.openButtonProps}
         size="md"
         isReadOnly={isReadOnly}

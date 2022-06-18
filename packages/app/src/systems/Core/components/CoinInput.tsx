@@ -8,8 +8,10 @@ import { Spinner } from "~/systems/UI";
 
 function getRightValue(value: string, displayType: string) {
   if (displayType === "text") return value;
+  if (!value.length) return null;
   if (value === "0.0") return "0";
-  return value === "." ? "0." : value;
+  if (value === ".") return "0.";
+  return value;
 }
 
 export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(

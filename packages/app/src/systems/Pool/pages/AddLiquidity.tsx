@@ -196,7 +196,7 @@ export function AddLiquidity() {
         <>
           <div className="space-y-4 my-4">
             <CoinInput
-              aria-label="Coin From Input"
+              aria-label="Coin from input"
               autoFocus
               {...fromInput.getInputProps()}
               rightElement={
@@ -207,7 +207,7 @@ export function AddLiquidity() {
               }
             />
             <CoinInput
-              aria-label="Coin To Input"
+              aria-label="Coin to input"
               id="coinTo"
               name="coinTo"
               {...toInput.getInputProps()}

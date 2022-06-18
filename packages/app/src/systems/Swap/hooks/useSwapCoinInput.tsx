@@ -69,7 +69,6 @@ export function useSwapCoinInput(direction: SwapDirection): UseCoinInputReturn {
     value: coinAmount,
     displayType: "input",
     disabled: isDisabled,
-    "aria-label": `Coin ${isFrom ? "from" : "to"} amount`,
     ...(isDisabled && { placeholder: "Select..." }),
   };
 }

@@ -44,7 +44,7 @@ describe('End-to-end Test: 😁 Happy Path', () => {
         if (hasPoolCreated) {
           // validate add liquidity
           cy.contains('Enter Ether amount');
-          cy.getByAriaLabel('Coin From Input').type('0.2');
+          cy.getByAriaLabel('Coin from input').type('0.2');
 
           // make sure preview output box shows up
           cy.getByAriaLabel('Preview Add Liquidity Output');
@@ -55,8 +55,8 @@ describe('End-to-end Test: 😁 Happy Path', () => {
         } else {
           // validate create pool
           cy.contains('Enter Ether amount');
-          cy.getByAriaLabel('Coin From Input').type('0.2');
-          cy.getByAriaLabel('Coin To Input').type('190');
+          cy.getByAriaLabel('Coin from input').type('0.2');
+          cy.getByAriaLabel('Coin to input').type('190');
 
           // make sure preview output box shows up
           cy.getByAriaLabel('Preview Add Liquidity Output');
@@ -72,7 +72,10 @@ describe('End-to-end Test: 😁 Happy Path', () => {
         // validate swap
         cy.contains('button', 'Swap').click();
         cy.contains('Enter amount');
-        cy.getByAriaLabel('Coin From Input').type('0.1');
+        cy.getByAriaLabel('Coin from input').type('0.1');
+        cy.getByAriaLabel('Coin selector to').click();
+        cy.get('[role=menu').type('{enter}');
+
         // make sure preview output box shows up
         cy.getByAriaLabel('Preview Swap Output');
 
@@ -84,9 +87,10 @@ describe('End-to-end Test: 😁 Happy Path', () => {
         cy.contains('button', 'Pool').click();
         cy.contains('button', 'Remove liquidity').click();
         cy.getByAriaLabel('Set Maximun Balance').click();
-        //
+
         // make sure preview output box shows up
         cy.getByAriaLabel('Preview Remove Liquidity Output');
+
         // make sure current positions box shows up
         cy.getByAriaLabel('Pool Current Position');
         cy.contains('button', 'Remove liquidity').click();

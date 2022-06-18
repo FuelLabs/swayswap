@@ -4,11 +4,14 @@ import {
   screen,
   waitFor,
 } from "@swayswap/test-utils";
+import Decimal from "decimal.js";
 import type { Wallet } from "fuels";
-import toast from "react-hot-toast";
+
+import * as poolHelpers from "../../Pool/utils/helpers";
+import * as swapHelpers from "../utils/helpers";
 
 import { App } from "~/App";
-import { parseToFormattedNumber } from "~/systems/Core";
+import { TOKENS } from "~/systems/Core";
 import {
   createWallet,
   mockUseWallet,
@@ -24,7 +27,6 @@ async function findSwapBtn() {
 async function clickOnMaxBalance() {
   return waitFor(async () => {
     const button = await screen.findAllByRole("button", { name: /max/i });
-    expect(button.length).toBe(2);
     fireEvent.click(button[0]);
   });
 }
@@ -35,9 +37,11 @@ async function createAndMockWallet() {
   return wallet;
 }
 
-async function getFormattedBalance(wallet: Wallet) {
-  const balance = await wallet.getBalance();
-  return parseToFormattedNumber(balance);
+async function fillCoinFromWithValue(value: string) {
+  await waitFor(async () => {
+    const coinFrom = screen.getByLabelText(/Coin from input/i);
+    fireEvent.change(coinFrom, { target: { value } });
+  });
 }
 
 describe("SwapPage", () => {
@@ -47,16 +51,14 @@ describe("SwapPage", () => {
       await faucet(wallet, 3);
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
     it("should swap button be disabled", async () => {
       renderWithRouter(<App />, { route: "/swap" });
 
       const submitBtn = await findSwapBtn();
-      expect(submitBtn).toBeDisabled();
-      expect(submitBtn.textContent).toMatch(/enter amount/i);
+      await waitFor(() => {
+        expect(submitBtn).toBeDisabled();
+        expect(submitBtn.textContent).toMatch(/enter amount/i);
+      });
     });
 
     it("should show balance correctly", async () => {
@@ -67,11 +69,19 @@ describe("SwapPage", () => {
     });
 
     function getFirstCoinSelectTextContent() {
-      return screen.getAllByLabelText("Coin Selector")[0].textContent;
+      return screen.getAllByLabelText(/coin selector/i)[0].textContent;
     }
 
-    it("should invert coin selector when click on invert", async () => {
+    it("should show a select coin button first", async () => {
       renderWithRouter(<App />, { route: "/swap" });
+
+      await waitFor(async () =>
+        expect(screen.getByText(/select token/i)).toBeInTheDocument()
+      );
+    });
+
+    it("should invert coin selector when click on invert", async () => {
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
 
       const invertBtn = screen.getByLabelText("Invert coins");
       await waitFor(async () => expect(invertBtn).toBeInTheDocument());
@@ -82,39 +92,65 @@ describe("SwapPage", () => {
       fireEvent.click(invertBtn);
     });
 
-    it("should show insufficient token amount if try to input more than balance", async () => {
-      renderWithRouter(<App />, { route: "/swap" });
+    it("should show insufficient eth for gas message", async () => {
+      const spy = jest
+        .spyOn(swapHelpers, "hasEnoughBalance")
+        .mockReturnValue(true);
 
-      await waitFor(async () => {
-        const coinFrom = screen.getByLabelText(/Coin from input/i);
-        fireEvent.change(coinFrom, { target: { value: "1000" } });
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+
+      await fillCoinFromWithValue("1000");
+      const submitBtn = await findSwapBtn();
+      await waitFor(() => {
+        expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
       });
 
+      spy.mockRestore();
+    });
+  });
+
+  describe("with eth for gas", () => {
+    let wallet: Wallet;
+
+    beforeAll(async () => {
+      wallet = await createAndMockWallet();
+      await faucet(wallet, 4);
+    });
+
+    it("should show insufficient balance if try to input more than balance", async () => {
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+
+      await fillCoinFromWithValue("1000");
       const submitBtn = await findSwapBtn();
-      expect(submitBtn.textContent).toMatch(
-        /(Insufficient)(\s\w+\s)(balance)/i
-      );
+      await waitFor(() => {
+        expect(submitBtn.textContent).toMatch(
+          /(Insufficient)(\s\w+\s)(balance)/i
+        );
+      });
     });
 
     it("should fill input value with max balance when click on max", async () => {
-      renderWithRouter(<App />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
 
       await clickOnMaxBalance();
       const coinFrom = screen.getByLabelText(/Coin from input/i);
       const inputValue = coinFrom.getAttribute("value");
-      expect(inputValue).toMatch(/1/);
+      const valDecimal = new Decimal(inputValue || "");
+      expect(valDecimal.round().toString()).toMatch(/2/);
     });
 
-    it("should show insufficient liquidity message when there is no pool reserve", async () => {
-      renderWithRouter(<App />, { route: "/swap" });
+    it("should show no pool found message when there is no pool reserve", async () => {
+      const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(0);
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
 
+      await fillCoinFromWithValue("0.5");
+      const submitBtn = await findSwapBtn();
       await waitFor(async () => {
-        const coinFrom = screen.getByLabelText(/Coin from input/i);
-        fireEvent.change(coinFrom, { target: { value: "0.5" } });
+        expect(submitBtn.textContent).toMatch(/no pool found/i);
+        expect(spy).toHaveBeenCalled();
       });
 
-      const submitBtn = await findSwapBtn();
-      expect(submitBtn.textContent).toMatch(/insufficient liquidity/i);
+      spy.mockRestore();
     });
   });
 
@@ -123,28 +159,54 @@ describe("SwapPage", () => {
 
     beforeAll(async () => {
       wallet = await createAndMockWallet();
-      await faucet(wallet, 4);
+      await faucet(wallet, 6);
       await mint(wallet);
-      await addLiquidity(wallet, "0.5", "1000");
+      await addLiquidity(
+        wallet,
+        "1",
+        "1000",
+        TOKENS[0].assetId,
+        TOKENS[1].assetId
+      );
     });
 
     afterAll(() => {
       jest.clearAllMocks();
     });
 
-    it("should show expected output after input value", async () => {
-      renderWithRouter(<App />, { route: "/swap" });
+    it("should show insufficient liquidity when amount is greater than liquidity", async () => {
+      const spy1 = jest
+        .spyOn(swapHelpers, "hasEnoughBalance")
+        .mockReturnValue(true);
 
+      const spy2 = jest
+        .spyOn(swapHelpers, "hasEthForNetworkFee")
+        .mockReturnValue(true);
+
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+
+      await fillCoinFromWithValue("100000");
+      const submitBtn = await findSwapBtn();
       await waitFor(async () => {
-        const coinFrom = screen.getByLabelText(/Coin from input/i);
-        fireEvent.change(coinFrom, { target: { value: "0.5" } });
+        expect(submitBtn.textContent).toMatch(/insufficient liquidity/i);
+      });
+
+      spy1.mockRestore();
+      spy2.mockRestore();
+    });
+
+    it("should show expected output after input value", async () => {
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+
+      await fillCoinFromWithValue("0.5");
+      await waitFor(async () => {
         const output = screen.getByText(/expected out/i);
         expect(output).toBeInTheDocument();
       });
     });
 
     it("should show price per token information", async () => {
-      renderWithRouter(<App />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
 
       await clickOnMaxBalance();
 
@@ -163,47 +225,13 @@ describe("SwapPage", () => {
     });
 
     it("should set automatically coin to input based on coin from value", async () => {
-      renderWithRouter(<App />, { route: "/swap" });
+      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
 
+      await fillCoinFromWithValue("0.5");
       await waitFor(async () => {
-        const coinFrom = screen.getByLabelText(/Coin from input/i);
-        fireEvent.change(coinFrom, { target: { value: "0.5" } });
         const coinTo = screen.getByLabelText(/Coin to input/i);
         const value = parseFloat(coinTo.getAttribute("value") || "0");
         expect(value).toBeGreaterThan(1);
-      });
-    });
-
-    it("should swap between two tokens", async () => {
-      const spy = jest.spyOn(toast, "success");
-      const amount = 0.5;
-      // As we don't have a way to access a good estimate of gas fee
-      // we use a max gas cost
-      const gasFeeEstimateMax = 0.01;
-      const currentBalance = Number(await getFormattedBalance(wallet));
-      expect(currentBalance).toBeGreaterThan(1);
-
-      renderWithRouter(<App />, {
-        route: "/swap",
-      });
-
-      await waitFor(async () => {
-        const coinFrom = await screen.findByLabelText(/Coin from input/i);
-        fireEvent.change(coinFrom, { target: { value: String(amount) } });
-        expect(coinFrom.getAttribute("value")).toBe(String(amount));
-
-        const swapBtn = await screen.findByLabelText(/swap button/i);
-        expect(swapBtn).not.toBeDisabled();
-        expect(swapBtn.textContent).toMatch(/Swap/i);
-        fireEvent.click(swapBtn);
-      });
-
-      await waitFor(async () => {
-        expect(spy).toBeCalled();
-        const afterBalance = Number(await getFormattedBalance(wallet));
-        expect(afterBalance).toBeGreaterThan(
-          currentBalance - amount - gasFeeEstimateMax
-        );
       });
     });
   });

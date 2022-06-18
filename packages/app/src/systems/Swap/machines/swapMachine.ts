@@ -7,9 +7,9 @@ import type { SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 import {
   createAmount,
+  hasEnoughBalance,
   hasEthForNetworkFee,
-  notHasEnoughBalance,
-  notHasLiquidityForSwap,
+  hasLiquidityForSwap,
   queryNetworkFeeOnSwap,
   queryPreviewAmount,
   swapTokens,
@@ -119,10 +119,6 @@ export const swapMachine =
             validatingInputs: {
               always: [
                 {
-                  cond: 'notHasEthForNetworkFee',
-                  target: '#(machine).invalid.withoutEthForNetworkFee',
-                },
-                {
                   cond: 'notHasAmount',
                   target: '#(machine).invalid.withoutAmount',
                 },
@@ -133,6 +129,14 @@ export const swapMachine =
                 {
                   cond: 'notHasCoinTo',
                   target: '#(machine).invalid.withoutCoinTo',
+                },
+                {
+                  cond: 'notHasCoinFromBalance',
+                  target: '#(machine).invalid.withoutCoinFromBalance',
+                },
+                {
+                  cond: 'notHasEthForNetworkFee',
+                  target: '#(machine).invalid.withoutEthForNetworkFee',
                 },
                 {
                   target: 'fetchingPoolInfo',
@@ -188,12 +192,12 @@ export const swapMachine =
                   target: '#(machine).invalid.withoutLiquidity',
                 },
                 {
-                  cond: 'notHasEthForNetworkFee',
-                  target: '#(machine).invalid.withoutEthForNetworkFee',
-                },
-                {
                   cond: 'notHasCoinFromBalance',
                   target: '#(machine).invalid.withoutCoinFromBalance',
+                },
+                {
+                  cond: 'notHasEthForNetworkFee',
+                  target: '#(machine).invalid.withoutEthForNetworkFee',
                 },
                 {
                   target: 'success',
@@ -443,7 +447,7 @@ export const swapMachine =
          * Notifications actions using toast()
          */
         toastSwapSuccess() {
-          toast.success('Swap made successfully');
+          toast.success('Swap made successfully!');
         },
         toastErrorMessage(_, ev) {
           handleError(ev.data);
@@ -475,13 +479,13 @@ export const swapMachine =
           return !ev.data.ratio;
         },
         noLiquidity: (ctx) => {
-          return !ctx.previewInfo?.has_liquidity || notHasLiquidityForSwap(ctx);
+          return !ctx.previewInfo?.has_liquidity || !hasLiquidityForSwap(ctx);
         },
         notHasCoinFromBalance: (ctx) => {
           const isFrom = ctx.direction === SwapDirection.fromTo;
           return isFrom
-            ? notHasEnoughBalance(ctx.fromAmount?.raw, ctx.coinFromBalance)
-            : notHasEnoughBalance(ctx.amountPlusSlippage?.raw, ctx.coinFromBalance);
+            ? !hasEnoughBalance(ctx.fromAmount?.raw, ctx.coinFromBalance)
+            : !hasEnoughBalance(ctx.amountPlusSlippage?.raw, ctx.coinFromBalance);
         },
         notHasEthForNetworkFee: (ctx) => {
           return !hasEthForNetworkFee(ctx);

@@ -48,9 +48,9 @@
     "services:run-test": "make -C docker services-run-test",
     "services:reset-test": "NODE_ENV=test run-s services:clean-test services:setup-test",
     "update-deps": "./scripts/update-deps.sh",
-    "test": "turbo run test -- --passWithNoTests --runInBand",
-    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --runInBand",
-    "test:clear": "jest --clearCache",
+    "test": "turbo run test -- --passWithNoTests --no-cache",
+    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --no-cache",
+    "test:clear": "pnpm -r exec jest --clearCache",
     "test:e2e": "run-p --race dev cy:run"
   },
   "devDependencies": {
