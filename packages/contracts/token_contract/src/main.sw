@@ -8,15 +8,17 @@ use std::{
     storage::*,
     token::*,
 };
+
 use token_abi::Token;
-use swayswap_helpers::{get_msg_sender_address_or_panic};
+use swayswap_helpers::get_msg_sender_address_or_panic;
 
 const ZERO_B256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
 
 storage {
     owner: Address,
     mint_amount: u64,
-    mint_list: StorageMap<Address, bool>,
+    mint_list: StorageMap<Address,
+    bool>, 
 }
 
 enum Error {
@@ -26,7 +28,7 @@ enum Error {
     NotOwner: (),
 }
 
-fn validate_owner() {
+#[storage(read)]fn validate_owner() {
     let sender = get_msg_sender_address_or_panic();
     require(storage.owner == sender, Error::NotOwner);
 }
@@ -35,34 +37,34 @@ impl Token for Contract {
     //////////////////////////////////////
     // Owner methods
     //////////////////////////////////////
-    fn initialize(mint_amount: u64, address: Address) {
+    #[storage(read, write)]fn initialize(mint_amount: u64, address: Address) {
         require(storage.owner.into() == ZERO_B256, Error::CannotReinitialize);
         // Start the next message to be signed
         storage.owner = address;
         storage.mint_amount = mint_amount;
     }
 
-    fn set_mint_amount(mint_amount: u64) {
+    #[storage(read, write)]fn set_mint_amount(mint_amount: u64) {
         validate_owner();
         storage.mint_amount = mint_amount;
     }
 
-    fn mint_coins(mint_amount: u64) {
+    #[storage(read)]fn mint_coins(mint_amount: u64) {
         validate_owner();
         mint(mint_amount);
     }
 
-    fn burn_coins(burn_amount: u64) {
+    #[storage(read)]fn burn_coins(burn_amount: u64) {
         validate_owner();
         burn(burn_amount);
     }
 
-    fn transfer_coins(coins: u64, address: Address) {
+    #[storage(read)]fn transfer_coins(coins: u64, address: Address) {
         validate_owner();
         transfer_to_output(coins, contract_id(), address);
     }
 
-    fn transfer_token_to_output(coins: u64, asset_id: ContractId, address: Address) {
+    #[storage(read)]fn transfer_token_to_output(coins: u64, asset_id: ContractId, address: Address) {
         validate_owner();
         transfer_to_output(coins, asset_id, address);
     }
@@ -70,7 +72,7 @@ impl Token for Contract {
     //////////////////////////////////////
     // Mint public method
     //////////////////////////////////////
-    fn mint() {
+    #[storage(read, write)]fn mint() {
         require(storage.mint_amount > 0, Error::MintIsClosed);
 
         // Enable a address to mint only once
@@ -84,7 +86,7 @@ impl Token for Contract {
     //////////////////////////////////////
     // Read-Only methods
     //////////////////////////////////////
-    fn get_mint_amount() -> u64 {
+    #[storage(read)]fn get_mint_amount() -> u64 {
         storage.mint_amount
     }
 
