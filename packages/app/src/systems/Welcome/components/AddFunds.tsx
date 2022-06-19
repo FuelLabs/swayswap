@@ -13,7 +13,7 @@ export function AddFunds() {
       <h2>Add some test ETH to your wallet</h2>
       <p>
         To get started you&apos;ll need some funds.<br />
-        Click "Give me ETH" below to get some from the faucet.
+        Click &ldquo;Give me ETH&rdquo; below to get some from the faucet.
       </p>
       <FaucetApp onSuccess={next} />
     </WelcomeStep>
