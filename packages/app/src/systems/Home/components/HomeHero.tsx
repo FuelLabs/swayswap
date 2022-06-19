@@ -8,23 +8,23 @@ export function HomeHero() {
   return (
     <div className="homePage--hero">
       <h1>
-        SwaySwap is the first ever DEX built on a modular execution layer: Fuel.
+        SwaySwap is a DEX built on the fastest modular execution layer: Fuel.
       </h1>
       <p>
         Built with an entirely new language{" "}
-        <Link isExternal href="https://fuellabs.github.io/sway/latest/">
-          Sway
+        <Link isExternal href="https://github.com/FuelLabs/sway">
+          [Sway]
         </Link>
         , virtual machine{" "}
         <Link isExternal href="https://github.com/FuelLabs/fuel-vm">
-          FuelVM
+          [FuelVM]
         </Link>
-        , and UTXO-based blockchain{" "}
+        , and UTXO-based smart contract blockchain{" "}
         <Link isExternal href="https://github.com/FuelLabs/fuel-core">
-          Fuel
+          [Fuel]
         </Link>
         , you can now experience a demonstration of the next generation of
-        scaling beyond layer-2s and monolithic design.
+        scaling beyond layer-2s and monolithic blockchain design. #BeyondMonolithic
       </p>
       <Button size="lg" variant="primary" onPress={() => navigate(Pages.swap)}>
         Launch app

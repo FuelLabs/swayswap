@@ -26,8 +26,8 @@ export function CreateWallet() {
       <img src={relativeUrl("/illustrations/create-wallet.png")} />
       <h2>Welcome to SwaySwap</h2>
       <p className="my-5">
-        To get started you&apos;ll need a wallet, <br />
-        click below to generate one.
+        To get started you&apos;ll need a wallet.<br />
+        Click "Create Wallet" below to generate one.
       </p>
       <Button variant="primary" size="lg" onPress={handleCreateWallet}>
         Create Wallet

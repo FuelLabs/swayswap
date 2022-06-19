@@ -38,9 +38,9 @@ export function WelcomeDone() {
         />
         <label htmlFor="accept-agreement">
           {" "}
-          I agree to the{" "}
+          I have read and understand the{" "}
           <Link isExternal href={DISCLAIMER_URL}>
-            (legal disclaimer)
+            legal disclaimer
           </Link>
           .
         </label>
