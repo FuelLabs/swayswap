@@ -8,7 +8,8 @@ export function HomeHero() {
   return (
     <div className="homePage--hero">
       <h1>
-        SwaySwap is a DEX built on the fastest modular execution layer: Fuel.
+        SwaySwap is a blazingly fast DEX built on the fastest modular execution
+        layer: Fuel.
       </h1>
       <p>
         Built with an entirely new language{" "}
