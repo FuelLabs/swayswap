@@ -24,7 +24,8 @@ export function HomeHero() {
           [Fuel]
         </Link>
         , you can now experience a demonstration of the next generation of
-        scaling beyond layer-2s and monolithic blockchain design. #BeyondMonolithic
+        scaling beyond layer-2s and monolithic blockchain design.
+        #BeyondMonolithic
       </p>
       <Button size="lg" variant="primary" onPress={() => navigate(Pages.swap)}>
         Launch app

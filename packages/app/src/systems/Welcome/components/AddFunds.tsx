@@ -12,7 +12,8 @@ export function AddFunds() {
       <img src={relativeUrl("/illustrations/add-funds.png")} />
       <h2>Add some test ETH to your wallet</h2>
       <p>
-        To get started you&apos;ll need some funds.<br />
+        To get started you&apos;ll need some funds.
+        <br />
         Click &ldquo;Give me ETH&rdquo; below to get some from the faucet.
       </p>
       <FaucetApp onSuccess={next} />
