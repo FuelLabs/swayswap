@@ -1,3 +1,4 @@
+import "cross-fetch/polyfill";
 import {
   fireEvent,
   renderWithRouter,
@@ -26,7 +27,7 @@ async function findSwapBtn() {
 
 async function clickOnMaxBalance() {
   return waitFor(async () => {
-    const button = await screen.findAllByRole("button", { name: /max/i });
+    const button = await screen.findAllByLabelText(/Set Maximun Balance/i);
     fireEvent.click(button[0]);
   });
 }
@@ -45,12 +46,14 @@ async function fillCoinFromWithValue(value: string) {
 }
 
 describe("SwapPage", () => {
-  describe("without liquidity", () => {
-    beforeAll(async () => {
-      const wallet = await createAndMockWallet();
-      await faucet(wallet, 3);
-    });
+  let wallet: Wallet;
 
+  beforeAll(async () => {
+    wallet = await createAndMockWallet();
+    await faucet(wallet, 4);
+  });
+
+  describe("without liquidity", () => {
     it("should swap button be disabled", async () => {
       renderWithRouter(<App />, { route: "/swap" });
 
@@ -65,7 +68,7 @@ describe("SwapPage", () => {
       renderWithRouter(<App />, { route: "/swap" });
 
       const balances = await screen.findAllByText(/(balance:)\s([1-9])/i);
-      expect(balances[0].textContent).toMatch("1");
+      expect(balances[0].textContent).toMatch("Balance: 2.0");
     });
 
     function getFirstCoinSelectTextContent() {
@@ -81,7 +84,7 @@ describe("SwapPage", () => {
     });
 
     it("should invert coin selector when click on invert", async () => {
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       const invertBtn = screen.getByLabelText("Invert coins");
       await waitFor(async () => expect(invertBtn).toBeInTheDocument());
@@ -93,11 +96,15 @@ describe("SwapPage", () => {
     });
 
     it("should show insufficient eth for gas message", async () => {
-      const spy = jest
+      const spyRatio = jest
+        .spyOn(poolHelpers, "getPoolRatio")
+        .mockReturnValue(1);
+
+      const spyBalance = jest
         .spyOn(swapHelpers, "hasEnoughBalance")
         .mockReturnValue(true);
 
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("1000");
       const submitBtn = await findSwapBtn();
@@ -105,20 +112,15 @@ describe("SwapPage", () => {
         expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
       });
 
-      spy.mockRestore();
+      spyBalance.mockRestore();
+      spyRatio.mockRestore();
     });
   });
 
   describe("with eth for gas", () => {
-    let wallet: Wallet;
-
-    beforeAll(async () => {
-      wallet = await createAndMockWallet();
-      await faucet(wallet, 4);
-    });
-
     it("should show insufficient balance if try to input more than balance", async () => {
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(1);
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("1000");
       const submitBtn = await findSwapBtn();
@@ -127,10 +129,12 @@ describe("SwapPage", () => {
           /(Insufficient)(\s\w+\s)(balance)/i
         );
       });
+
+      spy.mockRestore();
     });
 
     it("should fill input value with max balance when click on max", async () => {
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await clickOnMaxBalance();
       const coinFrom = screen.getByLabelText(/Coin from input/i);
@@ -141,7 +145,7 @@ describe("SwapPage", () => {
 
     it("should show no pool found message when there is no pool reserve", async () => {
       const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(0);
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("0.5");
       const submitBtn = await findSwapBtn();
@@ -155,10 +159,7 @@ describe("SwapPage", () => {
   });
 
   describe("with liquidity created", () => {
-    let wallet: Wallet;
-
     beforeAll(async () => {
-      wallet = await createAndMockWallet();
       await faucet(wallet, 6);
       await mint(wallet);
       await addLiquidity(
@@ -170,10 +171,6 @@ describe("SwapPage", () => {
       );
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
     it("should show insufficient liquidity when amount is greater than liquidity", async () => {
       const spy1 = jest
         .spyOn(swapHelpers, "hasEnoughBalance")
@@ -183,7 +180,7 @@ describe("SwapPage", () => {
         .spyOn(swapHelpers, "hasEthForNetworkFee")
         .mockReturnValue(true);
 
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("100000");
       const submitBtn = await findSwapBtn();
@@ -196,7 +193,7 @@ describe("SwapPage", () => {
     });
 
     it("should show expected output after input value", async () => {
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("0.5");
       await waitFor(async () => {
@@ -206,7 +203,7 @@ describe("SwapPage", () => {
     });
 
     it("should show price per token information", async () => {
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await clickOnMaxBalance();
 
@@ -225,7 +222,7 @@ describe("SwapPage", () => {
     });
 
     it("should set automatically coin to input based on coin from value", async () => {
-      renderWithRouter(<App />, { route: "/swap?coinTo=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("0.5");
       await waitFor(async () => {

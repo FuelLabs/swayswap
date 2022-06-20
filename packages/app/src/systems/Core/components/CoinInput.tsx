@@ -7,6 +7,7 @@ import { DECIMAL_UNITS } from "~/config";
 import { Spinner } from "~/systems/UI";
 
 function getRightValue(value: string) {
+  if (process.env.NODE_ENV === "test" && !value) return null;
   if (value === "0.0") return "0";
   if (value === ".") return "0.";
   return value;
