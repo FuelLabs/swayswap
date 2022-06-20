@@ -98,27 +98,6 @@ describe("SwapPage", () => {
       fireEvent.click(invertBtn);
     });
 
-    it("should show insufficient eth for gas message", async () => {
-      const spyRatio = jest
-        .spyOn(poolHelpers, "getPoolRatio")
-        .mockReturnValue(1);
-
-      const spyBalance = jest
-        .spyOn(swapHelpers, "hasEnoughBalance")
-        .mockReturnValue(true);
-
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
-
-      await fillCoinFromWithValue("1000");
-      const submitBtn = await findSwapBtn();
-      await waitFor(() => {
-        expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
-      });
-
-      spyBalance.mockRestore();
-      spyRatio.mockRestore();
-    });
-
     it("should show no pool found message when there is no pool reserve", async () => {
       const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(0);
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
@@ -148,7 +127,6 @@ describe("SwapPage", () => {
     });
 
     it("should show insufficient balance if try to input more than balance", async () => {
-      const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(1);
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("1000");
@@ -158,8 +136,6 @@ describe("SwapPage", () => {
           /(Insufficient)(\s\w+\s)(balance)/i
         );
       });
-
-      spy.mockRestore();
     });
 
     it("should fill input value with max balance when click on max", async () => {
@@ -169,7 +145,22 @@ describe("SwapPage", () => {
       const coinFrom = screen.getByLabelText(/Coin from input/i);
       const inputValue = coinFrom.getAttribute("value");
       const valDecimal = new Decimal(inputValue || "");
-      expect(valDecimal.round().toString()).toMatch(/4/);
+      expect(valDecimal.round().toString()).toMatch(/3/);
+    });
+
+    it("should show insufficient eth for gas message", async () => {
+      const spy = jest
+        .spyOn(swapHelpers, "hasEnoughBalance")
+        .mockReturnValue(true);
+
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+
+      await fillCoinFromWithValue("3.1");
+      const submitBtn = await findSwapBtn();
+      await waitFor(() => {
+        expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
+      });
+      spy.mockRestore();
     });
 
     it("should show insufficient liquidity when amount is greater than liquidity", async () => {

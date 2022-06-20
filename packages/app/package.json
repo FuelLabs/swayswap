@@ -11,8 +11,8 @@
     "contracts:init": "pnpm exec ts-node ./scripts/contracts-init",
     "postinstall": "sh ./scripts/postinstall.sh",
     "preview": "vite preview",
-    "test": "jest --verbose",
-    "test:watch": "jest --watch --detectOpenHandles",
+    "test": "jest --verbose --runInBand",
+    "test:watch": "jest --watch --runInBand --detectOpenHandles",
     "vite": "vite",
     "xstate:typegen": "xstate typegen 'src/**/*.ts?(x)'",
     "xstate:typegen:watch": "xstate typegen 'src/**/*.ts?(x)' --watch"

@@ -23,7 +23,7 @@ export async function initializePool(
   await tokenContract.submit.mint_coins(tokenAmount, overrides);
   await tokenContract.submit.transfer_token_to_output(tokenAmount, tokenId, address, {
     ...overrides,
-    variableOutputs: 1,
+    variableOutputs: 2,
   });
   const deadline = await wallet.provider.getBlockNumber();
 

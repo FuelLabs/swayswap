@@ -20,7 +20,7 @@ export function useTokenMethods(tokenId: string) {
     },
     async queryNetworkFee() {
       return contract.prepareCall.mint({
-        variableOutputs: 1,
+        variableOutputs: 2,
       });
     },
     async getMintAmount() {
@@ -29,7 +29,7 @@ export function useTokenMethods(tokenId: string) {
     mint(gasLimit: bigint) {
       return contract.submit.mint(
         getOverrides({
-          variableOutputs: 1,
+          variableOutputs: 2,
           gasLimit,
         })
       );
