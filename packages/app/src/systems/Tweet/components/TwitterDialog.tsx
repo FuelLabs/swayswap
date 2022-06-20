@@ -39,7 +39,7 @@ export function TwitterDialog() {
         <p className="text-l text-gray-50 text-center">
           💚 Share that you&apos;re using SwaySwap on Twitter.
         </p>
-        <Link href={tweetLink} isExternal className="de">
+        <Link href={tweetLink} isExternal className="hover:no-underline">
           <Button
             size="md"
             variant="primary"
