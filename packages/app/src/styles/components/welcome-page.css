@@ -91,6 +91,10 @@
     }
     img {
       @apply mx-auto mb-5;
+
+      @media (max-width: 640px) {
+        @apply h-[180px];
+      }
     }
   }
   /*
