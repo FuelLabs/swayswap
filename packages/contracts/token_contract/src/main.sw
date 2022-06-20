@@ -18,7 +18,7 @@ storage {
     owner: Address,
     mint_amount: u64,
     mint_list: StorageMap<Address,
-    bool>, 
+    bool>,
 }
 
 enum Error {
