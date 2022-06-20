@@ -72,7 +72,7 @@ pnpm <command name>
 ```
 
 | Script             | Description                                                                                                          |
-|--------------------|----------------------------------------------------------------------------------------------------------------------|
+| ------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `dev`              | Run development server for the WebApp [packages/app](../packages/app/).                                              |
 | `contracts`        | Build, generate types, deploy [packages/contracts](../packages/contracts). It should be used when editing contracts. |
 | `contracts:build`  | Build and generate types [packages/contracts](../packages/contracts).                                                |
