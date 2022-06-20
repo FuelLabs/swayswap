@@ -4,7 +4,8 @@ import { useTwitterDialog } from "../hooks/useTwitterDialog";
 
 import { Button, Dialog, Link, useDialog } from "~/systems/UI";
 
-const tweetText = `I'm using #SwaySwap, a blazingly fast DEX built on Fuel @fuellabs_\nhttps://fuellabs.github.io/swayswap`;
+// const tweetText = `I'm using #SwaySwap, a blazingly fast DEX built on Fuel @fuellabs_\nhttps://fuellabs.github.io/swayswap`;
+const tweetText = `foo`;
 const tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
   tweetText
 )}`;
