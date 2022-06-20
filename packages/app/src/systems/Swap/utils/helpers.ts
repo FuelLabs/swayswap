@@ -62,30 +62,24 @@ export function getPricePerToken(fromAmount?: Maybe<bigint>, toAmount?: Maybe<bi
 }
 
 function getPriceImpact(amounts: bigint[], reserves: bigint[]) {
-  const exchangeRateAfter = divideFnValidOnly(amounts[0], amounts[1]);
-  const exchangeRateBefore = divideFnValidOnly(reserves[0], reserves[1]);
+  const exchangeRateAfter = divideFnValidOnly(amounts[1], amounts[0]);
+  const exchangeRateBefore = divideFnValidOnly(reserves[1], reserves[0]);
   const result = (exchangeRateAfter / exchangeRateBefore - 1) * 100;
   return result > 100 ? 100 : result.toFixed(2);
 }
 
-export const calculatePriceImpact = ({
-  coinFrom,
-  direction,
-  poolInfo,
-  fromAmount,
-  toAmount,
-}: SwapMachineContext) => {
+export const calculatePriceImpact = (ctx: SwapMachineContext) => {
   // If any value is 0 return 0
+  const { coinFrom, poolInfo, fromAmount, toAmount } = ctx;
   const ethReserve = poolInfo?.eth_reserve;
   const tokenReserve = poolInfo?.token_reserve;
   if (!fromAmount?.raw || !toAmount?.raw || !ethReserve || !tokenReserve) {
     return '0';
   }
 
-  const isFrom = direction === SwapDirection.fromTo;
   const isEth = isCoinEth(coinFrom);
-  const amounts = isFrom ? [toAmount.raw, fromAmount.raw] : [fromAmount.raw, toAmount.raw];
-  const reserves = isEth ? [ethReserve, tokenReserve] : [tokenReserve, ethReserve];
+  const amounts = [toAmount.raw, fromAmount.raw];
+  const reserves = isEth ? [tokenReserve, ethReserve] : [ethReserve, tokenReserve];
   return getPriceImpact(amounts, reserves);
 };
 
@@ -121,16 +115,16 @@ export function hasLiquidityForSwap({
   const tokenReserve = safeBigInt(poolInfo?.token_reserve);
   const fromAmountRaw = safeBigInt(fromAmount?.raw);
   const toAmountRaw = safeBigInt(toAmount?.raw);
-  const txCostTotal = safeBigInt(txCost?.fee);
+  const networkFee = safeBigInt(txCost?.fee);
   const plusSlippage = safeBigInt(amountPlusSlippage?.raw);
 
   if (isCoinEth(coinFrom) && isFrom) {
-    return fromAmountRaw + txCostTotal < ethReserve && toAmountRaw < tokenReserve;
+    return fromAmountRaw + networkFee < ethReserve && toAmountRaw < tokenReserve;
   }
   if (isCoinEth(coinFrom) && !isFrom) {
-    return plusSlippage + txCostTotal < ethReserve && toAmountRaw < tokenReserve;
+    return plusSlippage + networkFee < ethReserve && toAmountRaw < tokenReserve;
   }
-  return fromAmountRaw < tokenReserve && toAmountRaw + txCostTotal < ethReserve;
+  return fromAmountRaw < tokenReserve && toAmountRaw + networkFee < ethReserve;
 }
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {
