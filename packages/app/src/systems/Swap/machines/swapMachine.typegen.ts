@@ -7,8 +7,8 @@ export interface Typegen0 {
     selectCoin: 'SELECT_COIN';
     invertDirection: 'INVERT_COINS';
     setMaxValue: 'SET_MAX_VALUE';
-    setInputValue: 'INPUT_CHANGE';
     clearContext: 'INPUT_CHANGE' | 'done.invoke.(machine).readyToSwap.swapping:invocation[0]';
+    setInputValue: 'INPUT_CHANGE';
     toastErrorMessage:
       | 'error.platform.(machine).fetchingBalances:invocation[0]'
       | 'error.platform.(machine).fetchingResources.fetchingTxCost:invocation[0]'
@@ -97,13 +97,13 @@ export interface Typegen0 {
   };
   eventsCausingGuards: {
     notHasOppositeCoin: 'SET_MAX_VALUE';
-    inputIsNotEmpty: 'INPUT_CHANGE';
+    inputIsEmpty: 'INPUT_CHANGE';
     notHasAmount: '';
     notHasCoinFrom: '';
     notHasCoinTo: '';
+    notHasPoolRatio: 'done.invoke.(machine).fetchingResources.fetchingPoolInfo:invocation[0]';
     notHasCoinFromBalance: '';
     notHasEthForNetworkFee: '';
-    notHasPoolRatio: 'done.invoke.(machine).fetchingResources.fetchingPoolInfo:invocation[0]';
     noLiquidity: '';
   };
   eventsCausingDelays: {};

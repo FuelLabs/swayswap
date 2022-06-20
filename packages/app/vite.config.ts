@@ -30,4 +30,7 @@ export default defineConfig({
     'process.env': Object.fromEntries(ENV_VARS),
   },
   ...(Boolean(process.env.CI) && { logLevel: 'silent' }),
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+  },
 });

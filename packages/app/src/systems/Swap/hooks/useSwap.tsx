@@ -1,6 +1,5 @@
 import { useActor, useInterpret, useSelector } from "@xstate/react";
 import type { CoinQuantity } from "fuels";
-import { atom, useAtom } from "jotai";
 import type { ReactNode } from "react";
 import { useEffect, createContext, useContext } from "react";
 import { useQueryClient } from "react-query";
@@ -13,7 +12,8 @@ import { isLoadingState, swapMachine } from "../machines/swapMachine";
 import type { SwapMachineContext } from "../types";
 import { SwapDirection } from "../types";
 
-import { useCoinByParam } from "./useCoinByParam";
+import { useSwapGlobalState } from "./useSwapGlobalState";
+import { useSwapURLParams } from "./useSwapURLParams";
 
 import {
   useWallet,
@@ -30,16 +30,6 @@ const selectors = {
   direction: (state: SwapMachineState) => state.context.direction,
   txCost: (state: SwapMachineState) => state.context.txCost,
 };
-
-// ----------------------------------------------------------------------------
-// Global State
-// ----------------------------------------------------------------------------
-
-const swapGlobalAtom = atom<Partial<SwapMachineContext>>({});
-
-export function useSwapGlobalState() {
-  return useAtom(swapGlobalAtom);
-}
 
 // ----------------------------------------------------------------------------
 // PubSub
@@ -115,12 +105,11 @@ type SwapProviderProps = {
 
 export function SwapProvider({ children }: SwapProviderProps) {
   const [globalState, setGlobalState] = useSwapGlobalState();
+  const { coinFrom, coinTo, setCoinParams } = useSwapURLParams();
   const client = useQueryClient();
   const wallet = useWallet();
   const contract = useContract();
   const slippage = useSlippage();
-  const coinFrom = useCoinByParam("coinFrom");
-  const coinTo = useCoinByParam("coinTo");
 
   const service = useInterpret(swapMachine, {
     context: {
@@ -146,7 +135,10 @@ export function SwapProvider({ children }: SwapProviderProps) {
    * a global state data and persist it between page navigation
    */
   useEffect(() => {
-    const sub = service.subscribe((item) => setGlobalState(item.context));
+    const sub = service.subscribe((item) => {
+      setCoinParams(item.context);
+      setGlobalState(item.context);
+    });
     return sub.unsubscribe;
   }, []);
 

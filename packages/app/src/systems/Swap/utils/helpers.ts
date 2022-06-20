@@ -84,7 +84,7 @@ export const calculatePriceImpact = ({
 
   const isFrom = direction === SwapDirection.fromTo;
   const isEth = isCoinEth(coinFrom);
-  const amounts = isFrom ? [fromAmount.raw, toAmount.raw] : [toAmount.raw, fromAmount.raw];
+  const amounts = isFrom ? [toAmount.raw, fromAmount.raw] : [fromAmount.raw, toAmount.raw];
   const reserves = isEth ? [ethReserve, tokenReserve] : [tokenReserve, ethReserve];
   return getPriceImpact(amounts, reserves);
 };

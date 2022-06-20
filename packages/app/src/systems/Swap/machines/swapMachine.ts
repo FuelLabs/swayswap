@@ -16,14 +16,7 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import {
-  handleError,
-  isCoinEth,
-  parseInputValueBigInt,
-  safeBigInt,
-  toNumber,
-  ZERO,
-} from '~/systems/Core';
+import { handleError, isCoinEth, safeBigInt, toNumber, ZERO } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
 import { getPoolRatio } from '~/systems/Pool';
@@ -131,14 +124,6 @@ export const swapMachine =
                   target: '#(machine).invalid.withoutCoinTo',
                 },
                 {
-                  cond: 'notHasCoinFromBalance',
-                  target: '#(machine).invalid.withoutCoinFromBalance',
-                },
-                {
-                  cond: 'notHasEthForNetworkFee',
-                  target: '#(machine).invalid.withoutEthForNetworkFee',
-                },
-                {
                   target: 'fetchingPoolInfo',
                 },
               ],
@@ -188,16 +173,16 @@ export const swapMachine =
             validatingSwap: {
               always: [
                 {
-                  cond: 'noLiquidity',
-                  target: '#(machine).invalid.withoutLiquidity',
-                },
-                {
                   cond: 'notHasCoinFromBalance',
                   target: '#(machine).invalid.withoutCoinFromBalance',
                 },
                 {
                   cond: 'notHasEthForNetworkFee',
                   target: '#(machine).invalid.withoutEthForNetworkFee',
+                },
+                {
+                  cond: 'noLiquidity',
+                  target: '#(machine).invalid.withoutLiquidity',
                 },
                 {
                   target: 'success',
@@ -306,13 +291,13 @@ export const swapMachine =
         ],
         INPUT_CHANGE: [
           {
-            actions: 'setInputValue',
-            cond: 'inputIsNotEmpty',
-            target: '.debouncing',
+            actions: 'clearContext',
+            cond: 'inputIsEmpty',
+            target: '.invalid.withoutAmount',
           },
           {
-            actions: 'clearContext',
-            target: '.invalid.withoutAmount',
+            actions: 'setInputValue',
+            target: '.debouncing',
           },
         ],
       },
@@ -416,9 +401,7 @@ export const swapMachine =
           return {
             ...ctx,
             direction,
-            ...(isFrom
-              ? { fromAmount: amount, toAmount: ZERO_AMOUNT }
-              : { toAmount: amount, fromAmount: ZERO_AMOUNT }),
+            ...(isFrom ? { fromAmount: amount } : { toAmount: amount }),
           };
         }),
         setValuesWithSlippage: assign((ctx) => {
@@ -456,8 +439,9 @@ export const swapMachine =
         },
       },
       guards: {
-        inputIsNotEmpty: (_, ev) => {
-          return parseInputValueBigInt(ev.data?.value) > 0;
+        inputIsEmpty: (_, ev) => {
+          const val = ev.data?.value || '';
+          return !val.length || val === '0';
         },
         notHasCoinFrom: (ctx) => {
           return !ctx.coinFrom;

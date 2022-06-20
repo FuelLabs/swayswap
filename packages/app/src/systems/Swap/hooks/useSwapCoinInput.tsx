@@ -13,14 +13,14 @@ import type { CoinInputProps } from "~/systems/Core";
 import { MAX_U64_VALUE, parseInputValueBigInt } from "~/systems/Core";
 
 const selectors = {
-  activeDir: (state: SwapMachineState) => {
-    return state.context.direction;
+  activeDir: ({ context: ctx }: SwapMachineState) => {
+    return ctx.direction;
   },
-  fromAmount: (state: SwapMachineState) => {
-    return state.context.fromAmount?.value || "";
+  fromAmount: ({ context: ctx }: SwapMachineState) => {
+    return ctx.fromAmount?.value || "";
   },
-  toAmount: (state: SwapMachineState) => {
-    return state.context.toAmount?.value || "";
+  toAmount: ({ context: ctx }: SwapMachineState) => {
+    return ctx.toAmount?.value || "";
   },
   isDisabled: (dir: SwapDirection) => (state: SwapMachineState) => {
     const { coinFrom, coinTo } = state.context;

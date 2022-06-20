@@ -6,9 +6,7 @@ import type { CoinInputProps } from "../hooks/useCoinInput";
 import { DECIMAL_UNITS } from "~/config";
 import { Spinner } from "~/systems/UI";
 
-function getRightValue(value: string, displayType: string) {
-  if (displayType === "text") return value;
-  if (!value.length) return null;
+function getRightValue(value: string) {
   if (value === "0.0") return "0";
   if (value === ".") return "0.";
   return value;
@@ -54,7 +52,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               getInputRef={ref}
               allowNegative={false}
               defaultValue={initialValue}
-              value={getRightValue(value || "", displayType)}
+              value={getRightValue(value || "")}
               displayType={displayType}
               isAllowed={isAllowed}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
