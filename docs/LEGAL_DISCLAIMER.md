@@ -1,6 +1,6 @@
 # Legal Disclaimer
 
-Read all of this disclaimer before using SwaySwap
+Read all of this disclaimer before using SwaySwap.
 
 - This software is only for use by _developers_ who understand what the Fuel network is. <https://github.com/FuelLabs/fuel-specs>
 - You are solely responsible for your use of this demo application ("SwaySwap").
