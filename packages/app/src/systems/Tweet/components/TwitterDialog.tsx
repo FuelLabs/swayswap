@@ -4,7 +4,7 @@ import { useTwitterDialog } from "../hooks/useTwitterDialog";
 
 import { Button, Dialog, Link, useDialog } from "~/systems/UI";
 
-const tweetText = `I'm using #SwaySwap, a blazingly fast DEX built on Fuel @fuellabs_`;
+const tweetText = `I'm using #SwaySwap, a blazingly fast DEX built on Fuel @fuellabs_\nhttps://fuellabs.github.io/swayswap`;
 const tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
   tweetText
 )}`;
@@ -37,8 +37,7 @@ export function TwitterDialog() {
     >
       <Dialog.Content className="w-40 p-4 pt-8">
         <p className="text-l text-gray-50 text-center">
-          💚 Share that you&apos;re using SwaySwap on Twitter. The first ever
-          DEX built on Fuel the fastest modular execution layer.
+          💚 Share that you&apos;re using SwaySwap on Twitter.
         </p>
         <Link href={tweetLink} isExternal className="de">
           <Button
@@ -57,7 +56,7 @@ export function TwitterDialog() {
           className="mt-2 p-0 border-0 text-gray-400"
           onPress={handleSkip}
         >
-          I don&apos;t have twitter account
+          I don&apos;t have a Twitter account
         </Button>
       </Dialog.Content>
     </Dialog>
