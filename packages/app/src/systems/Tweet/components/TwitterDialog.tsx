@@ -56,7 +56,7 @@ export function TwitterDialog() {
           className="mt-2 p-0 border-0 text-gray-400"
           onPress={handleSkip}
         >
-          I don&apos;t have a Twitter account
+          No thanks
         </Button>
       </Dialog.Content>
     </Dialog>
