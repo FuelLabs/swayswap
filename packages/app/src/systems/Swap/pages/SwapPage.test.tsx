@@ -50,10 +50,13 @@ describe("SwapPage", () => {
 
   beforeAll(async () => {
     wallet = await createAndMockWallet();
-    await faucet(wallet, 4);
   });
 
   describe("without liquidity", () => {
+    beforeAll(async () => {
+      await faucet(wallet, 4);
+    });
+
     it("should swap button be disabled", async () => {
       renderWithRouter(<App />, { route: "/swap" });
 
@@ -115,9 +118,35 @@ describe("SwapPage", () => {
       spyBalance.mockRestore();
       spyRatio.mockRestore();
     });
+
+    it("should show no pool found message when there is no pool reserve", async () => {
+      const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(0);
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+
+      await fillCoinFromWithValue("0.5");
+      const submitBtn = await findSwapBtn();
+      await waitFor(async () => {
+        expect(submitBtn.textContent).toMatch(/no pool found/i);
+        expect(spy).toHaveBeenCalled();
+      });
+
+      spy.mockRestore();
+    });
   });
 
-  describe("with eth for gas", () => {
+  describe("with liquidity created", () => {
+    beforeAll(async () => {
+      await faucet(wallet, 4);
+      await mint(wallet);
+      await addLiquidity(
+        wallet,
+        "1",
+        "1000",
+        TOKENS[0].assetId,
+        TOKENS[1].assetId
+      );
+    });
+
     it("should show insufficient balance if try to input more than balance", async () => {
       const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(1);
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
@@ -140,35 +169,7 @@ describe("SwapPage", () => {
       const coinFrom = screen.getByLabelText(/Coin from input/i);
       const inputValue = coinFrom.getAttribute("value");
       const valDecimal = new Decimal(inputValue || "");
-      expect(valDecimal.round().toString()).toMatch(/2/);
-    });
-
-    it("should show no pool found message when there is no pool reserve", async () => {
-      const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(0);
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
-
-      await fillCoinFromWithValue("0.5");
-      const submitBtn = await findSwapBtn();
-      await waitFor(async () => {
-        expect(submitBtn.textContent).toMatch(/no pool found/i);
-        expect(spy).toHaveBeenCalled();
-      });
-
-      spy.mockRestore();
-    });
-  });
-
-  describe("with liquidity created", () => {
-    beforeAll(async () => {
-      await faucet(wallet, 6);
-      await mint(wallet);
-      await addLiquidity(
-        wallet,
-        "1",
-        "1000",
-        TOKENS[0].assetId,
-        TOKENS[1].assetId
-      );
+      expect(valDecimal.round().toString()).toMatch(/4/);
     });
 
     it("should show insufficient liquidity when amount is greater than liquidity", async () => {
