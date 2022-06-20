@@ -38,7 +38,7 @@
     "lint": "run-s lint:check prettier:check",
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --write .",
-    "scripts:setup": "turbo run build --filter=swayswap-scripts && pnpm install",
+    "scripts:setup": "pnpm run --filter=swayswap-scripts build && pnpm install",
     "services:clean": "make -C docker services-clean",
     "services:setup": "run-s scripts:setup services:run contracts contracts:init-pool",
     "services:run": "make -C docker services-run",
