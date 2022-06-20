@@ -10,10 +10,11 @@ export function AddFunds() {
   return (
     <WelcomeStep id={1}>
       <img src={relativeUrl("/illustrations/add-funds.png")} />
-      <h2>Add some ETH to your wallet</h2>
+      <h2>Add some test ETH to your wallet</h2>
       <p>
-        To get started you&apos;ll need a wallet, <br />
-        click bellow to generate one
+        To get started you&apos;ll need some funds.
+        <br />
+        Click &ldquo;Give me ETH&rdquo; below to get some from the faucet.
       </p>
       <FaucetApp onSuccess={next} />
     </WelcomeStep>

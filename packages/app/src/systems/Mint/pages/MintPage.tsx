@@ -43,7 +43,7 @@ export function MintPage() {
               <BsArrowDown size={20} className="text-gray-400" />
             </div>
             <PreviewTable className="mt-2 bg-transparent">
-              <NetworkFeePreviewItem networkFee={mint.txCost.total} />
+              <NetworkFeePreviewItem networkFee={mint.txCost.fee} />
             </PreviewTable>
           </>
         )}

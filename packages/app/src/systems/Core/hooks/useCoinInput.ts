@@ -141,7 +141,7 @@ export function useCoinInput({
       ...(disableWhenEth &&
         isEth && {
           isReadOnly: true,
-          tooltip: 'Currently, we only support ETH to TOKEN.',
+          tooltip: 'Currently, we only support ETH <-> TOKEN.',
         }),
     } as CoinSelectorProps;
   }

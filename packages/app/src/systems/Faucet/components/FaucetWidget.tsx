@@ -28,13 +28,13 @@ export function FaucetWidget() {
               <FaFaucet className="text-primary-500" /> Faucet
             </Card.Title>
             <div>
-              Click the button below to receive {faucet.faucetAmount} ETH to
-              your wallet.
+              Click the button below to receive {faucet.faucetAmount} test ETH
+              to your wallet.
             </div>
             <FaucetApp
               isButtonFull
               onSuccess={() => {
-                toast.success("ETH add to your wallet!");
+                toast.success("Test ETH successfully fauceted!");
                 dialog.close();
               }}
             />

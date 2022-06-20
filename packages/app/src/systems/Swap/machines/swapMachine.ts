@@ -409,7 +409,7 @@ export const swapMachine =
         setMaxValue: assign((ctx, { data: { direction } }) => {
           const isFrom = direction === FROM_TO;
           const balance = safeBigInt(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
-          const networkFee = safeBigInt(ctx.txCost?.total);
+          const networkFee = safeBigInt(ctx.txCost?.fee);
           const nextValue = balance > ZERO ? balance - networkFee : balance;
           const amount = createAmount(nextValue);
 

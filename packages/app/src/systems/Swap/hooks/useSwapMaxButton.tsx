@@ -31,9 +31,9 @@ const selectors = {
   },
   showMaxButton: (dir: SwapDirection) => (state: SwapMachineState) => {
     const { txCost, ethBalance } = state.context;
-    if (!txCost?.total || !ethBalance) return;
+    if (!txCost?.fee || !ethBalance) return;
     const balance = getRightBalance(dir, state.context);
-    return balance && balance > 0 && ethBalance > txCost.total;
+    return balance && balance > 0 && ethBalance > txCost.fee;
   },
 };
 

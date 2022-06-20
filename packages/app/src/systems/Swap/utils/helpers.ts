@@ -114,14 +114,14 @@ export function hasLiquidityForSwap({
   txCost,
   amountPlusSlippage,
 }: SwapMachineContext) {
-  if (!coinFrom || !coinTo || !txCost?.total) return false;
+  if (!coinFrom || !coinTo || !txCost?.fee) return false;
 
   const isFrom = direction === SwapDirection.fromTo;
   const ethReserve = safeBigInt(poolInfo?.eth_reserve);
   const tokenReserve = safeBigInt(poolInfo?.token_reserve);
   const fromAmountRaw = safeBigInt(fromAmount?.raw);
   const toAmountRaw = safeBigInt(toAmount?.raw);
-  const txCostTotal = safeBigInt(txCost?.total);
+  const txCostTotal = safeBigInt(txCost?.fee);
   const plusSlippage = safeBigInt(amountPlusSlippage?.raw);
 
   if (isCoinEth(coinFrom) && isFrom) {
@@ -136,7 +136,7 @@ export function hasLiquidityForSwap({
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {
   const { ethBalance, direction, coinFrom, fromAmount, txCost, amountPlusSlippage } = params;
   const balance = safeBigInt(ethBalance);
-  const txCostTotal = safeBigInt(txCost?.total);
+  const txCostTotal = safeBigInt(txCost?.fee);
   const plusSlippage = safeBigInt(amountPlusSlippage?.raw);
   const fromAmountRaw = safeBigInt(fromAmount?.raw);
   const isFrom = direction === SwapDirection.fromTo;

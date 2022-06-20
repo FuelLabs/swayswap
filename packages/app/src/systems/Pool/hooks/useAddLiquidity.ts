@@ -38,7 +38,7 @@ export function useAddLiquidity({
   // multi-call on fuels-ts for now we are using
   // the local tx measures with a + 50% margin to avoid issues
   // TODO: https://github.com/FuelLabs/swayswap-demo/issues/42
-  const networkFee = toBigInt(2000000);
+  const networkFee = toBigInt(10);
 
   useEffect(() => {
     fromInput.setGasFee(networkFee);
