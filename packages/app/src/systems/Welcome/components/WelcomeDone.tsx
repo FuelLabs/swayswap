@@ -23,7 +23,7 @@ export function WelcomeDone() {
         Now you&apos;re ready to swap and pool <b>test assets</b> using Fuel:
         the fastest modular execution layer.
       </p>
-      <div className="flex justify-center items-center mb-6">
+      <div className="flex justify-center items-start mb-6">
         <input
           aria-label="Accept the use agreement"
           id="accept-agreement"
