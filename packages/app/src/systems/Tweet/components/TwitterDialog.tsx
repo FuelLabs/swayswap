@@ -47,7 +47,7 @@ export function TwitterDialog() {
             className="mt-6"
             onPress={shareTweet}
           >
-            Share on twitter
+            Share on Twitter
           </Button>
         </Link>
         <Button
