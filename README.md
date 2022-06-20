@@ -39,7 +39,7 @@ The above button launches the latest stable version of SwaySwap. To launch the l
 - Create a liquidity pool
 - Swap tokens
 - View current pool positions
-- Andd and remove liquidity to a liquidity pool
+- Add and remove liquidity from a liquidity pool
 
 <!-- Add some more space on the top of the gif -->
 <br />
