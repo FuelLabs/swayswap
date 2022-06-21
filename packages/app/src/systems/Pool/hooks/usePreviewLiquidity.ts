@@ -1,7 +1,5 @@
-import { calculateRatio } from '../utils/helpers';
-
 import type { UseCoinInput } from '~/systems/Core';
-import { safeBigInt, useBalances, toBigInt, toNumber } from '~/systems/Core';
+import { divideFnValidOnly, safeBigInt, useBalances, toBigInt, toNumber } from '~/systems/Core';
 import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UsePreviewLiquidityProps {
@@ -17,12 +15,12 @@ export function usePreviewLiquidity({ fromInput, poolInfo, contractId }: UsePrev
   const ethReserve = safeBigInt(poolInfo?.eth_reserve, 1);
 
   const liquidityFactor = toBigInt(toNumber(fromAmount) * toNumber(lpTokenSupply));
-  const previewTokensToReceive = calculateRatio(liquidityFactor, ethReserve);
+  const previewTokensToReceive = divideFnValidOnly(liquidityFactor, ethReserve);
   const nextTotalTokenSupply = previewTokensToReceive + toNumber(lpTokenSupply);
   const poolContractBalance = balances?.data?.find((item) => item.assetId === contractId);
   const currentPoolTokensAmount = toNumber(poolContractBalance?.amount);
   const nextCurrentPoolShare =
-    calculateRatio(
+    divideFnValidOnly(
       toBigInt(previewTokensToReceive + currentPoolTokensAmount),
       toBigInt(nextTotalTokenSupply)
     ) || 1;
