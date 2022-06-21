@@ -29,7 +29,7 @@ export function Link({
       {...buttonProps}
       {...(href && { href })}
       ref={ref}
-      className={cx(className, "link")}
+      className={cx("link", className)}
       data-pressed={isPressed}
       {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
     >
