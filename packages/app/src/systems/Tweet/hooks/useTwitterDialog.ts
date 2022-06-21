@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
 
-const TWITTER_DIALOG_KEY = 'swayswap-dialog';
+const TWITTER_DIALOG_KEY = 'swayswap-share-twitter-dialog';
 const openTwitterAtom = atom(localStorage.getItem(TWITTER_DIALOG_KEY) === 'true');
 
 export function useTwitterDialog() {
