@@ -119,4 +119,8 @@
       @apply hidden;
     }
   }
+
+  #accept-agreement {
+    transform: translateY(5px);
+  }
 }
