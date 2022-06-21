@@ -23,6 +23,7 @@ export type ChainConfig = {
   chain: {
     consensusParameters: {
       gasPriceFactor: string;
+      maxGasPerTx: string;
     };
     latestBlock: {
       height: string;
@@ -40,6 +41,7 @@ export async function getChainConfig(): Promise<ChainConfig> {
     chain {
       consensusParameters {
         gasPriceFactor
+        maxGasPerTx
       }
       latestBlock {
         height
@@ -109,6 +111,7 @@ export async function getTransactionCost(contractCall: ContractCall): Promise<Tr
     request.gasPrice = ZERO;
     request.bytePrice = ZERO;
     const chainConfig = await getChainConfig();
+    request.gasLimit = toBigInt(chainConfig.chain.consensusParameters.maxGasPerTx);
     const provider = new Provider(FUEL_PROVIDER_URL);
     const dryRunResult = await provider.call(request);
     const gasUsed = getGasUsed(dryRunResult);
