@@ -28,7 +28,7 @@ export function WalletInfo({ onClose }: WalletInfoProps) {
         </Button>
       </Card.Title>
       {isLoading && (
-        <div className="flex justify-start rounded-lg px-2 pt-2">
+        <div className="flex justify-start rounded-xl px-2 pt-2">
           <Spinner />
         </div>
       )}

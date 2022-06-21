@@ -7,7 +7,7 @@
     @apply transition ease-in duration-100;
   }
   .link {
-    @apply text-primary-400 no-underline hover:underline rounded-lg;
+    @apply text-primary-400 no-underline hover:underline rounded-xl;
     @apply focus:outline-none focus:underline;
   }
   .inner-shadow {

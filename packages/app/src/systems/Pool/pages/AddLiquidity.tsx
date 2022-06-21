@@ -29,10 +29,10 @@ import type { Coin } from "~/types";
 
 const style = {
   wrapper: `self-start max-w-[500px] mt-24`,
-  content: `bg-gray-800 w-[30rem] rounded-lg p-4 m-2`,
+  content: `bg-gray-800 w-[30rem] rounded-xl p-4 m-2`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
   createPoolInfo: `font-mono mt-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed
-  border-white/10 rounded-lg w-full`,
+  border-white/10 rounded-xl w-full`,
 };
 
 function PoolLoader({
@@ -47,7 +47,7 @@ function PoolLoader({
   steps: string[];
 }) {
   return (
-    <ul className="w-full rounded-lg border border-gray-600 text-gray-900">
+    <ul className="w-full rounded-xl border border-gray-600 text-gray-900">
       {steps.map((stepText, index) => (
         <li
           key={index}

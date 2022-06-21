@@ -4,7 +4,7 @@
     @apply overflow-y-auto grid place-items-center;
   }
   .dialog {
-    @apply relative z-10 bg-gray-800 text-gray-300 rounded-lg min-w-[300px] focus-ring;
+    @apply relative z-10 bg-gray-800 text-gray-300 rounded-xl min-w-[300px] focus-ring;
   }
   .dialog--closeBtn {
     @apply h-auto absolute top-2 right-2 focus-ring p-1 rounded border-transparent;
