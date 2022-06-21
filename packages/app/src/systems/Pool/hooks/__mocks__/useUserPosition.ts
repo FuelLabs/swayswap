@@ -1,6 +1,25 @@
 import * as useUserPositions from '../useUserPositions';
 
-const NO_POSITIONS = {
+export type MockUseUserPositionParams = {
+  pooledDAI: number;
+  pooledETH: number;
+  poolShare: number;
+  poolTokens: bigint | undefined;
+  poolTokensNum: bigint;
+  formattedPooledDAI: string;
+  formattedPooledETH: string;
+  formattedPoolShare: string;
+  poolRatio: number;
+  ethReserve: bigint;
+  formattedEthReserve: string;
+  formattedPoolTokens: string;
+  formattedTokenReserve: string;
+  hasPositions: boolean;
+  tokenReserve: bigint;
+  totalLiquidity: bigint;
+};
+
+const NO_POSITIONS: MockUseUserPositionParams = {
   ethReserve: BigInt(0),
   formattedEthReserve: '0.0',
   formattedPoolShare: '0.0',
@@ -19,7 +38,7 @@ const NO_POSITIONS = {
   totalLiquidity: BigInt(0),
 };
 
-export function mockUseUserPosition(opts?: Partial<typeof NO_POSITIONS>) {
+export function mockUseUserPosition(opts?: Partial<MockUseUserPositionParams>) {
   return jest.spyOn(useUserPositions, 'useUserPositions').mockImplementation(() => ({
     ...NO_POSITIONS,
     ...opts,
