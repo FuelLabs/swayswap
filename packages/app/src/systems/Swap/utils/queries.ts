@@ -107,7 +107,7 @@ export const queryNetworkFee = (contract: ExchangeContractAbi, direction?: Activ
   }
   return contract.prepareCall.swap_with_minimum(1, DEADLINE, {
     forward: [1, COIN_ETH],
-    variableOutputs: 2,
+    variableOutputs: 1,
     gasLimit: 1000000,
   });
 };
