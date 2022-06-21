@@ -6,7 +6,7 @@ import { Link } from "~/systems/UI";
 
 export function getBlockExplorerLink(path: string) {
   return `${BLOCK_EXPLORER_URL}${path}?providerUrl=${encodeURIComponent(
-    process.env.VITE_FUEL_PROVIDER_URL
+    process.env.VITE_FUEL_PROVIDER_URL as string
   )}`;
 }
 
