@@ -80,6 +80,9 @@ describe('End-to-end Test: 😁 Happy Path', () => {
         cy.getByAriaLabel('Swap button').click();
         cy.contains('Swap made successfully!');
 
+        // Dismiss twitter popup
+        cy.contains('button', 'No thanks').click();
+
         // validate remove liquidity
         cy.contains('button', 'Pool').click();
         cy.contains('button', 'Remove liquidity').click();
