@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { COIN_ETH } from '../utils/constants';
 import { getOverrides } from '../utils/gas';
 
 import { useWallet } from './useWallet';
@@ -20,16 +21,17 @@ export function useTokenMethods(tokenId: string) {
     },
     queryNetworkFee() {
       return contract.prepareCall.mint({
-        variableOutputs: 1,
+        forward: [1, COIN_ETH],
+        variableOutputs: 2,
       });
     },
     async getMintAmount() {
       return contract.dryRun.get_mint_amount();
     },
-    mint(gasLimit: bigint) {
-      return contract.submit.mint(
+    async mint(gasLimit: bigint) {
+      return contract.submitResult.mint(
         getOverrides({
-          variableOutputs: 1,
+          variableOutputs: 2,
           gasLimit,
         })
       );

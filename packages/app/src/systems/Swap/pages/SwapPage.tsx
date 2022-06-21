@@ -1,7 +1,5 @@
-import type { TransactionResult } from "fuels";
 import { useSetAtom } from "jotai";
 import { useMemo, useState } from "react";
-import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 
@@ -19,7 +17,6 @@ import {
   SwapQueries,
 } from "../utils";
 
-import { BLOCK_EXPLORER_URL } from "~/config";
 import {
   useDebounce,
   useBalances,
@@ -30,9 +27,10 @@ import {
   isSwayInfinity,
 } from "~/systems/Core";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
+import { txFeedback } from "~/systems/Core/utils/feedback";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { TwitterDialog, useTwitterDialog } from "~/systems/Tweet";
-import { Button, Card, Link } from "~/systems/UI";
+import { Button, Card } from "~/systems/UI";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
 
 export function SwapPage() {
@@ -120,43 +118,17 @@ export function SwapPage() {
       const res = await swapTokens(contract, swapState, txCost);
       return res;
     },
-    { onSuccess: handleSuccess }
+    { onSuccess: txFeedback("Swap made successfully!", handleSuccess) }
   );
 
   function handleSwap(state: SwapState) {
     setSwapState(state);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function handleSuccess(data: TransactionResult<any> | undefined) {
-    const txLink = (
-      <p className="text-xs text-gray-300 mt-1">
-        <Link
-          isExternal
-          href={`${BLOCK_EXPLORER_URL}/transaction/${data?.transactionId}`}
-        >
-          View it on Fuel Explorer
-        </Link>
-      </p>
-    );
-
-    /**
-     * Show a toast success message if status.type === 'success'
-     */
-    if (data?.status.type === "success") {
-      setHasSwapped(true);
-      openTwitterDialog();
-      toast.success(<>Swap made successfully! {txLink}</>, {
-        duration: 5000,
-      });
-      await balances.refetch();
-      return;
-    }
-
-    /**
-     * Show a toast error if status.type !== 'success''
-     */
-    toast.error(<>Transaction reverted! {txLink}</>);
+  async function handleSuccess() {
+    setHasSwapped(true);
+    openTwitterDialog();
+    await balances.refetch();
   }
 
   return (

@@ -2,10 +2,10 @@ import { BiLinkExternal, BiWallet } from "react-icons/bi";
 import { MdClose } from "react-icons/md";
 
 import { useAssets, useWallet } from "../hooks";
+import { getBlockExplorerLink } from "../utils/feedback";
 
 import { AssetItem } from "./AssetItem";
 
-import { BLOCK_EXPLORER_URL } from "~/config";
 import { Button, Card, Link, Spinner } from "~/systems/UI";
 
 type WalletInfoProps = {
@@ -41,7 +41,7 @@ export function WalletInfo({ onClose }: WalletInfoProps) {
         <Link
           isExternal
           className="flex items-center gap-2"
-          href={`${BLOCK_EXPLORER_URL}/address/${wallet?.address}`}
+          href={getBlockExplorerLink(`/address/${wallet?.address}`)}
         >
           View on Fuel Explorer <BiLinkExternal />
         </Link>
