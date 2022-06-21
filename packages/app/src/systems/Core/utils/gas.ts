@@ -1,5 +1,5 @@
-import type { CallResult, Overrides, ScriptTransactionRequest } from 'fuels';
-import { arrayify, Provider, ReceiptType } from 'fuels';
+import type { CallResult, ContractCall, Overrides, ScriptTransactionRequest } from 'fuels';
+import { buildTransaction, arrayify, Provider, ReceiptType } from 'fuels';
 
 import { divideFnValidOnly, toBigInt, toNumber, ZERO } from './math';
 
@@ -101,11 +101,9 @@ export function getTotalFee(gasUsed: bigint, byteSize: bigint, chainConfig?: Cha
   return getPriceByFactor(gasFee, chainConfig) + getPriceByFactor(byteFee, chainConfig);
 }
 
-export async function getTransactionCost(
-  requestPromise: Promise<ScriptTransactionRequest>
-): Promise<TransactionCost> {
+export async function getTransactionCost(contractCall: ContractCall): Promise<TransactionCost> {
   try {
-    const request = await requestPromise;
+    const request = await buildTransaction(contractCall);
     // Set gasPrice and bytePrice to ZERO to
     // measure gasUsed without needing to have balance
     request.gasPrice = ZERO;

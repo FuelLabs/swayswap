@@ -117,7 +117,8 @@ export function SwapPage() {
       if (!swapState) return;
       if (!txCost?.gas || txCost.error) return;
       setHasSwapped(false);
-      return swapTokens(contract, swapState, txCost);
+      const res = await swapTokens(contract, swapState, txCost);
+      return res;
     },
     { onSuccess: handleSuccess }
   );
@@ -132,7 +133,7 @@ export function SwapPage() {
       <p className="text-xs text-gray-300 mt-1">
         <Link
           isExternal
-          href={`${BLOCK_EXPLORER_URL}/transaction/${data?.blockId}`}
+          href={`${BLOCK_EXPLORER_URL}/transaction/${data?.transactionId}`}
         >
           View it on Fuel Explorer
         </Link>

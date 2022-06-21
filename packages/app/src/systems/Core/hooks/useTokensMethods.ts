@@ -18,7 +18,7 @@ export function useTokenMethods(tokenId: string) {
     getBalance() {
       return wallet?.getBalance(tokenId);
     },
-    async queryNetworkFee() {
+    queryNetworkFee() {
       return contract.prepareCall.mint({
         variableOutputs: 1,
       });

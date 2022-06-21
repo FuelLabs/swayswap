@@ -7,6 +7,8 @@ import type {
   FunctionFragment,
   DecodedValue,
   Contract,
+  ContractCall,
+  ContractCallOptions,
   Overrides,
   BigNumberish,
   BytesLike,
@@ -24,79 +26,7 @@ export type ContractIdInput = { value: string };
 export type ContractId = { value: string };
 
 interface TokenContractAbiInterface extends Interface {
-  submit: {
-    initialize: FunctionFragment;
-    set_mint_amount: FunctionFragment;
-    mint_coins: FunctionFragment;
-    burn_coins: FunctionFragment;
-    transfer_coins: FunctionFragment;
-    transfer_token_to_output: FunctionFragment;
-    mint: FunctionFragment;
-    get_mint_amount: FunctionFragment;
-    get_balance: FunctionFragment;
-    get_token_balance: FunctionFragment;
-  };
-  submitResult: {
-    initialize: FunctionFragment;
-    set_mint_amount: FunctionFragment;
-    mint_coins: FunctionFragment;
-    burn_coins: FunctionFragment;
-    transfer_coins: FunctionFragment;
-    transfer_token_to_output: FunctionFragment;
-    mint: FunctionFragment;
-    get_mint_amount: FunctionFragment;
-    get_balance: FunctionFragment;
-    get_token_balance: FunctionFragment;
-  };
-  dryRun: {
-    initialize: FunctionFragment;
-    set_mint_amount: FunctionFragment;
-    mint_coins: FunctionFragment;
-    burn_coins: FunctionFragment;
-    transfer_coins: FunctionFragment;
-    transfer_token_to_output: FunctionFragment;
-    mint: FunctionFragment;
-    get_mint_amount: FunctionFragment;
-    get_balance: FunctionFragment;
-    get_token_balance: FunctionFragment;
-  };
-  dryRunResult: {
-    initialize: FunctionFragment;
-    set_mint_amount: FunctionFragment;
-    mint_coins: FunctionFragment;
-    burn_coins: FunctionFragment;
-    transfer_coins: FunctionFragment;
-    transfer_token_to_output: FunctionFragment;
-    mint: FunctionFragment;
-    get_mint_amount: FunctionFragment;
-    get_balance: FunctionFragment;
-    get_token_balance: FunctionFragment;
-  };
-  simulate: {
-    initialize: FunctionFragment;
-    set_mint_amount: FunctionFragment;
-    mint_coins: FunctionFragment;
-    burn_coins: FunctionFragment;
-    transfer_coins: FunctionFragment;
-    transfer_token_to_output: FunctionFragment;
-    mint: FunctionFragment;
-    get_mint_amount: FunctionFragment;
-    get_balance: FunctionFragment;
-    get_token_balance: FunctionFragment;
-  };
-  simulateResult: {
-    initialize: FunctionFragment;
-    set_mint_amount: FunctionFragment;
-    mint_coins: FunctionFragment;
-    burn_coins: FunctionFragment;
-    transfer_coins: FunctionFragment;
-    transfer_token_to_output: FunctionFragment;
-    mint: FunctionFragment;
-    get_mint_amount: FunctionFragment;
-    get_balance: FunctionFragment;
-    get_token_balance: FunctionFragment;
-  };
-  prepareCall: {
+  functions: {
     initialize: FunctionFragment;
     set_mint_amount: FunctionFragment;
     mint_coins: FunctionFragment;
@@ -143,6 +73,40 @@ interface TokenContractAbiInterface extends Interface {
 
 export class TokenContractAbi extends Contract {
   interface: TokenContractAbiInterface;
+  prepareCall: {
+    initialize(
+      mint_amount: BigNumberish,
+      address: AddressInput,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    set_mint_amount(mint_amount: BigNumberish, options?: ContractCallOptions): ContractCall;
+
+    mint_coins(mint_amount: BigNumberish, options?: ContractCallOptions): ContractCall;
+
+    burn_coins(burn_amount: BigNumberish, options?: ContractCallOptions): ContractCall;
+
+    transfer_coins(
+      coins: BigNumberish,
+      address: AddressInput,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    transfer_token_to_output(
+      coins: BigNumberish,
+      asset_id: ContractIdInput,
+      address: AddressInput,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    mint(options?: ContractCallOptions): ContractCall;
+
+    get_mint_amount(options?: ContractCallOptions): ContractCall;
+
+    get_balance(options?: ContractCallOptions): ContractCall;
+
+    get_token_balance(asset_id: ContractIdInput, options?: ContractCallOptions): ContractCall;
+  };
   submit: {
     initialize(
       mint_amount: BigNumberish,
@@ -334,58 +298,6 @@ export class TokenContractAbi extends Contract {
       asset_id: ContractIdInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
-  };
-  prepareCall: {
-    initialize(
-      mint_amount: BigNumberish,
-      address: AddressInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    set_mint_amount(
-      mint_amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    mint_coins(
-      mint_amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    burn_coins(
-      burn_amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    transfer_coins(
-      coins: BigNumberish,
-      address: AddressInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    transfer_token_to_output(
-      coins: BigNumberish,
-      asset_id: ContractIdInput,
-      address: AddressInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    mint(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    get_mint_amount(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    get_token_balance(
-      asset_id: ContractIdInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
   };
   simulate: {
     initialize(
