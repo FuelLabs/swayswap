@@ -109,7 +109,7 @@ export const notHasBalanceWithSlippage = ({
     );
 
     if (swapState!.coinFrom.assetId === COIN_ETH) {
-      amountWithSlippage += txCost?.total || ZERO;
+      amountWithSlippage += txCost?.fee || ZERO;
     }
 
     return amountWithSlippage > currentBalance;
@@ -121,7 +121,7 @@ const hasEthForNetworkFee = ({ balances, txCost }: StateParams) => {
   const currentBalance = toNumber(
     balances?.find((coin) => coin.assetId === COIN_ETH)?.amount || ZERO
   );
-  return currentBalance > (txCost?.total || ZERO);
+  return currentBalance > (txCost?.fee || ZERO);
 };
 
 export const getValidationState = (stateParams: StateParams): ValidationStateEnum => {
