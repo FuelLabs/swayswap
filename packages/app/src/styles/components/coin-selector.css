@@ -1,6 +1,6 @@
 @layer components {
   .coinSelector {
-    @apply h-10 px-2 rounded-xl gap-1 bg-gray-800;
+    @apply h-10 px-2 rounded-lg gap-1 bg-gray-800;
   }
   .coinSelector:not([aria-disabled="true"]):not(.button--readonly) {
     @apply hover:text-gray-300 hover:border-gray-600;

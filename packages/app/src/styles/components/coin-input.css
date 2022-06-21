@@ -1,6 +1,6 @@
 @layer components {
   .coinInput {
-    @apply bg-gray-700 rounded-2xl p-2 border border-gray-700;
+    @apply bg-gray-700 rounded-lg p-2 border border-gray-700;
   }
   .coinInput--input {
     @apply w-[100px] flex-1 ml-2 h-10 bg-transparent placeholder:text-gray-300;
