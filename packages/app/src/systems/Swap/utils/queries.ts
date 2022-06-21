@@ -69,7 +69,7 @@ export const swapTokens = async (
     if (!forwardAmount.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
     }
-    await contract.submit.swap_with_maximum(
+    return contract.submitResult.swap_with_maximum(
       amount,
       DEADLINE,
       getOverrides({
@@ -78,12 +78,14 @@ export const swapTokens = async (
         variableOutputs: 1,
       })
     );
-  } else if (direction === ActiveInput.from && amount) {
+  }
+  if (direction === ActiveInput.from && amount) {
     const minValue = await getSwapWithMinimumMinAmount(contract, coinFrom.assetId, amount);
     if (!minValue.has_liquidity) {
       throw new Error('Not enough liquidity on pool');
     }
-    await contract.submit.swap_with_minimum(
+
+    return contract.submitResult.swap_with_minimum(
       minValue.amount,
       DEADLINE,
       getOverrides({

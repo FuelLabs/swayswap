@@ -1,3 +1,4 @@
+import type { TransactionResult } from "fuels";
 import { useSetAtom } from "jotai";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
@@ -18,6 +19,7 @@ import {
   SwapQueries,
 } from "../utils";
 
+import { BLOCK_EXPLORER_URL } from "~/config";
 import {
   useDebounce,
   useBalances,
@@ -29,7 +31,7 @@ import {
 } from "~/systems/Core";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
-import { Button, Card } from "~/systems/UI";
+import { Button, Card, Link } from "~/systems/UI";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
 
 export function SwapPage() {
@@ -94,26 +96,6 @@ export function SwapPage() {
     () => queryNetworkFee(contract, swapState?.direction)
   );
 
-  const { mutate: swap, isLoading: isSwapping } = useMutation(
-    async () => {
-      if (!swapState) return;
-      if (!txCost?.gas || txCost.error) return;
-      setHasSwapped(false);
-      await swapTokens(contract, swapState, txCost);
-    },
-    {
-      onSuccess: async () => {
-        setHasSwapped(true);
-        toast.success("Swap made successfully!");
-        await balances.refetch();
-      },
-    }
-  );
-
-  function handleSwap(state: SwapState) {
-    setSwapState(state);
-  }
-
   const validationState = getValidationState({
     swapState,
     previewAmount,
@@ -127,6 +109,53 @@ export function SwapPage() {
     isLoading || validationState !== ValidationStateEnum.Swap;
 
   const btnText = getValidationText(validationState, swapState);
+
+  const { mutate: swap, isLoading: isSwapping } = useMutation(
+    async () => {
+      if (!swapState) return;
+      if (!txCost?.gas || txCost.error) return;
+      setHasSwapped(false);
+      return swapTokens(contract, swapState, txCost);
+    },
+    {
+      onSuccess: handleSuccess,
+    }
+  );
+
+  function handleSwap(state: SwapState) {
+    setSwapState(state);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function handleSuccess(data: TransactionResult<any> | undefined) {
+    const txLink = (
+      <p className="text-xs text-gray-300 mt-1">
+        <Link
+          isExternal
+          href={`${BLOCK_EXPLORER_URL}/transaction/${data?.blockId}`}
+        >
+          View it on Fuel Explorer
+        </Link>
+      </p>
+    );
+
+    /**
+     * Show a toast success message if status.type === 'success'
+     */
+    if (data?.status.type === "success") {
+      setHasSwapped(true);
+      toast.success(<>Swap made successfully! {txLink}</>, {
+        duration: 5000,
+      });
+      await balances.refetch();
+      return;
+    }
+
+    /**
+     * Show a toast error if status.type !== 'success''
+     */
+    toast.error(<>Transaction reverted! {txLink}</>);
+  }
 
   return (
     <MainLayout>

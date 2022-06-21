@@ -1,11 +1,12 @@
-import { BiWallet } from "react-icons/bi";
+import { BiLinkExternal, BiWallet } from "react-icons/bi";
 import { MdClose } from "react-icons/md";
 
-import { useAssets } from "../hooks";
+import { useAssets, useWallet } from "../hooks";
 
 import { AssetItem } from "./AssetItem";
 
-import { Button, Card, Spinner } from "~/systems/UI";
+import { BLOCK_EXPLORER_URL } from "~/config";
+import { Button, Card, Link, Spinner } from "~/systems/UI";
 
 type WalletInfoProps = {
   onClose: () => void;
@@ -13,6 +14,7 @@ type WalletInfoProps = {
 
 export function WalletInfo({ onClose }: WalletInfoProps) {
   const { coins, isLoading } = useAssets();
+  const wallet = useWallet();
 
   return (
     <Card className="min-w-[300px]">
@@ -35,6 +37,15 @@ export function WalletInfo({ onClose }: WalletInfoProps) {
           <AssetItem key={coin.assetId} coin={coin} />
         </div>
       ))}
+      <div className="flex justify-center mt-4 text-sm">
+        <Link
+          isExternal
+          className="flex items-center gap-2"
+          href={`${BLOCK_EXPLORER_URL}/address/${wallet?.address}`}
+        >
+          View on Fuel Explorer <BiLinkExternal />
+        </Link>
+      </div>
     </Card>
   );
 }
