@@ -103,7 +103,7 @@ export function getTotalFee(gasUsed: bigint, byteSize: bigint, chainConfig?: Cha
 
 export async function getTransactionCost(contractCall: ContractCall): Promise<TransactionCost> {
   try {
-    const request = await buildTransaction(contractCall);
+    const request = await buildTransaction(contractCall, { fundTransaction: true });
     // Set gasPrice and bytePrice to ZERO to
     // measure gasUsed without needing to have balance
     request.gasPrice = ZERO;

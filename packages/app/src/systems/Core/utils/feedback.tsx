@@ -5,7 +5,9 @@ import { BLOCK_EXPLORER_URL } from "~/config";
 import { Link } from "~/systems/UI";
 
 export function getBlockExplorerLink(path: string) {
-  return `${BLOCK_EXPLORER_URL}${path}?providerUrl=${process.env.VITE_FUEL_PROVIDER_URL}`;
+  return `${BLOCK_EXPLORER_URL}${path}?providerUrl=${encodeURIComponent(
+    process.env.VITE_FUEL_PROVIDER_URL
+  )}`;
 }
 
 export function txFeedback(

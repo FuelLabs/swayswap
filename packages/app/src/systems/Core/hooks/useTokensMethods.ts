@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import { COIN_ETH } from '../utils/constants';
 import { getOverrides } from '../utils/gas';
 
 import { useWallet } from './useWallet';
@@ -21,7 +20,6 @@ export function useTokenMethods(tokenId: string) {
     },
     queryNetworkFee() {
       return contract.prepareCall.mint({
-        forward: [1, COIN_ETH],
         variableOutputs: 2,
       });
     },
