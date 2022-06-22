@@ -17,6 +17,12 @@ on:
       gas_price:
         description: 'Min gas price required from the provider'
         type: number
+      token_amount:
+        description: 'Token amount to be used on pool initialization'
+        type: string
+      eth_amount:
+        description: 'Eth amount to be used on pool initialization'
+        type: string
       initiate_supply:
         description: 'Should initialize the pool?'
         required: true
