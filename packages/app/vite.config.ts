@@ -30,4 +30,11 @@ export default defineConfig({
     'process.env': Object.fromEntries(ENV_VARS),
   },
   ...(Boolean(process.env.CI) && { logLevel: 'silent' }),
+  /**
+   * Need because of this issue:
+   * https://github.com/vitejs/vite/issues/8644#issuecomment-1159308803
+   */
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+  },
 });

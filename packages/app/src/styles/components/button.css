@@ -1,6 +1,6 @@
 @layer components {
   .button {
-    @apply appearance-none transition-main inline-flex items-center rounded-md gap-2;
+    @apply appearance-none transition-main inline-flex items-center rounded-xl gap-2;
     @apply border focus-ring btn-active cursor-pointer;
 
     &[aria-disabled="true"] {

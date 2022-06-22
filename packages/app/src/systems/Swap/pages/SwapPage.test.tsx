@@ -5,10 +5,8 @@ import {
   waitFor,
 } from "@swayswap/test-utils";
 import type { Wallet } from "fuels";
-import toast from "react-hot-toast";
 
 import { App } from "~/App";
-import { parseToFormattedNumber } from "~/systems/Core";
 import {
   createWallet,
   mockUseWallet,
@@ -33,11 +31,6 @@ async function createAndMockWallet() {
   const wallet = createWallet();
   mockUseWallet(wallet);
   return wallet;
-}
-
-async function getFormattedBalance(wallet: Wallet) {
-  const balance = await wallet.getBalance();
-  return parseToFormattedNumber(balance);
 }
 
 describe("SwapPage", () => {
@@ -171,39 +164,6 @@ describe("SwapPage", () => {
         const coinTo = screen.getByLabelText(/Coin to input/i);
         const value = parseFloat(coinTo.getAttribute("value") || "0");
         expect(value).toBeGreaterThan(1);
-      });
-    });
-
-    it("should swap between two tokens", async () => {
-      const spy = jest.spyOn(toast, "success");
-      const amount = 0.5;
-      // As we don't have a way to access a good estimate of gas fee
-      // we use a max gas cost
-      const gasFeeEstimateMax = 0.01;
-      const currentBalance = Number(await getFormattedBalance(wallet));
-      expect(currentBalance).toBeGreaterThan(1);
-
-      renderWithRouter(<App />, {
-        route: "/swap",
-      });
-
-      await waitFor(async () => {
-        const coinFrom = await screen.findByLabelText(/Coin from input/i);
-        fireEvent.change(coinFrom, { target: { value: String(amount) } });
-        expect(coinFrom.getAttribute("value")).toBe(String(amount));
-
-        const swapBtn = await screen.findByLabelText(/swap button/i);
-        expect(swapBtn).not.toBeDisabled();
-        expect(swapBtn.textContent).toMatch(/Swap/i);
-        fireEvent.click(swapBtn);
-      });
-
-      await waitFor(async () => {
-        expect(spy).toBeCalled();
-        const afterBalance = Number(await getFormattedBalance(wallet));
-        expect(afterBalance).toBeGreaterThan(
-          currentBalance - amount - gasFeeEstimateMax
-        );
       });
     });
   });

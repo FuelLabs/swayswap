@@ -1,6 +1,5 @@
 import { useSetAtom } from "jotai";
 import { useMemo, useState } from "react";
-import toast from "react-hot-toast";
 import { MdSwapCalls } from "react-icons/md";
 import { useMutation, useQuery } from "react-query";
 
@@ -28,6 +27,7 @@ import {
   isSwayInfinity,
 } from "~/systems/Core";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
+import { txFeedback } from "~/systems/Core/utils/feedback";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
 import { TwitterDialog, useTwitterDialog } from "~/systems/Tweet";
 import { Button, Card } from "~/systems/UI";
@@ -96,27 +96,6 @@ export function SwapPage() {
     () => queryNetworkFee(contract, swapState?.direction)
   );
 
-  const { mutate: swap, isLoading: isSwapping } = useMutation(
-    async () => {
-      if (!swapState) return;
-      if (!txCost?.gas || txCost.error) return;
-      setHasSwapped(false);
-      await swapTokens(contract, swapState, txCost);
-    },
-    {
-      onSuccess: async () => {
-        setHasSwapped(true);
-        openTwitterDialog();
-        toast.success("Swap made successfully!");
-        await balances.refetch();
-      },
-    }
-  );
-
-  function handleSwap(state: SwapState) {
-    setSwapState(state);
-  }
-
   const validationState = getValidationState({
     swapState,
     previewAmount,
@@ -130,6 +109,27 @@ export function SwapPage() {
     isLoading || validationState !== ValidationStateEnum.Swap;
 
   const btnText = getValidationText(validationState, swapState);
+
+  const { mutate: swap, isLoading: isSwapping } = useMutation(
+    async () => {
+      if (!swapState) return;
+      if (!txCost?.gas || txCost.error) return;
+      setHasSwapped(false);
+      const res = await swapTokens(contract, swapState, txCost);
+      return res;
+    },
+    { onSuccess: txFeedback("Swap made successfully!", handleSuccess) }
+  );
+
+  function handleSwap(state: SwapState) {
+    setSwapState(state);
+  }
+
+  async function handleSuccess() {
+    setHasSwapped(true);
+    openTwitterDialog();
+    await balances.refetch();
+  }
 
   return (
     <MainLayout>

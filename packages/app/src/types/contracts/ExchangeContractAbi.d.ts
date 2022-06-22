@@ -7,6 +7,8 @@ import type {
   FunctionFragment,
   DecodedValue,
   Contract,
+  ContractCall,
+  ContractCallOptions,
   Overrides,
   BigNumberish,
   BytesLike,
@@ -43,85 +45,7 @@ export type PreviewInfoInput = { amount: BigNumberish; has_liquidity: boolean };
 export type PreviewInfo = { amount: bigint; has_liquidity: boolean };
 
 interface ExchangeContractAbiInterface extends Interface {
-  submit: {
-    get_balance: FunctionFragment;
-    get_pool_info: FunctionFragment;
-    get_add_liquidity_token_amount: FunctionFragment;
-    deposit: FunctionFragment;
-    withdraw: FunctionFragment;
-    add_liquidity: FunctionFragment;
-    remove_liquidity: FunctionFragment;
-    swap_with_minimum: FunctionFragment;
-    swap_with_maximum: FunctionFragment;
-    get_swap_with_minimum: FunctionFragment;
-    get_swap_with_maximum: FunctionFragment;
-  };
-  submitResult: {
-    get_balance: FunctionFragment;
-    get_pool_info: FunctionFragment;
-    get_add_liquidity_token_amount: FunctionFragment;
-    deposit: FunctionFragment;
-    withdraw: FunctionFragment;
-    add_liquidity: FunctionFragment;
-    remove_liquidity: FunctionFragment;
-    swap_with_minimum: FunctionFragment;
-    swap_with_maximum: FunctionFragment;
-    get_swap_with_minimum: FunctionFragment;
-    get_swap_with_maximum: FunctionFragment;
-  };
-  dryRun: {
-    get_balance: FunctionFragment;
-    get_pool_info: FunctionFragment;
-    get_add_liquidity_token_amount: FunctionFragment;
-    deposit: FunctionFragment;
-    withdraw: FunctionFragment;
-    add_liquidity: FunctionFragment;
-    remove_liquidity: FunctionFragment;
-    swap_with_minimum: FunctionFragment;
-    swap_with_maximum: FunctionFragment;
-    get_swap_with_minimum: FunctionFragment;
-    get_swap_with_maximum: FunctionFragment;
-  };
-  dryRunResult: {
-    get_balance: FunctionFragment;
-    get_pool_info: FunctionFragment;
-    get_add_liquidity_token_amount: FunctionFragment;
-    deposit: FunctionFragment;
-    withdraw: FunctionFragment;
-    add_liquidity: FunctionFragment;
-    remove_liquidity: FunctionFragment;
-    swap_with_minimum: FunctionFragment;
-    swap_with_maximum: FunctionFragment;
-    get_swap_with_minimum: FunctionFragment;
-    get_swap_with_maximum: FunctionFragment;
-  };
-  simulate: {
-    get_balance: FunctionFragment;
-    get_pool_info: FunctionFragment;
-    get_add_liquidity_token_amount: FunctionFragment;
-    deposit: FunctionFragment;
-    withdraw: FunctionFragment;
-    add_liquidity: FunctionFragment;
-    remove_liquidity: FunctionFragment;
-    swap_with_minimum: FunctionFragment;
-    swap_with_maximum: FunctionFragment;
-    get_swap_with_minimum: FunctionFragment;
-    get_swap_with_maximum: FunctionFragment;
-  };
-  simulateResult: {
-    get_balance: FunctionFragment;
-    get_pool_info: FunctionFragment;
-    get_add_liquidity_token_amount: FunctionFragment;
-    deposit: FunctionFragment;
-    withdraw: FunctionFragment;
-    add_liquidity: FunctionFragment;
-    remove_liquidity: FunctionFragment;
-    swap_with_minimum: FunctionFragment;
-    swap_with_maximum: FunctionFragment;
-    get_swap_with_minimum: FunctionFragment;
-    get_swap_with_maximum: FunctionFragment;
-  };
-  prepareCall: {
+  functions: {
     get_balance: FunctionFragment;
     get_pool_info: FunctionFragment;
     get_add_liquidity_token_amount: FunctionFragment;
@@ -183,6 +107,53 @@ interface ExchangeContractAbiInterface extends Interface {
 
 export class ExchangeContractAbi extends Contract {
   interface: ExchangeContractAbiInterface;
+  prepareCall: {
+    get_balance(asset_id: ContractIdInput, options?: ContractCallOptions): ContractCall;
+
+    get_pool_info(options?: ContractCallOptions): ContractCall;
+
+    get_add_liquidity_token_amount(
+      eth_amount: BigNumberish,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    deposit(options?: ContractCallOptions): ContractCall;
+
+    withdraw(
+      amount: BigNumberish,
+      asset_id: ContractIdInput,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    add_liquidity(
+      min_liquidity: BigNumberish,
+      deadline: BigNumberish,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    remove_liquidity(
+      min_eth: BigNumberish,
+      min_tokens: BigNumberish,
+      deadline: BigNumberish,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    swap_with_minimum(
+      min: BigNumberish,
+      deadline: BigNumberish,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    swap_with_maximum(
+      amount: BigNumberish,
+      deadline: BigNumberish,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    get_swap_with_minimum(amount: BigNumberish, options?: ContractCallOptions): ContractCall;
+
+    get_swap_with_maximum(amount: BigNumberish, options?: ContractCallOptions): ContractCall;
+  };
   submit: {
     get_balance(
       asset_id: ContractIdInput,
@@ -410,66 +381,6 @@ export class ExchangeContractAbi extends Contract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
-  };
-  prepareCall: {
-    get_balance(
-      asset_id: ContractIdInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    get_pool_info(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    get_add_liquidity_token_amount(
-      eth_amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    deposit(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    withdraw(
-      amount: BigNumberish,
-      asset_id: ContractIdInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    add_liquidity(
-      min_liquidity: BigNumberish,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    remove_liquidity(
-      min_eth: BigNumberish,
-      min_tokens: BigNumberish,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    swap_with_minimum(
-      min: BigNumberish,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    swap_with_maximum(
-      amount: BigNumberish,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    get_swap_with_minimum(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    get_swap_with_maximum(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
   };
   simulate: {
     get_balance(

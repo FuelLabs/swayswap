@@ -1,5 +1,5 @@
-import type { CallResult, Overrides, ScriptTransactionRequest } from 'fuels';
-import { arrayify, Provider, ReceiptType } from 'fuels';
+import type { CallResult, ContractCall, Overrides, ScriptTransactionRequest } from 'fuels';
+import { buildTransaction, arrayify, Provider, ReceiptType } from 'fuels';
 
 import { divideFnValidOnly, toBigInt, toNumber, ZERO } from './math';
 
@@ -23,6 +23,7 @@ export type ChainConfig = {
   chain: {
     consensusParameters: {
       gasPriceFactor: string;
+      maxGasPerTx: string;
     };
     latestBlock: {
       height: string;
@@ -40,6 +41,7 @@ export async function getChainConfig(): Promise<ChainConfig> {
     chain {
       consensusParameters {
         gasPriceFactor
+        maxGasPerTx
       }
       latestBlock {
         height
@@ -101,16 +103,15 @@ export function getTotalFee(gasUsed: bigint, byteSize: bigint, chainConfig?: Cha
   return getPriceByFactor(gasFee, chainConfig) + getPriceByFactor(byteFee, chainConfig);
 }
 
-export async function getTransactionCost(
-  requestPromise: Promise<ScriptTransactionRequest>
-): Promise<TransactionCost> {
+export async function getTransactionCost(contractCall: ContractCall): Promise<TransactionCost> {
   try {
-    const request = await requestPromise;
+    const request = await buildTransaction(contractCall, { fundTransaction: true });
     // Set gasPrice and bytePrice to ZERO to
     // measure gasUsed without needing to have balance
     request.gasPrice = ZERO;
     request.bytePrice = ZERO;
     const chainConfig = await getChainConfig();
+    request.gasLimit = toBigInt(chainConfig.chain.consensusParameters.maxGasPerTx);
     const provider = new Provider(FUEL_PROVIDER_URL);
     const dryRunResult = await provider.call(request);
     const gasUsed = getGasUsed(dryRunResult);
