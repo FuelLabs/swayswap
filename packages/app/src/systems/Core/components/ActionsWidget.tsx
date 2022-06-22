@@ -4,7 +4,7 @@ import { FaFaucet } from "react-icons/fa";
 import { FaucetDialog, useFaucetDialog } from "~/systems/Faucet";
 import { Button, Link } from "~/systems/UI";
 
-const tweetText = `I'm using #SwaySwap, a blazingly fast DEX built on Fuel @fuellabs_\nhttps://fuellabs.github.io/swayswap`;
+const tweetText = `I'm using #SwaySwap, a blazingly fast DEX on the Fuel devnet @fuellabs_\nhttps://fuellabs.github.io/swayswap`;
 const tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
   tweetText
 )}`;
