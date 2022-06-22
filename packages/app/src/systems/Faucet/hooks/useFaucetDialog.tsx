@@ -1,10 +1,10 @@
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom } from "jotai";
 
-import { useDialog } from '~/systems/UI';
+import { useDialog } from "~/systems/UI";
 
 const dialogAtom = atom(false);
 
-export function useTwitterDialog() {
+export function useFaucetDialog() {
   const [opened, setOpened] = useAtom(dialogAtom);
   return useDialog({
     isOpen: opened,

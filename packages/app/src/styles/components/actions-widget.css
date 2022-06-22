@@ -1,17 +1,33 @@
 @layer components {
-  .faucetWidget {
-    @apply fixed bottom-0 p-4 pt-0;
+  .actionsWidget {
+    @apply flex items-center gap-1 p-4;
 
-    & > button {
-      @apply bg-gray-800 rounded-full;
+    @media (min-width: 834px) {
+      @apply p-6 fixed bottom-0 left-0;
     }
   }
 
-  .faucetWidget--tour {
-    @apply fixed bottom-5 left-5 outline-none;
+  .actionsWidget--btn {
+    @apply px-4 bg-gray-800 rounded-full h-10;
   }
 
-  .faucetWidget--dialog {
+  .actionsWidget--shareBtn {
+    @apply px-3 gap-0 transition-all ease-linear;
+
+    & .content {
+      @apply w-0 opacity-0;
+    }
+
+    &:hover {
+      @apply px-4 gap-2;
+    }
+
+    &:hover .content {
+      @apply w-[auto] opacity-100;
+    }
+  }
+
+  .faucetDialog {
     @apply min-w-[auto];
 
     & .card {
@@ -21,14 +37,6 @@
     & .card--title {
       @apply text-gray-100;
     }
-  }
-
-  .faucetWidget--formRow {
-    @apply mt-3;
-  }
-
-  .faucetWidget--label {
-    @apply mb-2 flex text-sm;
   }
 
   .faucetCaptcha {

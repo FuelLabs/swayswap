@@ -2,11 +2,8 @@
   .mainLayout {
     @apply flex flex-col;
     @apply h-screen text-gray-100 overflow-hidden;
-
-    @media (min-width: 600px) {
-      @apply grid;
-      grid-template-rows: auto 1fr;
-    }
+    @apply grid;
+    grid-template-rows: auto 1fr auto;
   }
   .mainLayout--wrapper {
     @apply flex justify-center items-start p-4 pb-16 sm:pt-14 overflow-y-auto;

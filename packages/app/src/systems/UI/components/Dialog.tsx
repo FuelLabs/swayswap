@@ -11,6 +11,7 @@ import {
 import type { OverlayTriggerState } from "@react-stately/overlays";
 import { useOverlayTriggerState } from "@react-stately/overlays";
 import type { AriaDialogProps } from "@react-types/dialog";
+import type { OverlayTriggerProps } from "@react-types/overlays";
 import cx from "classnames";
 import { createContext, useContext, useRef } from "react";
 import type { FC, ReactNode } from "react";
@@ -137,8 +138,10 @@ function DialogContent({ children, className, onClose }: DialogContentProps) {
   );
 }
 
-export function useDialog() {
-  const state = useOverlayTriggerState({});
+type DialogOptions = OverlayTriggerProps;
+
+export function useDialog(opts: DialogOptions = {}) {
+  const state = useOverlayTriggerState(opts);
   const openButtonRef = useRef<HTMLButtonElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 

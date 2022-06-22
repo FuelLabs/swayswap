@@ -10,7 +10,6 @@ import {
   parseUnits,
   toBigInt,
   MAX_U64_VALUE,
-  parseToFormattedNumber,
   ZERO,
 } from "../utils";
 
@@ -166,19 +165,11 @@ export function useCoinInput({
   };
 }
 
-function getRightValue(value: string, displayType: string) {
-  if (displayType === "text") return parseToFormattedNumber(value);
-
-  switch (value) {
-    case "0.0":
-      return "0";
-
-    case ".":
-      return "0.";
-
-    default:
-      return value;
-  }
+function getRightValue(value: string) {
+  if (process.env.NODE_ENV === "test" && !value) return null;
+  if (value === "0.0") return "0";
+  if (value === ".") return "0.";
+  return value;
 }
 
 type CoinInputProps = Omit<UseCoinParams, "onChange"> &
@@ -232,14 +223,14 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               getInputRef={ref}
               allowNegative={false}
               defaultValue={initialValue}
-              value={getRightValue(value || "", displayType)}
+              value={getRightValue(value || "")}
               displayType={displayType}
               isAllowed={isAllowed}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 onChange?.(e.target.value);
                 setValue(e.target.value);
               }}
-              decimalScale={DECIMAL_UNITS}
+              decimalScale={displayType === "text" ? 4 : DECIMAL_UNITS}
               placeholder="0"
               className="coinInput--input"
               thousandSeparator={false}

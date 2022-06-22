@@ -62,11 +62,6 @@ export const Header = () => {
         width={40}
       />
       {wallet && (
-        <div className="header--wallet">
-          <WalletWidget />
-        </div>
-      )}
-      {wallet && (
         <div className="header--nav">
           <div className="header--navContainer">
             <ButtonGroup>
@@ -86,6 +81,11 @@ export const Header = () => {
               </HeaderNav>
             </ButtonGroup>
           </div>
+        </div>
+      )}
+      {wallet && (
+        <div className="header--wallet">
+          <WalletWidget />
         </div>
       )}
     </div>
