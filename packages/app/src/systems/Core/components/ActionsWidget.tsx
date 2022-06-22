@@ -2,11 +2,14 @@ import { BsTwitter } from "react-icons/bs";
 import { FaFaucet } from "react-icons/fa";
 
 import { FaucetDialog, useFaucetDialog } from "~/systems/Faucet";
-import { TwitterDialog, useTwitterDialog } from "~/systems/Tweet";
-import { Button } from "~/systems/UI";
+import { Button, Link } from "~/systems/UI";
+
+const tweetText = `I'm using #SwaySwap, a blazingly fast DEX on the Fuel devnet @fuellabs_\nhttps://fuellabs.github.io/swayswap`;
+const tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+  tweetText
+)}`;
 
 export function ActionsWidget() {
-  const twitterDialog = useTwitterDialog();
   const faucetDialog = useFaucetDialog();
 
   return (
@@ -20,16 +23,15 @@ export function ActionsWidget() {
         <FaFaucet />
         <span className="content">Faucet</span>
       </Button>
-      <Button
-        {...twitterDialog.openButtonProps}
-        size="md"
-        className="actionsWidget--btn actionsWidget--shareBtn"
-        onPress={twitterDialog.open}
-      >
-        <BsTwitter />
-        <span className="content">Share</span>
-      </Button>
-      <TwitterDialog />
+      <Link href={tweetLink} isExternal className="no-underline">
+        <Button
+          size="md"
+          className="actionsWidget--btn actionsWidget--shareBtn"
+        >
+          <BsTwitter />
+          <span className="content">Share</span>
+        </Button>
+      </Link>
       <FaucetDialog />
     </div>
   );
