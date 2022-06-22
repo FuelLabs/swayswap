@@ -1,8 +1,6 @@
-import { useEffect } from "react";
-
 import { useTwitterDialog } from "../hooks/useTwitterDialog";
 
-import { Button, Dialog, Link, useDialog } from "~/systems/UI";
+import { Button, Dialog, Link } from "~/systems/UI";
 
 const tweetText = `I'm using #SwaySwap, a blazingly fast DEX built on Fuel @fuellabs_\nhttps://fuellabs.github.io/swayswap`;
 const tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
@@ -10,36 +8,21 @@ const tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
 )}`;
 
 export function TwitterDialog() {
-  const dialog = useDialog();
-  const { isOpen, close } = useTwitterDialog();
-
-  useEffect(() => {
-    dialog.setOpen(isOpen);
-  }, [isOpen]);
+  const dialog = useTwitterDialog();
 
   function shareTweet() {
     setTimeout(() => {
-      close();
+      dialog.close();
     }, 500);
   }
 
-  function handleSkip() {
-    close();
-  }
-
   return (
-    <Dialog
-      {...dialog.dialogProps}
-      isOpen={isOpen}
-      shouldCloseOnBlur={false}
-      isBlocked={true}
-      onClose={close}
-    >
+    <Dialog {...dialog.dialogProps} shouldCloseOnBlur={false} isBlocked={true}>
       <Dialog.Content className="w-40 p-4 pt-8">
         <p className="text-l text-gray-50 text-center">
           💚 Share that you&apos;re using SwaySwap on Twitter.
         </p>
-        <Link href={tweetLink} isExternal className="hover:no-underline">
+        <Link href={tweetLink} isExternal className="no-underline">
           <Button
             size="md"
             variant="primary"
@@ -54,7 +37,7 @@ export function TwitterDialog() {
           size="sm"
           isFull
           className="mt-2 p-0 border-0 text-gray-400"
-          onPress={handleSkip}
+          onPress={dialog.close}
         >
           No thanks
         </Button>
