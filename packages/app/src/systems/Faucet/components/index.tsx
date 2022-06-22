@@ -1,2 +1,2 @@
 export * from "./FaucetApp";
-export * from "./FaucetWidget";
+export * from "./FaucetDialog";
