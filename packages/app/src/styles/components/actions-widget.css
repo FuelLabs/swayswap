@@ -1,9 +1,25 @@
 @layer components {
   .actionsWidget {
-    @apply flex items-center gap-2 fixed bottom-0 p-4 pt-0;
+    @apply flex items-center gap-1 p-4 lg:p-6;
+  }
 
-    & > .button {
-      @apply bg-gray-800 rounded-full h-10;
+  .actionsWidget--btn {
+    @apply px-4 bg-gray-800 rounded-full h-10;
+  }
+
+  .actionsWidget--shareBtn {
+    @apply px-3 gap-0 transition-all ease-linear;
+
+    & .content {
+      @apply w-0 opacity-0;
+    }
+
+    &:hover {
+      @apply px-4 gap-2;
+    }
+
+    &:hover .content {
+      @apply w-[auto] opacity-100;
     }
   }
 

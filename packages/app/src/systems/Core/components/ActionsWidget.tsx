@@ -14,19 +14,20 @@ export function ActionsWidget() {
       <Button
         {...faucetDialog.openButtonProps}
         size="md"
-        className="actionsWidget--faucetBtn"
+        className="actionsWidget--btn "
         onPress={faucetDialog.open}
       >
         <FaFaucet />
-        Faucet
+        <span className="content">Faucet</span>
       </Button>
       <Button
         {...twitterDialog.openButtonProps}
         size="md"
-        className="actionsWidget--shareBtn"
+        className="actionsWidget--btn actionsWidget--shareBtn"
         onPress={twitterDialog.open}
       >
-        <BsTwitter /> Share
+        <BsTwitter />
+        <span className="content">Share</span>
       </Button>
       <TwitterDialog />
       <FaucetDialog />
