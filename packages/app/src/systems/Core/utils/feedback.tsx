@@ -35,7 +35,7 @@ export function txFeedback(
         <>
           {txMsg} {txLink}
         </>,
-        { duration: 5000 }
+        { duration: 8000 }
       );
       await onSuccess();
       return;
