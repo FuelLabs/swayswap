@@ -5,6 +5,11 @@
     @media (min-width: 834px) {
       @apply p-6 fixed bottom-0 left-0;
     }
+
+    & a,
+    & a:hover {
+      @apply no-underline;
+    }
   }
 
   .actionsWidget--btn {
