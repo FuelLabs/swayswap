@@ -1,3 +1,4 @@
+export * from "./ActionsWidget";
 export * from "./AnimatedPage";
 export * from "./AssetItem";
 export * from "./CoinInput";

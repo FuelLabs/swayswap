@@ -29,7 +29,6 @@ import {
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { txFeedback } from "~/systems/Core/utils/feedback";
 import { usePoolInfo, useUserPositions } from "~/systems/Pool";
-import { TwitterDialog, useTwitterDialog } from "~/systems/Tweet";
 import { Button, Card } from "~/systems/UI";
 import type { PreviewInfo } from "~/types/contracts/ExchangeContractAbi";
 
@@ -56,7 +55,6 @@ export function SwapPage() {
   const balances = useBalances();
   const setHasSwapped = useSetAtom(swapHasSwappedAtom);
   const { poolRatio } = useUserPositions();
-  const { open: openTwitterDialog } = useTwitterDialog();
 
   const { isLoading } = useQuery(
     [
@@ -127,13 +125,11 @@ export function SwapPage() {
 
   async function handleSuccess() {
     setHasSwapped(true);
-    openTwitterDialog();
     await balances.refetch();
   }
 
   return (
     <MainLayout>
-      <TwitterDialog />
       <Card className="sm:min-w-[450px]">
         <Card.Title>
           <MdSwapCalls className="text-primary-500" />

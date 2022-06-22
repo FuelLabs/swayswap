@@ -1,17 +1,13 @@
 @layer components {
-  .faucetWidget {
-    @apply fixed bottom-0 p-4 pt-0;
+  .actionsWidget {
+    @apply flex items-center gap-2 fixed bottom-0 p-4 pt-0;
 
-    & > button {
-      @apply bg-gray-800 rounded-full;
+    & > .button {
+      @apply bg-gray-800 rounded-full h-10;
     }
   }
 
-  .faucetWidget--tour {
-    @apply fixed bottom-5 left-5 outline-none;
-  }
-
-  .faucetWidget--dialog {
+  .faucetDialog {
     @apply min-w-[auto];
 
     & .card {
@@ -21,14 +17,6 @@
     & .card--title {
       @apply text-gray-100;
     }
-  }
-
-  .faucetWidget--formRow {
-    @apply mt-3;
-  }
-
-  .faucetWidget--label {
-    @apply mb-2 flex text-sm;
   }
 
   .faucetCaptcha {
