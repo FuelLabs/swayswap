@@ -1,6 +1,10 @@
 @layer components {
   .actionsWidget {
-    @apply flex items-center gap-1 p-4 lg:p-6;
+    @apply flex items-center gap-1 p-4;
+
+    @media (min-width: 834px) {
+      @apply p-6 fixed bottom-0 left-0;
+    }
   }
 
   .actionsWidget--btn {
