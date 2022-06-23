@@ -4,3 +4,4 @@ export * from './constants';
 export * from './math';
 export * from './queryClient';
 export * from './helpers';
+export * from './chain';
