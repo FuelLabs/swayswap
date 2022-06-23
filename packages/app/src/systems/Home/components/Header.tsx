@@ -19,12 +19,6 @@ export function Header() {
         <Link isExternal href="https://github.com/FuelLabs/swayswap">
           Github
         </Link>
-        <Link
-          isExternal
-          href="https://github.com/FuelLabs/swayswap/blob/master/README.md"
-        >
-          Docs
-        </Link>
         <Button
           size={breakpoint === "sm" ? "sm" : "lg"}
           variant="primary"
