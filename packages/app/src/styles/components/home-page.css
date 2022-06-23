@@ -17,13 +17,13 @@
   }
 
   .homePage--hero {
-    @apply p-4 lg:p-10 text-gray-100 max-w-[500px] lg:max-w-[700px];
+    @apply p-4 lg:p-10 text-gray-50 max-w-[500px] lg:max-w-[700px];
 
     h1 {
       @apply text-3xl sm:text-4xl font-bold font-display;
     }
     p {
-      @apply text-gray-300 my-6;
+      @apply text-gray-100 my-6;
     }
   }
 }
