@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { useUserPositions } from './useUserPositions';
 
-import { DEADLINE } from '~/config';
 import type { UseCoinInput } from '~/systems/Core';
-import { useContract, toBigInt } from '~/systems/Core';
+import { getDeadline, useContract, toBigInt } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { Coin } from '~/types';
 
@@ -74,9 +73,10 @@ export function useAddLiquidity({
       );
       setStage(2);
       // Create liquidity pool
+      const deadline = await getDeadline(contract);
       const liquidityTokens = await contract.submit.add_liquidity(
         1,
-        DEADLINE,
+        deadline,
         getOverrides({
           variableOutputs: 2,
           gasLimit: toBigInt(1500000),
