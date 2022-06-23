@@ -1,8 +1,7 @@
 import type { SwapState } from '../types';
 import { ActiveInput } from '../types';
 
-import { DEADLINE } from '~/config';
-import { COIN_ETH } from '~/systems/Core';
+import { COIN_ETH, getDeadline } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
@@ -58,6 +57,8 @@ export const swapTokens = async (
   { coinFrom, direction, amount }: SwapState,
   txCost: TransactionCost
 ) => {
+  const deadline = await getDeadline(contract);
+
   if (direction === ActiveInput.to && amount) {
     const forwardAmount = await getSwapWithMaximumRequiredAmount(
       contract,
@@ -69,7 +70,7 @@ export const swapTokens = async (
     }
     return contract.submitResult.swap_with_maximum(
       amount,
-      DEADLINE,
+      deadline,
       getOverrides({
         forward: [forwardAmount.amount, coinFrom.assetId],
         gasLimit: txCost.total,
@@ -85,7 +86,7 @@ export const swapTokens = async (
 
     return contract.submitResult.swap_with_minimum(
       minValue.amount,
-      DEADLINE,
+      deadline,
       getOverrides({
         forward: [amount, coinFrom.assetId],
         gasLimit: txCost.total,
@@ -95,16 +96,18 @@ export const swapTokens = async (
   }
 };
 
-export const queryNetworkFee = (contract: ExchangeContractAbi, direction?: ActiveInput) => {
+export const queryNetworkFee = async (contract: ExchangeContractAbi, direction?: ActiveInput) => {
   const directionValue = direction || ActiveInput.from;
+  const deadline = await getDeadline(contract);
+
   if (directionValue === ActiveInput.to) {
-    return contract.prepareCall.swap_with_maximum(1, DEADLINE, {
+    return contract.prepareCall.swap_with_maximum(1, deadline, {
       forward: [1, COIN_ETH],
       variableOutputs: 2,
       gasLimit: 1000000,
     });
   }
-  return contract.prepareCall.swap_with_minimum(1, DEADLINE, {
+  return contract.prepareCall.swap_with_minimum(1, deadline, {
     forward: [1, COIN_ETH],
     variableOutputs: 1,
     gasLimit: 1000000,
