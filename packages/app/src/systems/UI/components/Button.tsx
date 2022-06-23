@@ -18,6 +18,12 @@ export type ButtonProps = AriaButtonProps<"button"> & {
   isReadOnly?: boolean;
 };
 
+const SPINNER_SIZE = {
+  sm: 16,
+  md: 22,
+  lg: 28,
+};
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -68,7 +74,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading ? (
           <Spinner
-            size={size === "sm" ? 16 : 22}
+            size={SPINNER_SIZE[size]}
             variant="base"
             aria-label="Loading"
           />
