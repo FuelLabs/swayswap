@@ -28,9 +28,6 @@ export function HomeHero() {
         scaling beyond layer-2s and monolithic blockchain design.
         #BeyondMonolithic
       </p>
-      <Button size="lg" variant="primary" onPress={() => navigate(Pages.swap)}>
-        Launch app
-      </Button>
     </div>
   );
 }
