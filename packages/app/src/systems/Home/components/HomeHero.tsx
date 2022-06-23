@@ -1,10 +1,6 @@
-import { useNavigate } from "react-router-dom";
-
-import { Button, Link } from "~/systems/UI";
-import { Pages } from "~/types";
+import { Link } from "~/systems/UI";
 
 export function HomeHero() {
-  const navigate = useNavigate();
   return (
     <div className="homePage--hero">
       <h1>
