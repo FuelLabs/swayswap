@@ -1,6 +1,10 @@
-import { Link } from "~/systems/UI";
+import { useNavigate } from "react-router-dom";
+
+import { Button, Link } from "~/systems/UI";
+import { Pages } from "~/types";
 
 export function HomeHero() {
+  const navigate = useNavigate();
   return (
     <div className="homePage--hero">
       <h1>
@@ -24,6 +28,9 @@ export function HomeHero() {
         scaling beyond layer-2s and monolithic blockchain design.
         #BeyondMonolithic
       </p>
+      <Button size="lg" variant="primary" onPress={() => navigate(Pages.swap)}>
+        Launch app
+      </Button>
     </div>
   );
 }
