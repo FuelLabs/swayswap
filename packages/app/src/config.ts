@@ -18,7 +18,7 @@ export const SLIPPAGE_TOLERANCE = 0.005;
 /** Small network fee */
 export const NETWORK_FEE = 1;
 /** Default deadline */
-export const DEADLINE = 5000;
+export const DEADLINE = 99999999999;
 /** Max presentation units to avoid show 9 decimals on screen */
 export const FIXED_UNITS = 3;
 /** Min gas price required from the fuel-core */
