@@ -2,7 +2,7 @@ import { useButton } from "@react-aria/button";
 import { mergeProps, mergeRefs } from "@react-aria/utils";
 import type { AriaButtonProps } from "@react-types/button";
 import cx from "classnames";
-import { forwardRef, useRef } from "react";
+import { forwardRef, useRef, useMemo } from "react";
 
 import { Spinner } from "./Spinner";
 
@@ -56,6 +56,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     });
 
     const customProps = omit(["onPress"], props);
+    const loadingSpinnerSize = useMemo(() => {
+      if (size === "sm") {
+        return 16;
+      }
+
+      if (size === "md") {
+        return 22;
+      }
+
+      return 28;
+    }, [size]);
 
     return (
       <button
@@ -68,7 +79,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading ? (
           <Spinner
-            size={size === "sm" ? 16 : 22}
+            size={loadingSpinnerSize}
             variant="base"
             aria-label="Loading"
           />
