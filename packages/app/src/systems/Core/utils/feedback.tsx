@@ -47,7 +47,6 @@ export function txFeedback(
       return;
     }
 
-    console.log(data);
     /**
      * Show a toast error if status.type !== 'success''
      */
