@@ -18,6 +18,12 @@ export type ButtonProps = AriaButtonProps<"button"> & {
   isReadOnly?: boolean;
 };
 
+const SPINNER_SIZE = {
+  sm: 16,
+  md: 22,
+  lg: 28,
+};
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -56,17 +62,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     });
 
     const customProps = omit(["onPress"], props);
-    const loadingSpinnerSize = useMemo(() => {
-      if (size === "sm") {
-        return 16;
-      }
-
-      if (size === "md") {
-        return 22;
-      }
-
-      return 28;
-    }, [size]);
 
     return (
       <button
@@ -79,7 +74,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading ? (
           <Spinner
-            size={loadingSpinnerSize}
+            size={SPINNER_SIZE[size]}
             variant="base"
             aria-label="Loading"
           />
