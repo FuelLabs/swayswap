@@ -10,7 +10,7 @@ export enum PoolQueries {
 }
 
 export async function prepareRemoveLiquidity(contract: Contract) {
-  const deadline = getDeadline(contract);
+  const deadline = await getDeadline(contract);
   return contract.prepareCall.remove_liquidity(1, 1, deadline, {
     forward: [1, CONTRACT_ID],
     variableOutputs: 2,
@@ -23,7 +23,7 @@ export async function submitRemoveLiquidity(
   amount: bigint,
   txCost: TransactionCost
 ) {
-  const deadline = getDeadline(contract);
+  const deadline = await getDeadline(contract);
   return contract.submit.remove_liquidity(
     1,
     1,
