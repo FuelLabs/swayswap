@@ -1,7 +1,7 @@
 import type { SwapState } from '../types';
 import { ActiveInput } from '../types';
 
-import { COIN_ETH, getDeadline, toBigInt } from '~/systems/Core';
+import { COIN_ETH, getDeadline } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
