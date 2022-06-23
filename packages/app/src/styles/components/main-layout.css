@@ -4,23 +4,12 @@
     @apply h-screen text-gray-100 overflow-hidden;
 
     @media (max-width: 640px) {
+      @apply mobile-fit-screen;
       height: auto;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
     }
   }
   .mainLayout--wrapper {
-    @apply flex flex-1 flex-col items-center p-4 pb-8 overflow-y-auto;
-    /* Calculate the size of the header */
-    margin-top: 3.875rem;
-
-    @media (max-width: 640px) {
-      /* Calculate the size of the header */
-      margin-top: 6.875rem;
-    }
+    @apply flex flex-1 flex-col items-center p-4 pt-10 sm:pt-16 overflow-y-auto;
   }
 
   .mainLayout-errorContent {

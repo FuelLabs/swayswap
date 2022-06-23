@@ -1,6 +1,6 @@
 @layer components {
   .header {
-    @apply fixed top-0 w-full grid p-4 py-2;
+    @apply sticky top-0 w-full grid p-4 pb-0;
   }
   .header--navContainer {
     @apply px-1 gap-1 flex bg-gray-800 rounded-xl sm:rounded-3xl;
