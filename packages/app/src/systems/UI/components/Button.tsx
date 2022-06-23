@@ -2,7 +2,7 @@ import { useButton } from "@react-aria/button";
 import { mergeProps, mergeRefs } from "@react-aria/utils";
 import type { AriaButtonProps } from "@react-types/button";
 import cx from "classnames";
-import { forwardRef, useRef, useMemo } from "react";
+import { forwardRef, useRef } from "react";
 
 import { Spinner } from "./Spinner";
 
