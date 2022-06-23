@@ -23,7 +23,7 @@
   }
   .header--wallet {
     @apply flex items-center gap-1;
-    place-self: end;
+    place-self: center end;
     grid-area: 1 / 1 / 2 / 3;
   }
   .header--nav {
@@ -39,7 +39,7 @@
       grid-area: 1 / 1 / 2 / 2;
     }
     .header--wallet {
-      place-self: end;
+      place-self: center end;
       grid-area: 1 / 4 / 2 / 9;
     }
     .header--nav {
@@ -58,7 +58,7 @@
       grid-area: 1 / 1 / 2 / 2;
     }
     .header--wallet {
-      place-self: end;
+      place-self: center end;
       grid-area: 1 / 4 / 2 / 9;
     }
     .header--nav {

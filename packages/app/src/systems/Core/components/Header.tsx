@@ -56,10 +56,12 @@ export const Header = () => {
   return (
     <div className="header">
       <img
+        onClick={() => navigate("/")}
         src={relativeUrl("/fuel-logo-512x512.png")}
         alt="swayswap"
-        height={40}
-        width={40}
+        className="cursor-pointer"
+        height={46}
+        width={46}
       />
       {wallet && (
         <div className="header--nav">
