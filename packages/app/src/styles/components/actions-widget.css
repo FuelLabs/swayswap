@@ -1,6 +1,6 @@
 @layer components {
   .actionsWidget {
-    @apply flex items-center gap-1 p-4;
+    @apply flex gap-1 mt-6 self-start flex-1 items-end;
 
     @media (min-width: 834px) {
       @apply p-6 fixed bottom-0 left-0;

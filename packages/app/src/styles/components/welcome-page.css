@@ -6,11 +6,24 @@
     @media (min-width: 1024px) {
       grid-template-columns: 300px 1fr;
     }
+
+    @media (max-width: 640px) {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      min-height: inherit;
+    }
   }
   .welcomePage--content {
     @apply relative m-8 grid place-items-center max-h-[100vh];
 
     @media (max-width: 640px) {
+      @apply m-0 my-4;
+    }
+
+    @media (max-height: 500px) {
       @apply m-0 my-4;
     }
   }
@@ -84,16 +97,17 @@
     WelcomeStep
   */
   .welcomeStep {
-    @apply max-w-[350px] text-center text-gray-300;
+    @apply max-w-[350px] text-center text-gray-300 pb-6;
 
     h2 {
       @apply text-white text-2xl mb-4;
     }
     img {
       @apply mx-auto mb-5;
+      min-height: 100px;
 
-      @media (max-width: 640px) {
-        @apply max-w-[180px];
+      @media (max-height: 700px) {
+        max-height: calc(100vh / 3);
       }
     }
   }

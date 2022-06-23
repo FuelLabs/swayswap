@@ -2,12 +2,27 @@
   .mainLayout {
     @apply flex flex-col;
     @apply h-screen text-gray-100 overflow-hidden;
-    @apply grid;
-    grid-template-rows: auto 1fr auto;
+
+    @media (max-width: 640px) {
+      height: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
   }
   .mainLayout--wrapper {
-    @apply flex justify-center items-start p-4 pb-16 sm:pt-14 overflow-y-auto;
+    @apply flex flex-1 flex-col items-center p-4 pb-8 overflow-y-auto;
+    /* Calculate the size of the header */
+    margin-top: 3.875rem;
+
+    @media (max-width: 640px) {
+      /* Calculate the size of the header */
+      margin-top: 6.875rem;
+    }
   }
+
   .mainLayout-errorContent {
     @apply w-[30rem] flex-1 rounded-xl p-4 m-2;
   }
