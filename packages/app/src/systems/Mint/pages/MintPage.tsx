@@ -23,7 +23,7 @@ export function MintPage() {
 
   return (
     <MainLayout>
-      <Card className="sm:min-w-[450px]">
+      <Card>
         <Card.Title>
           <BiCoin className="text-primary-500" />
           Mint

@@ -60,8 +60,6 @@ export const Header = () => {
         src={relativeUrl("/fuel-logo-512x512.png")}
         alt="swayswap"
         className="cursor-pointer"
-        height={46}
-        width={46}
       />
       {wallet && (
         <div className="header--nav">
