@@ -47,6 +47,7 @@ export function WelcomeDone() {
       <Button
         size="lg"
         variant="primary"
+        className="mt-5 mx-auto"
         isDisabled={!state.context.acceptAgreement}
         onPress={handleDone}
       >

@@ -11,10 +11,19 @@
 
   .homePage--header {
     @apply flex justify-between font-semibold;
+
+    img {
+      height: 46px;
+      width: 46px;
+    }
   }
 
   .homePage--menu {
-    @apply flex items-center gap-4 lg:gap-6 text-lg;
+    @apply flex items-center text-lg;
+
+    > * {
+      @apply ml-4 lg:ml-6;
+    }
 
     & a {
       @apply text-gray-200;
