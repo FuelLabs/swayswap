@@ -220,6 +220,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
             <NumberFormat
               {...props}
               autoFocus={autoFocus}
+              inputMode={"decimal"}
               getInputRef={ref}
               allowNegative={false}
               defaultValue={initialValue}
