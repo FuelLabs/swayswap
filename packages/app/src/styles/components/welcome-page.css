@@ -1,7 +1,7 @@
 @layer components {
   .welcomePage--layout {
     @apply text-gray-100 min-h-screen;
-    @apply grid gap-8;
+    @apply grid gap-8 h-full;
 
     @media (min-width: 1024px) {
       grid-template-columns: 300px 1fr;
@@ -112,7 +112,7 @@
   */
   .stepsIndicator {
     @apply absolute bottom-0 left-[50%] -translate-x-1/2;
-    @apply flex gap-4;
+    @apply grid grid-cols-3 gap-4 sm:gap-2;
 
     li {
       @apply bg-gray-500 w-16 h-2 rounded-full;

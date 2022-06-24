@@ -9,12 +9,7 @@ export function Header() {
   const navigate = useNavigate();
   return (
     <header className="homePage--header">
-      <img
-        src={relativeUrl("/fuel-logo-512x512.png")}
-        alt="swayswap"
-        height={40}
-        width={40}
-      />
+      <img src={relativeUrl("/fuel-logo-512x512.png")} alt="swayswap" />
       <nav className="homePage--menu">
         <Link isExternal href="https://github.com/FuelLabs/swayswap">
           Github
