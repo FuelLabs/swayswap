@@ -94,9 +94,13 @@ export function useAddLiquidity({
   );
 
   function handleSuccess() {
-    fromInput.setAmount(BigInt(0));
-    toInput.setAmount(BigInt(0));
-    navigate('../');
+    fromInput.setAmount(null);
+    toInput.setAmount(null);
+    // Clean state before navigate to next
+    // screen
+    setTimeout(() => {
+      navigate('../');
+    });
   }
 
   function handleError(e: any) {
@@ -117,7 +121,6 @@ export function useAddLiquidity({
 
   async function handleSettled() {
     onSettle?.();
-    navigate('../');
     setStage(0);
   }
 
