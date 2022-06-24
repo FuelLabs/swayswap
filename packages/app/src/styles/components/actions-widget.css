@@ -45,7 +45,7 @@
   }
 
   .faucetCaptcha {
-    @apply mt-4 mx-6 flex items-center justify-center;
+    @apply mt-4 mx-6 flex h-[80px] items-center justify-center;
   }
   .faucetCaptcha--widget.is-hidden {
     @apply absolute top-0 left-0 hidden h-0 w-0 overflow-hidden;
