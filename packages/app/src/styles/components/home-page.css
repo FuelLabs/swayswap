@@ -2,6 +2,11 @@
   .homePage {
     @apply p-6 flex flex-col h-[100vh] justify-between bg-cover;
     background-image: url("/lp-bg.jpg");
+
+    @media (max-width: 640px) {
+      @apply mobile-fit-screen;
+      height: auto;
+    }
   }
 
   .homePage--header {

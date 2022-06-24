@@ -2,12 +2,16 @@
   .mainLayout {
     @apply flex flex-col;
     @apply h-screen text-gray-100 overflow-hidden;
-    @apply grid;
-    grid-template-rows: auto 1fr auto;
+
+    @media (max-width: 640px) {
+      @apply mobile-fit-screen;
+      height: auto;
+    }
   }
   .mainLayout--wrapper {
-    @apply flex justify-center items-start p-4 pb-16 sm:pt-14 overflow-y-auto;
+    @apply flex flex-1 flex-col items-center p-4 pt-10 sm:pt-16 overflow-y-auto;
   }
+
   .mainLayout-errorContent {
     @apply w-[30rem] flex-1 rounded-xl p-4 m-2;
   }

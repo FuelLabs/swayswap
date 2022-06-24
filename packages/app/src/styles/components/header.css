@@ -1,6 +1,6 @@
 @layer components {
   .header {
-    @apply sticky grid p-4 py-3 sm:py-4;
+    @apply sticky top-0 w-full grid p-4 pb-0;
   }
   .header--navContainer {
     @apply px-1 gap-1 flex bg-gray-800 rounded-xl sm:rounded-3xl;
@@ -20,6 +20,8 @@
   }
   .header img {
     grid-area: 1 / 1 / 2 / 2;
+    height: 40px;
+    width: 40px;
   }
   .header--wallet {
     @apply flex items-center gap-1;
@@ -37,6 +39,8 @@
     }
     .header img {
       grid-area: 1 / 1 / 2 / 2;
+      height: 46px;
+      width: 46px;
     }
     .header--wallet {
       place-self: center end;
@@ -56,6 +60,8 @@
     }
     .header img {
       grid-area: 1 / 1 / 2 / 2;
+      height: 46px;
+      width: 46px;
     }
     .header--wallet {
       place-self: center end;

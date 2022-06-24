@@ -1,9 +1,9 @@
 @layer components {
   .card {
     @apply bg-gray-800 rounded-xl py-3;
-    min-width: calc(100vw - 40px);
+    min-width: 100%;
 
-    @media (min-width: 450px) {
+    @media (min-width: 640px) {
       min-width: 450px;
     }
   }

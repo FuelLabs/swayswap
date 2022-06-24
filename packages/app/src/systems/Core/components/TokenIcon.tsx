@@ -4,7 +4,7 @@ import type { Coin } from "~/types";
 
 const style = {
   icon: `inline-flex rounded-full border-2 border-transparent`,
-  iconLast: `last:ml-[-10px] last:z-10 border-gray-800`,
+  iconLast: `last:ml-[-10px] last:z-1 border-gray-800`,
 };
 
 type TokenIconProps = {
