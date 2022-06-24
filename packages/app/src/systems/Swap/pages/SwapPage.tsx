@@ -103,15 +103,18 @@ export function SwapPage() {
     txCost,
   });
 
-  const shouldDisableSwap =
-    isLoading || validationState !== ValidationStateEnum.Swap;
+  const shouldDisableSwap = !!(
+    isLoading ||
+    validationState !== ValidationStateEnum.Swap ||
+    !txCost.total ||
+    txCost.error
+  );
 
   const btnText = getValidationText(validationState, swapState);
 
   const { mutate: swap, isLoading: isSwapping } = useMutation(
     async () => {
       if (!swapState) return;
-      if (!txCost?.gas || txCost.error) return;
       setHasSwapped(false);
       const res = await swapTokens(contract, swapState, txCost);
       return res;
