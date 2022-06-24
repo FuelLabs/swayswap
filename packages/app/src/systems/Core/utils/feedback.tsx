@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 
 import { BLOCK_EXPLORER_URL } from "~/config";
 import { Link } from "~/systems/UI";
+import type { Maybe } from "~/types";
 
 export function getBlockExplorerLink(path: string) {
   return `${BLOCK_EXPLORER_URL}${path}?providerUrl=${encodeURIComponent(
@@ -27,16 +28,16 @@ export function TxLink({ id }: TxLinkProps) {
 
 export function txFeedback(
   txMsg: string,
-  onSuccess: (data: TransactionResult<any>) => void | Promise<void>
+  onSuccess?: (data: TransactionResult<any>) => void | Promise<void>
 ) {
-  return async (data: TransactionResult<any> | undefined) => {
+  return async (data: Maybe<TransactionResult<any>>) => {
     const txLink = <TxLink id={data?.transactionId} />;
 
     /**
      * Show a toast success message if status.type === 'success'
      */
     if (data?.status.type === "success") {
-      await onSuccess(data);
+      await onSuccess?.(data);
       toast.success(
         <>
           {" "}

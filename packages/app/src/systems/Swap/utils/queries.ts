@@ -86,7 +86,7 @@ export const swapTokens = async (params: SwapMachineContext) => {
   const deadline = await getDeadline(contract);
 
   if (direction === SwapDirection.fromTo) {
-    return contract.submit.swap_with_minimum(
+    return contract.submitResult.swap_with_minimum(
       safeBigInt(amountLessSlippage?.raw),
       deadline,
       getOverrides({
@@ -97,7 +97,7 @@ export const swapTokens = async (params: SwapMachineContext) => {
     );
   }
 
-  return contract.submit.swap_with_maximum(
+  return contract.submitResult.swap_with_maximum(
     toAmount.raw,
     deadline,
     getOverrides({

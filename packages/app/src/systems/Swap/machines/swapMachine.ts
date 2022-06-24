@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import { CoinQuantity } from 'fuels';
-import toast from 'react-hot-toast';
+import { CoinQuantity, TransactionResult } from 'fuels';
 import { assign, createMachine, InterpreterFrom, StateFrom } from 'xstate';
 
 import type { SwapMachineContext } from '../types';
@@ -17,6 +16,7 @@ import {
 } from '../utils';
 
 import { handleError, isCoinEth, safeBigInt, toNumber, ZERO } from '~/systems/Core';
+import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
 import { getPoolRatio } from '~/systems/Pool';
@@ -55,7 +55,8 @@ type MachineServices = {
     data: Maybe<PreviewInfo>;
   };
   swap: {
-    data: Maybe<bigint>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: Maybe<TransactionResult<any>>;
   };
 };
 
@@ -308,8 +309,8 @@ export const swapMachine =
           return client?.fetchQuery<CoinQuantity[]>(Queries.UserQueryBalances);
         },
         fetchTxCost: async (ctx) => {
-          const networkFee = queryNetworkFeeOnSwap(ctx);
-          const txCost = getTransactionCost(networkFee);
+          const contractCall = await queryNetworkFeeOnSwap(ctx);
+          const txCost = await getTransactionCost(contractCall);
           return txCost || emptyTransactionCost();
         },
         fetchPoolRatio: async (ctx) => {
@@ -429,8 +430,8 @@ export const swapMachine =
         /**
          * Notifications actions using toast()
          */
-        toastSwapSuccess() {
-          toast.success('Swap made successfully!');
+        toastSwapSuccess(_, ev) {
+          txFeedback('Swap made successfully!')(ev.data);
         },
         toastErrorMessage(_, ev) {
           handleError(ev.data);
