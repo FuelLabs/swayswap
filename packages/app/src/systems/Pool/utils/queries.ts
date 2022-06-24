@@ -24,7 +24,7 @@ export async function submitRemoveLiquidity(
   txCost: TransactionCost
 ) {
   const deadline = await getDeadline(contract);
-  return contract.submit.remove_liquidity(
+  return contract.submitResult.remove_liquidity(
     1,
     1,
     deadline,

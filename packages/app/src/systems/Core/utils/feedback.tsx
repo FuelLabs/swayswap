@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { TransactionResult } from "fuels";
 import toast from "react-hot-toast";
 
@@ -10,34 +11,39 @@ export function getBlockExplorerLink(path: string) {
   )}`;
 }
 
+type TxLinkProps = {
+  id?: string;
+};
+
+export function TxLink({ id }: TxLinkProps) {
+  return (
+    <p className="text-xs text-gray-300 mt-1">
+      <Link isExternal href={getBlockExplorerLink(`/transaction/${id}`)}>
+        View it on Fuel Explorer
+      </Link>
+    </p>
+  );
+}
+
 export function txFeedback(
   txMsg: string,
-  onSuccess: () => void | Promise<void>
+  onSuccess: (data: TransactionResult<any>) => void | Promise<void>
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return async (data: TransactionResult<any> | undefined) => {
-    const txLink = (
-      <p className="text-xs text-gray-300 mt-1">
-        <Link
-          isExternal
-          href={getBlockExplorerLink(`/transaction/${data?.transactionId}`)}
-        >
-          View it on Fuel Explorer
-        </Link>
-      </p>
-    );
+    const txLink = <TxLink id={data?.transactionId} />;
 
     /**
      * Show a toast success message if status.type === 'success'
      */
     if (data?.status.type === "success") {
+      await onSuccess(data);
       toast.success(
         <>
-          {txMsg} {txLink}
+          {" "}
+          {txMsg} {txLink}{" "}
         </>,
         { duration: 8000 }
       );
-      await onSuccess();
       return;
     }
 
