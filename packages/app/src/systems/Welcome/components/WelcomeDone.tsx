@@ -1,8 +1,8 @@
 import { useWelcomeSteps } from "../hooks";
 
+import { WelcomeImage } from "./WelcomeImage";
 import { WelcomeStep } from "./WelcomeStep";
 
-import { relativeUrl } from "~/systems/Core";
 import { Button, Link } from "~/systems/UI";
 
 const DISCLAIMER_URL =
@@ -17,7 +17,7 @@ export function WelcomeDone() {
 
   return (
     <WelcomeStep id={2}>
-      <img src={relativeUrl("/illustrations/done.png")} width="70%" />
+      <WelcomeImage src="/illustrations/done.png" />
       <h2>Wallet Created!</h2>
       <p className="my-5">
         Now you&apos;re ready to swap and pool <b>test assets</b> using Fuel:

@@ -98,13 +98,19 @@
     h2 {
       @apply text-white text-2xl mb-4;
     }
-    img {
-      @apply mx-auto mb-5;
-      min-height: 100px;
+
+    .imgContainer {
+      @apply mb-5 flex items-center justify-center;
+      @apply h-[250px];
 
       @media (max-height: 700px) {
+        min-height: 100px;
         max-height: calc(100vh / 3);
       }
+    }
+
+    img {
+      @apply mx-auto max-h-full;
     }
   }
   /*
