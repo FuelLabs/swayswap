@@ -10,7 +10,7 @@ const panicError = (msg: string) => (
       <a href="#" onClick={() => copy(msg)}>
         Click here
       </a>{" "}
-      to view block response
+      to copy block response
     </span>
   </div>
 );
@@ -20,6 +20,7 @@ export function handleError(error: any) {
   const msg = error?.message;
   toast.error(msg?.includes("Panic") ? panicError(msg) : msg, {
     duration: 100000000,
+    id: msg,
   });
 }
 

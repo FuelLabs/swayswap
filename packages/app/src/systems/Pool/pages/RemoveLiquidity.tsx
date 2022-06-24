@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useMemo } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -25,11 +24,12 @@ import {
   safeBigInt,
 } from "~/systems/Core";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
+import { txFeedback } from "~/systems/Core/utils/feedback";
+import { getTransactionCost } from "~/systems/Core/utils/gas";
 import { Button, Card } from "~/systems/UI";
 
 export function RemoveLiquidityPage() {
   const navigate = useNavigate();
-  const [errors, setErrors] = useState<string[]>([]);
   const contract = useContract()!;
   const balances = useBalances();
   const ethBalance = useEthBalance();
@@ -48,29 +48,26 @@ export function RemoveLiquidityPage() {
       if (!amount) {
         throw new Error('"amount" is required');
       }
-      if (!txCost.total) return;
+      const contractCall = await prepareRemoveLiquidity(contract);
+      const nextTxCost = await getTransactionCost(contractCall);
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
-      await submitRemoveLiquidity(contract, amount, txCost);
+      return submitRemoveLiquidity(contract, amount, nextTxCost);
     },
-    {
-      onSuccess: async () => {
-        toast.success("Liquidity removed successfully!");
-        tokenInput.setAmount(ZERO);
-        await balances.refetch();
-        navigate("../");
-      },
-      onError: (error: Error) => {
-        toast.error(error.message);
-      },
-    }
+    { onSuccess: txFeedback("Liquidity removed successfully!", handleSuccess) }
   );
+
+  async function handleSuccess() {
+    tokenInput.setAmount(ZERO);
+    await balances.refetch();
+    navigate("../");
+  }
 
   if (!liquidityToken) {
     return null;
   }
 
-  const validateRemoveLiquidity = () => {
+  const errors = useMemo(() => {
     const errorList = [];
 
     if (!tokenInput.amount) {
@@ -81,10 +78,6 @@ export function RemoveLiquidityPage() {
     }
 
     return errorList;
-  };
-
-  useEffect(() => {
-    setErrors(validateRemoveLiquidity());
   }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
 
   const hasEnoughBalance = safeBigInt(ethBalance.raw) > txCost.fee;

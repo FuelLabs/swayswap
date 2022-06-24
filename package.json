@@ -47,7 +47,7 @@
     "services:setup-test": "NODE_ENV=test run-s scripts:setup create:test-env services:run-test contracts contracts:init",
     "services:run-test": "make -C docker services-run-test",
     "services:reset-test": "NODE_ENV=test run-s services:clean-test services:setup-test",
-    "update-deps": "./scripts/update-deps.sh",
+    "deps:update": "./scripts/update-deps.sh",
     "test": "pnpm run --filter=swayswap-app test",
     "test:coverage": "pnpm run --filter=swayswap-app test --coverage",
     "test:clear": "pnpm -r exec jest --clearCache",
@@ -82,5 +82,17 @@
     "turbo": "^1.2.16",
     "typescript": "^4.7.3",
     "updates": "^13.1.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowAny": [
+        "react",
+        "react-dom"
+      ],
+      "ignoreMissing": [
+        "react",
+        "react-dom"
+      ]
+    }
   }
 }

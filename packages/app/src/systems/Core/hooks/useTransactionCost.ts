@@ -1,4 +1,4 @@
-import type { ScriptTransactionRequest } from 'fuels';
+import type { ContractCall } from 'fuels';
 import type { UseQueryOptions } from 'react-query';
 import { useQuery } from 'react-query';
 
@@ -7,9 +7,12 @@ import { emptyTransactionCost, getTransactionCost } from '../utils/gas';
 
 import { useEthBalance } from './useEthBalance';
 
+type ContractCallFuncPromise = () => Promise<ContractCall>;
+type ContractCallFunc = () => ContractCall;
+
 export function useTransactionCost(
   queryKey: unknown[],
-  request: () => Promise<ScriptTransactionRequest>,
+  request: ContractCallFunc | ContractCallFuncPromise,
   options?: Omit<UseQueryOptions<TransactionCost>, 'queryKey' | 'queryFn'>
 ) {
   const ethBalance = useEthBalance();
@@ -20,7 +23,7 @@ export function useTransactionCost(
 
   const { data } = useQuery<TransactionCost>(
     queryKey,
-    async () => getTransactionCost(request()),
+    async () => getTransactionCost(await request()),
     options
   );
 

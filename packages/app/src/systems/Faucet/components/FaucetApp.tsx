@@ -43,7 +43,7 @@ export function FaucetApp({ isButtonFull, onSuccess }: FaucetAppProps) {
         isFull={isButtonFull}
         size="lg"
         variant="primary"
-        className="mt-5"
+        className="mt-5 mx-auto"
         isLoading={faucet.mutation.isLoading}
         onPress={() => faucet.handleFaucet(captcha.value)}
         {...(captcha.needToShow && { isDisabled: !captcha.value })}

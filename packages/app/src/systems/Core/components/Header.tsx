@@ -56,16 +56,11 @@ export const Header = () => {
   return (
     <div className="header">
       <img
+        onClick={() => navigate("/")}
         src={relativeUrl("/fuel-logo-512x512.png")}
         alt="swayswap"
-        height={40}
-        width={40}
+        className="cursor-pointer"
       />
-      {wallet && (
-        <div className="header--wallet">
-          <WalletWidget />
-        </div>
-      )}
       {wallet && (
         <div className="header--nav">
           <div className="header--navContainer">
@@ -86,6 +81,11 @@ export const Header = () => {
               </HeaderNav>
             </ButtonGroup>
           </div>
+        </div>
+      )}
+      {wallet && (
+        <div className="header--wallet">
+          <WalletWidget />
         </div>
       )}
     </div>

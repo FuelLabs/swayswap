@@ -5,7 +5,7 @@ import NumberFormat from "react-number-format";
 import type { Maybe } from "~/types";
 
 const style = {
-  transferPropContainer: `bg-gray-700 rounded-lg px-4 py-2 border border-gray-700 flex justify-between`,
+  transferPropContainer: `bg-gray-700 rounded-xl px-4 py-2 border border-gray-700 flex justify-between`,
   transferPropInput: `bg-transparent placeholder:text-gray-300 outline-none w-full`,
 };
 

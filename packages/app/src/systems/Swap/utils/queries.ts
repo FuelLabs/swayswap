@@ -1,17 +1,13 @@
-import type { ScriptTransactionRequest } from 'fuels';
-
-import type { SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
+import type { SwapMachineContext } from '../types';
 
-import { safeBigInt } from '~/systems/Core';
+import { safeBigInt, getDeadline } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 
 const DEADLINE = 1000;
 
-export const queryNetworkFeeOnSwap = async (
-  params: SwapMachineContext
-): Promise<ScriptTransactionRequest> => {
+export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
   const { direction, contract, coinFrom } = params;
   if (!contract || !coinFrom) {
     throw new Error('Contract not found');
@@ -87,21 +83,23 @@ export const swapTokens = async (params: SwapMachineContext) => {
     throw new Error('Missing some parameters');
   }
 
+  const deadline = await getDeadline(contract);
+
   if (direction === SwapDirection.fromTo) {
     return contract.submit.swap_with_minimum(
       safeBigInt(amountLessSlippage?.raw),
-      DEADLINE,
+      deadline,
       getOverrides({
         forward: [fromAmount.raw, coinFrom.assetId],
         gasLimit: txCost.total,
-        variableOutputs: 1,
+        variableOutputs: 2,
       })
     );
   }
 
   return contract.submit.swap_with_maximum(
     toAmount.raw,
-    DEADLINE,
+    deadline,
     getOverrides({
       forward: [safeBigInt(amountPlusSlippage?.raw), coinFrom.assetId],
       gasLimit: txCost.total,

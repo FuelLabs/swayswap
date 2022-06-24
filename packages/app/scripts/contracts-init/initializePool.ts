@@ -11,7 +11,7 @@ export async function initializePool(
   overrides: Overrides
 ) {
   const wallet = tokenContract.wallet!;
-  const tokenAmount = BigInt(TOKEN_AMOUNT || '2000000000000000');
+  const tokenAmount = BigInt(TOKEN_AMOUNT || '1200000000000000');
   const ethAmount = BigInt(ETH_AMOUNT || '1000500000000');
   const address = {
     value: wallet.address,

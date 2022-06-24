@@ -28,7 +28,7 @@ export function SwapPreview() {
       <div className="flex justify-center">
         <BsArrowDown size={20} className="text-gray-400" />
       </div>
-      <PreviewTable title="Expected out:" className="my-2">
+      <PreviewTable title="Expected output:" className="my-2">
         <PreviewItem
           title={"You'll receive:"}
           value={`${preview.outputAmount} ${coinTo?.symbol}`}

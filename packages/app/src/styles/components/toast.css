@@ -1,7 +1,7 @@
 @layer components {
   .toast {
     @apply px-4 py-3 flex items-center gap-2 bg-gray-800 text-gray-50;
-    @apply rounded-lg;
+    @apply rounded-xl;
 
     & div[role="status"] {
       display: -webkit-box;

@@ -1,12 +1,12 @@
 @layer components {
   .header {
-    @apply sticky grid p-4 py-3 sm:py-4;
+    @apply sticky top-0 w-full grid p-4 pb-0;
   }
   .header--navContainer {
     @apply px-1 gap-1 flex bg-gray-800 rounded-xl sm:rounded-3xl;
   }
   .header--navItem {
-    @apply py-1 px-3 my-1 text-base rounded-lg sm:rounded-full border-transparent;
+    @apply py-1 px-3 my-1 text-base rounded-xl sm:rounded-full border-transparent;
     @apply text-gray-400 hover:bg-gray-500/20 hover:text-gray-200;
   }
   .header--navItemActive {
@@ -20,9 +20,12 @@
   }
   .header img {
     grid-area: 1 / 1 / 2 / 2;
+    height: 40px;
+    width: 40px;
   }
   .header--wallet {
-    place-self: end;
+    @apply flex items-center gap-1;
+    place-self: center end;
     grid-area: 1 / 1 / 2 / 3;
   }
   .header--nav {
@@ -36,9 +39,11 @@
     }
     .header img {
       grid-area: 1 / 1 / 2 / 2;
+      height: 46px;
+      width: 46px;
     }
     .header--wallet {
-      place-self: end;
+      place-self: center end;
       grid-area: 1 / 4 / 2 / 9;
     }
     .header--nav {
@@ -55,9 +60,11 @@
     }
     .header img {
       grid-area: 1 / 1 / 2 / 2;
+      height: 46px;
+      width: 46px;
     }
     .header--wallet {
-      place-self: end;
+      place-self: center end;
       grid-area: 1 / 4 / 2 / 9;
     }
     .header--nav {

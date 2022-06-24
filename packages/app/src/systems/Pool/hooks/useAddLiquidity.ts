@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { useUserPositions } from './useUserPositions';
 
-import { DEADLINE } from '~/config';
 import type { UseCoinInput } from '~/systems/Core';
-import { useContract, toBigInt } from '~/systems/Core';
+import { getDeadline, useContract, toBigInt } from '~/systems/Core';
+import { txFeedback } from '~/systems/Core/utils/feedback';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { Coin } from '~/types';
 
@@ -26,11 +27,11 @@ export function useAddLiquidity({
   coinTo,
   onSettle,
 }: UseAddLiquidityProps) {
-  const [errorsCreatePull, setErrorsCreatePull] = useState<string[]>([]);
   const contract = useContract()!;
   const [stage, setStage] = useState(0);
   const navigate = useNavigate();
   const { poolRatio } = useUserPositions();
+
   // Add liquidity is a multi step process
   // Trying to calculate gas fee on add_liquidity
   // is a very inaccurate without the two deposits
@@ -39,6 +40,7 @@ export function useAddLiquidity({
   // the local tx measures with a + 50% margin to avoid issues
   // TODO: https://github.com/FuelLabs/swayswap-demo/issues/42
   const networkFee = toBigInt(10);
+  const successMsg = poolRatio ? 'Added liquidity to the pool.' : 'New pool created.';
 
   useEffect(() => {
     fromInput.setGasFee(networkFee);
@@ -74,58 +76,52 @@ export function useAddLiquidity({
       );
       setStage(2);
       // Create liquidity pool
-      const liquidityTokens = await contract.submit.add_liquidity(
+      const deadline = await getDeadline(contract);
+      return contract.submitResult.add_liquidity(
         1,
-        DEADLINE,
+        deadline,
         getOverrides({
           variableOutputs: 2,
           gasLimit: toBigInt(1500000),
         })
       );
-      setStage(3);
-
-      return liquidityTokens;
     },
     {
-      onSuccess: (liquidityTokens) => {
-        if (liquidityTokens) {
-          toast.success(poolRatio ? 'Added liquidity to the pool.' : 'New pool created.');
-          fromInput.setAmount(BigInt(0));
-          toInput.setAmount(BigInt(0));
-          navigate('../');
-        } else {
-          toast.error(
-            `Error when trying to ${poolRatio ? 'add liquidity to' : 'create'} this pool.`
-          );
-        }
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onError: (e: any) => {
-        const errors = e?.response?.errors;
-
-        if (errors?.length) {
-          if (errors[0].message === 'enough coins could not be found') {
-            toast.error(
-              `Not enough balance in your wallet to ${
-                poolRatio ? 'add liquidity to' : 'create'
-              } this pool.`
-            );
-          }
-        } else {
-          toast.error(
-            `Error when trying to ${poolRatio ? 'add liquidity to' : 'create'} this pool.`
-          );
-        }
-      },
-      onSettled: async () => {
-        onSettle?.();
-        navigate('../');
-        setStage(0);
-      },
+      onSuccess: txFeedback(successMsg, handleSuccess),
+      onError: handleError,
+      onSettled: handleSettled,
     }
   );
 
-  const validateCreatePool = () => {
+  function handleSuccess() {
+    fromInput.setAmount(BigInt(0));
+    toInput.setAmount(BigInt(0));
+    navigate('../');
+  }
+
+  function handleError(e: any) {
+    const errors = e?.response?.errors;
+
+    if (errors?.length) {
+      if (errors[0].message === 'enough coins could not be found') {
+        toast.error(
+          `Not enough balance in your wallet to ${
+            poolRatio ? 'add liquidity to' : 'create'
+          } this pool.`
+        );
+      }
+    } else {
+      toast.error(`Error when trying to ${poolRatio ? 'add liquidity to' : 'create'} this pool.`);
+    }
+  }
+
+  async function handleSettled() {
+    onSettle?.();
+    navigate('../');
+    setStage(0);
+  }
+
+  const errorsCreatePull = useMemo(() => {
     const errors = [];
 
     if (!fromInput.amount) {
@@ -142,10 +138,6 @@ export function useAddLiquidity({
     }
 
     return errors;
-  };
-
-  useEffect(() => {
-    setErrorsCreatePull(validateCreatePool());
   }, [
     fromInput.amount,
     toInput.amount,

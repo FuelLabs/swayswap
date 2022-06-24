@@ -7,10 +7,18 @@
     @apply transition ease-in duration-100;
   }
   .link {
-    @apply text-primary-400 no-underline hover:underline rounded-lg;
+    @apply text-primary-400 no-underline hover:underline rounded-xl;
     @apply focus:outline-none focus:underline;
   }
   .inner-shadow {
     box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.2);
+  }
+
+  .mobile-fit-screen {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 }

@@ -18,7 +18,7 @@ export function useTokenMethods(tokenId: string) {
     getBalance() {
       return wallet?.getBalance(tokenId);
     },
-    async queryNetworkFee() {
+    queryNetworkFee() {
       return contract.prepareCall.mint({
         variableOutputs: 2,
       });
@@ -26,8 +26,8 @@ export function useTokenMethods(tokenId: string) {
     async getMintAmount() {
       return contract.dryRun.get_mint_amount();
     },
-    mint(gasLimit: bigint) {
-      return contract.submit.mint(
+    async mint(gasLimit: bigint) {
+      return contract.submitResult.mint(
         getOverrides({
           variableOutputs: 2,
           gasLimit,

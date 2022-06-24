@@ -6,7 +6,7 @@ import { Input, Menu } from "~/systems/UI";
 import type { Coin } from "~/types";
 
 const style = {
-  input: `appearance-none w-full rounded-md bg-gray-700 px-4 py-2 focus-ring text-gray-100`,
+  input: `appearance-none w-full rounded-xl bg-gray-700 px-4 py-2 focus-ring text-gray-100`,
   coinItem: `py-2 px-6 flex items-center gap-3 border-t border-gray-700
   hover:bg-gray-700/50 hover:cursor-pointer focus-ring`,
   noResults: `px-6 py-4 border-t border-gray-700`,

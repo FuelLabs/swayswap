@@ -14,7 +14,7 @@ export function SwapPage() {
 
   return (
     <MainLayout>
-      <Card className="sm:min-w-[450px]">
+      <Card>
         <Card.Title>
           <MdSwapCalls className="text-primary-500" />
           Swap

@@ -2,14 +2,28 @@
   .homePage {
     @apply p-6 flex flex-col h-[100vh] justify-between bg-cover;
     background-image: url("/lp-bg.jpg");
+
+    @media (max-width: 640px) {
+      @apply mobile-fit-screen;
+      height: auto;
+    }
   }
 
   .homePage--header {
     @apply flex justify-between font-semibold;
+
+    img {
+      height: 46px;
+      width: 46px;
+    }
   }
 
   .homePage--menu {
-    @apply flex items-center gap-4 lg:gap-6 text-lg;
+    @apply flex items-center text-lg;
+
+    > * {
+      @apply ml-4 lg:ml-6;
+    }
 
     & a {
       @apply text-gray-200;
@@ -17,13 +31,13 @@
   }
 
   .homePage--hero {
-    @apply p-4 lg:p-10 text-gray-100 max-w-[500px] lg:max-w-[700px];
+    @apply p-4 lg:p-10 text-gray-50 max-w-[500px] lg:max-w-[700px];
 
     h1 {
       @apply text-3xl sm:text-4xl font-bold font-display;
     }
     p {
-      @apply text-gray-300 my-6;
+      @apply text-gray-100 my-6;
     }
   }
 }

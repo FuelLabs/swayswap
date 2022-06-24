@@ -30,7 +30,12 @@ export function CreateWallet() {
         <br />
         Click &ldquo;Create Wallet&rdquo; below to generate one.
       </p>
-      <Button variant="primary" size="lg" onPress={handleCreateWallet}>
+      <Button
+        variant="primary"
+        size="lg"
+        className="mt-5 mx-auto"
+        onPress={handleCreateWallet}
+      >
         Create Wallet
       </Button>
     </WelcomeStep>

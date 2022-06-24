@@ -50,20 +50,21 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               {...props}
               className="coinInput--input"
               autoFocus={autoFocus}
+              inputMode={"decimal"}
               getInputRef={ref}
               allowNegative={false}
               defaultValue={initialValue}
               value={getRightValue(value || "")}
               displayType={displayType}
               isAllowed={isAllowed}
+              onInput={onInput}
+              decimalScale={displayType === "text" ? 4 : DECIMAL_UNITS}
+              placeholder={props.placeholder || "0"}
+              thousandSeparator={false}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 onChange?.(e.target.value);
                 setValue(e.target.value);
               }}
-              decimalScale={DECIMAL_UNITS}
-              placeholder={props.placeholder || "0"}
-              thousandSeparator={false}
-              onInput={onInput}
             />
           )}
           {rightElement}

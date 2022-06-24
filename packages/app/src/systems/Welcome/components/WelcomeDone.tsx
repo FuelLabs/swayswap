@@ -23,21 +23,20 @@ export function WelcomeDone() {
         Now you&apos;re ready to swap and pool <b>test assets</b> using Fuel:
         the fastest modular execution layer.
       </p>
-      <div className="flex justify-center items-start mb-6">
-        <input
-          aria-label="Accept the use agreement"
-          id="accept-agreement"
-          checked={state.context.acceptAgreement}
-          onChange={(e) => {
-            send("ACCEPT_AGREEMENT", {
-              value: e.target.checked,
-            });
-          }}
-          className="h-5 w-5 mr-3 cursor-pointer"
-          type="checkbox"
-        />
+      <div className="flex justify-center mb-6">
         <label htmlFor="accept-agreement">
-          {" "}
+          <input
+            aria-label="Accept the use agreement"
+            id="accept-agreement"
+            checked={state.context.acceptAgreement}
+            onChange={(e) => {
+              send("ACCEPT_AGREEMENT", {
+                value: e.target.checked,
+              });
+            }}
+            className="h-5 w-5 mr-1 cursor-pointer"
+            type="checkbox"
+          />{" "}
           I have read and understand the{" "}
           <Link isExternal href={DISCLAIMER_URL}>
             legal disclaimer
@@ -48,6 +47,7 @@ export function WelcomeDone() {
       <Button
         size="lg"
         variant="primary"
+        className="mt-5 mx-auto"
         isDisabled={!state.context.acceptAgreement}
         onPress={handleDone}
       >

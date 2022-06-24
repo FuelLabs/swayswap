@@ -8,7 +8,7 @@ import { useWallet } from "../hooks";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { Header } from "./Header";
 
-import { FaucetWidget } from "~/systems/Faucet";
+import { ActionsWidget } from "~/systems/Core";
 import { Skeleton } from "~/systems/UI";
 
 type MainLayoutProps = {
@@ -32,9 +32,9 @@ export function MainLayout({ children }: MainLayoutProps) {
               children
             )}
           </ErrorBoundary>
+          {wallet && !ctx?.justContent && <ActionsWidget />}
         </div>
       </main>
-      {wallet && !ctx?.justContent && <FaucetWidget />}
     </>
   );
 }
