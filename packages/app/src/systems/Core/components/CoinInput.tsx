@@ -1,3 +1,4 @@
+import cx from "classnames";
 import { forwardRef, useEffect, useState } from "react";
 import NumberFormat from "react-number-format";
 
@@ -25,6 +26,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
       isLoading,
       rightElement,
       bottomElement,
+      className,
       ...props
     },
     ref
@@ -48,7 +50,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
           ) : (
             <NumberFormat
               {...props}
-              className="coinInput--input"
+              className={cx(className, "coinInput--input")}
               autoFocus={autoFocus}
               inputMode={"decimal"}
               getInputRef={ref}

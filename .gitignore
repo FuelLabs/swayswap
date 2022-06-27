@@ -78,3 +78,6 @@ contracts/token_contract/.rustc_info.json
 
 # Local actions to test CI using ACT
 act-actions
+
+# XState typegen
+*.typegen.ts

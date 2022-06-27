@@ -23,8 +23,9 @@ export async function initializePool(
   await tokenContract.submit.mint_coins(tokenAmount, overrides);
   await tokenContract.submit.transfer_token_to_output(tokenAmount, tokenId, address, {
     ...overrides,
-    variableOutputs: 2,
+    variableOutputs: 1,
   });
+
   const deadline = await wallet.provider.getBlockNumber();
 
   process.stdout.write('Depositing ETH\n');

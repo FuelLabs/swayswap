@@ -5,23 +5,23 @@ import { safeBigInt, getDeadline } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 
-const DEADLINE = 1000;
-
 export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
   const { direction, contract, coinFrom } = params;
   if (!contract || !coinFrom) {
     throw new Error('Contract not found');
   }
 
+  const deadline = await getDeadline(contract);
   const directionValue = direction || SwapDirection.fromTo;
+
   if (directionValue === SwapDirection.toFrom) {
-    return contract.prepareCall.swap_with_maximum(1, DEADLINE, {
+    return contract.prepareCall.swap_with_maximum(1, deadline, {
       forward: [1, coinFrom.assetId],
       variableOutputs: 2,
       gasLimit: 1000000,
     });
   }
-  return contract.prepareCall.swap_with_minimum(1, DEADLINE, {
+  return contract.prepareCall.swap_with_minimum(1, deadline, {
     forward: [1, coinFrom.assetId],
     variableOutputs: 2,
     gasLimit: 1000000,
