@@ -5,3 +5,4 @@ dist
 CHANGELOG.md
 packages/app/src/types
 contracts
+**/*.typegen.ts

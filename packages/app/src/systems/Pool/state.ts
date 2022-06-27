@@ -1,8 +1,10 @@
 import { atom } from 'jotai';
 import { atomWithReset, useResetAtom } from 'jotai/utils';
 
-export const poolFromAmountAtom = atomWithReset<bigint | null>(null);
-export const poolToAmountAtom = atomWithReset<bigint | null>(null);
+import type { Maybe } from '~/types';
+
+export const poolFromAmountAtom = atomWithReset<Maybe<bigint>>(null);
+export const poolToAmountAtom = atomWithReset<Maybe<bigint>>(null);
 
 export const poolStageDoneAtom = atom<number>(0);
 

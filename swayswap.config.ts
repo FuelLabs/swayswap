@@ -4,10 +4,7 @@ import { createConfig, replaceEventOnEnv } from 'swayswap-scripts';
 const { NODE_ENV, OUTPUT_ENV } = process.env;
 
 function getEnvName() {
-  if (NODE_ENV === 'test') {
-    return '.env.test';
-  }
-  return '.env';
+  return NODE_ENV === 'test' ? '.env.test' : '.env';
 }
 
 dotenv.config({

@@ -21,7 +21,7 @@ function action(command: string, func: (config: Config) => Promise<unknown>) {
       } as Event);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
-      console.error((err as Error).message);
+      console.error((err as Error)?.message ?? err);
       config.onFailure?.(err);
       process.exit();
     }

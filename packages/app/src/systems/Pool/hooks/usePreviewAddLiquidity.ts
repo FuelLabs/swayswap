@@ -4,6 +4,7 @@ import type { UseCoinInput } from '~/systems/Core';
 import {
   divideFnValidOnly,
   parseToFormattedNumber,
+  safeBigInt,
   toBigInt,
   toFixed,
   toNumber,
@@ -18,7 +19,7 @@ export interface UsePreviewAddLiquidityProps {
 
 export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewAddLiquidityProps) {
   const { totalLiquidity, poolTokensNum } = useUserPositions();
-  const amount = fromInput.amount || ZERO;
+  const amount = safeBigInt(fromInput.amount);
 
   const liquidityFactor = amount * toBigInt(totalLiquidity);
   const previewTokens = divideFnValidOnly(liquidityFactor, totalLiquidity);

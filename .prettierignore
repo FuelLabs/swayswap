@@ -12,3 +12,4 @@ yarn-lock.yaml
 packages/contracts
 .pnpm-store
 .env
+**/*.typegen.ts

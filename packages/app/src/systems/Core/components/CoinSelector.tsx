@@ -1,26 +1,19 @@
 import cx from "classnames";
-import type { ReactNode } from "react";
 import { useState, useEffect, forwardRef } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
+import type { CoinSelectorProps } from "../hooks/useCoinInput";
 import { TOKENS } from "../utils";
 
 import { CoinsListDialog } from "./CoinsListDialog";
 import { TokenIcon } from "./TokenIcon";
 
 import { Button, Dialog, Tooltip, useDialog } from "~/systems/UI";
-import type { Coin } from "~/types";
-
-export type CoinSelectorProps = {
-  coin?: Coin | null;
-  isReadOnly?: boolean;
-  onChange?: (coin: Coin) => void;
-  tooltip?: ReactNode;
-};
+import type { Coin, Maybe } from "~/types";
 
 export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
-  ({ coin, isReadOnly, onChange, tooltip: tooltipContent }, ref) => {
-    const [selected, setSelected] = useState<Coin | null>(null);
+  ({ coin, isReadOnly, onChange, tooltip: tooltipContent, ...props }, ref) => {
+    const [selected, setSelected] = useState<Maybe<Coin>>(null);
     const dialog = useDialog();
 
     function handleSelect(assetId: string) {
@@ -32,7 +25,7 @@ export const CoinSelector = forwardRef<HTMLDivElement, CoinSelectorProps>(
 
     const button = (
       <Button
-        aria-label="Coin Selector"
+        aria-label={props["aria-label"] || "Coin Selector"}
         {...dialog.openButtonProps}
         size="md"
         isReadOnly={isReadOnly}

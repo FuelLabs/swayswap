@@ -55,6 +55,7 @@ module.exports = {
         alphabetize: { order: 'asc' },
       },
     ],
+    'arrow-body-style': 'off',
     'import/prefer-default-export': 'off',
     'no-await-in-loop': 0,
     'no-bitwise': 0,

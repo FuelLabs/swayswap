@@ -1,17 +1,22 @@
-import { urlJoin } from 'url-join-ts';
+import { TOKENS } from './tokenList';
 
-const { PUBLIC_URL } = process.env;
+import type { Coin, Maybe } from '~/types';
 
 export const objectId = (value: string) => ({ value });
 
-// eslint-disable-next-line no-promise-executor-return
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export const relativeUrl = (path: string) => urlJoin(window.location.origin, PUBLIC_URL, path);
+export function sleep(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 export function omit<T>(list: string[], props: T) {
   return Object.entries(props).reduce((obj, [key, value]) => {
     if (list.some((k) => k === key)) return obj;
     return { ...obj, [key]: value };
   }, {} as T) as T;
+}
+
+export function isCoinEth(coin: Maybe<Coin>) {
+  return coin?.assetId === TOKENS[0].assetId;
 }

@@ -7,10 +7,12 @@ import type { InterpreterFrom, StateFrom } from "xstate";
 import { assign, createMachine } from "xstate";
 
 import { useWallet } from "~/systems/Core";
+import type { Maybe } from "~/types";
 import { Pages } from "~/types";
 
 export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
 export const LOCALSTORAGE_AGREEMENT_KEY = "fuel--agreement";
+
 export const STEPS = [
   { id: 0, path: Pages["welcome.createWallet"] },
   { id: 1, path: Pages["welcome.addFunds"] },
@@ -53,13 +55,13 @@ function assignCurrent(id: number): any {
 
 export type Step = {
   id: number;
-  path: string | null;
+  path: Maybe<string>;
 };
 
 type MachineContext = {
   current: Step;
   acceptAgreement: boolean;
-  wallet?: Wallet | null;
+  wallet?: Maybe<Wallet>;
 };
 
 type MachineEvents = { type: "NEXT" } | { type: "SET_CURRENT"; value: number };

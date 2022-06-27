@@ -16,16 +16,16 @@ import {
   useCoinInput,
   CoinSelector,
   NavigateBackButton,
-  ZERO,
   toBigInt,
   divideFnValidOnly,
   multiplyFn,
   TOKENS,
   useBalances,
+  safeBigInt,
+  CoinBalance,
 } from "~/systems/Core";
-import { CoinBalance } from "~/systems/Core/components/CoinBalance";
 import { Button, Card, Spinner } from "~/systems/UI";
-import type { Coin } from "~/types";
+import type { Coin, Maybe } from "~/types";
 
 const style = {
   wrapper: `self-start max-w-[500px] mt-24`,
@@ -139,21 +139,21 @@ export function AddLiquidity() {
     return poolRatio ? "Add liquidity" : "Create liquidity";
   }
 
-  function handleChangeFromValue(val: bigint | null) {
+  function handleChangeFromValue(val: Maybe<bigint>) {
     fromInput.setAmount(val);
 
     if (poolRatio) {
-      const value = val || ZERO;
+      const value = safeBigInt(val);
       const newToValue = Math.ceil(divideFnValidOnly(value, poolRatio));
       toInput.setAmount(BigInt(newToValue));
     }
   }
 
-  function handleChangeToValue(val: bigint | null) {
+  function handleChangeToValue(val: Maybe<bigint>) {
     toInput.setAmount(val);
 
     if (poolRatio) {
-      const value = val || ZERO;
+      const value = safeBigInt(val);
       const newFromValue = Math.floor(multiplyFn(value, poolRatio));
       fromInput.setAmount(BigInt(newFromValue));
     }
@@ -196,7 +196,7 @@ export function AddLiquidity() {
         <>
           <div className="space-y-4 my-4">
             <CoinInput
-              aria-label="Coin From Input"
+              aria-label="Coin from input"
               autoFocus
               {...fromInput.getInputProps()}
               rightElement={
@@ -207,7 +207,7 @@ export function AddLiquidity() {
               }
             />
             <CoinInput
-              aria-label="Coin To Input"
+              aria-label="Coin to input"
               id="coinTo"
               name="coinTo"
               {...toInput.getInputProps()}

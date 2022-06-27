@@ -1,15 +1,32 @@
-import type { SwapState } from '../types';
-import { ActiveInput } from '../types';
+import { SwapDirection } from '../types';
+import type { SwapMachineContext } from '../types';
 
-import { COIN_ETH, getDeadline } from '~/systems/Core';
-import type { TransactionCost } from '~/systems/Core/utils/gas';
+import { safeBigInt, getDeadline } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 
-export enum SwapQueries {
-  SwapPreview = 'SwapPage-SwapPreview',
-  NetworkFee = 'SwapPage-NetworkFee',
-}
+export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
+  const { direction, contract, coinFrom } = params;
+  if (!contract || !coinFrom) {
+    throw new Error('Contract not found');
+  }
+
+  const deadline = await getDeadline(contract);
+  const directionValue = direction || SwapDirection.fromTo;
+
+  if (directionValue === SwapDirection.toFrom) {
+    return contract.prepareCall.swap_with_maximum(1, deadline, {
+      forward: [1, coinFrom.assetId],
+      variableOutputs: 2,
+      gasLimit: 1000000,
+    });
+  }
+  return contract.prepareCall.swap_with_minimum(1, deadline, {
+    forward: [1, coinFrom.assetId],
+    variableOutputs: 2,
+    gasLimit: 1000000,
+  });
+};
 
 const getSwapWithMaximumRequiredAmount = async (
   contract: ExchangeContractAbi,
@@ -33,83 +50,60 @@ const getSwapWithMinimumMinAmount = async (
   return minAmount;
 };
 
-export const queryPreviewAmount = async (
-  contract: ExchangeContractAbi,
-  { amount, direction, coinFrom }: SwapState
-) => {
-  if (direction === ActiveInput.to && amount) {
-    const previewAmount = await getSwapWithMaximumRequiredAmount(
-      contract,
-      coinFrom.assetId,
-      amount
-    );
-    return previewAmount;
+export const queryPreviewAmount = async (params: SwapMachineContext) => {
+  const { coinFrom: coin, fromAmount, toAmount, contract, direction } = params;
+
+  if (!coin || !contract) return;
+  const coinId = coin.assetId;
+  const isFrom = direction === SwapDirection.fromTo;
+  const amount = isFrom ? fromAmount : toAmount;
+
+  if (direction === SwapDirection.toFrom) {
+    return getSwapWithMaximumRequiredAmount(contract, coinId, safeBigInt(amount?.raw));
   }
-  if (amount) {
-    const previewAmount = await getSwapWithMinimumMinAmount(contract, coinFrom.assetId, amount);
-    return previewAmount;
+  if (direction === SwapDirection.fromTo) {
+    return getSwapWithMinimumMinAmount(contract, coinId, safeBigInt(amount?.raw));
   }
-  return null;
 };
 
-export const swapTokens = async (
-  contract: ExchangeContractAbi,
-  { coinFrom, direction, amount }: SwapState,
-  txCost: TransactionCost
-) => {
+export const swapTokens = async (params: SwapMachineContext) => {
+  const {
+    contract,
+    coinFrom,
+    coinTo,
+    fromAmount,
+    toAmount,
+    direction,
+    txCost,
+    amountLessSlippage,
+    amountPlusSlippage,
+  } = params;
+
+  if (!contract || !coinFrom || !coinTo || !toAmount || !fromAmount || !txCost?.total) {
+    throw new Error('Missing some parameters');
+  }
+
   const deadline = await getDeadline(contract);
 
-  if (direction === ActiveInput.to && amount) {
-    const forwardAmount = await getSwapWithMaximumRequiredAmount(
-      contract,
-      coinFrom.assetId,
-      amount
-    );
-    if (!forwardAmount.has_liquidity) {
-      throw new Error('Not enough liquidity on pool');
-    }
-    return contract.submitResult.swap_with_maximum(
-      amount,
-      deadline,
-      getOverrides({
-        forward: [forwardAmount.amount, coinFrom.assetId],
-        gasLimit: txCost.total,
-        variableOutputs: 2,
-      })
-    );
-  }
-  if (direction === ActiveInput.from && amount) {
-    const minValue = await getSwapWithMinimumMinAmount(contract, coinFrom.assetId, amount);
-    if (!minValue.has_liquidity) {
-      throw new Error('Not enough liquidity on pool');
-    }
-
+  if (direction === SwapDirection.fromTo) {
     return contract.submitResult.swap_with_minimum(
-      minValue.amount,
+      safeBigInt(amountLessSlippage?.raw),
       deadline,
       getOverrides({
-        forward: [amount, coinFrom.assetId],
+        forward: [fromAmount.raw, coinFrom.assetId],
         gasLimit: txCost.total,
         variableOutputs: 2,
       })
     );
   }
-};
 
-export const queryNetworkFee = async (contract: ExchangeContractAbi, direction?: ActiveInput) => {
-  const directionValue = direction || ActiveInput.from;
-  const deadline = await getDeadline(contract);
-
-  if (directionValue === ActiveInput.to) {
-    return contract.prepareCall.swap_with_maximum(1, deadline, {
-      forward: [1, COIN_ETH],
+  return contract.submitResult.swap_with_maximum(
+    toAmount.raw,
+    deadline,
+    getOverrides({
+      forward: [safeBigInt(amountPlusSlippage?.raw), coinFrom.assetId],
+      gasLimit: txCost.total,
       variableOutputs: 2,
-      gasLimit: 1000000,
-    });
-  }
-  return contract.prepareCall.swap_with_minimum(1, deadline, {
-    forward: [1, COIN_ETH],
-    variableOutputs: 1,
-    gasLimit: 1000000,
-  });
+    })
+  );
 };

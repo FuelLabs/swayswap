@@ -39,10 +39,9 @@ describe("WelcomePage", () => {
     /**
      * Third step: done
      */
-
-    const acceptAgreement = await screen.findByRole("checkbox", {
-      name: /Accept the use agreement/i,
-    });
+    const acceptAgreement = await screen.findByLabelText(
+      /Accept the use agreement/i
+    );
     expect(acceptAgreement).not.toBeChecked();
     await user.click(acceptAgreement);
     expect(acceptAgreement).toBeChecked();
