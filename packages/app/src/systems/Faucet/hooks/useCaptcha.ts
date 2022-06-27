@@ -4,13 +4,14 @@ import type { StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
 
 import { RECAPTCHA_KEY } from '~/config';
+import type { Maybe } from '~/types';
 
 // Need this because of fast-refresh
 let IS_LOADED = false;
 
 type MachineContext = {
   key?: string;
-  captcha?: string | null;
+  captcha?: Maybe<string>;
 };
 
 type MachineEvents = { type: 'LOAD' } | { type: 'SET_CAPTCHA'; value: string };
@@ -105,7 +106,7 @@ export function useCaptcha() {
   const isLoading = useSelector(service, selectors.isLoading);
   const isLoaded = useSelector(service, selectors.isLoaded);
 
-  function setCaptcha(token: string | null) {
+  function setCaptcha(token: Maybe<string>) {
     send('SET_CAPTCHA', { value: token });
   }
   function load() {

@@ -12,6 +12,7 @@ import {
 import { CONTRACT_ID } from "~/config";
 import {
   CoinInput,
+  CoinBalance,
   useCoinInput,
   CoinSelector,
   NavigateBackButton,
@@ -20,8 +21,8 @@ import {
   TOKENS,
   useBalances,
   useEthBalance,
+  safeBigInt,
 } from "~/systems/Core";
-import { CoinBalance } from "~/systems/Core/components/CoinBalance";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { txFeedback } from "~/systems/Core/utils/feedback";
 import { getTransactionCost } from "~/systems/Core/utils/gas";
@@ -79,7 +80,7 @@ export function RemoveLiquidityPage() {
     return errorList;
   }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
 
-  const hasEnoughBalance = (ethBalance.raw || ZERO) > txCost.fee;
+  const hasEnoughBalance = safeBigInt(ethBalance.raw) > txCost.fee;
   const isRemoveButtonDisabled =
     !!errors.length ||
     removeLiquidityMutation.isLoading ||

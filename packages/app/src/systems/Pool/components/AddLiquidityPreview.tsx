@@ -11,12 +11,13 @@ import {
   useCoinMetadata,
   ETH_DAI,
 } from "~/systems/Core";
+import type { Maybe } from "~/types";
 import type { PoolInfo } from "~/types/contracts/ExchangeContractAbi";
 
 export interface AddLiquidityPreviewProps {
   poolInfo?: PoolInfo;
   fromInput: UseCoinInput;
-  networkFee?: bigint | null;
+  networkFee?: Maybe<bigint>;
 }
 
 export const AddLiquidityPreview = ({

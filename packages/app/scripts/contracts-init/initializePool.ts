@@ -25,6 +25,7 @@ export async function initializePool(
     ...overrides,
     variableOutputs: 1,
   });
+
   const deadline = await wallet.provider.getBlockNumber();
 
   process.stdout.write('Depositing ETH\n');

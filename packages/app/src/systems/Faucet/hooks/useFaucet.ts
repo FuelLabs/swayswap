@@ -5,6 +5,7 @@ import { useMutation, useQuery } from 'react-query';
 import { FUEL_FAUCET_URL } from '~/config';
 import { useBalances, useWallet } from '~/systems/Core';
 import { parseToFormattedNumber } from '~/systems/Core/utils/math';
+import type { Maybe } from '~/types';
 import { Queries } from '~/types';
 
 export async function fetchFaucet(input: RequestInit) {
@@ -28,7 +29,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
   const balances = useBalances();
 
   const mutation = useMutation(
-    async ({ captcha }: { captcha?: string | null } = {}) => {
+    async ({ captcha }: { captcha?: Maybe<string> } = {}) => {
       const response = await fetchFaucet({
         method: 'POST',
         body: JSON.stringify({
@@ -56,7 +57,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
     return res;
   });
 
-  function handleFaucet(captcha: string | null) {
+  function handleFaucet(captcha: Maybe<string>) {
     mutation.mutate({ captcha });
   }
 

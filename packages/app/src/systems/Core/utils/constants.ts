@@ -1,4 +1,4 @@
-import { TOKENS } from '~/systems/Core/utils';
+import { TOKENS } from './tokenList';
 
 export const contractABI = {};
 export const contractAddress = '0xF93c18172eAba6a9F145B3FB16d2bBeA2e096477';

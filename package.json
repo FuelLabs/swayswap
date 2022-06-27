@@ -38,7 +38,7 @@
     "lint": "run-s lint:check prettier:check",
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --write .",
-    "scripts:setup": "turbo run build --filter=swayswap-scripts && pnpm install",
+    "scripts:setup": "pnpm run --filter=swayswap-scripts build && pnpm install",
     "services:clean": "make -C docker services-clean",
     "services:setup": "run-s scripts:setup services:run contracts contracts:init-pool",
     "services:run": "make -C docker services-run",
@@ -48,9 +48,9 @@
     "services:run-test": "make -C docker services-run-test",
     "services:reset-test": "NODE_ENV=test run-s services:clean-test services:setup-test",
     "deps:update": "./scripts/update-deps.sh",
-    "test": "turbo run test -- --passWithNoTests --runInBand",
-    "test:coverage": "turbo run test -- --collectCoverage --passWithNoTests --runInBand",
-    "test:clear": "jest --clearCache",
+    "test": "pnpm run --filter=swayswap-app test",
+    "test:coverage": "pnpm run --filter=swayswap-app test --coverage",
+    "test:clear": "pnpm -r exec jest --clearCache",
     "test:e2e": "run-p --race dev cy:run"
   },
   "devDependencies": {

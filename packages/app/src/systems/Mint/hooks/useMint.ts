@@ -2,7 +2,7 @@ import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { TOKEN_ID } from '~/config';
-import { useTokenMethods, useBalances, ZERO } from '~/systems/Core';
+import { useTokenMethods, useBalances, safeBigInt } from '~/systems/Core';
 import { useTransactionCost } from '~/systems/Core/hooks/useTransactionCost';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import { Pages } from '~/types';
@@ -40,6 +40,6 @@ export function useMint(opts: UseMintOpts = {}) {
     ...mutation,
     txCost,
     handleMint,
-    mintAmount: mintAmount || ZERO,
+    mintAmount: safeBigInt(mintAmount),
   };
 }

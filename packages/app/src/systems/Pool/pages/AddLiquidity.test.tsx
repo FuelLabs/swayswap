@@ -54,7 +54,7 @@ describe("Add Liquidity", () => {
     renderWithRouter(<App />, {
       route: "/pool/add-liquidity",
     });
-    const coinFromInput = screen.getByLabelText(/Coin From Input/);
+    const coinFromInput = screen.getByLabelText(/Coin from input/);
     fireEvent.change(coinFromInput, {
       target: {
         value: "10",
@@ -74,13 +74,13 @@ describe("Add Liquidity", () => {
       route: "/pool/add-liquidity",
     });
 
-    const coinFromInput = screen.getByLabelText(/Coin From Input/);
+    const coinFromInput = screen.getByLabelText(/Coin from input/);
     fireEvent.change(coinFromInput, {
       target: {
         value: "10",
       },
     });
-    const coinToInput = screen.getByLabelText(/Coin To Input/);
+    const coinToInput = screen.getByLabelText(/Coin to input/);
     fireEvent.change(coinToInput, {
       target: {
         value: "1000",
@@ -98,13 +98,13 @@ describe("Add Liquidity", () => {
       route: "/pool/add-liquidity",
     });
 
-    const coinFromInput = screen.getByLabelText(/Coin From Input/);
+    const coinFromInput = screen.getByLabelText(/Coin from input/);
     fireEvent.change(coinFromInput, {
       target: {
         value: "0.1",
       },
     });
-    const coinToInput = screen.getByLabelText(/Coin To Input/);
+    const coinToInput = screen.getByLabelText(/Coin to input/);
     fireEvent.change(coinToInput, {
       target: {
         value: "1000",
@@ -121,7 +121,7 @@ describe("Add Liquidity", () => {
       route: "/pool/add-liquidity",
     });
 
-    const coinFromInput = await screen.findByLabelText(/Coin From Input/);
+    const coinFromInput = await screen.findByLabelText(/Coin from input/);
     fireEvent.change(coinFromInput, {
       target: {
         value: "10",
@@ -129,7 +129,7 @@ describe("Add Liquidity", () => {
     });
     expect(coinFromInput).toHaveValue("10");
 
-    const coinToInput = await screen.findByLabelText(/Coin To Input/);
+    const coinToInput = await screen.findByLabelText(/Coin to input/);
     fireEvent.change(coinToInput, {
       target: {
         value: "1000",
@@ -148,14 +148,14 @@ describe("Add Liquidity", () => {
 
     renderWithRouter(<App />, { route: "/pool/add-liquidity" });
 
-    const coinFromInput = screen.getByLabelText(/Coin From Input/);
+    const coinFromInput = screen.getByLabelText(/Coin from input/);
     fireEvent.change(coinFromInput, {
       target: {
         value: "0.5",
       },
     });
 
-    const coinToInput = screen.getByLabelText(/Coin To Input/);
+    const coinToInput = screen.getByLabelText(/Coin to input/);
     fireEvent.change(coinToInput, {
       target: {
         value: "2000",
@@ -175,14 +175,14 @@ describe("Add Liquidity", () => {
       route: "/pool/add-liquidity",
     });
 
-    const coinFromInput = await screen.findByLabelText(/Coin From Input/);
+    const coinFromInput = await screen.findByLabelText(/Coin from input/);
     fireEvent.change(coinFromInput, {
       target: {
         value: "0.1",
       },
     });
 
-    const coinToInput = await screen.findByLabelText(/Coin To Input/);
+    const coinToInput = await screen.findByLabelText(/Coin to input/);
     fireEvent.change(coinToInput, {
       target: {
         value: "500",
@@ -204,7 +204,7 @@ describe("Add Liquidity", () => {
       route: "/pool/add-liquidity",
     });
 
-    const coinFromInput = screen.getByLabelText(/Coin From Input/);
+    const coinFromInput = screen.getByLabelText(/Coin from input/);
     fireEvent.change(coinFromInput, {
       target: {
         value: ".",
@@ -212,7 +212,7 @@ describe("Add Liquidity", () => {
     });
 
     await waitFor(() => {
-      expect(coinFromInput).toHaveValue("0.");
+      expect(screen.getByLabelText(/Coin from input/)).toHaveValue("0.");
     });
   });
 });

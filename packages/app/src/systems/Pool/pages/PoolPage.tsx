@@ -1,11 +1,13 @@
 import { Outlet } from "react-router-dom";
 
-import { MainLayout } from "~/systems/Core";
+import { MainLayout, PrivateRoute } from "~/systems/Core";
 
 export function PoolPage() {
   return (
-    <MainLayout>
-      <Outlet />
-    </MainLayout>
+    <PrivateRoute>
+      <MainLayout>
+        <Outlet />
+      </MainLayout>
+    </PrivateRoute>
   );
 }

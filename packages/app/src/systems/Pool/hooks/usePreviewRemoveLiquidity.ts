@@ -6,19 +6,21 @@ import {
   minimumZero,
   multiplyFn,
   parseToFormattedNumber,
+  safeBigInt,
   toFixed,
-  ZERO,
 } from '~/systems/Core';
+import type { Maybe } from '~/types';
 
 export interface UsePreviewRemoveLiquidity {
-  amountToRemove?: bigint | null;
+  amountToRemove?: Maybe<bigint>;
 }
 
 export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLiquidity) {
   const { tokenReserve, ethReserve, totalLiquidity, poolTokensNum, poolTokens } =
     useUserPositions();
-  const amountToRemoveNum = amountToRemove || ZERO;
-  const userLPTokenBalance = poolTokens || ZERO;
+
+  const amountToRemoveNum = safeBigInt(amountToRemove);
+  const userLPTokenBalance = safeBigInt(poolTokens);
 
   const previewDAIRemoved = divideFnValidOnly(
     multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), tokenReserve),
