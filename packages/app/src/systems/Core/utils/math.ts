@@ -18,10 +18,8 @@ export const MAX_U64_STRING = '18446744073709551615';
 export function toFixed(number: Maybe<BigNumberish>, maxDecimals: number = FIXED_UNITS) {
   const [amount, decimals = '0'] = String(number?.toString() || '0.0').split('.');
   const minDecimals = decimals.split('').findIndex((u: string) => u !== '0');
-  const decimalFormatted = decimals.slice(
-    0,
-    minDecimals >= maxDecimals ? minDecimals + 1 : maxDecimals
-  );
+  const canShowMinDecimals = minDecimals >= maxDecimals && amount === '0';
+  const decimalFormatted = decimals.slice(0, canShowMinDecimals ? minDecimals + 1 : maxDecimals);
   return [amount || 0, '.', ...decimalFormatted].join('');
 }
 
