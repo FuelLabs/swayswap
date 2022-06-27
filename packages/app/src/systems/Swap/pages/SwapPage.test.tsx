@@ -57,13 +57,13 @@ describe("SwapPage", () => {
       await faucet(wallet, 4);
     });
 
-    it("should swap button be disabled", async () => {
+    it("should swap button be disabled and need to select token", async () => {
       renderWithRouter(<App />, { route: "/swap" });
 
       const submitBtn = await findSwapBtn();
       await waitFor(() => {
         expect(submitBtn).toBeDisabled();
-        expect(submitBtn.textContent).toMatch(/enter amount/i);
+        expect(submitBtn.textContent).toMatch(/select to token/i);
       });
     });
 
