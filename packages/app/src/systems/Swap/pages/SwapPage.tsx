@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from "framer-motion";
 import { MdSwapCalls } from "react-icons/md";
 
 import { PricePerToken, SwapPreview } from "../components";
@@ -20,8 +21,19 @@ export function SwapPage() {
           Swap
         </Card.Title>
         <SwapWidget />
-        {preview.hasPreview && <SwapPreview />}
-        {preview.hasPreview && <PricePerToken />}
+        <AnimatePresence>
+          {preview.hasPreview && (
+            <motion.div
+              transition={{ duration: 0.4 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <SwapPreview />
+              <PricePerToken />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <Button
           {...button.props}
           isFull

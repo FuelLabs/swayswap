@@ -60,6 +60,37 @@ type MachineServices = {
   };
 };
 
+const INVALID_STATES = {
+  NO_COIN_FROM: {
+    cond: 'notHasCoinFrom',
+    target: '#(machine).invalid.withoutCoinFrom',
+  },
+  NO_AMOUNT: {
+    cond: 'notHasAmount',
+    target: '#(machine).invalid.withoutAmount',
+  },
+  NO_COIN_TO: {
+    cond: 'notHasCoinTo',
+    target: '#(machine).invalid.withoutCoinTo',
+  },
+  NO_POOL_RATIO: {
+    cond: 'notHasPoolRatio',
+    target: '#(machine).invalid.withoutPoolRatio',
+  },
+  NO_COIN_FROM_BALANCE: {
+    cond: 'notHasCoinFromBalance',
+    target: '#(machine).invalid.withoutCoinFromBalance',
+  },
+  NO_ETH_FOR_NETWORK_FEE: {
+    cond: 'notHasEthForNetworkFee',
+    target: '#(machine).invalid.withoutEthForNetworkFee',
+  },
+  NO_LIQUIDITY: {
+    cond: 'noLiquidity',
+    target: '#(machine).invalid.withoutLiquidity',
+  },
+};
+
 export const swapMachine =
   /** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOgDMwAXHAqAIXQBt19M4BiCAe0JIIDcuAazAk0WPIVIVqk+kxZtYCAV0zpKuHgG0ADAF1EoAA5dYuTTyMgAHogCsAZgCMJABzOATPef37ANjcATl1ggBoQAE9ER3sAFhIgpKDPOLdHRwB2N11-AF88iPEaKXIqEvlmVg4wACdarlqSY2ZKMkbUMQwS4jLZWgYqpRV8QXVLfD1DJBBTcwnrOwQXfxJnTKDAt28ff0z-COiET0ddEjjnf2c4oLj7XUzLtwKi7slemQqAJTguAFdako+hUACo2ADCZkonB4olUIi6EgIH3Kch+sH+gLgwLkYMhsEoIzGGi0kwM1jmFlJi0QzlybncbmyTluQTc-iyhwcaRITjicV0ujiqTSTJeIGK72kqNo6MxQM+uIhUPYdQaTRaGnatU6kuR0v6+CgcoBCplRrxUKJahJOnJM0pCxmS3Z9l5bOC9jc9hSws8XIQ-ISukccUcwSuXs8t0y4r1pUVst+pux-CYuAgJKNAEl8MY-pRYOwKWYqVZnbSTo5ef57v4OUF7KkOQH-JsSJlMgLBZ5HgE4299TikxiU7ASDgwJghAAFLhcRjg2pgDSQGG8eGieMow3G5NY8eT6dzhdLleUSDW8akqYl+bUisIS4+EhtkKnAV93T2Vvtzvd3Re18fxdGcAckQTc091HA8J2wKdZ3nRdl1XCBVXqRpmlabVdUHSDdxNWCj0Q08UIvCAr1tMlphMUsnVAJZfBfPw9hOJJO1DH8okQYU3QCTsY3-R5HHAnoDW+fczV3Gdl34XAwAAd3XOFRmELc8J3CSYKkioZLAOTFMoiZbwdOiHwYxBPF0dsMiCfYLhCbtMgDPkSBDMM2VAttLhEwoJQ08S0Uk7FEyNPSDKUtVMM1NoOkRMThyNQidLkcL5IUoyb3tWj73LCyn29IISFDOkrNiO56QDXiawEuJOy7YTRKlRLoPlbFYCoTQjQAQVQf58ELYtTNy-AaWOL0iv5IJw3We4u2uFzAjc0NHHrOJ-DDQUwL87dApHNrxzTRgMyzKAAGUFPQYwhpystRsfS5BVfPYNl43sqwDLxvzWFw7guLwAmcIImqHULWrHZSSAJVd4uasHkrgO87rGk50hIVIrPrDJ-Cs5wA2mzJ0aZDx1nScMhRB0oIDAAAjfrMFodgbGhi8SHQMgL1qZAQN0Ih2F2khqbpv5WFoJH6NsHjprcnJrh9Lsrjs5zuIQJw3Xc8NQzbEn8h2gKSBQiBIhBLgLquvgIEYMB2DOgB1bqZ3F8zJeOOWfvrL07iBzYuKOL6Eg5OX-u8RXKd6Q3jdNy7jCh6PjEZ7gN1UhEBYjk2zZj2A49oTK7Ro2YzLyl3UkuDtcmmkDYh9eJPqszxX1+8N9mjDJPDD0g06j82s6u+OjXQ9UsK1OLU5XI30+j2Pe5z1Rrzzp2i6WTxUY7ZefTDTHvU+6yGUD4UNniXs4nbm2AFEQQAfTobqABluoAOXBU+zoX+78uuFx0dFXIsmcP+gYDL2Ds9YXrrT-o4JIJ8zqnxvqfcEl9wQAHlsz31fmNWs5wQJPGcEyE4Tg8YqyrucZIPgcgnEFPsE+KCABqp8vgIOQffF+w1kaPhxsVWIPlbjenrIBQBpxziXDKk3TI9hHhtz1hBYgZ9L4AFluoAA0L7UNvgAVVPmgx83pzjWQCKBVkOM3BxADPsVYdlAK9lAlZBWVD74zlUQggAEg-AA4holhEslgAFoNro02B-f6mRvC9iqhyXkK1tg4wuCBZ44p8BcGpvAGYAswaDEUIjDxzsl6NmKp4EmECThBgIUcUM9dkj+I8FcMMsTXhSL2klYK44waWgJJo-KRiEgNU8HsH0QpsgHBVk4VYGt0jrTZH-WMkiErw0aSQI6J0upQFzPmQsbSXZeEyGcRs-EQhCi9EExarg+QXCyMKcMdl24tQRoeeCx4kJnlQmsxiTgzibPuI2IJwRNnKyOEM5a1StbjMuJcmZ2kQpQTSopJ5tJ0gMjSLcdaFjsirRcqtf5msxk6xBVBa5UNOq0F6v1VZmTF6WWjGUwIIDvRhiyP6QZaKRmApJpM2p0ycWzPmZmRZGdoXHDbKsRwnhnAQLZF2UCvsHBXHCfyYVXZUYXKmXDdlYLxywD+JgJQSTbqeMskEYV7h9hBJSOyHBhzpUnLlecmp-k6lXMaby7Yry6rdNEY5fpAZYj134h4b0gqmzL0uULemYsSVv2LmyNyYiXBBKqW4FyeTzUhgEjNXyrLmqdwzhbK2vK66rGFR7EM6RDGfSBrvX6dU7irT-sfRVQ4M2Tx7sYPuUAc2pDOG4dkONjW+CriWkIDdrhCpyNsAIEi011rHpHTNy5UkKGqFqguI0UY+gZB6XwU1VpiJLUEgdQZvQ63sJc+tV0c09ndrWQtq08nb28Lu7IP9QJilraUAQ6YIAkAUhYbA-xKCEpFpQXla1irpCVnsTYoQBl+3DHmlwsQIFjOApc19x132fsoN+gskICAADEGioEA8EDsPhfBCN7B4CVT5UgMmFTRnyG1RFIdGG+j9X6f1YfwCbQDSRloY3WIY3wJa6Q-WuN6B4DlD3Pt6MhjMLH0M-pPIwL4tpAO+M1qBjYMTIO0mjcJsj1Lax1UY5y2TGHKA31wAARz+BmCwRxtVZMQEBtTnYwOae3hcYTPhmRYJuEZ5jaHTPsdw1wVAaTqgqfrjg9kNwi3PjpUcOykXy29g5KIu4fmUMmZ-afdD2HGj3yoApRoQhsNgDAIBn0wGIEuY0xB7dRUaN3GXikLITgMsZkA7EKr6nwPsgDMEBrv1RHxD8F2Gt46pC8q8R2vxVSSrrGCT82kdxBFVMCE2B4EDYkFCAA */
   createMachine(
@@ -112,31 +143,17 @@ export const swapMachine =
             },
             validatingInputs: {
               always: [
-                {
-                  cond: 'notHasAmount',
-                  target: '#(machine).invalid.withoutAmount',
-                },
-                {
-                  cond: 'notHasCoinFrom',
-                  target: '#(machine).invalid.withoutCoinFrom',
-                },
-                {
-                  cond: 'notHasCoinTo',
-                  target: '#(machine).invalid.withoutCoinTo',
-                },
-                {
-                  target: 'fetchingPoolInfo',
-                },
+                INVALID_STATES.NO_AMOUNT,
+                INVALID_STATES.NO_COIN_FROM,
+                INVALID_STATES.NO_COIN_TO,
+                { target: 'fetchingPoolInfo' },
               ],
             },
             fetchingPoolInfo: {
               invoke: {
                 src: 'fetchPoolRatio',
                 onDone: [
-                  {
-                    cond: 'notHasPoolRatio',
-                    target: '#(machine).invalid.withoutPoolRatio',
-                  },
+                  INVALID_STATES.NO_POOL_RATIO,
                   {
                     actions: 'setPoolInfo',
                     target: 'fetchingPreview',
@@ -173,21 +190,10 @@ export const swapMachine =
             },
             validatingSwap: {
               always: [
-                {
-                  cond: 'notHasCoinFromBalance',
-                  target: '#(machine).invalid.withoutCoinFromBalance',
-                },
-                {
-                  cond: 'notHasEthForNetworkFee',
-                  target: '#(machine).invalid.withoutEthForNetworkFee',
-                },
-                {
-                  cond: 'noLiquidity',
-                  target: '#(machine).invalid.withoutLiquidity',
-                },
-                {
-                  target: 'success',
-                },
+                INVALID_STATES.NO_COIN_FROM_BALANCE,
+                INVALID_STATES.NO_ETH_FOR_NETWORK_FEE,
+                INVALID_STATES.NO_LIQUIDITY,
+                { target: 'success' },
               ],
             },
             success: {
@@ -199,11 +205,12 @@ export const swapMachine =
           },
         },
         debouncing: {
-          tags: 'loading',
           after: {
-            '600': {
-              target: 'fetchingResources',
-            },
+            '600': [
+              INVALID_STATES.NO_COIN_FROM,
+              INVALID_STATES.NO_COIN_TO,
+              { target: 'fetchingResources' },
+            ],
           },
         },
         readyToSwap: {
@@ -243,14 +250,14 @@ export const swapMachine =
         },
         invalid: {
           states: {
-            withoutAmount: {
-              tags: 'needEnterAmount',
-            },
             withoutCoinFrom: {
               tags: 'needSelectToken',
             },
             withoutCoinTo: {
               tags: 'needSelectToken',
+            },
+            withoutAmount: {
+              tags: 'needEnterAmount',
             },
             withoutPoolRatio: {
               tags: 'noPoolFound',
