@@ -16,10 +16,6 @@ const selectors = {
     if (state.hasTag("isSwapping")) {
       return "Swapping...";
     }
-    if (state.hasTag("needSelectToken")) {
-      const opposite = ctx?.direction === FROM_TO ? TO_FROM : FROM_TO;
-      return `Select ${opposite} token`;
-    }
     if (state.hasTag("noPoolFound")) {
       return "No pool found";
     }
@@ -32,10 +28,14 @@ const selectors = {
     if (state.hasTag("notHasEthForNetworkFee")) {
       return "Insufficient ETH for gas";
     }
-    if (state.hasTag("canSwap")) {
-      return "Swap";
+    if (state.hasTag("needEnterAmount")) {
+      return "Enter amount";
     }
-    return "Enter amount";
+    if (state.hasTag("needSelectToken")) {
+      const opposite = ctx?.direction === FROM_TO ? TO_FROM : FROM_TO;
+      return `Select ${opposite} token`;
+    }
+    return "Swap";
   },
   canSwap: (state: SwapMachineState) => {
     return state.hasTag("canSwap");

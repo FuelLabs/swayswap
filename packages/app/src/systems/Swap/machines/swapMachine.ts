@@ -61,17 +61,13 @@ type MachineServices = {
 };
 
 const INVALID_STATES = {
-  NO_COIN_FROM: {
-    cond: 'notHasCoinFrom',
-    target: '#(machine).invalid.withoutCoinFrom',
+  NO_COIN_SELECTED: {
+    cond: 'notHasCoinSelected',
+    target: '#(machine).invalid.withoutCoinSelected',
   },
   NO_AMOUNT: {
     cond: 'notHasAmount',
     target: '#(machine).invalid.withoutAmount',
-  },
-  NO_COIN_TO: {
-    cond: 'notHasCoinTo',
-    target: '#(machine).invalid.withoutCoinTo',
   },
   NO_POOL_RATIO: {
     cond: 'notHasPoolRatio',
@@ -143,9 +139,8 @@ export const swapMachine =
             },
             validatingInputs: {
               always: [
+                INVALID_STATES.NO_COIN_SELECTED,
                 INVALID_STATES.NO_AMOUNT,
-                INVALID_STATES.NO_COIN_FROM,
-                INVALID_STATES.NO_COIN_TO,
                 { target: 'fetchingPoolInfo' },
               ],
             },
@@ -205,12 +200,9 @@ export const swapMachine =
           },
         },
         debouncing: {
+          tags: 'loading',
           after: {
-            '600': [
-              INVALID_STATES.NO_COIN_FROM,
-              INVALID_STATES.NO_COIN_TO,
-              { target: 'fetchingResources' },
-            ],
+            '600': 'fetchingResources',
           },
         },
         readyToSwap: {
@@ -250,10 +242,7 @@ export const swapMachine =
         },
         invalid: {
           states: {
-            withoutCoinFrom: {
-              tags: 'needSelectToken',
-            },
-            withoutCoinTo: {
+            withoutCoinSelected: {
               tags: 'needSelectToken',
             },
             withoutAmount: {
@@ -282,15 +271,20 @@ export const swapMachine =
           actions: 'selectCoin',
           target: '.fetchingBalances',
         },
-        INVERT_COINS: {
-          actions: 'invertDirection',
-          target: '.fetchingBalances',
-        },
+        INVERT_COINS: [
+          {
+            actions: 'clearContext',
+            ...INVALID_STATES.NO_COIN_SELECTED,
+          },
+          {
+            actions: 'invertDirection',
+            target: '.fetchingBalances',
+          },
+        ],
         SET_MAX_VALUE: [
           {
             actions: 'setMaxValue',
-            cond: 'notHasOppositeCoin',
-            target: '.invalid.withoutAmount',
+            ...INVALID_STATES.NO_COIN_SELECTED,
           },
           {
             actions: 'setMaxValue',
@@ -298,6 +292,10 @@ export const swapMachine =
           },
         ],
         INPUT_CHANGE: [
+          {
+            actions: 'clearContext',
+            ...INVALID_STATES.NO_COIN_SELECTED,
+          },
           {
             actions: 'clearContext',
             cond: 'inputIsEmpty',
@@ -451,15 +449,8 @@ export const swapMachine =
           const val = ev.data?.value || '';
           return !val.length || val === '0';
         },
-        notHasCoinFrom: (ctx) => {
-          return !ctx.coinFrom;
-        },
-        notHasCoinTo: (ctx) => {
-          return !ctx.coinTo;
-        },
-        notHasOppositeCoin: (ctx) => {
-          const isFrom = ctx.direction === SwapDirection.fromTo;
-          return isFrom ? !ctx.coinTo?.assetId : !ctx.coinFrom?.assetId;
+        notHasCoinSelected: (ctx) => {
+          return !ctx.coinFrom || !ctx.coinTo;
         },
         notHasAmount: (ctx) => {
           return (

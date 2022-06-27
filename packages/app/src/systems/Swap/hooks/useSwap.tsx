@@ -25,6 +25,7 @@ import {
 const selectors = {
   isLoading: isLoadingState,
   canSwap: (state: SwapMachineState) => state.hasTag("canSwap"),
+  canInvertCoins: (state: SwapMachineState) => !state.hasTag("needSelectToken"),
   coinFrom: (state: SwapMachineState) => state.context.coinFrom,
   coinTo: (state: SwapMachineState) => state.context.coinTo,
   direction: (state: SwapMachineState) => state.context.direction,
@@ -77,6 +78,7 @@ export function useSwap() {
   const coinTo = useSelector(service, selectors.coinTo);
   const direction = useSelector(service, selectors.direction);
   const txCost = useSelector(service, selectors.txCost);
+  const canInvertCoins = useSelector(service, selectors.canInvertCoins);
 
   function onInvertCoins() {
     service.send("INVERT_COINS");
@@ -89,6 +91,7 @@ export function useSwap() {
     onSwap,
     onInvertCoins,
     state: {
+      canInvertCoins,
       isLoading,
       canSwap,
       coinFrom,

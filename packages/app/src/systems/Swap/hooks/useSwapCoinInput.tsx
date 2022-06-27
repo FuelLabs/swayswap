@@ -27,9 +27,12 @@ const selectors = {
     return (dir === FROM_TO && !coinFrom) || (dir === TO_FROM && !coinTo);
   },
   isLoading: (dir: SwapDirection) => (state: SwapMachineState) => {
-    const { direction, fromAmount, toAmount } = state.context;
+    const { direction, fromAmount, toAmount, coinFrom, coinTo } = state.context;
     const amount = direction === FROM_TO ? fromAmount?.raw : toAmount?.raw;
-    return Boolean(state.hasTag("loading") && dir !== direction && amount);
+    const hasCoins = Boolean(coinFrom && coinTo);
+    return Boolean(
+      hasCoins && state.hasTag("loading") && dir !== direction && amount
+    );
   },
 };
 

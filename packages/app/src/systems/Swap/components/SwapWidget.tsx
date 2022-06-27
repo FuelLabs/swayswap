@@ -8,7 +8,7 @@ import { CoinBalance, CoinInput, CoinSelector } from "~/systems/Core";
 import { InvertButton } from "~/systems/UI";
 
 export function SwapWidget() {
-  const { onInvertCoins } = useSwap();
+  const { onInvertCoins, state } = useSwap();
   const coinSelectorFromProps = useSwapCoinSelector(FROM_TO);
   const coinSelectorToProps = useSwapCoinSelector(TO_FROM);
   const coinInputFromProps = useSwapCoinInput(FROM_TO);
@@ -32,7 +32,10 @@ export function SwapWidget() {
         />
       </div>
       <div className="flex items-center sm:justify-center -my-5">
-        <InvertButton onClick={onInvertCoins} />
+        <InvertButton
+          onClick={onInvertCoins}
+          isDisabled={!state.canInvertCoins}
+        />
       </div>
       <div className="mb-4">
         <CoinInput

@@ -8,14 +8,20 @@ const style = {
   confirmButton: `
     p-0 relative w-10 h-10 rounded-xl mb-3 mt-0 translate-x-[60px]
     border-2 border-gray-700 bg-gray-800 cursor-pointer text-gray-400
-    sm:translate-x-0 sm:my-1 sm:w-12 sm:h-12 sm:rounded-xl hover:text-gray-50`,
+    sm:translate-x-0 sm:my-1 sm:w-12 sm:h-12 sm:rounded-xl hover:text-gray-50
+    disabled:hover:text-gray-400 disabled:opacity-90`,
   icon: `transition-all w-[14px] sm:w-[18px]`,
   iconLeft: `translate-x-[6px]`,
   iconRight: `translate-x-[-6px]`,
   rotate: `rotate-180`,
 };
 
-export function InvertButton({ onClick }: { onClick: () => void }) {
+type InvertButtonProps = {
+  isDisabled?: boolean;
+  onClick: () => void;
+};
+
+export function InvertButton({ onClick, isDisabled }: InvertButtonProps) {
   const [isInverted, setInverted] = useState(false);
 
   function handleClick() {
@@ -25,6 +31,7 @@ export function InvertButton({ onClick }: { onClick: () => void }) {
 
   return (
     <Button
+      isDisabled={isDisabled}
       onPress={handleClick}
       className={style.confirmButton}
       aria-label="Invert coins"
