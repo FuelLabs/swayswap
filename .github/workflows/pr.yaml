@@ -23,9 +23,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/setup-node
+      - run: pnpm lint
+
   test:
     name: Test
     runs-on: ubuntu-latest
+    continue-on-error: false
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/setup-node
@@ -64,6 +73,7 @@ jobs:
   end-to-end-test:
     name: Test E2E
     runs-on: ubuntu-latest
+    continue-on-error: false
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/setup-node
