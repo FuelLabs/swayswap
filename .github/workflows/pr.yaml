@@ -4,13 +4,6 @@ on:
   pull_request:
     types: [opened, synchronize, edited, closed]
 
-env:
-  RUST_VERSION: 1.61.0
-  FORC_VERSION: 0.16.1
-  NODE_VERSION: 16
-  PNPM_VERSION: 7.0.0
-  COMPOSE_VERSION: 2.6.0
-
 jobs:
   cancel-previous-run:
     name: Cancel previous actions
@@ -30,59 +23,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build-and-test:
-    name: Build and test
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: ./.github/setup-node
+      - run: pnpm lint
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/setup-node
+      - uses: ./.github/setup-rust
+      - uses: ./.github/setup-docker
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Cache PNPM modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2.1.0
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          run_install: true
-
-      # Check lint as early as possible to avoid
-      # Long fail CI and fail on this step
-      - name: Lint
-        run: |
-          pnpm lint
-
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: ${{ env.RUST_VERSION }}
-          override: true
-        # selecting a toolchain either by action or manual `rustup` calls should happen
-        # before the cache plugin, as it uses the current rustc version as its cache key
-      - uses: Swatinem/rust-cache@v1
-
-      - name: Set git config
-        run: |
-          git config --global core.bigfilethreshold 100m
-
-      - name: Install Forc
-        run: |
-          curl -sSLf https://github.com/FuelLabs/sway/releases/download/v${{ env.FORC_VERSION }}/forc-binaries-linux_amd64.tar.gz -L -o forc.tar.gz
-          tar -xvf forc.tar.gz
-          chmod +x forc-binaries/forc
-          mv forc-binaries/forc /usr/local/bin/forc
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # As contracts are really Heavy to build
       # and test we only test it when some
@@ -102,26 +61,6 @@ jobs:
         run: |
           ./scripts/test-contracts.sh
 
-      - name: Setup Docker
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      # Make github action to use the latest version of
-      # docker compose without it docker compose down
-      # has issues with memory nil pointer
-      # https://github.com/docker/compose/pull/9354
-      - name: Install Compose
-        uses: ndeloof/install-compose-action@v0.0.1
-        with:
-          version: v${{ env.COMPOSE_VERSION }}
-
-      - name: Docker info
-        run: |
-          docker info
-
       - name: Setup scripts
         run: |
           pnpm scripts:setup
@@ -130,6 +69,22 @@ jobs:
         run: |
           pnpm ci:test:coverage
 
+  end-to-end-test:
+    name: Test E2E
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/setup-node
+      - uses: ./.github/setup-rust
+      - uses: ./.github/setup-docker
+        with:
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup scripts
+        run: |
+          pnpm scripts:setup
+      
       # using same dependencies from cypress/browsers:node16.5.0-chrome97-ff96 ...
       # not using directly the container because we still need ubuntu-latest preset
       - name: Install Cypress Dependencies
@@ -176,5 +131,4 @@ jobs:
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: "cypress:server:*"
           NODE_ENV: "test"
