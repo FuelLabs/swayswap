@@ -132,5 +132,3 @@ jobs:
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: "test"
-          # debugging seems to make tests slower randomly. you can include if you need to track issues in CI
-          # DEBUG: "cypress:server:*"
