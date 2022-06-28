@@ -23,24 +23,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/setup-node
-
-      - name: Lint
-        run: |
-          pnpm lint
-
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/setup-node
+      - run: pnpm lint
       - uses: ./.github/setup-rust
       - uses: ./.github/setup-docker
         with:
@@ -78,6 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/setup-node
+      - run: pnpm lint
       - uses: ./.github/setup-rust
       - uses: ./.github/setup-docker
         with:
