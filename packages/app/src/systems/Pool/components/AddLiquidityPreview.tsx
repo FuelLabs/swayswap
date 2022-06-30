@@ -12,10 +12,10 @@ import {
   ETH_DAI,
 } from "~/systems/Core";
 import type { Maybe } from "~/types";
-import type { PoolInfo } from "~/types/contracts/ExchangeContractAbi";
+import type { PoolInfoOutput } from "~/types/contracts/ExchangeContractAbi";
 
 export interface AddLiquidityPreviewProps {
-  poolInfo?: PoolInfo;
+  poolInfo?: PoolInfoOutput;
   fromInput: UseCoinInput;
   networkFee?: Maybe<bigint>;
 }

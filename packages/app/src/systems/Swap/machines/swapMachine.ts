@@ -21,7 +21,7 @@ import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
 import { getPoolRatio } from '~/systems/Pool';
 import { Coin, Maybe, Queries } from '~/types';
-import type { PoolInfo, PreviewInfo } from '~/types/contracts/ExchangeContractAbi';
+import type { PoolInfoOutput, PreviewInfoOutput } from '~/types/contracts/ExchangeContractAbi';
 
 export const FROM_TO = SwapDirection.fromTo;
 export const TO_FROM = SwapDirection.toFrom;
@@ -47,12 +47,12 @@ type MachineServices = {
   };
   fetchPoolRatio: {
     data: {
-      info: Maybe<PoolInfo>;
+      info: Maybe<PoolInfoOutput>;
       ratio: Maybe<number>;
     };
   };
   fetchPreview: {
-    data: Maybe<PreviewInfo>;
+    data: Maybe<PreviewInfoOutput>;
   };
   swap: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

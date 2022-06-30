@@ -1,10 +1,10 @@
 import type { UseCoinInput } from '~/systems/Core';
 import { divideFnValidOnly, safeBigInt, useBalances, toBigInt, toNumber } from '~/systems/Core';
-import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
+import type { PoolInfoOutput } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UsePreviewLiquidityProps {
   fromInput: UseCoinInput;
-  poolInfo?: PoolInfo;
+  poolInfo?: PoolInfoOutput;
   contractId: string;
 }
 
