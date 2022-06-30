@@ -1,7 +1,5 @@
-import classNames from "classnames";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { RiCheckFill } from "react-icons/ri";
 
 import {
   AddLiquidityPoolPrice,
@@ -24,7 +22,7 @@ import {
   safeBigInt,
   CoinBalance,
 } from "~/systems/Core";
-import { Button, Card, Spinner } from "~/systems/UI";
+import { Button, Card } from "~/systems/UI";
 import type { Coin, Maybe } from "~/types";
 
 const style = {
@@ -34,51 +32,6 @@ const style = {
   createPoolInfo: `font-mono mt-4 px-4 py-3 text-sm text-slate-400 decoration-1 border border-dashed
   border-white/10 rounded-xl w-full`,
 };
-
-function PoolLoader({
-  loading,
-  step,
-  steps,
-}: {
-  coinFrom: Coin;
-  coinTo: Coin;
-  loading: boolean;
-  step: number;
-  steps: string[];
-}) {
-  return (
-    <ul className="w-full rounded-xl border border-gray-600 text-gray-900">
-      {steps.map((stepText, index) => (
-        <li
-          key={index}
-          className={classNames(
-            "space-between flex w-full items-center border-b border-gray-600 px-6 py-2 text-white",
-            {
-              "rounded-t-lg": index === 0,
-              "bg-primary-500": step === index && loading,
-              "rounded-b-lg": index === steps.length,
-            }
-          )}
-        >
-          <div
-            className="flex-1"
-            aria-label={`Loading step: ${stepText}`}
-            aria-disabled={step > index}
-          >
-            {stepText}
-          </div>
-          {step === index && loading && <Spinner />}
-          {step > index && (
-            <RiCheckFill
-              aria-label={`Step completed: ${stepText}`}
-              aria-hidden
-            />
-          )}
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 export function AddLiquidity() {
   const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
@@ -115,7 +68,6 @@ export function AddLiquidity() {
 
   const {
     mutation: addLiquidityMutation,
-    stage,
     networkFee,
     errorsCreatePull,
   } = useAddLiquidity({
@@ -177,86 +129,64 @@ export function AddLiquidity() {
           Add Liquidity
         </div>
       </Card.Title>
-      {addLiquidityMutation.isLoading ? (
-        <div className="mt-6 mb-8 flex justify-center">
-          <PoolLoader
-            steps={[
-              `Deposit: ${coinFrom.name}`,
-              `Deposit: ${coinTo.name}`,
-              `Provide liquidity`,
-              `Done`,
-            ]}
-            step={stage}
-            loading={addLiquidityMutation.isLoading}
-            coinFrom={coinFrom}
-            coinTo={coinTo}
-          />
-        </div>
-      ) : (
-        <>
-          <div className="space-y-4 my-4">
-            <CoinInput
-              aria-label="Coin from input"
-              autoFocus
-              {...fromInput.getInputProps()}
-              rightElement={
-                <CoinSelector {...fromInput.getCoinSelectorProps()} />
+      <div className="space-y-4 my-4">
+        <CoinInput
+          aria-label="Coin from input"
+          autoFocus
+          {...fromInput.getInputProps()}
+          rightElement={<CoinSelector {...fromInput.getCoinSelectorProps()} />}
+          bottomElement={<CoinBalance {...fromInput.getCoinBalanceProps()} />}
+        />
+        <CoinInput
+          aria-label="Coin to input"
+          id="coinTo"
+          name="coinTo"
+          {...toInput.getInputProps()}
+          rightElement={
+            <CoinSelector {...toInput.getCoinSelectorProps()} isReadOnly />
+          }
+          bottomElement={<CoinBalance {...toInput.getCoinBalanceProps()} />}
+        />
+      </div>
+      <AddLiquidityPreview
+        poolInfo={poolInfo}
+        fromInput={fromInput}
+        networkFee={networkFee}
+      />
+      <AddLiquidityPoolPrice
+        coinFrom={coinFrom}
+        coinTo={coinTo}
+        reservesFromToRatio={poolRatio || addLiquidityRatio || 1}
+      />
+      <Button
+        aria-label="Add Liquidity Button"
+        isDisabled={!!errorsCreatePull.length || addLiquidityMutation.isLoading}
+        isFull
+        size="lg"
+        variant="primary"
+        isLoading={addLiquidityMutation.isLoading}
+        onPress={
+          errorsCreatePull.length
+            ? undefined
+            : () => {
+                addLiquidityMutation.mutate();
               }
-              bottomElement={
-                <CoinBalance {...fromInput.getCoinBalanceProps()} />
-              }
-            />
-            <CoinInput
-              aria-label="Coin to input"
-              id="coinTo"
-              name="coinTo"
-              {...toInput.getInputProps()}
-              rightElement={
-                <CoinSelector {...toInput.getCoinSelectorProps()} isReadOnly />
-              }
-              bottomElement={<CoinBalance {...toInput.getCoinBalanceProps()} />}
-            />
+        }
+      >
+        {getButtonText()}
+      </Button>
+      {!poolRatio && !isLoadingPoolInfo ? (
+        <div className={style.createPoolInfo} aria-label="create-pool">
+          <h4 className="text-orange-400 mb-2 font-bold">
+            You are creating a new pool
+          </h4>
+          <div className="flex">
+            You are the first to provide liquidity to this pool. The ratio
+            between these tokens will set the price of this pool.
           </div>
-          <AddLiquidityPreview
-            poolInfo={poolInfo}
-            fromInput={fromInput}
-            networkFee={networkFee}
-          />
-          <AddLiquidityPoolPrice
-            coinFrom={coinFrom}
-            coinTo={coinTo}
-            reservesFromToRatio={poolRatio || addLiquidityRatio || 1}
-          />
-          <Button
-            aria-label="Add Liquidity Button"
-            isDisabled={!!errorsCreatePull.length}
-            isFull
-            size="lg"
-            variant="primary"
-            onPress={
-              errorsCreatePull.length
-                ? undefined
-                : () => {
-                    addLiquidityMutation.mutate();
-                  }
-            }
-          >
-            {getButtonText()}
-          </Button>
-          {!poolRatio && !isLoadingPoolInfo ? (
-            <div className={style.createPoolInfo} aria-label="create-pool">
-              <h4 className="text-orange-400 mb-2 font-bold">
-                You are creating a new pool
-              </h4>
-              <div className="flex">
-                You are the first to provide liquidity to this pool. The ratio
-                between these tokens will set the price of this pool.
-              </div>
-            </div>
-          ) : null}
-          {!!(poolInfo && poolRatio) && <PoolCurrentReserves />}
-        </>
-      )}
+        </div>
+      ) : null}
+      {!!(poolInfo && poolRatio) && <PoolCurrentReserves />}
     </Card>
   );
 }

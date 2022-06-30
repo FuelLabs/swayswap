@@ -7,8 +7,8 @@ import { emptyTransactionCost, getTransactionCost } from '../utils/gas';
 
 import { useEthBalance } from './useEthBalance';
 
-type ContractCallFuncPromise = () => Promise<ContractCall>;
-type ContractCallFunc = () => ContractCall;
+type ContractCallFuncPromise = () => Promise<ContractCall | ContractCall[]>;
+type ContractCallFunc = () => ContractCall | ContractCall[];
 
 export function useTransactionCost(
   queryKey: unknown[],

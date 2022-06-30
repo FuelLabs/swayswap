@@ -51,7 +51,7 @@
     "decimal.js": "^10.3.1",
     "ethers": "^5.6.9",
     "framer-motion": "^6.3.15",
-    "fuels": "0.0.0-master-b32f29b9",
+    "fuels": "0.0.0-master-151d0d91",
     "graphql-request": "^4.3.0",
     "jotai": "^1.7.2",
     "mitt": "^3.0.0",

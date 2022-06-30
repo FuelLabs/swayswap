@@ -19,7 +19,7 @@ import type {
 
 export type ContractIdInput = { value: string };
 
-export type ContractId = { value: string };
+export type ContractIdOutput = { value: string };
 
 export type PoolInfoInput = {
   eth_reserve: BigNumberish;
@@ -27,7 +27,7 @@ export type PoolInfoInput = {
   lp_token_supply: BigNumberish;
 };
 
-export type PoolInfo = {
+export type PoolInfoOutput = {
   eth_reserve: bigint;
   token_reserve: bigint;
   lp_token_supply: bigint;
@@ -38,11 +38,14 @@ export type RemoveLiquidityInfoInput = {
   token_amount: BigNumberish;
 };
 
-export type RemoveLiquidityInfo = { eth_amount: bigint; token_amount: bigint };
+export type RemoveLiquidityInfoOutput = {
+  eth_amount: bigint;
+  token_amount: bigint;
+};
 
 export type PreviewInfoInput = { amount: BigNumberish; has_liquidity: boolean };
 
-export type PreviewInfo = { amount: bigint; has_liquidity: boolean };
+export type PreviewInfoOutput = { amount: bigint; has_liquidity: boolean };
 
 interface ExchangeContractAbiInterface extends Interface {
   functions: {
@@ -160,7 +163,9 @@ export class ExchangeContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<bigint>;
 
-    get_pool_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
+    get_pool_info(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PoolInfoOutput>;
 
     get_add_liquidity_token_amount(
       eth_amount: BigNumberish,
@@ -186,7 +191,7 @@ export class ExchangeContractAbi extends Contract {
       min_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<RemoveLiquidityInfo>;
+    ): Promise<RemoveLiquidityInfoOutput>;
 
     swap_with_minimum(
       min: BigNumberish,
@@ -203,12 +208,12 @@ export class ExchangeContractAbi extends Contract {
     get_swap_with_minimum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PreviewInfo>;
+    ): Promise<PreviewInfoOutput>;
 
     get_swap_with_maximum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PreviewInfo>;
+    ): Promise<PreviewInfoOutput>;
   };
   submitResult: {
     get_balance(
@@ -276,7 +281,9 @@ export class ExchangeContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<bigint>;
 
-    get_pool_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
+    get_pool_info(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PoolInfoOutput>;
 
     get_add_liquidity_token_amount(
       eth_amount: BigNumberish,
@@ -302,7 +309,7 @@ export class ExchangeContractAbi extends Contract {
       min_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<RemoveLiquidityInfo>;
+    ): Promise<RemoveLiquidityInfoOutput>;
 
     swap_with_minimum(
       min: BigNumberish,
@@ -319,12 +326,12 @@ export class ExchangeContractAbi extends Contract {
     get_swap_with_minimum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PreviewInfo>;
+    ): Promise<PreviewInfoOutput>;
 
     get_swap_with_maximum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PreviewInfo>;
+    ): Promise<PreviewInfoOutput>;
   };
   dryRunResult: {
     get_balance(
@@ -388,7 +395,9 @@ export class ExchangeContractAbi extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<bigint>;
 
-    get_pool_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
+    get_pool_info(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PoolInfoOutput>;
 
     get_add_liquidity_token_amount(
       eth_amount: BigNumberish,
@@ -414,7 +423,7 @@ export class ExchangeContractAbi extends Contract {
       min_tokens: BigNumberish,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<RemoveLiquidityInfo>;
+    ): Promise<RemoveLiquidityInfoOutput>;
 
     swap_with_minimum(
       min: BigNumberish,
@@ -431,12 +440,12 @@ export class ExchangeContractAbi extends Contract {
     get_swap_with_minimum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PreviewInfo>;
+    ): Promise<PreviewInfoOutput>;
 
     get_swap_with_maximum(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PreviewInfo>;
+    ): Promise<PreviewInfoOutput>;
   };
   simulateResult: {
     get_balance(
@@ -500,7 +509,9 @@ export class ExchangeContractAbi extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<bigint>;
 
-  get_pool_info(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PoolInfo>;
+  get_pool_info(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<PoolInfoOutput>;
 
   get_add_liquidity_token_amount(
     eth_amount: BigNumberish,
@@ -526,7 +537,7 @@ export class ExchangeContractAbi extends Contract {
     min_tokens: BigNumberish,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<RemoveLiquidityInfo>;
+  ): Promise<RemoveLiquidityInfoOutput>;
 
   swap_with_minimum(
     min: BigNumberish,
@@ -543,10 +554,10 @@ export class ExchangeContractAbi extends Contract {
   get_swap_with_minimum(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<PreviewInfo>;
+  ): Promise<PreviewInfoOutput>;
 
   get_swap_with_maximum(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<PreviewInfo>;
+  ): Promise<PreviewInfoOutput>;
 }
