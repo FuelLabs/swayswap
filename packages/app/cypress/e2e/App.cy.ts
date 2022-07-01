@@ -76,8 +76,9 @@ describe('End-to-end Test: 😁 Happy Path', () => {
         cy.get('[role=menu').type('{enter}');
         cy.getByAriaLabel('Coin from input').type('0.1');
 
+        // make sure loading preview output box shows up
+        cy.getByAriaLabel('Preview Value Loading');
         // make sure preview output box shows up
-        cy.contains('Swap');
         cy.getByAriaLabel('Preview Swap Output');
 
         // execute swap operation

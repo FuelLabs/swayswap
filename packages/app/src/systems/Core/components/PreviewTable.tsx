@@ -1,16 +1,37 @@
 import cx from "classnames";
 import type { ReactNode } from "react";
+import ContentLoader from "react-content-loader";
 
 type TableItemProps = {
   title: ReactNode;
   value: ReactNode;
   className?: string;
+  loading?: boolean;
 };
 
-export const PreviewItem = ({ title, value, className }: TableItemProps) => (
-  <div className={cx("flex", className)}>
+const PreviewValueLoading = () => (
+  <ContentLoader
+    speed={2}
+    width={90}
+    height={20}
+    backgroundColor="#2c3036"
+    foregroundColor="#515661"
+    className={cx("opacity-40")}
+    aria-label="Preview Value Loading"
+  >
+    <rect y="0" width="90" height="20" rx="3" />
+  </ContentLoader>
+);
+
+export const PreviewItem = ({
+  title,
+  value,
+  className,
+  loading,
+}: TableItemProps) => (
+  <div className={cx("flex justify-between", className)}>
     <div>{title}</div>
-    <div className="flex-auto text-right">{value}</div>
+    {loading ? <PreviewValueLoading /> : <div>{value}</div>}
   </div>
 );
 

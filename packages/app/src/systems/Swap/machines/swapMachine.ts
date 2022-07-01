@@ -106,7 +106,7 @@ export const swapMachine =
             onDone: [
               {
                 actions: 'setBalances',
-                target: 'fetchingResources',
+                target: 'validatingInputs',
               },
             ],
             onError: [
@@ -115,7 +115,14 @@ export const swapMachine =
               },
             ],
           },
-          tags: 'loading',
+          tags: 'loadingBalance',
+        },
+        validatingInputs: {
+          always: [
+            INVALID_STATES.NO_COIN_SELECTED,
+            INVALID_STATES.NO_AMOUNT,
+            { target: 'fetchingResources' },
+          ],
         },
         fetchingResources: {
           tags: 'loading',

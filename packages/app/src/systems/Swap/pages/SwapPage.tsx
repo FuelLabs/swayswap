@@ -3,6 +3,7 @@ import { MdSwapCalls } from "react-icons/md";
 
 import { PricePerToken, SwapPreview } from "../components";
 import { SwapWidget } from "../components/SwapWidget";
+import { useSwap } from "../hooks/useSwap";
 import { useSwapButton } from "../hooks/useSwapButton";
 import { useSwapPreview } from "../hooks/useSwapPreview";
 
@@ -12,6 +13,7 @@ import { Button, Card } from "~/systems/UI";
 export function SwapPage() {
   const button = useSwapButton();
   const preview = useSwapPreview();
+  const { state } = useSwap();
 
   return (
     <MainLayout>
@@ -22,7 +24,7 @@ export function SwapPage() {
         </Card.Title>
         <SwapWidget />
         <AnimatePresence>
-          {preview.hasPreview && (
+          {(state.isLoading || preview.hasPreview) && (
             <motion.div
               transition={{ duration: 0.4 }}
               initial={{ opacity: 0 }}

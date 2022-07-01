@@ -10,9 +10,6 @@ import { useSwapContext } from "./useSwap";
 import { safeBigInt } from "~/systems/Core";
 
 const selectors = {
-  hasPreview: (state: SwapMachineState) => {
-    return !state.hasTag("loading") && state.context.previewInfo;
-  },
   coinFrom: ({ context: ctx }: SwapMachineState) => {
     return {
       symbol: ctx.coinFrom?.symbol || "",
@@ -32,7 +29,6 @@ const selectors = {
 
 export function usePricePerToken() {
   const { service } = useSwapContext();
-  const hasPreview = useSelector(service, selectors.hasPreview);
   const coinFrom = useSelector(service, selectors.coinFrom);
   const coinTo = useSelector(service, selectors.coinTo);
   const isFrom = useSelector(service, selectors.isFrom);
@@ -48,7 +44,6 @@ export function usePricePerToken() {
   }
 
   return {
-    hasPreview,
     pricePerToken,
     onToggleAssets,
     assetFrom,
