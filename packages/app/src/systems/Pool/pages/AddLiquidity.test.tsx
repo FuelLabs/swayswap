@@ -192,9 +192,6 @@ describe("Add Liquidity", () => {
     const submitBtn = await screen.findByText(/Create liquidity/);
     expect(submitBtn).toBeInTheDocument();
     await user.click(submitBtn);
-
-    const successFeedback = await screen.findByText(/New pool created/i);
-    expect(successFeedback).toBeInTheDocument();
   });
 
   it("should show '0.' if typed only '.' in the input", async () => {
