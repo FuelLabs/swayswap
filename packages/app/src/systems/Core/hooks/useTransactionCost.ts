@@ -9,23 +9,29 @@ import { useEthBalance } from './useEthBalance';
 
 type ContractCallFuncPromise = () => Promise<ContractCall | ContractCall[]>;
 type ContractCallFunc = () => ContractCall | ContractCall[];
+type UseTransactionCost = TransactionCost & {
+  isLoading: boolean;
+};
 
 export function useTransactionCost(
   queryKey: unknown[],
   request: ContractCallFunc | ContractCallFuncPromise,
   options?: Omit<UseQueryOptions<TransactionCost>, 'queryKey' | 'queryFn'>
-) {
+): UseTransactionCost {
   const ethBalance = useEthBalance();
 
   if (Array.isArray(queryKey)) {
     queryKey.push(ethBalance.formatted);
   }
 
-  const { data } = useQuery<TransactionCost>(
+  const { data, isLoading } = useQuery<TransactionCost>(
     queryKey,
     async () => getTransactionCost(await request()),
     options
   );
 
-  return data || emptyTransactionCost();
+  return {
+    ...(data || emptyTransactionCost()),
+    isLoading,
+  };
 }

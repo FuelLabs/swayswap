@@ -166,7 +166,7 @@ describe("Add Liquidity", () => {
     expect(submitBtn).toBeInTheDocument();
   });
 
-  it("should be able to create liquidity", async () => {
+  it("Should be able to create liquidity", async () => {
     jest.unmock("../hooks/useUserPositions.ts");
 
     await faucet(wallet);

@@ -68,7 +68,7 @@ export function AddLiquidity() {
 
   const {
     mutation: addLiquidityMutation,
-    networkFee,
+    txCost,
     errorsCreatePull,
   } = useAddLiquidity({
     fromInput,
@@ -121,6 +121,12 @@ export function AddLiquidity() {
     setToInitialAmount(toInput.amount);
   }, [fromInput.amount, toInput.amount]);
 
+  const shouldDisableAddButton =
+    !!errorsCreatePull.length ||
+    addLiquidityMutation.isLoading ||
+    txCost.isLoading ||
+    !txCost.total;
+
   return (
     <Card className="max-w-[450px]">
       <Card.Title>
@@ -151,7 +157,7 @@ export function AddLiquidity() {
       <AddLiquidityPreview
         poolInfo={poolInfo}
         fromInput={fromInput}
-        networkFee={networkFee}
+        networkFee={txCost.fee}
       />
       <AddLiquidityPoolPrice
         coinFrom={coinFrom}
@@ -160,7 +166,7 @@ export function AddLiquidity() {
       />
       <Button
         aria-label="Add Liquidity Button"
-        isDisabled={!!errorsCreatePull.length || addLiquidityMutation.isLoading}
+        isDisabled={shouldDisableAddButton}
         isFull
         size="lg"
         variant="primary"

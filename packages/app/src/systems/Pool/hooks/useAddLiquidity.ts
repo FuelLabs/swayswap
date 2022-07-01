@@ -34,20 +34,23 @@ export function useAddLiquidity({
   const { poolRatio } = useUserPositions();
   const successMsg = poolRatio ? 'Added liquidity to the pool.' : 'New pool created.';
 
-  const txCost = useTransactionCost([PoolQueries.AddLiquidityNetworkFee], async () => {
-    const deadline = await getDeadline(contract);
-    return [
-      contract.prepareCall.deposit({
-        forward: [1, coinFrom.assetId],
-      }),
-      contract.prepareCall.deposit({
-        forward: [1, coinTo.assetId],
-      }),
-      contract.prepareCall.add_liquidity(1, deadline, {
-        variableOutputs: 2,
-      }),
-    ];
-  });
+  const txCost = useTransactionCost(
+    [PoolQueries.AddLiquidityNetworkFee, fromInput.amount?.toString(), toInput.amount?.toString()],
+    async () => {
+      const deadline = await getDeadline(contract);
+      return [
+        contract.prepareCall.deposit({
+          forward: [fromInput.amount || 1, coinFrom.assetId],
+        }),
+        contract.prepareCall.deposit({
+          forward: [toInput.amount || 1, coinTo.assetId],
+        }),
+        contract.prepareCall.add_liquidity(1, deadline, {
+          variableOutputs: 2,
+        }),
+      ];
+    }
+  );
 
   useEffect(() => {
     fromInput.setGasFee(txCost.fee);
@@ -84,7 +87,7 @@ export function useAddLiquidity({
         }
       );
       const response = await contract.wallet!.sendTransaction(transactionRequest);
-      const result = response.waitForResult();
+      const result = await response.waitForResult();
 
       return result;
     },
@@ -154,6 +157,6 @@ export function useAddLiquidity({
   return {
     mutation,
     errorsCreatePull,
-    networkFee: txCost.fee,
+    txCost,
   };
 }

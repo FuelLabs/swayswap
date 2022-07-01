@@ -1,44 +1,38 @@
 import type { Wallet } from 'fuels';
 
-import { CONTRACT_ID, DEADLINE, DECIMAL_UNITS } from '~/config';
-import { parseUnits, toBigInt } from '~/systems/Core';
+import { CONTRACT_ID, DECIMAL_UNITS } from '~/config';
+import { getDeadline, parseUnits } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import { ExchangeContractAbi__factory } from '~/types/contracts';
 
-function toAmountWei(amount: string) {
+function parseToBigInt(amount: string) {
   return parseUnits(amount, DECIMAL_UNITS).toBigInt();
 }
 
 export async function addLiquidity(
   wallet: Wallet,
-  fromAmountEth: string,
-  toAmountEth: string,
+  fromAmount: string,
+  toAmount: string,
   fromAsset: string,
   toAsset: string
 ) {
   const contract = ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
-  const res1 = await contract.submitResult.deposit(
+  const deadline = await getDeadline(contract);
+  const [, , result] = await contract.submitMulticall(
+    [
+      contract.prepareCall.deposit({
+        forward: [parseToBigInt(fromAmount), fromAsset],
+      }),
+      contract.prepareCall.deposit({
+        forward: [parseToBigInt(toAmount), toAsset],
+      }),
+      contract.prepareCall.add_liquidity(1, deadline, {
+        variableOutputs: 2,
+      }),
+    ],
     getOverrides({
-      forward: [toAmountWei(fromAmountEth), fromAsset],
-      gasLimit: toBigInt(30000),
+      gasLimit: 20000000,
     })
   );
-  // Deposit coins to
-  const res2 = await contract.submitResult.deposit(
-    getOverrides({
-      forward: [toAmountWei(toAmountEth), toAsset],
-      gasLimit: toBigInt(30000),
-    })
-  );
-  // Create liquidity pool
-  const res3 = await contract.submitResult.add_liquidity(
-    1,
-    DEADLINE,
-    getOverrides({
-      variableOutputs: 2,
-      gasLimit: toBigInt(1500000),
-    })
-  );
-
-  return [res1, res2, res3];
+  return result;
 }
