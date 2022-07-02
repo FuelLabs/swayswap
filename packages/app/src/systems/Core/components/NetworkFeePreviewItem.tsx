@@ -6,8 +6,10 @@ import type { Maybe } from "~/types";
 
 export function NetworkFeePreviewItem({
   networkFee,
+  loading,
 }: {
   networkFee?: Maybe<bigint>;
+  loading?: boolean;
 }) {
   if (!networkFee) return null;
 
@@ -16,6 +18,7 @@ export function NetworkFeePreviewItem({
       className="text-gray-300"
       title={`Network Fee`}
       value={`~ ${parseToFormattedNumber(networkFee)} ETH`}
+      loading={loading}
     />
   );
 }

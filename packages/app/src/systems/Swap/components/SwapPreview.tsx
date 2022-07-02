@@ -44,7 +44,7 @@ export function SwapPreview() {
           value={`${preview.inputAmount} ${inputSymbol}`}
           loading={isLoading}
         />
-        <NetworkFeePreviewItem networkFee={txCost?.fee} />
+        <NetworkFeePreviewItem networkFee={txCost?.fee} loading={isLoading} />
       </PreviewTable>
     </div>
   );
