@@ -5,6 +5,7 @@ import { assign, createMachine, InterpreterFrom, StateFrom } from 'xstate';
 import type { SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 import {
+  calculateMaxBalanceToSwap,
   createAmount,
   hasEnoughBalance,
   hasEthForNetworkFee,
@@ -15,7 +16,7 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import { handleError, isCoinEth, safeBigInt, toNumber, ZERO } from '~/systems/Core';
+import { handleError, isCoinEth, safeBigInt, toNumber } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
@@ -399,10 +400,7 @@ export const swapMachine =
         }),
         setMaxValue: assign((ctx, { data: { direction } }) => {
           const isFrom = direction === FROM_TO;
-          const balance = safeBigInt(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
-          const networkFee = safeBigInt(ctx.txCost?.fee);
-          const nextValue = balance > ZERO ? balance - networkFee : balance;
-          const amount = createAmount(nextValue);
+          const amount = calculateMaxBalanceToSwap({ direction, ctx });
 
           return {
             ...ctx,

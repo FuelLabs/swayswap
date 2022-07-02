@@ -12,6 +12,7 @@ export const CoinBalance = ({
   showBalance = true,
   showMaxButton = true,
   onSetMaxBalance,
+  isMaxButtonDisabled,
 }: CoinBalanceProps) => {
   const { data: balances } = useBalances({ enabled: true });
 
@@ -42,6 +43,7 @@ export const CoinBalance = ({
             onPress={onSetMaxBalance}
             className="text-xs py-0 px-1 h-auto bg-primary-800/60 text-primary-500 hover:bg-primary-800"
             variant="ghost"
+            isDisabled={isMaxButtonDisabled}
           >
             Max
           </Button>
