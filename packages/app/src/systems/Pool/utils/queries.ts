@@ -7,6 +7,7 @@ import { getOverrides } from '~/systems/Core/utils/gas';
 
 export enum PoolQueries {
   RemoveLiquidityNetworkFee = 'RemoveLiquidity-networkFee',
+  AddLiquidityNetworkFee = 'AddLiquidity-networkFee',
 }
 
 export async function prepareRemoveLiquidity(contract: Contract) {

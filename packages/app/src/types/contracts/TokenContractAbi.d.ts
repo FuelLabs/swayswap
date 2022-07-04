@@ -19,11 +19,11 @@ import type {
 
 export type AddressInput = { value: string };
 
-export type Address = { value: string };
+export type AddressOutput = { value: string };
 
 export type ContractIdInput = { value: string };
 
-export type ContractId = { value: string };
+export type ContractIdOutput = { value: string };
 
 interface TokenContractAbiInterface extends Interface {
   functions: {

@@ -103,15 +103,18 @@ export function getTotalFee(gasUsed: bigint, byteSize: bigint, chainConfig?: Cha
   return getPriceByFactor(gasFee, chainConfig) + getPriceByFactor(byteFee, chainConfig);
 }
 
-export async function getTransactionCost(contractCall: ContractCall): Promise<TransactionCost> {
+export async function getTransactionCost(
+  contractCalls: ContractCall | ContractCall[]
+): Promise<TransactionCost> {
   try {
-    const request = await buildTransaction(contractCall, { fundTransaction: true });
-    // Set gasPrice and bytePrice to ZERO to
-    // measure gasUsed without needing to have balance
-    request.gasPrice = ZERO;
-    request.bytePrice = ZERO;
+    const calls = Array.isArray(contractCalls) ? contractCalls : [contractCalls];
     const chainConfig = await getChainConfig();
-    request.gasLimit = toBigInt(chainConfig.chain.consensusParameters.maxGasPerTx);
+    const request = await buildTransaction(calls, {
+      gasPrice: 0,
+      bytePrice: 0,
+      gasLimit: toBigInt(chainConfig.chain.consensusParameters.maxGasPerTx),
+      fundTransaction: true,
+    });
     const provider = new Provider(FUEL_PROVIDER_URL);
     const dryRunResult = await provider.call(request);
     const gasUsed = getGasUsed(dryRunResult);
@@ -135,6 +138,7 @@ export function getOverrides(overrides: Overrides) {
   const ret: Overrides = {
     gasPrice: GAS_PRICE,
     bytePrice: BYTE_PRICE,
+    gasLimit: overrides.gasLimit || 10000000,
     transformRequest: async (request) => {
       request.gasLimit -= transactionByteSize(request);
       return request;
