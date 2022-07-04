@@ -6,8 +6,8 @@ import type { TransactionCost } from '../Core/utils/gas';
 import type { Coin, Maybe } from '~/types';
 import type {
   ExchangeContractAbi,
-  PoolInfo,
-  PreviewInfo,
+  PoolInfoOutput,
+  PreviewInfoOutput,
 } from '~/types/contracts/ExchangeContractAbi';
 
 export type CoinAmount = {
@@ -35,8 +35,8 @@ export type SwapMachineContext = {
   amountLessSlippage?: Maybe<CoinAmount>;
   fromAmount?: Maybe<CoinAmount>;
   toAmount?: Maybe<CoinAmount>;
-  poolInfo?: Maybe<PoolInfo>;
+  poolInfo?: Maybe<PoolInfoOutput>;
   txCost?: TransactionCost;
   slippage?: number;
-  previewInfo?: Maybe<PreviewInfo>;
+  previewInfo?: Maybe<PreviewInfoOutput>;
 };

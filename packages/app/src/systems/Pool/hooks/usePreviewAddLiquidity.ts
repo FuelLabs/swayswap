@@ -10,11 +10,11 @@ import {
   toNumber,
   ZERO,
 } from '~/systems/Core/utils/math';
-import type { PoolInfo } from '~/types/contracts/ExchangeContractAbi';
+import type { PoolInfoOutput } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UsePreviewAddLiquidityProps {
   fromInput: UseCoinInput;
-  poolInfo?: PoolInfo;
+  poolInfo?: PoolInfoOutput;
 }
 
 export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewAddLiquidityProps) {
