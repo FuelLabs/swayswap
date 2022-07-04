@@ -46,7 +46,7 @@ export const CoinBalance = ({
                 ? ""
                 : "bg-primary-800/60 text-primary-500 hover:bg-primary-800"
             }`}
-            variant="ghost"
+            variant="primary"
             isDisabled={isMaxButtonDisabled}
           >
             Max
