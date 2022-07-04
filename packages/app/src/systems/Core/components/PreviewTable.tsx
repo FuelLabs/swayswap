@@ -1,6 +1,7 @@
 import cx from "classnames";
 import type { ReactNode } from "react";
-import ContentLoader from "react-content-loader";
+
+import { SkeletonLoader } from "~/systems/UI";
 
 type TableItemProps = {
   title: ReactNode;
@@ -10,17 +11,9 @@ type TableItemProps = {
 };
 
 const PreviewValueLoading = () => (
-  <ContentLoader
-    speed={2}
-    width={90}
-    height={20}
-    backgroundColor="#2c3036"
-    foregroundColor="#515661"
-    className={cx("opacity-40")}
-    aria-label="Preview Value Loading"
-  >
+  <SkeletonLoader width={90} height={20} aria-label="Preview Value Loading">
     <rect y="0" width="90" height="20" rx="3" />
-  </ContentLoader>
+  </SkeletonLoader>
 );
 
 export const PreviewItem = ({

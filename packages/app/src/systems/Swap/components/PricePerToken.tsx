@@ -1,11 +1,10 @@
 import cx from "classnames";
-import ContentLoader from "react-content-loader";
 import { AiOutlineSwap } from "react-icons/ai";
 
 import { usePricePerToken } from "../hooks/usePricePerToken";
 import { useSwap } from "../hooks/useSwap";
 
-import { Button } from "~/systems/UI";
+import { Button, SkeletonLoader } from "~/systems/UI";
 
 const style = {
   wrapper: `flex items-center gap-3 my-4 px-2 text-sm text-gray-400`,
@@ -13,16 +12,13 @@ const style = {
 };
 
 const ToPriceLoading = () => (
-  <ContentLoader
-    speed={2}
+  <SkeletonLoader
     width={50}
     height={18}
-    backgroundColor="#2c3036"
-    foregroundColor="#515661"
     className={cx(["opacity-40", "inline"])}
   >
     <rect y="0" width="90" height="20" rx="3" />
-  </ContentLoader>
+  </SkeletonLoader>
 );
 
 export function PricePerToken() {
