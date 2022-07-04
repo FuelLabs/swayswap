@@ -1,3 +1,4 @@
+import cx from "classnames";
 import { useMemo } from "react";
 
 import type { CoinBalanceProps } from "../hooks";
@@ -41,11 +42,10 @@ export const CoinBalance = ({
             aria-label="Set Maximun Balance"
             size="sm"
             onPress={onSetMaxBalance}
-            className={`text-xs py-0 px-1 h-auto ${
-              isMaxButtonDisabled
-                ? ""
-                : "bg-primary-800/60 text-primary-500 hover:bg-primary-800"
-            }`}
+            className={cx(`text-xs py-0 px-1 h-auto`, {
+              "bg-primary-800/60 text-primary-500 hover:bg-primary-800":
+                !isMaxButtonDisabled,
+            })}
             variant="primary"
             isDisabled={isMaxButtonDisabled}
           >
