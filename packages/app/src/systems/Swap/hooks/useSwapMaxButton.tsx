@@ -3,8 +3,10 @@ import { useSelector } from "@xstate/react";
 import type { SwapMachineState } from "../machines/swapMachine";
 import type { SwapMachineContext } from "../types";
 import { SwapDirection } from "../types";
+import { calculateMaxBalanceToSwap } from "../utils";
 
 import { useSwapContext } from "./useSwap";
+import { useSwapCoinInput } from "./useSwapCoinInput";
 
 import type { CoinBalanceProps, CoinSelectorProps } from "~/systems/Core";
 import { safeBigInt } from "~/systems/Core";
@@ -35,10 +37,13 @@ const selectors = {
     const balance = getRightBalance(dir, state.context);
     return balance && balance > 0 && ethBalance > txCost.fee;
   },
+  getMaxBalanceToSwap: (dir: SwapDirection) => (state: SwapMachineState) =>
+    calculateMaxBalanceToSwap({ direction: dir, ctx: state.context }),
 };
 
 export function useSwapMaxButton(direction: SwapDirection): CoinSelectorProps {
   const { service, send } = useSwapContext();
+  const { value: coinAmount } = useSwapCoinInput(direction);
   const isFrom = direction === SwapDirection.fromTo;
   const coinSelector = isFrom ? selectors.coinFrom : selectors.coinTo;
   const coin = useSelector(service, coinSelector);
@@ -46,6 +51,10 @@ export function useSwapMaxButton(direction: SwapDirection): CoinSelectorProps {
   const hasBalance = useSelector(service, selectors.hasBalance(direction));
   const maxButtonSelector = selectors.showMaxButton(direction);
   const showMaxButton = useSelector(service, maxButtonSelector);
+  const maxBalanceToSwap = useSelector(
+    service,
+    selectors.getMaxBalanceToSwap(direction)
+  );
 
   return {
     coin,
@@ -55,5 +64,6 @@ export function useSwapMaxButton(direction: SwapDirection): CoinSelectorProps {
     onSetMaxBalance: () => {
       send("SET_MAX_VALUE", { data: { direction } });
     },
+    isMaxButtonDisabled: maxBalanceToSwap.value === coinAmount,
   } as CoinBalanceProps;
 }

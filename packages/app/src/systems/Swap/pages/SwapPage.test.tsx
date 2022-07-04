@@ -25,10 +25,15 @@ async function findSwapBtn() {
   return waitFor(() => screen.findByLabelText(/swap button/i));
 }
 
-async function clickOnMaxBalance() {
+async function findMaxBalanceBtn(input: "from" | "to" = "from") {
+  const button = await screen.findAllByLabelText(/Set Maximun Balance/i);
+  return button[input === "from" ? 0 : 1];
+}
+
+async function clickOnMaxBalance(input: "from" | "to" = "from") {
   return waitFor(async () => {
-    const button = await screen.findAllByLabelText(/Set Maximun Balance/i);
-    fireEvent.click(button[0]);
+    const button = await findMaxBalanceBtn(input);
+    fireEvent.click(button);
   });
 }
 
@@ -221,6 +226,38 @@ describe("SwapPage", () => {
         const coinTo = screen.getByLabelText(/Coin to input/i);
         const value = parseFloat(coinTo.getAttribute("value") || "0");
         expect(value).toBeGreaterThan(1);
+      });
+    });
+
+    it("should disable max button after setting max FROM balance", async () => {
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+
+      await clickOnMaxBalance();
+
+      await waitFor(async () => {
+        const submitBtn = await findSwapBtn();
+        expect(submitBtn.textContent).toMatch(/Loading/i);
+      });
+
+      await waitFor(async () => {
+        const maxBalanceBtn = await findMaxBalanceBtn();
+        expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
+      });
+    });
+
+    it("should disable max button after setting max FROM balance", async () => {
+      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+
+      await clickOnMaxBalance("to");
+
+      await waitFor(async () => {
+        const submitBtn = await findSwapBtn();
+        expect(submitBtn.textContent).toMatch(/Loading/i);
+      });
+
+      await waitFor(async () => {
+        const maxBalanceBtn = await findMaxBalanceBtn("to");
+        expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
       });
     });
   });
