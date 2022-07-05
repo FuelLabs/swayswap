@@ -116,7 +116,7 @@ export const swapMachine =
               },
             ],
           },
-          tags: 'loading',
+          tags: 'loadingBalance',
         },
         fetchingResources: {
           tags: 'loading',

@@ -9,7 +9,7 @@ export * from "./Link";
 export * from "./Menu";
 export * from "./NumberInput";
 export * from "./Popover";
-export * from "./Skeleton";
+export * from "./SkeletonLoader";
 export * from "./Spinner";
 export * from "./Toaster";
 export * from "./Tooltip";

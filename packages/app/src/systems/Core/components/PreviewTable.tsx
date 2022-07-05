@@ -1,16 +1,30 @@
 import cx from "classnames";
 import type { ReactNode } from "react";
 
+import { SkeletonLoader } from "~/systems/UI";
+
 type TableItemProps = {
   title: ReactNode;
   value: ReactNode;
   className?: string;
+  loading?: boolean;
 };
 
-export const PreviewItem = ({ title, value, className }: TableItemProps) => (
-  <div className={cx("flex", className)}>
+const PreviewValueLoading = () => (
+  <SkeletonLoader width={90} height={20} aria-label="Preview Value Loading">
+    <rect y="0" width="90" height="20" rx="3" />
+  </SkeletonLoader>
+);
+
+export const PreviewItem = ({
+  title,
+  value,
+  className,
+  loading,
+}: TableItemProps) => (
+  <div className={cx("flex justify-between", className)}>
     <div>{title}</div>
-    <div className="flex-auto text-right">{value}</div>
+    {loading ? <PreviewValueLoading /> : <div>{value}</div>}
   </div>
 );
 

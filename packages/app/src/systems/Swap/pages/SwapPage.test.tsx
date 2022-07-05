@@ -209,13 +209,17 @@ describe("SwapPage", () => {
       const daiToEthRegexp = /(\d+)(\s)(DAI = )(\d+).((\s)|(\d+\s))ETH/i;
 
       pricePerToken = await screen.findByLabelText(/price per token/i);
-      expect(pricePerToken.textContent).toMatch(ethToDaiRegexp);
+      await waitFor(async () => {
+        expect(pricePerToken.textContent).toMatch(ethToDaiRegexp);
+      });
 
       const inverPriceBtn = await screen.findByLabelText(/invert token price/i);
       fireEvent.click(inverPriceBtn);
 
       pricePerToken = await screen.findByLabelText(/price per token/i);
-      expect(pricePerToken.textContent).toMatch(daiToEthRegexp);
+      await waitFor(async () => {
+        expect(pricePerToken.textContent).toMatch(daiToEthRegexp);
+      });
     });
 
     it("should set automatically coin to input based on coin from value", async () => {

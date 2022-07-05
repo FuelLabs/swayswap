@@ -15,7 +15,7 @@ export function SwapPreview() {
   const preview = useSwapPreview();
 
   const { slippage } = preview;
-  const { coinTo, coinFrom, direction, txCost } = state;
+  const { coinTo, coinFrom, direction, txCost, isLoading } = state;
 
   const isFrom = direction === SwapDirection.fromTo;
   const inputSymbol = isFrom ? coinTo?.symbol : coinFrom?.symbol;
@@ -32,16 +32,19 @@ export function SwapPreview() {
         <PreviewItem
           title={"You'll receive:"}
           value={`${preview.outputAmount} ${coinTo?.symbol}`}
+          loading={isLoading}
         />
         <PreviewItem
           title={"Price impact: "}
           value={`${preview.priceImpact}%`}
+          loading={isLoading}
         />
         <PreviewItem
           title={`${inputText} (${slippage?.formatted}):`}
           value={`${preview.inputAmount} ${inputSymbol}`}
+          loading={isLoading}
         />
-        <NetworkFeePreviewItem networkFee={txCost?.fee} />
+        <NetworkFeePreviewItem networkFee={txCost?.fee} loading={isLoading} />
       </PreviewTable>
     </div>
   );
