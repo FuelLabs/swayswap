@@ -146,7 +146,6 @@ export const swapMachine =
               ],
             },
             fetchingPoolInfo: {
-              tags: 'loadingPreview',
               invoke: {
                 src: 'fetchPoolRatio',
                 onDone: [
@@ -164,7 +163,6 @@ export const swapMachine =
               },
             },
             fetchingPreview: {
-              tags: 'loadingPreview',
               invoke: {
                 src: 'fetchPreview',
                 onDone: [
@@ -203,7 +201,7 @@ export const swapMachine =
           },
         },
         debouncing: {
-          tags: ['loading', 'loadingPreview'],
+          tags: 'loading',
           after: {
             '600': 'fetchingResources',
           },
@@ -483,8 +481,4 @@ export type SwapMachineState = StateFrom<SwapMachine>;
 
 export function isLoadingState(state: SwapMachineState) {
   return state.hasTag('loading');
-}
-
-export function isLoadingPreview(state: SwapMachineState) {
-  return state.hasTag('loadingPreview');
 }
