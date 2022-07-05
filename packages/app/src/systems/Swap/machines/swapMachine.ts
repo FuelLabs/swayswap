@@ -295,15 +295,16 @@ export const swapMachine =
         INPUT_CHANGE: [
           {
             actions: 'clearContext',
-            ...INVALID_STATES.NO_COIN_SELECTED,
-          },
-          {
-            actions: 'clearContext',
             cond: 'inputIsEmpty',
             target: '.invalid.withoutAmount',
           },
           {
             actions: 'setInputValue',
+            ...INVALID_STATES.NO_COIN_SELECTED,
+          },
+          {
+            actions: 'setInputValue',
+            cond: 'hasCoinsSelected',
             target: '.debouncing',
           },
         ],
@@ -449,6 +450,9 @@ export const swapMachine =
         },
         notHasCoinSelected: (ctx) => {
           return !ctx.coinFrom || !ctx.coinTo;
+        },
+        hasCoinsSelected: (ctx) => {
+          return ctx.coinFrom && ctx.coinTo;
         },
         notHasAmount: (ctx) => {
           return (
