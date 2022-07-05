@@ -69,6 +69,7 @@ export type CoinBalanceProps = {
   showBalance?: boolean;
   showMaxButton?: boolean;
   onSetMaxBalance?: () => void;
+  isMaxButtonDisabled?: boolean;
 };
 
 type DisplayType = 'input' | 'text';

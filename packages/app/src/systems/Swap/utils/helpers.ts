@@ -3,6 +3,7 @@ import { SwapDirection } from '../types';
 
 import { DECIMAL_UNITS } from '~/config';
 import { isCoinEth } from '~/systems/Core';
+import type { TransactionCost } from '~/systems/Core/utils/gas';
 import {
   ZERO,
   toNumber,
@@ -16,7 +17,7 @@ import {
   toBigInt,
   safeBigInt,
 } from '~/systems/Core/utils/math';
-import type { Maybe } from '~/types';
+import type { Coin, Maybe } from '~/types';
 
 export const ZERO_AMOUNT = { value: '', raw: ZERO };
 
@@ -151,4 +152,26 @@ export const hasEthForNetworkFee = (params: SwapMachineContext) => {
    * When coinFrom isn't ETH but you need to pay gas fee
    */
   return balance > txCostTotal;
+};
+
+export interface CalculateMaxBalanceToSwapParams {
+  direction: SwapDirection;
+  ctx: {
+    coinFrom?: Coin;
+    coinTo?: Coin;
+    coinFromBalance?: Maybe<bigint>;
+    coinToBalance?: Maybe<bigint>;
+    txCost?: TransactionCost;
+  };
+}
+
+export const calculateMaxBalanceToSwap = ({ direction, ctx }: CalculateMaxBalanceToSwapParams) => {
+  const isFrom = direction === SwapDirection.fromTo;
+
+  const shouldUseNetworkFee =
+    (isFrom && isCoinEth(ctx.coinFrom)) || (!isFrom && isCoinEth(ctx.coinTo));
+  const balance = safeBigInt(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
+  const networkFee = safeBigInt(ctx.txCost?.fee);
+  const nextValue = balance > ZERO && shouldUseNetworkFee ? balance - networkFee : balance;
+  return createAmount(nextValue);
 };
