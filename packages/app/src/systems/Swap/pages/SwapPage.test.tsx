@@ -50,6 +50,18 @@ async function fillCoinFromWithValue(value: string) {
   });
 }
 
+async function waitFinishLoading() {
+  await waitFor(async () => {
+    const submitBtn = await findSwapBtn();
+    expect(submitBtn.textContent).toMatch(/Loading/i);
+  });
+
+  await waitFor(async () => {
+    const submitBtn = await findSwapBtn();
+    expect(submitBtn.textContent).not.toMatch(/Loading/i);
+  });
+}
+
 describe("SwapPage", () => {
   let wallet: Wallet;
 
@@ -236,29 +248,21 @@ describe("SwapPage", () => {
     it("should disable max button after setting max FROM balance", async () => {
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
+      await waitFinishLoading();
       await clickOnMaxBalance();
-
-      await waitFor(async () => {
-        const submitBtn = await findSwapBtn();
-        expect(submitBtn.textContent).toMatch(/Loading/i);
-      });
-
+      await waitFinishLoading();
       await waitFor(async () => {
         const maxBalanceBtn = await findMaxBalanceBtn();
         expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
       });
     });
 
-    it("should disable max button after setting max FROM balance", async () => {
+    it("should disable max button after setting max TO balance", async () => {
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
+      await waitFinishLoading();
       await clickOnMaxBalance("to");
-
-      await waitFor(async () => {
-        const submitBtn = await findSwapBtn();
-        expect(submitBtn.textContent).toMatch(/Loading/i);
-      });
-
+      await waitFinishLoading();
       await waitFor(async () => {
         const maxBalanceBtn = await findMaxBalanceBtn("to");
         expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
