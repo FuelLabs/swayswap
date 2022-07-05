@@ -251,6 +251,7 @@ describe("SwapPage", () => {
       await waitFinishLoading();
       await clickOnMaxBalance();
       await waitFinishLoading();
+
       await waitFor(async () => {
         const maxBalanceBtn = await findMaxBalanceBtn();
         expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
@@ -263,6 +264,7 @@ describe("SwapPage", () => {
       await waitFinishLoading();
       await clickOnMaxBalance("to");
       await waitFinishLoading();
+
       await waitFor(async () => {
         const maxBalanceBtn = await findMaxBalanceBtn("to");
         expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
