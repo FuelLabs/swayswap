@@ -23,7 +23,7 @@ export const CoinBalance = ({
   }, [balances, coin?.assetId]);
 
   return (
-    <div className="flex items-center justify-end gap-2 mt-2 whitespace-nowrap">
+    <div className="flex items-center justify-end gap-2 mt-2 whitespace-nowrap min-h-[18px]">
       {showBalance && (
         <div
           className="text-xs text-gray-400"
