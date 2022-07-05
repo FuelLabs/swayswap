@@ -250,7 +250,6 @@ describe("SwapPage", () => {
 
       await waitFinishLoading();
       await clickOnMaxBalance();
-      await waitFinishLoading();
 
       await waitFor(async () => {
         const maxBalanceBtn = await findMaxBalanceBtn();
@@ -263,7 +262,6 @@ describe("SwapPage", () => {
 
       await waitFinishLoading();
       await clickOnMaxBalance("to");
-      await waitFinishLoading();
 
       await waitFor(async () => {
         const maxBalanceBtn = await findMaxBalanceBtn("to");
