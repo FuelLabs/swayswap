@@ -8,7 +8,11 @@ import type {
   SwapMachineService,
   SwapMachineState,
 } from "../machines/swapMachine";
-import { isLoadingState, swapMachine } from "../machines/swapMachine";
+import {
+  isLoadingPreview,
+  isLoadingState,
+  swapMachine,
+} from "../machines/swapMachine";
 import type { SwapMachineContext } from "../types";
 import { SwapDirection } from "../types";
 
@@ -24,6 +28,7 @@ import {
 
 const selectors = {
   isLoading: isLoadingState,
+  isLoadingOutput: isLoadingPreview,
   canSwap: (state: SwapMachineState) => state.hasTag("canSwap"),
   canInvertCoins: (state: SwapMachineState) => !state.hasTag("needSelectToken"),
   coinFrom: (state: SwapMachineState) => state.context.coinFrom,
@@ -73,6 +78,7 @@ export function useSwapContext() {
 export function useSwap() {
   const service = useSwapService();
   const isLoading = useSelector(service, selectors.isLoading);
+  const isLoadingOutput = useSelector(service, selectors.isLoadingOutput);
   const canSwap = useSelector(service, selectors.canSwap);
   const coinFrom = useSelector(service, selectors.coinFrom);
   const coinTo = useSelector(service, selectors.coinTo);
@@ -93,6 +99,7 @@ export function useSwap() {
     state: {
       canInvertCoins,
       isLoading,
+      isLoadingOutput,
       canSwap,
       coinFrom,
       coinTo,

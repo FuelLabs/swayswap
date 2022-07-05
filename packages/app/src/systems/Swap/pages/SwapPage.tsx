@@ -24,7 +24,7 @@ export function SwapPage() {
         </Card.Title>
         <SwapWidget />
         <AnimatePresence>
-          {(state.isLoading || preview.hasPreview) && (
+          {(state.isLoadingOutput || preview.hasPreview) && (
             <motion.div
               transition={{ duration: 0.4 }}
               initial={{ opacity: 0 }}

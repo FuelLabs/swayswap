@@ -107,7 +107,7 @@ export const swapMachine =
             onDone: [
               {
                 actions: 'setBalances',
-                target: 'validatingInputs',
+                target: 'fetchingResources',
               },
             ],
             onError: [
@@ -117,13 +117,6 @@ export const swapMachine =
             ],
           },
           tags: 'loadingBalance',
-        },
-        validatingInputs: {
-          always: [
-            INVALID_STATES.NO_COIN_SELECTED,
-            INVALID_STATES.NO_AMOUNT,
-            { target: 'fetchingResources' },
-          ],
         },
         fetchingResources: {
           tags: 'loading',
@@ -153,6 +146,7 @@ export const swapMachine =
               ],
             },
             fetchingPoolInfo: {
+              tags: 'loadingPreview',
               invoke: {
                 src: 'fetchPoolRatio',
                 onDone: [
@@ -170,6 +164,7 @@ export const swapMachine =
               },
             },
             fetchingPreview: {
+              tags: 'loadingPreview',
               invoke: {
                 src: 'fetchPreview',
                 onDone: [
@@ -208,7 +203,7 @@ export const swapMachine =
           },
         },
         debouncing: {
-          tags: 'loading',
+          tags: ['loading', 'loadingPreview'],
           after: {
             '600': 'fetchingResources',
           },
@@ -488,4 +483,8 @@ export type SwapMachineState = StateFrom<SwapMachine>;
 
 export function isLoadingState(state: SwapMachineState) {
   return state.hasTag('loading');
+}
+
+export function isLoadingPreview(state: SwapMachineState) {
+  return state.hasTag('loadingPreview');
 }
