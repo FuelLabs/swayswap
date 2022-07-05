@@ -452,7 +452,7 @@ export const swapMachine =
           return !ctx.coinFrom || !ctx.coinTo;
         },
         hasCoinsSelected: (ctx) => {
-          return ctx.coinFrom && ctx.coinTo;
+          return Boolean(ctx.coinFrom && ctx.coinTo);
         },
         notHasAmount: (ctx) => {
           return (
