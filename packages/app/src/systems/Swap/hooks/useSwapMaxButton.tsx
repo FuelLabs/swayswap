@@ -68,7 +68,7 @@ export function useSwapMaxButton(direction: SwapDirection): CoinSelectorProps {
     coin,
     gasFee,
     showBalance: Boolean(hasBalance),
-    showMaxButton: Boolean(hasBalance),
+    showMaxButton: Boolean(hasBalance) && isFrom,
     onSetMaxBalance: () => {
       send("SET_MAX_VALUE", { data: { direction } });
     },

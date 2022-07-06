@@ -256,17 +256,5 @@ describe("SwapPage", () => {
         expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
       });
     });
-
-    it("should disable max button after setting max TO balance", async () => {
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
-
-      await waitFinishLoading();
-      await clickOnMaxBalance("to");
-
-      await waitFor(async () => {
-        const maxBalanceBtn = await findMaxBalanceBtn("to");
-        expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
-      });
-    });
   });
 });
