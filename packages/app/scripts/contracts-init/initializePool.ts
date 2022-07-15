@@ -26,22 +26,23 @@ export async function initializePool(
     variableOutputs: 1,
   });
 
+  process.stdout.write('Initialize pool\n');
   const deadline = await wallet.provider.getBlockNumber();
-
-  process.stdout.write('Depositing ETH\n');
-  await exchangeContract.submit.deposit({
-    forward: [ethAmount, NativeAssetId],
-    ...overrides,
-  });
-  process.stdout.write('Depositing Token\n');
-  await exchangeContract.submit.deposit({
-    forward: [tokenAmount, tokenContract.id],
-    ...overrides,
-  });
-  process.stdout.write('Add liquidity\n');
-  await exchangeContract.submit.add_liquidity(1, deadline + BigInt(1000), {
-    ...overrides,
-    variableOutputs: 2,
-    gasLimit: 100_000_000,
-  });
+  await exchangeContract.submitMulticall(
+    [
+      exchangeContract.prepareCall.deposit({
+        forward: [ethAmount, NativeAssetId],
+      }),
+      exchangeContract.prepareCall.deposit({
+        forward: [tokenAmount, tokenContract.id],
+      }),
+      exchangeContract.prepareCall.add_liquidity(1, deadline + BigInt(1000), {
+        variableOutputs: 2,
+      }),
+    ],
+    {
+      ...overrides,
+      gasLimit: 100_000_000,
+    }
+  );
 }
