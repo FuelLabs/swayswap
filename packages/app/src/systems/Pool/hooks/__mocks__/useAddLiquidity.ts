@@ -6,7 +6,7 @@ import { getOverrides } from '~/systems/Core/utils/gas';
 import { ExchangeContractAbi__factory } from '~/types/contracts';
 
 function parseToBigInt(amount: string) {
-  return parseUnits(amount, DECIMAL_UNITS).toBigInt();
+  return parseUnits(amount, DECIMAL_UNITS);
 }
 
 export async function addLiquidity(
