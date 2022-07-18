@@ -39,7 +39,7 @@ export function parseInputValueBigInt(value: string) {
 }
 
 export function toBigInt(number: BigNumberish) {
-  return BigInt(number || '0');
+  return BigInt(number);
 }
 
 export function formatUnits(number: BigNumberish, precision: number = DECIMAL_UNITS): string {
