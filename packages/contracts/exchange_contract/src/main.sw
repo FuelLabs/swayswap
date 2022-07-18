@@ -27,7 +27,7 @@ const ETH_ID = 0x000000000000000000000000000000000000000000000000000000000000000
 
 /// Contract ID of the token on the other side of the pool.
 /// Modify at compile time for different pool.
-const TOKEN_ID = 0x9a92f01a55c59e8a3a7860acac1264a1015470e6c868b2ad6e148f4ba7757f73;
+const TOKEN_ID = 0xeb4f49ab76e1866ba27bdc9392373ad868d1efc88bbcd0eb67c8b066308a060d;
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
@@ -38,13 +38,9 @@ const LIQUIDITY_MINER_FEE = 333;
 // Storage declarations
 ////////////////////////////////////////
 
-/// Storage delimited
-const S_DEPOSITS: b256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
-
 storage {
-    lp_token_supply: u64,
-    deposits: StorageMap<(Address,
-    ContractId), u64>, 
+    lp_token_supply: u64 = 0,
+    deposits: StorageMap<(Address, ContractId), u64> = StorageMap {},
 }
 
 ////////////////////////////////////////
@@ -75,7 +71,7 @@ fn calculate_amount_with_fee(amount: u64) -> u64 {
 
 fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
     let calculation = (~U128::from(0, a) * ~U128::from(0, b));
-    let result_wrapped = (calculation / ~U128::from(0, c)).to_u64();
+    let result_wrapped = (calculation / ~U128::from(0, c)).as_u64();
 
     // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
     match result_wrapped {
@@ -89,7 +85,7 @@ fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -
     let input_amount_with_fee: u64 = calculate_amount_with_fee(input_amount);
     let numerator = ~U128::from(0, input_amount_with_fee) * ~U128::from(0, output_reserve);
     let denominator = ~U128::from(0, input_reserve) + ~U128::from(0, input_amount_with_fee);
-    let result_wrapped = (numerator / denominator).to_u64();
+    let result_wrapped = (numerator / denominator).as_u64();
     // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
     match result_wrapped {
         Result::Ok(inner_value) => inner_value, _ => revert(0), 
@@ -101,7 +97,7 @@ fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64)
     assert(input_reserve > 0 && output_reserve > 0);
     let numerator = ~U128::from(0, input_reserve) * ~U128::from(0, output_amount);
     let denominator = ~U128::from(0, calculate_amount_with_fee(output_reserve - output_amount));
-    let result_wrapped = (numerator / denominator).to_u64();
+    let result_wrapped = (numerator / denominator).as_u64();
     if denominator > numerator {
         // Emulate Infinity Value
         ~u64::max()
