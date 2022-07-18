@@ -1,14 +1,13 @@
-import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
 import * as ethers from '@ethersproject/units';
 import { Decimal } from 'decimal.js';
+import type { BigNumberish } from 'fuels';
 
 import { DECIMAL_UNITS, FIXED_UNITS } from '~/config';
 import type { Maybe } from '~/types';
 
 export const ZERO = toBigInt(0);
 
-export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS).toBigInt();
+export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS);
 // Max value supported
 // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
 export const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
@@ -24,11 +23,11 @@ export function toFixed(number: Maybe<BigNumberish>, maxDecimals: number = FIXED
 }
 
 export function toNumber(number: Maybe<BigNumberish>) {
-  return BigNumber.from(number || 0).toNumber();
+  return Number(BigInt(number || '0'));
 }
 
 export function parseUnits(number: string, precision: number = DECIMAL_UNITS) {
-  return ethers.parseUnits(number, precision);
+  return ethers.parseUnits(number, precision).toBigInt();
 }
 
 export function parseInputValueBigInt(value: string) {
@@ -40,7 +39,7 @@ export function parseInputValueBigInt(value: string) {
 }
 
 export function toBigInt(number: BigNumberish) {
-  return BigNumber.from(number).toBigInt();
+  return BigInt(number);
 }
 
 export function formatUnits(number: BigNumberish, precision: number = DECIMAL_UNITS): string {

@@ -5,7 +5,7 @@ import * as useBalances from '../useBalances';
 
 import { DECIMAL_UNITS } from '~/config';
 
-const FAKE_BALANCE = [{ amount: parseUnits('3', DECIMAL_UNITS).toBigInt(), assetId: COIN_ETH }];
+const FAKE_BALANCE = [{ amount: parseUnits('3', DECIMAL_UNITS), assetId: COIN_ETH }];
 
 export function mockUseBalances(balances?: CoinQuantity[]) {
   const mock = {
