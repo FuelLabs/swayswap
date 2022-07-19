@@ -85,6 +85,15 @@ describe('End-to-end Test: 😁 Happy Path', () => {
         cy.getByAriaLabel('Swap button').click();
         cy.contains('Swap made successfully!');
 
+        // validate that comma can be used as decimal separator
+        cy.getByAriaLabel('Coin from input').type('0,2');
+        cy.getByAriaLabel('Coin from input')
+          .get('input')
+          .should(($input) => {
+            const val = $input.val();
+            expect(val).to.equal('0.2');
+          });
+
         // validate remove liquidity
         cy.contains('button', 'Pool').click();
         cy.contains('button', 'Remove liquidity').click();
