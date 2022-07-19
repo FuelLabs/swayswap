@@ -2,11 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ExchangeContractAbi } from './ExchangeContractAbi';
-export type { ExchangeContractStorageSlots } from './ExchangeContractStorageSlots';
 export type { TokenContractAbi } from './TokenContractAbi';
-export type { TokenContractStorageSlots } from './TokenContractStorageSlots';
 
 export { ExchangeContractAbi__factory } from './factories/ExchangeContractAbi__factory';
-export { ExchangeContractStorageSlots__factory } from './factories/ExchangeContractStorageSlots__factory';
 export { TokenContractAbi__factory } from './factories/TokenContractAbi__factory';
-export { TokenContractStorageSlots__factory } from './factories/TokenContractStorageSlots__factory';
