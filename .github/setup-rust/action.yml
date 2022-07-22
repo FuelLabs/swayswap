@@ -5,7 +5,7 @@ inputs:
     default: 1.61.0
   forc-version:
     description: 'Forc version'
-    default: 0.16.1
+    default: 0.18.1
 runs:
   using: "composite"
   steps:

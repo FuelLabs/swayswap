@@ -13,7 +13,7 @@ dotenv.config({
 
 export default createConfig({
   types: {
-    artifacts: './packages/contracts/**/out/debug/**.json',
+    artifacts: './packages/contracts/**/out/debug/**-abi.json',
     output: './packages/app/src/types/contracts',
   },
   contracts: [

@@ -15,10 +15,9 @@ use swayswap_helpers::get_msg_sender_address_or_panic;
 const ZERO_B256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
 
 storage {
-    owner: Address,
-    mint_amount: u64,
-    mint_list: StorageMap<Address,
-    bool>,
+    owner: Address = Address { value: 0x0000000000000000000000000000000000000000000000000000000000000000 },
+    mint_amount: u64 = 0,
+    mint_list: StorageMap<Address, bool> = StorageMap {},
 }
 
 enum Error {
