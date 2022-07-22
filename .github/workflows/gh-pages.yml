@@ -1,7 +1,8 @@
 name: GitHub Pages
 
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   deploy:
@@ -10,12 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/setup-node
-
-      - name: Check if is a release
-        id: check-release
-        if: ${{ !startsWith(github.event.inputs.from_branch, 'refs/tags/v') }}
-        run: |
-          exit 1;
 
       - name: Build
         env:
