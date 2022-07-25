@@ -1,18 +1,13 @@
 import cx from "classnames";
-import { forwardRef, useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { forwardRef, useState, useEffect } from "react";
 import NumberFormat from "react-number-format";
 
 import type { CoinInputProps } from "../hooks/useCoinInput";
 
 import { DECIMAL_UNITS } from "~/config";
+import { ZERO_AMOUNT } from "~/systems/Swap/utils";
 import { Spinner } from "~/systems/UI";
-
-function getRightValue(value: string) {
-  if (process.env.NODE_ENV === "test" && !value) return null;
-  if (value === "0.0") return "0";
-  if (value === ".") return "0.";
-  return value;
-}
 
 export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
   (
@@ -31,14 +26,10 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     },
     ref
   ) => {
-    const [value, setValue] = useState<string | undefined>(initialValue);
-
-    useEffect(() => {
-      // Enable to clean field using empty string
-      if (initialValue != null) {
-        setValue(initialValue);
-      }
-    }, [initialValue]);
+    const [displayedCoinValue, setDisplayedCoinValue] = useDisplayedCoins(
+      initialValue,
+      onChange
+    );
 
     return (
       <div className="coinInput">
@@ -55,8 +46,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               inputMode={"decimal"}
               getInputRef={ref}
               allowNegative={false}
-              defaultValue={initialValue}
-              value={getRightValue(value || "")}
+              value={displayedCoinValue}
               displayType={displayType}
               isAllowed={isAllowed}
               onInput={onInput}
@@ -65,8 +55,23 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               allowedDecimalSeparators={[".", ","]}
               thousandSeparator={false}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                onChange?.(e.target.value);
-                setValue(e.target.value);
+                if (e.currentTarget.value.startsWith(".")) {
+                  setDisplayedCoinValue("0.");
+                  return;
+                }
+
+                const hasLeadingZeros =
+                  e.currentTarget.value.match(/^0+\d/) != null;
+
+                if (hasLeadingZeros) {
+                  const valueWithoutLeadingZeros = parseFloat(
+                    e.currentTarget.value
+                  ).toString();
+                  setDisplayedCoinValue(valueWithoutLeadingZeros);
+                  return;
+                }
+
+                setDisplayedCoinValue(e.currentTarget.value);
               }}
             />
           )}
@@ -77,3 +82,21 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     );
   }
 );
+
+function useDisplayedCoins(
+  initialValue: string,
+  onChange: CoinInputProps["onChange"]
+): [string, Dispatch<SetStateAction<string>>] {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    if (value !== initialValue) onChange?.(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (parseFloat(value) === 0 && initialValue === ZERO_AMOUNT.value) return;
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return [value, setValue];
+}
