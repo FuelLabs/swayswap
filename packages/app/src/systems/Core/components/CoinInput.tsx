@@ -1,6 +1,5 @@
 import cx from "classnames";
-import type { Dispatch, SetStateAction } from "react";
-import { forwardRef, useState, useEffect } from "react";
+import { forwardRef, useState, useEffect, useCallback } from "react";
 import NumberFormat from "react-number-format";
 
 import type { CoinInputProps } from "../hooks/useCoinInput";
@@ -54,25 +53,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               placeholder={props.placeholder || "0"}
               allowedDecimalSeparators={[".", ","]}
               thousandSeparator={false}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.currentTarget.value.startsWith(".")) {
-                  setDisplayedCoinValue("0.");
-                  return;
-                }
-
-                const hasLeadingZeros =
-                  e.currentTarget.value.match(/^0+\d/) != null;
-
-                if (hasLeadingZeros) {
-                  const valueWithoutLeadingZeros = parseFloat(
-                    e.currentTarget.value
-                  ).toString();
-                  setDisplayedCoinValue(valueWithoutLeadingZeros);
-                  return;
-                }
-
-                setDisplayedCoinValue(e.currentTarget.value);
-              }}
+              onChange={setDisplayedCoinValue}
             />
           )}
           {rightElement}
@@ -86,7 +67,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
 function useDisplayedCoins(
   initialValue: string,
   onChange: CoinInputProps["onChange"]
-): [string, Dispatch<SetStateAction<string>>] {
+): [string, (e: React.ChangeEvent<HTMLInputElement>) => void] {
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -98,5 +79,27 @@ function useDisplayedCoins(
     setValue(initialValue);
   }, [initialValue]);
 
-  return [value, setValue];
+  const valueSetter = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.currentTarget.value.startsWith(".")) {
+        setValue("0.");
+        return;
+      }
+
+      const hasLeadingZeros = e.currentTarget.value.match(/^0+\d/) != null;
+
+      if (hasLeadingZeros) {
+        const valueWithoutLeadingZeros = parseFloat(
+          e.currentTarget.value
+        ).toString();
+        setValue(valueWithoutLeadingZeros);
+        return;
+      }
+
+      setValue(e.currentTarget.value);
+    },
+    [setValue]
+  );
+
+  return [value, valueSetter];
 }
