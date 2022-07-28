@@ -1,18 +1,12 @@
 import cx from "classnames";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useState, useEffect, useCallback } from "react";
 import NumberFormat from "react-number-format";
 
 import type { CoinInputProps } from "../hooks/useCoinInput";
 
 import { DECIMAL_UNITS } from "~/config";
+import { ZERO_AMOUNT } from "~/systems/Swap/utils";
 import { Spinner } from "~/systems/UI";
-
-function getRightValue(value: string) {
-  if (process.env.NODE_ENV === "test" && !value) return null;
-  if (value === "0.0") return "0";
-  if (value === ".") return "0.";
-  return value;
-}
 
 export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
   (
@@ -31,14 +25,10 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     },
     ref
   ) => {
-    const [value, setValue] = useState<string | undefined>(initialValue);
-
-    useEffect(() => {
-      // Enable to clean field using empty string
-      if (initialValue != null) {
-        setValue(initialValue);
-      }
-    }, [initialValue]);
+    const [displayedCoinValue, setDisplayedCoinValue] = useDisplayedCoins(
+      initialValue,
+      onChange
+    );
 
     return (
       <div className="coinInput">
@@ -55,8 +45,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               inputMode={"decimal"}
               getInputRef={ref}
               allowNegative={false}
-              defaultValue={initialValue}
-              value={getRightValue(value || "")}
+              value={displayedCoinValue}
               displayType={displayType}
               isAllowed={isAllowed}
               onInput={onInput}
@@ -64,10 +53,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               placeholder={props.placeholder || "0"}
               allowedDecimalSeparators={[".", ","]}
               thousandSeparator={false}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                onChange?.(e.target.value);
-                setValue(e.target.value);
-              }}
+              onChange={setDisplayedCoinValue}
             />
           )}
           {rightElement}
@@ -77,3 +63,43 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     );
   }
 );
+
+function useDisplayedCoins(
+  initialValue: string,
+  onChange: CoinInputProps["onChange"]
+): [string, (e: React.ChangeEvent<HTMLInputElement>) => void] {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    if (value !== initialValue) onChange?.(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (parseFloat(value) === 0 && initialValue === ZERO_AMOUNT.value) return;
+    setValue(initialValue);
+  }, [initialValue]);
+
+  const valueSetter = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.currentTarget.value.startsWith(".")) {
+        setValue("0.");
+        return;
+      }
+
+      const hasLeadingZeros = e.currentTarget.value.match(/^0+\d/) != null;
+
+      if (hasLeadingZeros) {
+        const valueWithoutLeadingZeros = parseFloat(
+          e.currentTarget.value
+        ).toString();
+        setValue(valueWithoutLeadingZeros);
+        return;
+      }
+
+      setValue(e.currentTarget.value);
+    },
+    [setValue]
+  );
+
+  return [value, valueSetter];
+}
