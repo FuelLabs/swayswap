@@ -462,8 +462,8 @@ export const swapMachine =
           const next = createAmount(ev.data.value);
 
           const valueChanged = isFrom
-            ? ctx.fromAmount?.value !== next.value
-            : ctx.toAmount?.value !== next.value;
+            ? ctx.fromAmount == null || parseFloat(ctx.fromAmount.value) !== parseFloat(next.value)
+            : ctx.toAmount == null || parseFloat(ctx.toAmount.value) !== parseFloat(next.value);
 
           return !valueChanged;
         },
