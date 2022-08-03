@@ -5,7 +5,6 @@ import NumberFormat from "react-number-format";
 import type { CoinInputProps } from "../hooks/useCoinInput";
 
 import { DECIMAL_UNITS } from "~/config";
-import { ZERO_AMOUNT } from "~/systems/Swap/utils";
 import { Spinner } from "~/systems/UI";
 
 export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
@@ -71,13 +70,12 @@ function useDisplayedCoins(
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
-    if (value !== initialValue) onChange?.(value);
-  }, [value]);
-
-  useEffect(() => {
-    if (parseFloat(value) === 0 && initialValue === ZERO_AMOUNT.value) return;
     setValue(initialValue);
   }, [initialValue]);
+
+  useEffect(() => {
+    if (value !== initialValue) onChange?.(value);
+  }, [value]);
 
   const valueSetter = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
