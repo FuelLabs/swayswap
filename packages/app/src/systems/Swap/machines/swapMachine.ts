@@ -454,16 +454,15 @@ export const swapMachine =
       },
       guards: {
         inputIsEmpty: (_, ev) => {
-          const val = parseFloat(ev.data.value);
-          return Number.isNaN(val) || val === 0;
+          const val = createAmount(ev.data.value);
+          return val.raw === ZERO_AMOUNT.raw;
         },
         notValueChanged: (ctx, ev) => {
           const isFrom = ctx.direction === FROM_TO;
           const next = createAmount(ev.data.value);
-
           const valueChanged = isFrom
-            ? ctx.fromAmount == null || parseFloat(ctx.fromAmount.value) !== parseFloat(next.value)
-            : ctx.toAmount == null || parseFloat(ctx.toAmount.value) !== parseFloat(next.value);
+            ? ctx.fromAmount == null || ctx.fromAmount.raw !== next.raw
+            : ctx.toAmount == null || ctx.toAmount.raw !== next.raw;
 
           return !valueChanged;
         },
