@@ -1,8 +1,9 @@
 import cx from "classnames";
-import { forwardRef, useState, useEffect, useCallback } from "react";
+import { forwardRef } from "react";
 import NumberFormat from "react-number-format";
 
 import type { CoinInputProps } from "../hooks/useCoinInput";
+import { useCoinInputDisplayValue } from "../hooks/useCoinInputDisplayValue";
 
 import { DECIMAL_UNITS } from "~/config";
 import { Spinner } from "~/systems/UI";
@@ -24,10 +25,8 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     },
     ref
   ) => {
-    const [displayedCoinValue, setDisplayedCoinValue] = useDisplayedCoins(
-      initialValue,
-      onChange
-    );
+    const [displayedCoinValue, setDisplayedCoinValue] =
+      useCoinInputDisplayValue(initialValue, onChange);
 
     return (
       <div className="coinInput">
@@ -62,36 +61,3 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     );
   }
 );
-
-function useDisplayedCoins(
-  initialValue: string,
-  onChange: CoinInputProps["onChange"]
-): [string, (e: React.ChangeEvent<HTMLInputElement>) => void] {
-  const [value, setValue] = useState(initialValue);
-
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-
-  useEffect(() => {
-    if (value !== initialValue) onChange?.(value);
-  }, [value]);
-
-  const valueSetter = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const valueWithoutLeadingZeros = e.currentTarget.value.replace(
-        /^0+\d/,
-        (substring) => substring.replace(/^0+(?=[\d])/, "")
-      );
-
-      setValue(
-        valueWithoutLeadingZeros.startsWith(".")
-          ? `0${valueWithoutLeadingZeros}`
-          : valueWithoutLeadingZeros
-      );
-    },
-    [setValue]
-  );
-
-  return [value, valueSetter];
-}
