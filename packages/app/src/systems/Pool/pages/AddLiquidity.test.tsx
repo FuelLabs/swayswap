@@ -207,9 +207,6 @@ describe("Add Liquidity", () => {
         value: ".",
       },
     });
-
-    await waitFor(() => {
-      expect(screen.getByLabelText(/Coin from input/)).toHaveValue("0.");
-    });
+    expect(coinFromInput).toHaveValue("0.");
   });
 });

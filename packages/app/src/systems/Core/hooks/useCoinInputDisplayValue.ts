@@ -18,7 +18,7 @@ export function useCoinInputDisplayValue(
 
   const valueSetter = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const valueWithoutLeadingZeros = e.currentTarget.value.replace(/^0+\d/, (substring) =>
+      const valueWithoutLeadingZeros = e.target.value.replace(/^0+\d/, (substring) =>
         substring.replace(/^0+(?=[\d])/, '')
       );
 
