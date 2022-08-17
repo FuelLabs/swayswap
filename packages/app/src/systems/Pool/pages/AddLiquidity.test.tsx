@@ -207,6 +207,8 @@ describe("Add Liquidity", () => {
         value: ".",
       },
     });
-    expect(coinFromInput).toHaveValue("0.");
+    waitFor(() => {
+      expect(coinFromInput).toHaveValue("0.");
+    });
   });
 });
