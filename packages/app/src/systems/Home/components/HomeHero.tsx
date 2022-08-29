@@ -28,6 +28,10 @@ export function HomeHero() {
         scaling beyond layer-2s and monolithic blockchain design.
         #BeyondMonolithic
       </p>
+      <p className="text-sm font-light italic">
+        This is running on the Fuel test network. No real funds are used.
+        Demonstration purposes only.
+      </p>
       <Button size="lg" variant="primary" onPress={() => navigate(Pages.swap)}>
         Launch app
       </Button>
