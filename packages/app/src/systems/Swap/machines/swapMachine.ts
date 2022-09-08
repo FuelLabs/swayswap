@@ -202,6 +202,12 @@ export const swapMachine =
         },
         debouncing: {
           tags: 'loading',
+          on: {
+            INPUT_CHANGE: {
+              actions: 'setInputValue',
+              target: 'debouncing',
+            },
+          },
           after: {
             '600': 'fetchingResources',
           },
@@ -297,6 +303,9 @@ export const swapMachine =
             actions: 'clearContext',
             cond: 'inputIsEmpty',
             target: '.invalid.withoutAmount',
+          },
+          {
+            cond: 'notValueChanged',
           },
           {
             actions: 'setInputValue',
@@ -445,8 +454,17 @@ export const swapMachine =
       },
       guards: {
         inputIsEmpty: (_, ev) => {
-          const val = ev.data?.value || '';
-          return !val.length || val === '0';
+          const val = createAmount(ev.data.value);
+          return val.raw === ZERO_AMOUNT.raw;
+        },
+        notValueChanged: (ctx, ev) => {
+          const isFrom = ctx.direction === FROM_TO;
+          const next = createAmount(ev.data.value);
+          const valueChanged = isFrom
+            ? ctx.fromAmount == null || ctx.fromAmount.raw !== next.raw
+            : ctx.toAmount == null || ctx.toAmount.raw !== next.raw;
+
+          return !valueChanged;
         },
         notHasCoinSelected: (ctx) => {
           return !ctx.coinFrom || !ctx.coinTo;
