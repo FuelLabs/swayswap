@@ -1,18 +1,12 @@
 import cx from "classnames";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef } from "react";
 import NumberFormat from "react-number-format";
 
 import type { CoinInputProps } from "../hooks/useCoinInput";
+import { useCoinInputDisplayValue } from "../hooks/useCoinInputDisplayValue";
 
 import { DECIMAL_UNITS } from "~/config";
 import { Spinner } from "~/systems/UI";
-
-function getRightValue(value: string) {
-  if (process.env.NODE_ENV === "test" && !value) return null;
-  if (value === "0.0") return "0";
-  if (value === ".") return "0.";
-  return value;
-}
 
 export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
   (
@@ -31,14 +25,8 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
     },
     ref
   ) => {
-    const [value, setValue] = useState<string | undefined>(initialValue);
-
-    useEffect(() => {
-      // Enable to clean field using empty string
-      if (initialValue != null) {
-        setValue(initialValue);
-      }
-    }, [initialValue]);
+    const [displayedCoinValue, setDisplayedCoinValue] =
+      useCoinInputDisplayValue(initialValue, onChange);
 
     return (
       <div className="coinInput">
@@ -55,8 +43,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               inputMode={"decimal"}
               getInputRef={ref}
               allowNegative={false}
-              defaultValue={initialValue}
-              value={getRightValue(value || "")}
+              value={displayedCoinValue}
               displayType={displayType}
               isAllowed={isAllowed}
               onInput={onInput}
@@ -64,10 +51,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               placeholder={props.placeholder || "0"}
               allowedDecimalSeparators={[".", ","]}
               thousandSeparator={false}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                onChange?.(e.target.value);
-                setValue(e.target.value);
-              }}
+              onChange={setDisplayedCoinValue}
             />
           )}
           {rightElement}
