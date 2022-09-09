@@ -5,6 +5,7 @@ import {
   fireEvent,
 } from "@swayswap/test-utils";
 import type { Wallet } from "fuels";
+import { bn } from "fuels";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
 
@@ -25,7 +26,7 @@ beforeAll(() => {
 });
 
 const USER_LIQUIDITY_POSITIONS = {
-  ethReserve: BigInt(1009199438931),
+  ethReserve: bn("1009199438931"),
   formattedEthReserve: "1,009.199",
   formattedPoolShare: "0.019",
   formattedPoolTokens: "0.198",
@@ -35,12 +36,12 @@ const USER_LIQUIDITY_POSITIONS = {
   hasPositions: true,
   poolRatio: 0.0005041416678966015,
   poolShare: 0.00019762092871333754,
-  poolTokens: BigInt(198666508),
-  poolTokensNum: BigInt(198666508),
+  poolTokens: bn("198666508"),
+  poolTokensNum: bn("198666508"),
   pooledDAI: 395600965122.81934,
   pooledETH: 199438930.3785234,
-  tokenReserve: BigInt(2001817154177355),
-  totalLiquidity: BigInt(1005290832775),
+  tokenReserve: bn("2001817154177355"),
+  totalLiquidity: bn("1005290832775"),
 };
 
 describe("Remove Liquidity", () => {

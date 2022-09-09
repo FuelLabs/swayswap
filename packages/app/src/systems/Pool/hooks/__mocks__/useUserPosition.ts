@@ -1,26 +1,30 @@
+import type { BN } from 'fuels';
+
 import * as useUserPositions from '../useUserPositions';
+
+import { ZERO } from '~/systems/Core';
 
 export type MockUseUserPositionParams = {
   pooledDAI: number;
   pooledETH: number;
   poolShare: number;
-  poolTokens: bigint | undefined;
-  poolTokensNum: bigint;
+  poolTokens: BN;
+  poolTokensNum: BN;
   formattedPooledDAI: string;
   formattedPooledETH: string;
   formattedPoolShare: string;
   poolRatio: number;
-  ethReserve: bigint;
+  ethReserve: BN;
   formattedEthReserve: string;
   formattedPoolTokens: string;
   formattedTokenReserve: string;
   hasPositions: boolean;
-  tokenReserve: bigint;
-  totalLiquidity: bigint;
+  tokenReserve: BN;
+  totalLiquidity: BN;
 };
 
 const NO_POSITIONS: MockUseUserPositionParams = {
-  ethReserve: BigInt(0),
+  ethReserve: ZERO,
   formattedEthReserve: '0.0',
   formattedPoolShare: '0.0',
   formattedPoolTokens: '0',
@@ -30,12 +34,12 @@ const NO_POSITIONS: MockUseUserPositionParams = {
   hasPositions: false,
   poolRatio: 0,
   poolShare: 0,
-  poolTokens: undefined,
-  poolTokensNum: BigInt(0),
+  poolTokens: ZERO,
+  poolTokensNum: ZERO,
   pooledDAI: 0,
   pooledETH: 0,
-  tokenReserve: BigInt(0),
-  totalLiquidity: BigInt(0),
+  tokenReserve: ZERO,
+  totalLiquidity: ZERO,
 };
 
 export function mockUseUserPosition(opts?: Partial<MockUseUserPositionParams>) {

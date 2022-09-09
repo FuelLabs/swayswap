@@ -44,14 +44,15 @@ export function useAddLiquidity({
       return contract
         .multiCall([
           contract.functions.deposit().callParams({
-            forward: [fromInput.amount || 1, coinFrom.assetId],
+            forward: [fromInput.amount || 2, coinFrom.assetId],
           }),
           contract.functions.deposit().callParams({
-            forward: [toInput.amount || 1, coinTo.assetId],
+            forward: [toInput.amount || 2, coinTo.assetId],
           }),
           contract.functions.add_liquidity(1, deadline),
         ])
         .txParams({
+          gasPrice: 0,
           variableOutputs: 2,
         });
     }

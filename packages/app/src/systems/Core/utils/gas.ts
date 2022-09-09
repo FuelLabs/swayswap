@@ -57,6 +57,7 @@ export async function getTransactionCost(
   try {
     const txCost = await functionInvocation.getTransactionCost({
       gasPrice: GAS_PRICE || 0,
+      fundTransaction: false,
     });
     return {
       total: toBigInt(txCost.gasUsed.toNumber() * 1.3),

@@ -21,7 +21,7 @@ export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
     return contract.functions
       .swap_with_maximum(1, deadline)
       .callParams({
-        forward: [1, NativeAssetId],
+        forward: [2, NativeAssetId],
       })
       .txParams({
         variableOutputs: 2,
@@ -31,7 +31,7 @@ export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
   return contract.functions
     .swap_with_minimum(1, deadline)
     .callParams({
-      forward: [1, NativeAssetId],
+      forward: [2, NativeAssetId],
     })
     .txParams({
       variableOutputs: 2,
@@ -54,7 +54,9 @@ const getSwapWithMaximumRequiredAmount = async (
         gasPrice: 0,
       })
     )
-    .get();
+    .get({
+      fundTransaction: false,
+    });
   return requiredAmount;
 };
 
@@ -73,7 +75,9 @@ const getSwapWithMinimumMinAmount = async (
         gasPrice: 0,
       })
     )
-    .get();
+    .get({
+      fundTransaction: false,
+    });
   return minAmount;
 };
 

@@ -1,4 +1,3 @@
-import { parseUnits } from "@ethersproject/units";
 import {
   screen,
   renderWithRouter,
@@ -11,7 +10,7 @@ import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
 
 import { App } from "~/App";
 import { DECIMAL_UNITS, TOKEN_ID } from "~/config";
-import { COIN_ETH, ONE_ASSET } from "~/systems/Core";
+import { COIN_ETH, ONE_ASSET, parseUnits } from "~/systems/Core";
 import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
 import {
   createWallet,
@@ -138,7 +137,7 @@ describe("Add Liquidity", () => {
     expect(coinToInput).toHaveValue("1000");
   });
 
-  const MINT_VALUE = parseUnits("4000", DECIMAL_UNITS).toBigInt();
+  const MINT_VALUE = parseUnits("4000", DECIMAL_UNITS);
 
   it("should be able to click on submit button if inputs are right", async () => {
     mockUseBalances([

@@ -30,7 +30,9 @@ export function useTokenMethods(tokenId: string) {
         .txParams({
           variableOutputs: 1,
         })
-        .get();
+        .get({
+          fundTransaction: false,
+        });
       return mintAmount;
     },
     async mint(gasLimit: BigNumberish) {

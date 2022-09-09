@@ -16,7 +16,7 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import { handleError, isCoinEth, safeBigInt, toBigInt, toNumber } from '~/systems/Core';
+import { handleError, isCoinEth, safeBigInt, toNumber } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
@@ -335,7 +335,9 @@ export const swapMachine =
           if (!ctx.contract) {
             throw new Error('Contract not found');
           }
-          const { value: info } = await ctx.contract.functions.get_pool_info().get();
+          const { value: info } = await ctx.contract.functions.get_pool_info().get({
+            fundTransaction: false,
+          });
           const ratio = getPoolRatio(info);
           return {
             info,

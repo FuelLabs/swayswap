@@ -6,7 +6,9 @@ export function usePoolInfo() {
   const contract = useContract();
   return useQuery('PoolPage-poolInfo', async () => {
     if (!contract) return;
-    const { value: poolInfo } = await contract.functions.get_pool_info().get();
+    const { value: poolInfo } = await contract.functions.get_pool_info().get({
+      fundTransaction: false,
+    });
     return poolInfo;
   });
 }
