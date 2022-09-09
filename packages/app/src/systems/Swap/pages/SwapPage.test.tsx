@@ -62,6 +62,14 @@ async function waitFinishLoading() {
   });
 }
 
+async function getETHBalance() {
+  const balanceLabel = await screen.findByLabelText("ETH balance");
+  const balance = balanceLabel.lastChild?.textContent || "0";
+  const valBalance = new Decimal(balance);
+
+  return valBalance;
+}
+
 describe("SwapPage", () => {
   let wallet: Wallet;
 
@@ -162,7 +170,9 @@ describe("SwapPage", () => {
       const coinFrom = screen.getByLabelText(/Coin from input/i);
       const inputValue = coinFrom.getAttribute("value");
       const valDecimal = new Decimal(inputValue || "");
-      expect(valDecimal.round().toString()).toMatch(/3/);
+      const balance = await getETHBalance();
+
+      expect(valDecimal.round().toString()).toMatch(balance.round().toString());
     });
 
     it("should show insufficient eth for gas message", async () => {
@@ -172,7 +182,9 @@ describe("SwapPage", () => {
 
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
-      await fillCoinFromWithValue("3.1");
+      const balance = await getETHBalance();
+
+      await fillCoinFromWithValue(balance.mul(2).toString());
       const submitBtn = await findSwapBtn();
       await waitFor(() => {
         expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);

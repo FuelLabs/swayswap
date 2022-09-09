@@ -20,3 +20,8 @@ export function omit<T>(list: string[], props: T) {
 export function isCoinEth(coin: Maybe<Coin>) {
   return coin?.assetId === TOKENS[0].assetId;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function compareStates(a: any, b: any) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}

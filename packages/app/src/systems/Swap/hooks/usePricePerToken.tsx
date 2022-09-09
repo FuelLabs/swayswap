@@ -7,7 +7,7 @@ import { getPricePerToken } from "../utils";
 
 import { useSwapContext } from "./useSwap";
 
-import { safeBigInt } from "~/systems/Core";
+import { compareStates, safeBigInt } from "~/systems/Core";
 
 const selectors = {
   coinFrom: ({ context: ctx }: SwapMachineState) => {
@@ -29,8 +29,8 @@ const selectors = {
 
 export function usePricePerToken() {
   const { service } = useSwapContext();
-  const coinFrom = useSelector(service, selectors.coinFrom);
-  const coinTo = useSelector(service, selectors.coinTo);
+  const coinFrom = useSelector(service, selectors.coinFrom, compareStates);
+  const coinTo = useSelector(service, selectors.coinTo, compareStates);
   const isFrom = useSelector(service, selectors.isFrom);
   const assets = isFrom ? [coinFrom, coinTo] : [coinTo, coinFrom];
 

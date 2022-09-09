@@ -474,22 +474,10 @@ export const swapMachine =
           return Boolean(ctx.coinFrom && ctx.coinTo);
         },
         notHasAmount: (ctx) => {
-          const notHasAmount =
+          return (
             (ctx.direction === SwapDirection.fromTo && !ctx.fromAmount?.raw) ||
-            (ctx.direction === SwapDirection.toFrom && !ctx.toAmount?.raw);
-          console.log(
-            ctx.direction === SwapDirection.fromTo,
-            ctx.fromAmount?.raw,
-            !ctx.fromAmount?.raw,
-            safeBigInt(ctx.fromAmount?.raw).eq(0)
+            (ctx.direction === SwapDirection.toFrom && !ctx.toAmount?.raw)
           );
-          console.log(
-            ctx.direction === SwapDirection.toFrom,
-            ctx.toAmount?.raw,
-            !ctx.toAmount?.raw,
-            safeBigInt(ctx.toAmount?.raw).eq(0)
-          );
-          return notHasAmount;
         },
         notHasPoolRatio: (_, ev) => {
           return !ev.data.ratio;

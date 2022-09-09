@@ -20,6 +20,7 @@ import {
   useContract,
   useSlippage,
   useSubscriber,
+  compareStates,
 } from "~/systems/Core";
 
 const selectors = {
@@ -74,10 +75,10 @@ export function useSwap() {
   const service = useSwapService();
   const isLoading = useSelector(service, selectors.isLoading);
   const canSwap = useSelector(service, selectors.canSwap);
-  const coinFrom = useSelector(service, selectors.coinFrom);
-  const coinTo = useSelector(service, selectors.coinTo);
+  const coinFrom = useSelector(service, selectors.coinFrom, compareStates);
+  const coinTo = useSelector(service, selectors.coinTo, compareStates);
   const direction = useSelector(service, selectors.direction);
-  const txCost = useSelector(service, selectors.txCost);
+  const txCost = useSelector(service, selectors.txCost, compareStates);
   const canInvertCoins = useSelector(service, selectors.canInvertCoins);
 
   function onInvertCoins() {

@@ -9,7 +9,7 @@ import { calculateMaxBalanceToSwap } from "../utils";
 import { useSwapContext } from "./useSwap";
 
 import type { CoinBalanceProps, CoinSelectorProps } from "~/systems/Core";
-import { safeBigInt } from "~/systems/Core";
+import { compareStates, safeBigInt } from "~/systems/Core";
 
 function getRightBalance(dir: SwapDirection, ctx: SwapMachineContext) {
   const { coinFromBalance, coinToBalance } = ctx;
@@ -58,7 +58,7 @@ export function useSwapMaxButton(direction: SwapDirection): CoinSelectorProps {
   const isFrom = direction === SwapDirection.fromTo;
   const coinSelector = isFrom ? selectors.coinFrom : selectors.coinTo;
   const coin = useSelector(service, coinSelector);
-  const gasFee = useSelector(service, selectors.gasFee);
+  const gasFee = useSelector(service, selectors.gasFee, compareStates);
   const hasBalance = useSelector(service, selectors.hasBalance(direction));
   const isMaxButtonDisabled = useSelector(
     service,
