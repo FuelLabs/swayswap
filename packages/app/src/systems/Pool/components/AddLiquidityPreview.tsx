@@ -1,3 +1,4 @@
+import type { BN } from "fuels";
 import { BsArrowDown } from "react-icons/bs";
 
 import { usePreviewAddLiquidity } from "../hooks";
@@ -17,7 +18,7 @@ import type { PoolInfoOutput } from "~/types/contracts/ExchangeContractAbi";
 export interface AddLiquidityPreviewProps {
   poolInfo?: PoolInfoOutput;
   fromInput: UseCoinInput;
-  networkFee?: Maybe<bigint>;
+  networkFee?: Maybe<BN>;
 }
 
 export const AddLiquidityPreview = ({

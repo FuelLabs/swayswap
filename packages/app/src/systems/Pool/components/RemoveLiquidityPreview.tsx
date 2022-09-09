@@ -1,3 +1,4 @@
+import type { BN } from "fuels";
 import { BsArrowDown } from "react-icons/bs";
 
 import { usePreviewRemoveLiquidity } from "../hooks";
@@ -13,8 +14,8 @@ import {
 import type { Maybe } from "~/types";
 
 export interface RemoveLiquidityPreviewProps {
-  amount: Maybe<bigint>;
-  networkFee?: Maybe<bigint>;
+  amount: Maybe<BN>;
+  networkFee?: Maybe<BN>;
 }
 
 export const RemoveLiquidityPreview = ({

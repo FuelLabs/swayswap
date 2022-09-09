@@ -1,3 +1,4 @@
+import type { BN } from "fuels";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
@@ -21,6 +22,7 @@ import {
   useBalances,
   safeBigInt,
   CoinBalance,
+  isValidNumber,
 } from "~/systems/Core";
 import { Button, Card } from "~/systems/UI";
 import type { Coin, Maybe } from "~/types";
@@ -34,6 +36,7 @@ const style = {
 };
 
 export function AddLiquidity() {
+  const [error, setError] = useState<string | null>(null);
   const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
   const [toInitialAmount, setToInitialAmount] = useAtom(poolToAmountAtom);
   const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
@@ -88,26 +91,43 @@ export function AddLiquidity() {
     if (errorsCreatePull.length) {
       return errorsCreatePull[0];
     }
+    if (error) {
+      return error;
+    }
     return poolRatio ? "Add liquidity" : "Create liquidity";
   }
 
-  function handleChangeFromValue(val: Maybe<bigint>) {
+  function handleChangeFromValue(val: Maybe<BN>) {
     fromInput.setAmount(val);
 
     if (poolRatio) {
       const value = safeBigInt(val);
       const newToValue = Math.ceil(divideFnValidOnly(value, poolRatio));
-      toInput.setAmount(BigInt(newToValue));
+      // TODO: refactor swayswap to remove use of numbers
+      // on this place max value on input should be removed
+      if (isValidNumber(newToValue)) {
+        setError(null);
+        toInput.setAmount(toBigInt(newToValue));
+      } else {
+        setError("From amount is not supported!");
+      }
     }
   }
 
-  function handleChangeToValue(val: Maybe<bigint>) {
+  function handleChangeToValue(val: Maybe<BN>) {
     toInput.setAmount(val);
 
     if (poolRatio) {
       const value = safeBigInt(val);
       const newFromValue = Math.floor(multiplyFn(value, poolRatio));
-      fromInput.setAmount(BigInt(newFromValue));
+      // TODO: refactor swayswap to remove use of numbers
+      // on this place max value on input should be removed
+      if (isValidNumber(newFromValue)) {
+        setError(null);
+        fromInput.setAmount(toBigInt(newFromValue));
+      } else {
+        setError("From to is not supported!");
+      }
     }
   }
 
@@ -119,13 +139,14 @@ export function AddLiquidity() {
   useEffect(() => {
     setFromInitialAmount(fromInput.amount);
     setToInitialAmount(toInput.amount);
-  }, [fromInput.amount, toInput.amount]);
+  }, [fromInput.amount?.toHex(), toInput.amount?.toHex()]);
 
   const shouldDisableAddButton =
     !!errorsCreatePull.length ||
     addLiquidityMutation.isLoading ||
     txCost.isLoading ||
-    !txCost.total;
+    !txCost.total ||
+    !!error;
 
   return (
     <Card className="max-w-[450px]">

@@ -1,7 +1,7 @@
 import * as ethers from '@ethersproject/units';
 import { Decimal } from 'decimal.js';
-import type { BigNumberish, BN } from 'fuels';
 import { bn } from 'fuels';
+import type { BigNumberish, BN } from 'fuels';
 
 import { DECIMAL_UNITS, FIXED_UNITS } from '~/config';
 import type { Maybe } from '~/types';
@@ -28,6 +28,7 @@ export function isZero(number: Maybe<BigNumberish>): boolean {
 }
 
 export function toNumber(number: Maybe<BigNumberish>): number {
+  if (typeof number === 'number') return number;
   return bn(number || '0').toNumber();
 }
 
@@ -52,7 +53,7 @@ export function formatUnits(number: BigNumberish, precision: number = DECIMAL_UN
 }
 
 export function divideFn(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): number {
-  return new Decimal(safeBigInt(value).toHex() || 0).div(safeBigInt(by).toHex() || 0).toNumber();
+  return new Decimal(Number(value || 0) || 0).div(Number(by || 0)).toNumber();
 }
 
 export function divideFnValidOnly(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): number {
@@ -90,4 +91,8 @@ export function isSwayInfinity(value: Maybe<BigNumberish>): boolean {
 
 export function safeBigInt(value?: Maybe<BigNumberish>, defaultValue?: number): BN {
   return bn(value || bn(defaultValue || 0));
+}
+
+export function isValidNumber(value: number) {
+  return value <= Number.MAX_SAFE_INTEGER;
 }

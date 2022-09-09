@@ -10,7 +10,7 @@ import type { SwapDirection } from "../types";
 import { useSwapContext } from "./useSwap";
 
 import type { CoinInputProps } from "~/systems/Core";
-import { MAX_U64_VALUE, parseInputValueBigInt } from "~/systems/Core";
+import { parseInputValueBigInt } from "~/systems/Core";
 
 const selectors = {
   activeDir: ({ context: ctx }: SwapMachineState) => {
@@ -51,7 +51,7 @@ export function useSwapCoinInput(direction: SwapDirection): UseCoinInputReturn {
   const isLoading = useSelector(service, selectors.isLoading(direction));
 
   const isAllowed = ({ value: val }: NumberFormatValues) => {
-    return parseInputValueBigInt(val).toNumber() <= MAX_U64_VALUE;
+    return parseInputValueBigInt(val).lt(Number.MAX_SAFE_INTEGER);
   };
 
   function onChange(value: string) {

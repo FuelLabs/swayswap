@@ -1,3 +1,4 @@
+import { bn } from "fuels";
 import { useMemo } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +36,12 @@ export function RemoveLiquidityPage() {
   const ethBalance = useEthBalance();
 
   const liquidityToken = TOKENS.find((c) => c.assetId === CONTRACT_ID);
-  const tokenInput = useCoinInput({ coin: liquidityToken });
+  const tokenInput = useCoinInput({
+    coin: liquidityToken,
+    // TODO: refactor swayswap to remove use of numbers
+    // on this place max value on input should be removed
+    max: bn(5_000_000_000_000),
+  });
   const amount = tokenInput.amount;
 
   const txCost = useTransactionCost(
@@ -78,9 +84,9 @@ export function RemoveLiquidityPage() {
     }
 
     return errorList;
-  }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
+  }, [tokenInput.amount?.toString(), tokenInput.hasEnoughBalance]);
 
-  const hasEnoughBalance = safeBigInt(ethBalance.raw) > txCost.fee;
+  const hasEnoughBalance = safeBigInt(ethBalance.raw).gt(txCost.fee);
   const isRemoveButtonDisabled =
     !!errors.length ||
     removeLiquidityMutation.isLoading ||

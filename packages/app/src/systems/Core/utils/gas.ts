@@ -1,4 +1,10 @@
-import type { BN, CallResult, FunctionInvocationScope, TxParams } from 'fuels';
+import type {
+  BN,
+  CallResult,
+  FunctionInvocationScope,
+  MultiCallInvocationScope,
+  TxParams,
+} from 'fuels';
 import { bn, ReceiptType } from 'fuels';
 
 import { toBigInt, ZERO } from './math';
@@ -46,7 +52,7 @@ export function emptyTransactionCost(error?: string) {
 }
 
 export async function getTransactionCost(
-  functionInvocation: FunctionInvocationScope
+  functionInvocation: FunctionInvocationScope | MultiCallInvocationScope
 ): Promise<TransactionCost> {
   try {
     const txCost = await functionInvocation.getTransactionCost({

@@ -5,7 +5,6 @@ import {
   divideFnValidOnly,
   parseToFormattedNumber,
   safeBigInt,
-  toBigInt,
   toFixed,
   toNumber,
   ZERO,
@@ -21,12 +20,12 @@ export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewAddLiq
   const { totalLiquidity, poolTokensNum } = useUserPositions();
   const amount = safeBigInt(fromInput.amount);
 
-  const liquidityFactor = amount * toBigInt(totalLiquidity);
+  const liquidityFactor = totalLiquidity.mul(amount);
   const previewTokens = divideFnValidOnly(liquidityFactor, totalLiquidity);
-  const nextTotalTokenSupply = previewTokens + toNumber(poolInfo?.lp_token_supply || BigInt(0));
+  const nextTotalTokenSupply = previewTokens + toNumber(poolInfo?.lp_token_supply || ZERO);
   const nextCurrentPoolShare = divideFnValidOnly(
-    BigInt(previewTokens) + poolTokensNum,
-    BigInt(nextTotalTokenSupply)
+    previewTokens + poolTokensNum.toNumber(),
+    nextTotalTokenSupply
   );
 
   let formattedPreviewTokens = parseToFormattedNumber(previewTokens);
@@ -38,7 +37,7 @@ export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewAddLiq
    */
   if (poolInfo?.eth_reserve === ZERO) {
     formattedPreviewTokens = parseToFormattedNumber(amount);
-    formattedNextCurrentPoolShare = toFixed(amount > 0 ? 100 : 0);
+    formattedNextCurrentPoolShare = toFixed(amount.gt(ZERO) ? 100 : 0);
   }
 
   return {

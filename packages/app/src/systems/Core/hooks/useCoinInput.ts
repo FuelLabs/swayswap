@@ -4,14 +4,7 @@ import type { ReactNode } from 'react';
 import { useMemo, useEffect, useState } from 'react';
 import type { NumberFormatValues } from 'react-number-format';
 
-import {
-  formatUnits,
-  isCoinEth,
-  MAX_U64_VALUE,
-  parseInputValueBigInt,
-  safeBigInt,
-  ZERO,
-} from '../utils';
+import { formatUnits, isCoinEth, parseInputValueBigInt, safeBigInt, ZERO } from '../utils';
 
 import { useBalances } from './useBalances';
 
@@ -22,6 +15,7 @@ export type UseCoinParams = {
   /**
    * Props for <CoinInput />
    */
+  max?: Maybe<BN>;
   amount?: Maybe<BN>;
   coin?: Maybe<Coin>;
   gasFee?: Maybe<BN>;
@@ -117,7 +111,8 @@ export function useCoinInput({
   }
 
   function isAllowed({ value }: NumberFormatValues) {
-    return parseInputValueBigInt(value) <= bn(MAX_U64_VALUE);
+    const max = params.max ? params.max : bn(Number.MAX_SAFE_INTEGER);
+    return parseInputValueBigInt(value).lt(max);
   }
 
   function getInputProps() {
@@ -162,12 +157,12 @@ export function useCoinInput({
 
   useEffect(() => {
     if (initialGasFee) setGasFee(initialGasFee);
-  }, [initialGasFee]);
+  }, [initialGasFee?.toHex()]);
 
   useEffect(() => {
     // Enable value initialAmount to be null
     if (initialAmount !== undefined) setAmount(initialAmount);
-  }, [initialAmount]);
+  }, [initialAmount?.toHex()]);
 
   return {
     amount,
@@ -177,6 +172,6 @@ export function useCoinInput({
     getCoinSelectorProps,
     getCoinBalanceProps,
     formatted: formatValue(amount),
-    hasEnoughBalance: getSafeMaxBalance() >= safeBigInt(amount),
+    hasEnoughBalance: getSafeMaxBalance().gte(safeBigInt(amount)),
   };
 }

@@ -1,4 +1,3 @@
-import { buildTransaction } from 'fuels';
 import { useEffect, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
@@ -42,23 +41,25 @@ export function useAddLiquidity({
     ],
     async () => {
       const deadline = await getDeadline(contract);
-      return [
-        contract.prepareCall.deposit({
-          forward: [fromInput.amount || 1, coinFrom.assetId],
-        }),
-        contract.prepareCall.deposit({
-          forward: [toInput.amount || 1, coinTo.assetId],
-        }),
-        contract.prepareCall.add_liquidity(1, deadline, {
+      return contract
+        .multiCall([
+          contract.functions.deposit().callParams({
+            forward: [fromInput.amount || 1, coinFrom.assetId],
+          }),
+          contract.functions.deposit().callParams({
+            forward: [toInput.amount || 1, coinTo.assetId],
+          }),
+          contract.functions.add_liquidity(1, deadline),
+        ])
+        .txParams({
           variableOutputs: 2,
-        }),
-      ];
+        });
     }
   );
 
   useEffect(() => {
     fromInput.setGasFee(txCost.fee);
-  }, [txCost.fee]);
+  }, [txCost.fee.toHex()]);
 
   const mutation = useMutation(
     async () => {
@@ -71,29 +72,25 @@ export function useAddLiquidity({
       }
 
       const deadline = await getDeadline(contract);
-      const transactionRequest = await buildTransaction(
-        [
-          contract.prepareCall.deposit({
+      const { transactionResult } = await contract
+        .multiCall([
+          contract.functions.deposit().callParams({
             forward: [fromAmount, coinFrom.assetId],
           }),
-          contract.prepareCall.deposit({
+          contract.functions.deposit().callParams({
             forward: [toAmount, coinTo.assetId],
           }),
-          contract.prepareCall.add_liquidity(1, deadline, {
-            variableOutputs: 2,
-          }),
-        ],
-        {
+          contract.functions.add_liquidity(1, deadline),
+        ])
+        .txParams({
+          variableOutputs: 2,
           ...getOverrides({
             gasLimit: txCost.total,
           }),
-          fundTransaction: true,
-        }
-      );
-      const response = await contract.wallet!.sendTransaction(transactionRequest);
-      const result = await response.waitForResult();
+        })
+        .call();
 
-      return result;
+      return transactionResult;
     },
     {
       onSuccess: txFeedback(successMsg, handleSuccess),

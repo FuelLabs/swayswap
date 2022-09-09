@@ -1,3 +1,5 @@
+import type { BN } from 'fuels';
+
 import { useUserPositions } from './useUserPositions';
 
 import {
@@ -12,7 +14,7 @@ import {
 import type { Maybe } from '~/types';
 
 export interface UsePreviewRemoveLiquidity {
-  amountToRemove?: Maybe<bigint>;
+  amountToRemove?: Maybe<BN>;
 }
 
 export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLiquidity) {
@@ -37,7 +39,7 @@ export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLi
     minimumZero(Math.floor(previewETHRemoved))
   );
 
-  const nextCurrentPoolTokens = minimumZero(poolTokensNum - amountToRemoveNum);
+  const nextCurrentPoolTokens = minimumZero(poolTokensNum.sub(amountToRemoveNum));
   const nextPoolShare = divideFnValidOnly(nextCurrentPoolTokens, totalLiquidity);
   const formattedNextCurrentPoolTokens = parseToFormattedNumber(minimumZero(nextCurrentPoolTokens));
   const formattedNextPoolShare = toFixed(nextPoolShare * 100, 6);
