@@ -10,6 +10,7 @@ import type {
   BytesLike,
   BigNumberish,
   InvokeFunction,
+  BN,
 } from 'fuels';
 
 export type ContractIdInput = { value: string };
@@ -23,9 +24,9 @@ export type PoolInfoInput = {
 };
 
 export type PoolInfoOutput = {
-  eth_reserve: bigint;
-  token_reserve: bigint;
-  lp_token_supply: bigint;
+  eth_reserve: BN;
+  token_reserve: BN;
+  lp_token_supply: BN;
 };
 
 export type RemoveLiquidityInfoInput = {
@@ -33,14 +34,11 @@ export type RemoveLiquidityInfoInput = {
   token_amount: BigNumberish;
 };
 
-export type RemoveLiquidityInfoOutput = {
-  eth_amount: bigint;
-  token_amount: bigint;
-};
+export type RemoveLiquidityInfoOutput = { eth_amount: BN; token_amount: BN };
 
 export type PreviewInfoInput = { amount: BigNumberish; has_liquidity: boolean };
 
-export type PreviewInfoOutput = { amount: bigint; has_liquidity: boolean };
+export type PreviewInfoOutput = { amount: BN; has_liquidity: boolean };
 
 interface ExchangeContractAbiInterface extends Interface {
   functions: {
@@ -106,26 +104,26 @@ interface ExchangeContractAbiInterface extends Interface {
 export class ExchangeContractAbi extends Contract {
   interface: ExchangeContractAbiInterface;
   functions: {
-    get_balance: InvokeFunction<[asset_id: ContractIdInput], bigint>;
+    get_balance: InvokeFunction<[asset_id: ContractIdInput], BN>;
 
     get_pool_info: InvokeFunction<[], PoolInfoOutput>;
 
-    get_add_liquidity_token_amount: InvokeFunction<[eth_amount: BigNumberish], bigint>;
+    get_add_liquidity_token_amount: InvokeFunction<[eth_amount: BigNumberish], BN>;
 
     deposit: InvokeFunction<[], void>;
 
     withdraw: InvokeFunction<[amount: BigNumberish, asset_id: ContractIdInput], void>;
 
-    add_liquidity: InvokeFunction<[min_liquidity: BigNumberish, deadline: BigNumberish], bigint>;
+    add_liquidity: InvokeFunction<[min_liquidity: BigNumberish, deadline: BigNumberish], BN>;
 
     remove_liquidity: InvokeFunction<
       [min_eth: BigNumberish, min_tokens: BigNumberish, deadline: BigNumberish],
       RemoveLiquidityInfoOutput
     >;
 
-    swap_with_minimum: InvokeFunction<[min: BigNumberish, deadline: BigNumberish], bigint>;
+    swap_with_minimum: InvokeFunction<[min: BigNumberish, deadline: BigNumberish], BN>;
 
-    swap_with_maximum: InvokeFunction<[amount: BigNumberish, deadline: BigNumberish], bigint>;
+    swap_with_maximum: InvokeFunction<[amount: BigNumberish, deadline: BigNumberish], BN>;
 
     get_swap_with_minimum: InvokeFunction<[amount: BigNumberish], PreviewInfoOutput>;
 

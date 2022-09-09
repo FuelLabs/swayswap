@@ -11,6 +11,10 @@ dotenv.config({
   path: `./docker/${getEnvName()}`,
 });
 
+const getDeployOptions = () => ({
+  gasPrice: Number(process.env.GAS_PRICE || 0),
+});
+
 export default createConfig({
   types: {
     artifacts: './packages/contracts/**/out/debug/**-abi.json',
@@ -18,12 +22,25 @@ export default createConfig({
   },
   contracts: [
     {
-      name: 'VITE_CONTRACT_ID',
-      path: './packages/contracts/exchange_contract',
-    },
-    {
       name: 'VITE_TOKEN_ID',
       path: './packages/contracts/token_contract',
+      options: getDeployOptions(),
+    },
+    {
+      name: 'VITE_CONTRACT_ID',
+      path: './packages/contracts/exchange_contract',
+      options: (contracts) => {
+        const contractDeployed = contracts.find((c) => c.name === 'VITE_TOKEN_ID')!;
+        return {
+          ...getDeployOptions(),
+          storageSlots: [
+            {
+              key: '0x0000000000000000000000000000000000000000000000000000000000000001',
+              value: contractDeployed.contractId,
+            },
+          ],
+        };
+      },
     },
   ],
   onSuccess: (event) => {

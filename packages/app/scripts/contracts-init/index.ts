@@ -1,4 +1,4 @@
-import { Wallet } from 'fuels';
+import { bn, Wallet } from 'fuels';
 
 import '../../load.envs';
 import './loadDockerEnv';
@@ -20,8 +20,8 @@ async function main() {
   const exchangeContract = ExchangeContractAbi__factory.connect(VITE_CONTRACT_ID!, wallet);
   const tokenContract = TokenContractAbi__factory.connect(VITE_TOKEN_ID!, wallet);
   const overrides = {
-    gasPrice: BigInt(GAS_PRICE || 0),
-    bytePrice: BigInt(BYTE_PRICE || 0),
+    gasPrice: bn(GAS_PRICE || 0),
+    bytePrice: bn(BYTE_PRICE || 0),
   };
 
   await initializeTokenContract(tokenContract, overrides);

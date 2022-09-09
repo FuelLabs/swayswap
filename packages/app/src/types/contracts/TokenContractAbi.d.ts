@@ -10,6 +10,7 @@ import type {
   BytesLike,
   BigNumberish,
   InvokeFunction,
+  BN,
 } from 'fuels';
 
 export type AddressInput = { value: string };
@@ -86,10 +87,10 @@ export class TokenContractAbi extends Contract {
 
     mint: InvokeFunction<[], void>;
 
-    get_mint_amount: InvokeFunction<[], bigint>;
+    get_mint_amount: InvokeFunction<[], BN>;
 
-    get_balance: InvokeFunction<[], bigint>;
+    get_balance: InvokeFunction<[], BN>;
 
-    get_token_balance: InvokeFunction<[asset_id: ContractIdInput], bigint>;
+    get_token_balance: InvokeFunction<[asset_id: ContractIdInput], BN>;
   };
 }

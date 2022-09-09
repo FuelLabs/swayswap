@@ -1,4 +1,5 @@
 import type { BigNumberish } from 'fuels';
+import { bn } from 'fuels';
 
 import type { TokenContractAbi } from '../../src/types/contracts';
 
@@ -8,9 +9,9 @@ export async function initializeTokenContract(
   tokenContract: TokenContractAbi,
   overrides: { gasPrice: BigNumberish; bytePrice: BigNumberish }
 ) {
-  const mintAmount = BigInt(MINT_AMOUNT || '2000000000000');
+  const mintAmount = bn(MINT_AMOUNT || '2000000');
   const address = {
-    value: tokenContract.wallet!.address,
+    value: tokenContract.wallet!.address.toB256(),
   };
 
   try {

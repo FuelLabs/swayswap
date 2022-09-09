@@ -1,5 +1,5 @@
 import type { BigNumberish } from 'fuels';
-import { NativeAssetId } from 'fuels';
+import { bn, NativeAssetId } from 'fuels';
 
 import type { ExchangeContractAbi, TokenContractAbi } from '../../src/types/contracts';
 
@@ -11,13 +11,13 @@ export async function initializePool(
   overrides: { gasPrice: BigNumberish; bytePrice: BigNumberish }
 ) {
   const wallet = tokenContract.wallet!;
-  const tokenAmount = BigInt(TOKEN_AMOUNT || '1200000000000000');
-  const ethAmount = BigInt(ETH_AMOUNT || '1000500000000');
+  const tokenAmount = bn(TOKEN_AMOUNT || '1200000000000000');
+  const ethAmount = bn(ETH_AMOUNT || '1000500000000');
   const address = {
-    value: wallet.address,
+    value: wallet.address.toB256(),
   };
   const tokenId = {
-    value: tokenContract.id,
+    value: tokenContract.id.toB256(),
   };
 
   await tokenContract.functions.mint_coins(tokenAmount).txParams(overrides).call();
@@ -37,9 +37,9 @@ export async function initializePool(
         forward: [ethAmount, NativeAssetId],
       }),
       exchangeContract.functions.deposit().callParams({
-        forward: [tokenAmount, tokenContract.id],
+        forward: [tokenAmount, tokenContract.id.toB256()],
       }),
-      exchangeContract.functions.add_liquidity(1, deadline + BigInt(1000)),
+      exchangeContract.functions.add_liquidity(1, bn(1000).add(deadline)),
     ])
     .txParams({
       ...overrides,
