@@ -1,4 +1,4 @@
-import type { ContractCall } from 'fuels';
+import type { FunctionInvocationScope } from 'fuels';
 import type { UseQueryOptions } from 'react-query';
 import { useQuery } from 'react-query';
 
@@ -7,8 +7,8 @@ import { emptyTransactionCost, getTransactionCost } from '../utils/gas';
 
 import { useEthBalance } from './useEthBalance';
 
-type ContractCallFuncPromise = () => Promise<ContractCall | ContractCall[]>;
-type ContractCallFunc = () => ContractCall | ContractCall[];
+type ContractCallFuncPromise = () => Promise<FunctionInvocationScope>;
+type ContractCallFunc = () => FunctionInvocationScope;
 type UseTransactionCost = TransactionCost & {
   isLoading: boolean;
 };

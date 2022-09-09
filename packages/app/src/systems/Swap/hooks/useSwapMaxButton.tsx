@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { bn } from "fuels";
 
 import type { SwapMachineState } from "../machines/swapMachine";
 import type { SwapMachineContext } from "../types";
@@ -28,7 +29,7 @@ const selectors = {
   },
   hasBalance: (dir: SwapDirection) => (state: SwapMachineState) => {
     const balance = getRightBalance(dir, state.context);
-    return balance && balance > 0;
+    return balance && balance.gt(bn(0));
   },
   isMaxButtonDisabled: (dir: SwapDirection) => (state: SwapMachineState) => {
     const { txCost, ethBalance } = state.context;

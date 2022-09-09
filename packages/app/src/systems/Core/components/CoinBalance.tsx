@@ -3,7 +3,7 @@ import { useMemo } from "react";
 
 import type { CoinBalanceProps } from "../hooks";
 import { useBalances } from "../hooks";
-import { parseToFormattedNumber } from "../utils";
+import { parseToFormattedNumber, ZERO } from "../utils";
 
 import { Button, Tooltip } from "~/systems/UI";
 
@@ -19,7 +19,7 @@ export const CoinBalance = ({
 
   const balance = useMemo(() => {
     const coinBalance = balances?.find((i) => i.assetId === coin?.assetId);
-    return parseToFormattedNumber(coinBalance?.amount || BigInt(0));
+    return parseToFormattedNumber(coinBalance?.amount || ZERO);
   }, [balances, coin?.assetId]);
 
   return (

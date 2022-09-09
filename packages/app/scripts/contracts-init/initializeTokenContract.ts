@@ -9,7 +9,7 @@ export async function initializeTokenContract(
   tokenContract: TokenContractAbi,
   overrides: { gasPrice: BigNumberish; bytePrice: BigNumberish }
 ) {
-  const mintAmount = bn(MINT_AMOUNT || '2000000');
+  const mintAmount = bn(MINT_AMOUNT || '0x1D1A94A2000');
   const address = {
     value: tokenContract.wallet!.address.toB256(),
   };

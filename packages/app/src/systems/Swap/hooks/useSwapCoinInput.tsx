@@ -51,7 +51,7 @@ export function useSwapCoinInput(direction: SwapDirection): UseCoinInputReturn {
   const isLoading = useSelector(service, selectors.isLoading(direction));
 
   const isAllowed = ({ value: val }: NumberFormatValues) => {
-    return parseInputValueBigInt(val) <= MAX_U64_VALUE;
+    return parseInputValueBigInt(val).toNumber() <= MAX_U64_VALUE;
   };
 
   function onChange(value: string) {

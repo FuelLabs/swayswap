@@ -28,7 +28,7 @@ export function WalletWidget() {
   });
 
   const handleCopy = () => {
-    clipboard.copy(wallet!.address);
+    clipboard.copy(wallet!.address.toAddress());
     toast("Address copied", { icon: "✨" });
   };
 
@@ -47,7 +47,8 @@ export function WalletWidget() {
               isDisabled={!coins.length}
               className={cx(style.button, style.buttonLeft)}
             >
-              {wallet?.address.slice(0, 4)}...{wallet?.address.slice(-4)}
+              {String(wallet?.address).slice(0, 4)}...
+              {String(wallet?.address).slice(-4)}
             </Button>
             {Boolean(coins.length) && (
               <Popover {...popover.rootProps}>

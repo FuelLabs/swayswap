@@ -1,3 +1,5 @@
+import { bn, BN } from 'fuels';
+
 import type { CoinAmount, SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 
@@ -19,7 +21,7 @@ import {
 } from '~/systems/Core/utils/math';
 import type { Coin, Maybe } from '~/types';
 
-export const ZERO_AMOUNT = { value: '', raw: ZERO };
+export const ZERO_AMOUNT = { value: '', raw: bn(0) };
 
 /**
  * This function returns amounts that are used inside SwapMachine
@@ -30,11 +32,11 @@ export const ZERO_AMOUNT = { value: '', raw: ZERO };
  * @param value Maybe<bigint | string>
  * @returns CoinAmount
  */
-export function createAmount(value: Maybe<bigint | string | number>): CoinAmount {
+export function createAmount(value: Maybe<BN | string | number>): CoinAmount {
   if (!value) return ZERO_AMOUNT;
-  if (typeof value === 'bigint' && value < ZERO) return ZERO_AMOUNT;
+  if (BN.isBN(value) && value.eq(ZERO)) return ZERO_AMOUNT;
   if (typeof value === 'number' && value < 0) return ZERO_AMOUNT;
-  if (typeof value === 'bigint') {
+  if (BN.isBN(value)) {
     return {
       value: formatUnits(value, DECIMAL_UNITS),
       raw: value,
@@ -55,14 +57,14 @@ export function createAmount(value: Maybe<bigint | string | number>): CoinAmount
   return ZERO_AMOUNT;
 }
 
-export function getPricePerToken(fromAmount?: Maybe<bigint>, toAmount?: Maybe<bigint>) {
+export function getPricePerToken(fromAmount?: Maybe<BN>, toAmount?: Maybe<BN>) {
   if (!toAmount || !fromAmount) return '';
   const ratio = divideFnValidOnly(toAmount, fromAmount);
   const price = ratio * toNumber(ONE_ASSET);
   return toFixed(price / toNumber(ONE_ASSET));
 }
 
-function getPriceImpact(amounts: bigint[], reserves: bigint[]) {
+function getPriceImpact(amounts: BN[], reserves: BN[]) {
   const exchangeRateAfter = divideFnValidOnly(amounts[1], amounts[0]);
   const exchangeRateBefore = divideFnValidOnly(reserves[1], reserves[0]);
   const result = (exchangeRateAfter / exchangeRateBefore - 1) * 100;
@@ -85,17 +87,17 @@ export const calculatePriceImpact = (ctx: SwapMachineContext) => {
 };
 
 export const calculatePriceWithSlippage = (
-  amount: bigint,
+  amount: BN,
   direction: SwapDirection,
   slippage: number
 ) => {
   const isFrom = direction === SwapDirection.fromTo;
   const total = multiplyFn(amount, isFrom ? 1 - slippage : 1 + slippage);
-  return BigInt(Math.trunc(total));
+  return toBigInt(Math.trunc(total));
 };
 
-export function hasEnoughBalance(amount: Maybe<bigint>, balance: Maybe<bigint>) {
-  return Boolean(amount && balance && amount < balance);
+export function hasEnoughBalance(amount: Maybe<BN>, balance: Maybe<BN>) {
+  return Boolean(amount && balance && amount.lt(balance));
 }
 
 // TODO: Add unit tests on this
@@ -120,12 +122,12 @@ export function hasLiquidityForSwap({
   const plusSlippage = safeBigInt(amountPlusSlippage?.raw);
 
   if (isCoinEth(coinFrom) && isFrom) {
-    return fromAmountRaw + networkFee < ethReserve && toAmountRaw < tokenReserve;
+    return fromAmountRaw.add(networkFee).lt(ethReserve) && toAmountRaw.lt(tokenReserve);
   }
   if (isCoinEth(coinFrom) && !isFrom) {
-    return plusSlippage + networkFee < ethReserve && toAmountRaw < tokenReserve;
+    return plusSlippage.add(networkFee).lt(ethReserve) && toAmountRaw.lt(tokenReserve);
   }
-  return fromAmountRaw < tokenReserve && toAmountRaw + networkFee < ethReserve;
+  return fromAmountRaw.add(tokenReserve) && toAmountRaw.add(networkFee).lt(ethReserve);
 }
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {
@@ -140,18 +142,18 @@ export const hasEthForNetworkFee = (params: SwapMachineContext) => {
    * When coinFrom is ETH and we wan't to buy tokens if exact amount of ETH
    */
   if (isCoinEth(coinFrom) && isFrom) {
-    return fromAmountRaw + txCostTotal <= balance;
+    return fromAmountRaw.add(txCostTotal).lte(balance);
   }
   /**
    * When coinFrom is ETH and we wan't to buy exact amount of token
    */
   if (isCoinEth(coinFrom) && !isFrom) {
-    return plusSlippage + txCostTotal <= balance;
+    return plusSlippage.add(txCostTotal).lte(balance);
   }
   /**
    * When coinFrom isn't ETH but you need to pay gas fee
    */
-  return balance > txCostTotal;
+  return balance.gt(txCostTotal);
 };
 
 export interface CalculateMaxBalanceToSwapParams {
@@ -159,19 +161,19 @@ export interface CalculateMaxBalanceToSwapParams {
   ctx: {
     coinFrom?: Coin;
     coinTo?: Coin;
-    coinFromBalance?: Maybe<bigint>;
-    coinToBalance?: Maybe<bigint>;
+    coinFromBalance?: Maybe<BN>;
+    coinToBalance?: Maybe<BN>;
     txCost?: TransactionCost;
   };
 }
 
 export const calculateMaxBalanceToSwap = ({ direction, ctx }: CalculateMaxBalanceToSwapParams) => {
   const isFrom = direction === SwapDirection.fromTo;
-
   const shouldUseNetworkFee =
     (isFrom && isCoinEth(ctx.coinFrom)) || (!isFrom && isCoinEth(ctx.coinTo));
   const balance = safeBigInt(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
   const networkFee = safeBigInt(ctx.txCost?.fee);
-  const nextValue = balance > ZERO && shouldUseNetworkFee ? balance - networkFee : balance;
+  const nextValue = balance.gt(ZERO) && shouldUseNetworkFee ? balance.sub(networkFee) : balance;
+
   return createAmount(nextValue);
 };

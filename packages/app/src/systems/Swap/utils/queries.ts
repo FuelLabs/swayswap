@@ -1,3 +1,6 @@
+import type { BN } from 'fuels';
+import { NativeAssetId } from 'fuels';
+
 import { SwapDirection } from '../types';
 import type { SwapMachineContext } from '../types';
 
@@ -15,38 +18,62 @@ export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
   const directionValue = direction || SwapDirection.fromTo;
 
   if (directionValue === SwapDirection.toFrom) {
-    return contract.prepareCall.swap_with_maximum(1, deadline, {
-      forward: [1, coinFrom.assetId],
+    return contract.functions
+      .swap_with_maximum(1, deadline)
+      .callParams({
+        forward: [1, NativeAssetId],
+      })
+      .txParams({
+        variableOutputs: 2,
+        gasLimit: 1000000,
+      });
+  }
+  return contract.functions
+    .swap_with_minimum(1, deadline)
+    .callParams({
+      forward: [1, NativeAssetId],
+    })
+    .txParams({
       variableOutputs: 2,
       gasLimit: 1000000,
     });
-  }
-  return contract.prepareCall.swap_with_minimum(1, deadline, {
-    forward: [1, coinFrom.assetId],
-    variableOutputs: 2,
-    gasLimit: 1000000,
-  });
 };
 
 const getSwapWithMaximumRequiredAmount = async (
   contract: ExchangeContractAbi,
   assetId: string,
-  amount: bigint
+  amount: BN
 ) => {
-  const requiredAmount = await contract.dryRun.get_swap_with_maximum(amount, {
-    forward: [0, assetId],
-  });
+  const { value: requiredAmount } = await contract.functions
+    .get_swap_with_maximum(amount)
+    .callParams({
+      forward: [0, assetId],
+    })
+    .txParams(
+      getOverrides({
+        gasPrice: 0,
+      })
+    )
+    .get();
   return requiredAmount;
 };
 
 const getSwapWithMinimumMinAmount = async (
   contract: ExchangeContractAbi,
   assetId: string,
-  amount: bigint
+  amount: BN
 ) => {
-  const minAmount = await contract.dryRun.get_swap_with_minimum(amount, {
-    forward: [0, assetId],
-  });
+  const { value: minAmount } = await contract.functions
+    .get_swap_with_minimum(amount)
+    .callParams({
+      forward: [0, assetId],
+    })
+    .txParams(
+      getOverrides({
+        gasPrice: 0,
+      })
+    )
+    .get();
   return minAmount;
 };
 
@@ -86,24 +113,32 @@ export const swapTokens = async (params: SwapMachineContext) => {
   const deadline = await getDeadline(contract);
 
   if (direction === SwapDirection.fromTo) {
-    return contract.submitResult.swap_with_minimum(
-      safeBigInt(amountLessSlippage?.raw),
-      deadline,
-      getOverrides({
+    const { transactionResult } = await contract.functions
+      .swap_with_minimum(safeBigInt(amountLessSlippage?.raw), deadline)
+      .callParams({
         forward: [fromAmount.raw, coinFrom.assetId],
+      })
+      .txParams(
+        getOverrides({
+          gasLimit: txCost.total,
+          variableOutputs: 2,
+        })
+      )
+      .call();
+    return transactionResult;
+  }
+
+  const { transactionResult } = await contract.functions
+    .swap_with_maximum(toAmount.raw, deadline)
+    .callParams({
+      forward: [safeBigInt(amountPlusSlippage?.raw), coinFrom.assetId],
+    })
+    .txParams(
+      getOverrides({
         gasLimit: txCost.total,
         variableOutputs: 2,
       })
-    );
-  }
-
-  return contract.submitResult.swap_with_maximum(
-    toAmount.raw,
-    deadline,
-    getOverrides({
-      forward: [safeBigInt(amountPlusSlippage?.raw), coinFrom.assetId],
-      gasLimit: txCost.total,
-      variableOutputs: 2,
-    })
-  );
+    )
+    .call();
+  return transactionResult;
 };

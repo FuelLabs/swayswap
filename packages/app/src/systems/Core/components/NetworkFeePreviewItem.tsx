@@ -1,3 +1,5 @@
+import type { BN } from "fuels";
+
 import { parseToFormattedNumber } from "../utils";
 
 import { PreviewItem } from "./PreviewTable";
@@ -8,10 +10,10 @@ export function NetworkFeePreviewItem({
   networkFee,
   loading,
 }: {
-  networkFee?: Maybe<bigint>;
+  networkFee?: Maybe<BN>;
   loading?: boolean;
 }) {
-  if (!networkFee) return null;
+  if (!networkFee || networkFee.lte(0)) return null;
 
   return (
     <PreviewItem

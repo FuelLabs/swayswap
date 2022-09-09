@@ -12,7 +12,7 @@ export async function faucet(wallet: Wallet, times = 2) {
       const res = await fetchFaucet({
         method: 'POST',
         body: JSON.stringify({
-          address: wallet?.address,
+          address: wallet?.address.toAddress(),
           captcha: '',
         }),
       });

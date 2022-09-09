@@ -1,11 +1,12 @@
 import * as ethers from '@ethersproject/units';
 import { Decimal } from 'decimal.js';
-import type { BigNumberish } from 'fuels';
+import type { BigNumberish, BN } from 'fuels';
+import { bn } from 'fuels';
 
 import { DECIMAL_UNITS, FIXED_UNITS } from '~/config';
 import type { Maybe } from '~/types';
 
-export const ZERO = toBigInt(0);
+export const ZERO = bn(0);
 
 export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS);
 // Max value supported
@@ -22,15 +23,19 @@ export function toFixed(number: Maybe<BigNumberish>, maxDecimals: number = FIXED
   return [amount || 0, '.', ...decimalFormatted].join('');
 }
 
-export function toNumber(number: Maybe<BigNumberish>) {
-  return Number(BigInt(number || '0'));
+export function isZero(number: Maybe<BigNumberish>): boolean {
+  return bn(number || 0).eq(0);
 }
 
-export function parseUnits(number: string, precision: number = DECIMAL_UNITS) {
-  return ethers.parseUnits(number, precision).toBigInt();
+export function toNumber(number: Maybe<BigNumberish>): number {
+  return bn(number || '0').toNumber();
 }
 
-export function parseInputValueBigInt(value: string) {
+export function parseUnits(number: string, precision: number = DECIMAL_UNITS): BN {
+  return bn(ethers.parseUnits(number, precision).toHexString());
+}
+
+export function parseInputValueBigInt(value: string): BN {
   if (value !== '') {
     const nextValue = value === '.' ? '0.' : value;
     return toBigInt(parseUnits(nextValue));
@@ -39,50 +44,50 @@ export function parseInputValueBigInt(value: string) {
 }
 
 export function toBigInt(number: BigNumberish) {
-  return BigInt(number);
+  return bn(number);
 }
 
 export function formatUnits(number: BigNumberish, precision: number = DECIMAL_UNITS): string {
-  return ethers.formatUnits(number, precision);
+  return ethers.formatUnits(bn(number).toHex(), precision);
 }
 
-export function divideFn(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>) {
-  return new Decimal(value?.toString() || 0).div(by?.toString() || 0).toNumber();
+export function divideFn(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): number {
+  return new Decimal(safeBigInt(value).toHex() || 0).div(safeBigInt(by).toHex() || 0).toNumber();
 }
 
-export function divideFnValidOnly(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>) {
+export function divideFnValidOnly(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): number {
   const result = divideFn(value || 0, by || 0);
 
   return Number(Number.isNaN(result) || !Number.isFinite(result) ? 0 : result);
 }
 
 export function parseToFormattedNumber(
-  value: string | BigNumberish,
+  value: BigNumberish,
   precision: number = DECIMAL_UNITS
-) {
+): string {
   let val = value;
   if (typeof value === 'number') {
-    val = BigInt(Math.trunc(value));
+    val = Math.trunc(value);
   }
   return ethers.commify(toFixed(formatUnits(val, precision), FIXED_UNITS));
 }
 
-export function multiplyFn(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>) {
+export function multiplyFn(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): number {
   return new Decimal(value?.toString() || 0).mul(by?.toString() || 0).toNumber();
 }
 
-export function minimumZero(value: number | bigint) {
-  return value < 0 ? 0 : value;
+export function minimumZero(value: BigNumberish): BN {
+  return bn(value).lt(0) ? bn(0) : bn(value);
 }
 
-export function maxAmount(value: number | bigint, max: number | bigint) {
-  return max > value ? value : max;
+export function maxAmount(value: BigNumberish, max: BigNumberish): BN {
+  return bn(max).lt(value) ? bn(value) : bn(max);
 }
 
-export function isSwayInfinity(value: Maybe<BigNumberish>) {
-  return value?.toString() === MAX_U64_STRING;
+export function isSwayInfinity(value: Maybe<BigNumberish>): boolean {
+  return bn(value || 0).gte(MAX_U64_STRING);
 }
 
-export function safeBigInt(value?: Maybe<bigint>, defaultValue?: number) {
-  return value || toBigInt(defaultValue || 0);
+export function safeBigInt(value?: Maybe<BigNumberish>, defaultValue?: number): BN {
+  return bn(value || bn(defaultValue || 0));
 }

@@ -1,3 +1,4 @@
+import type { BigNumberish } from 'fuels';
 import { useMemo } from 'react';
 
 import { getOverrides } from '../utils/gas';
@@ -19,20 +20,30 @@ export function useTokenMethods(tokenId: string) {
       return wallet?.getBalance(tokenId);
     },
     queryNetworkFee() {
-      return contract.prepareCall.mint({
+      return contract.functions.mint().txParams({
         variableOutputs: 1,
       });
     },
     async getMintAmount() {
-      return contract.dryRun.get_mint_amount();
-    },
-    async mint(gasLimit: bigint) {
-      return contract.submitResult.mint(
-        getOverrides({
+      const { value: mintAmount } = await contract.functions
+        .get_mint_amount()
+        .txParams({
           variableOutputs: 1,
-          gasLimit,
         })
-      );
+        .get();
+      return mintAmount;
+    },
+    async mint(gasLimit: BigNumberish) {
+      const { transactionResult } = await contract.functions
+        .mint()
+        .txParams(
+          getOverrides({
+            variableOutputs: 1,
+            gasLimit,
+          })
+        )
+        .call();
+      return transactionResult;
     },
   };
 }

@@ -11,8 +11,8 @@ export async function initializePool(
   overrides: { gasPrice: BigNumberish; bytePrice: BigNumberish }
 ) {
   const wallet = tokenContract.wallet!;
-  const tokenAmount = bn(TOKEN_AMOUNT || '1200000000000000');
-  const ethAmount = bn(ETH_AMOUNT || '1000500000000');
+  const tokenAmount = bn(TOKEN_AMOUNT || '0x44364C5BB0000');
+  const ethAmount = bn(ETH_AMOUNT || '0xE8F2727500');
   const address = {
     value: wallet.address.toB256(),
   };
