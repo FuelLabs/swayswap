@@ -1,11 +1,13 @@
 name: 'Setup Node.js env'
+
 inputs:
   node-version:
     description: 'Node version'
     default: 16
   pnpm-version:
     description: 'PNPM version'
-    default: 7.0.0
+    default: 7.11.0
+
 runs:
   using: "composite"
   steps:
@@ -24,7 +26,7 @@ runs:
           ${{ runner.os }}-
 
     - name: Setup PNPM
-      uses: pnpm/action-setup@v2.1.0
+      uses: pnpm/action-setup@v2.2.2
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
