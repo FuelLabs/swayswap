@@ -87,6 +87,11 @@ jobs:
         with:
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Run PNPM install
+        id: pnpm-cache
+        run:
+          pnpm recursive install --frozen-lockfile
+
       - name: Setup scripts
         run: |
           pnpm scripts:setup
