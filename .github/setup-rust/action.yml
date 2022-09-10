@@ -1,4 +1,5 @@
 name: 'Setup Rust env'
+
 inputs:
   rust-version:
     description: 'Rust version'
