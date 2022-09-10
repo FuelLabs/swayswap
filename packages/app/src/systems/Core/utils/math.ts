@@ -1,4 +1,4 @@
-import * as ethers from '@ethersproject/units';
+// import * as ethers from '@ethersproject/units';
 import { Decimal } from 'decimal.js';
 import { bn } from 'fuels';
 import type { BigNumberish, BN } from 'fuels';
@@ -6,34 +6,61 @@ import type { BigNumberish, BN } from 'fuels';
 import { DECIMAL_UNITS, FIXED_UNITS } from '~/config';
 import type { Maybe } from '~/types';
 
+/** Zero BN function */
 export const ZERO = bn(0);
-
+/** One Asset Amount 1000000000 */
 export const ONE_ASSET = parseUnits('1', DECIMAL_UNITS);
-// Max value supported
-// eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-export const MAX_U64_VALUE = 0xffff_ffff_ffff_ffff;
-// Max value from Sway Contract
-export const MAX_U64_STRING = '18446744073709551615';
-
-export function toFixed(number: Maybe<BigNumberish>, maxDecimals: number = FIXED_UNITS) {
-  const [amount, decimals = '0'] = String(number?.toString() || '0.0').split('.');
-  const minDecimals = decimals.split('').findIndex((u: string) => u !== '0');
-  const canShowMinDecimals = minDecimals >= maxDecimals && amount === '0';
-  const decimalFormatted = decimals.slice(0, canShowMinDecimals ? minDecimals + 1 : maxDecimals);
-  return [amount || 0, '.', ...decimalFormatted].join('');
-}
+/** Max value from Sway Contract */
+export const MAX_U64_STRING = '0xFFFFFFFFFFFFFFFF';
 
 export function isZero(number: Maybe<BigNumberish>): boolean {
   return bn(number || 0).eq(0);
 }
 
-export function toNumber(number: Maybe<BigNumberish>): number {
-  if (typeof number === 'number') return number;
-  return bn(number || '0').toNumber();
+export function formatUnits(number: BN, precision: number = DECIMAL_UNITS) {
+  const valueUnits = number.toString().slice(0, precision * -1);
+  const valueDecimals = number.toString().slice(precision * -1);
+  const length = valueDecimals.length;
+  const defaultDecimals = Array.from({ length: precision - length })
+    .fill('0')
+    .join('');
+
+  return `${valueUnits ? `${valueUnits}.` : '0.'}${defaultDecimals}${valueDecimals}`;
 }
 
-export function parseUnits(number: string, precision: number = DECIMAL_UNITS): BN {
-  return bn(ethers.parseUnits(number, precision).toHexString());
+export function format(
+  value: BN = ZERO,
+  maxDecimals: number = FIXED_UNITS,
+  precision: number = DECIMAL_UNITS
+) {
+  const [valueUnits = '0', valueDecimals = '0'] = formatUnits(value, precision).split('.');
+  const groupRegex = new RegExp(`(\\d)(?=(\\d{${maxDecimals}})+\\b)`, 'g');
+  const units = valueUnits.replace(groupRegex, '$1,');
+  let decimals = valueDecimals.slice(0, maxDecimals);
+
+  if (valueUnits === '0') {
+    const firstNonZero = valueDecimals.match(/[1-9]/);
+
+    if (firstNonZero && firstNonZero.index && firstNonZero.index > maxDecimals) {
+      decimals = valueDecimals.slice(0, firstNonZero.index + 1);
+    }
+  }
+
+  return `${units}.${decimals}`;
+}
+
+export function parseUnits(value: string, precision: number = DECIMAL_UNITS): BN {
+  const [valueUnits = '0', valueDecimals = '0'] = value.split('.');
+  const length = valueDecimals.length;
+
+  if (length > precision) {
+    throw new Error('Decimal can not be bigger than the precision');
+  }
+
+  const decimals = Array.from({ length: precision }).fill('0');
+  decimals.splice(0, length, valueDecimals);
+  const amount = `${valueUnits.replace(',', '')}${decimals.join('')}`;
+  return bn(amount);
 }
 
 export function parseInputValueBigInt(value: string): BN {
@@ -48,51 +75,33 @@ export function toBigInt(number: BigNumberish) {
   return bn(number);
 }
 
-export function formatUnits(number: BigNumberish, precision: number = DECIMAL_UNITS): string {
-  return ethers.formatUnits(bn(number).toHex(), precision);
-}
-
-export function divideFn(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): number {
-  return new Decimal(Number(value || 0) || 0).div(Number(by || 0)).toNumber();
-}
-
-export function divideFnValidOnly(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): number {
-  const result = divideFn(value || 0, by || 0);
-
-  return Number(Number.isNaN(result) || !Number.isFinite(result) ? 0 : result);
-}
-
-export function parseToFormattedNumber(
-  value: BigNumberish,
-  precision: number = DECIMAL_UNITS
-): string {
-  let val = value;
+export function getNumberOrHex(value: Maybe<BigNumberish>): number | string {
   if (typeof value === 'number') {
-    val = Math.trunc(value);
+    return value;
   }
-  return ethers.commify(toFixed(formatUnits(val, precision), FIXED_UNITS));
+  return bn(value || 0).toHex();
 }
 
-export function multiplyFn(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): number {
-  return new Decimal(value?.toString() || 0).mul(by?.toString() || 0).toNumber();
+export function multiply(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): BN {
+  return bn(new Decimal(getNumberOrHex(value)).mul(getNumberOrHex(by)).round().toHex());
+}
+
+export function divide(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): BN {
+  return bn(new Decimal(getNumberOrHex(value)).div(getNumberOrHex(by)).round().toHex());
 }
 
 export function minimumZero(value: BigNumberish): BN {
-  return bn(value).lt(0) ? bn(0) : bn(value);
+  return bn(value).lte('0') ? bn('0') : bn(value);
 }
 
 export function maxAmount(value: BigNumberish, max: BigNumberish): BN {
   return bn(max).lt(value) ? bn(value) : bn(max);
 }
 
-export function isSwayInfinity(value: Maybe<BigNumberish>): boolean {
-  return bn(value || 0).gte(MAX_U64_STRING);
+export function safeBigInt(value?: Maybe<BigNumberish>, defaultValue?: BigNumberish): BN {
+  return bn(value || defaultValue || 0);
 }
 
-export function safeBigInt(value?: Maybe<BigNumberish>, defaultValue?: number): BN {
-  return bn(value || bn(defaultValue || 0));
-}
-
-export function isValidNumber(value: number) {
-  return value <= Number.MAX_SAFE_INTEGER;
+export function isValidNumber(value: BigNumberish) {
+  return bn(value).lte(MAX_U64_STRING);
 }
