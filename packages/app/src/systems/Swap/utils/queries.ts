@@ -7,6 +7,7 @@ import type { SwapMachineContext } from '../types';
 import { safeBigInt, getDeadline } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
+import type { PreviewInfoOutput } from '~/types/contracts/ExchangeContractAbi';
 
 export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
   const { direction, contract, coinFrom } = params;
@@ -81,7 +82,9 @@ const getSwapWithMinimumMinAmount = async (
   return minAmount;
 };
 
-export const queryPreviewAmount = async (params: SwapMachineContext) => {
+export const queryPreviewAmount = async (
+  params: SwapMachineContext
+): Promise<PreviewInfoOutput | undefined> => {
   const { coinFrom: coin, fromAmount, toAmount, contract, direction } = params;
 
   if (!coin || !contract) return;

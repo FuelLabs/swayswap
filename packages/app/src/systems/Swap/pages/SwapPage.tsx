@@ -21,10 +21,7 @@ export function SwapPage() {
   const { value: toValue } = useSwapCoinInput(TO_FROM);
 
   const shouldShowPreview = useMemo(() => {
-    return (
-      (state.isLoading || preview.hasPreview) &&
-      (parseFloat(fromValue) || parseFloat(toValue))
-    );
+    return (state.isLoading || preview.hasPreview) && (fromValue || toValue);
   }, [fromValue, toValue, state.isLoading, preview.hasPreview]);
 
   return (

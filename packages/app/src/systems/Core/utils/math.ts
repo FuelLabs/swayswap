@@ -41,7 +41,7 @@ export function format(
   if (valueUnits === '0') {
     const firstNonZero = valueDecimals.match(/[1-9]/);
 
-    if (firstNonZero && firstNonZero.index && firstNonZero.index > maxDecimals) {
+    if (firstNonZero && firstNonZero.index && firstNonZero.index + 1 > maxDecimals) {
       decimals = valueDecimals.slice(0, firstNonZero.index + 1);
     }
   }

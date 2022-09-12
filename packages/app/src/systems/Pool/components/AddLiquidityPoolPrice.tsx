@@ -1,6 +1,4 @@
-import { toNumber } from "fuels";
-
-import { parseToFormattedNumber, ONE_ASSET } from "~/systems/Core";
+import { format, ONE_ASSET } from "~/systems/Core";
 import type { Coin } from "~/types";
 
 export interface AddLiquidityPoolPriceProps {
@@ -14,14 +12,9 @@ export const AddLiquidityPoolPrice = ({
   coinTo,
   reservesFromToRatio,
 }: AddLiquidityPoolPriceProps) => {
-  const oneAssetAmount = toNumber(ONE_ASSET);
   const reservesRatio = reservesFromToRatio;
-  const daiPrice = parseToFormattedNumber(
-    Math.floor(oneAssetAmount / reservesRatio)
-  );
-  const ethPrice = parseToFormattedNumber(
-    Math.floor(oneAssetAmount * 1 * reservesRatio)
-  );
+  const daiPrice = format(ONE_ASSET.div(reservesRatio));
+  const ethPrice = format(ONE_ASSET.mul(reservesRatio));
   return (
     <div aria-label="Pool Price Box">
       <h4 className="ml-2 mb-2 text-gray-200 text-sm">Pool price</h4>

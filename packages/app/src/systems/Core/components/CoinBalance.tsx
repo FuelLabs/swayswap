@@ -3,7 +3,7 @@ import { useMemo } from "react";
 
 import type { CoinBalanceProps } from "../hooks";
 import { useBalances } from "../hooks";
-import { parseToFormattedNumber, ZERO } from "../utils";
+import { format, safeBigInt } from "../utils";
 
 import { Button, Tooltip } from "~/systems/UI";
 
@@ -19,7 +19,7 @@ export const CoinBalance = ({
 
   const balance = useMemo(() => {
     const coinBalance = balances?.find((i) => i.assetId === coin?.assetId);
-    return parseToFormattedNumber(coinBalance?.amount || ZERO);
+    return format(safeBigInt(coinBalance?.amount));
   }, [balances, coin?.assetId]);
 
   return (
@@ -35,7 +35,7 @@ export const CoinBalance = ({
       {showMaxButton && (
         <Tooltip
           content={`Max = ${balance} (${coin?.symbol} balance)${
-            gasFee ? ` - ${parseToFormattedNumber(gasFee)} (network fee)` : ``
+            gasFee ? ` - ${format(gasFee)} (network fee)` : ``
           }`}
         >
           <Button

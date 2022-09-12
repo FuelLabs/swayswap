@@ -1,5 +1,7 @@
+import { bn } from 'fuels';
+
 import type { UseCoinInput } from '~/systems/Core';
-import { divideFnValidOnly, safeBigInt, useBalances, toBigInt, toNumber } from '~/systems/Core';
+import { divide, safeBigInt, useBalances, toBigInt } from '~/systems/Core';
 import type { PoolInfoOutput } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UsePreviewLiquidityProps {
@@ -14,16 +16,13 @@ export function usePreviewLiquidity({ fromInput, poolInfo, contractId }: UsePrev
   const lpTokenSupply = safeBigInt(poolInfo?.lp_token_supply, 1);
   const ethReserve = safeBigInt(poolInfo?.eth_reserve, 1);
 
-  const liquidityFactor = toBigInt(toNumber(fromAmount) * toNumber(lpTokenSupply));
-  const previewTokensToReceive = divideFnValidOnly(liquidityFactor, ethReserve);
-  const nextTotalTokenSupply = previewTokensToReceive + toNumber(lpTokenSupply);
+  const liquidityFactor = toBigInt(fromAmount.mul(lpTokenSupply));
+  const previewTokensToReceive = divide(liquidityFactor, ethReserve);
+  const nextTotalTokenSupply = previewTokensToReceive.add(lpTokenSupply);
   const poolContractBalance = balances?.data?.find((item) => item.assetId === contractId);
-  const currentPoolTokensAmount = toNumber(poolContractBalance?.amount);
+  const currentPoolTokensAmount = safeBigInt(poolContractBalance?.amount);
   const nextCurrentPoolShare =
-    divideFnValidOnly(
-      toBigInt(previewTokensToReceive + currentPoolTokensAmount),
-      toBigInt(nextTotalTokenSupply)
-    ) || 1;
+    divide(previewTokensToReceive.add(currentPoolTokensAmount), nextTotalTokenSupply) || bn(1);
 
   return {
     liquidityFactor,

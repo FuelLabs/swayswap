@@ -1,24 +1,22 @@
+import Decimal from 'decimal.js';
 import { bn, BN } from 'fuels';
 
 import type { CoinAmount, SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 
 import { DECIMAL_UNITS } from '~/config';
-import { isCoinEth } from '~/systems/Core';
-import type { TransactionCost } from '~/systems/Core/utils/gas';
 import {
+  isCoinEth,
   ZERO,
-  toNumber,
-  divideFnValidOnly,
-  multiplyFn,
-  ONE_ASSET,
-  toFixed,
-  parseInputValueBigInt,
+  format,
   formatUnits,
-  parseToFormattedNumber,
-  toBigInt,
   safeBigInt,
-} from '~/systems/Core/utils/math';
+  multiply,
+  parseUnits,
+  isZero,
+  ONE_ASSET,
+} from '~/systems/Core';
+import type { TransactionCost } from '~/systems/Core/utils/gas';
 import type { Coin, Maybe } from '~/types';
 
 export const ZERO_AMOUNT = { value: '', raw: bn(0) };
@@ -32,43 +30,37 @@ export const ZERO_AMOUNT = { value: '', raw: bn(0) };
  * @param value Maybe<bigint | string>
  * @returns CoinAmount
  */
-export function createAmount(value: Maybe<BN | string | number>): CoinAmount {
+export function createAmount(value: Maybe<string | BN>): CoinAmount {
   if (!value) return ZERO_AMOUNT;
-  if (BN.isBN(value) && value.eq(ZERO)) return ZERO_AMOUNT;
-  if (typeof value === 'number' && value < 0) return ZERO_AMOUNT;
+  if (typeof value === 'string') {
+    const raw = parseUnits(value);
+    return {
+      value: formatUnits(raw),
+      raw,
+    };
+  }
   if (BN.isBN(value)) {
     return {
       value: formatUnits(value, DECIMAL_UNITS),
       raw: value,
     };
   }
-  if (typeof value === 'string') {
-    return {
-      value,
-      raw: parseInputValueBigInt(value),
-    };
-  }
-  if (typeof value === 'number') {
-    return {
-      value: parseToFormattedNumber(value),
-      raw: toBigInt(Math.ceil(value)),
-    };
-  }
   return ZERO_AMOUNT;
 }
 
 export function getPricePerToken(fromAmount?: Maybe<BN>, toAmount?: Maybe<BN>) {
-  if (!toAmount || !fromAmount) return '';
-  const ratio = divideFnValidOnly(toAmount, fromAmount);
-  const price = ratio * toNumber(ONE_ASSET);
-  return toFixed(price / toNumber(ONE_ASSET));
+  if (!toAmount || !fromAmount || isZero(fromAmount) || isZero(toAmount)) return '';
+  return format(
+    bn(new Decimal(toAmount.toHex()).div(fromAmount.toHex()).mul(ONE_ASSET.toHex()).round().toHex())
+  );
 }
 
 function getPriceImpact(amounts: BN[], reserves: BN[]) {
-  const exchangeRateAfter = divideFnValidOnly(amounts[1], amounts[0]);
-  const exchangeRateBefore = divideFnValidOnly(reserves[1], reserves[0]);
-  const result = (exchangeRateAfter / exchangeRateBefore - 1) * 100;
-  return result > 100 ? 100 : result.toFixed(2);
+  if (amounts.find((a) => isZero(a)) || reserves.find((r) => isZero(r))) return '0';
+  const exchangeRateAfter = new Decimal(amounts[1].toHex()).div(amounts[0].toHex());
+  const exchangeRateBefore = new Decimal(reserves[1].toHex()).div(reserves[0].toHex());
+  const result = exchangeRateBefore.div(exchangeRateAfter).sub(1).mul(100);
+  return result.toFixed(2);
 }
 
 export const calculatePriceImpact = (ctx: SwapMachineContext) => {
@@ -79,10 +71,10 @@ export const calculatePriceImpact = (ctx: SwapMachineContext) => {
   if (!fromAmount?.raw || !toAmount?.raw || !ethReserve || !tokenReserve) {
     return '0';
   }
-
   const isEth = isCoinEth(coinFrom);
   const amounts = [toAmount.raw, fromAmount.raw];
   const reserves = isEth ? [tokenReserve, ethReserve] : [ethReserve, tokenReserve];
+
   return getPriceImpact(amounts, reserves);
 };
 
@@ -92,42 +84,24 @@ export const calculatePriceWithSlippage = (
   slippage: number
 ) => {
   const isFrom = direction === SwapDirection.fromTo;
-  const total = multiplyFn(amount, isFrom ? 1 - slippage : 1 + slippage);
-  return toBigInt(Math.trunc(total));
+  return multiply(amount, isFrom ? 1 - slippage : 1 + slippage);
 };
 
 export function hasEnoughBalance(amount: Maybe<BN>, balance: Maybe<BN>) {
-  return Boolean(amount && balance && amount.lt(balance));
+  return Boolean(amount && balance && amount.lte(balance));
 }
 
 // TODO: Add unit tests on this
-export function hasLiquidityForSwap({
-  direction,
-  poolInfo,
-  coinFrom,
-  fromAmount,
-  coinTo,
-  toAmount,
-  txCost,
-  amountPlusSlippage,
-}: SwapMachineContext) {
-  if (!coinFrom || !coinTo || !txCost?.fee) return false;
-
+export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: SwapMachineContext) {
   const isFrom = direction === SwapDirection.fromTo;
   const ethReserve = safeBigInt(poolInfo?.eth_reserve);
   const tokenReserve = safeBigInt(poolInfo?.token_reserve);
-  const fromAmountRaw = safeBigInt(fromAmount?.raw);
   const toAmountRaw = safeBigInt(toAmount?.raw);
-  const networkFee = safeBigInt(txCost?.fee);
-  const plusSlippage = safeBigInt(amountPlusSlippage?.raw);
 
-  if (isCoinEth(coinFrom) && isFrom) {
-    return fromAmountRaw.add(networkFee).lt(ethReserve) && toAmountRaw.lt(tokenReserve);
-  }
-  if (isCoinEth(coinFrom) && !isFrom) {
-    return plusSlippage.add(networkFee).lt(ethReserve) && toAmountRaw.lt(tokenReserve);
-  }
-  return fromAmountRaw.add(tokenReserve) && toAmountRaw.add(networkFee).lt(ethReserve);
+  if (isZero(ethReserve) || isZero(tokenReserve) || isFrom) return true;
+
+  const reserveAmount = isCoinEth(coinTo) ? ethReserve : tokenReserve;
+  return toAmountRaw.lte(reserveAmount);
 }
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {

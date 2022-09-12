@@ -8,7 +8,7 @@ import { PoolQueries } from '../utils';
 import { useUserPositions } from './useUserPositions';
 
 import type { UseCoinInput } from '~/systems/Core';
-import { toNumber, useTransactionCost, getDeadline, useContract } from '~/systems/Core';
+import { useTransactionCost, getDeadline, useContract } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { Coin } from '~/types';
@@ -34,11 +34,7 @@ export function useAddLiquidity({
   const successMsg = poolRatio ? 'Added liquidity to the pool.' : 'New pool created.';
 
   const txCost = useTransactionCost(
-    [
-      PoolQueries.AddLiquidityNetworkFee,
-      toNumber(fromInput.amount || 0),
-      toNumber(toInput.amount || 0),
-    ],
+    [PoolQueries.AddLiquidityNetworkFee, fromInput.amount, toInput.amount],
     async () => {
       const deadline = await getDeadline(contract);
       return contract

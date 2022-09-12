@@ -6,11 +6,7 @@ import { calculatePriceImpact, calculatePriceWithSlippage } from "../utils";
 
 import { useSwapContext } from "./useSwap";
 
-import {
-  parseToFormattedNumber,
-  safeBigInt,
-  useSlippage,
-} from "~/systems/Core";
+import { format, safeBigInt, useSlippage } from "~/systems/Core";
 
 const selectors = {
   hasPreview: (state: SwapMachineState) => {
@@ -19,7 +15,7 @@ const selectors = {
   outputAmount: (state: SwapMachineState) => {
     const ctx = state.context;
     const amount = safeBigInt(ctx?.toAmount?.raw);
-    return parseToFormattedNumber(amount);
+    return format(amount);
   },
   inputAmount: (state: SwapMachineState) => {
     const ctx = state.context;
@@ -30,7 +26,7 @@ const selectors = {
       ctx?.direction,
       ctx?.slippage || 0
     );
-    return parseToFormattedNumber(price);
+    return format(price);
   },
   priceImpact: (state: SwapMachineState) => {
     const ctx = state.context;

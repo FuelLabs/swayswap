@@ -2,16 +2,7 @@ import { getPoolRatio } from '../utils/helpers';
 
 import { usePoolInfo } from './usePoolInfo';
 
-import {
-  TOKENS,
-  useBalances,
-  ZERO,
-  divideFnValidOnly,
-  parseToFormattedNumber,
-  multiplyFn,
-  toFixed,
-  safeBigInt,
-} from '~/systems/Core';
+import { TOKENS, useBalances, ZERO, safeBigInt, format, divide, multiply } from '~/systems/Core';
 
 export function useUserPositions() {
   const { data: info } = usePoolInfo();
@@ -26,18 +17,18 @@ export function useUserPositions() {
   const tokenReserve = safeBigInt(info?.token_reserve);
   const ethReserve = safeBigInt(info?.eth_reserve);
 
-  const formattedTokenReserve = parseToFormattedNumber(tokenReserve);
-  const formattedEthReserve = parseToFormattedNumber(ethReserve);
+  const formattedTokenReserve = format(tokenReserve);
+  const formattedEthReserve = format(ethReserve);
   const poolRatio = getPoolRatio(info);
 
-  const pooledDAI = divideFnValidOnly(multiplyFn(poolTokensNum, tokenReserve), totalLiquidity);
-  const pooledETH = divideFnValidOnly(multiplyFn(poolTokensNum, ethReserve), totalLiquidity);
-  const formattedPooledDAI = parseToFormattedNumber(pooledDAI);
-  const formattedPooledETH = parseToFormattedNumber(pooledETH);
-  const formattedPoolTokens = poolTokensNum ? parseToFormattedNumber(poolTokensNum) : '0';
+  const pooledDAI = divide(multiply(poolTokensNum, tokenReserve), totalLiquidity);
+  const pooledETH = divide(multiply(poolTokensNum, ethReserve), totalLiquidity);
+  const formattedPooledDAI = format(pooledDAI);
+  const formattedPooledETH = format(pooledETH);
+  const formattedPoolTokens = poolTokensNum ? format(poolTokensNum) : '0';
 
-  const poolShare = divideFnValidOnly(poolTokensNum, totalLiquidity);
-  const formattedPoolShare = toFixed(poolShare * 100);
+  const poolShare = divide(poolTokensNum, totalLiquidity);
+  const formattedPoolShare = format(poolShare.mul(100));
   const hasPositions = poolTokensNum > ZERO;
 
   return {

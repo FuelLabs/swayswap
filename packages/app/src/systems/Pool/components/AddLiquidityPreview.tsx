@@ -5,7 +5,7 @@ import { usePreviewAddLiquidity } from "../hooks";
 
 import type { UseCoinInput } from "~/systems/Core";
 import {
-  parseToFormattedNumber,
+  format,
   PreviewItem,
   PreviewTable,
   TokenIcon,
@@ -63,7 +63,7 @@ export const AddLiquidityPreview = ({
           <PreviewItem
             className="text-gray-300"
             title={`Network Fee`}
-            value={`~ ${parseToFormattedNumber(networkFee)} ETH`}
+            value={`~ ${format(networkFee)} ETH`}
           />
         ) : null}
       </PreviewTable>

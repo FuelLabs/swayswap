@@ -127,7 +127,6 @@ export function SwapProvider({ children }: SwapProviderProps) {
       toAmount: globalState.toAmount,
       slippage: slippage.value,
     } as SwapMachineContext,
-    devTools: true,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any);
 

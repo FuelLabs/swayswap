@@ -2,15 +2,7 @@ import type { BN } from 'fuels';
 
 import { useUserPositions } from './useUserPositions';
 
-import {
-  divideFnValidOnly,
-  maxAmount,
-  minimumZero,
-  multiplyFn,
-  parseToFormattedNumber,
-  safeBigInt,
-  toFixed,
-} from '~/systems/Core';
+import { divide, maxAmount, minimumZero, multiply, format, safeBigInt } from '~/systems/Core';
 import type { Maybe } from '~/types';
 
 export interface UsePreviewRemoveLiquidity {
@@ -24,25 +16,21 @@ export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLi
   const amountToRemoveNum = safeBigInt(amountToRemove);
   const userLPTokenBalance = safeBigInt(poolTokens);
 
-  const previewDAIRemoved = divideFnValidOnly(
-    multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), tokenReserve),
+  const previewDAIRemoved = divide(
+    multiply(maxAmount(amountToRemoveNum, userLPTokenBalance), tokenReserve),
     totalLiquidity
   );
-  const previewETHRemoved = divideFnValidOnly(
-    multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), ethReserve),
+  const previewETHRemoved = divide(
+    multiply(maxAmount(amountToRemoveNum, userLPTokenBalance), ethReserve),
     totalLiquidity
   );
-  const formattedPreviewDAIRemoved = parseToFormattedNumber(
-    minimumZero(Math.floor(previewDAIRemoved))
-  );
-  const formattedPreviewETHRemoved = parseToFormattedNumber(
-    minimumZero(Math.floor(previewETHRemoved))
-  );
+  const formattedPreviewDAIRemoved = format(minimumZero(previewDAIRemoved));
+  const formattedPreviewETHRemoved = format(minimumZero(previewETHRemoved));
 
   const nextCurrentPoolTokens = minimumZero(poolTokensNum.sub(amountToRemoveNum));
-  const nextPoolShare = divideFnValidOnly(nextCurrentPoolTokens, totalLiquidity);
-  const formattedNextCurrentPoolTokens = parseToFormattedNumber(minimumZero(nextCurrentPoolTokens));
-  const formattedNextPoolShare = toFixed(nextPoolShare * 100, 6);
+  const nextPoolShare = divide(nextCurrentPoolTokens, totalLiquidity);
+  const formattedNextCurrentPoolTokens = format(minimumZero(nextCurrentPoolTokens));
+  const formattedNextPoolShare = format(nextPoolShare.mul(100), 6);
 
   return {
     previewDAIRemoved,

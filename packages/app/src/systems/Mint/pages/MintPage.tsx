@@ -4,7 +4,7 @@ import { BsArrowDown } from "react-icons/bs";
 import {
   MainLayout,
   NetworkFeePreviewItem,
-  parseToFormattedNumber,
+  format,
   PreviewTable,
 } from "~/systems/Core";
 import { useMint } from "~/systems/Mint";
@@ -34,7 +34,7 @@ export function MintPage() {
         <div className="text-gray-300">
           <div className="text-sm mr-2 mt-2">Amount:</div>
           <div className="font-bold text-gray-100 text-lg">
-            {parseToFormattedNumber(mint.mintAmount)}
+            {format(mint.mintAmount)}
           </div>
         </div>
         {!shouldDisableMint && (

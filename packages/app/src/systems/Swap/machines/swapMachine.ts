@@ -1,3 +1,4 @@
+import type Decimal from 'decimal.js';
 import type { CoinQuantity, TransactionResult } from 'fuels';
 import type { InterpreterFrom, StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
@@ -16,7 +17,7 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import { handleError, isCoinEth, safeBigInt, toNumber } from '~/systems/Core';
+import { handleError, isCoinEth, multiply, safeBigInt } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
@@ -50,7 +51,7 @@ type MachineServices = {
   fetchPoolRatio: {
     data: {
       info: Maybe<PoolInfoOutput>;
-      ratio: Maybe<number>;
+      ratio: Maybe<Decimal>;
     };
   };
   fetchPreview: {
@@ -144,6 +145,10 @@ export const swapMachine =
               always: [
                 INVALID_STATES.NO_COIN_SELECTED,
                 INVALID_STATES.NO_AMOUNT,
+                {
+                  cond: 'hasLiquidity',
+                  target: '#(machine).invalid.withoutLiquidity',
+                },
                 { target: 'fetchingPoolInfo' },
               ],
             },
@@ -424,8 +429,8 @@ export const swapMachine =
         }),
         setValuesWithSlippage: assign((ctx) => {
           const slippage = ctx.slippage || 0;
-          const lessSlippage = toNumber(ctx.toAmount?.raw) * (1 - slippage);
-          const plusSlippage = toNumber(ctx.fromAmount?.raw) * (1 + slippage);
+          const lessSlippage = multiply(ctx.toAmount?.raw, 1 - slippage);
+          const plusSlippage = multiply(ctx.fromAmount?.raw, 1 + slippage);
           const amountLessSlippage = createAmount(lessSlippage);
           const amountPlusSlippage = createAmount(plusSlippage);
 
@@ -457,6 +462,9 @@ export const swapMachine =
         },
       },
       guards: {
+        hasLiquidity: (ctx) => {
+          return !hasLiquidityForSwap(ctx);
+        },
         inputIsEmpty: (_, ev) => {
           const val = createAmount(ev.data.value);
           return val.raw.eq(ZERO_AMOUNT.raw);
@@ -485,7 +493,7 @@ export const swapMachine =
           return !ev.data.ratio;
         },
         noLiquidity: (ctx) => {
-          return !ctx.previewInfo?.has_liquidity || !hasLiquidityForSwap(ctx);
+          return !ctx.previewInfo?.has_liquidity;
         },
         notHasCoinFromBalance: (ctx) => {
           const isFrom = ctx.direction === SwapDirection.fromTo;

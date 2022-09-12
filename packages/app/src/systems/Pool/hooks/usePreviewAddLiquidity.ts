@@ -1,14 +1,9 @@
+import { bn } from 'fuels';
+
 import { useUserPositions } from './useUserPositions';
 
 import type { UseCoinInput } from '~/systems/Core';
-import {
-  divideFnValidOnly,
-  parseToFormattedNumber,
-  safeBigInt,
-  toFixed,
-  toNumber,
-  ZERO,
-} from '~/systems/Core/utils/math';
+import { format, divide, safeBigInt, ZERO } from '~/systems/Core/utils/math';
 import type { PoolInfoOutput } from '~/types/contracts/ExchangeContractAbi';
 
 export interface UsePreviewAddLiquidityProps {
@@ -21,23 +16,20 @@ export function usePreviewAddLiquidity({ fromInput, poolInfo }: UsePreviewAddLiq
   const amount = safeBigInt(fromInput.amount);
 
   const liquidityFactor = totalLiquidity.mul(amount);
-  const previewTokens = divideFnValidOnly(liquidityFactor, totalLiquidity);
-  const nextTotalTokenSupply = previewTokens + toNumber(poolInfo?.lp_token_supply || ZERO);
-  const nextCurrentPoolShare = divideFnValidOnly(
-    previewTokens + poolTokensNum.toNumber(),
-    nextTotalTokenSupply
-  );
+  const previewTokens = divide(liquidityFactor, totalLiquidity);
+  const nextTotalTokenSupply = previewTokens.add(safeBigInt(poolInfo?.lp_token_supply));
+  const nextCurrentPoolShare = divide(previewTokens.add(poolTokensNum), nextTotalTokenSupply);
 
-  let formattedPreviewTokens = parseToFormattedNumber(previewTokens);
-  let formattedNextCurrentPoolShare = toFixed(nextCurrentPoolShare * 100);
+  let formattedPreviewTokens = format(previewTokens);
+  let formattedNextCurrentPoolShare = format(nextCurrentPoolShare.mul(100));
 
   /**
    * This is necessary for the first user interaction, when there's any
    * pool already created. So, we need to set values manually.
    */
   if (poolInfo?.eth_reserve === ZERO) {
-    formattedPreviewTokens = parseToFormattedNumber(amount);
-    formattedNextCurrentPoolShare = toFixed(amount.gt(ZERO) ? 100 : 0);
+    formattedPreviewTokens = format(amount);
+    formattedNextCurrentPoolShare = format(amount.gt(ZERO) ? bn(100) : bn(0));
   }
 
   return {

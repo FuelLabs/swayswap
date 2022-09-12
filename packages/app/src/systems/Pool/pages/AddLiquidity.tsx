@@ -16,8 +16,8 @@ import {
   CoinSelector,
   NavigateBackButton,
   toBigInt,
-  divideFnValidOnly,
-  multiplyFn,
+  divide,
+  multiply,
   TOKENS,
   useBalances,
   safeBigInt,
@@ -67,7 +67,7 @@ export function AddLiquidity() {
 
   // If reserve didn't return a ratio them the current user
   // Is creating the pool and the ratio is 1:1
-  const addLiquidityRatio = divideFnValidOnly(fromInput.amount, toInput.amount);
+  const addLiquidityRatio = divide(fromInput.amount, toInput.amount);
 
   const {
     mutation: addLiquidityMutation,
@@ -102,7 +102,7 @@ export function AddLiquidity() {
 
     if (poolRatio) {
       const value = safeBigInt(val);
-      const newToValue = Math.ceil(divideFnValidOnly(value, poolRatio));
+      const newToValue = Math.ceil(divide(value, poolRatio));
       // TODO: refactor swayswap to remove use of numbers
       // on this place max value on input should be removed
       if (isValidNumber(newToValue)) {
@@ -119,7 +119,7 @@ export function AddLiquidity() {
 
     if (poolRatio) {
       const value = safeBigInt(val);
-      const newFromValue = Math.floor(multiplyFn(value, poolRatio));
+      const newFromValue = Math.floor(multiply(value, poolRatio));
       // TODO: refactor swayswap to remove use of numbers
       // on this place max value on input should be removed
       if (isValidNumber(newFromValue)) {

@@ -1,6 +1,6 @@
 import type { BN } from "fuels";
 
-import { parseToFormattedNumber } from "../utils";
+import { format } from "../utils";
 
 import { PreviewItem } from "./PreviewTable";
 
@@ -19,7 +19,7 @@ export function NetworkFeePreviewItem({
     <PreviewItem
       className="text-gray-300"
       title={`Network Fee`}
-      value={`~ ${parseToFormattedNumber(networkFee)} ETH`}
+      value={`~ ${format(networkFee)} ETH`}
       loading={loading}
     />
   );
