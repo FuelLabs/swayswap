@@ -379,9 +379,11 @@ impl Exchange for Contract {
         let mut sold = 0;
         let mut has_liquidity = true;
         if (msg_asset_id().into() == ETH_ID) {
+            assert(amount < token_reserve);
             sold = get_output_price(amount, eth_reserve, token_reserve);
             has_liquidity = sold < eth_reserve;
         } else {
+            assert(amount < eth_reserve);
             sold = get_output_price(amount, token_reserve, eth_reserve);
             has_liquidity = sold < token_reserve;
         }
