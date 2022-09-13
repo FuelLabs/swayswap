@@ -7,7 +7,7 @@ import type {
 } from 'fuels';
 import { bn, ReceiptType } from 'fuels';
 
-import { toBigInt, ZERO } from './math';
+import { safeBigInt, toBigInt, ZERO } from './math';
 
 import { BYTE_PRICE, GAS_PRICE } from '~/config';
 
@@ -70,10 +70,11 @@ export async function getTransactionCost(
 }
 
 export function getOverrides(overrides?: TxParams): TxParams {
+  const gasLimit = safeBigInt(overrides?.gasLimit);
   const ret = {
     gasPrice: GAS_PRICE,
     bytePrice: BYTE_PRICE,
-    gasLimit: overrides?.gasLimit || 100_000_000,
+    gasLimit: gasLimit.gt(0) ? gasLimit : 100_000_000,
     ...overrides,
   };
   return ret;

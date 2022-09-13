@@ -1,6 +1,8 @@
+import Decimal from "decimal.js";
 import type { BN } from "fuels";
+import { bn } from "fuels";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import {
   AddLiquidityPoolPrice,
@@ -15,17 +17,14 @@ import {
   useCoinInput,
   CoinSelector,
   NavigateBackButton,
-  toBigInt,
-  divide,
-  multiply,
   TOKENS,
   useBalances,
-  safeBigInt,
   CoinBalance,
-  isValidNumber,
+  safeBigInt,
+  toBigInt,
 } from "~/systems/Core";
 import { Button, Card } from "~/systems/UI";
-import type { Coin, Maybe } from "~/types";
+import type { Maybe } from "~/types";
 
 const style = {
   wrapper: `self-start max-w-[500px] mt-24`,
@@ -36,14 +35,10 @@ const style = {
 };
 
 export function AddLiquidity() {
-  const [error, setError] = useState<string | null>(null);
   const [fromInitialAmount, setFromInitialAmount] = useAtom(poolFromAmountAtom);
   const [toInitialAmount, setToInitialAmount] = useAtom(poolToAmountAtom);
-  const [[coinFrom, coinTo], setCoins] = useState<[Coin, Coin]>([
-    TOKENS[0],
-    TOKENS[1],
-  ]);
-
+  const coinFrom = TOKENS[0];
+  const coinTo = TOKENS[1];
   const balances = useBalances();
   const poolInfoQuery = usePoolInfo();
   const userPositions = useUserPositions();
@@ -53,21 +48,13 @@ export function AddLiquidity() {
   const fromInput = useCoinInput({
     coin: coinFrom,
     disableWhenEth: true,
-    onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
-    gasFee: toBigInt(1),
     onChange: handleChangeFromValue,
   });
-
   const toInput = useCoinInput({
     coin: coinTo,
     disableWhenEth: true,
-    onChangeCoin: (coin: Coin) => setCoins([coin, coinTo]),
     onChange: handleChangeToValue,
   });
-
-  // If reserve didn't return a ratio them the current user
-  // Is creating the pool and the ratio is 1:1
-  const addLiquidityRatio = divide(fromInput.amount, toInput.amount);
 
   const {
     mutation: addLiquidityMutation,
@@ -91,26 +78,17 @@ export function AddLiquidity() {
     if (errorsCreatePull.length) {
       return errorsCreatePull[0];
     }
-    if (error) {
-      return error;
-    }
     return poolRatio ? "Add liquidity" : "Create liquidity";
   }
 
   function handleChangeFromValue(val: Maybe<BN>) {
     fromInput.setAmount(val);
-
     if (poolRatio) {
       const value = safeBigInt(val);
-      const newToValue = Math.ceil(divide(value, poolRatio));
-      // TODO: refactor swayswap to remove use of numbers
-      // on this place max value on input should be removed
-      if (isValidNumber(newToValue)) {
-        setError(null);
-        toInput.setAmount(toBigInt(newToValue));
-      } else {
-        setError("From amount is not supported!");
-      }
+      const newToValue = bn(
+        new Decimal(value.toHex()).div(poolRatio).ceil().toHex()
+      );
+      toInput.setAmount(toBigInt(newToValue));
     }
   }
 
@@ -119,15 +97,10 @@ export function AddLiquidity() {
 
     if (poolRatio) {
       const value = safeBigInt(val);
-      const newFromValue = Math.floor(multiply(value, poolRatio));
-      // TODO: refactor swayswap to remove use of numbers
-      // on this place max value on input should be removed
-      if (isValidNumber(newFromValue)) {
-        setError(null);
-        fromInput.setAmount(toBigInt(newFromValue));
-      } else {
-        setError("From to is not supported!");
-      }
+      const newFromValue = bn(
+        new Decimal(value.toHex()).div(poolRatio).ceil().toHex()
+      );
+      fromInput.setAmount(toBigInt(newFromValue));
     }
   }
 
@@ -145,8 +118,7 @@ export function AddLiquidity() {
     !!errorsCreatePull.length ||
     addLiquidityMutation.isLoading ||
     txCost.isLoading ||
-    !txCost.total ||
-    !!error;
+    !txCost.total;
 
   return (
     <Card className="max-w-[450px]">
@@ -180,11 +152,7 @@ export function AddLiquidity() {
         fromInput={fromInput}
         networkFee={txCost.fee}
       />
-      <AddLiquidityPoolPrice
-        coinFrom={coinFrom}
-        coinTo={coinTo}
-        reservesFromToRatio={poolRatio || addLiquidityRatio || 1}
-      />
+      <AddLiquidityPoolPrice coinFrom={coinFrom} coinTo={coinTo} />
       <Button
         aria-label="Add Liquidity Button"
         isDisabled={shouldDisableAddButton}

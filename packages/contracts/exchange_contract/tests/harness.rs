@@ -366,16 +366,17 @@ async fn exchange_contract() {
     // Add more liquidity to the contract
     ////////////////////////////////////////////////////////
 
-    let token_amount_required = exchange_instance
-        .get_add_liquidity_token_amount(eth_to_add_liquidity_amount)
+    let add_liquidity_preview = exchange_instance
+        .get_add_liquidity(eth_to_add_liquidity_amount, *BASE_ASSET_ID)
         .simulate()
         .await
         .unwrap();
+    assert_eq!(add_liquidity_preview.value.lp_token_received, 99);
     let lp_amount_received = deposit_and_add_liquidity(
         &exchange_instance,
         native_amount_deposit,
         token_asset_id,
-        token_amount_required.value,
+        add_liquidity_preview.value.token_amount
     )
     .await
         + lp_amount_received;

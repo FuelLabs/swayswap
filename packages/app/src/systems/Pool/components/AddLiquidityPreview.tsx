@@ -5,6 +5,7 @@ import { usePreviewAddLiquidity } from "../hooks";
 
 import type { UseCoinInput } from "~/systems/Core";
 import {
+  isZero,
   format,
   PreviewItem,
   PreviewTable,
@@ -59,7 +60,7 @@ export const AddLiquidityPreview = ({
           title={"Your share of current pool:"}
           value={`${formattedNextCurrentPoolShare}%`}
         />
-        {networkFee ? (
+        {!isZero(networkFee) && networkFee ? (
           <PreviewItem
             className="text-gray-300"
             title={`Network Fee`}

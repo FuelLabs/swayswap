@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -37,13 +37,13 @@ export function useAddLiquidity({
     [PoolQueries.AddLiquidityNetworkFee, fromInput.amount, toInput.amount],
     async () => {
       const deadline = await getDeadline(contract);
-      return contract
+      const total = await contract
         .multiCall([
           contract.functions.deposit().callParams({
-            forward: [fromInput.amount || 2, coinFrom.assetId],
+            forward: [fromInput.amount || 1, coinFrom.assetId],
           }),
           contract.functions.deposit().callParams({
-            forward: [toInput.amount || 2, coinTo.assetId],
+            forward: [toInput.amount || 1, coinTo.assetId],
           }),
           contract.functions.add_liquidity(1, deadline),
         ])
@@ -51,12 +51,9 @@ export function useAddLiquidity({
           gasPrice: 0,
           variableOutputs: 2,
         });
+      return total;
     }
   );
-
-  useEffect(() => {
-    fromInput.setGasFee(txCost.fee);
-  }, [txCost.fee.toHex()]);
 
   const mutation = useMutation(
     async () => {

@@ -33,7 +33,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
       const response = await fetchFaucet({
         method: 'POST',
         body: JSON.stringify({
-          address: wallet?.address.toAddress(),
+          address: wallet?.address,
           captcha: captcha || '',
         }),
       });

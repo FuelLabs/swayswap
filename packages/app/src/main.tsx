@@ -9,9 +9,9 @@ import { BrowserRouter } from "react-router-dom";
 
 import { App } from "./App";
 
-inspect({
-  iframe: false,
-});
+// inspect({
+//   iframe: false,
+// });
 
 const { PUBLIC_URL } = process.env;
 createRoot(document.getElementById("root")!).render(

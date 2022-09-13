@@ -33,7 +33,11 @@ export function format(
   maxDecimals: number = FIXED_UNITS,
   precision: number = DECIMAL_UNITS
 ) {
-  const [valueUnits = '0', valueDecimals = '0'] = formatUnits(value, precision).split('.');
+  return toFixed(formatUnits(value, precision), maxDecimals);
+}
+
+export function toFixed(value: Maybe<string>, maxDecimals: number = FIXED_UNITS) {
+  const [valueUnits = '0', valueDecimals = '0'] = String(value || '0.0').split('.');
   const groupRegex = new RegExp(`(\\d)(?=(\\d{${maxDecimals}})+\\b)`, 'g');
   const units = valueUnits.replace(groupRegex, '$1,');
   let decimals = valueDecimals.slice(0, maxDecimals);
@@ -103,5 +107,12 @@ export function safeBigInt(value?: Maybe<BigNumberish>, defaultValue?: BigNumber
 }
 
 export function isValidNumber(value: BigNumberish) {
-  return bn(value).lte(MAX_U64_STRING);
+  try {
+    if (typeof value === 'string') {
+      return bn(parseUnits(value)).lte(MAX_U64_STRING);
+    }
+    return bn(value).lte(MAX_U64_STRING);
+  } catch (e) {
+    return false;
+  }
 }

@@ -15,7 +15,7 @@ use std::{
     u128::U128,
 };
 
-use exchange_abi::{Exchange, PoolInfo, PositionInfo, PreviewInfo, RemoveLiquidityInfo};
+use exchange_abi::{Exchange, PoolInfo, PositionInfo, PreviewInfo, RemoveLiquidityInfo, PreviewAddLiquidityInfo};
 use swayswap_helpers::get_msg_sender_address_or_panic;
 
 ////////////////////////////////////////
@@ -133,11 +133,23 @@ impl Exchange for Contract {
     }
 
     #[storage(read)]
-    fn get_add_liquidity_token_amount(eth_amount: u64) -> u64 {
-        let eth_reserve = get_current_reserve(ETH_ID);
-        let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY));
-        let token_amount = mutiply_div(eth_amount, token_reserve, eth_reserve);
-        token_amount
+    fn get_add_liquidity(amount: u64, asset_id: b256) -> PreviewAddLiquidityInfo {
+        let token_id = get::<b256>(TOKEN_ID_KEY);
+        let mut current_asset_reserve_a = get_current_reserve(ETH_ID);
+        let mut current_asset_reserve_b = get_current_reserve(token_id);
+        let total_liquidity = storage.lp_token_supply;
+        
+        if (asset_id == token_id) {
+            current_asset_reserve_a = get_current_reserve(TOKEN_ID_KEY);
+            current_asset_reserve_b = get_current_reserve(ETH_ID);
+        }
+        let token_amount = mutiply_div(amount, current_asset_reserve_b, current_asset_reserve_a);
+        let liquidity_minted = mutiply_div(amount, total_liquidity, current_asset_reserve_a);
+        
+        PreviewAddLiquidityInfo {
+            token_amount: token_amount,
+            lp_token_received: liquidity_minted,
+        }
     }
 
     #[storage(read, write)]

@@ -23,6 +23,11 @@ pub struct PreviewInfo {
     has_liquidity: bool,
 }
 
+pub struct PreviewAddLiquidityInfo {
+    token_amount: u64,
+    lp_token_received: u64,
+}
+
 abi Exchange {
     ////////////////////
     // Read only
@@ -33,9 +38,9 @@ abi Exchange {
     /// Get information on the liquidity pool.
     #[storage(read)]
     fn get_pool_info() -> PoolInfo;
-    /// Get information on the liquidity pool.
+    /// Get add liquidity preview
     #[storage(read)]
-    fn get_add_liquidity_token_amount(eth_amount: u64) -> u64;
+    fn get_add_liquidity(amount: u64, asset_id: b256) -> PreviewAddLiquidityInfo;
     ////////////////////
     // Actions
     ////////////////////

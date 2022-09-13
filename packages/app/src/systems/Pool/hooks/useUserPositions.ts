@@ -1,8 +1,11 @@
+import Decimal from 'decimal.js';
+import { bn } from 'fuels';
+
 import { getPoolRatio } from '../utils/helpers';
 
 import { usePoolInfo } from './usePoolInfo';
 
-import { TOKENS, useBalances, ZERO, safeBigInt, format, divide, multiply } from '~/systems/Core';
+import { TOKENS, useBalances, ZERO, safeBigInt, format, isZero } from '~/systems/Core';
 
 export function useUserPositions() {
   const { data: info } = usePoolInfo();
@@ -20,15 +23,32 @@ export function useUserPositions() {
   const formattedTokenReserve = format(tokenReserve);
   const formattedEthReserve = format(ethReserve);
   const poolRatio = getPoolRatio(info);
+  let pooledDAI = ZERO;
+  let pooledETH = ZERO;
 
-  const pooledDAI = divide(multiply(poolTokensNum, tokenReserve), totalLiquidity);
-  const pooledETH = divide(multiply(poolTokensNum, ethReserve), totalLiquidity);
+  if (!isZero(totalLiquidity)) {
+    pooledDAI = bn(
+      new Decimal(poolTokensNum.toHex())
+        .mul(tokenReserve.toHex())
+        .div(totalLiquidity.toHex())
+        .round()
+        .toHex()
+    );
+    pooledETH = bn(
+      new Decimal(poolTokensNum.toHex())
+        .mul(ethReserve.toHex())
+        .div(totalLiquidity.toHex())
+        .round()
+        .toHex()
+    );
+  }
+
   const formattedPooledDAI = format(pooledDAI);
   const formattedPooledETH = format(pooledETH);
   const formattedPoolTokens = poolTokensNum ? format(poolTokensNum) : '0';
 
-  const poolShare = divide(poolTokensNum, totalLiquidity);
-  const formattedPoolShare = format(poolShare.mul(100));
+  const poolShare = new Decimal(poolTokensNum.toHex()).div(totalLiquidity.toHex());
+  const formattedPoolShare = poolShare.mul(100).toFixed(2);
   const hasPositions = poolTokensNum > ZERO;
 
   return {

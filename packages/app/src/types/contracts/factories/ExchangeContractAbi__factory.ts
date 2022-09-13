@@ -55,17 +55,31 @@ const _abi = [
   },
   {
     type: 'function',
-    name: 'get_add_liquidity_token_amount',
+    name: 'get_add_liquidity',
     inputs: [
       {
         type: 'u64',
-        name: 'eth_amount',
+        name: 'amount',
+      },
+      {
+        type: 'b256',
+        name: 'asset_id',
       },
     ],
     outputs: [
       {
-        type: 'u64',
+        type: 'struct PreviewAddLiquidityInfo',
         name: '',
+        components: [
+          {
+            type: 'u64',
+            name: 'token_amount',
+          },
+          {
+            type: 'u64',
+            name: 'lp_token_received',
+          },
+        ],
       },
     ],
   },
