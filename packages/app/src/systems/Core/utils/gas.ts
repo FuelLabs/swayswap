@@ -5,7 +5,7 @@ import type {
   MultiCallInvocationScope,
   TxParams,
 } from 'fuels';
-import { bn, ReceiptType } from 'fuels';
+import { ReceiptType } from 'fuels';
 
 import { safeBigInt, toBigInt, ZERO } from './math';
 
@@ -45,8 +45,8 @@ export type TransactionCost = {
 
 export function emptyTransactionCost(error?: string) {
   return {
-    fee: bn(0),
-    total: bn(0),
+    fee: ZERO,
+    total: ZERO,
     error,
   };
 }
@@ -55,10 +55,13 @@ export async function getTransactionCost(
   functionInvocation: FunctionInvocationScope | MultiCallInvocationScope
 ): Promise<TransactionCost> {
   try {
-    const txCost = await functionInvocation.getTransactionCost({
-      gasPrice: GAS_PRICE || 0,
-      fundTransaction: true,
-    });
+    const txCost = await functionInvocation
+      .txParams({
+        gasPrice: ZERO,
+      })
+      .getTransactionCost({
+        fundTransaction: true,
+      });
     return {
       total: toBigInt(txCost.gasUsed.toNumber() * 1.3),
       fee: txCost.fee,

@@ -1,41 +1,35 @@
-import type { BN } from "fuels";
+import { useSelector } from "@xstate/react";
 import { BsArrowDown } from "react-icons/bs";
 
-import { usePreviewAddLiquidity } from "../hooks";
+import { useAddLiquidityContext } from "../hooks";
+import { selectors } from "../selectors";
 
-import type { UseCoinInput } from "~/systems/Core";
 import {
   isZero,
   format,
   PreviewItem,
   PreviewTable,
   TokenIcon,
-  useCoinMetadata,
-  ETH_DAI,
+  toFixed,
+  compareStates,
 } from "~/systems/Core";
-import type { Maybe } from "~/types";
-import type { PoolInfoOutput } from "~/types/contracts/ExchangeContractAbi";
 
-export interface AddLiquidityPreviewProps {
-  poolInfo?: PoolInfoOutput;
-  fromInput: UseCoinInput;
-  networkFee?: Maybe<BN>;
-}
-
-export const AddLiquidityPreview = ({
-  poolInfo,
-  fromInput,
-  networkFee,
-}: AddLiquidityPreviewProps) => {
-  const { coinMetaData } = useCoinMetadata({ symbol: ETH_DAI.name });
-  const coinFrom = coinMetaData?.pairOf?.[0];
-  const coinTo = coinMetaData?.pairOf?.[1];
-
-  const { formattedPreviewTokens, formattedNextCurrentPoolShare } =
-    usePreviewAddLiquidity({
-      fromInput,
-      poolInfo,
-    });
+export const AddLiquidityPreview = () => {
+  const { service } = useAddLiquidityContext();
+  const coinFrom = useSelector(service, selectors.coinFrom);
+  const coinTo = useSelector(service, selectors.coinTo);
+  const poolShare = useSelector(service, selectors.poolShare, compareStates);
+  const transactionCost = useSelector(
+    service,
+    selectors.transactionCost,
+    compareStates
+  );
+  const previewAmount = useSelector(
+    service,
+    selectors.previewAmount,
+    compareStates
+  );
+  const isLoading = useSelector(service, selectors.isLoading);
 
   return (
     <>
@@ -49,22 +43,25 @@ export const AddLiquidityPreview = ({
       >
         <PreviewItem
           title="Pool tokens you'll receive:"
+          loading={isLoading}
           value={
             <div className="flex flex-1 items-center justify-end">
-              {formattedPreviewTokens}{" "}
+              {format(previewAmount)}{" "}
               <TokenIcon coinFrom={coinFrom} coinTo={coinTo} size={14} />
             </div>
           }
         />
         <PreviewItem
+          loading={isLoading}
           title={"Your share of current pool:"}
-          value={`${formattedNextCurrentPoolShare}%`}
+          value={`${toFixed(poolShare.toString())}%`}
         />
-        {!isZero(networkFee) && networkFee ? (
+        {!isZero(transactionCost?.fee) && transactionCost ? (
           <PreviewItem
+            loading={isLoading}
             className="text-gray-300"
             title={`Network Fee`}
-            value={`~ ${format(networkFee)} ETH`}
+            value={`~ ${format(transactionCost.fee)} ETH`}
           />
         ) : null}
       </PreviewTable>

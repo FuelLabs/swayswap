@@ -155,12 +155,6 @@ export function useCoinInput({
     } as CoinBalanceProps;
   }
 
-  function handleSetAmount(value: Maybe<BN>) {
-    if (value?.toHex() !== amount?.toHex()) {
-      setAmount(value);
-    }
-  }
-
   useEffect(() => {
     if (initialGasFee) setGasFee(initialGasFee);
   }, [initialGasFee?.toHex()]);
@@ -172,7 +166,7 @@ export function useCoinInput({
 
   return {
     amount,
-    setAmount: handleSetAmount,
+    setAmount,
     setGasFee,
     getInputProps,
     getCoinSelectorProps,

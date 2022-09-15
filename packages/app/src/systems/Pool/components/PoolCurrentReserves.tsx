@@ -1,18 +1,28 @@
-import { useUserPositions } from "../hooks";
+import { useSelector } from "@xstate/react";
+
+import { useAddLiquidityContext } from "../hooks";
+import { selectors } from "../selectors";
+
+import { NewPoolWarning } from "./NewPoolWarning";
 
 import {
   PreviewTable,
   PreviewItem,
   TokenIcon,
-  useCoinMetadata,
-  ETH_DAI,
+  compareStates,
+  safeBigInt,
+  format,
 } from "~/systems/Core";
 
 export const PoolCurrentReserves = () => {
-  const { formattedEthReserve, formattedTokenReserve } = useUserPositions();
-  const { coinMetaData } = useCoinMetadata({ symbol: ETH_DAI.name });
-  const coinFrom = coinMetaData?.pairOf?.[0];
-  const coinTo = coinMetaData?.pairOf?.[1];
+  const { service } = useAddLiquidityContext();
+  const poolInfo = useSelector(service, selectors.poolInfo, compareStates);
+  const coinFrom = useSelector(service, selectors.coinFrom);
+  const createPool = useSelector(service, selectors.createPool);
+  const coinTo = useSelector(service, selectors.coinTo);
+  const isLoading = useSelector(service, selectors.isLoading);
+
+  if (!isLoading && createPool) return <NewPoolWarning />;
 
   return (
     <PreviewTable
@@ -21,22 +31,24 @@ export const PoolCurrentReserves = () => {
       aria-label="pool-reserves"
     >
       <PreviewItem
+        loading={isLoading}
         title={
           <div className="inline-flex items-center gap-2">
             <TokenIcon coinFrom={coinFrom} size={14} />
             {coinFrom?.name}
           </div>
         }
-        value={formattedEthReserve}
+        value={format(safeBigInt(poolInfo?.eth_reserve))}
       />
       <PreviewItem
+        loading={isLoading}
         title={
           <div className="inline-flex items-center gap-2">
             <TokenIcon coinFrom={coinTo} size={14} />
             {coinTo?.name}
           </div>
         }
-        value={formattedTokenReserve}
+        value={format(safeBigInt(poolInfo?.token_reserve))}
       />
     </PreviewTable>
   );

@@ -4,8 +4,7 @@ import { useQuery } from 'react-query';
 import { usePublisher } from './usePubSub';
 import { useWallet } from './useWallet';
 
-import { SwapEvents } from '~/systems/Swap/hooks/useSwap';
-import { Queries } from '~/types';
+import { Queries, AppEvents } from '~/types';
 
 export function useBalances(opts: UseQueryOptions = {}) {
   const wallet = useWallet();
@@ -16,7 +15,7 @@ export function useBalances(opts: UseQueryOptions = {}) {
     ...(opts as any),
     onSuccess(data) {
       opts.onSuccess?.(data);
-      publisher.emit(SwapEvents.refetchBalances, data);
+      publisher.emit(AppEvents.updatedBalances, data);
     },
   });
 }

@@ -83,6 +83,16 @@ fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
     }
 }
 
+fn div_mutiply(a: u64, b: u64, c: u64) -> u64 {
+    let calculation = (~U128::from(0, a) / ~U128::from(0, b));
+    let result_wrapped = (calculation * ~U128::from(0, c)).as_u64();
+
+    // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
+    match result_wrapped {
+        Result::Ok(inner_value) => inner_value, _ => revert(0), 
+    }
+}
+
 /// Pricing function for converting between ETH and Tokens.
 fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -> u64 {
     assert(input_reserve > 0 && output_reserve > 0);
@@ -135,20 +145,31 @@ impl Exchange for Contract {
     #[storage(read)]
     fn get_add_liquidity(amount: u64, asset_id: b256) -> PreviewAddLiquidityInfo {
         let token_id = get::<b256>(TOKEN_ID_KEY);
-        let mut current_asset_reserve_a = get_current_reserve(ETH_ID);
-        let mut current_asset_reserve_b = get_current_reserve(token_id);
         let total_liquidity = storage.lp_token_supply;
-        
+        let eth_reserve = get_current_reserve(ETH_ID);
+        let token_reserve = get_current_reserve(token_id);
+        let mut current_eth_amount = amount;
+        let mut lp_token_received = 0;
+        let mut token_amount = 0;
+  
         if (asset_id == token_id) {
-            current_asset_reserve_a = get_current_reserve(TOKEN_ID_KEY);
-            current_asset_reserve_b = get_current_reserve(ETH_ID);
+            current_eth_amount = mutiply_div(amount, eth_reserve, token_reserve);
         }
-        let token_amount = mutiply_div(amount, current_asset_reserve_b, current_asset_reserve_a);
-        let liquidity_minted = mutiply_div(amount, total_liquidity, current_asset_reserve_a);
-        
+
+        if total_liquidity > 0 {
+            token_amount = mutiply_div(current_eth_amount, token_reserve, eth_reserve);
+            lp_token_received = mutiply_div(current_eth_amount, total_liquidity, eth_reserve);
+        } else {
+            lp_token_received = current_eth_amount;
+        };
+
+        if (asset_id == token_id) {
+            token_amount = current_eth_amount;
+        }
+
         PreviewAddLiquidityInfo {
             token_amount: token_amount,
-            lp_token_received: liquidity_minted,
+            lp_token_received: lp_token_received,
         }
     }
 

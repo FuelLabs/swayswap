@@ -4,6 +4,8 @@ import { CONTRACT_ID } from '~/config';
 import { getDeadline } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getOverrides } from '~/systems/Core/utils/gas';
+import type { Coin } from '~/types';
+import type { ExchangeContractAbi } from '~/types/contracts';
 
 export enum PoolQueries {
   RemoveLiquidityNetworkFee = 'RemoveLiquidity-networkFee',
@@ -42,4 +44,31 @@ export async function submitRemoveLiquidity(
     )
     .call();
   return transactionResult;
+}
+
+export async function addLiquidity(
+  contract: ExchangeContractAbi,
+  fromAmount: BN,
+  toAmount: BN,
+  fromAsset: Coin,
+  toAsset: Coin,
+  gasLimit?: BN
+) {
+  const deadline = await getDeadline(contract);
+  return contract
+    .multiCall([
+      contract.functions.deposit().callParams({
+        forward: [fromAmount, fromAsset.assetId],
+      }),
+      contract.functions.deposit().callParams({
+        forward: [toAmount, toAsset.assetId],
+      }),
+      contract.functions.add_liquidity(1, deadline),
+    ])
+    .txParams(
+      getOverrides({
+        variableOutputs: 2,
+        gasLimit,
+      })
+    );
 }

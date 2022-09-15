@@ -372,6 +372,7 @@ async fn exchange_contract() {
         .await
         .unwrap();
     assert_eq!(add_liquidity_preview.value.lp_token_received, 99);
+
     let lp_amount_received = deposit_and_add_liquidity(
         &exchange_instance,
         native_amount_deposit,

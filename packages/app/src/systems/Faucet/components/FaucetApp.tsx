@@ -33,8 +33,7 @@ export function FaucetApp({ isButtonFull, onSuccess }: FaucetAppProps) {
           </div>
           {captcha.isFailed && (
             <div className="faucetCaptcha--error">
-              Sorry, something wrong happened here, please reload your this
-              page!
+              Sorry, something went wrong here. Please reload this page!
             </div>
           )}
         </div>

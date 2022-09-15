@@ -7,8 +7,8 @@ import { useWallet } from './useWallet';
 
 import type { Coin } from '~/types';
 
-type Asset = Coin & { amount: BN };
-const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<Asset> =>
+type AssetAmount = Coin & { amount: BN };
+const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<AssetAmount> =>
   coins.map((coin) => {
     const coinMetadata = TOKENS.find((c) => c.assetId === coin.assetId);
     return {

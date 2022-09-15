@@ -22,6 +22,7 @@ import {
   useSubscriber,
   compareStates,
 } from "~/systems/Core";
+import { AppEvents } from "~/types";
 
 const selectors = {
   isLoading: isLoadingState,
@@ -32,14 +33,6 @@ const selectors = {
   direction: (state: SwapMachineState) => state.context.direction,
   txCost: (state: SwapMachineState) => state.context.txCost,
 };
-
-// ----------------------------------------------------------------------------
-// PubSub
-// ----------------------------------------------------------------------------
-
-export enum SwapEvents {
-  "refetchBalances" = "refetchBalances",
-}
 
 // ----------------------------------------------------------------------------
 // SwapContext
@@ -150,7 +143,7 @@ export function SwapProvider({ children }: SwapProviderProps) {
    * This subscriber is need because there's a lot of times the balance
    * is updated outside the machine
    */
-  useSubscriber<CoinQuantity[]>(SwapEvents.refetchBalances, (data) => {
+  useSubscriber<CoinQuantity[]>(AppEvents.updatedBalances, (data) => {
     service.send("SET_BALANCES", { data });
   });
 

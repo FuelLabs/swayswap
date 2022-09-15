@@ -7,9 +7,9 @@ import { CoinSelector } from "./CoinSelector";
 
 import type { Coin } from "~/types";
 
-type Asset = Coin & { amount: BN };
+type AssetAmount = Coin & { amount: BN };
 type AssetItemProps = {
-  coin: Asset;
+  coin: AssetAmount;
 };
 
 export function AssetItem({ coin }: AssetItemProps) {

@@ -17,7 +17,7 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import { handleError, isCoinEth, multiply, safeBigInt } from '~/systems/Core';
+import { getCoin, getCoinETH, handleError, multiply, safeBigInt } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
@@ -370,9 +370,9 @@ export const swapMachine =
           const balances: CoinQuantity[] = ev.data || [];
           const fromId = ctx.coinFrom?.assetId;
           const toId = ctx.coinTo?.assetId;
-          const fromBalance = balances.find((c) => c.assetId === fromId);
-          const toBalance = balances.find((c) => c.assetId === toId);
-          const ethBalance = balances.find(isCoinEth);
+          const fromBalance = getCoin(balances, fromId);
+          const toBalance = getCoin(balances, toId);
+          const ethBalance = getCoinETH(balances);
           return {
             coinFromBalance: safeBigInt(fromBalance?.amount),
             coinToBalance: safeBigInt(toBalance?.amount),
