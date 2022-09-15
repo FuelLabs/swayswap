@@ -22,7 +22,8 @@ export const PoolCurrentReserves = () => {
   const coinTo = useSelector(service, selectors.coinTo);
   const isLoading = useSelector(service, selectors.isLoading);
 
-  if (!isLoading && createPool) return <NewPoolWarning />;
+  if (!poolInfo) return null;
+  if (createPool) return <NewPoolWarning />;
 
   return (
     <PreviewTable

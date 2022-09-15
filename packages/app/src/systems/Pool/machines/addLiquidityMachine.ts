@@ -4,10 +4,11 @@ import type { InterpreterFrom, StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
 
 import type { AddLiquidityMachineContext } from '../types';
-import { poolInfoEmpty, liquidityPreviewEmpty, AddLiquidityActive } from '../types';
-import { addLiquidity } from '../utils';
+import { liquidityPreviewEmpty, AddLiquidityActive } from '../types';
+import { addLiquidity, getPoolRatio } from '../utils';
 
-import { getCoin, getCoinETH, handleError, isZero, safeBigInt, TOKENS } from '~/systems/Core';
+import { CONTRACT_ID } from '~/config';
+import { getCoin, getCoinETH, handleError, isZero, safeBigInt, TOKENS, ZERO } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getTransactionCost } from '~/systems/Core/utils/gas';
@@ -61,7 +62,10 @@ type MachineServices = {
   fetchAddLiquidity: {
     data: Maybe<PreviewAddLiquidityInfoOutput>;
   };
-  fetchResources: {
+  fetchCreateLiquidity: {
+    data: Maybe<PreviewAddLiquidityInfoOutput>;
+  };
+  fetchPoolInfo: {
     data: Maybe<PoolInfoOutput>;
   };
   fetchTransactionCost: {
@@ -97,7 +101,7 @@ export const addLiquidityMachine =
             onDone: [
               {
                 actions: 'setBalances',
-                target: 'fetchingResources',
+                target: 'fetchingPoolInfo',
               },
             ],
             onError: [
@@ -108,14 +112,14 @@ export const addLiquidityMachine =
           },
           tags: 'loadingBalance',
         },
-        fetchingResources: {
+        fetchingPoolInfo: {
           tags: 'loading',
           invoke: {
-            src: 'fetchResources',
+            src: 'fetchPoolInfo',
             onDone: [
               {
                 actions: 'setPoolInfo',
-                target: 'validatingInputs',
+                target: 'idle',
               },
             ],
             onError: 'idle',
@@ -124,9 +128,15 @@ export const addLiquidityMachine =
         debouncing: {
           tags: 'loading',
           after: {
-            '600': {
-              target: 'fetchingAddLiquidityPreview',
-            },
+            '600': [
+              {
+                cond: 'poolHasLiquidity',
+                target: 'addLiquidity',
+              },
+              {
+                target: 'createPool',
+              },
+            ],
           },
           on: {
             INPUT_CHANGE: {
@@ -136,17 +146,56 @@ export const addLiquidityMachine =
             },
           },
         },
-        fetchingAddLiquidityPreview: {
-          tags: 'loading',
-          invoke: {
-            src: 'fetchAddLiquidity',
-            onDone: [
-              {
-                actions: 'setPreviewAddLiqudity',
-                target: 'validatingInputs',
+        createPool: {
+          tags: 'createPool',
+          initial: 'fetchingCreateLiquidityPreview',
+          states: {
+            idle: {},
+            fetchingCreateLiquidityPreview: {
+              tags: 'loading',
+              invoke: {
+                src: 'fetchCreateLiquidity',
+                onDone: {
+                  actions: 'setPreviewCreateLiqudity',
+                  target: '#(AddLiquidityMachine).validatingInputs',
+                },
+                onError: 'idle',
               },
-            ],
-            onError: 'idle',
+            },
+            readyToAddLiquidity: {
+              tags: 'readyToAddLiquidity',
+              on: {
+                ADD_LIQUIDITY: {
+                  target: '#(AddLiquidityMachine).addingLiquidity',
+                },
+              },
+            },
+          },
+        },
+        addLiquidity: {
+          tags: 'addLiquidity',
+          initial: 'fetchingAddLiquidityPreview',
+          states: {
+            idle: {},
+            fetchingAddLiquidityPreview: {
+              tags: 'loading',
+              invoke: {
+                src: 'fetchAddLiquidity',
+                onDone: {
+                  actions: 'setPreviewAddLiqudity',
+                  target: '#(AddLiquidityMachine).validatingInputs',
+                },
+                onError: 'idle',
+              },
+            },
+            readyToAddLiquidity: {
+              tags: 'readyToAddLiquidity',
+              on: {
+                ADD_LIQUIDITY: {
+                  target: '#(AddLiquidityMachine).addingLiquidity',
+                },
+              },
+            },
           },
         },
         validatingInputs: {
@@ -158,9 +207,9 @@ export const addLiquidityMachine =
           ],
         },
         fetchingTransactionCost: {
-          initial: 'initial',
+          initial: 'fetching',
           states: {
-            initial: {
+            fetching: {
               tags: 'loading',
               invoke: {
                 src: 'fetchTransactionCost',
@@ -175,60 +224,36 @@ export const addLiquidityMachine =
                 INVALID_STATES.NO_ETH_FOR_NETWORK_FEE,
                 INVALID_STATES.INVALID_TRANSACTION,
                 {
-                  target: '#(AddLiquidityMachine).readyToAddLiquidity',
+                  cond: 'poolHasLiquidity',
+                  target: '#(AddLiquidityMachine).addLiquidity.readyToAddLiquidity',
+                },
+                {
+                  target: '#(AddLiquidityMachine).createPool.readyToAddLiquidity',
                 },
               ],
             },
           },
         },
-        readyToAddLiquidity: {
-          initial: 'initial',
-          states: {
-            initial: {
-              always: [
-                {
-                  cond: 'poolHasLiquidity',
-                  target: 'addLiquidity',
-                },
-                {
-                  cond: 'poolZeroLiqudity',
-                  target: 'createPool',
-                },
-              ],
-            },
-            createPool: {
-              tags: 'createPool',
-            },
-            addLiquidity: {
-              tags: 'addLiquidity',
-            },
-            addingLiquidity: {
-              tags: 'isAddingLiquidity',
-              invoke: {
-                src: 'addLiquidity',
-                onDone: [
-                  {
-                    target: 'success',
-                  },
-                ],
-                onError: [
-                  {
-                    actions: 'toastErrorMessage',
-                  },
-                ],
+        addingLiquidity: {
+          tags: 'isAddingLiquidity',
+          invoke: {
+            src: 'addLiquidity',
+            onDone: [
+              {
+                target: 'success',
               },
-            },
-            success: {
-              entry: ['toastSwapSuccess', 'clearContext'],
-              always: {
-                target: '#(AddLiquidityMachine).fetchingBalances',
+            ],
+            onError: [
+              {
+                actions: 'toastErrorMessage',
               },
-            },
+            ],
           },
-          on: {
-            ADD_LIQUIDITY: {
-              target: '.addingLiquidity',
-            },
+        },
+        success: {
+          entry: ['toastSwapSuccess', 'clearContext'],
+          always: {
+            target: '#(AddLiquidityMachine).fetchingBalances',
           },
         },
         invalid: {
@@ -315,7 +340,18 @@ export const addLiquidityMachine =
           }
           return null;
         },
-        fetchResources: async (ctx) => {
+        fetchCreateLiquidity: async (ctx) => {
+          const { contract, coinFrom, fromAmount } = ctx;
+          if (!contract) return null;
+          if (fromAmount && coinFrom) {
+            const { value } = await contract.functions
+              .get_add_liquidity(fromAmount, coinFrom.assetId)
+              .get();
+            return value;
+          }
+          return null;
+        },
+        fetchPoolInfo: async (ctx) => {
           const { contract, wallet } = ctx;
           if (!contract || !wallet) return null;
           const { value } = await contract.functions.get_pool_info().get();
@@ -335,12 +371,23 @@ export const addLiquidityMachine =
         }),
         setPoolInfo: assign({
           poolInfo: (_, ev) => {
-            if (!ev.data) return poolInfoEmpty;
+            if (!ev.data) return null;
             return ev.data;
+          },
+          poolRatio: (_, ev) => {
+            return getPoolRatio(ev.data);
+          },
+          poolShare: (ctx, ev) => {
+            const poolPosition = safeBigInt(ctx.poolPosition);
+            if (!ev.data || isZero(poolPosition)) return new Decimal(0);
+            return new Decimal(poolPosition.toHex()).div(ev.data.lp_token_supply.toHex()).mul(100);
           },
         }),
         setBalances: assign({
           balances: (_, ev) => ev.data,
+          poolPosition: (_, ev) => {
+            return safeBigInt(getCoin(ev.data, CONTRACT_ID)?.amount);
+          },
         }),
         setPreviewAddLiqudity: assign((ctx, ev) => {
           if (!ev.data) {
@@ -353,10 +400,11 @@ export const addLiquidityMachine =
             };
           }
 
+          const currentLPTokensBalance = safeBigInt(ctx.poolPosition);
           const finalContext: AddLiquidityMachineContext = {
             ...ctx,
-            poolShare: new Decimal(ev.data.lp_token_received.toHex())
-              .div(ev.data.lp_token_received.add(ctx.poolInfo.lp_token_supply).toHex())
+            poolShare: new Decimal(ev.data.lp_token_received.add(currentLPTokensBalance).toHex())
+              .div(ev.data.lp_token_received.add(safeBigInt(ctx.poolInfo?.lp_token_supply)).toHex())
               .mul(100),
             liquidityPreview: {
               liquidityTokens: ev.data.lp_token_received,
@@ -371,6 +419,25 @@ export const addLiquidityMachine =
           }
 
           return finalContext;
+        }),
+        setPreviewCreateLiqudity: assign((ctx, ev) => {
+          if (!ev.data || isZero(ctx.fromAmount) || isZero(ctx.toAmount)) {
+            return {
+              ...ctx,
+              poolShare: new Decimal(100),
+              liquidityPreview: liquidityPreviewEmpty,
+            };
+          }
+
+          return {
+            ...ctx,
+            poolRatio: new Decimal(ctx.fromAmount!.toHex()).div(ctx.toAmount!.toHex()),
+            poolShare: new Decimal(100),
+            liquidityPreview: {
+              liquidityTokens: ev.data.lp_token_received,
+              requiredAmount: ZERO,
+            },
+          };
         }),
         setInputValue: assign((ctx, ev) => {
           const { coin, amount, active } = ev.data;
@@ -387,7 +454,6 @@ export const addLiquidityMachine =
             return {
               ...ctx,
               active: AddLiquidityActive.from,
-              toAmount: null,
               coinFrom: coin,
               fromAmount: amount,
             };
@@ -395,7 +461,6 @@ export const addLiquidityMachine =
           return {
             ...ctx,
             active: AddLiquidityActive.to,
-            fromAmount: null,
             coinTo: coin,
             toAmount: amount,
           };
@@ -431,10 +496,7 @@ export const addLiquidityMachine =
           return balanceTo.lt(safeBigInt(ctx.toAmount));
         },
         poolHasLiquidity: (ctx) => {
-          return !isZero(ctx.poolInfo.lp_token_supply);
-        },
-        poolZeroLiqudity: (ctx) => {
-          return isZero(ctx.poolInfo.lp_token_supply);
+          return !isZero(ctx.poolInfo?.lp_token_supply);
         },
       },
     }

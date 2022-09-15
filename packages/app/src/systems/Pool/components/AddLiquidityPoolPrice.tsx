@@ -4,7 +4,6 @@ import { bn } from "fuels";
 
 import { useAddLiquidityContext } from "../hooks";
 import { selectors } from "../selectors";
-import { getPoolRatio } from "../utils";
 
 import { format, ONE_ASSET } from "~/systems/Core";
 
@@ -12,14 +11,23 @@ export const AddLiquidityPoolPrice = () => {
   const { service } = useAddLiquidityContext();
   const coinFrom = useSelector(service, selectors.coinFrom);
   const coinTo = useSelector(service, selectors.coinTo);
-  const poolInfo = useSelector(service, selectors.poolInfo);
-  const poolRatio = getPoolRatio(poolInfo);
+  const poolRatio = useSelector(service, selectors.poolRatio);
 
   const daiPrice = format(
-    bn(new Decimal(ONE_ASSET.toHex()).div(poolRatio).round().toHex())
+    bn(
+      new Decimal(ONE_ASSET.toHex())
+        .div(poolRatio || 1)
+        .round()
+        .toHex()
+    )
   );
   const ethPrice = format(
-    bn(new Decimal(ONE_ASSET.toHex()).mul(poolRatio).round().toHex())
+    bn(
+      new Decimal(ONE_ASSET.toHex())
+        .mul(poolRatio || 1)
+        .round()
+        .toHex()
+    )
   );
 
   return (

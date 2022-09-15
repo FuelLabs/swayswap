@@ -3,7 +3,6 @@ import { useCallback } from "react";
 
 import { useAddLiquidityContext } from "../hooks";
 import type { AddLiquidityMachineState } from "../machines/addLiquidityMachine";
-import { selectors } from "../selectors";
 
 import { Button } from "~/systems/UI";
 
@@ -32,11 +31,10 @@ const buttonSelectors = {
     if (state.hasTag("addLiquidity")) {
       return "Add Liquidity";
     }
-
-    return "Add Liquidity";
+    return "Enter amount";
   },
-  readyToAddLiquidity: (state: AddLiquidityMachineState) => {
-    return !state.matches("readyToAddLiquidity");
+  notReadyToAddLiquidity: (state: AddLiquidityMachineState) => {
+    return !state.hasTag("readyToAddLiquidity");
   },
   isLoading: (state: AddLiquidityMachineState) => {
     return state.hasTag("loading") || state.hasTag("isAddingLiquidity");
@@ -47,9 +45,9 @@ export const AddLiquidityButton = () => {
   const { service, send } = useAddLiquidityContext();
   const isLoading = useSelector(service, buttonSelectors.isLoading);
   const buttonText = useSelector(service, buttonSelectors.buttonText);
-  const readyToAddLiquidity = useSelector(
+  const notReadyToAddLiquidity = useSelector(
     service,
-    buttonSelectors.readyToAddLiquidity
+    buttonSelectors.notReadyToAddLiquidity
   );
 
   const handleAddLiquidity = useCallback(() => {
@@ -65,7 +63,7 @@ export const AddLiquidityButton = () => {
       size="lg"
       variant="primary"
       isLoading={isLoading}
-      isDisabled={readyToAddLiquidity}
+      isDisabled={notReadyToAddLiquidity}
       onPress={handleAddLiquidity}
     >
       {buttonText}

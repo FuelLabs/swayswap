@@ -8,7 +8,7 @@ import { useQueryClient } from "react-query";
 import type { AddLiquidityMachineService } from "../machines/addLiquidityMachine";
 import { addLiquidityMachine } from "../machines/addLiquidityMachine";
 import type { AddLiquidityMachineContext } from "../types";
-import { poolInfoEmpty, liquidityPreviewEmpty } from "../types";
+import { liquidityPreviewEmpty } from "../types";
 
 import { TOKENS, useContract, useSubscriber, useWallet } from "~/systems/Core";
 import { AppEvents } from "~/types";
@@ -54,9 +54,10 @@ export function AddLiquidityProvider({ children }: { children: ReactNode }) {
     coinFrom,
     coinTo,
     active: null,
+    poolRatio: null,
     fromAmount: null,
     toAmount: null,
-    poolInfo: poolInfoEmpty,
+    poolInfo: null,
     poolShare: new Decimal(0),
     balances: [],
     liquidityPreview: liquidityPreviewEmpty,

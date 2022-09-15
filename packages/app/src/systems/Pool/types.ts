@@ -30,7 +30,9 @@ export type AddLiquidityMachineContext = {
   wallet: Maybe<Wallet>;
   liquidityPreview: LiquidityPreview;
   poolShare: Decimal;
-  poolInfo: PoolInfoOutput;
+  poolInfo: Maybe<PoolInfoOutput>;
+  poolRatio: Maybe<Decimal>;
+  poolPosition: Maybe<BN>;
   balances: Array<CoinQuantity>;
   transactionCost: Maybe<TransactionCost>;
 };
@@ -38,10 +40,4 @@ export type AddLiquidityMachineContext = {
 export const liquidityPreviewEmpty: LiquidityPreview = {
   liquidityTokens: ZERO,
   requiredAmount: ZERO,
-};
-
-export const poolInfoEmpty: PoolInfoOutput = {
-  eth_reserve: ZERO,
-  lp_token_supply: ZERO,
-  token_reserve: ZERO,
 };

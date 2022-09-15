@@ -1,11 +1,14 @@
-import { safeBigInt } from '../Core';
+import { isZero, safeBigInt } from '../Core';
 
 import type { AddLiquidityMachineState } from './machines/addLiquidityMachine';
 import type { AddLiquidityActive } from './types';
 
 export const selectors = {
-  createPool: (state: AddLiquidityMachineState) => {
-    return state.hasTag('createPool');
+  createPool: ({ context: ctx }: AddLiquidityMachineState) => {
+    return isZero(ctx.poolInfo?.eth_reserve);
+  },
+  addLiquidity: ({ context: ctx }: AddLiquidityMachineState) => {
+    return ctx.poolInfo?.eth_reserve.gt(0);
   },
   poolShare: ({ context: ctx }: AddLiquidityMachineState) => {
     return ctx.poolShare;
@@ -23,7 +26,11 @@ export const selectors = {
     return ctx.coinTo;
   },
   isActiveLoading: (active: AddLiquidityActive) => (state: AddLiquidityMachineState) => {
-    return active !== state.context.active && state.hasTag('loading');
+    return (
+      active !== state.context.active &&
+      state.hasTag('loading') &&
+      !isZero(state.context.poolInfo?.eth_reserve)
+    );
   },
   previewAmount: ({ context: ctx }: AddLiquidityMachineState) => {
     return safeBigInt(ctx.liquidityPreview?.liquidityTokens);
@@ -36,5 +43,8 @@ export const selectors = {
   },
   transactionCost: ({ context: ctx }: AddLiquidityMachineState) => {
     return ctx.transactionCost;
+  },
+  poolRatio: ({ context: ctx }: AddLiquidityMachineState) => {
+    return ctx.poolRatio;
   },
 };
