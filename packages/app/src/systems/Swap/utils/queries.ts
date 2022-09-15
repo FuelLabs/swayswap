@@ -4,7 +4,7 @@ import { NativeAssetId } from 'fuels';
 import { SwapDirection } from '../types';
 import type { SwapMachineContext } from '../types';
 
-import { safeBigInt, getDeadline } from '~/systems/Core';
+import { safeBigInt, getDeadline, ZERO } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
 import type { PreviewInfoOutput } from '~/types/contracts/ExchangeContractAbi';
@@ -50,14 +50,10 @@ const getSwapWithMaximumRequiredAmount = async (
     .callParams({
       forward: [0, assetId],
     })
-    .txParams(
-      getOverrides({
-        gasPrice: 0,
-      })
-    )
-    .get({
-      fundTransaction: false,
-    });
+    .txParams({
+      gasPrice: ZERO,
+    })
+    .get();
   return requiredAmount;
 };
 
@@ -71,14 +67,10 @@ const getSwapWithMinimumMinAmount = async (
     .callParams({
       forward: [0, assetId],
     })
-    .txParams(
-      getOverrides({
-        gasPrice: 0,
-      })
-    )
-    .get({
-      fundTransaction: false,
-    });
+    .txParams({
+      gasPrice: ZERO,
+    })
+    .get();
   return minAmount;
 };
 

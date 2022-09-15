@@ -1,29 +1,11 @@
-import type { BN } from 'fuels';
+import Decimal from 'decimal.js';
 
+import type { PoolInfoPreview } from '../../utils/helpers';
 import * as useUserPositions from '../useUserPositions';
 
 import { ZERO } from '~/systems/Core';
 
-export type MockUseUserPositionParams = {
-  pooledDAI: number;
-  pooledETH: number;
-  poolShare: number;
-  poolTokens: BN;
-  poolTokensNum: BN;
-  formattedPooledDAI: string;
-  formattedPooledETH: string;
-  formattedPoolShare: string;
-  poolRatio: number;
-  ethReserve: BN;
-  formattedEthReserve: string;
-  formattedPoolTokens: string;
-  formattedTokenReserve: string;
-  hasPositions: boolean;
-  tokenReserve: BN;
-  totalLiquidity: BN;
-};
-
-const NO_POSITIONS: MockUseUserPositionParams = {
+const NO_POSITIONS: PoolInfoPreview = {
   ethReserve: ZERO,
   formattedEthReserve: '0.0',
   formattedPoolShare: '0.0',
@@ -32,17 +14,16 @@ const NO_POSITIONS: MockUseUserPositionParams = {
   formattedPooledETH: '0.0',
   formattedTokenReserve: '0.0',
   hasPositions: false,
-  poolRatio: 0,
-  poolShare: 0,
+  poolRatio: new Decimal(0),
+  poolShare: new Decimal(0),
   poolTokens: ZERO,
-  poolTokensNum: ZERO,
-  pooledDAI: 0,
-  pooledETH: 0,
+  pooledDAI: ZERO,
+  pooledETH: ZERO,
   tokenReserve: ZERO,
   totalLiquidity: ZERO,
 };
 
-export function mockUseUserPosition(opts?: Partial<MockUseUserPositionParams>) {
+export function mockUseUserPosition(opts?: Partial<PoolInfoPreview>) {
   return jest.spyOn(useUserPositions, 'useUserPositions').mockImplementation(() => ({
     ...NO_POSITIONS,
     ...opts,

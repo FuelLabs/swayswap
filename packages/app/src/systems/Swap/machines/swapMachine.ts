@@ -340,9 +340,7 @@ export const swapMachine =
           if (!ctx.contract) {
             throw new Error('Contract not found');
           }
-          const { value: info } = await ctx.contract.functions.get_pool_info().get({
-            fundTransaction: false,
-          });
+          const { value: info } = await ctx.contract.functions.get_pool_info().get();
           const ratio = getPoolRatio(info);
           return {
             info,
@@ -490,10 +488,10 @@ export const swapMachine =
           );
         },
         notHasPoolRatio: (_, ev) => {
-          return !ev.data.ratio;
+          return Boolean(ev.data.ratio?.eq(0));
         },
         noLiquidity: (ctx) => {
-          return !ctx.previewInfo?.has_liquidity;
+          return !ctx.previewInfo?.has_liquidity || !hasLiquidityForSwap(ctx);
         },
         notHasCoinFromBalance: (ctx) => {
           const isFrom = ctx.direction === SwapDirection.fromTo;

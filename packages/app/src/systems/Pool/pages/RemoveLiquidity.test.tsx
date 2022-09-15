@@ -4,14 +4,16 @@ import {
   waitFor,
   fireEvent,
 } from "@swayswap/test-utils";
+import Decimal from "decimal.js";
 import type { Wallet } from "fuels";
 import { bn } from "fuels";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
+import type { PoolInfoPreview } from "../utils";
 
 import { App } from "~/App";
 import { CONTRACT_ID } from "~/config";
-import { COIN_ETH, ONE_ASSET, TOKENS } from "~/systems/Core";
+import { COIN_ETH, ONE_ASSET, parseUnits, TOKENS } from "~/systems/Core";
 import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
 import {
   createWallet,
@@ -25,7 +27,7 @@ beforeAll(() => {
   mockUseWallet(wallet);
 });
 
-const USER_LIQUIDITY_POSITIONS = {
+const USER_LIQUIDITY_POSITIONS: PoolInfoPreview = {
   ethReserve: bn("1009199438931"),
   formattedEthReserve: "1,009.199",
   formattedPoolShare: "0.019",
@@ -34,12 +36,11 @@ const USER_LIQUIDITY_POSITIONS = {
   formattedPooledETH: "0.199",
   formattedTokenReserve: "2,001,817.154",
   hasPositions: true,
-  poolRatio: 0.0005041416678966015,
-  poolShare: 0.00019762092871333754,
+  poolRatio: new Decimal("0.0005041416678966015"),
+  poolShare: new Decimal("0.00019762092871333754"),
   poolTokens: bn("198666508"),
-  poolTokensNum: bn("198666508"),
-  pooledDAI: 395600965122.81934,
-  pooledETH: 199438930.3785234,
+  pooledDAI: parseUnits("395600965122.81934"),
+  pooledETH: parseUnits("199438930.3785234"),
   tokenReserve: bn("2001817154177355"),
   totalLiquidity: bn("1005290832775"),
 };

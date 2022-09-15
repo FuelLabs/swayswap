@@ -19,7 +19,7 @@ import {
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
 import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
-import { addLiquidity } from "~/systems/Pool/hooks/__mocks__/useAddLiquidity";
+import { addLiquidity } from "~/systems/Pool/hooks/__mocks__/addLiquidity";
 
 async function findSwapBtn() {
   return waitFor(() => screen.findByLabelText(/swap button/i));
@@ -46,6 +46,13 @@ async function createAndMockWallet() {
 async function fillCoinFromWithValue(value: string) {
   await waitFor(async () => {
     const coinFrom = screen.getByLabelText(/Coin from input/i);
+    fireEvent.change(coinFrom, { target: { value } });
+  });
+}
+
+async function fillCoinToWithValue(value: string) {
+  await waitFor(async () => {
+    const coinFrom = screen.getByLabelText(/Coin to input/i);
     fireEvent.change(coinFrom, { target: { value } });
   });
 }
@@ -124,7 +131,9 @@ describe("SwapPage", () => {
     });
 
     it("should show no pool found message when there is no pool reserve", async () => {
-      const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(0);
+      const spy = jest
+        .spyOn(poolHelpers, "getPoolRatio")
+        .mockReturnValue(new Decimal(0));
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("0.5");
@@ -201,9 +210,9 @@ describe("SwapPage", () => {
         .spyOn(swapHelpers, "hasEthForNetworkFee")
         .mockReturnValue(true);
 
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=DAI&to=ETH" });
 
-      await fillCoinFromWithValue("100000");
+      await fillCoinToWithValue("10000000000.0");
       const submitBtn = await findSwapBtn();
       await waitFor(async () => {
         expect(submitBtn.textContent).toMatch(/insufficient liquidity/i);

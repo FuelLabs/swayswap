@@ -88,7 +88,7 @@ export const calculatePriceWithSlippage = (
 };
 
 export function hasEnoughBalance(amount: Maybe<BN>, balance: Maybe<BN>) {
-  return Boolean(amount && balance && amount.lte(balance));
+  return safeBigInt(amount).lte(safeBigInt(balance)) && !isZero(balance);
 }
 
 // TODO: Add unit tests on this
@@ -98,7 +98,7 @@ export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: S
   const tokenReserve = safeBigInt(poolInfo?.token_reserve);
   const toAmountRaw = safeBigInt(toAmount?.raw);
 
-  if (isZero(ethReserve) || isZero(tokenReserve) || isFrom) return true;
+  if (isFrom) return true;
 
   const reserveAmount = isCoinEth(coinTo) ? ethReserve : tokenReserve;
   return toAmountRaw.lte(reserveAmount);

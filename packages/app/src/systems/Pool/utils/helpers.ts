@@ -13,7 +13,28 @@ export function getPoolRatio(info?: Maybe<PoolInfoOutput>) {
   return new Decimal(ethReserve.toHex()).div(tokenReserve.toHex());
 }
 
-export function getPoolInfoPreview(info: Maybe<PositionInfoOutput>, poolTokens: BN) {
+export type PoolInfoPreview = {
+  pooledDAI: BN;
+  pooledETH: BN;
+  poolShare: Decimal;
+  poolTokens: BN;
+  formattedPooledDAI: string;
+  formattedPooledETH: string;
+  formattedPoolShare: string;
+  formattedPoolTokens: string;
+  formattedTokenReserve: string;
+  formattedEthReserve: string;
+  hasPositions: boolean;
+  totalLiquidity: BN;
+  tokenReserve: BN;
+  ethReserve: BN;
+  poolRatio: Decimal;
+};
+
+export function getPoolInfoPreview(
+  info: Maybe<PositionInfoOutput>,
+  poolTokens: BN
+): PoolInfoPreview {
   // Amounts
   const totalLiquidity = safeBigInt(info?.lp_token_supply);
   const tokenReserve = safeBigInt(info?.token_reserve);

@@ -1,6 +1,7 @@
 import { useSelector } from "@xstate/react";
 import Decimal from "decimal.js";
 import { bn } from "fuels";
+import { useMemo } from "react";
 
 import { useAddLiquidityContext } from "../hooks";
 import { selectors } from "../selectors";
@@ -11,24 +12,17 @@ export const AddLiquidityPoolPrice = () => {
   const { service } = useAddLiquidityContext();
   const coinFrom = useSelector(service, selectors.coinFrom);
   const coinTo = useSelector(service, selectors.coinTo);
-  const poolRatio = useSelector(service, selectors.poolRatio);
+  const poolRatio = useSelector(service, selectors.poolRatio) || 1;
 
-  const daiPrice = format(
-    bn(
-      new Decimal(ONE_ASSET.toHex())
-        .div(poolRatio || 1)
-        .round()
-        .toHex()
-    )
-  );
-  const ethPrice = format(
-    bn(
-      new Decimal(ONE_ASSET.toHex())
-        .mul(poolRatio || 1)
-        .round()
-        .toHex()
-    )
-  );
+  const [daiPrice, ethPrice] = useMemo(() => {
+    const daiPriceFormatted = format(
+      bn(new Decimal(ONE_ASSET.toHex()).div(poolRatio).round().toHex())
+    );
+    const ethPriceFormatted = format(
+      bn(new Decimal(ONE_ASSET.toHex()).mul(poolRatio).round().toHex())
+    );
+    return [daiPriceFormatted, ethPriceFormatted];
+  }, [poolRatio]);
 
   return (
     <div aria-label="Pool Price Box">

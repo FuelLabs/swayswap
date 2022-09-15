@@ -2,6 +2,7 @@ import Decimal from 'decimal.js';
 import type { BN } from 'fuels';
 import { useMemo } from 'react';
 
+import type { PoolInfoPreview } from '../utils/helpers';
 import { getPoolInfoPreview } from '../utils/helpers';
 
 import { usePositionInfo } from './usePoolInfo';
@@ -19,7 +20,12 @@ import {
 } from '~/systems/Core';
 import type { Maybe } from '~/types';
 
-export function usePreviewRemoveLiquidity(amount: Maybe<BN>) {
+export type PreviewRemoveLiquidity = PoolInfoPreview & {
+  formattedNextPoolTokens: string;
+  formattedNextPoolShare: string;
+};
+
+export function usePreviewRemoveLiquidity(amount: Maybe<BN>): PreviewRemoveLiquidity {
   const { data: balances } = useBalances();
   const poolTokens = useMemo(() => {
     const lpTokenAmount = getCoin(balances || [], CONTRACT_ID)?.amount;
