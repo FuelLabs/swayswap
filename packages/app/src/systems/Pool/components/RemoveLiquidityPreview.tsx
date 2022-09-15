@@ -10,6 +10,7 @@ import {
   useCoinMetadata,
   ETH_DAI,
   NetworkFeePreviewItem,
+  safeBigInt,
 } from "~/systems/Core";
 import type { Maybe } from "~/types";
 
@@ -26,11 +27,11 @@ export const RemoveLiquidityPreview = ({
   const coinFrom = coinMetaData?.pairOf?.[0];
   const coinTo = coinMetaData?.pairOf?.[1];
   const {
-    formattedPreviewDAIRemoved,
-    formattedPreviewETHRemoved,
-    formattedNextCurrentPoolTokens,
+    formattedPooledDAI,
+    formattedPooledETH,
+    formattedNextPoolTokens,
     formattedNextPoolShare,
-  } = usePreviewRemoveLiquidity({ amountToRemove: amount });
+  } = usePreviewRemoveLiquidity(safeBigInt(amount));
 
   if (!amount) return null;
 
@@ -48,8 +49,7 @@ export const RemoveLiquidityPreview = ({
           title="DAI:"
           value={
             <div className="flex flex-1 items-center justify-end">
-              {formattedPreviewDAIRemoved}{" "}
-              <TokenIcon coinFrom={coinTo} size={14} />
+              {formattedPooledDAI} <TokenIcon coinFrom={coinTo} size={14} />
             </div>
           }
         />
@@ -57,8 +57,7 @@ export const RemoveLiquidityPreview = ({
           title={"ETH:"}
           value={
             <div className="flex flex-1 items-center justify-end">
-              {formattedPreviewETHRemoved}{" "}
-              <TokenIcon coinFrom={coinFrom} size={14} />
+              {formattedPooledETH} <TokenIcon coinFrom={coinFrom} size={14} />
             </div>
           }
         />
@@ -66,7 +65,7 @@ export const RemoveLiquidityPreview = ({
           title="Pool tokens after:"
           value={
             <div className="flex flex-1 items-center justify-end">
-              {formattedNextCurrentPoolTokens}{" "}
+              {formattedNextPoolTokens}{" "}
               <TokenIcon coinFrom={coinFrom} coinTo={coinTo} size={14} />
             </div>
           }

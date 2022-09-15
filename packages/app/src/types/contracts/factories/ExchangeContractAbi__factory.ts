@@ -55,6 +55,44 @@ const _abi = [
   },
   {
     type: 'function',
+    name: 'get_position',
+    inputs: [
+      {
+        type: 'u64',
+        name: 'amount',
+      },
+    ],
+    outputs: [
+      {
+        type: 'struct PositionInfo',
+        name: '',
+        components: [
+          {
+            type: 'u64',
+            name: 'eth_amount',
+          },
+          {
+            type: 'u64',
+            name: 'token_amount',
+          },
+          {
+            type: 'u64',
+            name: 'eth_reserve',
+          },
+          {
+            type: 'u64',
+            name: 'token_reserve',
+          },
+          {
+            type: 'u64',
+            name: 'lp_token_supply',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
     name: 'get_add_liquidity',
     inputs: [
       {

@@ -1,4 +1,3 @@
-import { bn } from "fuels";
 import { useMemo } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -38,9 +37,6 @@ export function RemoveLiquidityPage() {
   const liquidityToken = TOKENS.find((c) => c.assetId === CONTRACT_ID);
   const tokenInput = useCoinInput({
     coin: liquidityToken,
-    // TODO: refactor swayswap to remove use of numbers
-    // on this place max value on input should be removed
-    max: bn(5_000_000_000_000),
   });
   const amount = tokenInput.amount;
 

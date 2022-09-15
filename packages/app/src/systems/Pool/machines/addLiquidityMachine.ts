@@ -8,7 +8,16 @@ import { liquidityPreviewEmpty, AddLiquidityActive } from '../types';
 import { addLiquidity, getPoolRatio } from '../utils';
 
 import { CONTRACT_ID } from '~/config';
-import { getCoin, getCoinETH, handleError, isZero, safeBigInt, TOKENS, ZERO } from '~/systems/Core';
+import {
+  calculatePercentage,
+  getCoin,
+  getCoinETH,
+  handleError,
+  isZero,
+  safeBigInt,
+  TOKENS,
+  ZERO,
+} from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getTransactionCost } from '~/systems/Core/utils/gas';
@@ -380,7 +389,7 @@ export const addLiquidityMachine =
           poolShare: (ctx, ev) => {
             const poolPosition = safeBigInt(ctx.poolPosition);
             if (!ev.data || isZero(poolPosition)) return new Decimal(0);
-            return new Decimal(poolPosition.toHex()).div(ev.data.lp_token_supply.toHex()).mul(100);
+            return calculatePercentage(poolPosition, ev.data.lp_token_supply);
           },
         }),
         setBalances: assign({
@@ -395,17 +404,16 @@ export const addLiquidityMachine =
               ...ctx,
               fromAmount: null,
               toAmount: null,
-              poolShare: new Decimal(0),
               liquidityPreview: liquidityPreviewEmpty,
             };
           }
 
           const currentLPTokensBalance = safeBigInt(ctx.poolPosition);
+          const totalLPTokens = ev.data.lp_token_received.add(currentLPTokensBalance);
+          const lpTokenSupply = safeBigInt(ctx.poolInfo?.lp_token_supply);
           const finalContext: AddLiquidityMachineContext = {
             ...ctx,
-            poolShare: new Decimal(ev.data.lp_token_received.add(currentLPTokensBalance).toHex())
-              .div(ev.data.lp_token_received.add(safeBigInt(ctx.poolInfo?.lp_token_supply)).toHex())
-              .mul(100),
+            poolShare: calculatePercentage(totalLPTokens, lpTokenSupply),
             liquidityPreview: {
               liquidityTokens: ev.data.lp_token_received,
               requiredAmount: ev.data.token_amount,
@@ -431,7 +439,7 @@ export const addLiquidityMachine =
 
           return {
             ...ctx,
-            poolRatio: new Decimal(ctx.fromAmount!.toHex()).div(ctx.toAmount!.toHex()),
+            poolRatio: calculatePercentage(ctx.fromAmount!, ctx.toAmount!).div(100),
             poolShare: new Decimal(100),
             liquidityPreview: {
               liquidityTokens: ev.data.lp_token_received,

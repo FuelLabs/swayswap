@@ -58,6 +58,7 @@ export function AddLiquidityProvider({ children }: { children: ReactNode }) {
     fromAmount: null,
     toAmount: null,
     poolInfo: null,
+    poolPosition: null,
     poolShare: new Decimal(0),
     balances: [],
     liquidityPreview: liquidityPreviewEmpty,
@@ -65,7 +66,6 @@ export function AddLiquidityProvider({ children }: { children: ReactNode }) {
   };
   const service = useInterpret(addLiquidityMachine, {
     context,
-    devTools: true,
   });
 
   if (!isProd) {

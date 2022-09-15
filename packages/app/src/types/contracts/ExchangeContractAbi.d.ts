@@ -29,6 +29,22 @@ export type PoolInfoOutput = {
   lp_token_supply: BN;
 };
 
+export type PositionInfoInput = {
+  eth_amount: BigNumberish;
+  token_amount: BigNumberish;
+  eth_reserve: BigNumberish;
+  token_reserve: BigNumberish;
+  lp_token_supply: BigNumberish;
+};
+
+export type PositionInfoOutput = {
+  eth_amount: BN;
+  token_amount: BN;
+  eth_reserve: BN;
+  token_reserve: BN;
+  lp_token_supply: BN;
+};
+
 export type PreviewAddLiquidityInfoInput = {
   token_amount: BigNumberish;
   lp_token_received: BigNumberish;
@@ -54,6 +70,7 @@ interface ExchangeContractAbiInterface extends Interface {
   functions: {
     get_balance: FunctionFragment;
     get_pool_info: FunctionFragment;
+    get_position: FunctionFragment;
     get_add_liquidity: FunctionFragment;
     deposit: FunctionFragment;
     withdraw: FunctionFragment;
@@ -67,6 +84,7 @@ interface ExchangeContractAbiInterface extends Interface {
 
   encodeFunctionData(functionFragment: 'get_balance', values: [ContractIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'get_pool_info', values?: undefined): Uint8Array;
+  encodeFunctionData(functionFragment: 'get_position', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(
     functionFragment: 'get_add_liquidity',
     values: [BigNumberish, string]
@@ -97,6 +115,7 @@ interface ExchangeContractAbiInterface extends Interface {
 
   decodeFunctionData(functionFragment: 'get_balance', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_pool_info', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'get_position', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_add_liquidity', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'deposit', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'withdraw', data: BytesLike): DecodedValue;
@@ -114,6 +133,8 @@ export class ExchangeContractAbi extends Contract {
     get_balance: InvokeFunction<[asset_id: ContractIdInput], BN>;
 
     get_pool_info: InvokeFunction<[], PoolInfoOutput>;
+
+    get_position: InvokeFunction<[amount: BigNumberish], PositionInfoOutput>;
 
     get_add_liquidity: InvokeFunction<
       [amount: BigNumberish, asset_id: string],

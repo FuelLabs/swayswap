@@ -1,6 +1,7 @@
+import type { BN } from 'fuels';
 import { useQuery } from 'react-query';
 
-import { useContract } from '~/systems/Core';
+import { isZero, useContract } from '~/systems/Core';
 
 export function usePoolInfo() {
   const contract = useContract();
@@ -10,5 +11,14 @@ export function usePoolInfo() {
       fundTransaction: false,
     });
     return poolInfo;
+  });
+}
+
+export function usePositionInfo(amount: BN) {
+  const contract = useContract();
+  return useQuery(['PoolPage-positionInfo', amount], async () => {
+    if (!contract || isZero(amount)) return;
+    const { value: position } = await contract.functions.get_position(amount).get();
+    return position;
   });
 }

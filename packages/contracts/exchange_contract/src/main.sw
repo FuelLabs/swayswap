@@ -143,6 +143,23 @@ impl Exchange for Contract {
     }
 
     #[storage(read)]
+    fn get_position(amount: u64) -> PositionInfo {
+        let total_liquidity = storage.lp_token_supply;
+        let eth_reserve = get_current_reserve(ETH_ID);
+        let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY));
+        let eth_amount = mutiply_div(amount, eth_reserve, total_liquidity);
+        let token_amount = mutiply_div(amount, token_reserve, total_liquidity);
+
+        PositionInfo {
+            lp_token_supply: total_liquidity,
+            eth_reserve: eth_reserve,
+            token_reserve: token_reserve,
+            eth_amount: eth_amount,
+            token_amount: token_amount
+        }
+    }
+
+    #[storage(read)]
     fn get_add_liquidity(amount: u64, asset_id: b256) -> PreviewAddLiquidityInfo {
         let token_id = get::<b256>(TOKEN_ID_KEY);
         let total_liquidity = storage.lp_token_supply;

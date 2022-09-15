@@ -116,3 +116,7 @@ export function isValidNumber(value: BigNumberish) {
     return false;
   }
 }
+
+export function calculatePercentage(amount: BN, by: BN) {
+  return new Decimal(amount.toHex()).div(by.toHex()).mul(100);
+}

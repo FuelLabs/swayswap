@@ -1,45 +1,49 @@
+import Decimal from 'decimal.js';
 import type { BN } from 'fuels';
+import { useMemo } from 'react';
 
-import { useUserPositions } from './useUserPositions';
+import { getPoolInfoPreview } from '../utils/helpers';
 
-import { divide, maxAmount, minimumZero, multiply, format, safeBigInt } from '~/systems/Core';
+import { usePositionInfo } from './usePoolInfo';
+
+import { CONTRACT_ID } from '~/config';
+import {
+  calculatePercentage,
+  format,
+  getCoin,
+  isZero,
+  safeBigInt,
+  toFixed,
+  useBalances,
+  ZERO,
+} from '~/systems/Core';
 import type { Maybe } from '~/types';
 
-export interface UsePreviewRemoveLiquidity {
-  amountToRemove?: Maybe<BN>;
-}
+export function usePreviewRemoveLiquidity(amount: Maybe<BN>) {
+  const { data: balances } = useBalances();
+  const poolTokens = useMemo(() => {
+    const lpTokenAmount = getCoin(balances || [], CONTRACT_ID)?.amount;
+    const poolTokensNum = safeBigInt(lpTokenAmount);
+    return poolTokensNum;
+  }, [balances]);
+  const { data: info } = usePositionInfo(amount || ZERO);
+  const poolPreview = useMemo(() => getPoolInfoPreview(info, amount || ZERO), [info, amount]);
+  let nextPoolTokens = ZERO;
+  let nextPoolShare = new Decimal(0);
 
-export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLiquidity) {
-  const { tokenReserve, ethReserve, totalLiquidity, poolTokensNum, poolTokens } =
-    useUserPositions();
+  if (!isZero(poolTokens)) {
+    nextPoolTokens = poolTokens.sub(poolPreview.poolTokens);
+    if (nextPoolTokens.lte(poolPreview.totalLiquidity)) {
+      nextPoolShare = calculatePercentage(nextPoolTokens, poolPreview.totalLiquidity);
+    }
+  }
 
-  const amountToRemoveNum = safeBigInt(amountToRemove);
-  const userLPTokenBalance = safeBigInt(poolTokens);
-
-  const previewDAIRemoved = divide(
-    multiply(maxAmount(amountToRemoveNum, userLPTokenBalance), tokenReserve),
-    totalLiquidity
-  );
-  const previewETHRemoved = divide(
-    multiply(maxAmount(amountToRemoveNum, userLPTokenBalance), ethReserve),
-    totalLiquidity
-  );
-  const formattedPreviewDAIRemoved = format(minimumZero(previewDAIRemoved));
-  const formattedPreviewETHRemoved = format(minimumZero(previewETHRemoved));
-
-  const nextCurrentPoolTokens = minimumZero(poolTokensNum.sub(amountToRemoveNum));
-  const nextPoolShare = divide(nextCurrentPoolTokens, totalLiquidity);
-  const formattedNextCurrentPoolTokens = format(minimumZero(nextCurrentPoolTokens));
-  const formattedNextPoolShare = format(nextPoolShare.mul(100), 6);
+  const formattedNextPoolTokens = format(nextPoolTokens);
+  const formattedNextPoolShare = toFixed(nextPoolShare.toString());
 
   return {
-    previewDAIRemoved,
-    previewETHRemoved,
-    nextCurrentPoolTokens,
-    nextPoolShare,
-    formattedPreviewDAIRemoved,
-    formattedPreviewETHRemoved,
-    formattedNextCurrentPoolTokens,
+    ...poolPreview,
+    formattedNextPoolTokens,
     formattedNextPoolShare,
   };
 }

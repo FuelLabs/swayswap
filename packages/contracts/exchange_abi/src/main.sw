@@ -10,6 +10,9 @@ pub struct RemoveLiquidityInfo {
 pub struct PositionInfo {
     eth_amount: u64,
     token_amount: u64,
+    eth_reserve: u64,
+    token_reserve: u64,
+    lp_token_supply: u64,
 }
 
 pub struct PoolInfo {
@@ -41,6 +44,9 @@ abi Exchange {
     /// Get add liquidity preview
     #[storage(read)]
     fn get_add_liquidity(amount: u64, asset_id: b256) -> PreviewAddLiquidityInfo;
+    /// Get current positions
+    #[storage(read)]
+    fn get_position(amount: u64) -> PositionInfo;
     ////////////////////
     // Actions
     ////////////////////
