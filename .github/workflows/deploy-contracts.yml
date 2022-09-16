@@ -6,14 +6,11 @@ on:
       provider_url:
         description: 'Provider url'
         required: true
-        default: 'https://node.swayswap.io/graphql' 
+        default: 'https://testnet-01-preview.swayswap.io/graphql'
         type: string
       wallet_secret:
         description: 'Wallet secret used to deploy and provide initial liquidity'
         type: string
-      byte_price:
-        description: 'Min byte price required from the provider'
-        type: number
       gas_price:
         description: 'Min gas price required from the provider'
         type: number
@@ -41,8 +38,7 @@ env:
   PNPM_VERSION: 7.0.0
   COMPOSE_VERSION: 2.6.0
   WALLET_SECRET: ${{ github.event.inputs.wallet_secret || secrets.WALLET_SECRET }}
-  PROVIDER_URL: ${{ github.event.inputs.provider_url || 'https://node.swayswap.io/graphql' }}
-  BYTE_PRICE: ${{ github.event.inputs.byte_price || 1 }}
+  PROVIDER_URL: ${{ github.event.inputs.provider_url || 'https://testnet-01-preview.swayswap.io/graphql' }}
   GAS_PRICE: ${{ github.event.inputs.gas_price || 1 }}
   TOKEN_AMOUNT: ${{ github.event.inputs.token_amount }}
   ETH_AMOUNT: ${{ github.event.inputs.eth_amount }}
@@ -77,6 +73,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/setup-node
       - uses: ./.github/setup-rust
+
+      - name: Run PNPM install
+        id: pnpm-cache
+        run:
+          pnpm recursive install --frozen-lockfile
 
       - name: Setup scripts
         run: |
