@@ -23,7 +23,5 @@ export const DEADLINE = 1000;
 export const FIXED_UNITS = 3;
 /** Min gas price required from the fuel-core */
 export const GAS_PRICE = 1;
-/** Min byte price required from the fuel-core */
-export const BYTE_PRICE = 1;
 /** Base block explorer url */
 export const BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';

@@ -9,7 +9,7 @@ import { ReceiptType } from 'fuels';
 
 import { safeBigInt, toBigInt, ZERO } from './math';
 
-import { BYTE_PRICE, GAS_PRICE } from '~/config';
+import { GAS_PRICE } from '~/config';
 
 export function getGasUsed(simulateResult: CallResult) {
   const scriptResult = simulateResult.receipts.find(
@@ -24,7 +24,6 @@ export function getGasUsed(simulateResult: CallResult) {
 export type ChainConfig = {
   nodeInfo: {
     minGasPrice: string;
-    minBytePrice: string;
   };
   chain: {
     consensusParameters: {
@@ -76,7 +75,6 @@ export function getOverrides(overrides?: TxParams): TxParams {
   const gasLimit = safeBigInt(overrides?.gasLimit);
   const ret = {
     gasPrice: GAS_PRICE,
-    bytePrice: BYTE_PRICE,
     gasLimit: gasLimit.gt(0) ? gasLimit : 100_000_000,
     ...overrides,
   };

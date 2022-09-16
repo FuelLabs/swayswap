@@ -7,7 +7,7 @@ const { MINT_AMOUNT } = process.env;
 
 export async function initializeTokenContract(
   tokenContract: TokenContractAbi,
-  overrides: { gasPrice: BigNumberish; bytePrice: BigNumberish }
+  overrides: { gasPrice: BigNumberish }
 ) {
   const mintAmount = bn(MINT_AMOUNT || '0x1D1A94A2000');
   const address = {

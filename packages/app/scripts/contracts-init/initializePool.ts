@@ -8,7 +8,7 @@ const { TOKEN_AMOUNT, ETH_AMOUNT } = process.env;
 export async function initializePool(
   tokenContract: TokenContractAbi,
   exchangeContract: ExchangeContractAbi,
-  overrides: { gasPrice: BigNumberish; bytePrice: BigNumberish }
+  overrides: { gasPrice: BigNumberish }
 ) {
   const wallet = tokenContract.wallet!;
   const tokenAmount = bn(TOKEN_AMOUNT || '0x44364C5BB0000');

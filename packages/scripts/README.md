@@ -57,4 +57,3 @@ See complete [types here](./src/types.ts).
 | GENESIS_SECRET | empty            | Genesis secret used when WALLET_SECRET is not present it creates a new wallet and seeds values from genesis to the new wallet and deploys the contract |
 | PROVIDER_URL   | fuels-ts default | Fuel network url                                                                                                                                       |
 | GAS_PRICE      | 0                | Specified the gas price used to send the tx                                                                                                            |
-| BYTE_PRICE     | 0                | Specified the gas byte used to send the tx                                                                                                             |

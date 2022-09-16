@@ -7,8 +7,7 @@ import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../../s
 import { initializePool } from './initializePool';
 import { initializeTokenContract } from './initializeTokenContract';
 
-const { WALLET_SECRET, PROVIDER_URL, BYTE_PRICE, GAS_PRICE, VITE_CONTRACT_ID, VITE_TOKEN_ID } =
-  process.env;
+const { WALLET_SECRET, PROVIDER_URL, GAS_PRICE, VITE_CONTRACT_ID, VITE_TOKEN_ID } = process.env;
 
 if (!WALLET_SECRET) {
   process.stdout.write('WALLET_SECRET is not detected!\n');
@@ -21,7 +20,6 @@ async function main() {
   const tokenContract = TokenContractAbi__factory.connect(VITE_TOKEN_ID!, wallet);
   const overrides = {
     gasPrice: bn(GAS_PRICE || 0),
-    bytePrice: bn(BYTE_PRICE || 0),
   };
 
   await initializeTokenContract(tokenContract, overrides);
