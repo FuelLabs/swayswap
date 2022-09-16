@@ -238,8 +238,8 @@ describe("SwapPage", () => {
       await clickOnMaxBalance();
 
       let pricePerToken: HTMLElement;
-      const ethToDaiRegexp = /(\d+)(\s)(ETH = )(\d+).((\s)|(\d+\s))DAI/i;
-      const daiToEthRegexp = /(\d+)(\s)(DAI = )(\d+).((\s)|(\d+\s))ETH/i;
+      const ethToDaiRegexp = /(\d+)(\s)(ETH = )([\d,]+).((\s)|(\d+\s))DAI/i;
+      const daiToEthRegexp = /(\d+)(\s)(DAI = )([\d,]+).((\s)|(\d+\s))ETH/i;
 
       pricePerToken = await screen.findByLabelText(/price per token/i);
       await waitFor(async () => {

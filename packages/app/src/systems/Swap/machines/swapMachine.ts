@@ -88,6 +88,11 @@ const INVALID_STATES = {
     cond: 'noLiquidity',
     target: '#(machine).invalid.withoutLiquidity',
   },
+  NO_FROM_LIQUIDITY: {
+    cond: 'notHasLiquidity',
+    actions: 'cleanPreviewInfo',
+    target: '#(machine).invalid.withoutLiquidity',
+  },
 };
 
 export const swapMachine =
@@ -123,8 +128,26 @@ export const swapMachine =
         },
         fetchingResources: {
           tags: 'loading',
-          initial: 'fetchingTxCost',
+          initial: 'fetchingPoolInfo',
           states: {
+            idle: {},
+            fetchingPoolInfo: {
+              invoke: {
+                src: 'fetchPoolRatio',
+                onDone: [
+                  INVALID_STATES.NO_POOL_RATIO,
+                  {
+                    actions: 'setPoolInfo',
+                    target: 'fetchingTxCost',
+                  },
+                ],
+                onError: [
+                  {
+                    actions: 'toastErrorMessage',
+                  },
+                ],
+              },
+            },
             fetchingTxCost: {
               invoke: {
                 src: 'fetchTxCost',
@@ -145,29 +168,9 @@ export const swapMachine =
               always: [
                 INVALID_STATES.NO_COIN_SELECTED,
                 INVALID_STATES.NO_AMOUNT,
-                {
-                  cond: 'hasLiquidity',
-                  target: '#(machine).invalid.withoutLiquidity',
-                },
-                { target: 'fetchingPoolInfo' },
+                INVALID_STATES.NO_FROM_LIQUIDITY,
+                { target: 'fetchingPreview' },
               ],
-            },
-            fetchingPoolInfo: {
-              invoke: {
-                src: 'fetchPoolRatio',
-                onDone: [
-                  INVALID_STATES.NO_POOL_RATIO,
-                  {
-                    actions: 'setPoolInfo',
-                    target: 'fetchingPreview',
-                  },
-                ],
-                onError: [
-                  {
-                    actions: 'toastErrorMessage',
-                  },
-                ],
-              },
             },
             fetchingPreview: {
               invoke: {
@@ -355,6 +358,10 @@ export const swapMachine =
         },
       },
       actions: {
+        cleanPreviewInfo: assign((ctx) => ({
+          ...ctx,
+          previewInfo: null,
+        })),
         setTxCost: assign({
           txCost: (_, ev) => ev.data,
         }),
@@ -460,7 +467,7 @@ export const swapMachine =
         },
       },
       guards: {
-        hasLiquidity: (ctx) => {
+        notHasLiquidity: (ctx) => {
           return !hasLiquidityForSwap(ctx);
         },
         inputIsEmpty: (_, ev) => {
