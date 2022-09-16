@@ -368,6 +368,16 @@ async fn exchange_contract() {
 
     let add_liquidity_preview = exchange_instance
         .get_add_liquidity(eth_to_add_liquidity_amount, *BASE_ASSET_ID)
+        .call_params(CallParameters::new(
+            Some(amount_expected.value.amount),
+            Some(token_asset_id.clone()),
+            Some(100_000_000),
+        ))
+        .tx_params(TxParameters {
+            gas_price: 0,
+            gas_limit: 100_000_000,
+            maturity: 0,
+        })
         .simulate()
         .await
         .unwrap();
