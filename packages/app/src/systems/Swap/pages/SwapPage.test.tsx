@@ -26,7 +26,7 @@ async function findSwapBtn() {
 }
 
 async function findMaxBalanceBtn(input: "from" | "to" = "from") {
-  const button = await screen.findAllByLabelText(/Set Maximun Balance/i);
+  const button = await screen.findAllByLabelText(/Set Maximum Balance/i);
   return button[input === "from" ? 0 : 1];
 }
 

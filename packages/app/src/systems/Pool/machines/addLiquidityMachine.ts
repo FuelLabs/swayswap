@@ -5,7 +5,7 @@ import { assign, createMachine } from 'xstate';
 
 import type { AddLiquidityMachineContext } from '../types';
 import { liquidityPreviewEmpty, AddLiquidityActive } from '../types';
-import { addLiquidity, getPoolRatio } from '../utils';
+import { addLiquidity, fetchPoolInfo, getPoolRatio } from '../utils';
 
 import { CONTRACT_ID } from '~/config';
 import {
@@ -37,9 +37,13 @@ const INVALID_STATES = {
     cond: 'notHasToBalance',
     target: '#(AddLiquidityMachine).invalid.withoutToBalance',
   },
-  NO_AMOUNT: {
-    cond: 'notHasAmount',
-    target: '#(AddLiquidityMachine).invalid.withoutAmount',
+  NO_FROM_AMOUNT: {
+    cond: 'notHasFromAmount',
+    target: '#(AddLiquidityMachine).invalid.withoutFromAmount',
+  },
+  NO_TO_AMOUNT: {
+    cond: 'notHasToAmount',
+    target: '#(AddLiquidityMachine).invalid.withoutToAmount',
   },
   NO_ETH_FOR_NETWORK_FEE: {
     cond: 'notHasEthForNetworkFee',
@@ -209,7 +213,8 @@ export const addLiquidityMachine =
         },
         validatingInputs: {
           always: [
-            INVALID_STATES.NO_AMOUNT,
+            INVALID_STATES.NO_FROM_AMOUNT,
+            INVALID_STATES.NO_TO_AMOUNT,
             INVALID_STATES.NO_FROM_BALANCE,
             INVALID_STATES.NO_TO_BALANCE,
             { target: 'fetchingTransactionCost' },
@@ -267,8 +272,11 @@ export const addLiquidityMachine =
         },
         invalid: {
           states: {
-            withoutAmount: {
-              tags: 'needEnterAmount',
+            withoutFromAmount: {
+              tags: 'needEnterFromAmount',
+            },
+            withoutToAmount: {
+              tags: 'needEnterToAmount',
             },
             withoutFromBalance: {
               tags: 'notHasFromBalance',
@@ -361,10 +369,7 @@ export const addLiquidityMachine =
           return null;
         },
         fetchPoolInfo: async (ctx) => {
-          const { contract, wallet } = ctx;
-          if (!contract || !wallet) return null;
-          const { value } = await contract.functions.get_pool_info().get();
-          return value;
+          return fetchPoolInfo(ctx);
         },
       },
       actions: {
@@ -492,8 +497,11 @@ export const addLiquidityMachine =
           const networkFee = safeBigInt(ctx.transactionCost?.fee);
           return ethBalance.lte(fromAmount.add(networkFee));
         },
-        notHasAmount: (ctx) => {
-          return !ctx.fromAmount || !ctx.toAmount || isZero(ctx.toAmount) || isZero(ctx.fromAmount);
+        notHasFromAmount: (ctx) => {
+          return !ctx.fromAmount || isZero(ctx.fromAmount);
+        },
+        notHasToAmount: (ctx) => {
+          return !ctx.toAmount || isZero(ctx.toAmount);
         },
         notHasFromBalance: (ctx) => {
           const balanceFrom = safeBigInt(getCoin(ctx.balances, ctx.coinFrom.assetId)?.amount);

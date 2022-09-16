@@ -10,7 +10,7 @@ import { addLiquidityMachine } from "../machines/addLiquidityMachine";
 import type { AddLiquidityMachineContext } from "../types";
 import { liquidityPreviewEmpty } from "../types";
 
-import { TOKENS, useContract, useSubscriber, useWallet } from "~/systems/Core";
+import { TOKENS, useContract, useSubscriber } from "~/systems/Core";
 import { AppEvents } from "~/types";
 
 const serviceMap = new Map();
@@ -44,12 +44,10 @@ export function useAddLiquidityContext() {
 export function AddLiquidityProvider({ children }: { children: ReactNode }) {
   const client = useQueryClient();
   const contract = useContract();
-  const wallet = useWallet();
   const coinFrom = TOKENS[0];
   const coinTo = TOKENS[1];
   const context: AddLiquidityMachineContext = {
     client,
-    wallet,
     contract,
     coinFrom,
     coinTo,
@@ -72,9 +70,13 @@ export function AddLiquidityProvider({ children }: { children: ReactNode }) {
     serviceMap.set("service", service);
   }
 
-  useSubscriber<CoinQuantity[]>(AppEvents.updatedBalances, (data) => {
-    service.send("SET_BALANCES", { data });
-  });
+  useSubscriber<CoinQuantity[]>(
+    AppEvents.updatedBalances,
+    (data) => {
+      service.send("SET_BALANCES", { data });
+    },
+    [service]
+  );
 
   return (
     <AddLiquidityContext.Provider value={service}>

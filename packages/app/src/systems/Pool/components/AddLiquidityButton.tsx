@@ -22,16 +22,19 @@ const buttonSelectors = {
     if (state.hasTag("notHasEthForNetworkFee")) {
       return `Insufficient ETH for gas`;
     }
-    if (state.hasTag("needEnterAmount")) {
-      return "Enter amount";
+    if (state.hasTag("needEnterFromAmount")) {
+      return `Enter ${ctx.coinFrom.name} amount`;
+    }
+    if (state.hasTag("needEnterToAmount")) {
+      return `Enter ${ctx.coinTo.name} amount`;
     }
     if (state.hasTag("createPool")) {
-      return "Create Pool";
+      return "Create liquidity";
     }
     if (state.hasTag("addLiquidity")) {
       return "Add Liquidity";
     }
-    return "Enter amount";
+    return `Enter ${ctx.coinFrom.name} amount`;
   },
   notReadyToAddLiquidity: (state: AddLiquidityMachineState) => {
     return !state.hasTag("readyToAddLiquidity");

@@ -7,11 +7,10 @@ import {
 import type { Wallet } from "fuels";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
+import * as poolQueries from "../utils/queries";
 
 import { App } from "~/App";
-import { DECIMAL_UNITS, TOKEN_ID } from "~/config";
-import { COIN_ETH, ONE_ASSET, parseUnits } from "~/systems/Core";
-import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
+import { ZERO } from "~/systems/Core";
 import {
   createWallet,
   mockUseWallet,
@@ -37,7 +36,11 @@ describe("Add Liquidity", () => {
 
   it("should see a 'new pool' message", async () => {
     renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-
+    jest.spyOn(poolQueries, "fetchPoolInfo").mockImplementation(async () => ({
+      eth_reserve: ZERO,
+      token_reserve: ZERO,
+      lp_token_supply: ZERO,
+    }));
     const newPoolMessage = await screen.findByText(/new pool/);
     expect(newPoolMessage).toBeInTheDocument();
   });
@@ -67,54 +70,6 @@ describe("Add Liquidity", () => {
     });
   });
 
-  it("should show insufficient warning if has no coinFrom balance", async () => {
-    mockUseBalances();
-    renderWithRouter(<App />, {
-      route: "/pool/add-liquidity",
-    });
-
-    const coinFromInput = screen.getByLabelText(/Coin from input/);
-    fireEvent.change(coinFromInput, {
-      target: {
-        value: "10",
-      },
-    });
-    const coinToInput = screen.getByLabelText(/Coin to input/);
-    fireEvent.change(coinToInput, {
-      target: {
-        value: "1000",
-      },
-    });
-
-    const submitBtn = await screen.findByText(/Insufficient Ether/i);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
-  });
-
-  it("should show insufficient warning if has no coinTo balance", async () => {
-    mockUseBalances();
-    renderWithRouter(<App />, {
-      route: "/pool/add-liquidity",
-    });
-
-    const coinFromInput = screen.getByLabelText(/Coin from input/);
-    fireEvent.change(coinFromInput, {
-      target: {
-        value: "0.1",
-      },
-    });
-    const coinToInput = screen.getByLabelText(/Coin to input/);
-    fireEvent.change(coinToInput, {
-      target: {
-        value: "1000",
-      },
-    });
-
-    const submitBtn = await screen.findByText(/Insufficient DAI balance/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
-  });
-
   it("should be able to set coin to input values if no liquidity added", async () => {
     renderWithRouter(<App />, {
       route: "/pool/add-liquidity",
@@ -137,65 +92,55 @@ describe("Add Liquidity", () => {
     expect(coinToInput).toHaveValue("1000");
   });
 
-  const MINT_VALUE = parseUnits("4000", DECIMAL_UNITS);
+  describe("Create/Add liquidity", () => {
+    it("Should be able to create liquidity", async () => {
+      await faucet(wallet);
+      await mint(wallet);
+      const { user } = renderWithRouter(<App />, {
+        route: "/pool/add-liquidity",
+      });
 
-  it("should be able to click on submit button if inputs are right", async () => {
-    mockUseBalances([
-      { amount: ONE_ASSET, assetId: COIN_ETH },
-      { amount: MINT_VALUE, assetId: TOKEN_ID },
-    ]);
+      const coinFromInput = await screen.findByLabelText(/Coin from input/);
+      fireEvent.change(coinFromInput, {
+        target: {
+          value: "0.1",
+        },
+      });
 
-    renderWithRouter(<App />, { route: "/pool/add-liquidity" });
+      const coinToInput = await screen.findByLabelText(/Coin to input/);
+      fireEvent.change(coinToInput, {
+        target: {
+          value: "500",
+        },
+      });
 
-    const coinFromInput = screen.getByLabelText(/Coin from input/);
-    fireEvent.change(coinFromInput, {
-      target: {
-        value: "0.5",
-      },
+      const submitBtn = await screen.findByText(/Create liquidity/);
+      expect(submitBtn).toBeInTheDocument();
+      await user.click(submitBtn);
     });
 
-    const coinToInput = screen.getByLabelText(/Coin to input/);
-    fireEvent.change(coinToInput, {
-      target: {
-        value: "2000",
-      },
+    it("Should be able to add liquidity", async () => {
+      renderWithRouter(<App />, {
+        route: "/pool/add-liquidity",
+      });
+
+      const coinFromInput = await screen.findByLabelText(/Coin from input/);
+      fireEvent.change(coinFromInput, {
+        target: {
+          value: "0.1",
+        },
+      });
+
+      waitFor(async () => {
+        const submitBtn = await screen.findByText(/Add liquidity/);
+        expect(submitBtn).toBeInTheDocument();
+      });
     });
-
-    const submitBtn = await screen.findByText(/Create liquidity/);
-    expect(submitBtn).toBeInTheDocument();
-  });
-
-  it("Should be able to create liquidity", async () => {
-    jest.unmock("../hooks/useUserPositions.ts");
-
-    await faucet(wallet);
-    await mint(wallet);
-    const { user } = renderWithRouter(<App />, {
-      route: "/pool/add-liquidity",
-    });
-
-    const coinFromInput = await screen.findByLabelText(/Coin from input/);
-    fireEvent.change(coinFromInput, {
-      target: {
-        value: "0.1",
-      },
-    });
-
-    const coinToInput = await screen.findByLabelText(/Coin to input/);
-    fireEvent.change(coinToInput, {
-      target: {
-        value: "500",
-      },
-    });
-
-    const submitBtn = await screen.findByText(/Create liquidity/);
-    expect(submitBtn).toBeInTheDocument();
-    await user.click(submitBtn);
   });
 
   // This test is triggering a false alert, skipping it for now.
   // TODO: Should be included again with issue -> https://github.com/FuelLabs/swayswap/issues/306
-  it.skip("should show '0.' if typed only '.' in the input", async () => {
+  it("should show '0.' if typed only '.' in the input", async () => {
     jest.unmock("../hooks/useUserPositions.ts");
 
     renderWithRouter(<App />, {

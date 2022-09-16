@@ -1,5 +1,5 @@
 import type Decimal from 'decimal.js';
-import type { BN, CoinQuantity, Wallet } from 'fuels';
+import type { BN, CoinQuantity } from 'fuels';
 import type { QueryClient } from 'react-query';
 
 import { ZERO } from '../Core';
@@ -27,7 +27,6 @@ export type AddLiquidityMachineContext = {
   fromAmount: Maybe<BN>;
   toAmount: Maybe<BN>;
   contract: Maybe<ExchangeContractAbi>;
-  wallet: Maybe<Wallet>;
   liquidityPreview: LiquidityPreview;
   poolShare: Decimal;
   poolInfo: Maybe<PoolInfoOutput>;

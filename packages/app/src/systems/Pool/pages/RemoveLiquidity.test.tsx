@@ -1,9 +1,4 @@
-import {
-  screen,
-  renderWithRouter,
-  waitFor,
-  fireEvent,
-} from "@swayswap/test-utils";
+import { screen, renderWithRouter, fireEvent, act } from "@swayswap/test-utils";
 import Decimal from "decimal.js";
 import type { Wallet } from "fuels";
 import { bn } from "fuels";
@@ -56,16 +51,22 @@ describe("Remove Liquidity", () => {
 
   it("should see a 'current positions' box", async () => {
     renderWithRouter(<App />, { route: "/pool/remove-liquidity" });
-
-    const newPoolMessage = await screen.findByText(/Your current positions/);
-    expect(newPoolMessage).toBeInTheDocument();
+    await act(async () => {
+      const currentPositionsMessage = await screen.findByText(
+        /Your current positions/
+      );
+      expect(currentPositionsMessage).toBeInTheDocument();
+    });
   });
 
   it("should enter amount button be disabled by default", async () => {
     renderWithRouter(<App />, { route: "/pool/remove-liquidity" });
-    const submitBtn = await screen.findByText("Enter ETH/DAI amount");
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
+    await act(async () => {
+      const submitBtn = await screen.findByText("Enter ETH/DAI amount");
+
+      expect(submitBtn).toBeInTheDocument();
+      expect(submitBtn).toBeDisabled();
+    });
   });
 
   it("should show insufficient warning if has no LP Token balance", async () => {
@@ -96,30 +97,11 @@ describe("Remove Liquidity", () => {
 
     renderWithRouter(<App />, { route: "/pool/remove-liquidity" });
 
-    const coinFromInput = screen.getByLabelText(/Set Maximun Balance/);
+    const coinFromInput = screen.getByLabelText(/Set Maximum Balance/);
     fireEvent.click(coinFromInput);
 
     const submitBtn = await screen.findByText(/Remove liquidity/);
     expect(submitBtn).toBeInTheDocument();
     expect(submitBtn).not.toBeDisabled();
-  });
-
-  it("should show '0.' if typed only '.' in the input", async () => {
-    jest.unmock("../hooks/useUserPositions.ts");
-
-    renderWithRouter(<App />, {
-      route: "/pool/remove-liquidity",
-    });
-
-    const coinFromInput = screen.getByLabelText(/LP Token Input/);
-    fireEvent.change(coinFromInput, {
-      target: {
-        value: ".",
-      },
-    });
-
-    await waitFor(() => {
-      expect(coinFromInput).toHaveValue("0.");
-    });
   });
 });

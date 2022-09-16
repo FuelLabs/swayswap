@@ -41,7 +41,7 @@ export const CoinBalance = ({
       {showMaxButton && !isZero(balance) && (
         <Tooltip content={maxButtonText}>
           <Button
-            aria-label="Set Maximun Balance"
+            aria-label="Set Maximum Balance"
             size="sm"
             onPress={onSetMaxBalance}
             className={cx(`text-xs py-0 px-1 h-auto`, {

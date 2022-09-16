@@ -1,5 +1,7 @@
 import type { BN, Contract } from 'fuels';
 
+import type { AddLiquidityMachineContext } from '../types';
+
 import { CONTRACT_ID } from '~/config';
 import { getDeadline } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
@@ -71,4 +73,11 @@ export async function addLiquidity(
         gasLimit,
       })
     );
+}
+
+export async function fetchPoolInfo(ctx: AddLiquidityMachineContext) {
+  const { contract } = ctx;
+  if (!contract) return null;
+  const { value } = await contract.functions.get_pool_info().get();
+  return value;
 }
