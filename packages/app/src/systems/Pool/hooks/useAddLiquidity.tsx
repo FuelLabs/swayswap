@@ -4,6 +4,7 @@ import type { CoinQuantity } from "fuels";
 import type { ReactNode } from "react";
 import { useContext, createContext } from "react";
 import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import type { AddLiquidityMachineService } from "../machines/addLiquidityMachine";
 import { addLiquidityMachine } from "../machines/addLiquidityMachine";
@@ -44,9 +45,11 @@ export function useAddLiquidityContext() {
 export function AddLiquidityProvider({ children }: { children: ReactNode }) {
   const client = useQueryClient();
   const contract = useContract();
+  const navigate = useNavigate();
   const coinFrom = TOKENS[0];
   const coinTo = TOKENS[1];
   const context: AddLiquidityMachineContext = {
+    navigate,
     client,
     contract,
     coinFrom,

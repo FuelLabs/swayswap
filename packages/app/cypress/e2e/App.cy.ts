@@ -26,13 +26,27 @@ describe('End-to-end Test: 😁 Happy Path', () => {
     const creatingPoolSelector = '[aria-label="create-pool"]';
     const addingLiquiditySelector = '[aria-label="pool-reserves"]';
 
+    // This functions query the selector for creating a conditional
+    // test flow, this is needed in order to enable tests to in already
+    // initialized pool like local development
+    async function getPoolSelector(
+      $body: JQuery<HTMLBodyElement>,
+      counter: number = 0
+    ): Promise<string> {
+      if (counter > 20) {
+        throw new Error('Not found pool or add liquidity flow');
+      }
+      await new Promise((resolve) => {
+        setTimeout(() => resolve(null), 200);
+      });
+      if ($body.find(creatingPoolSelector).length) return creatingPoolSelector;
+      if ($body.find(addingLiquiditySelector).length) return addingLiquiditySelector;
+      return getPoolSelector($body, counter + 1);
+    }
+
     // check if is 'creating a pool' or 'adding liquidity'
     cy.get('body')
-      .then(($body) => {
-        if ($body.find(creatingPoolSelector).length) return creatingPoolSelector;
-        if ($body.find(addingLiquiditySelector).length) return addingLiquiditySelector;
-        return '';
-      })
+      .then(($body) => getPoolSelector($body))
       .then((selector: string) => {
         if (!selector) {
           // should break test
@@ -51,16 +65,14 @@ describe('End-to-end Test: 😁 Happy Path', () => {
 
           // make sure pool price box shows up
           cy.getByAriaLabel('Pool Price Box');
-          cy.contains('button', 'Add liquidity').click();
+          cy.getByAriaLabel('Add liquidity').click();
         } else {
           // validate create pool
           cy.contains('Enter Ether amount');
           cy.getByAriaLabel('Coin from input').type('0.2');
           cy.getByAriaLabel('Coin to input').type('190');
-
           // make sure preview output box shows up
           cy.getByAriaLabel('Preview Add Liquidity Output');
-
           // make sure pool price box shows up
           cy.getByAriaLabel('Pool Price Box');
           cy.contains('button', 'Create liquidity').click();
@@ -97,7 +109,7 @@ describe('End-to-end Test: 😁 Happy Path', () => {
         // validate remove liquidity
         cy.contains('button', 'Pool').click();
         cy.contains('button', 'Remove liquidity').click();
-        cy.getByAriaLabel('Set Maximun Balance').click();
+        cy.getByAriaLabel('Set Maximum Balance').click();
 
         // make sure preview output box shows up
         cy.getByAriaLabel('Preview Remove Liquidity Output');

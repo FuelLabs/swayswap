@@ -61,12 +61,12 @@ export const AddLiquidityButton = () => {
 
   return (
     <Button
-      aria-label="Add Liquidity Button"
+      aria-label="Add liquidity"
       isFull
       size="lg"
       variant="primary"
       isLoading={isLoading}
-      isDisabled={notReadyToAddLiquidity}
+      isDisabled={isLoading || notReadyToAddLiquidity}
       onPress={handleAddLiquidity}
     >
       {buttonText}

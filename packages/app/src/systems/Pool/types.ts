@@ -1,6 +1,7 @@
 import type Decimal from 'decimal.js';
 import type { BN, CoinQuantity } from 'fuels';
 import type { QueryClient } from 'react-query';
+import type { NavigateFunction } from 'react-router-dom';
 
 import { ZERO } from '../Core';
 import type { TransactionCost } from '../Core/utils/gas';
@@ -20,6 +21,7 @@ export type LiquidityPreview = {
 };
 
 export type AddLiquidityMachineContext = {
+  navigate: NavigateFunction;
   client: QueryClient;
   coinFrom: Coin;
   coinTo: Coin;

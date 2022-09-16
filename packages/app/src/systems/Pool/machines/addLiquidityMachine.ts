@@ -265,7 +265,7 @@ export const addLiquidityMachine =
           },
         },
         success: {
-          entry: ['toastSwapSuccess', 'clearContext'],
+          entry: ['toastSwapSuccess', 'clearContext', 'navigateToPoolList'],
           always: {
             target: '#(AddLiquidityMachine).fetchingBalances',
           },
@@ -485,6 +485,9 @@ export const addLiquidityMachine =
           handleError(ev.data);
           // eslint-disable-next-line no-console
           console.error(ev.data);
+        },
+        navigateToPoolList: (ctx) => {
+          ctx.navigate('/pool/list');
         },
       },
       guards: {
