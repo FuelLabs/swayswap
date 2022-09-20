@@ -18,21 +18,22 @@ export async function addLiquidity(
 ) {
   const contract = ExchangeContractAbi__factory.connect(CONTRACT_ID, wallet);
   const deadline = await getDeadline(contract);
-  const [, , result] = await contract.submitMulticall(
-    [
-      contract.prepareCall.deposit({
+  const { transactionResult } = await contract
+    .multiCall([
+      contract.functions.deposit().callParams({
         forward: [parseToBigInt(fromAmount), fromAsset],
       }),
-      contract.prepareCall.deposit({
+      contract.functions.deposit().callParams({
         forward: [parseToBigInt(toAmount), toAsset],
       }),
-      contract.prepareCall.add_liquidity(1, deadline, {
+      contract.functions.add_liquidity(1, deadline),
+    ])
+    .txParams(
+      getOverrides({
         variableOutputs: 2,
-      }),
-    ],
-    getOverrides({
-      gasLimit: 20000000,
-    })
-  );
-  return result;
+        gasLimit: 20000000,
+      })
+    )
+    .call();
+  return transactionResult;
 }

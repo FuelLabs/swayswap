@@ -1,4 +1,6 @@
-import { parseToFormattedNumber } from "../utils";
+import type { BN } from "fuels";
+
+import { format } from "../utils";
 
 import { PreviewItem } from "./PreviewTable";
 
@@ -8,16 +10,16 @@ export function NetworkFeePreviewItem({
   networkFee,
   loading,
 }: {
-  networkFee?: Maybe<bigint>;
+  networkFee?: Maybe<BN>;
   loading?: boolean;
 }) {
-  if (!networkFee) return null;
+  if (!networkFee || networkFee.lte(0)) return null;
 
   return (
     <PreviewItem
       className="text-gray-300"
       title={`Network Fee`}
-      value={`~ ${parseToFormattedNumber(networkFee)} ETH`}
+      value={`~ ${format(networkFee)} ETH`}
       loading={loading}
     />
   );

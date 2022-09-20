@@ -35,7 +35,9 @@ export function RemoveLiquidityPage() {
   const ethBalance = useEthBalance();
 
   const liquidityToken = TOKENS.find((c) => c.assetId === CONTRACT_ID);
-  const tokenInput = useCoinInput({ coin: liquidityToken });
+  const tokenInput = useCoinInput({
+    coin: liquidityToken,
+  });
   const amount = tokenInput.amount;
 
   const txCost = useTransactionCost(
@@ -78,9 +80,9 @@ export function RemoveLiquidityPage() {
     }
 
     return errorList;
-  }, [tokenInput.amount, tokenInput.hasEnoughBalance]);
+  }, [tokenInput.amount?.toString(), tokenInput.hasEnoughBalance]);
 
-  const hasEnoughBalance = safeBigInt(ethBalance.raw) > txCost.fee;
+  const hasEnoughBalance = safeBigInt(ethBalance.raw).gt(txCost.fee);
   const isRemoveButtonDisabled =
     !!errors.length ||
     removeLiquidityMutation.isLoading ||

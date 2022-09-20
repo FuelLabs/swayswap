@@ -19,14 +19,14 @@ import {
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
 import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
-import { addLiquidity } from "~/systems/Pool/hooks/__mocks__/useAddLiquidity";
+import { addLiquidity } from "~/systems/Pool/hooks/__mocks__/addLiquidity";
 
 async function findSwapBtn() {
   return waitFor(() => screen.findByLabelText(/swap button/i));
 }
 
 async function findMaxBalanceBtn(input: "from" | "to" = "from") {
-  const button = await screen.findAllByLabelText(/Set Maximun Balance/i);
+  const button = await screen.findAllByLabelText(/Set Maximum Balance/i);
   return button[input === "from" ? 0 : 1];
 }
 
@@ -50,6 +50,13 @@ async function fillCoinFromWithValue(value: string) {
   });
 }
 
+async function fillCoinToWithValue(value: string) {
+  await waitFor(async () => {
+    const coinFrom = screen.getByLabelText(/Coin to input/i);
+    fireEvent.change(coinFrom, { target: { value } });
+  });
+}
+
 async function waitFinishLoading() {
   await waitFor(async () => {
     const submitBtn = await findSwapBtn();
@@ -60,6 +67,14 @@ async function waitFinishLoading() {
     const submitBtn = await findSwapBtn();
     expect(submitBtn.textContent).not.toMatch(/Loading/i);
   });
+}
+
+async function getETHBalance() {
+  const balanceLabel = await screen.findByLabelText("ETH balance");
+  const balance = balanceLabel.lastChild?.textContent || "0";
+  const valBalance = new Decimal(balance);
+
+  return valBalance;
 }
 
 describe("SwapPage", () => {
@@ -116,7 +131,9 @@ describe("SwapPage", () => {
     });
 
     it("should show no pool found message when there is no pool reserve", async () => {
-      const spy = jest.spyOn(poolHelpers, "getPoolRatio").mockReturnValue(0);
+      const spy = jest
+        .spyOn(poolHelpers, "getPoolRatio")
+        .mockReturnValue(new Decimal(0));
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("0.5");
@@ -162,7 +179,9 @@ describe("SwapPage", () => {
       const coinFrom = screen.getByLabelText(/Coin from input/i);
       const inputValue = coinFrom.getAttribute("value");
       const valDecimal = new Decimal(inputValue || "");
-      expect(valDecimal.round().toString()).toMatch(/3/);
+      const balance = await getETHBalance();
+
+      expect(valDecimal.round().toString()).toMatch(balance.round().toString());
     });
 
     it("should show insufficient eth for gas message", async () => {
@@ -172,7 +191,9 @@ describe("SwapPage", () => {
 
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
-      await fillCoinFromWithValue("3.1");
+      const balance = await getETHBalance();
+
+      await fillCoinFromWithValue(balance.mul(2).toString());
       const submitBtn = await findSwapBtn();
       await waitFor(() => {
         expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
@@ -189,9 +210,9 @@ describe("SwapPage", () => {
         .spyOn(swapHelpers, "hasEthForNetworkFee")
         .mockReturnValue(true);
 
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=DAI&to=ETH" });
 
-      await fillCoinFromWithValue("100000");
+      await fillCoinToWithValue("10000000000.0");
       const submitBtn = await findSwapBtn();
       await waitFor(async () => {
         expect(submitBtn.textContent).toMatch(/insufficient liquidity/i);
@@ -217,8 +238,8 @@ describe("SwapPage", () => {
       await clickOnMaxBalance();
 
       let pricePerToken: HTMLElement;
-      const ethToDaiRegexp = /(\d+)(\s)(ETH = )(\d+).((\s)|(\d+\s))DAI/i;
-      const daiToEthRegexp = /(\d+)(\s)(DAI = )(\d+).((\s)|(\d+\s))ETH/i;
+      const ethToDaiRegexp = /(\d+)(\s)(ETH = )([\d,]+).((\s)|(\d+\s))DAI/i;
+      const daiToEthRegexp = /(\d+)(\s)(DAI = )([\d,]+).((\s)|(\d+\s))ETH/i;
 
       pricePerToken = await screen.findByLabelText(/price per token/i);
       await waitFor(async () => {

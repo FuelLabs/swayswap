@@ -38,6 +38,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
           ) : (
             <NumberFormat
               {...props}
+              autoComplete="off"
               className={cx(className, "coinInput--input")}
               autoFocus={autoFocus}
               inputMode={"decimal"}
@@ -47,7 +48,7 @@ export const CoinInput = forwardRef<HTMLInputElement, CoinInputProps>(
               displayType={displayType}
               isAllowed={isAllowed}
               onInput={onInput}
-              decimalScale={displayType === "text" ? 4 : DECIMAL_UNITS}
+              decimalScale={DECIMAL_UNITS}
               placeholder={props.placeholder || "0"}
               allowedDecimalSeparators={[".", ","]}
               thousandSeparator={false}

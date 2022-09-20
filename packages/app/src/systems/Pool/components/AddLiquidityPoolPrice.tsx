@@ -1,27 +1,29 @@
-import { toNumber } from "fuels";
+import { useSelector } from "@xstate/react";
+import Decimal from "decimal.js";
+import { bn } from "fuels";
+import { useMemo } from "react";
 
-import { parseToFormattedNumber, ONE_ASSET } from "~/systems/Core";
-import type { Coin } from "~/types";
+import { useAddLiquidityContext } from "../hooks";
+import { selectors } from "../selectors";
 
-export interface AddLiquidityPoolPriceProps {
-  coinFrom: Coin;
-  coinTo: Coin;
-  reservesFromToRatio: number;
-}
+import { format, ONE_ASSET } from "~/systems/Core";
 
-export const AddLiquidityPoolPrice = ({
-  coinFrom,
-  coinTo,
-  reservesFromToRatio,
-}: AddLiquidityPoolPriceProps) => {
-  const oneAssetAmount = toNumber(ONE_ASSET);
-  const reservesRatio = reservesFromToRatio;
-  const daiPrice = parseToFormattedNumber(
-    Math.floor(oneAssetAmount / reservesRatio)
-  );
-  const ethPrice = parseToFormattedNumber(
-    Math.floor(oneAssetAmount * 1 * reservesRatio)
-  );
+export const AddLiquidityPoolPrice = () => {
+  const { service } = useAddLiquidityContext();
+  const coinFrom = useSelector(service, selectors.coinFrom);
+  const coinTo = useSelector(service, selectors.coinTo);
+  const poolRatio = useSelector(service, selectors.poolRatio) || 1;
+
+  const [daiPrice, ethPrice] = useMemo(() => {
+    const daiPriceFormatted = format(
+      bn(new Decimal(ONE_ASSET.toHex()).div(poolRatio).round().toHex())
+    );
+    const ethPriceFormatted = format(
+      bn(new Decimal(ONE_ASSET.toHex()).mul(poolRatio).round().toHex())
+    );
+    return [daiPriceFormatted, ethPriceFormatted];
+  }, [poolRatio]);
+
   return (
     <div aria-label="Pool Price Box">
       <h4 className="ml-2 mb-2 text-gray-200 text-sm">Pool price</h4>

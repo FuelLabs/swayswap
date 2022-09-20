@@ -4,7 +4,7 @@ import { BsArrowDown } from "react-icons/bs";
 import {
   MainLayout,
   NetworkFeePreviewItem,
-  parseToFormattedNumber,
+  format,
   PreviewTable,
 } from "~/systems/Core";
 import { useMint } from "~/systems/Mint";
@@ -13,7 +13,7 @@ import { Button, Card } from "~/systems/UI";
 export function MintPage() {
   const mint = useMint();
   const shouldDisableMint =
-    !mint.txCost.total || !!mint.txCost.error || !mint.mintAmount;
+    mint.txCost.total.lte(0) || !!mint.txCost.error || mint.mintAmount.lte(0);
 
   const getTextButton = () => {
     if (!mint.mintAmount) return "Mint is closed!";
@@ -34,7 +34,7 @@ export function MintPage() {
         <div className="text-gray-300">
           <div className="text-sm mr-2 mt-2">Amount:</div>
           <div className="font-bold text-gray-100 text-lg">
-            {parseToFormattedNumber(mint.mintAmount)}
+            {format(mint.mintAmount)}
           </div>
         </div>
         {!shouldDisableMint && (

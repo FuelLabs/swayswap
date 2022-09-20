@@ -11,7 +11,7 @@ export function mockUseBalances(balances?: CoinQuantity[]) {
   const mock = {
     data: balances || FAKE_BALANCE,
     loading: false,
-    refetch: () => undefined,
+    refetch: async () => balances || FAKE_BALANCE,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any;
 

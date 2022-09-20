@@ -1,4 +1,4 @@
-import { TOKENS, parseToFormattedNumber } from '../utils';
+import { TOKENS, format } from '../utils';
 
 import { useBalances } from './useBalances';
 
@@ -10,6 +10,6 @@ export function useEthBalance() {
 
   return {
     raw: balance,
-    formatted: balance && parseToFormattedNumber(balance),
+    formatted: balance && format(balance),
   };
 }

@@ -1,4 +1,4 @@
-import type { CoinQuantity, Wallet } from 'fuels';
+import type { BN, CoinQuantity, Wallet } from 'fuels';
 import type { QueryClient } from 'react-query';
 
 import type { TransactionCost } from '../Core/utils/gas';
@@ -11,7 +11,7 @@ import type {
 } from '~/types/contracts/ExchangeContractAbi';
 
 export type CoinAmount = {
-  raw: bigint;
+  raw: BN;
   value: string;
 };
 
@@ -28,9 +28,9 @@ export type SwapMachineContext = {
   direction: SwapDirection;
   coinFrom?: Coin;
   coinTo?: Coin;
-  coinFromBalance?: Maybe<bigint>;
-  coinToBalance?: Maybe<bigint>;
-  ethBalance?: Maybe<bigint>;
+  coinFromBalance?: Maybe<BN>;
+  coinToBalance?: Maybe<BN>;
+  ethBalance?: Maybe<BN>;
   amountPlusSlippage?: Maybe<CoinAmount>;
   amountLessSlippage?: Maybe<CoinAmount>;
   fromAmount?: Maybe<CoinAmount>;

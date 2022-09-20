@@ -1,55 +1,55 @@
-import { useUserPositions } from './useUserPositions';
+import Decimal from 'decimal.js';
+import type { BN } from 'fuels';
+import { useMemo } from 'react';
 
+import type { PoolInfoPreview } from '../utils/helpers';
+import { getPoolInfoPreview } from '../utils/helpers';
+
+import { usePositionInfo } from './usePoolInfo';
+
+import { CONTRACT_ID } from '~/config';
 import {
-  divideFnValidOnly,
-  maxAmount,
-  minimumZero,
-  multiplyFn,
-  parseToFormattedNumber,
+  calculatePercentage,
+  format,
+  getCoin,
+  isZero,
   safeBigInt,
   toFixed,
+  useBalances,
+  ZERO,
 } from '~/systems/Core';
 import type { Maybe } from '~/types';
 
-export interface UsePreviewRemoveLiquidity {
-  amountToRemove?: Maybe<bigint>;
-}
+export type PreviewRemoveLiquidity = PoolInfoPreview & {
+  formattedNextPoolTokens: string;
+  formattedNextPoolShare: string;
+};
 
-export function usePreviewRemoveLiquidity({ amountToRemove }: UsePreviewRemoveLiquidity) {
-  const { tokenReserve, ethReserve, totalLiquidity, poolTokensNum, poolTokens } =
-    useUserPositions();
+export function usePreviewRemoveLiquidity(amount: Maybe<BN>): PreviewRemoveLiquidity {
+  const { data: balances } = useBalances();
+  const poolTokens = useMemo(() => {
+    const lpTokenAmount = getCoin(balances || [], CONTRACT_ID)?.amount;
+    const poolTokensNum = safeBigInt(lpTokenAmount);
+    return poolTokensNum;
+  }, [balances]);
+  const { data: info } = usePositionInfo(amount || ZERO);
+  const poolPreview = useMemo(() => getPoolInfoPreview(info, amount || ZERO), [info, amount]);
+  let nextPoolTokens = ZERO;
+  let nextPoolShare = new Decimal(0);
 
-  const amountToRemoveNum = safeBigInt(amountToRemove);
-  const userLPTokenBalance = safeBigInt(poolTokens);
+  if (!isZero(poolTokens)) {
+    nextPoolTokens = poolTokens.sub(poolPreview.poolTokens);
+    if (nextPoolTokens.lte(poolPreview.totalLiquidity)) {
+      nextPoolShare = calculatePercentage(nextPoolTokens, poolPreview.totalLiquidity);
+    }
+  }
 
-  const previewDAIRemoved = divideFnValidOnly(
-    multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), tokenReserve),
-    totalLiquidity
-  );
-  const previewETHRemoved = divideFnValidOnly(
-    multiplyFn(maxAmount(amountToRemoveNum, userLPTokenBalance), ethReserve),
-    totalLiquidity
-  );
-  const formattedPreviewDAIRemoved = parseToFormattedNumber(
-    minimumZero(Math.floor(previewDAIRemoved))
-  );
-  const formattedPreviewETHRemoved = parseToFormattedNumber(
-    minimumZero(Math.floor(previewETHRemoved))
-  );
-
-  const nextCurrentPoolTokens = minimumZero(poolTokensNum - amountToRemoveNum);
-  const nextPoolShare = divideFnValidOnly(nextCurrentPoolTokens, totalLiquidity);
-  const formattedNextCurrentPoolTokens = parseToFormattedNumber(minimumZero(nextCurrentPoolTokens));
-  const formattedNextPoolShare = toFixed(nextPoolShare * 100, 6);
+  const formattedNextPoolTokens = format(nextPoolTokens);
+  const formattedNextPoolShare = toFixed(nextPoolShare.toString());
 
   return {
-    previewDAIRemoved,
-    previewETHRemoved,
-    nextCurrentPoolTokens,
-    nextPoolShare,
-    formattedPreviewDAIRemoved,
-    formattedPreviewETHRemoved,
-    formattedNextCurrentPoolTokens,
+    ...poolPreview,
+    formattedNextPoolTokens,
     formattedNextPoolShare,
   };
 }

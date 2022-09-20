@@ -20,7 +20,9 @@ import {
   useContract,
   useSlippage,
   useSubscriber,
+  compareStates,
 } from "~/systems/Core";
+import { AppEvents } from "~/types";
 
 const selectors = {
   isLoading: isLoadingState,
@@ -31,14 +33,6 @@ const selectors = {
   direction: (state: SwapMachineState) => state.context.direction,
   txCost: (state: SwapMachineState) => state.context.txCost,
 };
-
-// ----------------------------------------------------------------------------
-// PubSub
-// ----------------------------------------------------------------------------
-
-export enum SwapEvents {
-  "refetchBalances" = "refetchBalances",
-}
 
 // ----------------------------------------------------------------------------
 // SwapContext
@@ -74,10 +68,10 @@ export function useSwap() {
   const service = useSwapService();
   const isLoading = useSelector(service, selectors.isLoading);
   const canSwap = useSelector(service, selectors.canSwap);
-  const coinFrom = useSelector(service, selectors.coinFrom);
-  const coinTo = useSelector(service, selectors.coinTo);
+  const coinFrom = useSelector(service, selectors.coinFrom, compareStates);
+  const coinTo = useSelector(service, selectors.coinTo, compareStates);
   const direction = useSelector(service, selectors.direction);
-  const txCost = useSelector(service, selectors.txCost);
+  const txCost = useSelector(service, selectors.txCost, compareStates);
   const canInvertCoins = useSelector(service, selectors.canInvertCoins);
 
   function onInvertCoins() {
@@ -126,6 +120,7 @@ export function SwapProvider({ children }: SwapProviderProps) {
       toAmount: globalState.toAmount,
       slippage: slippage.value,
     } as SwapMachineContext,
+    devTools: true,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any);
 
@@ -149,7 +144,7 @@ export function SwapProvider({ children }: SwapProviderProps) {
    * This subscriber is need because there's a lot of times the balance
    * is updated outside the machine
    */
-  useSubscriber<CoinQuantity[]>(SwapEvents.refetchBalances, (data) => {
+  useSubscriber<CoinQuantity[]>(AppEvents.updatedBalances, (data) => {
     service.send("SET_BALANCES", { data });
   });
 

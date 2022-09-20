@@ -3,7 +3,7 @@ import { useMemo } from "react";
 
 import type { CoinBalanceProps } from "../hooks";
 import { useBalances } from "../hooks";
-import { parseToFormattedNumber } from "../utils";
+import { format, isZero, safeBigInt } from "../utils";
 
 import { Button, Tooltip } from "~/systems/UI";
 
@@ -19,8 +19,14 @@ export const CoinBalance = ({
 
   const balance = useMemo(() => {
     const coinBalance = balances?.find((i) => i.assetId === coin?.assetId);
-    return parseToFormattedNumber(coinBalance?.amount || BigInt(0));
+    return safeBigInt(coinBalance?.amount);
   }, [balances, coin?.assetId]);
+
+  const maxButtonText = isZero(gasFee)
+    ? format(balance)
+    : `Max = ${format(balance)} (${coin?.symbol} balance)${
+        gasFee ? ` - ${format(gasFee)} (network fee)` : ``
+      }`;
 
   return (
     <div className="flex items-center justify-end gap-2 mt-2 whitespace-nowrap min-h-[18px]">
@@ -29,17 +35,13 @@ export const CoinBalance = ({
           className="text-xs text-gray-400"
           aria-label={`${coin?.symbol} balance`}
         >
-          Balance: {balance}
+          Balance: {format(balance)}
         </div>
       )}
-      {showMaxButton && (
-        <Tooltip
-          content={`Max = ${balance} (${coin?.symbol} balance)${
-            gasFee ? ` - ${parseToFormattedNumber(gasFee)} (network fee)` : ``
-          }`}
-        >
+      {showMaxButton && !isZero(balance) && (
+        <Tooltip content={maxButtonText}>
           <Button
-            aria-label="Set Maximun Balance"
+            aria-label="Set Maximum Balance"
             size="sm"
             onPress={onSetMaxBalance}
             className={cx(`text-xs py-0 px-1 h-auto`, {

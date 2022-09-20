@@ -20,7 +20,7 @@ export function useMint(opts: UseMintOpts = {}) {
 
   const mutation = useMutation(
     async () => {
-      if (!txCost.total) return;
+      if (txCost.total.eq(0)) return;
       return methods.mint(txCost.total);
     },
     { onSuccess: txFeedback('Token received successfully!', handleSuccess) }

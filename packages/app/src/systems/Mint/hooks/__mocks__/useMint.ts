@@ -6,5 +6,8 @@ import { TokenContractAbi__factory } from '~/types/contracts';
 
 export async function mint(wallet: Wallet) {
   const contract = TokenContractAbi__factory.connect(TOKEN_ID, wallet);
-  return contract.submit.mint(getOverrides({ variableOutputs: 1 }));
+  return contract.functions
+    .mint()
+    .txParams(getOverrides({ variableOutputs: 1 }))
+    .call();
 }

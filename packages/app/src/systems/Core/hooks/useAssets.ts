@@ -1,4 +1,4 @@
-import type { CoinQuantity } from 'fuels';
+import type { BN, CoinQuantity } from 'fuels';
 import { useQuery } from 'react-query';
 
 import { TOKENS, ASSET_404, toBigInt } from '../utils';
@@ -7,8 +7,8 @@ import { useWallet } from './useWallet';
 
 import type { Coin } from '~/types';
 
-type Asset = Coin & { amount: bigint };
-const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<Asset> =>
+type AssetAmount = Coin & { amount: BN };
+const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<AssetAmount> =>
   coins.map((coin) => {
     const coinMetadata = TOKENS.find((c) => c.assetId === coin.assetId);
     return {

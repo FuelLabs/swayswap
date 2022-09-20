@@ -12,4 +12,3 @@ export * from './useSlippage';
 export * from './useTokensMethods';
 export * from './useTransactionCost';
 export * from './useWallet';
-export * from './useChainConfig';

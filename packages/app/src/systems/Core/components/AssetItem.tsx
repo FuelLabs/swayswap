@@ -1,3 +1,5 @@
+import type { BN } from "fuels";
+
 import { useCoinInput } from "../hooks/useCoinInput";
 
 import { CoinInput } from "./CoinInput";
@@ -5,9 +7,9 @@ import { CoinSelector } from "./CoinSelector";
 
 import type { Coin } from "~/types";
 
-type Asset = Coin & { amount: bigint };
+type AssetAmount = Coin & { amount: BN };
 type AssetItemProps = {
-  coin: Asset;
+  coin: AssetAmount;
 };
 
 export function AssetItem({ coin }: AssetItemProps) {

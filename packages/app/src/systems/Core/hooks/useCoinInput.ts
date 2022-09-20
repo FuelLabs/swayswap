@@ -1,15 +1,10 @@
+import type { BN } from 'fuels';
+import { bn } from 'fuels';
 import type { ReactNode } from 'react';
 import { useMemo, useEffect, useState } from 'react';
 import type { NumberFormatValues } from 'react-number-format';
 
-import {
-  formatUnits,
-  isCoinEth,
-  MAX_U64_VALUE,
-  parseInputValueBigInt,
-  safeBigInt,
-  ZERO,
-} from '../utils';
+import { formatUnits, isCoinEth, parseInputValueBigInt, safeBigInt, ZERO } from '../utils';
 
 import { useBalances } from './useBalances';
 
@@ -20,12 +15,13 @@ export type UseCoinParams = {
   /**
    * Props for <CoinInput />
    */
-  amount?: Maybe<bigint>;
+  max?: Maybe<BN>;
+  amount?: Maybe<BN>;
   coin?: Maybe<Coin>;
-  gasFee?: Maybe<bigint>;
+  gasFee?: Maybe<BN>;
   isReadOnly?: boolean;
   onInput?: (...args: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
-  onChange?: (val: Maybe<bigint>) => void;
+  onChange?: (val: Maybe<BN>) => void;
   /**
    * Coins for <CoinSelector />
    */
@@ -34,9 +30,9 @@ export type UseCoinParams = {
 };
 
 export type UseCoinInput = {
-  amount: Maybe<bigint>;
-  setAmount: React.Dispatch<React.SetStateAction<Maybe<bigint>>>;
-  setGasFee: React.Dispatch<React.SetStateAction<Maybe<bigint>>>;
+  amount: Maybe<BN>;
+  setAmount: (value: Maybe<BN>) => void;
+  setGasFee: React.Dispatch<React.SetStateAction<Maybe<BN>>>;
   getInputProps: () => CoinInputProps;
   getCoinSelectorProps: () => CoinSelectorProps;
   getCoinBalanceProps: () => CoinBalanceProps;
@@ -65,7 +61,7 @@ export type CoinSelectorProps = {
 
 export type CoinBalanceProps = {
   coin?: Maybe<Coin>;
-  gasFee?: Maybe<bigint>;
+  gasFee?: Maybe<BN>;
   showBalance?: boolean;
   showMaxButton?: boolean;
   onSetMaxBalance?: () => void;
@@ -74,7 +70,7 @@ export type CoinBalanceProps = {
 
 type DisplayType = 'input' | 'text';
 
-const formatValue = (amount: Maybe<bigint>) => {
+const formatValue = (amount: Maybe<BN>) => {
   return amount ? formatUnits(amount) : '';
 };
 
@@ -89,8 +85,8 @@ export function useCoinInput({
   disableWhenEth,
   ...params
 }: UseCoinParams): UseCoinInput {
-  const [amount, setAmount] = useState<Maybe<bigint>>(null);
-  const [gasFee, setGasFee] = useState<Maybe<bigint>>(safeBigInt(initialGasFee));
+  const [amount, setAmount] = useState<Maybe<BN>>(null);
+  const [gasFee, setGasFee] = useState<Maybe<BN>>(safeBigInt(initialGasFee));
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
   const isEth = useMemo(() => isCoinEth(coin), [coin?.assetId]);
@@ -99,7 +95,7 @@ export function useCoinInput({
   // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.
   function getSafeMaxBalance() {
     const next = safeBigInt(coinBalance?.amount);
-    const value = next > ZERO ? next - safeBigInt(gasFee) : next;
+    const value = next > ZERO ? next.sub(safeBigInt(gasFee)) : next;
     if (value < ZERO) return ZERO;
     return value;
   }
@@ -115,7 +111,8 @@ export function useCoinInput({
   }
 
   function isAllowed({ value }: NumberFormatValues) {
-    return parseInputValueBigInt(value) <= MAX_U64_VALUE;
+    const max = params.max ? params.max : bn(Number.MAX_SAFE_INTEGER);
+    return parseInputValueBigInt(value).lt(max);
   }
 
   function getInputProps() {
@@ -160,12 +157,12 @@ export function useCoinInput({
 
   useEffect(() => {
     if (initialGasFee) setGasFee(initialGasFee);
-  }, [initialGasFee]);
+  }, [initialGasFee?.toHex()]);
 
   useEffect(() => {
     // Enable value initialAmount to be null
     if (initialAmount !== undefined) setAmount(initialAmount);
-  }, [initialAmount]);
+  }, [initialAmount?.toHex()]);
 
   return {
     amount,
@@ -175,6 +172,6 @@ export function useCoinInput({
     getCoinSelectorProps,
     getCoinBalanceProps,
     formatted: formatValue(amount),
-    hasEnoughBalance: getSafeMaxBalance() >= safeBigInt(amount),
+    hasEnoughBalance: getSafeMaxBalance().gte(safeBigInt(amount)),
   };
 }

@@ -49,7 +49,7 @@ export function txFeedback(
     }
 
     /**
-     * Show a toast error if status.type !== 'success''
+     * Show a toast error if status.type !== 'success''
      */
     toast.error(<>Transaction reverted! {txLink}</>);
   };

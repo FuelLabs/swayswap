@@ -2,245 +2,205 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Provider, Wallet } from 'fuels';
+import type { Provider, Wallet, AbstractAddress } from 'fuels';
 import { Interface, Contract } from 'fuels';
 import type { TokenContractAbi, TokenContractAbiInterface } from '../TokenContractAbi';
 const _abi = [
   {
     type: 'function',
-    inputs: [
-      {
-        name: 'mint_amount',
-        type: 'u64',
-        components: null,
-        typeArguments: null,
-      },
-      {
-        name: 'address',
-        type: 'struct Address',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-            typeArguments: null,
-          },
-        ],
-        typeArguments: null,
-      },
-    ],
     name: 'initialize',
+    inputs: [
+      {
+        type: 'u64',
+        name: 'mint_amount',
+      },
+      {
+        type: 'struct Address',
+        name: 'address',
+        components: [
+          {
+            type: 'b256',
+            name: 'value',
+          },
+        ],
+      },
+    ],
     outputs: [
       {
-        name: '',
         type: '()',
+        name: '',
         components: [],
-        typeArguments: null,
       },
     ],
   },
   {
     type: 'function',
-    inputs: [
-      {
-        name: 'mint_amount',
-        type: 'u64',
-        components: null,
-        typeArguments: null,
-      },
-    ],
     name: 'set_mint_amount',
-    outputs: [
-      {
-        name: '',
-        type: '()',
-        components: [],
-        typeArguments: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
     inputs: [
       {
+        type: 'u64',
         name: 'mint_amount',
-        type: 'u64',
-        components: null,
-        typeArguments: null,
       },
     ],
+    outputs: [
+      {
+        type: '()',
+        name: '',
+        components: [],
+      },
+    ],
+  },
+  {
+    type: 'function',
     name: 'mint_coins',
+    inputs: [
+      {
+        type: 'u64',
+        name: 'mint_amount',
+      },
+    ],
     outputs: [
       {
-        name: '',
         type: '()',
+        name: '',
         components: [],
-        typeArguments: null,
       },
     ],
   },
   {
     type: 'function',
-    inputs: [
-      {
-        name: 'burn_amount',
-        type: 'u64',
-        components: null,
-        typeArguments: null,
-      },
-    ],
     name: 'burn_coins',
+    inputs: [
+      {
+        type: 'u64',
+        name: 'burn_amount',
+      },
+    ],
     outputs: [
       {
-        name: '',
         type: '()',
+        name: '',
         components: [],
-        typeArguments: null,
       },
     ],
   },
   {
     type: 'function',
-    inputs: [
-      {
-        name: 'coins',
-        type: 'u64',
-        components: null,
-        typeArguments: null,
-      },
-      {
-        name: 'address',
-        type: 'struct Address',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-            typeArguments: null,
-          },
-        ],
-        typeArguments: null,
-      },
-    ],
     name: 'transfer_coins',
-    outputs: [
-      {
-        name: '',
-        type: '()',
-        components: [],
-        typeArguments: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
     inputs: [
       {
+        type: 'u64',
         name: 'coins',
-        type: 'u64',
-        components: null,
-        typeArguments: null,
       },
       {
-        name: 'asset_id',
-        type: 'struct ContractId',
-        components: [
-          {
-            name: 'value',
-            type: 'b256',
-            components: null,
-            typeArguments: null,
-          },
-        ],
-        typeArguments: null,
-      },
-      {
-        name: 'address',
         type: 'struct Address',
+        name: 'address',
         components: [
           {
-            name: 'value',
             type: 'b256',
-            components: null,
-            typeArguments: null,
+            name: 'value',
           },
         ],
-        typeArguments: null,
       },
     ],
+    outputs: [
+      {
+        type: '()',
+        name: '',
+        components: [],
+      },
+    ],
+  },
+  {
+    type: 'function',
     name: 'transfer_token_to_output',
-    outputs: [
-      {
-        name: '',
-        type: '()',
-        components: [],
-        typeArguments: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'mint',
-    outputs: [
-      {
-        name: '',
-        type: '()',
-        components: [],
-        typeArguments: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'get_mint_amount',
-    outputs: [
-      {
-        name: '',
-        type: 'u64',
-        components: null,
-        typeArguments: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'get_balance',
-    outputs: [
-      {
-        name: '',
-        type: 'u64',
-        components: null,
-        typeArguments: null,
-      },
-    ],
-  },
-  {
-    type: 'function',
     inputs: [
       {
-        name: 'asset_id',
+        type: 'u64',
+        name: 'coins',
+      },
+      {
         type: 'struct ContractId',
+        name: 'asset_id',
         components: [
           {
-            name: 'value',
             type: 'b256',
-            components: null,
-            typeArguments: null,
+            name: 'value',
           },
         ],
-        typeArguments: null,
+      },
+      {
+        type: 'struct Address',
+        name: 'address',
+        components: [
+          {
+            type: 'b256',
+            name: 'value',
+          },
+        ],
       },
     ],
-    name: 'get_token_balance',
     outputs: [
       {
+        type: '()',
         name: '',
+        components: [],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'mint',
+    inputs: [],
+    outputs: [
+      {
+        type: '()',
+        name: '',
+        components: [],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'get_mint_amount',
+    inputs: [],
+    outputs: [
+      {
         type: 'u64',
-        components: null,
-        typeArguments: null,
+        name: '',
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'get_balance',
+    inputs: [],
+    outputs: [
+      {
+        type: 'u64',
+        name: '',
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'get_token_balance',
+    inputs: [
+      {
+        type: 'struct ContractId',
+        name: 'asset_id',
+        components: [
+          {
+            type: 'b256',
+            name: 'value',
+          },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        type: 'u64',
+        name: '',
       },
     ],
   },
@@ -249,9 +209,12 @@ const _abi = [
 export class TokenContractAbi__factory {
   static readonly abi = _abi;
   static createInterface(): TokenContractAbiInterface {
-    return new Interface(_abi) as TokenContractAbiInterface;
+    return new Interface(_abi) as unknown as TokenContractAbiInterface;
   }
-  static connect(id: string, walletOrProvider: Wallet | Provider): TokenContractAbi {
-    return new Contract(id, _abi, walletOrProvider) as TokenContractAbi;
+  static connect(
+    id: string | AbstractAddress,
+    walletOrProvider: Wallet | Provider
+  ): TokenContractAbi {
+    return new Contract(id, _abi, walletOrProvider) as unknown as TokenContractAbi;
   }
 }
