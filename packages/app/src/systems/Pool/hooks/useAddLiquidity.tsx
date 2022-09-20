@@ -18,8 +18,7 @@ const serviceMap = new Map();
 const isProd = process.env.NODE_ENV === "production";
 
 export const AddLiquidityContext = createContext<AddLiquidityMachineService>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  {} as any
+  {} as AddLiquidityMachineService
 );
 
 function useAddLiquidityService() {
