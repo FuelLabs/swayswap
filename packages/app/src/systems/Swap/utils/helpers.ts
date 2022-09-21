@@ -35,7 +35,7 @@ export function createAmount(value: Maybe<string | BN>): CoinAmount {
   if (typeof value === 'string') {
     const raw = parseUnits(value);
     return {
-      value: formatUnits(raw),
+      value,
       raw,
     };
   }
