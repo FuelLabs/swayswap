@@ -10,7 +10,7 @@ import {
   ZERO,
   format,
   formatUnits,
-  safeBigInt,
+  safeBN,
   multiply,
   parseUnits,
   isZero,
@@ -88,15 +88,15 @@ export const calculatePriceWithSlippage = (
 };
 
 export function hasEnoughBalance(amount: Maybe<BN>, balance: Maybe<BN>) {
-  return safeBigInt(amount).lte(safeBigInt(balance)) && !isZero(balance);
+  return safeBN(amount).lte(safeBN(balance)) && !isZero(balance);
 }
 
 // TODO: Add unit tests on this
 export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: SwapMachineContext) {
   const isFrom = direction === SwapDirection.fromTo;
-  const ethReserve = safeBigInt(poolInfo?.eth_reserve);
-  const tokenReserve = safeBigInt(poolInfo?.token_reserve);
-  const toAmountRaw = safeBigInt(toAmount?.raw);
+  const ethReserve = safeBN(poolInfo?.eth_reserve);
+  const tokenReserve = safeBN(poolInfo?.token_reserve);
+  const toAmountRaw = safeBN(toAmount?.raw);
 
   if (isFrom) return true;
 
@@ -106,10 +106,10 @@ export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: S
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {
   const { ethBalance, direction, coinFrom, fromAmount, txCost, amountPlusSlippage } = params;
-  const balance = safeBigInt(ethBalance);
-  const txCostTotal = safeBigInt(txCost?.fee);
-  const plusSlippage = safeBigInt(amountPlusSlippage?.raw);
-  const fromAmountRaw = safeBigInt(fromAmount?.raw);
+  const balance = safeBN(ethBalance);
+  const txCostTotal = safeBN(txCost?.fee);
+  const plusSlippage = safeBN(amountPlusSlippage?.raw);
+  const fromAmountRaw = safeBN(fromAmount?.raw);
   const isFrom = direction === SwapDirection.fromTo;
 
   /**
@@ -145,8 +145,8 @@ export const calculateMaxBalanceToSwap = ({ direction, ctx }: CalculateMaxBalanc
   const isFrom = direction === SwapDirection.fromTo;
   const shouldUseNetworkFee =
     (isFrom && isCoinEth(ctx.coinFrom)) || (!isFrom && isCoinEth(ctx.coinTo));
-  const balance = safeBigInt(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
-  const networkFee = safeBigInt(ctx.txCost?.fee);
+  const balance = safeBN(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
+  const networkFee = safeBN(ctx.txCost?.fee);
   const nextValue = balance.gt(ZERO) && shouldUseNetworkFee ? balance.sub(networkFee) : balance;
 
   return createAmount(nextValue);

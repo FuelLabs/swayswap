@@ -1,4 +1,3 @@
-// import * as ethers from '@ethersproject/units';
 import { Decimal } from 'decimal.js';
 import { bn } from 'fuels';
 import type { BigNumberish, BN } from 'fuels';
@@ -58,7 +57,7 @@ export function parseUnits(value: string, precision: number = DECIMAL_UNITS): BN
   const length = valueDecimals.length;
 
   if (length > precision) {
-    throw new Error('Decimal can not be bigger than the precision');
+    throw new Error("Decimal can't be bigger than the precision");
   }
 
   const decimals = Array.from({ length: precision }).fill('0');
@@ -67,16 +66,12 @@ export function parseUnits(value: string, precision: number = DECIMAL_UNITS): BN
   return bn(amount);
 }
 
-export function parseInputValueBigInt(value: string): BN {
+export function parseInputValueBN(value: string): BN {
   if (value !== '') {
     const nextValue = value === '.' ? '0.' : value;
-    return toBigInt(parseUnits(nextValue));
+    return bn(parseUnits(nextValue));
   }
   return ZERO;
-}
-
-export function toBigInt(number: BigNumberish) {
-  return bn(number);
 }
 
 export function getNumberOrHex(value: Maybe<BigNumberish>): number | string {
@@ -102,7 +97,7 @@ export function maxAmount(value: BigNumberish, max: BigNumberish): BN {
   return bn(max).lt(value) ? bn(value) : bn(max);
 }
 
-export function safeBigInt(value?: Maybe<BigNumberish>, defaultValue?: BigNumberish): BN {
+export function safeBN(value?: Maybe<BigNumberish>, defaultValue?: BigNumberish): BN {
   return bn(value || defaultValue || 0);
 }
 

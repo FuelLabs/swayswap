@@ -8,7 +8,7 @@ import { calculateMaxBalanceToSwap } from "../utils";
 import { useSwapContext } from "./useSwap";
 
 import type { CoinBalanceProps, CoinSelectorProps } from "~/systems/Core";
-import { isZero, compareStates, safeBigInt } from "~/systems/Core";
+import { isZero, compareStates, safeBN } from "~/systems/Core";
 
 function getRightBalance(dir: SwapDirection, ctx: SwapMachineContext) {
   const { coinFromBalance, coinToBalance } = ctx;
@@ -24,7 +24,7 @@ const selectors = {
     return state.context.coinTo;
   },
   gasFee: (state: SwapMachineState) => {
-    return safeBigInt(state.context.txCost?.total);
+    return safeBN(state.context.txCost?.total);
   },
   hasBalance: (dir: SwapDirection) => (state: SwapMachineState) => {
     const balance = getRightBalance(dir, state.context);

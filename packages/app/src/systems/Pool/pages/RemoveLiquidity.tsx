@@ -21,7 +21,7 @@ import {
   TOKENS,
   useBalances,
   useEthBalance,
-  safeBigInt,
+  safeBN,
 } from "~/systems/Core";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { txFeedback } from "~/systems/Core/utils/feedback";
@@ -82,7 +82,7 @@ export function RemoveLiquidityPage() {
     return errorList;
   }, [tokenInput.amount?.toString(), tokenInput.hasEnoughBalance]);
 
-  const hasEnoughBalance = safeBigInt(ethBalance.raw).gt(txCost.fee);
+  const hasEnoughBalance = safeBN(ethBalance.raw).gt(txCost.fee);
   const isRemoveButtonDisabled =
     !!errors.length ||
     removeLiquidityMutation.isLoading ||

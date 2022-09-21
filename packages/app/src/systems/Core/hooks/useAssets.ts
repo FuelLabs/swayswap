@@ -1,7 +1,8 @@
 import type { BN, CoinQuantity } from 'fuels';
+import { bn } from 'fuels';
 import { useQuery } from 'react-query';
 
-import { TOKENS, ASSET_404, toBigInt } from '../utils';
+import { TOKENS, ASSET_404 } from '../utils';
 
 import { useWallet } from './useWallet';
 
@@ -19,7 +20,7 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<AssetAmount> 
       img: coinMetadata?.img || ASSET_404.img,
       pairOf: coinMetadata?.pairOf,
       assetId: coin.assetId,
-      amount: toBigInt(coin.amount || 0),
+      amount: bn(coin.amount || 0),
     };
   });
 

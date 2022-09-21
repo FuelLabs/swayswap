@@ -3,7 +3,7 @@ import { useMemo } from "react";
 
 import type { CoinBalanceProps } from "../hooks";
 import { useBalances } from "../hooks";
-import { format, isZero, safeBigInt } from "../utils";
+import { format, isZero, safeBN } from "../utils";
 
 import { Button, Tooltip } from "~/systems/UI";
 
@@ -19,7 +19,7 @@ export const CoinBalance = ({
 
   const balance = useMemo(() => {
     const coinBalance = balances?.find((i) => i.assetId === coin?.assetId);
-    return safeBigInt(coinBalance?.amount);
+    return safeBN(coinBalance?.amount);
   }, [balances, coin?.assetId]);
 
   const maxButtonText = isZero(gasFee)

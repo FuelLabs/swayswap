@@ -5,13 +5,13 @@ import { getPoolInfoPreview } from '../utils/helpers';
 import { usePositionInfo } from './usePoolInfo';
 
 import { CONTRACT_ID } from '~/config';
-import { useBalances, safeBigInt, getCoin } from '~/systems/Core';
+import { useBalances, safeBN, getCoin } from '~/systems/Core';
 
 export function useUserPositions() {
   const { data: balances } = useBalances();
   const poolTokens = useMemo(() => {
     const lpTokenAmount = getCoin(balances || [], CONTRACT_ID)?.amount;
-    const poolTokensNum = safeBigInt(lpTokenAmount);
+    const poolTokensNum = safeBN(lpTokenAmount);
     return poolTokensNum;
   }, [balances]);
   const { data: info } = usePositionInfo(poolTokens);
