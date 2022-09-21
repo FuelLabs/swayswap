@@ -10,7 +10,7 @@ import {
   useCoinMetadata,
   ETH_DAI,
   NetworkFeePreviewItem,
-  safeBigInt,
+  safeBN,
 } from "~/systems/Core";
 import type { Maybe } from "~/types";
 
@@ -31,7 +31,7 @@ export const RemoveLiquidityPreview = ({
     formattedPooledETH,
     formattedNextPoolTokens,
     formattedNextPoolShare,
-  } = usePreviewRemoveLiquidity(safeBigInt(amount));
+  } = usePreviewRemoveLiquidity(safeBN(amount));
 
   if (!amount) return null;
 

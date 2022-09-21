@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import type { BN } from 'fuels';
 
-import { calculatePercentage, format, isZero, safeBigInt, toFixed, ZERO } from '~/systems/Core';
+import { calculatePercentage, format, isZero, safeBN, toFixed, ZERO } from '~/systems/Core';
 import type { Maybe } from '~/types';
 import type { PoolInfoOutput, PositionInfoOutput } from '~/types/contracts/ExchangeContractAbi';
 
@@ -36,11 +36,11 @@ export function getPoolInfoPreview(
   poolTokens: BN
 ): PoolInfoPreview {
   // Amounts
-  const totalLiquidity = safeBigInt(info?.lp_token_supply);
-  const tokenReserve = safeBigInt(info?.token_reserve);
-  const ethReserve = safeBigInt(info?.eth_reserve);
-  const pooledETH = safeBigInt(info?.eth_amount);
-  const pooledDAI = safeBigInt(info?.token_amount);
+  const totalLiquidity = safeBN(info?.lp_token_supply);
+  const tokenReserve = safeBN(info?.token_reserve);
+  const ethReserve = safeBN(info?.eth_reserve);
+  const pooledETH = safeBN(info?.eth_amount);
+  const pooledDAI = safeBN(info?.token_amount);
   const poolRatio = getPoolRatio(info);
   const poolShare = calculatePercentage(poolTokens, totalLiquidity);
   const hasPositions = poolTokens.gt(ZERO);

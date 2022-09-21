@@ -15,6 +15,7 @@ import { SwapDirection } from "../types";
 import { useSwapGlobalState } from "./useSwapGlobalState";
 import { useSwapURLParams } from "./useSwapURLParams";
 
+import { IS_DEVELOPMENT } from "~/config";
 import {
   useWallet,
   useContract,
@@ -39,7 +40,6 @@ const selectors = {
 // ----------------------------------------------------------------------------
 
 const serviceMap = new Map();
-const isProd = process.env.NODE_ENV === "production";
 
 const swapServiceContext = createContext<SwapMachineService>(
   // @ts-ignore
@@ -52,7 +52,7 @@ export function useSwapService() {
    * Need this because of React.context that updates for null on each refresh
    * Causing an error in useActor. But it's on development
    */
-  if (!service && !isProd) {
+  if (!service && IS_DEVELOPMENT) {
     service = serviceMap.get("service");
   }
   return service;
@@ -123,7 +123,7 @@ export function SwapProvider({ children }: SwapProviderProps) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any);
 
-  if (!isProd) {
+  if (IS_DEVELOPMENT) {
     serviceMap.set("service", service);
   }
 

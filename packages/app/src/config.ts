@@ -25,3 +25,5 @@ export const FIXED_UNITS = 3;
 export const GAS_PRICE = 1;
 /** Base block explorer url */
 export const BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
+/** Is production env */
+export const IS_DEVELOPMENT = process.env.NODE_ENV !== 'production';

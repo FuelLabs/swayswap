@@ -9,6 +9,10 @@ describe('Math utilities', () => {
     expect(math.parseUnits('0.00002').toHex()).toEqual(bn('20000').toHex());
     expect(math.parseUnits('100.00002').toHex()).toEqual(bn('100000020000').toHex());
     expect(math.parseUnits('100,100.00002').toHex()).toEqual(bn('100100000020000').toHex());
+    expect(math.parseUnits('100,100.00002', 5).toHex()).toEqual(bn('10010000002').toHex());
+    expect(() => {
+      math.parseUnits('100,100.000002', 5);
+    }).toThrow("Decimal can't be bigger than the precision");
   });
   it('Math.formatUnits', () => {
     expect(math.formatUnits(bn('1000000000'))).toEqual('1.000000000');
@@ -34,10 +38,13 @@ describe('Math utilities', () => {
     expect(math.isZero(bn(0))).toBeTruthy();
   });
 
-  it('Math.divideBy', () => {
+  it('Math.multiply', () => {
     expect(math.multiply(bn(100), 1.2).toHex()).toEqual(bn(120).toHex());
     expect(math.multiply(bn(2), 0.5).toHex()).toEqual(bn(1).toHex());
     expect(math.multiply(bn('100000020000'), 0.5).toHex()).toEqual(bn('50000010000').toHex());
+  });
+
+  it('Math.divide', () => {
     expect(math.divide(bn(4), bn(2)).toHex()).toEqual(bn(2).toHex());
     expect(math.divide(bn(1), 0.5).toHex()).toEqual(bn(2).toHex());
     expect(math.divide(bn('100000020000'), 0.5).toHex()).toEqual(bn('200000040000').toHex());
@@ -51,8 +58,8 @@ describe('Math utilities', () => {
     expect(math.maxAmount(bn(1), bn(2)).toHex()).toEqual(bn(2).toHex());
   });
 
-  it('Math.safeBigInt', () => {
-    expect(math.safeBigInt().toHex()).toEqual(math.ZERO.toHex());
+  it('Math.safeBN', () => {
+    expect(math.safeBN().toHex()).toEqual(math.ZERO.toHex());
   });
 
   it('Math.isValidNumber', () => {

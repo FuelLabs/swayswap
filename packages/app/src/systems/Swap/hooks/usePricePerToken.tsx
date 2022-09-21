@@ -7,19 +7,19 @@ import { getPricePerToken } from "../utils";
 
 import { useSwapContext } from "./useSwap";
 
-import { compareStates, safeBigInt } from "~/systems/Core";
+import { compareStates, safeBN } from "~/systems/Core";
 
 const selectors = {
   coinFrom: ({ context: ctx }: SwapMachineState) => {
     return {
       symbol: ctx.coinFrom?.symbol || "",
-      amount: safeBigInt(ctx.fromAmount?.raw),
+      amount: safeBN(ctx.fromAmount?.raw),
     };
   },
   coinTo: ({ context: ctx }: SwapMachineState) => {
     return {
       symbol: ctx.coinTo?.symbol || "",
-      amount: safeBigInt(ctx.toAmount?.raw),
+      amount: safeBN(ctx.toAmount?.raw),
     };
   },
   isFrom: ({ context: ctx }: SwapMachineState) => {

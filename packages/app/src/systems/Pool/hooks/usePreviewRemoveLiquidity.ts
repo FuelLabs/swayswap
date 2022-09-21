@@ -13,7 +13,7 @@ import {
   format,
   getCoin,
   isZero,
-  safeBigInt,
+  safeBN,
   toFixed,
   useBalances,
   ZERO,
@@ -29,7 +29,7 @@ export function usePreviewRemoveLiquidity(amount: Maybe<BN>): PreviewRemoveLiqui
   const { data: balances } = useBalances();
   const poolTokens = useMemo(() => {
     const lpTokenAmount = getCoin(balances || [], CONTRACT_ID)?.amount;
-    const poolTokensNum = safeBigInt(lpTokenAmount);
+    const poolTokensNum = safeBN(lpTokenAmount);
     return poolTokensNum;
   }, [balances]);
   const { data: info } = usePositionInfo(amount || ZERO);
