@@ -18,8 +18,8 @@ jobs:
           PUBLIC_URL: "/${{ github.event.repository.name }}"
           VITE_FUEL_PROVIDER_URL: "https://node-beta-1.fuel.network/graphql"
           VITE_FUEL_FAUCET_URL: "https://faucet-beta-1.fuel.network/dispense"
-          VITE_CONTRACT_ID: "0x2847206b783ee9dcb3f9937fbacf3ad9f137aff219e5ed4530d736ab6fccc945"
-          VITE_TOKEN_ID: "0xb744fe010c85326e85cf00cf7426117ae9466405787f33edaba1c43a99d353aa"
+          VITE_CONTRACT_ID: "0xc9a5366c269438d294ef942bc962dd2e6c86121e3bca00192723eb7eb58fa87d"
+          VITE_TOKEN_ID: "0x6dfc0f524d3006e103fc4bd733c4f012b5a089fd09361d44833cdf653e9afe5b"
         run: |
           pnpm build
 
