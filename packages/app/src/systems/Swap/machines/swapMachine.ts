@@ -95,7 +95,7 @@ const INVALID_STATES = {
   },
   FROM_AMOUNT_TOO_LOW: {
     cond: 'toAmountIsZero',
-    actions: 'cleanPreviewInfo',
+    actions: ['cleanPreviewInfo', 'cleanToAmount'],
     target: '#(machine).invalid.fromAmountTooLow',
   },
 };
@@ -319,7 +319,6 @@ export const swapMachine =
         ],
         INPUT_CHANGE: [
           {
-            actions: 'clearContext',
             cond: 'inputIsEmpty',
             target: '.invalid.withoutAmount',
           },
@@ -370,6 +369,10 @@ export const swapMachine =
         cleanPreviewInfo: assign((ctx) => ({
           ...ctx,
           previewInfo: null,
+        })),
+        cleanToAmount: assign((ctx) => ({
+          ...ctx,
+          toAmount: undefined,
         })),
         setTxCost: assign({
           txCost: (_, ev) => ev.data,
