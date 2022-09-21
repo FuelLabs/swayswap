@@ -319,7 +319,6 @@ export const swapMachine =
         ],
         INPUT_CHANGE: [
           {
-            actions: 'clearContext',
             cond: 'inputIsEmpty',
             target: '.invalid.withoutAmount',
           },
