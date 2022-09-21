@@ -6,7 +6,7 @@ inputs:
     default: 16
   pnpm-version:
     description: 'PNPM version'
-    default: 7.11.0
+    default: 7
 
 runs:
   using: "composite"
@@ -28,5 +28,5 @@ runs:
     - uses: pnpm/action-setup@v2.2.2
       name: Install pnpm
       with:
-        version: 7
+        version: ${{ inputs.pnpm-version }}
         run_install: true
