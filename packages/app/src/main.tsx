@@ -1,5 +1,6 @@
 import "@fontsource/inter/variable.css";
 import "@fontsource/raleway/variable.css";
+import "@fuel-ui/css";
 
 import "./styles/index.css";
 

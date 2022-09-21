@@ -8,6 +8,7 @@ import { useBreakpoint } from "../hooks/useBreakpoint";
 import { useWallet } from "../hooks/useWallet";
 import { relativeUrl } from "../utils";
 
+import { MigrationWarning } from "./MigrationWarning";
 import { WalletWidget } from "./WalletWidget";
 
 import type { ButtonProps } from "~/systems/UI";
@@ -54,40 +55,43 @@ export const Header = () => {
   const location = useLocation();
 
   return (
-    <div className="header">
-      <img
-        onClick={() => navigate("/")}
-        src={relativeUrl("/fuel-logo-512x512.png")}
-        alt="swayswap"
-        className="cursor-pointer"
-      />
-      {wallet && (
-        <div className="header--nav">
-          <div className="header--navContainer">
-            <ButtonGroup>
-              <HeaderNav
-                icon={MdSwapCalls}
-                onPress={() => navigate(Pages.swap)}
-                isActive={location.pathname === Pages.swap}
-              >
-                Swap
-              </HeaderNav>
-              <HeaderNav
-                icon={BiDollarCircle}
-                onPress={() => navigate(Pages.pool)}
-                isActive={location.pathname.includes(Pages.pool)}
-              >
-                Pool
-              </HeaderNav>
-            </ButtonGroup>
+    <>
+      <MigrationWarning />
+      <div className="header">
+        <img
+          onClick={() => navigate("/")}
+          src={relativeUrl("/fuel-logo-512x512.png")}
+          alt="swayswap"
+          className="cursor-pointer"
+        />
+        {wallet && (
+          <div className="header--nav">
+            <div className="header--navContainer">
+              <ButtonGroup>
+                <HeaderNav
+                  icon={MdSwapCalls}
+                  onPress={() => navigate(Pages.swap)}
+                  isActive={location.pathname === Pages.swap}
+                >
+                  Swap
+                </HeaderNav>
+                <HeaderNav
+                  icon={BiDollarCircle}
+                  onPress={() => navigate(Pages.pool)}
+                  isActive={location.pathname.includes(Pages.pool)}
+                >
+                  Pool
+                </HeaderNav>
+              </ButtonGroup>
+            </div>
           </div>
-        </div>
-      )}
-      {wallet && (
-        <div className="header--wallet">
-          <WalletWidget />
-        </div>
-      )}
-    </div>
+        )}
+        {wallet && (
+          <div className="header--wallet">
+            <WalletWidget />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
