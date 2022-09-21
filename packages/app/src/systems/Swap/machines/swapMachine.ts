@@ -95,6 +95,7 @@ const INVALID_STATES = {
   },
   FROM_AMOUNT_TOO_LOW: {
     cond: 'toAmountIsZero',
+    actions: 'cleanPreviewInfo',
     target: '#(machine).invalid.fromAmountTooLow',
   },
 };
