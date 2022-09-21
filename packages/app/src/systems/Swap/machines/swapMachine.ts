@@ -17,7 +17,7 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import { getCoin, getCoinETH, handleError, multiply, safeBigInt } from '~/systems/Core';
+import { getCoin, getCoinETH, handleError, isZero, multiply, safeBigInt } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
@@ -92,6 +92,10 @@ const INVALID_STATES = {
     cond: 'notHasLiquidity',
     actions: 'cleanPreviewInfo',
     target: '#(machine).invalid.withoutLiquidity',
+  },
+  FROM_AMOUNT_TOO_LOW: {
+    cond: 'toAmountIsZero',
+    target: '#(machine).invalid.fromAmountTooLow',
   },
 };
 
@@ -198,6 +202,7 @@ export const swapMachine =
               always: [
                 INVALID_STATES.NO_COIN_FROM_BALANCE,
                 INVALID_STATES.NO_ETH_FOR_NETWORK_FEE,
+                INVALID_STATES.FROM_AMOUNT_TOO_LOW,
                 INVALID_STATES.NO_LIQUIDITY,
                 { target: 'success' },
               ],
@@ -276,6 +281,9 @@ export const swapMachine =
             },
             withoutEthForNetworkFee: {
               tags: 'notHasEthForNetworkFee',
+            },
+            fromAmountTooLow: {
+              tags: 'fromAmountTooLow',
             },
           },
         },
@@ -467,6 +475,9 @@ export const swapMachine =
         },
       },
       guards: {
+        toAmountIsZero: (ctx) => {
+          return isZero(ctx.previewInfo?.amount);
+        },
         notHasLiquidity: (ctx) => {
           return !hasLiquidityForSwap(ctx);
         },

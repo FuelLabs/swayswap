@@ -35,6 +35,9 @@ const selectors = {
       const opposite = ctx?.direction === FROM_TO ? TO_FROM : FROM_TO;
       return `Select ${opposite} token`;
     }
+    if (state.hasTag("fromAmountTooLow")) {
+      return `${coinFrom?.name || ""} amount is too low`;
+    }
     return "Swap";
   },
   canSwap: (state: SwapMachineState) => {
