@@ -6,8 +6,8 @@ import {
   AddLiquidityPoolPrice,
   AddLiquidityPreview,
   PoolCurrentReserves,
+  AddLiquidityButton,
 } from "../components";
-import { AddLiquidityButton } from "../components/AddLiquidityButton";
 import { useAddLiquidityContext } from "../hooks";
 import { selectors } from "../selectors";
 import { AddLiquidityActive } from "../types";

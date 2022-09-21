@@ -138,8 +138,6 @@ describe("Add Liquidity", () => {
     });
   });
 
-  // This test is triggering a false alert, skipping it for now.
-  // TODO: Should be included again with issue -> https://github.com/FuelLabs/swayswap/issues/306
   it("should show '0.' if typed only '.' in the input", async () => {
     jest.unmock("../hooks/useUserPositions.ts");
 
