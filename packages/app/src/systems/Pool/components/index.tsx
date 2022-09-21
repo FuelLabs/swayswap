@@ -4,3 +4,4 @@ export * from "./PoolCurrentPosition";
 export * from "./PoolCurrentReserves";
 export * from "./RemoveLiquidityPreview";
 export * from "./NewPoolWarning";
+export * from "./AddLiquidityButton";

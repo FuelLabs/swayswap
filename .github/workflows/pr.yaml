@@ -73,7 +73,6 @@ jobs:
 
       - name: Setup scripts
         run: |
-          ls
           pnpm scripts:setup
 
       - name: Run test
