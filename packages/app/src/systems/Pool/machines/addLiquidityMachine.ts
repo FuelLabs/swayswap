@@ -14,7 +14,7 @@ import {
   getCoinETH,
   handleError,
   isZero,
-  safeBigInt,
+  safeBN,
   TOKENS,
   ZERO,
 } from '~/systems/Core';
@@ -392,7 +392,7 @@ export const addLiquidityMachine =
             return getPoolRatio(ev.data);
           },
           poolShare: (ctx, ev) => {
-            const poolPosition = safeBigInt(ctx.poolPosition);
+            const poolPosition = safeBN(ctx.poolPosition);
             if (!ev.data || isZero(poolPosition)) return new Decimal(0);
             return calculatePercentage(poolPosition, ev.data.lp_token_supply);
           },
@@ -400,7 +400,7 @@ export const addLiquidityMachine =
         setBalances: assign({
           balances: (_, ev) => ev.data,
           poolPosition: (_, ev) => {
-            return safeBigInt(getCoin(ev.data, CONTRACT_ID)?.amount);
+            return safeBN(getCoin(ev.data, CONTRACT_ID)?.amount);
           },
         }),
         setPreviewAddLiqudity: assign((ctx, ev) => {
@@ -413,9 +413,9 @@ export const addLiquidityMachine =
             };
           }
 
-          const currentLPTokensBalance = safeBigInt(ctx.poolPosition);
+          const currentLPTokensBalance = safeBN(ctx.poolPosition);
           const totalLPTokens = ev.data.lp_token_received.add(currentLPTokensBalance);
-          const lpTokenSupply = safeBigInt(ctx.poolInfo?.lp_token_supply);
+          const lpTokenSupply = safeBN(ctx.poolInfo?.lp_token_supply);
           const finalContext: AddLiquidityMachineContext = {
             ...ctx,
             poolShare: calculatePercentage(totalLPTokens, lpTokenSupply),
@@ -495,9 +495,9 @@ export const addLiquidityMachine =
           return !!ctx.transactionCost?.error;
         },
         notHasEthForNetworkFee: (ctx) => {
-          const fromAmount = safeBigInt(ctx.fromAmount);
-          const ethBalance = safeBigInt(getCoinETH(ctx.balances)?.amount);
-          const networkFee = safeBigInt(ctx.transactionCost?.fee);
+          const fromAmount = safeBN(ctx.fromAmount);
+          const ethBalance = safeBN(getCoinETH(ctx.balances)?.amount);
+          const networkFee = safeBN(ctx.transactionCost?.fee);
           return ethBalance.lte(fromAmount.add(networkFee));
         },
         notHasFromAmount: (ctx) => {
@@ -507,12 +507,12 @@ export const addLiquidityMachine =
           return !ctx.toAmount || isZero(ctx.toAmount);
         },
         notHasFromBalance: (ctx) => {
-          const balanceFrom = safeBigInt(getCoin(ctx.balances, ctx.coinFrom.assetId)?.amount);
-          return balanceFrom.lt(safeBigInt(ctx.fromAmount));
+          const balanceFrom = safeBN(getCoin(ctx.balances, ctx.coinFrom.assetId)?.amount);
+          return balanceFrom.lt(safeBN(ctx.fromAmount));
         },
         notHasToBalance: (ctx) => {
-          const balanceTo = safeBigInt(getCoin(ctx.balances, ctx.coinTo.assetId)?.amount);
-          return balanceTo.lt(safeBigInt(ctx.toAmount));
+          const balanceTo = safeBN(getCoin(ctx.balances, ctx.coinTo.assetId)?.amount);
+          return balanceTo.lt(safeBN(ctx.toAmount));
         },
         poolHasLiquidity: (ctx) => {
           return !isZero(ctx.poolInfo?.lp_token_supply);

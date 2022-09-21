@@ -11,11 +11,11 @@ import { addLiquidityMachine } from "../machines/addLiquidityMachine";
 import type { AddLiquidityMachineContext } from "../types";
 import { liquidityPreviewEmpty } from "../types";
 
+import { IS_DEVELOPMENT } from "~/config";
 import { TOKENS, useContract, useSubscriber } from "~/systems/Core";
 import { AppEvents } from "~/types";
 
 const serviceMap = new Map();
-const isProd = process.env.NODE_ENV === "production";
 
 export const AddLiquidityContext = createContext<AddLiquidityMachineService>(
   {} as AddLiquidityMachineService
@@ -28,7 +28,7 @@ function useAddLiquidityService() {
    * Need this because of React.context that updates for null on each refresh
    * Causing an error in useActor. But it's on development
    */
-  if (!service && !isProd) {
+  if (!service && IS_DEVELOPMENT) {
     service = serviceMap.get("service");
   }
 
@@ -68,7 +68,7 @@ export function AddLiquidityProvider({ children }: { children: ReactNode }) {
     context,
   });
 
-  if (!isProd) {
+  if (IS_DEVELOPMENT) {
     serviceMap.set("service", service);
   }
 

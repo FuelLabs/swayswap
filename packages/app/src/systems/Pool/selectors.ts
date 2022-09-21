@@ -1,4 +1,4 @@
-import { isZero, safeBigInt } from '../Core';
+import { isZero, safeBN } from '../Core';
 
 import type { AddLiquidityMachineState } from './machines/addLiquidityMachine';
 import type { AddLiquidityActive } from './types';
@@ -33,7 +33,7 @@ export const selectors = {
     );
   },
   previewAmount: ({ context: ctx }: AddLiquidityMachineState) => {
-    return safeBigInt(ctx.liquidityPreview?.liquidityTokens);
+    return safeBN(ctx.liquidityPreview?.liquidityTokens);
   },
   poolInfo: ({ context: ctx }: AddLiquidityMachineState) => {
     return ctx.poolInfo;

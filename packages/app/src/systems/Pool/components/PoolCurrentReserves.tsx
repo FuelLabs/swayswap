@@ -10,7 +10,7 @@ import {
   PreviewItem,
   TokenIcon,
   compareStates,
-  safeBigInt,
+  safeBN,
   format,
 } from "~/systems/Core";
 
@@ -39,7 +39,7 @@ export const PoolCurrentReserves = () => {
             {coinFrom?.name}
           </div>
         }
-        value={format(safeBigInt(poolInfo?.eth_reserve))}
+        value={format(safeBN(poolInfo?.eth_reserve))}
       />
       <PreviewItem
         loading={isLoading}
@@ -49,7 +49,7 @@ export const PoolCurrentReserves = () => {
             {coinTo?.name}
           </div>
         }
-        value={format(safeBigInt(poolInfo?.token_reserve))}
+        value={format(safeBN(poolInfo?.token_reserve))}
       />
     </PreviewTable>
   );

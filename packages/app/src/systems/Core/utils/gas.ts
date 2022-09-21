@@ -1,3 +1,4 @@
+import { ReceiptType } from 'fuels';
 import type {
   BN,
   CallResult,
@@ -5,9 +6,8 @@ import type {
   MultiCallInvocationScope,
   TxParams,
 } from 'fuels';
-import { ReceiptType } from 'fuels';
 
-import { safeBigInt, toBigInt, ZERO } from './math';
+import { multiply, safeBN, ZERO } from './math';
 
 import { GAS_PRICE } from '~/config';
 
@@ -62,7 +62,7 @@ export async function getTransactionCost(
         fundTransaction: true,
       });
     return {
-      total: toBigInt(txCost.gasUsed.toNumber() * 1.3),
+      total: multiply(txCost.gasUsed, 1.3),
       fee: txCost.fee,
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,10 +72,10 @@ export async function getTransactionCost(
 }
 
 export function getOverrides(overrides?: TxParams): TxParams {
-  const gasLimit = safeBigInt(overrides?.gasLimit);
+  const gasLimit = safeBN(overrides?.gasLimit);
   const ret = {
     gasPrice: GAS_PRICE,
-    gasLimit: gasLimit.gt(0) ? gasLimit : 100_000_000,
+    gasLimit: !gasLimit.isZero() ? gasLimit : 100_000_000,
     ...overrides,
   };
   return ret;

@@ -4,7 +4,7 @@ import { useMutation, useQuery } from 'react-query';
 
 import { FUEL_FAUCET_URL } from '~/config';
 import { useBalances, useWallet } from '~/systems/Core';
-import { format, safeBigInt } from '~/systems/Core/utils/math';
+import { format, safeBN } from '~/systems/Core/utils/math';
 import type { Maybe } from '~/types';
 import { Queries } from '~/types';
 
@@ -62,7 +62,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
   }
 
   const faucetAmount = useMemo(() => {
-    const amount = safeBigInt(query.data?.amount);
+    const amount = safeBN(query.data?.amount);
     return format(amount);
   }, [query.status]);
 
