@@ -12,21 +12,19 @@ export const ONE_ASSET = bn.parseUnits('1', DECIMAL_UNITS);
 /** Max value from Sway Contract */
 export const MAX_U64_STRING = '0xFFFFFFFFFFFFFFFF';
 
-// export function getNumberOrHex(value: Maybe<BigNumberish>): number | string {
-//   if (typeof value === 'number') {
-//     return value;
-//   }
-//   return bn(value || 0).toHex();
-// }
+export function getNumberOrHex(value: Maybe<BigNumberish>): number | string {
+  if (typeof value === 'number') {
+    return value;
+  }
+  return bn(value || 0).toHex();
+}
 
 export function multiply(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): BN {
-  return bn(new Decimal(bn(value).toHex()).mul(bn(by).toHex()).round().toHex());
-  // return bn(new Decimal(getNumberOrHex(value)).mul(getNumberOrHex(by)).round().toHex());
+  return bn(new Decimal(getNumberOrHex(value)).mul(getNumberOrHex(by)).round().toHex());
 }
 
 export function divide(value?: Maybe<BigNumberish>, by?: Maybe<BigNumberish>): BN {
-  return bn(new Decimal(bn(value).toHex()).div(bn(by).toHex()).round().toHex());
-  // return bn(new Decimal(getNumberOrHex(value)).div(getNumberOrHex(by)).round().toHex());
+  return bn(new Decimal(getNumberOrHex(value)).div(getNumberOrHex(by)).round().toHex());
 }
 
 export function minimumZero(value: BigNumberish): BN {
