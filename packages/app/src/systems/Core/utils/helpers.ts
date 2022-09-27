@@ -10,7 +10,7 @@ export function sleep(ms: number) {
   });
 }
 
-export function omit<T>(list: string[], props: T) {
+export function omit<T extends Object>(list: string[], props: T) {
   return Object.entries(props).reduce((obj, [key, value]) => {
     if (list.some((k) => k === key)) return obj;
     return { ...obj, [key]: value };
