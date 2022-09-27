@@ -71,7 +71,7 @@ export type CoinBalanceProps = {
 type DisplayType = 'input' | 'text';
 
 const formatValue = (amount: Maybe<BN>) => {
-  return amount ? bn(amount).formatUnits() : '';
+  return amount ? amount.formatUnits() : '';
 };
 
 export function useCoinInput({
@@ -102,7 +102,7 @@ export function useCoinInput({
 
   function handleInputPropsChange(val: string) {
     if (isReadOnly) return;
-    const next = val !== '' ? bn(val) : null;
+    const next = val !== '' ? bn.parseUnits(val) : null;
     if (typeof onChange === 'function') {
       onChange(next);
     } else {
@@ -112,7 +112,7 @@ export function useCoinInput({
 
   function isAllowed({ value }: NumberFormatValues) {
     const max = params.max ? params.max : bn(Number.MAX_SAFE_INTEGER);
-    return bn(value).lt(max);
+    return bn.parseUnits(value).lt(max);
   }
 
   function getInputProps() {
