@@ -1,4 +1,5 @@
-import { BN, format } from "fuels";
+import type { BN } from "fuels";
+import { format } from "fuels";
 
 import { PreviewItem } from "./PreviewTable";
 

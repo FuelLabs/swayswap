@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { bn, format, toFixed } from "fuels";
 import { BsArrowDown } from "react-icons/bs";
 
 import { useAddLiquidityContext } from "../hooks";
@@ -10,7 +11,6 @@ import {
   TokenIcon,
   compareStates,
 } from "~/systems/Core";
-import { bn, format, toFixed } from "fuels";
 
 export const AddLiquidityPreview = () => {
   const { service } = useAddLiquidityContext();

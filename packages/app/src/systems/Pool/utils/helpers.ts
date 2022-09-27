@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
-import { bn, BN, format, toFixed } from 'fuels';
+import type { BN } from 'fuels';
+import { bn, format, toFixed } from 'fuels';
 
 import { calculatePercentage, ZERO } from '~/systems/Core';
 import type { Maybe } from '~/types';

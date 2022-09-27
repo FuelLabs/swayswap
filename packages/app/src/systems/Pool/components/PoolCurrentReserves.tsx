@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { bn, format } from "fuels";
 
 import { useAddLiquidityContext } from "../hooks";
 import { selectors } from "../selectors";
@@ -11,7 +12,6 @@ import {
   TokenIcon,
   compareStates,
 } from "~/systems/Core";
-import { bn, format } from "fuels";
 
 export const PoolCurrentReserves = () => {
   const { service } = useAddLiquidityContext();

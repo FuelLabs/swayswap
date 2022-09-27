@@ -1,4 +1,5 @@
 import { format } from 'fuels';
+
 import { TOKENS } from '../utils';
 
 import { useBalances } from './useBalances';

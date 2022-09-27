@@ -1,4 +1,5 @@
-import { bn, BN } from "fuels";
+import type { BN } from "fuels";
+import { bn } from "fuels";
 import { BsArrowDown } from "react-icons/bs";
 
 import { usePreviewRemoveLiquidity } from "../hooks";

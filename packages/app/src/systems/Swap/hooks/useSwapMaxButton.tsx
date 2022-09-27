@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { bn } from "fuels";
 
 import type { SwapMachineState } from "../machines/swapMachine";
 import type { SwapMachineContext } from "../types";
@@ -9,7 +10,6 @@ import { useSwapContext } from "./useSwap";
 
 import type { CoinBalanceProps, CoinSelectorProps } from "~/systems/Core";
 import { compareStates } from "~/systems/Core";
-import { bn } from "fuels";
 
 function getRightBalance(dir: SwapDirection, ctx: SwapMachineContext) {
   const { coinFromBalance, coinToBalance } = ctx;

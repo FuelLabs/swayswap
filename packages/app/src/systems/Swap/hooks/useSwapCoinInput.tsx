@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { bn } from "fuels";
 import type React from "react";
 import { useEffect, useRef } from "react";
 import type { NumberFormatValues } from "react-number-format";
@@ -11,7 +12,6 @@ import { useSwapContext } from "./useSwap";
 
 import type { CoinInputProps } from "~/systems/Core";
 import { isValidNumber } from "~/systems/Core";
-import { bn } from "fuels";
 
 const selectors = {
   activeDir: ({ context: ctx }: SwapMachineState) => {

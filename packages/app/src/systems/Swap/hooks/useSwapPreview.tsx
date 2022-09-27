@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { bn, format } from "fuels";
 
 import type { SwapMachineState } from "../machines/swapMachine";
 import { SwapDirection } from "../types";
@@ -7,7 +8,6 @@ import { calculatePriceImpact, calculatePriceWithSlippage } from "../utils";
 import { useSwapContext } from "./useSwap";
 
 import { useSlippage } from "~/systems/Core";
-import { bn, format } from "fuels";
 
 const selectors = {
   hasPreview: (state: SwapMachineState) => {

@@ -1,6 +1,7 @@
-import { bn, Wallet } from 'fuels';
+import type { Wallet } from 'fuels';
+import { bn } from 'fuels';
 
-import { CONTRACT_ID, DECIMAL_UNITS } from '~/config';
+import { CONTRACT_ID } from '~/config';
 import { getDeadline } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import { ExchangeContractAbi__factory } from '~/types/contracts';

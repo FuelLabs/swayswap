@@ -1,5 +1,5 @@
-import { bn, BN } from 'fuels';
-import { NativeAssetId } from 'fuels';
+import type { BN } from 'fuels';
+import { bn, NativeAssetId } from 'fuels';
 
 import { SwapDirection } from '../types';
 import type { SwapMachineContext } from '../types';

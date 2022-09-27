@@ -1,4 +1,5 @@
-import { bn, CoinQuantity } from 'fuels';
+import type { CoinQuantity } from 'fuels';
+import { bn } from 'fuels';
 
 import { COIN_ETH } from '../../utils';
 import * as useBalances from '../useBalances';

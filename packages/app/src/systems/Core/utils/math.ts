@@ -2,7 +2,7 @@ import { Decimal } from 'decimal.js';
 import { bn } from 'fuels';
 import type { BigNumberish, BN } from 'fuels';
 
-import { DECIMAL_UNITS, FIXED_UNITS } from '~/config';
+import { DECIMAL_UNITS } from '~/config';
 import type { Maybe } from '~/types';
 
 /** Zero BN function */

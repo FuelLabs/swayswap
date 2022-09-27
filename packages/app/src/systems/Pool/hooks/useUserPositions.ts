@@ -1,3 +1,4 @@
+import { bn } from 'fuels';
 import { useMemo } from 'react';
 
 import { getPoolInfoPreview } from '../utils/helpers';
@@ -6,7 +7,6 @@ import { usePositionInfo } from './usePoolInfo';
 
 import { CONTRACT_ID } from '~/config';
 import { useBalances, getCoin } from '~/systems/Core';
-import { bn } from 'fuels';
 
 export function useUserPositions() {
   const { data: balances } = useBalances();

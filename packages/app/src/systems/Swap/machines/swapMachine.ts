@@ -1,5 +1,6 @@
 import type Decimal from 'decimal.js';
-import { bn, CoinQuantity, TransactionResult } from 'fuels';
+import type { CoinQuantity, TransactionResult } from 'fuels';
+import { bn } from 'fuels';
 import type { InterpreterFrom, StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
 

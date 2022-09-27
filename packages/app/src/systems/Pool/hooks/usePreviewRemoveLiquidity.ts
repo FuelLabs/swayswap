@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
-import { bn, BN, format, toFixed } from 'fuels';
+import type { BN } from 'fuels';
+import { bn, format, toFixed } from 'fuels';
 import { useMemo } from 'react';
 
 import type { PoolInfoPreview } from '../utils/helpers';

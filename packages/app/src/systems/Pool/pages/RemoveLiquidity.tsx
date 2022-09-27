@@ -1,3 +1,4 @@
+import { bn } from "fuels";
 import { useMemo } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +27,6 @@ import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { txFeedback } from "~/systems/Core/utils/feedback";
 import { getTransactionCost } from "~/systems/Core/utils/gas";
 import { Button, Card } from "~/systems/UI";
-import { bn } from "fuels";
 
 export function RemoveLiquidityPage() {
   const navigate = useNavigate();
