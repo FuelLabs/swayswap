@@ -10,9 +10,8 @@ import {
   PreviewItem,
   TokenIcon,
   compareStates,
-  safeBN,
-  format,
 } from "~/systems/Core";
+import { bn, format } from "fuels";
 
 export const PoolCurrentReserves = () => {
   const { service } = useAddLiquidityContext();
@@ -39,7 +38,7 @@ export const PoolCurrentReserves = () => {
             {coinFrom?.name}
           </div>
         }
-        value={format(safeBN(poolInfo?.eth_reserve))}
+        value={format(bn(poolInfo?.eth_reserve))}
       />
       <PreviewItem
         loading={isLoading}
@@ -49,7 +48,7 @@ export const PoolCurrentReserves = () => {
             {coinTo?.name}
           </div>
         }
-        value={format(safeBN(poolInfo?.token_reserve))}
+        value={format(bn(poolInfo?.token_reserve))}
       />
     </PreviewTable>
   );

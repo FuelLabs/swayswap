@@ -21,12 +21,12 @@ import {
   TOKENS,
   useBalances,
   useEthBalance,
-  safeBN,
 } from "~/systems/Core";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { txFeedback } from "~/systems/Core/utils/feedback";
 import { getTransactionCost } from "~/systems/Core/utils/gas";
 import { Button, Card } from "~/systems/UI";
+import { bn } from "fuels";
 
 export function RemoveLiquidityPage() {
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ export function RemoveLiquidityPage() {
     return errorList;
   }, [tokenInput.amount?.toString(), tokenInput.hasEnoughBalance]);
 
-  const hasEnoughBalance = safeBN(ethBalance.raw).gt(txCost.fee);
+  const hasEnoughBalance = bn(ethBalance.raw).gt(txCost.fee);
   const isRemoveButtonDisabled =
     !!errors.length ||
     removeLiquidityMutation.isLoading ||

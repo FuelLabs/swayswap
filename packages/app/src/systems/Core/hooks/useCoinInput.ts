@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useMemo, useEffect, useState } from 'react';
 import type { NumberFormatValues } from 'react-number-format';
 
-import { formatUnits, isCoinEth, parseInputValueBN, safeBN, ZERO } from '../utils';
+import { isCoinEth, ZERO } from '../utils';
 
 import { useBalances } from './useBalances';
 
@@ -71,7 +71,7 @@ export type CoinBalanceProps = {
 type DisplayType = 'input' | 'text';
 
 const formatValue = (amount: Maybe<BN>) => {
-  return amount ? formatUnits(amount) : '';
+  return amount ? bn(amount).formatUnits() : '';
 };
 
 export function useCoinInput({
@@ -86,7 +86,7 @@ export function useCoinInput({
   ...params
 }: UseCoinParams): UseCoinInput {
   const [amount, setAmount] = useState<Maybe<BN>>(null);
-  const [gasFee, setGasFee] = useState<Maybe<BN>>(safeBN(initialGasFee));
+  const [gasFee, setGasFee] = useState<Maybe<BN>>(bn(initialGasFee));
   const { data: balances } = useBalances();
   const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
   const isEth = useMemo(() => isCoinEth(coin), [coin?.assetId]);
@@ -94,15 +94,15 @@ export function useCoinInput({
   // TODO: consider real gas fee, replacing GAS_FEE variable.
   // For now we need to keep 1 unit in the wallet(it's not spent) in order to complete "create pool" transaction.
   function getSafeMaxBalance() {
-    const next = safeBN(coinBalance?.amount);
-    const value = next > ZERO ? next.sub(safeBN(gasFee)) : next;
+    const next = bn(coinBalance?.amount);
+    const value = next > ZERO ? next.sub(bn(gasFee)) : next;
     if (value < ZERO) return ZERO;
     return value;
   }
 
   function handleInputPropsChange(val: string) {
     if (isReadOnly) return;
-    const next = val !== '' ? parseInputValueBN(val) : null;
+    const next = val !== '' ? bn(val) : null;
     if (typeof onChange === 'function') {
       onChange(next);
     } else {
@@ -112,7 +112,7 @@ export function useCoinInput({
 
   function isAllowed({ value }: NumberFormatValues) {
     const max = params.max ? params.max : bn(Number.MAX_SAFE_INTEGER);
-    return parseInputValueBN(value).lt(max);
+    return bn(value).lt(max);
   }
 
   function getInputProps() {
@@ -122,7 +122,7 @@ export function useCoinInput({
       displayType: (isReadOnly ? 'text' : 'input') as DisplayType,
       onInput,
       onChange: handleInputPropsChange,
-      balance: formatValue(safeBN(coinBalance?.amount)),
+      balance: formatValue(bn(coinBalance?.amount)),
       isAllowed,
     } as CoinInputProps;
   }
@@ -172,6 +172,6 @@ export function useCoinInput({
     getCoinSelectorProps,
     getCoinBalanceProps,
     formatted: formatValue(amount),
-    hasEnoughBalance: getSafeMaxBalance().gte(safeBN(amount)),
+    hasEnoughBalance: getSafeMaxBalance().gte(bn(amount)),
   };
 }

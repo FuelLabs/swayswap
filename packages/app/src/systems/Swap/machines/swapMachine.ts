@@ -1,5 +1,5 @@
 import type Decimal from 'decimal.js';
-import type { CoinQuantity, TransactionResult } from 'fuels';
+import { bn, CoinQuantity, TransactionResult } from 'fuels';
 import type { InterpreterFrom, StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
 
@@ -17,7 +17,7 @@ import {
   ZERO_AMOUNT,
 } from '../utils';
 
-import { getCoin, getCoinETH, handleError, isZero, multiply, safeBN } from '~/systems/Core';
+import { getCoin, getCoinETH, handleError, multiply } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/gas';
@@ -391,9 +391,9 @@ export const swapMachine =
           const toBalance = getCoin(balances, toId);
           const ethBalance = getCoinETH(balances);
           return {
-            coinFromBalance: safeBN(fromBalance?.amount),
-            coinToBalance: safeBN(toBalance?.amount),
-            ethBalance: safeBN(ethBalance?.amount),
+            coinFromBalance: bn(fromBalance?.amount),
+            coinToBalance: bn(toBalance?.amount),
+            ethBalance: bn(ethBalance?.amount),
           };
         }),
         selectCoin: assign((ctx, ev) => ({
@@ -480,7 +480,7 @@ export const swapMachine =
       },
       guards: {
         toAmountIsZero: (ctx) => {
-          return isZero(ctx.previewInfo?.amount);
+          return bn(ctx.previewInfo?.amount).isZero();
         },
         notHasLiquidity: (ctx) => {
           return !hasLiquidityForSwap(ctx);

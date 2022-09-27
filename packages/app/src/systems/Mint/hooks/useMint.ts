@@ -1,8 +1,9 @@
+import { bn } from 'fuels';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { TOKEN_ID } from '~/config';
-import { useTokenMethods, useBalances, safeBN } from '~/systems/Core';
+import { useTokenMethods, useBalances } from '~/systems/Core';
 import { useTransactionCost } from '~/systems/Core/hooks/useTransactionCost';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import { Pages } from '~/types';
@@ -40,6 +41,6 @@ export function useMint(opts: UseMintOpts = {}) {
     ...mutation,
     txCost,
     handleMint,
-    mintAmount: safeBN(mintAmount),
+    mintAmount: bn(mintAmount),
   };
 }

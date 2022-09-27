@@ -6,7 +6,8 @@ import { calculatePriceImpact, calculatePriceWithSlippage } from "../utils";
 
 import { useSwapContext } from "./useSwap";
 
-import { format, safeBN, useSlippage } from "~/systems/Core";
+import { useSlippage } from "~/systems/Core";
+import { bn, format } from "fuels";
 
 const selectors = {
   hasPreview: (state: SwapMachineState) => {
@@ -14,13 +15,13 @@ const selectors = {
   },
   outputAmount: (state: SwapMachineState) => {
     const ctx = state.context;
-    const amount = safeBN(ctx?.toAmount?.raw);
+    const amount = bn(ctx?.toAmount?.raw);
     return format(amount);
   },
   inputAmount: (state: SwapMachineState) => {
     const ctx = state.context;
     const isFrom = ctx?.direction === SwapDirection.fromTo;
-    const amount = safeBN((isFrom ? ctx?.toAmount : ctx?.fromAmount)?.raw);
+    const amount = bn((isFrom ? ctx?.toAmount : ctx?.fromAmount)?.raw);
     const price = calculatePriceWithSlippage(
       amount,
       ctx?.direction,

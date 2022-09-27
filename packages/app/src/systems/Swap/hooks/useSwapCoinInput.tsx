@@ -10,7 +10,8 @@ import type { SwapDirection } from "../types";
 import { useSwapContext } from "./useSwap";
 
 import type { CoinInputProps } from "~/systems/Core";
-import { isValidNumber, parseUnits } from "~/systems/Core";
+import { isValidNumber } from "~/systems/Core";
+import { bn } from "fuels";
 
 const selectors = {
   activeDir: ({ context: ctx }: SwapMachineState) => {
@@ -51,7 +52,7 @@ export function useSwapCoinInput(direction: SwapDirection): UseCoinInputReturn {
   const isLoading = useSelector(service, selectors.isLoading(direction));
 
   const isAllowed = ({ value: val }: NumberFormatValues) => {
-    return isValidNumber(parseUnits(val));
+    return isValidNumber(bn.parseUnits(val));
   };
 
   function onChange(value: string) {

@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
-import type { BN } from 'fuels';
+import { bn, BN, format, toFixed } from 'fuels';
 
-import { calculatePercentage, format, isZero, safeBN, toFixed, ZERO } from '~/systems/Core';
+import { calculatePercentage, ZERO } from '~/systems/Core';
 import type { Maybe } from '~/types';
 import type { PoolInfoOutput, PositionInfoOutput } from '~/types/contracts/ExchangeContractAbi';
 
@@ -9,7 +9,7 @@ export function getPoolRatio(info?: Maybe<PoolInfoOutput>) {
   if (!info) return new Decimal(1);
   const tokenReserve = info.token_reserve;
   const ethReserve = info.eth_reserve;
-  if (isZero(tokenReserve)) return new Decimal(1);
+  if (bn(tokenReserve).isZero()) return new Decimal(1);
   return new Decimal(ethReserve.toHex()).div(tokenReserve.toHex());
 }
 
@@ -36,11 +36,11 @@ export function getPoolInfoPreview(
   poolTokens: BN
 ): PoolInfoPreview {
   // Amounts
-  const totalLiquidity = safeBN(info?.lp_token_supply);
-  const tokenReserve = safeBN(info?.token_reserve);
-  const ethReserve = safeBN(info?.eth_reserve);
-  const pooledETH = safeBN(info?.eth_amount);
-  const pooledDAI = safeBN(info?.token_amount);
+  const totalLiquidity = bn(info?.lp_token_supply);
+  const tokenReserve = bn(info?.token_reserve);
+  const ethReserve = bn(info?.eth_reserve);
+  const pooledETH = bn(info?.eth_amount);
+  const pooledDAI = bn(info?.token_amount);
   const poolRatio = getPoolRatio(info);
   const poolShare = calculatePercentage(poolTokens, totalLiquidity);
   const hasPositions = poolTokens.gt(ZERO);

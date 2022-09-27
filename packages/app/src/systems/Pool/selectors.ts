@@ -1,11 +1,11 @@
-import { isZero, safeBN } from '../Core';
+import { bn } from 'fuels';
 
 import type { AddLiquidityMachineState } from './machines/addLiquidityMachine';
 import type { AddLiquidityActive } from './types';
 
 export const selectors = {
   createPool: ({ context: ctx }: AddLiquidityMachineState) => {
-    return isZero(ctx.poolInfo?.eth_reserve);
+    return bn(ctx.poolInfo?.eth_reserve).isZero();
   },
   addLiquidity: ({ context: ctx }: AddLiquidityMachineState) => {
     return ctx.poolInfo?.eth_reserve.gt(0);
@@ -29,11 +29,11 @@ export const selectors = {
     return (
       active !== state.context.active &&
       state.hasTag('loading') &&
-      !isZero(state.context.poolInfo?.eth_reserve)
+      !bn(state.context.poolInfo?.eth_reserve).isZero()
     );
   },
   previewAmount: ({ context: ctx }: AddLiquidityMachineState) => {
-    return safeBN(ctx.liquidityPreview?.liquidityTokens);
+    return bn(ctx.liquidityPreview?.liquidityTokens);
   },
   poolInfo: ({ context: ctx }: AddLiquidityMachineState) => {
     return ctx.poolInfo;

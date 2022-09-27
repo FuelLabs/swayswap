@@ -8,7 +8,7 @@ import type { PoolInfoPreview } from "../utils";
 
 import { App } from "~/App";
 import { CONTRACT_ID } from "~/config";
-import { COIN_ETH, ONE_ASSET, parseUnits, TOKENS } from "~/systems/Core";
+import { COIN_ETH, ONE_ASSET, TOKENS } from "~/systems/Core";
 import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
 import {
   createWallet,
@@ -34,8 +34,8 @@ const USER_LIQUIDITY_POSITIONS: PoolInfoPreview = {
   poolRatio: new Decimal("0.0005041416678966015"),
   poolShare: new Decimal("0.00019762092871333754"),
   poolTokens: bn("198666508"),
-  pooledDAI: parseUnits("395600965122.81934"),
-  pooledETH: parseUnits("199438930.3785234"),
+  pooledDAI: bn.parseUnits("395600965122.81934"),
+  pooledETH: bn.parseUnits("199438930.3785234"),
   tokenReserve: bn("2001817154177355"),
   totalLiquidity: bn("1005290832775"),
 };

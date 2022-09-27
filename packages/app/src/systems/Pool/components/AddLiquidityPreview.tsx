@@ -5,14 +5,12 @@ import { useAddLiquidityContext } from "../hooks";
 import { selectors } from "../selectors";
 
 import {
-  isZero,
-  format,
   PreviewItem,
   PreviewTable,
   TokenIcon,
-  toFixed,
   compareStates,
 } from "~/systems/Core";
+import { bn, format, toFixed } from "fuels";
 
 export const AddLiquidityPreview = () => {
   const { service } = useAddLiquidityContext();
@@ -56,7 +54,7 @@ export const AddLiquidityPreview = () => {
           title={"Your share of current pool:"}
           value={`${toFixed(poolShare.toString())}%`}
         />
-        {!isZero(transactionCost?.fee) && transactionCost ? (
+        {!bn(transactionCost?.fee).isZero() && transactionCost ? (
           <PreviewItem
             loading={isLoading}
             className="text-gray-300"
