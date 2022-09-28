@@ -115,7 +115,7 @@ importers:
       eslint-plugin-cypress: ^2.12.1
       ethers: ^5.6.9
       framer-motion: ^6.3.15
-      fuels: next
+      fuels: ^0.17.0
       graphql: ^16.5.0
       graphql-request: ^4.3.0
       http-server: ^14.1.1
@@ -176,7 +176,7 @@ importers:
       decimal.js: 10.4.1
       ethers: 5.7.1
       framer-motion: 6.5.1_biqbaboplfbrettd7655fr4n2y
-      fuels: 0.0.0-next-20220927133327
+      fuels: 0.17.0
       graphql: 16.6.0
       graphql-request: 4.3.0_graphql@16.6.0
       jotai: 1.8.4_react@18.2.0+xstate@4.33.6
@@ -2125,20 +2125,6 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@fuel-ts/abi-coder/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-zGGvVtyk8KjlPaPnToUHK1JzyLWGSNxcyg2JL336Qz17YmTKXjFxQ/uA8uiFWeF2pdcgh4CFYjDCpXgfT/iNNA==}
-    dependencies:
-      '@ethersproject/abi': 5.7.0
-      '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/properties': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-      '@ethersproject/strings': 5.7.0
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      type-fest: 2.19.0
-    dev: false
-
   /@fuel-ts/abi-coder/0.16.0:
     resolution: {integrity: sha512-sPrzmV7NN7SJMWtCK83gdWy42EQorh88Uk8Ras3eZYu/W4mh9J8IJTqeHcU9r5rkZM/Umi6dSloyDrANqeBUoQ==}
     dependencies:
@@ -2153,16 +2139,18 @@ packages:
       type-fest: 2.19.0
     dev: false
 
-  /@fuel-ts/address/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-hqR08+dZuM8S7StukRacVWe6EuMM5m+3fi39merWoaQ/6u1dUqSbKm0SVeK2I/qXlGZJ7wrWJvIQs42vHG3Y5A==}
+  /@fuel-ts/abi-coder/0.17.0:
+    resolution: {integrity: sha512-8mdmZz/1aDKk3/nWri0XzMNfBxZD9toa5WJ4Fg4SKyhBFpBn3eW8ZyJQxj5e3uPBVKc5T1EwaV8ewz7Yt5P0pw==}
     dependencies:
+      '@ethersproject/abi': 5.7.0
+      '@ethersproject/bignumber': 5.7.0
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
+      '@ethersproject/properties': 5.7.0
       '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/constants': 0.0.0-next-20220927133327
-      '@fuel-ts/interfaces': 0.0.0-next-20220927133327
-      '@fuel-ts/keystore': 0.0.0-next-20220927133327
-      bech32: 2.0.0
+      '@ethersproject/strings': 5.7.0
+      '@fuel-ts/math': 0.17.0
+      type-fest: 2.19.0
     dev: false
 
   /@fuel-ts/address/0.16.0:
@@ -2177,34 +2165,24 @@ packages:
       bech32: 2.0.0
     dev: false
 
-  /@fuel-ts/constants/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-AoUmbZ1EIBhevaF7osD4yqTkNxUX0fTUMPjXE7drDGnHEr6jrxtqS7e2HCo9IXCSIP6GHH++bFg9sMiuM3vVvg==}
+  /@fuel-ts/address/0.17.0:
+    resolution: {integrity: sha512-q5MVR3HZIsPGl6UdyBFbzMTohH51wldDAHaUymoj9by8EjYlneumnj8AsQn3uxPjdllceAtON+Cy54gP7pYhtw==}
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/logger': 5.7.0
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/constants': 0.17.0
+      '@fuel-ts/interfaces': 0.17.0
+      '@fuel-ts/keystore': 0.17.0
+      bech32: 2.0.0
     dev: false
 
   /@fuel-ts/constants/0.16.0:
     resolution: {integrity: sha512-zgtB9diDtRyFJLQQsDtG2A4md6fDUCep6RdTk7OITyWcQePbAuZfMznhxLbGX0nB21PykZ7fE7Fbdwl8AvuI+Q==}
     dev: false
 
-  /@fuel-ts/contract/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-G86RNzhb4N5tOC/siDC6hlNOFSowl4xwcEkvCJfw/BlPVrEHw81SfgyW9gJUlSRu4A1cMGXFwp7Z0IQnguloAA==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/abi-coder': 0.0.0-next-20220927133327
-      '@fuel-ts/address': 0.0.0-next-20220927133327
-      '@fuel-ts/constants': 0.0.0-next-20220927133327
-      '@fuel-ts/interfaces': 0.0.0-next-20220927133327
-      '@fuel-ts/keystore': 0.0.0-next-20220927133327
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/merkle': 0.0.0-next-20220927133327
-      '@fuel-ts/providers': 0.0.0-next-20220927133327
-      '@fuel-ts/script': 0.0.0-next-20220927133327
-      '@fuel-ts/sparsemerkle': 0.0.0-next-20220927133327
-      '@fuel-ts/transactions': 0.0.0-next-20220927133327
-      '@fuel-ts/wallet': 0.0.0-next-20220927133327
-    transitivePeerDependencies:
-      - encoding
+  /@fuel-ts/constants/0.17.0:
+    resolution: {integrity: sha512-ZwSAj8xdLhePs0SBEhxBkyxEiqcD6xU55t5C+48rbNKMex4E39Arety7AN+ef3n8XFELaawKUkWyaeuihMTp/Q==}
     dev: false
 
   /@fuel-ts/contract/0.16.0:
@@ -2229,16 +2207,24 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/hasher/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-Y/WoCkhOOxOA5Iek4hG+N6/59CVaJP2GJyCL6wPq+G05uBpZTe5+N4bPKIX22aWBeCjuGhvCGYuuYgfcXpah1w==}
+  /@fuel-ts/contract/0.17.0:
+    resolution: {integrity: sha512-hT2+7CUS98vg+Qa3bJeCD+9rfnyLEScFxpC9k5IwwgChuOXYDAmYmh0GoGyaN9OptfPbHn6/+UNi6MHz6CTaug==}
     dependencies:
       '@ethersproject/bytes': 5.7.0
+      '@ethersproject/logger': 5.7.0
       '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/constants': 0.0.0-next-20220927133327
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/providers': 0.0.0-next-20220927133327
-      '@fuel-ts/transactions': 0.0.0-next-20220927133327
-      lodash.clonedeep: 4.5.0
+      '@fuel-ts/abi-coder': 0.17.0
+      '@fuel-ts/address': 0.17.0
+      '@fuel-ts/constants': 0.17.0
+      '@fuel-ts/interfaces': 0.17.0
+      '@fuel-ts/keystore': 0.17.0
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/merkle': 0.17.0
+      '@fuel-ts/providers': 0.17.0
+      '@fuel-ts/script': 0.17.0
+      '@fuel-ts/sparsemerkle': 0.17.0
+      '@fuel-ts/transactions': 0.17.0
+      '@fuel-ts/wallet': 0.17.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -2257,15 +2243,16 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/hdwallet/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-ZT6agbZtQhvJRd0fqCqNkMYCTcvhfxNcLYeQKtm7heqSumq1bpdjYYCdNyFQdVBkUvb2+f8n2fujhsXRlu9WWg==}
+  /@fuel-ts/hasher/0.17.0:
+    resolution: {integrity: sha512-yAu2QPcLt/BhDlYhKtZhps7P/XdhxUHRrVPXndACXmXLMJxULnodBxBGt4uojv6dwmVDXsq+qPmPMIows4EKBg==}
     dependencies:
-      '@ethersproject/basex': 5.7.0
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/mnemonic': 0.0.0-next-20220927133327
-      '@fuel-ts/signer': 0.0.0-next-20220927133327
+      '@fuel-ts/constants': 0.17.0
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/providers': 0.17.0
+      '@fuel-ts/transactions': 0.17.0
+      lodash.clonedeep: 4.5.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -2283,19 +2270,25 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/interfaces/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-vc1vSI06X11lkLTYB+IdV7lCevnfSESPoE+zW1Vi0+s2mjqwz6OoeqyHjyEqF0BNQ6QEI63JIYIKy6wXX9sg+Q==}
+  /@fuel-ts/hdwallet/0.17.0:
+    resolution: {integrity: sha512-p9POqLm1Cwaz+EF1EyZCUXw4ZXey682UuDeZj7Vjb1VTyrUCeSbYRUOt32aSThPkeh/ZYls2xHwbeqZPCX6n5A==}
+    dependencies:
+      '@ethersproject/basex': 5.7.0
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/mnemonic': 0.17.0
+      '@fuel-ts/signer': 0.17.0
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /@fuel-ts/interfaces/0.16.0:
     resolution: {integrity: sha512-/AsO49YcGwpVte29nYxHDWYtthneRFRXX3gP2xeO1LceZec8sB6tAr0pioOk/UpUr+DE/jGqoPPvgNyYR+9rkw==}
     dev: false
 
-  /@fuel-ts/keystore/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-6fxDBKhD29ETqJXgcYdcDieIVHOf0Xn8A7hTQAxpIq1NnUJec973l9wGxV6ugAvmQHXl3CuIicrDMH1pyBDfZA==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/pbkdf2': 5.7.0
+  /@fuel-ts/interfaces/0.17.0:
+    resolution: {integrity: sha512-cQK4kaTNbZffuIxDgrRJUuCLo/7MLfE9/V4K91HqyZvdmEBuIIMrRXwxHIuij3Z6uudYWH48iQ3RqcIFgsol/w==}
     dev: false
 
   /@fuel-ts/keystore/0.16.0:
@@ -2305,11 +2298,11 @@ packages:
       '@ethersproject/pbkdf2': 5.7.0
     dev: false
 
-  /@fuel-ts/math/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-uSTIXoXGPDJbRPeLSxnVslMTBf6AFRiBb72kXXyQlxXXUex3y4G+O3lHTiA3ODqFAu18FZ1V4BplwFYzDA4icA==}
+  /@fuel-ts/keystore/0.17.0:
+    resolution: {integrity: sha512-4bim4HStfVqcF+2Fq7CeYGjlf0/t2D2kJLIeIHemdCHPwEQlnBtw4ho/HcymY7SGxNAmydlbUcDKrLLC2qo4dg==}
     dependencies:
-      '@types/bn.js': 5.1.1
-      bn.js: 5.2.1
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/pbkdf2': 5.7.0
     dev: false
 
   /@fuel-ts/math/0.16.0:
@@ -2319,11 +2312,11 @@ packages:
       bn.js: 5.2.1
     dev: false
 
-  /@fuel-ts/merkle-shared/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-5GuXu94OZ9X2kR9EB3jzT3QG7gwpDlC1WEsannSO7Mg08udv5zNSAh34BNzKdNaarq8qWWA4pZ4xtiLrZHbxkg==}
+  /@fuel-ts/math/0.17.0:
+    resolution: {integrity: sha512-0hp3vRU9oDd/RNvrtMrDrHd97BtwSGCiKAYuiS46Ul2U/ip4M4n6LYSv95ZcvSUT/ngYUlRZiXUQE9ZmXaIS9Q==}
     dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/sha2': 5.7.0
+      '@types/bn.js': 5.1.1
+      bn.js: 5.2.1
     dev: false
 
   /@fuel-ts/merkle-shared/0.16.0:
@@ -2333,11 +2326,11 @@ packages:
       '@ethersproject/sha2': 5.7.0
     dev: false
 
-  /@fuel-ts/merkle/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-k6qw3T/NEFzwN38C2aSqfgtd4f5kZMBC5oP9rDKPLy6qMvMRqMgbpRLL0M7s0p/DRCma/0huMlBH42rbCJdRpQ==}
+  /@fuel-ts/merkle-shared/0.17.0:
+    resolution: {integrity: sha512-7GeOzlDpNGMQuLyXEw6DQb6GD3Z744S6j4nc8FM2Wd/Sa2CWTilV+L1KwBJUXLEeaXx/6LUN9B+mRzg+WqABrg==}
     dependencies:
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/merkle-shared': 0.0.0-next-20220927133327
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/sha2': 5.7.0
     dev: false
 
   /@fuel-ts/merkle/0.16.0:
@@ -2347,11 +2340,11 @@ packages:
       '@fuel-ts/merkle-shared': 0.16.0
     dev: false
 
-  /@fuel-ts/merklesum/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-jNv06JhLyehIbMQUWXYegYGqVFXnlKdlJe19fMFYOA2KTJ01FFYnPRvvJRza+ggqZzE6JWY/A1YwmhzmaWPB5Q==}
+  /@fuel-ts/merkle/0.17.0:
+    resolution: {integrity: sha512-3Nhq7pqjFaWxMML2IwVGRS2ppICBoB0518I34iui51/bWtW+soBHeN/g4rLKfBJ9PV0KJC245bH+iHKRhWAxLQ==}
     dependencies:
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/merkle-shared': 0.0.0-next-20220927133327
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/merkle-shared': 0.17.0
     dev: false
 
   /@fuel-ts/merklesum/0.16.0:
@@ -2361,15 +2354,11 @@ packages:
       '@fuel-ts/merkle-shared': 0.16.0
     dev: false
 
-  /@fuel-ts/mnemonic/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-6bJ/c1CnqOgyCtUWDJVMeLDz4mjvJJi4tUHM82MlbwTYZrPrsJxG7k3ZaXnZ4cHKpQwC4J1QlkpbR1RKAvHPdw==}
+  /@fuel-ts/merklesum/0.17.0:
+    resolution: {integrity: sha512-rfHRRsuqUOblpPO5Z3qIAOWh1JruBNWD95fPHk24ZDSSYWo+Dl/cwvFT7gl4/pRJ//rq08573rmmoOUAK3ykZg==}
     dependencies:
-      '@ethersproject/basex': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/pbkdf2': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/keystore': 0.0.0-next-20220927133327
-      '@fuel-ts/wordlists': 0.0.0-next-20220927133327
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/merkle-shared': 0.17.0
     dev: false
 
   /@fuel-ts/mnemonic/0.16.0:
@@ -2383,17 +2372,15 @@ packages:
       '@fuel-ts/wordlists': 0.16.0
     dev: false
 
-  /@fuel-ts/predicate/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-LHvMb6dTaoJdyA+t5qQ0GppoxojA6SSNT1Tz5yyKOPiykWkGY/GJAnXN+exetFAIT+zAw4diUgXwWXD6z8/UhQ==}
+  /@fuel-ts/mnemonic/0.17.0:
+    resolution: {integrity: sha512-/Izu5yRSOxo1YfEDPlWsxzUsivoBpk9rk0U6ySz761QVTbyV35fQK9jxjFobHja9O931uCXWBqZBdlmqCO8Mbg==}
     dependencies:
+      '@ethersproject/basex': 5.7.0
       '@ethersproject/bytes': 5.7.0
-      '@fuel-ts/abi-coder': 0.0.0-next-20220927133327
-      '@fuel-ts/address': 0.0.0-next-20220927133327
-      '@fuel-ts/contract': 0.0.0-next-20220927133327
-      '@fuel-ts/interfaces': 0.0.0-next-20220927133327
-      '@fuel-ts/wallet': 0.0.0-next-20220927133327
-    transitivePeerDependencies:
-      - encoding
+      '@ethersproject/pbkdf2': 5.7.0
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/keystore': 0.17.0
+      '@fuel-ts/wordlists': 0.17.0
     dev: false
 
   /@fuel-ts/predicate/0.16.0:
@@ -2409,23 +2396,15 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/providers/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-VCw65Tkm86cDE6912COR2hHaKu4zqdBs33lhS0vzhBJnCli/pqpdwRkb5c/krO/M3z6kqmk97nzhzSyOpYoDuw==}
+  /@fuel-ts/predicate/0.17.0:
+    resolution: {integrity: sha512-flsjypxRwMrF9Z875PHfXBP+szdyIVA7DlAZmc8gSW5W1ASAWDMTp4JDJXSoXJfBafNGDedRs3imcqwxQwQB4g==}
     dependencies:
       '@ethersproject/bytes': 5.7.0
-      '@ethersproject/networks': 5.7.1
-      '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/abi-coder': 0.0.0-next-20220927133327
-      '@fuel-ts/address': 0.0.0-next-20220927133327
-      '@fuel-ts/constants': 0.0.0-next-20220927133327
-      '@fuel-ts/interfaces': 0.0.0-next-20220927133327
-      '@fuel-ts/keystore': 0.0.0-next-20220927133327
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/transactions': 0.0.0-next-20220927133327
-      graphql: 15.8.0
-      graphql-request: 3.7.0_graphql@15.8.0
-      graphql-tag: 2.12.6_graphql@15.8.0
-      lodash.clonedeep: 4.5.0
+      '@fuel-ts/abi-coder': 0.17.0
+      '@fuel-ts/address': 0.17.0
+      '@fuel-ts/contract': 0.17.0
+      '@fuel-ts/interfaces': 0.17.0
+      '@fuel-ts/wallet': 0.17.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -2451,16 +2430,23 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/script/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-LHXibxVCYmdNR91dKjQckzw2JH017SOROi7KMxnLPYr6OR011bCis6KqsXWraL9wIVktz6xYb1qyilk9QHr3Rg==}
+  /@fuel-ts/providers/0.17.0:
+    resolution: {integrity: sha512-ObZ7pxW8i+ItypVJSWm89aBqvOfx72HGvl6CxIw4UEZdnha09uHWUy4x7ZtT+poUw46WfTGPIOIUpqXAs6CMQA==}
     dependencies:
       '@ethersproject/bytes': 5.7.0
-      '@fuel-ts/abi-coder': 0.0.0-next-20220927133327
-      '@fuel-ts/constants': 0.0.0-next-20220927133327
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/providers': 0.0.0-next-20220927133327
-      '@fuel-ts/transactions': 0.0.0-next-20220927133327
-      '@fuel-ts/wallet': 0.0.0-next-20220927133327
+      '@ethersproject/networks': 5.7.1
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/abi-coder': 0.17.0
+      '@fuel-ts/address': 0.17.0
+      '@fuel-ts/constants': 0.17.0
+      '@fuel-ts/interfaces': 0.17.0
+      '@fuel-ts/keystore': 0.17.0
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/transactions': 0.17.0
+      graphql: 15.8.0
+      graphql-request: 3.7.0_graphql@15.8.0
+      graphql-tag: 2.12.6_graphql@15.8.0
+      lodash.clonedeep: 4.5.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -2479,16 +2465,16 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/signer/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-MowXdju/pNlIW2eOcibJBg2353uwbEz9HtyKSKiEzKCM8e9X0eesteFX8khPUMY3coPyWtvGKMBKFBTjUXfhHw==}
+  /@fuel-ts/script/0.17.0:
+    resolution: {integrity: sha512-vODrL1dhjgnbQlpQt2oTOSl9sr0XTqFboJGIDCKFxOyiKvkj4HX5GZRiM3FRxl4kKxIUSng7T0o/+r8HkykcGA==}
     dependencies:
       '@ethersproject/bytes': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/address': 0.0.0-next-20220927133327
-      '@fuel-ts/hasher': 0.0.0-next-20220927133327
-      '@fuel-ts/keystore': 0.0.0-next-20220927133327
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      elliptic: 6.5.4
+      '@fuel-ts/abi-coder': 0.17.0
+      '@fuel-ts/constants': 0.17.0
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/providers': 0.17.0
+      '@fuel-ts/transactions': 0.17.0
+      '@fuel-ts/wallet': 0.17.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -2507,11 +2493,18 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/sparsemerkle/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-GHmP3QCeFtGEFMxVrI/iTsSfgaSb/DkjDiWf4GApIqys6qw2m8+2WXBFkU0fy3VIsOqmSBYLw8SaOf7GVUZ78g==}
+  /@fuel-ts/signer/0.17.0:
+    resolution: {integrity: sha512-iiH0O04dHmBfKNW8qNkBYkRz7ihJN8NWosHFzeIL21AsY3elbe8uJha+xZhwH7Y8mYHQck+IuTnu1QoeqRS6Ew==}
     dependencies:
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/merkle-shared': 0.0.0-next-20220927133327
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/address': 0.17.0
+      '@fuel-ts/hasher': 0.17.0
+      '@fuel-ts/keystore': 0.17.0
+      '@fuel-ts/math': 0.17.0
+      elliptic: 6.5.4
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /@fuel-ts/sparsemerkle/0.16.0:
@@ -2521,22 +2514,19 @@ packages:
       '@fuel-ts/merkle-shared': 0.16.0
     dev: false
 
-  /@fuel-ts/testcases/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-+iAtPoaHqAoKZQT+6uJd4NbpBNBXkfGV4SIT3tvbECsYYVIc9HUNfvzw2x2v8fCEQKWRFttyNxBwvTiZEq5DGg==}
+  /@fuel-ts/sparsemerkle/0.17.0:
+    resolution: {integrity: sha512-k1pllcm+AgjEGfvexlCyAjlri5M1ypcLifscdbG4h+ZTjSfFQ9yVJSXGlUJGFFPlK3+zorcJ5RLdQWHvfE3JTQ==}
+    dependencies:
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/merkle-shared': 0.17.0
     dev: false
 
   /@fuel-ts/testcases/0.16.0:
     resolution: {integrity: sha512-JpnyZIQn22cLTuI6JGX5qyBieWMryRIz2EiVlLYLNP/3Uhj7WEHdFpB7JZsOdGce79ZIlm+FW4NU0gNiPucutA==}
     dev: false
 
-  /@fuel-ts/transactions/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-nX60VlgnMZljd+nZiUCcn0w+DBnaQrch0Am7gCiqRiqfVYfq3P1ufjlYyKJiuADh4CwxTDLI/YdYLg1wRf68pw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/abi-coder': 0.0.0-next-20220927133327
-      '@fuel-ts/constants': 0.0.0-next-20220927133327
-      '@fuel-ts/math': 0.0.0-next-20220927133327
+  /@fuel-ts/testcases/0.17.0:
+    resolution: {integrity: sha512-hiJheg2Mzbjeri7gljYNs57lRVWAx9oZqQ06iUKnx/wvoMYxpv7RWFiqdAHBUW6QPhlzIv7h5pH6D6CMdutOXw==}
     dev: false
 
   /@fuel-ts/transactions/0.16.0:
@@ -2548,17 +2538,14 @@ packages:
       '@fuel-ts/math': 0.16.0
     dev: false
 
-  /@fuel-ts/wallet-manager/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-ldlMWLRtYpXDodMVZwRXbdNFl+BXxMdC82+DtVrwGdWoajR27Tm6Z+egpaW/tvc7tJziSWzt479tSnVfG63Snw==}
+  /@fuel-ts/transactions/0.17.0:
+    resolution: {integrity: sha512-1jM8YIlluVnvTPCZpE3//FYVcBcXLzMtDISSjuS64I8arHNxXi9YyEKCrRgjfiNhUJfWgRplaItJPVf8ONiLLQ==}
     dependencies:
-      '@fuel-ts/address': 0.0.0-next-20220927133327
-      '@fuel-ts/interfaces': 0.0.0-next-20220927133327
-      '@fuel-ts/keystore': 0.0.0-next-20220927133327
-      '@fuel-ts/mnemonic': 0.0.0-next-20220927133327
-      '@fuel-ts/wallet': 0.0.0-next-20220927133327
-      events: 3.3.0
-    transitivePeerDependencies:
-      - encoding
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/abi-coder': 0.17.0
+      '@fuel-ts/constants': 0.17.0
+      '@fuel-ts/math': 0.17.0
     dev: false
 
   /@fuel-ts/wallet-manager/0.16.0:
@@ -2574,20 +2561,15 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/wallet/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-n4ENWDymLZGNX0C/eIxoETKU0D1f9N/jFpVkC6pqITm/HcrcB5shfk1HWZDawD/viE8eVCJANmX17b3UI5P4aQ==}
+  /@fuel-ts/wallet-manager/0.17.0:
+    resolution: {integrity: sha512-+R8PamR5tiDZgriyIchSKn5KdRcs0+pO2VbcpyQVREk5cGwNgVq3MmbC+X2N7VAK6qIaCD5yW41Xd2crQP6AqA==}
     dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@fuel-ts/abi-coder': 0.0.0-next-20220927133327
-      '@fuel-ts/constants': 0.0.0-next-20220927133327
-      '@fuel-ts/hasher': 0.0.0-next-20220927133327
-      '@fuel-ts/hdwallet': 0.0.0-next-20220927133327
-      '@fuel-ts/interfaces': 0.0.0-next-20220927133327
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/mnemonic': 0.0.0-next-20220927133327
-      '@fuel-ts/providers': 0.0.0-next-20220927133327
-      '@fuel-ts/signer': 0.0.0-next-20220927133327
-      '@fuel-ts/transactions': 0.0.0-next-20220927133327
+      '@fuel-ts/address': 0.17.0
+      '@fuel-ts/interfaces': 0.17.0
+      '@fuel-ts/keystore': 0.17.0
+      '@fuel-ts/mnemonic': 0.17.0
+      '@fuel-ts/wallet': 0.17.0
+      events: 3.3.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -2610,12 +2592,30 @@ packages:
       - encoding
     dev: false
 
-  /@fuel-ts/wordlists/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-wPKztiWbefbJCa0WGaqyioC1iC7Cf2HogW0sUABq5NmQrVkcVzdEYtdqRm5+QzTGs+0RqS2M8CPMBW09AHD+CA==}
+  /@fuel-ts/wallet/0.17.0:
+    resolution: {integrity: sha512-X3RTcya9k2F1jn/I7dImqubSClQ3DcwkKCMBF00audOamIJQX3z7M0czzhyNkyE+FurdLUBP65HTtrQkvRSggg==}
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@fuel-ts/abi-coder': 0.17.0
+      '@fuel-ts/constants': 0.17.0
+      '@fuel-ts/hasher': 0.17.0
+      '@fuel-ts/hdwallet': 0.17.0
+      '@fuel-ts/interfaces': 0.17.0
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/mnemonic': 0.17.0
+      '@fuel-ts/providers': 0.17.0
+      '@fuel-ts/signer': 0.17.0
+      '@fuel-ts/transactions': 0.17.0
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /@fuel-ts/wordlists/0.16.0:
     resolution: {integrity: sha512-ZsQD5lQQuCXmH7NG5El9hzNhzsfg97rtL6iIq85bvri5K84NdcBMn627/qTA6LkAomOI/f7PWrzqiSCerZ+x2g==}
+    dev: false
+
+  /@fuel-ts/wordlists/0.17.0:
+    resolution: {integrity: sha512-MOiLcIUc3jYbRPmZQi+nR2HihMHXCB7JeoVDNHg0nqa7HEG8kapyYtsDcVCP714A46IfIEOX2SLtZD4AoEy68g==}
     dev: false
 
   /@fuel-ui/css/0.7.0:
@@ -10549,36 +10549,6 @@ packages:
       - supports-color
     dev: false
 
-  /fuels/0.0.0-next-20220927133327:
-    resolution: {integrity: sha512-9BiWJj3Pz1nxvvwvy4i2cTn8+ewAa8s8PLn8B5iI4BZiXgL6wFcohWJ5DM0/vVkQYMmkQrij69SI5CvJCXAzaQ==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@fuel-ts/abi-coder': 0.0.0-next-20220927133327
-      '@fuel-ts/address': 0.0.0-next-20220927133327
-      '@fuel-ts/constants': 0.0.0-next-20220927133327
-      '@fuel-ts/contract': 0.0.0-next-20220927133327
-      '@fuel-ts/hasher': 0.0.0-next-20220927133327
-      '@fuel-ts/hdwallet': 0.0.0-next-20220927133327
-      '@fuel-ts/interfaces': 0.0.0-next-20220927133327
-      '@fuel-ts/keystore': 0.0.0-next-20220927133327
-      '@fuel-ts/math': 0.0.0-next-20220927133327
-      '@fuel-ts/merkle': 0.0.0-next-20220927133327
-      '@fuel-ts/merkle-shared': 0.0.0-next-20220927133327
-      '@fuel-ts/merklesum': 0.0.0-next-20220927133327
-      '@fuel-ts/mnemonic': 0.0.0-next-20220927133327
-      '@fuel-ts/predicate': 0.0.0-next-20220927133327
-      '@fuel-ts/providers': 0.0.0-next-20220927133327
-      '@fuel-ts/signer': 0.0.0-next-20220927133327
-      '@fuel-ts/sparsemerkle': 0.0.0-next-20220927133327
-      '@fuel-ts/testcases': 0.0.0-next-20220927133327
-      '@fuel-ts/transactions': 0.0.0-next-20220927133327
-      '@fuel-ts/wallet': 0.0.0-next-20220927133327
-      '@fuel-ts/wallet-manager': 0.0.0-next-20220927133327
-      '@fuel-ts/wordlists': 0.0.0-next-20220927133327
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /fuels/0.16.0:
     resolution: {integrity: sha512-l08LE0SF/YNlkfeoH9ar9A0ebOgQkTgK3ep/vgOFCWUFZtfFSWaoKMkid1UKKpiidVBHP2d5Xj7baMH2ZEMUvw==}
     dependencies:
@@ -10605,6 +10575,36 @@ packages:
       '@fuel-ts/wallet': 0.16.0
       '@fuel-ts/wallet-manager': 0.16.0
       '@fuel-ts/wordlists': 0.16.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /fuels/0.17.0:
+    resolution: {integrity: sha512-z4JSUpgCIQ1cagSJ57Jy9JldMxogk1jecSLoUKB/t65mt40ZY2p2usYN7b1lpFzyBf9UT1yI+mNiJSFl4vyq9A==}
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@fuel-ts/abi-coder': 0.17.0
+      '@fuel-ts/address': 0.17.0
+      '@fuel-ts/constants': 0.17.0
+      '@fuel-ts/contract': 0.17.0
+      '@fuel-ts/hasher': 0.17.0
+      '@fuel-ts/hdwallet': 0.17.0
+      '@fuel-ts/interfaces': 0.17.0
+      '@fuel-ts/keystore': 0.17.0
+      '@fuel-ts/math': 0.17.0
+      '@fuel-ts/merkle': 0.17.0
+      '@fuel-ts/merkle-shared': 0.17.0
+      '@fuel-ts/merklesum': 0.17.0
+      '@fuel-ts/mnemonic': 0.17.0
+      '@fuel-ts/predicate': 0.17.0
+      '@fuel-ts/providers': 0.17.0
+      '@fuel-ts/signer': 0.17.0
+      '@fuel-ts/sparsemerkle': 0.17.0
+      '@fuel-ts/testcases': 0.17.0
+      '@fuel-ts/transactions': 0.17.0
+      '@fuel-ts/wallet': 0.17.0
+      '@fuel-ts/wallet-manager': 0.17.0
+      '@fuel-ts/wordlists': 0.17.0
     transitivePeerDependencies:
       - encoding
     dev: false
