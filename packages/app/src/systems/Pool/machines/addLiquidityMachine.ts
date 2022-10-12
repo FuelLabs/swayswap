@@ -98,6 +98,7 @@ export const addLiquidityMachine =
     {
       // eslint-disable-next-line @typescript-eslint/consistent-type-imports
       tsTypes: {} as import('./addLiquidityMachine.typegen').Typegen0,
+      predictableActionArguments: true,
       schema: {
         context: {} as AddLiquidityMachineContext,
         events: {} as MachineEvents,

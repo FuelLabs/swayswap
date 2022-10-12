@@ -107,6 +107,7 @@ export const swapMachine =
     {
       // eslint-disable-next-line @typescript-eslint/consistent-type-imports
       tsTypes: {} as import('./swapMachine.typegen').Typegen0,
+      predictableActionArguments: true,
       schema: {
         context: {} as SwapMachineContext,
         events: {} as MachineEvents,
