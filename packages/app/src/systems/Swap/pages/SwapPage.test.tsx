@@ -12,7 +12,7 @@ import * as poolHelpers from "../../Pool/utils/helpers";
 import * as swapHelpers from "../utils/helpers";
 
 import { App } from "~/App";
-import { sleep, TOKENS } from "~/systems/Core";
+import { TOKENS } from "~/systems/Core";
 import {
   createWallet,
   mockUseWallet,
