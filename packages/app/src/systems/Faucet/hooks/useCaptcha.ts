@@ -17,6 +17,7 @@ type MachineContext = {
 type MachineEvents = { type: 'LOAD' } | { type: 'SET_CAPTCHA'; value: string };
 
 const captchaMachine = createMachine<MachineContext>({
+  predictableActionArguments: true,
   schema: {
     context: {} as MachineContext,
     events: {} as MachineEvents,
