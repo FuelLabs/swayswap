@@ -99,8 +99,6 @@ describe("SwapPage", () => {
       });
     });
 
-    // this is incorrectly breaking.
-    // I think it's because the test is not waiting for faucet finish. or some other test is spending 0.5 ETH before this test runs
     it("should show balance correctly", async () => {
       renderWithRouter(<App />, { route: "/swap" });
 
