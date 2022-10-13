@@ -21,7 +21,7 @@ describe("WelcomePage", () => {
     /**
      * First step: Creating wallet
      */
-    const createWalletBtn = screen.getByRole("button", {
+    const createWalletBtn = await screen.findByRole("button", {
       name: /Create Wallet/i,
     });
     expect(createWalletBtn).toBeInTheDocument();
