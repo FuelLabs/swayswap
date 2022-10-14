@@ -6,7 +6,7 @@ use std::str::FromStr;
 ///////////////////////////////
 // Load the SwaySwap Contract abi
 ///////////////////////////////
-abigen!(TestSwaySwap, "packages/contracts/out/debug/swayswap_contract-abi.json");
+abigen!(TestSwaySwap, "out/debug/swayswap_contract-abi.json");
 
 #[tokio::test]
 async fn swayswap() {

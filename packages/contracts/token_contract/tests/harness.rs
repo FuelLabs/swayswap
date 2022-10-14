@@ -7,7 +7,7 @@ use fuels_abigen_macro::abigen;
 ///////////////////////////////
 abigen!(
     TestToken,
-    "packages/contracts/token_contract/out/debug/token_contract-abi.json"
+    "../token_contract/out/debug/token_contract-abi.json"
 );
 
 #[tokio::test]

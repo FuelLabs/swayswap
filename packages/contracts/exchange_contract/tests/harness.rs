@@ -7,14 +7,14 @@ use fuels::tx::StorageSlot;
 ///////////////////////////////
 // Load the Exchange Contract abi
 ///////////////////////////////
-abigen!(TestExchange, "packages/contracts/exchange_contract/out/debug/exchange_contract-abi.json");
+abigen!(TestExchange, "out/debug/exchange_contract-abi.json");
 
 ///////////////////////////////
 // Load the Token Contract abi
 ///////////////////////////////
 abigen!(
     TestToken,
-    "packages/contracts/token_contract/out/debug/token_contract-abi.json"
+    "../token_contract/out/debug/token_contract-abi.json"
 );
 
 async fn deposit_and_add_liquidity(
