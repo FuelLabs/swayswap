@@ -53,6 +53,10 @@ jobs:
         run:
           pnpm recursive install --frozen-lockfile
 
+      - name: Build
+        run: |
+          pnpm build
+
       # As contracts are really Heavy to build
       # and test we only test it when some
       # contract was updated on the PR
