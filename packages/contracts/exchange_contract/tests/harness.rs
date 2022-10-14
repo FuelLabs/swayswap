@@ -14,7 +14,7 @@ abigen!(TestExchange, "out/debug/exchange_contract-abi.json");
 ///////////////////////////////
 abigen!(
     TestToken,
-    "../token_contract/out/debug/token_contract-abi.json"
+    "../token_contract/out/debug/token_contract-flat-abi.json"
 );
 
 async fn deposit_and_add_liquidity(
