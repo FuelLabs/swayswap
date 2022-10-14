@@ -1,9 +1,9 @@
 import cx from "classnames";
+import { bn, format } from "fuels";
 import { useMemo } from "react";
 
 import type { CoinBalanceProps } from "../hooks";
 import { useBalances } from "../hooks";
-import { format, isZero, safeBN } from "../utils";
 
 import { Button, Tooltip } from "~/systems/UI";
 
@@ -19,10 +19,10 @@ export const CoinBalance = ({
 
   const balance = useMemo(() => {
     const coinBalance = balances?.find((i) => i.assetId === coin?.assetId);
-    return safeBN(coinBalance?.amount);
+    return bn(coinBalance?.amount);
   }, [balances, coin?.assetId]);
 
-  const maxButtonText = isZero(gasFee)
+  const maxButtonText = bn(gasFee).isZero()
     ? format(balance)
     : `Max = ${format(balance)} (${coin?.symbol} balance)${
         gasFee ? ` - ${format(gasFee)} (network fee)` : ``
@@ -38,7 +38,7 @@ export const CoinBalance = ({
           Balance: {format(balance)}
         </div>
       )}
-      {showMaxButton && !isZero(balance) && (
+      {showMaxButton && !bn(balance).isZero() && (
         <Tooltip content={maxButtonText}>
           <Button
             aria-label="Set Maximum Balance"

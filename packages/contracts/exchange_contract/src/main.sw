@@ -212,7 +212,7 @@ impl Exchange for Contract {
         let new_amount = deposited_amount - amount;
         storage.deposits.insert((sender, asset_id), new_amount);
 
-        transfer_to_output(amount, asset_id, sender)
+        transfer_to_address(amount, asset_id, sender)
     }
 
     #[storage(read, write)]
@@ -251,18 +251,18 @@ impl Exchange for Contract {
                 mint(liquidity_minted);
                 storage.lp_token_supply = total_liquidity + liquidity_minted;
 
-                transfer_to_output(liquidity_minted, contract_id(), sender);
+                transfer_to_address(liquidity_minted, contract_id(), sender);
 
                 // If user sent more than the correct ratio, we deposit back the extra tokens
                 let token_extra = current_token_amount - token_amount;
                 if (token_extra > 0) {
-                    transfer_to_output(token_extra, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+                    transfer_to_address(token_extra, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
                 }
 
                 minted = liquidity_minted;
             } else {
-                transfer_to_output(current_token_amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
-                transfer_to_output(current_eth_amount, ~ContractId::from(ETH_ID), sender);
+                transfer_to_address(current_token_amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+                transfer_to_address(current_eth_amount, ~ContractId::from(ETH_ID), sender);
                 minted = 0;
             }
         } else {
@@ -278,7 +278,7 @@ impl Exchange for Contract {
             mint(initial_liquidity);
             storage.lp_token_supply = initial_liquidity;
 
-            transfer_to_output(initial_liquidity, contract_id(), sender);
+            transfer_to_address(initial_liquidity, contract_id(), sender);
 
             minted = initial_liquidity;
         };
@@ -317,8 +317,8 @@ impl Exchange for Contract {
         remove_reserve(ETH_ID, eth_amount);
 
         // Send tokens back
-        transfer_to_output(eth_amount, ~ContractId::from(ETH_ID), sender);
-        transfer_to_output(token_amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+        transfer_to_address(eth_amount, ~ContractId::from(ETH_ID), sender);
+        transfer_to_address(token_amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
 
         RemoveLiquidityInfo {
             eth_amount: eth_amount,
@@ -344,7 +344,7 @@ impl Exchange for Contract {
         if (asset_id == ETH_ID) {
             let tokens_bought = get_input_price(forwarded_amount, eth_reserve, token_reserve);
             assert(tokens_bought >= min);
-            transfer_to_output(tokens_bought, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+            transfer_to_address(tokens_bought, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
             bought = tokens_bought;
             // Update reserve
             add_reserve(ETH_ID, forwarded_amount);
@@ -352,7 +352,7 @@ impl Exchange for Contract {
         } else {
             let eth_bought = get_input_price(forwarded_amount, token_reserve, eth_reserve);
             assert(eth_bought >= min);
-            transfer_to_output(eth_bought, ~ContractId::from(ETH_ID), sender);
+            transfer_to_address(eth_bought, ~ContractId::from(ETH_ID), sender);
             bought = eth_bought;
             // Update reserve
             remove_reserve(ETH_ID, eth_bought);
@@ -380,9 +380,9 @@ impl Exchange for Contract {
             assert(forwarded_amount >= eth_sold);
             let refund = forwarded_amount - eth_sold;
             if refund > 0 {
-                transfer_to_output(refund, ~ContractId::from(ETH_ID), sender);
+                transfer_to_address(refund, ~ContractId::from(ETH_ID), sender);
             };
-            transfer_to_output(amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+            transfer_to_address(amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
             sold = eth_sold;
             // Update reserve
             add_reserve(ETH_ID, eth_sold);
@@ -392,9 +392,9 @@ impl Exchange for Contract {
             assert(forwarded_amount >= tokens_sold);
             let refund = forwarded_amount - tokens_sold;
             if refund > 0 {
-                transfer_to_output(refund, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+                transfer_to_address(refund, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
             };
-            transfer_to_output(amount, ~ContractId::from(ETH_ID), sender);
+            transfer_to_address(amount, ~ContractId::from(ETH_ID), sender);
             sold = tokens_sold;
             // Update reserve
             remove_reserve(ETH_ID, amount);

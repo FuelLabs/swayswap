@@ -116,7 +116,7 @@ export function usePopover({
   const triggerProps = mergeProps(
     triggerBaseProps,
     { ref: triggerRef },
-    { onClick: () => state.toggle() }
+    { onPress: () => state.toggle() }
   );
 
   return {

@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
 import type { BN } from 'fuels';
+import { bn, format, toFixed } from 'fuels';
 import { useMemo } from 'react';
 
 import type { PoolInfoPreview } from '../utils/helpers';
@@ -8,16 +9,7 @@ import { getPoolInfoPreview } from '../utils/helpers';
 import { usePositionInfo } from './usePoolInfo';
 
 import { CONTRACT_ID } from '~/config';
-import {
-  calculatePercentage,
-  format,
-  getCoin,
-  isZero,
-  safeBN,
-  toFixed,
-  useBalances,
-  ZERO,
-} from '~/systems/Core';
+import { calculatePercentage, getCoin, useBalances, ZERO } from '~/systems/Core';
 import type { Maybe } from '~/types';
 
 export type PreviewRemoveLiquidity = PoolInfoPreview & {
@@ -29,7 +21,7 @@ export function usePreviewRemoveLiquidity(amount: Maybe<BN>): PreviewRemoveLiqui
   const { data: balances } = useBalances();
   const poolTokens = useMemo(() => {
     const lpTokenAmount = getCoin(balances || [], CONTRACT_ID)?.amount;
-    const poolTokensNum = safeBN(lpTokenAmount);
+    const poolTokensNum = bn(lpTokenAmount);
     return poolTokensNum;
   }, [balances]);
   const { data: info } = usePositionInfo(amount || ZERO);
@@ -37,7 +29,7 @@ export function usePreviewRemoveLiquidity(amount: Maybe<BN>): PreviewRemoveLiqui
   let nextPoolTokens = ZERO;
   let nextPoolShare = new Decimal(0);
 
-  if (!isZero(poolTokens)) {
+  if (!bn(poolTokens).isZero()) {
     nextPoolTokens = poolTokens.sub(poolPreview.poolTokens);
     if (nextPoolTokens.lte(poolPreview.totalLiquidity)) {
       nextPoolShare = calculatePercentage(nextPoolTokens, poolPreview.totalLiquidity);

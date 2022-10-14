@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { bn } from "fuels";
 import { useState } from "react";
 
 import type { SwapMachineState } from "../machines/swapMachine";
@@ -7,19 +8,19 @@ import { getPricePerToken } from "../utils";
 
 import { useSwapContext } from "./useSwap";
 
-import { compareStates, safeBN } from "~/systems/Core";
+import { compareStates } from "~/systems/Core";
 
 const selectors = {
   coinFrom: ({ context: ctx }: SwapMachineState) => {
     return {
       symbol: ctx.coinFrom?.symbol || "",
-      amount: safeBN(ctx.fromAmount?.raw),
+      amount: bn(ctx.fromAmount?.raw),
     };
   },
   coinTo: ({ context: ctx }: SwapMachineState) => {
     return {
       symbol: ctx.coinTo?.symbol || "",
-      amount: safeBN(ctx.toAmount?.raw),
+      amount: bn(ctx.toAmount?.raw),
     };
   },
   isFrom: ({ context: ctx }: SwapMachineState) => {

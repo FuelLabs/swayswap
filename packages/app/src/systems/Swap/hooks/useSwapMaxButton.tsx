@@ -1,4 +1,5 @@
 import { useSelector } from "@xstate/react";
+import { bn } from "fuels";
 
 import type { SwapMachineState } from "../machines/swapMachine";
 import type { SwapMachineContext } from "../types";
@@ -8,7 +9,7 @@ import { calculateMaxBalanceToSwap } from "../utils";
 import { useSwapContext } from "./useSwap";
 
 import type { CoinBalanceProps, CoinSelectorProps } from "~/systems/Core";
-import { isZero, compareStates, safeBN } from "~/systems/Core";
+import { compareStates } from "~/systems/Core";
 
 function getRightBalance(dir: SwapDirection, ctx: SwapMachineContext) {
   const { coinFromBalance, coinToBalance } = ctx;
@@ -24,11 +25,11 @@ const selectors = {
     return state.context.coinTo;
   },
   gasFee: (state: SwapMachineState) => {
-    return safeBN(state.context.txCost?.total);
+    return bn(state.context.txCost?.total);
   },
   hasBalance: (dir: SwapDirection) => (state: SwapMachineState) => {
     const balance = getRightBalance(dir, state.context);
-    return balance && !isZero(balance);
+    return balance && !bn(balance).isZero();
   },
   isMaxButtonDisabled: (dir: SwapDirection) => (state: SwapMachineState) => {
     const { txCost, ethBalance } = state.context;

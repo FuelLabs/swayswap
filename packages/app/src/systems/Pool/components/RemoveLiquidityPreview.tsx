@@ -1,4 +1,5 @@
 import type { BN } from "fuels";
+import { bn } from "fuels";
 import { BsArrowDown } from "react-icons/bs";
 
 import { usePreviewRemoveLiquidity } from "../hooks";
@@ -10,7 +11,6 @@ import {
   useCoinMetadata,
   ETH_DAI,
   NetworkFeePreviewItem,
-  safeBN,
 } from "~/systems/Core";
 import type { Maybe } from "~/types";
 
@@ -31,7 +31,7 @@ export const RemoveLiquidityPreview = ({
     formattedPooledETH,
     formattedNextPoolTokens,
     formattedNextPoolShare,
-  } = usePreviewRemoveLiquidity(safeBN(amount));
+  } = usePreviewRemoveLiquidity(bn(amount));
 
   if (!amount) return null;
 

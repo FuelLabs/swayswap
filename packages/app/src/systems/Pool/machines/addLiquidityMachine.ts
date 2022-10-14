@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
 import type { BN, CoinQuantity, TransactionResult } from 'fuels';
+import { bn } from 'fuels';
 import type { InterpreterFrom, StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
 
@@ -13,8 +14,6 @@ import {
   getCoin,
   getCoinETH,
   handleError,
-  isZero,
-  safeBN,
   TOKENS,
   ZERO,
 } from '~/systems/Core';
@@ -99,6 +98,7 @@ export const addLiquidityMachine =
     {
       // eslint-disable-next-line @typescript-eslint/consistent-type-imports
       tsTypes: {} as import('./addLiquidityMachine.typegen').Typegen0,
+      predictableActionArguments: true,
       schema: {
         context: {} as AddLiquidityMachineContext,
         events: {} as MachineEvents,
@@ -392,15 +392,15 @@ export const addLiquidityMachine =
             return getPoolRatio(ev.data);
           },
           poolShare: (ctx, ev) => {
-            const poolPosition = safeBN(ctx.poolPosition);
-            if (!ev.data || isZero(poolPosition)) return new Decimal(0);
+            const poolPosition = bn(ctx.poolPosition);
+            if (!ev.data || bn(poolPosition).isZero()) return new Decimal(0);
             return calculatePercentage(poolPosition, ev.data.lp_token_supply);
           },
         }),
         setBalances: assign({
           balances: (_, ev) => ev.data,
           poolPosition: (_, ev) => {
-            return safeBN(getCoin(ev.data, CONTRACT_ID)?.amount);
+            return bn(getCoin(ev.data, CONTRACT_ID)?.amount);
           },
         }),
         setPreviewAddLiqudity: assign((ctx, ev) => {
@@ -413,9 +413,9 @@ export const addLiquidityMachine =
             };
           }
 
-          const currentLPTokensBalance = safeBN(ctx.poolPosition);
+          const currentLPTokensBalance = bn(ctx.poolPosition);
           const totalLPTokens = ev.data.lp_token_received.add(currentLPTokensBalance);
-          const lpTokenSupply = safeBN(ctx.poolInfo?.lp_token_supply);
+          const lpTokenSupply = bn(ctx.poolInfo?.lp_token_supply);
           const finalContext: AddLiquidityMachineContext = {
             ...ctx,
             poolShare: calculatePercentage(totalLPTokens, lpTokenSupply),
@@ -434,7 +434,7 @@ export const addLiquidityMachine =
           return finalContext;
         }),
         setPreviewCreateLiqudity: assign((ctx, ev) => {
-          if (!ev.data || isZero(ctx.fromAmount) || isZero(ctx.toAmount)) {
+          if (!ev.data || bn(ctx.fromAmount).isZero() || bn(ctx.toAmount).isZero()) {
             return {
               ...ctx,
               poolShare: new Decimal(100),
@@ -495,27 +495,27 @@ export const addLiquidityMachine =
           return !!ctx.transactionCost?.error;
         },
         notHasEthForNetworkFee: (ctx) => {
-          const fromAmount = safeBN(ctx.fromAmount);
-          const ethBalance = safeBN(getCoinETH(ctx.balances)?.amount);
-          const networkFee = safeBN(ctx.transactionCost?.fee);
+          const fromAmount = bn(ctx.fromAmount);
+          const ethBalance = bn(getCoinETH(ctx.balances)?.amount);
+          const networkFee = bn(ctx.transactionCost?.fee);
           return ethBalance.lte(fromAmount.add(networkFee));
         },
         notHasFromAmount: (ctx) => {
-          return !ctx.fromAmount || isZero(ctx.fromAmount);
+          return !ctx.fromAmount || bn(ctx.fromAmount).isZero();
         },
         notHasToAmount: (ctx) => {
-          return !ctx.toAmount || isZero(ctx.toAmount);
+          return !ctx.toAmount || bn(ctx.toAmount).isZero();
         },
         notHasFromBalance: (ctx) => {
-          const balanceFrom = safeBN(getCoin(ctx.balances, ctx.coinFrom.assetId)?.amount);
-          return balanceFrom.lt(safeBN(ctx.fromAmount));
+          const balanceFrom = bn(getCoin(ctx.balances, ctx.coinFrom.assetId)?.amount);
+          return balanceFrom.lt(bn(ctx.fromAmount));
         },
         notHasToBalance: (ctx) => {
-          const balanceTo = safeBN(getCoin(ctx.balances, ctx.coinTo.assetId)?.amount);
-          return balanceTo.lt(safeBN(ctx.toAmount));
+          const balanceTo = bn(getCoin(ctx.balances, ctx.coinTo.assetId)?.amount);
+          return balanceTo.lt(bn(ctx.toAmount));
         },
         poolHasLiquidity: (ctx) => {
-          return !isZero(ctx.poolInfo?.lp_token_supply);
+          return !bn(ctx.poolInfo?.lp_token_supply).isZero();
         },
       },
     }

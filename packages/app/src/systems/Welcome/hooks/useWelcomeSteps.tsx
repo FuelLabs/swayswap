@@ -68,6 +68,7 @@ type MachineEvents = { type: "NEXT" } | { type: "SET_CURRENT"; value: number };
 
 const welcomeStepsMachine = createMachine<MachineContext>({
   id: "welcomeSteps",
+  predictableActionArguments: true,
   initial: "init",
   schema: {
     context: {} as MachineContext,

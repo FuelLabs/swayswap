@@ -53,6 +53,14 @@ jobs:
         run:
           pnpm recursive install --frozen-lockfile
 
+      - name: Setup scripts
+        run: |
+          pnpm scripts:setup
+
+      - name: Build Contracts
+        run: |
+          pnpm contracts:build
+
       # As contracts are really Heavy to build
       # and test we only test it when some
       # contract was updated on the PR
@@ -70,10 +78,6 @@ jobs:
         if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
         run: |
           ./scripts/test-contracts.sh
-
-      - name: Setup scripts
-        run: |
-          pnpm scripts:setup
 
       - name: Run test
         run: |

@@ -1,10 +1,10 @@
+import { format } from "fuels";
 import { BiCoin } from "react-icons/bi";
 import { BsArrowDown } from "react-icons/bs";
 
 import {
   MainLayout,
   NetworkFeePreviewItem,
-  format,
   PreviewTable,
 } from "~/systems/Core";
 import { useMint } from "~/systems/Mint";

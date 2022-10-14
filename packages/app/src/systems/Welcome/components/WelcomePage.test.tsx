@@ -15,13 +15,13 @@ describe("WelcomePage", () => {
 
   it("should be able to do all welcome steps and see swap page after", async () => {
     const { user } = renderWithRouter(<App />, {
-      route: "/welcome/create-wallet",
+      route: "/welcome",
     });
 
     /**
      * First step: Creating wallet
      */
-    const createWalletBtn = screen.getByRole("button", {
+    const createWalletBtn = await screen.findByRole("button", {
       name: /Create Wallet/i,
     });
     expect(createWalletBtn).toBeInTheDocument();

@@ -1,21 +1,11 @@
 import Decimal from 'decimal.js';
-import { bn, BN } from 'fuels';
+import { bn, BN, format } from 'fuels';
 
 import type { CoinAmount, SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 
 import { DECIMAL_UNITS } from '~/config';
-import {
-  isCoinEth,
-  ZERO,
-  format,
-  formatUnits,
-  safeBN,
-  multiply,
-  parseUnits,
-  isZero,
-  ONE_ASSET,
-} from '~/systems/Core';
+import { isCoinEth, ZERO, multiply, ONE_ASSET } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import type { Coin, Maybe } from '~/types';
 
@@ -33,7 +23,7 @@ export const ZERO_AMOUNT = { value: '', raw: bn(0) };
 export function createAmount(value: Maybe<string | BN>): CoinAmount {
   if (!value) return ZERO_AMOUNT;
   if (typeof value === 'string') {
-    const raw = parseUnits(value);
+    const raw = bn.parseUnits(value);
     return {
       value,
       raw,
@@ -41,7 +31,7 @@ export function createAmount(value: Maybe<string | BN>): CoinAmount {
   }
   if (BN.isBN(value)) {
     return {
-      value: formatUnits(value, DECIMAL_UNITS),
+      value: bn(value).formatUnits(DECIMAL_UNITS),
       raw: value,
     };
   }
@@ -49,14 +39,14 @@ export function createAmount(value: Maybe<string | BN>): CoinAmount {
 }
 
 export function getPricePerToken(fromAmount?: Maybe<BN>, toAmount?: Maybe<BN>) {
-  if (!toAmount || !fromAmount || isZero(fromAmount) || isZero(toAmount)) return '';
+  if (!toAmount || !fromAmount || bn(fromAmount).isZero() || bn(toAmount).isZero()) return '';
   return format(
     bn(new Decimal(toAmount.toHex()).div(fromAmount.toHex()).mul(ONE_ASSET.toHex()).round().toHex())
   );
 }
 
 function getPriceImpact(amounts: BN[], reserves: BN[]) {
-  if (amounts.find((a) => isZero(a)) || reserves.find((r) => isZero(r))) return '0';
+  if (amounts.find((a) => bn(a).isZero()) || reserves.find((r) => bn(r).isZero())) return '0';
   const exchangeRateAfter = new Decimal(amounts[1].toHex()).div(amounts[0].toHex());
   const exchangeRateBefore = new Decimal(reserves[1].toHex()).div(reserves[0].toHex());
   const result = exchangeRateBefore.div(exchangeRateAfter).sub(1).mul(100);
@@ -88,15 +78,15 @@ export const calculatePriceWithSlippage = (
 };
 
 export function hasEnoughBalance(amount: Maybe<BN>, balance: Maybe<BN>) {
-  return safeBN(amount).lte(safeBN(balance)) && !isZero(balance);
+  return bn(amount).lte(bn(balance)) && !bn(balance).isZero();
 }
 
 // TODO: Add unit tests on this
 export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: SwapMachineContext) {
   const isFrom = direction === SwapDirection.fromTo;
-  const ethReserve = safeBN(poolInfo?.eth_reserve);
-  const tokenReserve = safeBN(poolInfo?.token_reserve);
-  const toAmountRaw = safeBN(toAmount?.raw);
+  const ethReserve = bn(poolInfo?.eth_reserve);
+  const tokenReserve = bn(poolInfo?.token_reserve);
+  const toAmountRaw = bn(toAmount?.raw);
 
   if (isFrom) return true;
 
@@ -106,10 +96,10 @@ export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: S
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {
   const { ethBalance, direction, coinFrom, fromAmount, txCost, amountPlusSlippage } = params;
-  const balance = safeBN(ethBalance);
-  const txCostTotal = safeBN(txCost?.fee);
-  const plusSlippage = safeBN(amountPlusSlippage?.raw);
-  const fromAmountRaw = safeBN(fromAmount?.raw);
+  const balance = bn(ethBalance);
+  const txCostTotal = bn(txCost?.fee);
+  const plusSlippage = bn(amountPlusSlippage?.raw);
+  const fromAmountRaw = bn(fromAmount?.raw);
   const isFrom = direction === SwapDirection.fromTo;
 
   /**
@@ -145,8 +135,8 @@ export const calculateMaxBalanceToSwap = ({ direction, ctx }: CalculateMaxBalanc
   const isFrom = direction === SwapDirection.fromTo;
   const shouldUseNetworkFee =
     (isFrom && isCoinEth(ctx.coinFrom)) || (!isFrom && isCoinEth(ctx.coinTo));
-  const balance = safeBN(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
-  const networkFee = safeBN(ctx.txCost?.fee);
+  const balance = bn(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
+  const networkFee = bn(ctx.txCost?.fee);
   const nextValue = balance.gt(ZERO) && shouldUseNetworkFee ? balance.sub(networkFee) : balance;
 
   return createAmount(nextValue);

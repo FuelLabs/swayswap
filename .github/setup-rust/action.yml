@@ -3,7 +3,7 @@ name: 'Setup Rust env'
 inputs:
   rust-version:
     description: 'Rust version'
-    default: 1.63.0
+    default: 1.64.0
 
 runs:
   using: "composite"

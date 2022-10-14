@@ -7,7 +7,7 @@ use fuels_abigen_macro::abigen;
 ///////////////////////////////
 abigen!(
     TestToken,
-    "../token_contract/out/debug/token_contract-abi.json"
+    "out/debug/token_contract-abi.json"
 );
 
 #[tokio::test]
@@ -27,7 +27,7 @@ async fn token_contract() {
     ////////////////////////////////////////////////////////
 
     let token_contract_id = Contract::deploy(
-        "../token_contract/out/debug/token_contract.bin",
+        "out/debug/token_contract.bin",
         &wallet_owner,
         TxParameters::default(),
         StorageConfiguration::default(),

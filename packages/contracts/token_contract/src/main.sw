@@ -66,13 +66,13 @@ impl Token for Contract {
     #[storage(read)]
     fn transfer_coins(coins: u64, address: Address) {
         validate_owner();
-        transfer_to_output(coins, contract_id(), address);
+        transfer_to_address(coins, contract_id(), address);
     }
 
     #[storage(read)]
     fn transfer_token_to_output(coins: u64, asset_id: ContractId, address: Address) {
         validate_owner();
-        transfer_to_output(coins, asset_id, address);
+        transfer_to_address(coins, asset_id, address);
     }
 
     //////////////////////////////////////

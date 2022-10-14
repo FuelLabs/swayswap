@@ -1,6 +1,6 @@
 import { useDialog as useReactAriaDialog } from "@react-aria/dialog";
 import { FocusScope } from "@react-aria/focus";
-import type { ModalAriaProps, OverlayProps } from "@react-aria/overlays";
+import type { ModalAriaProps, AriaOverlayProps } from "@react-aria/overlays";
 import {
   useOverlay,
   usePreventScroll,
@@ -31,7 +31,7 @@ type DialogContext = {
 
 const ctx = createContext<DialogContext>({});
 
-export type DialogProps = OverlayProps &
+export type DialogProps = AriaOverlayProps &
   AriaDialogProps & {
     children: ReactNode;
     state: OverlayTriggerState;

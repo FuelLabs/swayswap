@@ -1,4 +1,4 @@
-import { ReceiptType } from 'fuels';
+import { bn, ReceiptType } from 'fuels';
 import type {
   BN,
   CallResult,
@@ -7,7 +7,7 @@ import type {
   TxParams,
 } from 'fuels';
 
-import { multiply, safeBN, ZERO } from './math';
+import { multiply, ZERO } from './math';
 
 import { GAS_PRICE } from '~/config';
 
@@ -72,7 +72,7 @@ export async function getTransactionCost(
 }
 
 export function getOverrides(overrides?: TxParams): TxParams {
-  const gasLimit = safeBN(overrides?.gasLimit);
+  const gasLimit = bn(overrides?.gasLimit);
   const ret = {
     gasPrice: GAS_PRICE,
     gasLimit: !gasLimit.isZero() ? gasLimit : 100_000_000,

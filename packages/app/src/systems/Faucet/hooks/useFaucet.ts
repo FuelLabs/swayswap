@@ -1,10 +1,10 @@
 import fetch from 'cross-fetch';
+import { bn, format } from 'fuels';
 import { useMemo } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 import { FUEL_FAUCET_URL } from '~/config';
 import { useBalances, useWallet } from '~/systems/Core';
-import { format, safeBN } from '~/systems/Core/utils/math';
 import type { Maybe } from '~/types';
 import { Queries } from '~/types';
 
@@ -62,7 +62,7 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
   }
 
   const faucetAmount = useMemo(() => {
-    const amount = safeBN(query.data?.amount);
+    const amount = bn(query.data?.amount);
     return format(amount);
   }, [query.status]);
 

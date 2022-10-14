@@ -1,13 +1,10 @@
 import type { Wallet } from 'fuels';
+import { bn } from 'fuels';
 
-import { CONTRACT_ID, DECIMAL_UNITS } from '~/config';
-import { getDeadline, parseUnits } from '~/systems/Core';
+import { CONTRACT_ID } from '~/config';
+import { getDeadline } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import { ExchangeContractAbi__factory } from '~/types/contracts';
-
-function parseToBigInt(amount: string) {
-  return parseUnits(amount, DECIMAL_UNITS);
-}
 
 export async function addLiquidity(
   wallet: Wallet,
@@ -21,10 +18,10 @@ export async function addLiquidity(
   const { transactionResult } = await contract
     .multiCall([
       contract.functions.deposit().callParams({
-        forward: [parseToBigInt(fromAmount), fromAsset],
+        forward: [bn.parseUnits(fromAmount), fromAsset],
       }),
       contract.functions.deposit().callParams({
-        forward: [parseToBigInt(toAmount), toAsset],
+        forward: [bn.parseUnits(toAmount), toAsset],
       }),
       contract.functions.add_liquidity(1, deadline),
     ])

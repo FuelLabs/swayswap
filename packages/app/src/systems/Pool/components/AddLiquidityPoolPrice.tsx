@@ -1,12 +1,12 @@
 import { useSelector } from "@xstate/react";
 import Decimal from "decimal.js";
-import { bn } from "fuels";
+import { bn, format } from "fuels";
 import { useMemo } from "react";
 
 import { useAddLiquidityContext } from "../hooks";
 import { selectors } from "../selectors";
 
-import { format, ONE_ASSET } from "~/systems/Core";
+import { ONE_ASSET } from "~/systems/Core";
 
 export const AddLiquidityPoolPrice = () => {
   const { service } = useAddLiquidityContext();
