@@ -29,4 +29,4 @@ runs:
     - name: Install Fuel toolchain
       uses: FuelLabs/action-fuel-toolchain@v0.3.0
       with:
-        toolchain: latest
+        toolchain: beta-1
