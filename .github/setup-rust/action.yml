@@ -27,6 +27,6 @@ runs:
 
     - uses: actions/checkout@v2
     - name: Install Fuel toolchain
-      uses: FuelLabs/action-fuel-toolchain@v0.3.0
+      uses: FuelLabs/action-fuel-toolchain@master
       with:
         toolchain: beta-1
