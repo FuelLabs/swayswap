@@ -4,6 +4,10 @@ inputs:
   rust-version:
     description: 'Rust version'
     default: 1.64.0
+  forc-version:
+    description: 'Forc version'
+    default: 0.26.0
+
 
 runs:
   using: "composite"
@@ -29,4 +33,4 @@ runs:
     - name: Install Fuel toolchain
       uses: FuelLabs/action-fuel-toolchain@master
       with:
-        toolchain: beta-1
+        components: forc@${{ inputs.forc-version }}
