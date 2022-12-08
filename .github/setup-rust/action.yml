@@ -4,6 +4,10 @@ inputs:
   rust-version:
     description: 'Rust version'
     default: 1.64.0
+  forc-version:
+    description: 'Forc version'
+    default: 0.26.0
+
 
 runs:
   using: "composite"
@@ -27,6 +31,7 @@ runs:
 
     - uses: actions/checkout@v2
     - name: Install Fuel toolchain
-      uses: FuelLabs/action-fuel-toolchain@v0.3.0
+      uses: FuelLabs/action-fuel-toolchain@master
       with:
-        toolchain: latest
+        name: swayswap-toolchain
+        components: forc@${{ inputs.forc-version }}
