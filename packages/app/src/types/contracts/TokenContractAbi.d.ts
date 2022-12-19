@@ -13,35 +13,39 @@ import type {
   BN,
 } from 'fuels';
 
-export type AddressInput = { value: string };
-
-export type AddressOutput = { value: string };
-
 export type ContractIdInput = { value: string };
 
 export type ContractIdOutput = { value: string };
 
+export type AddressInput = { value: string };
+
+export type AddressOutput = { value: string };
+
 interface TokenContractAbiInterface extends Interface {
   functions: {
-    initialize: FunctionFragment;
-    set_mint_amount: FunctionFragment;
-    mint_coins: FunctionFragment;
     burn_coins: FunctionFragment;
+    get_balance: FunctionFragment;
+    get_mint_amount: FunctionFragment;
+    get_token_balance: FunctionFragment;
+    initialize: FunctionFragment;
+    mint: FunctionFragment;
+    mint_coins: FunctionFragment;
+    set_mint_amount: FunctionFragment;
     transfer_coins: FunctionFragment;
     transfer_token_to_output: FunctionFragment;
-    mint: FunctionFragment;
-    get_mint_amount: FunctionFragment;
-    get_balance: FunctionFragment;
-    get_token_balance: FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: 'burn_coins', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'get_balance', values?: undefined): Uint8Array;
+  encodeFunctionData(functionFragment: 'get_mint_amount', values?: undefined): Uint8Array;
+  encodeFunctionData(functionFragment: 'get_token_balance', values: [ContractIdInput]): Uint8Array;
   encodeFunctionData(
     functionFragment: 'initialize',
     values: [BigNumberish, AddressInput]
   ): Uint8Array;
-  encodeFunctionData(functionFragment: 'set_mint_amount', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'mint', values?: undefined): Uint8Array;
   encodeFunctionData(functionFragment: 'mint_coins', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'burn_coins', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'set_mint_amount', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(
     functionFragment: 'transfer_coins',
     values: [BigNumberish, AddressInput]
@@ -50,33 +54,37 @@ interface TokenContractAbiInterface extends Interface {
     functionFragment: 'transfer_token_to_output',
     values: [BigNumberish, ContractIdInput, AddressInput]
   ): Uint8Array;
-  encodeFunctionData(functionFragment: 'mint', values?: undefined): Uint8Array;
-  encodeFunctionData(functionFragment: 'get_mint_amount', values?: undefined): Uint8Array;
-  encodeFunctionData(functionFragment: 'get_balance', values?: undefined): Uint8Array;
-  encodeFunctionData(functionFragment: 'get_token_balance', values: [ContractIdInput]): Uint8Array;
 
-  decodeFunctionData(functionFragment: 'initialize', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'set_mint_amount', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'mint_coins', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'burn_coins', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'get_balance', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'get_mint_amount', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'get_token_balance', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'initialize', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'mint', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'mint_coins', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'set_mint_amount', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'transfer_coins', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'transfer_token_to_output', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'mint', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'get_mint_amount', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'get_balance', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'get_token_balance', data: BytesLike): DecodedValue;
 }
 
 export class TokenContractAbi extends Contract {
   interface: TokenContractAbiInterface;
   functions: {
+    burn_coins: InvokeFunction<[burn_amount: BigNumberish], void>;
+
+    get_balance: InvokeFunction<[], BN>;
+
+    get_mint_amount: InvokeFunction<[], BN>;
+
+    get_token_balance: InvokeFunction<[asset_id: ContractIdInput], BN>;
+
     initialize: InvokeFunction<[mint_amount: BigNumberish, address: AddressInput], void>;
 
-    set_mint_amount: InvokeFunction<[mint_amount: BigNumberish], void>;
+    mint: InvokeFunction<[], void>;
 
     mint_coins: InvokeFunction<[mint_amount: BigNumberish], void>;
 
-    burn_coins: InvokeFunction<[burn_amount: BigNumberish], void>;
+    set_mint_amount: InvokeFunction<[mint_amount: BigNumberish], void>;
 
     transfer_coins: InvokeFunction<[coins: BigNumberish, address: AddressInput], void>;
 
@@ -84,13 +92,5 @@ export class TokenContractAbi extends Contract {
       [coins: BigNumberish, asset_id: ContractIdInput, address: AddressInput],
       void
     >;
-
-    mint: InvokeFunction<[], void>;
-
-    get_mint_amount: InvokeFunction<[], BN>;
-
-    get_balance: InvokeFunction<[], BN>;
-
-    get_token_balance: InvokeFunction<[asset_id: ContractIdInput], BN>;
   };
 }
