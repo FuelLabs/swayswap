@@ -8,6 +8,68 @@ import type { ExchangeContractAbi, ExchangeContractAbiInterface } from '../Excha
 const _abi = [
   {
     type: 'function',
+    name: 'add_liquidity',
+    inputs: [
+      {
+        type: 'u64',
+        name: 'min_liquidity',
+      },
+      {
+        type: 'u64',
+        name: 'deadline',
+      },
+    ],
+    outputs: [
+      {
+        type: 'u64',
+        name: '',
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'deposit',
+    inputs: [],
+    outputs: [
+      {
+        type: '()',
+        name: '',
+        components: [],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'get_add_liquidity',
+    inputs: [
+      {
+        type: 'u64',
+        name: 'amount',
+      },
+      {
+        type: 'b256',
+        name: 'asset_id',
+      },
+    ],
+    outputs: [
+      {
+        type: 'struct PreviewAddLiquidityInfo',
+        name: '',
+        components: [
+          {
+            type: 'u64',
+            name: 'token_amount',
+          },
+          {
+            type: 'u64',
+            name: 'lp_token_received',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
     name: 'get_balance',
     inputs: [
       {
@@ -93,29 +155,25 @@ const _abi = [
   },
   {
     type: 'function',
-    name: 'get_add_liquidity',
+    name: 'get_swap_with_maximum',
     inputs: [
       {
         type: 'u64',
         name: 'amount',
       },
-      {
-        type: 'b256',
-        name: 'asset_id',
-      },
     ],
     outputs: [
       {
-        type: 'struct PreviewAddLiquidityInfo',
+        type: 'struct PreviewInfo',
         name: '',
         components: [
           {
             type: 'u64',
-            name: 'token_amount',
+            name: 'amount',
           },
           {
-            type: 'u64',
-            name: 'lp_token_received',
+            type: 'bool',
+            name: 'has_liquidity',
           },
         ],
       },
@@ -123,60 +181,27 @@ const _abi = [
   },
   {
     type: 'function',
-    name: 'deposit',
-    inputs: [],
-    outputs: [
-      {
-        type: '()',
-        name: '',
-        components: [],
-      },
-    ],
-  },
-  {
-    type: 'function',
-    name: 'withdraw',
+    name: 'get_swap_with_minimum',
     inputs: [
       {
         type: 'u64',
         name: 'amount',
       },
+    ],
+    outputs: [
       {
-        type: 'struct ContractId',
-        name: 'asset_id',
+        type: 'struct PreviewInfo',
+        name: '',
         components: [
           {
-            type: 'b256',
-            name: 'value',
+            type: 'u64',
+            name: 'amount',
+          },
+          {
+            type: 'bool',
+            name: 'has_liquidity',
           },
         ],
-      },
-    ],
-    outputs: [
-      {
-        type: '()',
-        name: '',
-        components: [],
-      },
-    ],
-  },
-  {
-    type: 'function',
-    name: 'add_liquidity',
-    inputs: [
-      {
-        type: 'u64',
-        name: 'min_liquidity',
-      },
-      {
-        type: 'u64',
-        name: 'deadline',
-      },
-    ],
-    outputs: [
-      {
-        type: 'u64',
-        name: '',
       },
     ],
   },
@@ -216,26 +241,6 @@ const _abi = [
   },
   {
     type: 'function',
-    name: 'swap_with_minimum',
-    inputs: [
-      {
-        type: 'u64',
-        name: 'min',
-      },
-      {
-        type: 'u64',
-        name: 'deadline',
-      },
-    ],
-    outputs: [
-      {
-        type: 'u64',
-        name: '',
-      },
-    ],
-  },
-  {
-    type: 'function',
     name: 'swap_with_maximum',
     inputs: [
       {
@@ -256,53 +261,48 @@ const _abi = [
   },
   {
     type: 'function',
-    name: 'get_swap_with_minimum',
+    name: 'swap_with_minimum',
     inputs: [
       {
         type: 'u64',
-        name: 'amount',
+        name: 'min',
+      },
+      {
+        type: 'u64',
+        name: 'deadline',
       },
     ],
     outputs: [
       {
-        type: 'struct PreviewInfo',
+        type: 'u64',
         name: '',
-        components: [
-          {
-            type: 'u64',
-            name: 'amount',
-          },
-          {
-            type: 'bool',
-            name: 'has_liquidity',
-          },
-        ],
       },
     ],
   },
   {
     type: 'function',
-    name: 'get_swap_with_maximum',
+    name: 'withdraw',
     inputs: [
       {
         type: 'u64',
         name: 'amount',
       },
+      {
+        type: 'struct ContractId',
+        name: 'asset_id',
+        components: [
+          {
+            type: 'b256',
+            name: 'value',
+          },
+        ],
+      },
     ],
     outputs: [
       {
-        type: 'struct PreviewInfo',
+        type: '()',
         name: '',
-        components: [
-          {
-            type: 'u64',
-            name: 'amount',
-          },
-          {
-            type: 'bool',
-            name: 'has_liquidity',
-          },
-        ],
+        components: [],
       },
     ],
   },

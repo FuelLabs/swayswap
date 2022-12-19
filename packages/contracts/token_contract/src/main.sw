@@ -3,10 +3,13 @@ contract;
 use std::{
     address::*,
     revert::require,
-    context::{*, call_frames::*},
     contract_id::ContractId,
     storage::*,
     token::*,
+    call_frames::{
+        contract_id,
+    },
+    context::balance_of,
 };
 
 use token_abi::Token;

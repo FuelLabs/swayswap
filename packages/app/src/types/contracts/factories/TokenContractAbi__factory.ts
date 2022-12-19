@@ -8,6 +8,67 @@ import type { TokenContractAbi, TokenContractAbiInterface } from '../TokenContra
 const _abi = [
   {
     type: 'function',
+    name: 'burn_coins',
+    inputs: [
+      {
+        type: 'u64',
+        name: 'burn_amount',
+      },
+    ],
+    outputs: [
+      {
+        type: '()',
+        name: '',
+        components: [],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'get_balance',
+    inputs: [],
+    outputs: [
+      {
+        type: 'u64',
+        name: '',
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'get_mint_amount',
+    inputs: [],
+    outputs: [
+      {
+        type: 'u64',
+        name: '',
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'get_token_balance',
+    inputs: [
+      {
+        type: 'struct ContractId',
+        name: 'asset_id',
+        components: [
+          {
+            type: 'b256',
+            name: 'value',
+          },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        type: 'u64',
+        name: '',
+      },
+    ],
+  },
+  {
+    type: 'function',
     name: 'initialize',
     inputs: [
       {
@@ -35,13 +96,8 @@ const _abi = [
   },
   {
     type: 'function',
-    name: 'set_mint_amount',
-    inputs: [
-      {
-        type: 'u64',
-        name: 'mint_amount',
-      },
-    ],
+    name: 'mint',
+    inputs: [],
     outputs: [
       {
         type: '()',
@@ -69,11 +125,11 @@ const _abi = [
   },
   {
     type: 'function',
-    name: 'burn_coins',
+    name: 'set_mint_amount',
     inputs: [
       {
         type: 'u64',
-        name: 'burn_amount',
+        name: 'mint_amount',
       },
     ],
     outputs: [
@@ -145,62 +201,6 @@ const _abi = [
         type: '()',
         name: '',
         components: [],
-      },
-    ],
-  },
-  {
-    type: 'function',
-    name: 'mint',
-    inputs: [],
-    outputs: [
-      {
-        type: '()',
-        name: '',
-        components: [],
-      },
-    ],
-  },
-  {
-    type: 'function',
-    name: 'get_mint_amount',
-    inputs: [],
-    outputs: [
-      {
-        type: 'u64',
-        name: '',
-      },
-    ],
-  },
-  {
-    type: 'function',
-    name: 'get_balance',
-    inputs: [],
-    outputs: [
-      {
-        type: 'u64',
-        name: '',
-      },
-    ],
-  },
-  {
-    type: 'function',
-    name: 'get_token_balance',
-    inputs: [
-      {
-        type: 'struct ContractId',
-        name: 'asset_id',
-        components: [
-          {
-            type: 'b256',
-            name: 'value',
-          },
-        ],
-      },
-    ],
-    outputs: [
-      {
-        type: 'u64',
-        name: '',
       },
     ],
   },

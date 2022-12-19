@@ -69,9 +69,9 @@ abi Exchange {
     #[storage(read, write)]
     fn swap_with_maximum(amount: u64, deadline: u64) -> u64;
     /// Get the minimum amount of coins that will be received for a swap_with_minimum.
-    #[storage(read, write)]
+    #[storage(read)]
     fn get_swap_with_minimum(amount: u64) -> PreviewInfo;
     /// Get required amount of coins for a swap_with_maximum.
-    #[storage(read, write)]
+    #[storage(read)]
     fn get_swap_with_maximum(amount: u64) -> PreviewInfo;
 }

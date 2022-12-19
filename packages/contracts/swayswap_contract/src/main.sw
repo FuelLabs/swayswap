@@ -16,6 +16,6 @@ impl SwapSwap for Contract {
         store_b256(token_id.into(), exchange_id.into());
     }
     fn get_exchange_contract(token_id: ContractId) -> ContractId {
-        ~ContractId::from(get_b256(token_id.into()))
+        ContractId::from(get_b256(token_id.into()))
     }
 }
