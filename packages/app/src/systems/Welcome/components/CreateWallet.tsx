@@ -1,25 +1,25 @@
-import { useMutation } from "react-query";
+// import { useMutation } from "react-query";
 
-import { useWelcomeSteps } from "../hooks";
+// import { useWelcomeSteps } from "../hooks";
 
 import { WelcomeImage } from "./WelcomeImage";
 import { WelcomeStep } from "./WelcomeStep";
 
-import { useAppContext } from "~/systems/Core";
+// import { useAppContext } from "~/systems/Core";
 import { Button } from "~/systems/UI";
 
 export function CreateWallet() {
-  const { createWallet } = useAppContext();
-  const { next } = useWelcomeSteps();
+  // const { createWallet } = useAppContext();
+  // const { next } = useWelcomeSteps();
 
-  const createWalletMutation = useMutation(async () => createWallet(), {
-    onSuccess: () => {
-      next();
-    },
-  });
+  // const createWalletMutation = useMutation(async () => createWallet(), {
+  //   onSuccess: () => {
+  //     next();
+  //   },
+  // });
 
   function handleCreateWallet() {
-    createWalletMutation.mutate();
+    // createWalletMutation.mutate();
   }
 
   return (

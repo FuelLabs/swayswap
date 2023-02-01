@@ -17,7 +17,7 @@ const style = {
 };
 
 export function WalletWidget() {
-  const wallet = useWallet();
+  const { wallet } = useWallet();
   const ethBalance = useEthBalance();
   const { coins } = useAssets();
 

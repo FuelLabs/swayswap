@@ -104,7 +104,7 @@ export function SwapProvider({ children }: SwapProviderProps) {
   const [globalState, setGlobalState] = useSwapGlobalState();
   const { coinFrom, coinTo, setCoinParams } = useSwapURLParams();
   const client = useQueryClient();
-  const wallet = useWallet();
+  const { wallet } = useWallet();
   const contract = useContract();
   const slippage = useSlippage();
 

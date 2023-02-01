@@ -1,3 +1,4 @@
+import type { CoinQuantity } from 'fuels';
 import { format } from 'fuels';
 
 import { TOKENS } from '../utils';
@@ -8,7 +9,7 @@ const ETH_ID = TOKENS.find((item) => item.symbol === 'ETH')?.assetId;
 
 export function useEthBalance() {
   const { data: balances } = useBalances();
-  const balance = balances?.find((item) => item.assetId === ETH_ID)?.amount;
+  const balance = balances?.find((item: CoinQuantity) => item.assetId === ETH_ID)?.amount;
 
   return {
     raw: balance,

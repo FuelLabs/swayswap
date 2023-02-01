@@ -8,7 +8,7 @@ import { useWallet } from './useWallet';
 import { TokenContractAbi__factory } from '~/types/contracts';
 
 export function useTokenMethods(tokenId: string) {
-  const wallet = useWallet()!;
+  const { wallet } = useWallet()!;
   const contract = useMemo(
     () => TokenContractAbi__factory.connect(tokenId, wallet),
     [wallet.address]

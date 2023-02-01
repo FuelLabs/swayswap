@@ -7,7 +7,7 @@ import { useWallet } from './useWallet';
 import { Queries, AppEvents } from '~/types';
 
 export function useBalances(opts: UseQueryOptions = {}) {
-  const wallet = useWallet();
+  const { wallet } = useWallet();
   const publisher = usePublisher();
 
   return useQuery(Queries.UserQueryBalances, async () => wallet?.getBalances(), {

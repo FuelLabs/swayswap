@@ -50,7 +50,7 @@ const HeaderNav = ({
 };
 
 export const Header = () => {
-  const wallet = useWallet();
+  const { wallet } = useWallet();
   const navigate = useNavigate();
   const location = useLocation();
 

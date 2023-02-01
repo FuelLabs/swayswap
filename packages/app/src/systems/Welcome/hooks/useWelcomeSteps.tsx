@@ -170,7 +170,7 @@ export const stepsSelectors = {
 const ctx = createContext<Context>({} as Context);
 export function StepsProvider({ children }: WelcomeStepsProviderProps) {
   const navigate = useNavigate();
-  const wallet = useWallet();
+  const { wallet } = useWallet();
 
   const [state, send, service] = useMachine<Machine>(() =>
     welcomeStepsMachine

@@ -4,7 +4,6 @@ export * from './useBreakpoint';
 export * from './useCoinInput';
 export * from './useCoinMetadata';
 export * from './useContract';
-export * from './useCreateWallet';
 export * from './useDebounce';
 export * from './useEthBalance';
 export * from './usePubSub';

@@ -38,7 +38,7 @@ function MainLayoutLoader() {
 
 export function MainLayout({ children }: MainLayoutProps) {
   const { reset: resetReactQuery } = useQueryErrorResetBoundary();
-  const wallet = useWallet();
+  const { wallet } = useWallet();
   const ctx = useContext(AppContext);
 
   return (

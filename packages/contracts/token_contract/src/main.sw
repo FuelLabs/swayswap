@@ -1,10 +1,8 @@
 contract;
 
 use std::{
-    address::*,
-    revert::require,
-    context::{*, call_frames::*},
-    contract_id::ContractId,
+    call_frames::contract_id,
+    context::balance_of,
     storage::*,
     token::*,
 };

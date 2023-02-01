@@ -9,7 +9,7 @@ import { Pages } from "~/types";
 export function PrivateRoute({ children }: { children: ReactNode }) {
   const current = getCurrent();
   const acceptAgreement = getAgreement();
-  const wallet = useWallet();
+  const { wallet } = useWallet();
   if ((current.id > 2 && acceptAgreement) || (wallet && !current.id)) {
     return <>{children}</>;
   }

@@ -1,15 +1,12 @@
 contract;
 
 use std::{
-    address::*,
     assert::assert,
     block::*,
-    chain::auth::*,
-    context::{*, call_frames::*},
-    contract_id::ContractId,
+    auth::*,
+    call_frames::{contract_id, msg_asset_id},
+    context::{*},
     hash::*,
-    result::*,
-    revert::revert,
     storage::*,
     token::*,
     u128::U128,
@@ -74,8 +71,8 @@ fn calculate_amount_with_fee(amount: u64) -> u64 {
 }
 
 fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
-    let calculation = (~U128::from(0, a) * ~U128::from(0, b));
-    let result_wrapped = (calculation / ~U128::from(0, c)).as_u64();
+    let calculation = (U128::from((0, a)) * U128::from((0, b)));
+    let result_wrapped = (calculation / U128::from((0, c))).as_u64();
 
     // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
     match result_wrapped {
@@ -84,8 +81,8 @@ fn mutiply_div(a: u64, b: u64, c: u64) -> u64 {
 }
 
 fn div_mutiply(a: u64, b: u64, c: u64) -> u64 {
-    let calculation = (~U128::from(0, a) / ~U128::from(0, b));
-    let result_wrapped = (calculation * ~U128::from(0, c)).as_u64();
+    let calculation = (U128::from((0, a)) / U128::from((0, b)));
+    let result_wrapped = (calculation * U128::from((0, c))).as_u64();
 
     // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
     match result_wrapped {
@@ -97,8 +94,8 @@ fn div_mutiply(a: u64, b: u64, c: u64) -> u64 {
 fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -> u64 {
     assert(input_reserve > 0 && output_reserve > 0);
     let input_amount_with_fee: u64 = calculate_amount_with_fee(input_amount);
-    let numerator = ~U128::from(0, input_amount_with_fee) * ~U128::from(0, output_reserve);
-    let denominator = ~U128::from(0, input_reserve) + ~U128::from(0, input_amount_with_fee);
+    let numerator = U128::from((0, input_amount_with_fee)) * U128::from((0, output_reserve));
+    let denominator = U128::from((0, input_reserve)) + U128::from((0, input_amount_with_fee));
     let result_wrapped = (numerator / denominator).as_u64();
     // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
     match result_wrapped {
@@ -109,12 +106,12 @@ fn get_input_price(input_amount: u64, input_reserve: u64, output_reserve: u64) -
 /// Pricing function for converting between ETH and Tokens.
 fn get_output_price(output_amount: u64, input_reserve: u64, output_reserve: u64) -> u64 {
     assert(input_reserve > 0 && output_reserve > 0);
-    let numerator = ~U128::from(0, input_reserve) * ~U128::from(0, output_amount);
-    let denominator = ~U128::from(0, calculate_amount_with_fee(output_reserve - output_amount));
+    let numerator = U128::from((0, input_reserve)) * U128::from((0, output_amount));
+    let denominator = U128::from((0, calculate_amount_with_fee(output_reserve - output_amount)));
     let result_wrapped = (numerator / denominator).as_u64();
     if denominator > numerator {
         // Emulate Infinity Value
-        ~u64::max()
+        u64::max()
     } else {
         // TODO remove workaround once https://github.com/FuelLabs/sway/pull/1671 lands.
         match result_wrapped {
@@ -225,8 +222,8 @@ impl Exchange for Contract {
 
         let total_liquidity = storage.lp_token_supply;
 
-        let current_eth_amount = storage.deposits.get((sender, ~ContractId::from(ETH_ID)));
-        let current_token_amount = storage.deposits.get((sender, ~ContractId::from(get::<b256>(TOKEN_ID_KEY))));
+        let current_eth_amount = storage.deposits.get((sender, ContractId::from(ETH_ID)));
+        let current_token_amount = storage.deposits.get((sender, ContractId::from(get::<b256>(TOKEN_ID_KEY))));
 
         assert(current_eth_amount > 0);
 
@@ -256,13 +253,13 @@ impl Exchange for Contract {
                 // If user sent more than the correct ratio, we deposit back the extra tokens
                 let token_extra = current_token_amount - token_amount;
                 if (token_extra > 0) {
-                    transfer_to_address(token_extra, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+                    transfer_to_address(token_extra, ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
                 }
 
                 minted = liquidity_minted;
             } else {
-                transfer_to_address(current_token_amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
-                transfer_to_address(current_eth_amount, ~ContractId::from(ETH_ID), sender);
+                transfer_to_address(current_token_amount, ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+                transfer_to_address(current_eth_amount, ContractId::from(ETH_ID), sender);
                 minted = 0;
             }
         } else {
@@ -284,8 +281,8 @@ impl Exchange for Contract {
         };
 
         // Clear user contract balances after finishing add/create liquidity
-        storage.deposits.insert((sender, ~ContractId::from(get::<b256>(TOKEN_ID_KEY))), 0);
-        storage.deposits.insert((sender, ~ContractId::from(ETH_ID)), 0);
+        storage.deposits.insert((sender, ContractId::from(get::<b256>(TOKEN_ID_KEY))), 0);
+        storage.deposits.insert((sender, ContractId::from(ETH_ID)), 0);
 
         minted
     }
@@ -317,8 +314,8 @@ impl Exchange for Contract {
         remove_reserve(ETH_ID, eth_amount);
 
         // Send tokens back
-        transfer_to_address(eth_amount, ~ContractId::from(ETH_ID), sender);
-        transfer_to_address(token_amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+        transfer_to_address(eth_amount, ContractId::from(ETH_ID), sender);
+        transfer_to_address(token_amount, ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
 
         RemoveLiquidityInfo {
             eth_amount: eth_amount,
@@ -344,7 +341,7 @@ impl Exchange for Contract {
         if (asset_id == ETH_ID) {
             let tokens_bought = get_input_price(forwarded_amount, eth_reserve, token_reserve);
             assert(tokens_bought >= min);
-            transfer_to_address(tokens_bought, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+            transfer_to_address(tokens_bought, ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
             bought = tokens_bought;
             // Update reserve
             add_reserve(ETH_ID, forwarded_amount);
@@ -352,7 +349,7 @@ impl Exchange for Contract {
         } else {
             let eth_bought = get_input_price(forwarded_amount, token_reserve, eth_reserve);
             assert(eth_bought >= min);
-            transfer_to_address(eth_bought, ~ContractId::from(ETH_ID), sender);
+            transfer_to_address(eth_bought, ContractId::from(ETH_ID), sender);
             bought = eth_bought;
             // Update reserve
             remove_reserve(ETH_ID, eth_bought);
@@ -380,9 +377,9 @@ impl Exchange for Contract {
             assert(forwarded_amount >= eth_sold);
             let refund = forwarded_amount - eth_sold;
             if refund > 0 {
-                transfer_to_address(refund, ~ContractId::from(ETH_ID), sender);
+                transfer_to_address(refund, ContractId::from(ETH_ID), sender);
             };
-            transfer_to_address(amount, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+            transfer_to_address(amount, ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
             sold = eth_sold;
             // Update reserve
             add_reserve(ETH_ID, eth_sold);
@@ -392,9 +389,9 @@ impl Exchange for Contract {
             assert(forwarded_amount >= tokens_sold);
             let refund = forwarded_amount - tokens_sold;
             if refund > 0 {
-                transfer_to_address(refund, ~ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
+                transfer_to_address(refund, ContractId::from(get::<b256>(TOKEN_ID_KEY)), sender);
             };
-            transfer_to_address(amount, ~ContractId::from(ETH_ID), sender);
+            transfer_to_address(amount, ContractId::from(ETH_ID), sender);
             sold = tokens_sold;
             // Update reserve
             remove_reserve(ETH_ID, amount);

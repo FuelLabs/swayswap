@@ -94,5 +94,8 @@
         "react-dom"
       ]
     }
+  },
+  "dependencies": {
+    "fuels": "0.29.1"
   }
 }
