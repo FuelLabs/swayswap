@@ -1,4 +1,4 @@
-import type { Wallet } from 'fuels';
+import type { FuelWalletLocked } from '@fuel-wallet/sdk';
 import { bn } from 'fuels';
 
 import { CONTRACT_ID } from '~/config';
@@ -7,7 +7,7 @@ import { getOverrides } from '~/systems/Core/utils/gas';
 import { ExchangeContractAbi__factory } from '~/types/contracts';
 
 export async function addLiquidity(
-  wallet: Wallet,
+  wallet: FuelWalletLocked,
   fromAmount: string,
   toAmount: string,
   fromAsset: string,

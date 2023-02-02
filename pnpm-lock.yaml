@@ -74,7 +74,7 @@ importers:
       '@fuel-ts/wallet-manager': 0.29.1
       '@fuel-ui/css': ^0.12.0
       '@fuel-ui/react': ^0.12.0
-      '@fuel-wallet/sdk': 0.5.0-next-c2a82f8
+      '@fuel-wallet/sdk': 0.5.1
       '@headlessui/react': ^1.6.5
       '@jest/globals': ^28.1.1
       '@radix-ui/react-accordion': ^0.1.6
@@ -158,7 +158,7 @@ importers:
       '@fuel-ts/wallet-manager': 0.29.1
       '@fuel-ui/css': 0.12.0
       '@fuel-ui/react': 0.12.0_ragfnvbjuezmupbzbcltcxk5ci
-      '@fuel-wallet/sdk': 0.5.0-next-c2a82f8_fuels@0.29.1
+      '@fuel-wallet/sdk': 0.5.1_fuels@0.29.1
       '@headlessui/react': 1.7.2_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-accordion': 0.1.6_react@18.2.0
       '@radix-ui/react-alert-dialog': 0.1.7_rj7ozvcq3uehdlnj3cbwzbi5ce
@@ -2510,13 +2510,13 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@fuel-wallet/sdk/0.5.0-next-c2a82f8_fuels@0.29.1:
-    resolution: {integrity: sha512-JMhXD/EYsRNswPRCJRheqUuLzRLz7Dg167LCbGrqP3acDYqrjsf4FuU3KejvnxfptSfYrdy39OrLzs+4Qv2WcA==}
+  /@fuel-wallet/sdk/0.5.1_fuels@0.29.1:
+    resolution: {integrity: sha512-wak1ZUR3665ONdNYFF4TTNMsE89U1uteuzZA8MTtR7QdOnfqOLr4z4/hIDw+B1JtPtX8agi/nP2fmcGbL4bDbA==}
     peerDependencies:
       fuels: '>=0.29.1'
     dependencies:
-      '@types/chrome': 0.0.208
-      dexie-observable: 4.0.0-beta.13
+      '@types/chrome': 0.0.210
+      dexie-observable: 4.0.1-beta.13
       events: 3.3.0
       fuels: 0.29.1
       json-rpc-2.0: 1.4.2
@@ -7057,8 +7057,8 @@ packages:
       '@types/node': 18.7.23
     dev: false
 
-  /@types/chrome/0.0.208:
-    resolution: {integrity: sha512-VDU/JnXkF5qaI7WBz14Azpa2VseZTgML0ia/g/B1sr9OfdOnHiH/zZ7P7qCDqxSlkqJh76/bPc8jLFcx8rHJmw==}
+  /@types/chrome/0.0.210:
+    resolution: {integrity: sha512-VSjQu1k6a/rAfuqR1Gi/oxHZj4+t6+LG+GobNI3ZWI6DQ+fmphNSF6TrLHG6BYK2bXc9Gb4c1uXFKRRVLaGl5Q==}
     dependencies:
       '@types/filesystem': 0.0.32
       '@types/har-format': 1.2.10
@@ -9179,10 +9179,10 @@ packages:
       defined: 1.0.0
       minimist: 1.2.6
 
-  /dexie-observable/4.0.0-beta.13:
-    resolution: {integrity: sha512-p1/0W8Dx+KNrm2TF2JppBuRrE9I6k8/1mBZ6OgTqW85O+FQJu7zBh7k6YwK0FmjP7eBcK+AbxdlvfD5DKXLPag==}
+  /dexie-observable/4.0.1-beta.13:
+    resolution: {integrity: sha512-axmgPk7yjoPwj+0DdQIE5s1MBXi+6XcIFIjBKdQAmSGpsLQSth/LHvMOQ3q3Wj6pwIE5hqIxg2GL75sVqQbhEw==}
     peerDependencies:
-      dexie: ^3.0.2 || ^4.0.0-alpha.1
+      dexie: ^3.0.2 || ^4.0.1-alpha.5
     dev: false
 
   /didyoumean/1.2.2:

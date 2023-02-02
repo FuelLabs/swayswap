@@ -1,10 +1,10 @@
+import type { FuelWalletLocked } from "@fuel-wallet/sdk";
 import {
   screen,
   renderWithRouter,
   waitFor,
   fireEvent,
 } from "@swayswap/test-utils";
-import type { Wallet } from "fuels";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
 import * as poolQueries from "../utils/queries";
@@ -18,10 +18,10 @@ import {
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
 import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
 
-let wallet: Wallet;
+let wallet: FuelWalletLocked;
 
-beforeAll(() => {
-  wallet = createWallet();
+beforeAll(async () => {
+  wallet = await createWallet();
   mockUseWallet(wallet);
 });
 

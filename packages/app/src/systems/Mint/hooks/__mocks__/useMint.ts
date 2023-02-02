@@ -1,10 +1,10 @@
-import type { Wallet } from 'fuels';
+import type { FuelWalletLocked } from '@fuel-wallet/sdk';
 
 import { TOKEN_ID } from '~/config';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import { TokenContractAbi__factory } from '~/types/contracts';
 
-export async function mint(wallet: Wallet) {
+export async function mint(wallet: FuelWalletLocked) {
   const contract = TokenContractAbi__factory.connect(TOKEN_ID, wallet);
   return contract.functions
     .mint()

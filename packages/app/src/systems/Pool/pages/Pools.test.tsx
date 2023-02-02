@@ -1,5 +1,5 @@
+import type { FuelWalletLocked } from "@fuel-wallet/sdk";
 import { screen, renderWithRouter } from "@swayswap/test-utils";
-import type { Wallet } from "fuels";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
 
@@ -9,10 +9,10 @@ import {
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 
-let wallet: Wallet;
+let wallet: FuelWalletLocked;
 
-beforeAll(() => {
-  wallet = createWallet();
+beforeAll(async () => {
+  wallet = await createWallet();
   mockUseWallet(wallet);
 });
 

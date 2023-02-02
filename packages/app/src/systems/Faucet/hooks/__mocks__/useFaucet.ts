@@ -1,8 +1,8 @@
-import type { Wallet } from 'fuels';
+import type { WalletLocked } from '@fuel-ts/wallet';
 
 import { fetchFaucet } from '../useFaucet';
 
-export async function faucet(wallet: Wallet, times = 2) {
+export async function faucet(wallet: WalletLocked, times = 2) {
   const range = Array.from({ length: times });
   await range.reduce(async (promise) => {
     await promise;

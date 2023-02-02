@@ -16,9 +16,9 @@ export const useWallet = () => {
       if (!isConnected) {
         await fuel.connect();
       }
-      const selectedAccount = (await fuel.currentAccount()) as string;
-      const selectedWallet = await fuel.getWallet(selectedAccount);
-      return selectedWallet;
+      const currentAccount = await fuel.currentAccount();
+      const currentWallet = await fuel.getWallet(currentAccount);
+      return currentWallet;
     },
     {
       enabled: !!fuel,

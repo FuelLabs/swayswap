@@ -1,4 +1,5 @@
 import "cross-fetch/polyfill";
+import type { FuelWalletLocked } from "@fuel-wallet/sdk";
 import {
   fireEvent,
   renderWithRouter,
@@ -6,7 +7,6 @@ import {
   waitFor,
 } from "@swayswap/test-utils";
 import Decimal from "decimal.js";
-import type { Wallet } from "fuels";
 
 import * as poolHelpers from "../../Pool/utils/helpers";
 import * as swapHelpers from "../utils/helpers";
@@ -38,7 +38,7 @@ async function clickOnMaxBalance(input: "from" | "to" = "from") {
 }
 
 async function createAndMockWallet() {
-  const wallet = createWallet();
+  const wallet = await createWallet();
   mockUseWallet(wallet);
   return wallet;
 }
@@ -78,7 +78,7 @@ async function getETHBalance() {
 }
 
 describe("SwapPage", () => {
-  let wallet: Wallet;
+  let wallet: FuelWalletLocked;
 
   beforeAll(async () => {
     wallet = await createAndMockWallet();

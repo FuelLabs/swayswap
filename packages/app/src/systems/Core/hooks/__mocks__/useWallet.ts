@@ -1,12 +1,14 @@
 import type { FuelWalletLocked } from '@fuel-wallet/sdk';
-import { Wallet } from 'fuels';
 
 import * as useWallet from '../useWallet';
 
-import { FUEL_PROVIDER_URL } from '~/config';
+import { MockConnection } from './MockConnection';
 
-export function createWallet() {
-  return Wallet.generate({ provider: FUEL_PROVIDER_URL });
+export async function createWallet() {
+  const mockFuel = MockConnection.start();
+  const currentAccount = await mockFuel.currentAccount();
+  const wallet = await mockFuel.getWallet(currentAccount);
+  return wallet;
 }
 
 export function mockUseWallet(wallet: FuelWalletLocked) {
