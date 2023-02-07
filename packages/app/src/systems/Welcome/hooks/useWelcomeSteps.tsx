@@ -14,10 +14,10 @@ export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
 export const LOCALSTORAGE_AGREEMENT_KEY = "fuel--agreement";
 
 export const STEPS = [
-  { id: 0, path: Pages["welcome.createWallet"] },
-  { id: 1, path: Pages["welcome.addFunds"] },
-  { id: 2, path: Pages["welcome.done"] },
-  { id: 3, path: null },
+  // { id: 0, path: Pages["welcome.createWallet"] },
+  // { id: 1, path: Pages["welcome.addFunds"] },
+  { id: 0, path: Pages["welcome.done"] },
+  { id: 1, path: null },
 ];
 
 export function getAgreement() {
@@ -88,44 +88,44 @@ const welcomeStepsMachine = createMachine<MachineContext>({
           target: "finished",
           cond: (ctx) => Boolean(ctx.wallet && !ctx.current.id),
         },
-        {
-          target: "creatingWallet",
-          cond: (ctx) => ctx.current.id === 0,
-        },
-        {
-          target: "addingFunds",
-          cond: (ctx) => ctx.current.id === 1,
-        },
+        // {
+        //   target: "creatingWallet",
+        //   cond: (ctx) => ctx.current.id === 0,
+        // },
+        // {
+        //   target: "addingFunds",
+        //   cond: (ctx) => ctx.current.id === 1,
+        // },
         {
           target: "done",
           cond: (ctx) =>
-            ctx.current.id === 2 ||
-            (ctx.current.id >= 2 && !ctx.acceptAgreement),
+            ctx.current.id === 0 ||
+            (ctx.current.id >= 0 && !ctx.acceptAgreement),
         },
         {
-          cond: (ctx) => ctx.current.id === 3 && ctx.acceptAgreement,
+          cond: (ctx) => ctx.current.id === 1 && ctx.acceptAgreement,
           target: "finished",
         },
       ],
     },
-    creatingWallet: {
-      entry: [assignCurrent(0), "navigateTo"],
-      on: {
-        NEXT: {
-          target: "addingFunds",
-        },
-      },
-    },
-    addingFunds: {
-      entry: [assignCurrent(1), "navigateTo"],
-      on: {
-        NEXT: {
-          target: "done",
-        },
-      },
-    },
+    // creatingWallet: {
+    //   entry: [assignCurrent(0), "navigateTo"],
+    //   on: {
+    //     NEXT: {
+    //       target: "addingFunds",
+    //     },
+    //   },
+    // },
+    // addingFunds: {
+    //   entry: [assignCurrent(1), "navigateTo"],
+    //   on: {
+    //     NEXT: {
+    //       target: "done",
+    //     },
+    //   },
+    // },
     done: {
-      entry: [assignCurrent(2), "navigateTo"],
+      entry: [assignCurrent(0), "navigateTo"],
       on: {
         ACCEPT_AGREEMENT: {
           actions: ["acceptAgreement"],
@@ -136,7 +136,7 @@ const welcomeStepsMachine = createMachine<MachineContext>({
       },
     },
     finished: {
-      entry: assignCurrent(3),
+      entry: assignCurrent(1),
       type: "final",
     },
   },

@@ -27,10 +27,10 @@ export function WelcomeSidebarBullet() {
           y: 0,
           x: 6,
         },
-        third: {
-          y: 65,
-          x: 6,
-        },
+        // third: {
+        //   y: 65,
+        //   x: 6,
+        // },
       }}
       transition={{
         ease: "easeOut",

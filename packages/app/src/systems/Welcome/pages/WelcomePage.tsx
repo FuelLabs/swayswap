@@ -2,13 +2,7 @@ import { useSelector } from "@xstate/react";
 import { AnimatePresence } from "framer-motion";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 
-import {
-  WelcomeSidebar,
-  CreateWallet,
-  AddFunds,
-  WelcomeDone,
-  StepsIndicator,
-} from "../components";
+import { WelcomeSidebar, WelcomeDone, StepsIndicator } from "../components";
 import { useWelcomeSteps, stepsSelectors } from "../hooks";
 
 import { useBreakpoint } from "~/systems/Core";
@@ -30,11 +24,11 @@ export function WelcomePage() {
       <section className="welcomePage--content">
         <AnimatePresence exitBeforeEnter>
           <Routes key={location.pathname} location={location}>
-            <Route
+            {/* <Route
               path={Pages["welcome.createWallet"]}
               element={<CreateWallet />}
             />
-            <Route path={Pages["welcome.addFunds"]} element={<AddFunds />} />
+            <Route path={Pages["welcome.addFunds"]} element={<AddFunds />} /> */}
             <Route path={Pages["welcome.done"]} element={<WelcomeDone />} />
           </Routes>
         </AnimatePresence>
