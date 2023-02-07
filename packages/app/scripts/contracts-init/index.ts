@@ -15,7 +15,7 @@ if (!WALLET_SECRET) {
 }
 
 async function main() {
-  const wallet = new Wallet(WALLET_SECRET!, PROVIDER_URL);
+  const wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   const exchangeContract = ExchangeContractAbi__factory.connect(VITE_CONTRACT_ID!, wallet);
   const tokenContract = TokenContractAbi__factory.connect(VITE_TOKEN_ID!, wallet);
   const overrides = {

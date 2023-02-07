@@ -1,5 +1,5 @@
 import cx from "classnames";
-import type { NumericFormatProps } from "react-number-format";
+import type { NumberFormatProps } from "react-number-format";
 import NumberFormat from "react-number-format";
 
 import type { Maybe } from "~/types";
@@ -9,7 +9,7 @@ const style = {
   transferPropInput: `bg-transparent placeholder:text-gray-300 outline-none w-full`,
 };
 
-export type NumberInputProps = Omit<NumericFormatProps, "onChange"> & {
+export type NumberInputProps = Omit<NumberFormatProps, "onChange"> & {
   disabled?: boolean;
   value?: number | Maybe<string>;
   onChange?: (value: string) => void;
@@ -31,7 +31,7 @@ export function NumberInput({
         placeholder={placeholder}
         thousandSeparator={thousandSeparator}
         displayType={disabled ? "text" : "input"}
-        onValueChange={(e) => onChange?.(e.value)}
+        onValueChange={(e: any) => onChange?.(e.value)} // @eslint-disable-line @typescript-eslint/no-explicit-any
         className={style.transferPropInput}
       />
     </div>
