@@ -53,7 +53,7 @@ export function MainLayout({ children }: MainLayoutProps) {
               children
             )}
           </ErrorBoundary>
-          {wallet && !ctx?.justContent && <ActionsWidget />}
+          {/* {wallet && !ctx?.justContent && <ActionsWidget />} */}
         </div>
       </main>
     </>

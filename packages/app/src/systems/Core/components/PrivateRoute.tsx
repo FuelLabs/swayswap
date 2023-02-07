@@ -10,7 +10,7 @@ export function PrivateRoute({ children }: { children: ReactNode }) {
   const current = getCurrent();
   const acceptAgreement = getAgreement();
   const { wallet } = useWallet();
-  if ((current.id > 2 && acceptAgreement) || (wallet && !current.id)) {
+  if ((current.id > 0 && acceptAgreement) || (wallet && !current.id)) {
     return <>{children}</>;
   }
   return <Navigate to={Pages.welcome} replace />;

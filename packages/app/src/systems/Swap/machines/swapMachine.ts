@@ -350,6 +350,7 @@ export const swapMachine =
           return txCost || emptyTransactionCost();
         },
         fetchPoolRatio: async (ctx) => {
+          console.log('ctx: ', ctx);
           if (!ctx.contract) {
             throw new Error('Contract not found');
           }
