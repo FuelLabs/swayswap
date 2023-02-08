@@ -1,4 +1,4 @@
-import type { BN, CoinQuantity, Wallet } from 'fuels';
+import type { BN, CoinQuantity, WalletLocked } from 'fuels';
 import type { QueryClient } from 'react-query';
 
 import type { TransactionCost } from '../Core/utils/gas';
@@ -22,7 +22,7 @@ export enum SwapDirection {
 
 export type SwapMachineContext = {
   client?: QueryClient;
-  wallet?: Maybe<Wallet>;
+  wallet?: Maybe<WalletLocked>;
   contract: Maybe<ExchangeContractAbi>;
   balances?: Maybe<CoinQuantity[]>;
   direction: SwapDirection;

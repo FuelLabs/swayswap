@@ -107,7 +107,6 @@ export function SwapProvider({ children }: SwapProviderProps) {
   const { wallet } = useWallet();
   const contract = useContract();
   const slippage = useSlippage();
-
   const service = useInterpret(swapMachine, {
     context: {
       client,
@@ -122,6 +121,18 @@ export function SwapProvider({ children }: SwapProviderProps) {
     } as SwapMachineContext,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any);
+  const isIdleState = useSelector(service, (s) => s.matches("idle"));
+
+  useEffect(() => {
+    if (!wallet || !contract || !isIdleState) return;
+    service.send({
+      type: "INITIALIZE_SWAP",
+      data: {
+        wallet,
+        contract,
+      },
+    });
+  }, [wallet, contract, isIdleState]);
 
   if (IS_DEVELOPMENT) {
     serviceMap.set("service", service);
