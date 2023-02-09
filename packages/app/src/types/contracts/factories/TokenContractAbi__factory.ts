@@ -100,6 +100,12 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
     {
       inputs: [],
@@ -109,6 +115,7 @@ const _abi = {
         type: 5,
         typeArguments: null,
       },
+      attributes: null,
     },
     {
       inputs: [],
@@ -118,6 +125,12 @@ const _abi = {
         type: 5,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
     {
       inputs: [
@@ -133,6 +146,7 @@ const _abi = {
         type: 5,
         typeArguments: null,
       },
+      attributes: null,
     },
     {
       inputs: [
@@ -153,6 +167,12 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [],
@@ -162,6 +182,12 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [
@@ -177,6 +203,12 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
     {
       inputs: [
@@ -192,6 +224,12 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [
@@ -212,6 +250,12 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
     {
       inputs: [
@@ -237,6 +281,12 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
   ],
   loggedTypes: [
@@ -306,6 +356,7 @@ const _abi = {
     },
   ],
   messagesTypes: [],
+  configurables: [],
 };
 
 export class TokenContractAbi__factory {

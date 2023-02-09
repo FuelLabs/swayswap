@@ -177,6 +177,12 @@ const _abi = {
         type: 9,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [],
@@ -186,6 +192,12 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [
@@ -206,6 +218,12 @@ const _abi = {
         type: 6,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
     {
       inputs: [
@@ -221,6 +239,12 @@ const _abi = {
         type: 9,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
     {
       inputs: [],
@@ -230,6 +254,12 @@ const _abi = {
         type: 4,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
     {
       inputs: [
@@ -245,6 +275,12 @@ const _abi = {
         type: 5,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
     },
     {
       inputs: [
@@ -260,6 +296,12 @@ const _abi = {
         type: 7,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [
@@ -275,6 +317,12 @@ const _abi = {
         type: 7,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [
@@ -300,6 +348,12 @@ const _abi = {
         type: 8,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [
@@ -320,6 +374,12 @@ const _abi = {
         type: 9,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [
@@ -340,6 +400,12 @@ const _abi = {
         type: 9,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
     {
       inputs: [
@@ -360,10 +426,17 @@ const _abi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
     },
   ],
   loggedTypes: [],
   messagesTypes: [],
+  configurables: [],
 };
 
 export class ExchangeContractAbi__factory {
