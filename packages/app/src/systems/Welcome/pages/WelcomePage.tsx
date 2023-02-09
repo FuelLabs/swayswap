@@ -13,7 +13,6 @@ export function WelcomePage() {
   const isFinished = useSelector(service, stepsSelectors.isFinished);
   const location = useLocation();
   const breakpoint = useBreakpoint();
-
   if (isFinished) {
     return <Navigate to={Pages.swap} replace />;
   }
@@ -24,11 +23,6 @@ export function WelcomePage() {
       <section className="welcomePage--content">
         <AnimatePresence exitBeforeEnter>
           <Routes key={location.pathname} location={location}>
-            {/* <Route
-              path={Pages["welcome.createWallet"]}
-              element={<CreateWallet />}
-            />
-            <Route path={Pages["welcome.addFunds"]} element={<AddFunds />} /> */}
             <Route path={Pages["welcome.done"]} element={<WelcomeDone />} />
           </Routes>
         </AnimatePresence>

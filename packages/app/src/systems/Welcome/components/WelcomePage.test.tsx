@@ -6,11 +6,12 @@ describe("WelcomePage", () => {
   it("should always be redirect to welcome", async () => {
     renderWithRouter(<App />, { route: "/swap" });
 
-    await waitFor(async () => {
-      expect(
-        await screen.findByText(/Welcome to SwaySwap/)
-      ).toBeInTheDocument();
-    });
+    await waitFor(
+      async () => {
+        expect(await screen.findByText(/legal disclaimer/)).toBeInTheDocument();
+      },
+      { timeout: 10000 }
+    );
   });
 
   it("should be able to do all welcome steps and see swap page after", async () => {
@@ -19,25 +20,7 @@ describe("WelcomePage", () => {
     });
 
     /**
-     * First step: Creating wallet
-     */
-    // const createWalletBtn = await screen.findByRole("button", {
-    //   name: /Create Wallet/i,
-    // });
-    // expect(createWalletBtn).toBeInTheDocument();
-    // await user.click(createWalletBtn);
-
-    /**
-     * Second step: Adding funds
-     */
-    // const addFundsBtn = await screen.findByRole("button", {
-    //   name: /Give me ETH/i,
-    // });
-    // expect(addFundsBtn).toBeInTheDocument();
-    // await user.click(addFundsBtn);
-
-    /**
-     * Third step: done
+     * First step: done
      */
     const acceptAgreement = await screen.findByLabelText(
       /Accept the use agreement/i

@@ -321,9 +321,7 @@ export const addLiquidityMachine =
             coinTo,
             transactionCost.total
           );
-          console.log('before call');
           const { value, transactionResult } = await addLiquidityCall.call<[void, void, BN]>();
-          console.log('after call');
           return {
             amount: value[2],
             transactionResult,

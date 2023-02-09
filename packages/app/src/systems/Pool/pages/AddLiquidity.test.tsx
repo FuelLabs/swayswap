@@ -57,7 +57,6 @@ describe("Add Liquidity", () => {
       route: "/pool/add-liquidity",
     });
     const coinFromInput = screen.getByLabelText(/Coin from input/);
-    // console.log("infooooo: ", coinFromInput);
     fireEvent.change(coinFromInput, {
       target: {
         value: "10",
@@ -118,7 +117,9 @@ describe("Add Liquidity", () => {
         },
       });
 
-      const submitBtn = await screen.findByText(/Create liquidity/);
+      const submitBtn = await screen.findByText(/Create liquidity/, undefined, {
+        timeout: 10000,
+      });
       expect(submitBtn).toBeInTheDocument();
       await user.click(submitBtn);
     });

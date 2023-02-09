@@ -14,8 +14,6 @@ export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
 export const LOCALSTORAGE_AGREEMENT_KEY = "fuel--agreement";
 
 export const STEPS = [
-  // { id: 0, path: Pages["welcome.createWallet"] },
-  // { id: 1, path: Pages["welcome.addFunds"] },
   { id: 0, path: Pages["welcome.done"] },
   { id: 1, path: null },
 ];
@@ -88,14 +86,6 @@ const welcomeStepsMachine = createMachine<MachineContext>({
           target: "finished",
           cond: (ctx) => Boolean(ctx.wallet && !ctx.current.id),
         },
-        // {
-        //   target: "creatingWallet",
-        //   cond: (ctx) => ctx.current.id === 0,
-        // },
-        // {
-        //   target: "addingFunds",
-        //   cond: (ctx) => ctx.current.id === 1,
-        // },
         {
           target: "done",
           cond: (ctx) =>
@@ -108,22 +98,6 @@ const welcomeStepsMachine = createMachine<MachineContext>({
         },
       ],
     },
-    // creatingWallet: {
-    //   entry: [assignCurrent(0), "navigateTo"],
-    //   on: {
-    //     NEXT: {
-    //       target: "addingFunds",
-    //     },
-    //   },
-    // },
-    // addingFunds: {
-    //   entry: [assignCurrent(1), "navigateTo"],
-    //   on: {
-    //     NEXT: {
-    //       target: "done",
-    //     },
-    //   },
-    // },
     done: {
       entry: [assignCurrent(0), "navigateTo"],
       on: {
@@ -182,7 +156,7 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
       .withConfig({
         actions: {
           navigateTo: (context) => {
-            if (context.current.id > 2) return;
+            if (context.current.id > 0) return;
             navigate(`/welcome/${context.current.path}`);
           },
           acceptAgreement: assign((context, event) => {

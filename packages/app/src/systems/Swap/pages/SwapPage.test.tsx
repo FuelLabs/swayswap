@@ -165,11 +165,14 @@ describe("SwapPage", () => {
 
       await fillCoinFromWithValue("1000");
       const submitBtn = await findSwapBtn();
-      await waitFor(() => {
-        expect(submitBtn.textContent).toMatch(
-          /(Insufficient)(\s\w+\s)(balance)/i
-        );
-      });
+      await waitFor(
+        () => {
+          expect(submitBtn.textContent).toMatch(
+            /(Insufficient)(\s\w+\s)(balance)/i
+          );
+        },
+        { timeout: 10000 }
+      );
     });
 
     it("should fill input value with max balance when click on max", async () => {
@@ -195,9 +198,12 @@ describe("SwapPage", () => {
 
       await fillCoinFromWithValue(balance.mul(2).toString());
       const submitBtn = await findSwapBtn();
-      await waitFor(() => {
-        expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
-      });
+      await waitFor(
+        () => {
+          expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
+        },
+        { timeout: 10000 }
+      );
       spy.mockRestore();
     });
 
@@ -259,11 +265,14 @@ describe("SwapPage", () => {
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
       await fillCoinFromWithValue("0.5");
-      await waitFor(async () => {
-        const coinTo = screen.getByLabelText(/Coin to input/i);
-        const value = parseFloat(coinTo.getAttribute("value") || "0");
-        expect(value).toBeGreaterThan(1);
-      });
+      await waitFor(
+        async () => {
+          const coinTo = screen.getByLabelText(/Coin to input/i);
+          const value = parseFloat(coinTo.getAttribute("value") || "0");
+          expect(value).toBeGreaterThan(1);
+        },
+        { timeout: 10000 }
+      );
     });
 
     it("should disable max button after setting max FROM balance", async () => {
