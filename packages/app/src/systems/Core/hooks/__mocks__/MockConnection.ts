@@ -62,7 +62,9 @@ export class MockConnection extends BaseConnection {
   }
 
   async sendTransaction(params: { address: string; transaction: string; message: string }) {
-    const transaction = transactionRequestify(JSON.parse(params.transaction));
+    console.log('infooo: ', params);
+    const transactionInput = params.transaction ? JSON.parse(params.transaction) : params;
+    const transaction = transactionRequestify(transactionInput);
     const response = await userWallet.sendTransaction(transaction);
     return response.id;
   }
