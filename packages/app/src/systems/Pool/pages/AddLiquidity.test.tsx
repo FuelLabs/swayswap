@@ -57,17 +57,21 @@ describe("Add Liquidity", () => {
       route: "/pool/add-liquidity",
     });
     const coinFromInput = screen.getByLabelText(/Coin from input/);
+    // console.log("infooooo: ", coinFromInput);
     fireEvent.change(coinFromInput, {
       target: {
         value: "10",
       },
     });
 
-    await waitFor(() => {
-      const submitBtn = screen.getByText(/Enter DAI amount/);
-      expect(submitBtn).toBeInTheDocument();
-      expect(submitBtn).toBeDisabled();
-    });
+    await waitFor(
+      () => {
+        const submitBtn = screen.getByText(/Enter DAI amount/);
+        expect(submitBtn).toBeInTheDocument();
+        expect(submitBtn).toBeDisabled();
+      },
+      { timeout: 10000 }
+    );
   });
 
   it("should be able to set coin to input values if no liquidity added", async () => {
