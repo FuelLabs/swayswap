@@ -77,6 +77,7 @@ importers:
       '@fuel-wallet/sdk': 0.5.1
       '@headlessui/react': ^1.7.10
       '@jest/globals': ^29.4.1
+      '@playwright/test': ^1.30.0
       '@radix-ui/react-accordion': ^1.1.0
       '@radix-ui/react-alert-dialog': ^1.0.2
       '@radix-ui/react-tooltip': ^1.0.3
@@ -210,6 +211,7 @@ importers:
       xstate: 4.35.4
     devDependencies:
       '@jest/globals': 29.4.1
+      '@playwright/test': 1.30.0
       '@react-types/button': 3.7.0_react@18.2.0
       '@react-types/dialog': 3.4.5_react@18.2.0
       '@react-types/link': 3.3.6_react@18.2.0
@@ -3347,6 +3349,15 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
+  /@playwright/test/1.30.0:
+    resolution: {integrity: sha512-SVxkQw1xvn/Wk/EvBnqWIq6NLo1AppwbYOjNLmyU0R1RoQ3rLEBtmjTnElcnz8VEtn11fptj1ECxK0tgURhajw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.11.19
+      playwright-core: 1.30.0
+    dev: true
+
   /@radix-ui/colors/0.1.8:
     resolution: {integrity: sha512-jwRMXYwC0hUo0mv6wGpuw254Pd9p/R6Td5xsRpOmaWkUHlooNWqVcadgyzlRumMq3xfOTXwJReU0Jv+EIy4Jbw==}
     dev: false
@@ -5972,7 +5983,7 @@ packages:
   /@types/graceful-fs/4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.11.19
 
   /@types/har-format/1.2.10:
     resolution: {integrity: sha512-o0J30wqycjF5miWDKYKKzzOU1ZTLuA42HZ4HE7/zqTOc/jTLdQ5NhYWvsRQo45Nfi1KHoRdNhteSI4BAxTF1Pg==}
@@ -6075,6 +6086,7 @@ packages:
 
   /@types/node/17.0.45:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
+    dev: true
 
   /@types/node/18.11.19:
     resolution: {integrity: sha512-YUgMWAQBWLObABqrvx8qKO1enAvBUdjZOAWQ5grBAkp5LQv45jBvYKZ3oFS9iKRCQyFjqw6iuEa1vmFqtxYLZw==}
@@ -13329,6 +13341,12 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       find-up: 4.1.0
+
+  /playwright-core/1.30.0:
+    resolution: {integrity: sha512-7AnRmTCf+GVYhHbLJsGUtskWTE33SwMZkybJ0v6rqR1boxq2x36U7p1vDRV7HO2IwTZgmycracLxPEJI49wu4g==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /pn/1.1.0:
     resolution: {integrity: sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==}

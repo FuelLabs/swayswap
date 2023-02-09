@@ -4,9 +4,9 @@ describe('End-to-end Test: 😁 Happy Path', () => {
 
     cy.contains('button', /Launch app/i).click();
 
-    // create a wallet and fund it
-    cy.contains('button', /Create wallet/i).click();
-    cy.contains('button', 'Give me ETH').click();
+    // // create a wallet and fund it
+    // cy.contains('button', /Create wallet/i).click();
+    // cy.contains('button', 'Give me ETH').click();
     cy.getByAriaLabel('Accept the use agreement').check();
     cy.contains('button', 'Get Swapping!').click();
     cy.contains('Select to token');
