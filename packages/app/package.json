@@ -7,6 +7,7 @@
     "build": "tsc && vite build && pnpm create404",
     "create404": "cp ./dist/index.html ./dist/404.html",
     "dev": "run-p vite xstate:typegen:watch",
+    "dev-test": "vite --port 9000",
     "gh-preview": "sh ./scripts/gh-pages-preview.sh",
     "contracts:init": "pnpm exec ts-node ./scripts/contracts-init",
     "postinstall": "sh ./scripts/postinstall.sh",

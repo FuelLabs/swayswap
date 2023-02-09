@@ -1,12 +1,11 @@
 import '../load.envs';
-import type { BrowserContext, Page } from '@playwright/test';
+import type { BrowserContext } from '@playwright/test';
 
 import { test, expect } from './fixtures';
 
 const MNEMONIC = 'demand fashion unaware upgrade upon heart bright august panel kangaroo want gaze';
-const WALLET_PASSWORD = '123123123';
+const WALLET_PASSWORD = '$123Ran123Dom123!';
 const ACCOUNT1 = 'Account 1';
-const ACCOUNT2 = 'Account 2';
 
 async function walletSetup(context: BrowserContext, extensionId: string) {
   const appPage = await context.newPage();
@@ -45,10 +44,15 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
   // Confirm password
   const confirmPassword = signupPage.locator(`[aria-label="Confirm Password"]`);
   await confirmPassword.type(WALLET_PASSWORD);
+
+  // This is needed to dismiss the password security popup
+  await signupPage.click('body');
+
   // Agree to T&S
-  await signupPage.getByRole('checkbox').click();
+  await signupPage.getByRole('checkbox').check();
+  expect(signupPage.getByRole('checkbox')).toBeChecked();
   await signupPage.locator('button').getByText('Next').click();
-  await signupPage.waitForSelector('text=Wallet created successfully');
+  expect(signupPage.getByText('Wallet created successfully')).toBeVisible();
 
   const connectPagePromise = context.waitForEvent('page');
 
@@ -125,16 +129,16 @@ async function walletApprove(context: BrowserContext) {
 //   await walletPage.waitForSelector('img', { timeout: 10000 });
 // }
 
-async function switchWallet(walletPage: Page, extensionId: string, accountName: string) {
-  // Switch to ACCOUNT1
-  await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
-  await walletPage.waitForSelector('[aria-label="Accounts"]');
-  const accountsButton = walletPage.locator('[aria-label="Accounts"]');
-  await accountsButton.click();
-  const accountButton = walletPage.locator(`[aria-label="${accountName}"]`);
-  await accountButton.waitFor();
-  await accountButton.click();
-}
+// async function switchWallet(walletPage: Page, extensionId: string, accountName: string) {
+//   // Switch to ACCOUNT1
+//   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
+//   await walletPage.waitForSelector('[aria-label="Accounts"]');
+//   const accountsButton = walletPage.locator('[aria-label="Accounts"]');
+//   await accountsButton.click();
+//   const accountButton = walletPage.locator(`[aria-label="${accountName}"]`);
+//   await accountButton.waitFor();
+//   await accountButton.click();
+// }
 
 function getPages(context: BrowserContext) {
   const pages = context.pages();
@@ -148,8 +152,8 @@ test.beforeAll(async ({ context, extensionId }) => {
 });
 
 test.describe('End-to-end Test: 😁 Happy Path', () => {
-  test('e2e', async ({ context, extensionId }) => {
-    const { appPage, walletPage } = getPages(context);
+  test('e2e', async ({ context }) => {
+    const { appPage } = getPages(context);
 
     await appPage.goto('/');
 
@@ -170,6 +174,59 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     expect(appPage.getByText('You do not have any open positions')).toBeTruthy();
     await appPage.locator('button', { hasText: 'Add Liquidity' }).click();
 
+    const addingLiquiditySelector = '[aria-label="pool-reserves"]';
+
+    const hasPoolBeenCreated = await appPage.locator(addingLiquiditySelector).isVisible();
+
+    if (hasPoolBeenCreated) {
+      expect(appPage.getByText('Enter Ether amount')).toBeVisible();
+      await appPage.locator('[aria-label="Coin from input"]').fill('0.2');
+      expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
+      expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
+      await appPage.locator('[aria-label="Add liquidity"]').click();
+    } else {
+      expect(appPage.getByText('Enter Ether amount')).toBeVisible();
+      await appPage.locator('[aria-label="Coin from input"]').fill('0.2');
+      await appPage.locator('[aria-label="Coin to input"]').fill('190');
+      expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
+      expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
+      await appPage.locator('[aria-label="Create liquidity"]').click();
+    }
+
     await walletApprove(context);
+
+    expect(appPage.getByText('ETH/DAI')).toBeVisible();
+
+    // validate swap
+    await appPage.locator('button', { hasText: 'Swap' }).click();
+    expect(appPage.getByText('Select to token')).toBeVisible();
+    await appPage.locator('[aria-label="Coin selector to"]').click();
+    await appPage.locator('[role="menu"]').press('Enter');
+    await appPage.locator('[aria-label="Coin from input"]').fill('0.1');
+
+    expect(appPage.locator('[aria-label="Preview Value Loading"]')).toBeVisible();
+    expect(appPage.locator('[aria-label="Preview Swap Output"]')).toBeVisible();
+
+    await appPage.locator('[aria-label="Swap button"]').click();
+    await walletApprove(context);
+    expect(appPage.getByText('Swap made successfully!')).toBeVisible();
+
+    // validate that a comma can be used as a decimal separator
+    await appPage.locator('[aria-label="Coin from input"]').fill('0,2');
+    expect(appPage.locator('[aria-label="Coin from input"]')).toHaveValue('0.2');
+
+    // validate remove liquidity
+    await appPage.locator('button', { hasText: 'Pool' }).click();
+    await appPage.locator('button', { hasText: 'Remove liquidity' }).click();
+    await appPage.locator('[aria-label="Set Maximum Balance"]').click();
+
+    // make sure preview output box show up
+    expect(appPage.locator('[aria-label="Preview Remove Liquidity Output"]')).toBeVisible();
+
+    // make sure current positions box show up
+    expect(appPage.locator('[aria-label="Pool Current Position"]')).toBeVisible();
+    await appPage.locator('button', { hasText: 'Remove liquidity' }).click();
+    await walletApprove(context);
+    expect(appPage.getByText('Liquidity removed successfully')).toBeVisible();
   });
 });

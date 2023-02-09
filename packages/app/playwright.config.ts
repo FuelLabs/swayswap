@@ -5,7 +5,7 @@ const { E2E_PORT = 9000 } = process.env;
 
 const config: PlaywrightTestConfig = {
   timeout: 120000,
-  testDir: './tests',
+  testDir: './playwright',
   /* Retry on CI only */
   retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on CI. */
