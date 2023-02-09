@@ -119,14 +119,12 @@ export const swapTokens = async (params: SwapMachineContext) => {
       })
       .txParams(
         getOverrides({
-          gasLimit: txCost.total,
           variableOutputs: 2,
         })
       )
       .call();
     return transactionResult;
   }
-
   const { transactionResult } = await contract.functions
     .swap_with_maximum(toAmount.raw, deadline)
     .callParams({
@@ -134,7 +132,6 @@ export const swapTokens = async (params: SwapMachineContext) => {
     })
     .txParams(
       getOverrides({
-        gasLimit: txCost.total,
         variableOutputs: 2,
       })
     )
