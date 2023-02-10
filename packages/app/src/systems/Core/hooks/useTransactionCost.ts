@@ -15,7 +15,7 @@ type UseTransactionCost = TransactionCost & {
 
 export function useTransactionCost(
   queryKey: unknown[],
-  request: ContractCallFunc | ContractCallFuncPromise,
+  request?: ContractCallFunc | ContractCallFuncPromise,
   options?: Omit<UseQueryOptions<TransactionCost>, 'queryKey' | 'queryFn'>
 ): UseTransactionCost {
   const ethBalance = useEthBalance();
@@ -26,7 +26,9 @@ export function useTransactionCost(
 
   const { data, isLoading } = useQuery<TransactionCost>(
     queryKey,
-    async () => getTransactionCost(await request()),
+    async () => {
+      return getTransactionCost(await request!());
+    },
     options
   );
 

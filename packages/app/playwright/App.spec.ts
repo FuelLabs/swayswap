@@ -35,7 +35,7 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
   const pasteButton = signupPage.locator('button').getByText('Paste');
   await pasteButton.click();
 
-  let nextButton = signupPage.locator('button').getByText('Next');
+  const nextButton = signupPage.locator('button').getByText('Next');
   await nextButton.click();
 
   // Enter password
@@ -52,32 +52,18 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
   await signupPage.getByRole('checkbox').check();
   expect(signupPage.getByRole('checkbox')).toBeChecked();
   await signupPage.locator('button').getByText('Next').click();
-  expect(signupPage.getByText('Wallet created successfully')).toBeVisible();
-
-  const connectPagePromise = context.waitForEvent('page');
-
-  // Go back to app page and connect wallet
-  await appPage.goto('/');
-
-  // Connect to wallets
-  const connectPage = await connectPagePromise;
-  await connectPage.waitForLoadState();
-
-  nextButton = connectPage.locator('button').getByText('Next');
-  await nextButton.click();
-
-  const changeButton = connectPage.locator('button').getByText('Change');
-  await changeButton.click();
-
-  const activateAccount1Card = connectPage.locator(`[aria-label="${ACCOUNT1}"]`);
-  const switchButton = activateAccount1Card.getByRole('switch');
-  await switchButton.click();
-
-  nextButton = connectPage.locator('button').getByText('Next');
-  await nextButton.click();
-
-  const connectButton = connectPage.locator('button').getByText('Connect');
-  await connectButton.click();
+  expect(signupPage.getByText('Wallet created successfully'))
+    .toBeVisible()
+    .then(async () => {
+      // Navigate to add network and add test network
+      await walletPage.goto(`chrome-extension://${extensionId}/popup.html#/networks/add`);
+      await walletPage.reload({ waitUntil: 'load' });
+      await walletPage.locator('[aria-label="Network name"]').fill('test');
+      await walletPage
+        .locator('[aria-label="Network URL"]')
+        .fill(process.env.VITE_FUEL_PROVIDER_URL!);
+      await walletPage.locator('button', { hasText: 'Create' }).click();
+    });
 
   return { appPage, walletPage };
 }
@@ -102,44 +88,6 @@ async function walletApprove(context: BrowserContext) {
   await confirmButton.click();
 }
 
-// async function addWallet(walletPage: Page, extensionId: string, accountName: string) {
-//   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
-
-//   await walletPage.waitForSelector('[aria-label="Accounts"]');
-
-//   // First we have to add a second account
-//   const accountsButton = walletPage.locator('[aria-label="Accounts"]');
-//   await accountsButton.click();
-
-//   const addAccountButton = walletPage.locator('[aria-label="Add account"]');
-//   await addAccountButton.click();
-
-//   const accountNameInput = walletPage.locator('[aria-label="Account Name"]');
-//   await accountNameInput.fill(accountName);
-
-//   const accountFormSubmitButton = walletPage.locator('button').getByText('Create');
-//   await accountFormSubmitButton.click();
-
-//   const passwordInput = walletPage.locator('[aria-label="Your Password"]');
-//   await passwordInput.fill(WALLET_PASSWORD);
-
-//   const accountConfirmButton = walletPage.locator('button').getByText('Add Account');
-//   await accountConfirmButton.click();
-
-//   await walletPage.waitForSelector('img', { timeout: 10000 });
-// }
-
-// async function switchWallet(walletPage: Page, extensionId: string, accountName: string) {
-//   // Switch to ACCOUNT1
-//   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
-//   await walletPage.waitForSelector('[aria-label="Accounts"]');
-//   const accountsButton = walletPage.locator('[aria-label="Accounts"]');
-//   await accountsButton.click();
-//   const accountButton = walletPage.locator(`[aria-label="${accountName}"]`);
-//   await accountButton.waitFor();
-//   await accountButton.click();
-// }
-
 function getPages(context: BrowserContext) {
   const pages = context.pages();
   const [walletPage] = pages.filter((page) => page.url().includes('popup'));
@@ -157,15 +105,41 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     await appPage.goto('/');
 
-    await appPage.locator('button', { hasText: 'Launch app' }).click();
+    await appPage.locator('button', { hasText: 'Launch app' }).first().click();
 
-    await appPage.locator('[aria-label="Accept the use agreement"').check();
+    await appPage.locator('[aria-label="Accept the use agreement"]').check();
+    const connectPagePromise = context.waitForEvent('page');
     await appPage.locator('button', { hasText: 'Get Swapping!' }).click();
+
+    // Expect to be taken to swap pages
     expect(appPage.getByText('Select to token')).toBeTruthy();
+
+    // Connect to wallet
+    const connectPage = await connectPagePromise;
+    await connectPage.waitForLoadState();
+
+    let nextButton = connectPage.locator('button').getByText('Next');
+    await nextButton.click();
+
+    const changeButton = connectPage.locator('button').getByText('Change');
+    await changeButton.click();
+
+    const activateAccount1Card = connectPage.locator(`[aria-label="${ACCOUNT1}"]`);
+    const switchButton = activateAccount1Card.getByRole('switch');
+    await switchButton.click();
+
+    nextButton = connectPage.locator('button').getByText('Next');
+    await nextButton.click();
+
+    const connectButton = connectPage.locator('button').getByText('Connect');
+    await connectButton.click();
 
     // mint tokens
     await appPage.goto('/mint');
     await appPage.locator('button', { hasText: 'Mint tokens' }).click();
+
+    await walletApprove(context);
+
     // wait to be redirected to swap page after minting
     expect(appPage.getByText('Select to token')).toBeTruthy();
 

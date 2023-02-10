@@ -1,3 +1,4 @@
+import type { FunctionInvocationScope } from 'fuels';
 import { bn } from 'fuels';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -13,16 +14,26 @@ type UseMintOpts = {
 };
 
 export function useMint(opts: UseMintOpts = {}) {
-  const methods = useTokenMethods(TOKEN_ID);
+  const { methods, isLoading } = useTokenMethods(TOKEN_ID);
   const navigate = useNavigate();
   const balances = useBalances();
-  const txCost = useTransactionCost(['MintPreview--networkFee'], () => methods.queryNetworkFee());
-  const { data: mintAmount } = useQuery(['MintPreview--mintAmount'], () => methods.getMintAmount());
+  const txCost = useTransactionCost(
+    ['MintPreview--networkFee'],
+    () => methods?.queryNetworkFee() as FunctionInvocationScope,
+    {
+      enabled: Boolean(methods && !isLoading),
+    }
+  );
+  const { data: mintAmount } = useQuery(
+    ['MintPreview--mintAmount'],
+    () => methods?.getMintAmount(),
+    { enabled: Boolean(methods && !isLoading) }
+  );
 
   const mutation = useMutation(
     async () => {
       if (txCost.total.isZero()) return;
-      return methods.mint(txCost.total);
+      return methods!.mint(txCost.total);
     },
     { onSuccess: txFeedback('Token received successfully!', handleSuccess) }
   );
