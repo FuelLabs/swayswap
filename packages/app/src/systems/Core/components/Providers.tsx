@@ -16,7 +16,8 @@ type AppProps = {
   children?: ReactNode;
 };
 
-const IS_TEST = process.env.NODE_ENV === "test";
+// const IS_TEST = process.env.NODE_ENV === "test";
+const IS_TEST = false;
 
 export function Providers({ children }: AppProps) {
   return (

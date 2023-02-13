@@ -24,7 +24,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content-script-loader.contentScript.ts-d787f703-1f7a76c4.js"
+        "assets/content-script-loader.contentScript.ts-e188c0b1-4c13defc.js"
       ],
       "matches": [
         "<all_urls>"
@@ -54,10 +54,10 @@
         "<all_urls>"
       ],
       "resources": [
-        "assets/index-00fb7aa5.js",
+        "assets/index-65a4253e.js",
         "assets/constants-dea61167.js",
-        "assets/pageScript-ec221334.js",
-        "assets/contentScript.ts-d787f703.js"
+        "assets/pageScript-5118a58e.js",
+        "assets/contentScript.ts-e188c0b1.js"
       ],
       "use_dynamic_url": true
     },
@@ -67,10 +67,10 @@
         "https://*/*"
       ],
       "resources": [
-        "assets/contentScript.ts-d787f703.js",
-        "assets/index-00fb7aa5.js",
+        "assets/contentScript.ts-e188c0b1.js",
+        "assets/index-65a4253e.js",
         "assets/constants-dea61167.js",
-        "assets/pageScript-ec221334.js"
+        "assets/pageScript-5118a58e.js"
       ],
       "use_dynamic_url": false
     }

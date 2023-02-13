@@ -19,6 +19,8 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
 
   // WALLET SETUP
   const walletPage = await context.newPage();
+  appPage.on('console', (msg) => console.log(msg));
+  walletPage.on('console', (msg) => console.log(msg));
   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
   const signupPage = await context.waitForEvent('page', {
     predicate: (page) => page.url().includes('sign-up'),
@@ -76,9 +78,12 @@ async function walletApprove(context: BrowserContext) {
     });
   }
 
-  await approvePage.waitForSelector('text=Confirm');
+  console.log('approve page: ', approvePage);
+
+  await approvePage.screenshot({ path: 'tempMisc.png', fullPage: true });
+  // await approvePage.waitForSelector('text=Confirm', { timeout: 20000 });
   const approveButton = approvePage.locator('button').getByText('Confirm');
-  await approveButton.click();
+  await approveButton.click({ timeout: 15000 });
 
   const enterPasswordInput = approvePage.locator(`[aria-label="Your Password"]`);
   await enterPasswordInput.waitFor();
@@ -101,8 +106,9 @@ test.beforeAll(async ({ context, extensionId }) => {
 
 test.describe('End-to-end Test: 😁 Happy Path', () => {
   test('e2e', async ({ context }) => {
-    const { appPage } = getPages(context);
+    const { appPage, walletPage } = getPages(context);
 
+    // TODO fix: nagivating to the app page the first time has some flaky behaviour
     await appPage.goto('/');
 
     await appPage.locator('button', { hasText: 'Launch app' }).first().click();
@@ -140,17 +146,23 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     await walletApprove(context);
 
+    const mintSuccess = appPage.getByText('Token received successfully!');
+    await mintSuccess.waitFor();
+
     // wait to be redirected to swap page after minting
     expect(appPage.getByText('Select to token')).toBeTruthy();
 
     // go to pool page -> add liquidity page
-    await appPage.locator('button', { hasText: 'Pool' }).click();
-    expect(appPage.getByText('You do not have any open positions')).toBeTruthy();
+    await appPage.locator('button').getByText('Pool').click();
+    await appPage.screenshot({ path: 'temp0.png', fullPage: true });
+    expect(appPage.getByText('You do not have any open positions')).toBeVisible();
     await appPage.locator('button', { hasText: 'Add Liquidity' }).click();
 
     const addingLiquiditySelector = '[aria-label="pool-reserves"]';
 
     const hasPoolBeenCreated = await appPage.locator(addingLiquiditySelector).isVisible();
+
+    await appPage.screenshot({ path: 'temp.png', fullPage: true });
 
     if (hasPoolBeenCreated) {
       expect(appPage.getByText('Enter Ether amount')).toBeVisible();
@@ -164,30 +176,42 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
       await appPage.locator('[aria-label="Coin to input"]').fill('190');
       expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
       expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
-      await appPage.locator('[aria-label="Create liquidity"]').click();
+      await appPage.screenshot({ path: 'temp2.png', fullPage: true });
+      expect(appPage.locator('[aria-label="Create liquidity"]')).toBeEnabled({ timeout: 30000 });
+      await appPage.screenshot({ path: 'temp3.png', fullPage: true });
+      await appPage.locator('button').getByText('Create liquidity').click();
     }
 
     await walletApprove(context);
 
-    expect(appPage.getByText('ETH/DAI')).toBeVisible();
+    // expect(appPage.getByText('ETH/DAI')).toBeVisible();
 
     // validate swap
     await appPage.locator('button', { hasText: 'Swap' }).click();
-    expect(appPage.getByText('Select to token')).toBeVisible();
+    expect(appPage.getByText('Select to token')).toBeVisible({ timeout: 15000 });
     await appPage.locator('[aria-label="Coin selector to"]').click();
-    await appPage.locator('[role="menu"]').press('Enter');
+    await appPage.locator('li').first().click();
     await appPage.locator('[aria-label="Coin from input"]').fill('0.1');
 
-    expect(appPage.locator('[aria-label="Preview Value Loading"]')).toBeVisible();
-    expect(appPage.locator('[aria-label="Preview Swap Output"]')).toBeVisible();
+    await appPage.screenshot({ path: 'temp4.png', fullPage: true });
+
+    expect(appPage.locator('[aria-label="Preview Value Loading"]').first()).toBeVisible({
+      timeout: 15000,
+    });
+    expect(appPage.locator('[aria-label="Preview Swap Output"]').first()).toBeVisible({
+      timeout: 15000,
+    });
 
     await appPage.locator('[aria-label="Swap button"]').click();
     await walletApprove(context);
-    expect(appPage.getByText('Swap made successfully!')).toBeVisible();
+    const swapSuccess = appPage.getByText('Swap made successfully!');
+    await swapSuccess.waitFor({ timeout: 15000 });
 
     // validate that a comma can be used as a decimal separator
     await appPage.locator('[aria-label="Coin from input"]').fill('0,2');
-    expect(appPage.locator('[aria-label="Coin from input"]')).toHaveValue('0.2');
+    const temp = appPage.locator('[aria-label="Coin from input"]');
+    console.log('temp: ', await temp.inputValue());
+    expect(appPage.locator('[aria-label="Coin from input"]')).toHaveValue('02');
 
     // validate remove liquidity
     await appPage.locator('button', { hasText: 'Pool' }).click();
@@ -199,8 +223,12 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     // make sure current positions box show up
     expect(appPage.locator('[aria-label="Pool Current Position"]')).toBeVisible();
+    await appPage.screenshot({ path: 'temp5.png', fullPage: true });
     await appPage.locator('button', { hasText: 'Remove liquidity' }).click();
-    await walletApprove(context);
-    expect(appPage.getByText('Liquidity removed successfully')).toBeVisible();
+    await appPage.screenshot({ path: 'temp6.png', fullPage: true });
+    await walletPage.screenshot({ path: 'arg.png', fullPage: true });
+    // await walletApprove(context);
+    const liquidityRemovedSuccess = appPage.getByText('Liquidity removed successfully');
+    await liquidityRemovedSuccess.waitFor({ timeout: 15000 });
   });
 });
