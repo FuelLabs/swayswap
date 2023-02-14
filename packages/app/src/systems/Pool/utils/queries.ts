@@ -1,15 +1,12 @@
 import type { BN, Contract } from 'fuels';
-import { Wallet } from 'fuels';
 
 import type { AddLiquidityMachineContext } from '../types';
 
 import { CONTRACT_ID } from '~/config';
 import { getDeadline } from '~/systems/Core';
-import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { Coin } from '~/types';
 import type { ExchangeContractAbi } from '~/types/contracts';
-import { ExchangeContractAbi__factory } from '~/types/contracts';
 
 export enum PoolQueries {
   RemoveLiquidityNetworkFee = 'RemoveLiquidity-networkFee',
@@ -29,17 +26,8 @@ export async function prepareRemoveLiquidity(contract: Contract) {
     });
 }
 
-export async function submitRemoveLiquidity(
-  contract: Contract,
-  amount: BN,
-  txCost: TransactionCost
-) {
+export async function submitRemoveLiquidity(contract: Contract, amount: BN) {
   const deadline = await getDeadline(contract);
-  console.log('before remove liq call', deadline.toString());
-  const tempWallet = Wallet.fromPrivateKey(
-    '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298'
-  );
-  const tempContract = ExchangeContractAbi__factory.connect(CONTRACT_ID, tempWallet);
   const { transactionResult } = await contract.functions
     .remove_liquidity(1, 1, deadline)
     .callParams({

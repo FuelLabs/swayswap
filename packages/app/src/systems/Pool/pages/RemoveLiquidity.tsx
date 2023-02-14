@@ -25,7 +25,6 @@ import {
 } from "~/systems/Core";
 import { useTransactionCost } from "~/systems/Core/hooks/useTransactionCost";
 import { txFeedback } from "~/systems/Core/utils/feedback";
-import { getTransactionCost } from "~/systems/Core/utils/gas";
 import { Button, Card } from "~/systems/UI";
 
 export function RemoveLiquidityPage() {
@@ -50,11 +49,9 @@ export function RemoveLiquidityPage() {
       if (!amount) {
         throw new Error('"amount" is required');
       }
-      const contractCall = await prepareRemoveLiquidity(contract);
-      const nextTxCost = await getTransactionCost(contractCall);
       // TODO: Add way to set min_eth and min_tokens
       // https://github.com/FuelLabs/swayswap/issues/55
-      return submitRemoveLiquidity(contract, amount, nextTxCost);
+      return submitRemoveLiquidity(contract, amount);
     },
     { onSuccess: txFeedback("Liquidity removed successfully!", handleSuccess) }
   );

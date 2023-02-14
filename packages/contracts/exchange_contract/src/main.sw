@@ -10,6 +10,7 @@ use std::{
     storage::*,
     token::*,
     u128::U128,
+    logging::log,
 };
 
 use exchange_abi::{Exchange, PoolInfo, PositionInfo, PreviewInfo, RemoveLiquidityInfo, PreviewAddLiquidityInfo};
