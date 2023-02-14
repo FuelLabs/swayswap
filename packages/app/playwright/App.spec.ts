@@ -78,10 +78,6 @@ async function walletApprove(context: BrowserContext) {
     });
   }
 
-  console.log('approve page: ', approvePage);
-
-  await approvePage.screenshot({ path: 'tempMisc.png', fullPage: true });
-  // await approvePage.waitForSelector('text=Confirm', { timeout: 20000 });
   const approveButton = approvePage.locator('button').getByText('Confirm');
   await approveButton.click({ timeout: 15000 });
 
@@ -106,7 +102,7 @@ test.beforeAll(async ({ context, extensionId }) => {
 
 test.describe('End-to-end Test: 😁 Happy Path', () => {
   test('e2e', async ({ context }) => {
-    const { appPage, walletPage } = getPages(context);
+    const { appPage } = getPages(context);
 
     // TODO fix: nagivating to the app page the first time has some flaky behaviour
     await appPage.goto('/');
@@ -116,6 +112,8 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     await appPage.locator('[aria-label="Accept the use agreement"]').check();
     const connectPagePromise = context.waitForEvent('page');
     await appPage.locator('button', { hasText: 'Get Swapping!' }).click();
+
+    await appPage.reload();
 
     // Expect to be taken to swap pages
     expect(appPage.getByText('Select to token')).toBeTruthy();
@@ -154,15 +152,12 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     // go to pool page -> add liquidity page
     await appPage.locator('button').getByText('Pool').click();
-    await appPage.screenshot({ path: 'temp0.png', fullPage: true });
     expect(appPage.getByText('You do not have any open positions')).toBeVisible();
     await appPage.locator('button', { hasText: 'Add Liquidity' }).click();
 
     const addingLiquiditySelector = '[aria-label="pool-reserves"]';
 
     const hasPoolBeenCreated = await appPage.locator(addingLiquiditySelector).isVisible();
-
-    await appPage.screenshot({ path: 'temp.png', fullPage: true });
 
     if (hasPoolBeenCreated) {
       expect(appPage.getByText('Enter Ether amount')).toBeVisible();
@@ -176,9 +171,7 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
       await appPage.locator('[aria-label="Coin to input"]').fill('190');
       expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
       expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
-      await appPage.screenshot({ path: 'temp2.png', fullPage: true });
       expect(appPage.locator('[aria-label="Create liquidity"]')).toBeEnabled({ timeout: 30000 });
-      await appPage.screenshot({ path: 'temp3.png', fullPage: true });
       await appPage.locator('button').getByText('Create liquidity').click();
     }
 
@@ -192,8 +185,6 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     await appPage.locator('[aria-label="Coin selector to"]').click();
     await appPage.locator('li').first().click();
     await appPage.locator('[aria-label="Coin from input"]').fill('0.1');
-
-    await appPage.screenshot({ path: 'temp4.png', fullPage: true });
 
     expect(appPage.locator('[aria-label="Preview Value Loading"]').first()).toBeVisible({
       timeout: 15000,
@@ -223,10 +214,7 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     // make sure current positions box show up
     expect(appPage.locator('[aria-label="Pool Current Position"]')).toBeVisible();
-    await appPage.screenshot({ path: 'temp5.png', fullPage: true });
     await appPage.locator('button', { hasText: 'Remove liquidity' }).click();
-    await appPage.screenshot({ path: 'temp6.png', fullPage: true });
-    await walletPage.screenshot({ path: 'arg.png', fullPage: true });
     // await walletApprove(context);
     const liquidityRemovedSuccess = appPage.getByText('Liquidity removed successfully');
     await liquidityRemovedSuccess.waitFor({ timeout: 15000 });
