@@ -9,7 +9,7 @@ inputs:
     default: 0.35.1
   fuel-core-version:
     description: 'Fuel core version'
-    default: 0.17.1
+    default: 0.17.2
 
 
 runs:
