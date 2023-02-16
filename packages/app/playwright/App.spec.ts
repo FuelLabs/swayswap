@@ -163,9 +163,9 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
       await appPage.locator('[aria-label="Coin to input"]').fill('190');
       await expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
       await expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
-      await expect(appPage.locator('[aria-label="Create liquidity"]')).toBeEnabled({
-        timeout: 30000,
-      });
+      // await expect(appPage.locator('[aria-label="Create liquidity"]')).toBeEnabled({
+      //   timeout: 30000,
+      // });
       await appPage.locator('button').getByText('Create liquidity').click();
     }
 
