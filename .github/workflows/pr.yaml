@@ -114,3 +114,11 @@ jobs:
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: "test"
+
+      - name: "Upload test results"
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: playwright-report
+          path: /packages/app/playwright-report/
+          retention-days: 30
