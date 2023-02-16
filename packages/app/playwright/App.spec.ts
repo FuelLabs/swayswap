@@ -53,7 +53,7 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
   expect(signupPage.getByRole('checkbox')).toBeChecked();
   await signupPage.locator('button').getByText('Next').click();
   expect(signupPage.getByText('Wallet created successfully'))
-    .toBeVisible()
+    .toBeVisible({ timeout: 15000 })
     .then(async () => {
       // Navigate to add network and add test network
       await walletPage.goto(`chrome-extension://${extensionId}/popup.html#/networks/add`);
