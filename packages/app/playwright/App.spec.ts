@@ -1,5 +1,6 @@
 import '../load.envs';
 import type { BrowserContext } from '@playwright/test';
+import { sleep } from 'fuels';
 
 import { test, expect } from './fixtures';
 
@@ -19,8 +20,6 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
 
   // WALLET SETUP
   const walletPage = await context.newPage();
-  appPage.on('console', (msg) => console.log(msg));
-  walletPage.on('console', (msg) => console.log(msg));
   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
   const signupPage = await context.waitForEvent('page', {
     predicate: (page) => page.url().includes('sign-up'),
@@ -80,13 +79,6 @@ async function walletApprove(context: BrowserContext) {
 
   const approveButton = approvePage.locator('button').getByText('Confirm');
   await approveButton.click({ timeout: 15000 });
-
-  const enterPasswordInput = approvePage.locator(`[aria-label="Your Password"]`);
-  await enterPasswordInput.waitFor();
-  await enterPasswordInput.fill(WALLET_PASSWORD);
-  const confirmButton = approvePage.locator('button').getByText('Confirm Transaction');
-  await confirmButton.waitFor();
-  await confirmButton.click();
 }
 
 function getPages(context: BrowserContext) {
@@ -104,7 +96,6 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
   test('e2e', async ({ context }) => {
     const { appPage } = getPages(context);
 
-    // TODO fix: nagivating to the app page the first time has some flaky behaviour
     await appPage.goto('/');
 
     await appPage.locator('button', { hasText: 'Launch app' }).first().click();
@@ -177,7 +168,7 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     await walletApprove(context);
 
-    // expect(appPage.getByText('ETH/DAI')).toBeVisible();
+    expect(appPage.getByText('ETH/DAI')).toBeVisible({ timeout: 15000 });
 
     // validate swap
     await appPage.locator('button', { hasText: 'Swap' }).click();
@@ -200,8 +191,6 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     // validate that a comma can be used as a decimal separator
     await appPage.locator('[aria-label="Coin from input"]').fill('0,2');
-    const temp = appPage.locator('[aria-label="Coin from input"]');
-    console.log('temp: ', await temp.inputValue());
     expect(appPage.locator('[aria-label="Coin from input"]')).toHaveValue('02');
 
     // validate remove liquidity
