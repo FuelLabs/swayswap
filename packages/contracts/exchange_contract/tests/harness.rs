@@ -1,8 +1,6 @@
 use std::{vec, str::FromStr};
-use fuel_tx::{AssetId, ContractId, Bytes32};
 use fuels::prelude::*;
-use fuels_abigen_macro::abigen;
-use fuels::tx::StorageSlot;
+use fuels::tx::{StorageSlot, AssetId, ContractId, Bytes32};
 
 ///////////////////////////////
 // Load the Exchange Contract abi
