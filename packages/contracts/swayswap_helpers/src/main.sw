@@ -26,6 +26,6 @@ pub fn get_msg_sender_address_or_panic() -> Address {
     if let Identity::Address(address) = sender.unwrap() {
        address
     } else {
-       revert(0);
+       revert(420);
     }
 }

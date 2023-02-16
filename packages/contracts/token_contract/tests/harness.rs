@@ -130,13 +130,11 @@ async fn token_contract() {
 
     let token_mint1_instance = TestToken::new(token_contract_id.clone(), wallet_mint1.clone());
     // Mint and transfer some alt tokens to the wallet
-    token_mint1_instance.methods()
+    let response = token_mint1_instance.methods()
         .mint()
         .append_variable_outputs(1)
         .call()
-        .await
-        .unwrap();
-    // Mint can be called only once
+        .await.unwrap();
     let is_error = token_mint1_instance.methods()
         .mint()
         .append_variable_outputs(1)
@@ -219,7 +217,7 @@ async fn token_contract() {
         .get_token_balance(ContractId::from(*BASE_ASSET_ID))
         .call_params(CallParameters::new(
             Some(send_native_token_amount),
-            None,
+            Some(BASE_ASSET_ID),
             None,
         )).unwrap()
         .call()

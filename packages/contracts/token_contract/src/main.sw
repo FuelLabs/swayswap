@@ -5,6 +5,7 @@ use std::{
     context::balance_of,
     storage::*,
     token::*,
+    logging::log,
 };
 
 use token_abi::Token;
@@ -82,7 +83,8 @@ impl Token for Contract {
 
         // Enable a address to mint only once
         let sender = get_msg_sender_address_or_panic();
-        require(storage.mint_list.get(sender).unwrap() == false, Error::AddressAlreadyMint);
+        let temp = storage.mint_list.get(sender).unwrap_or(false);
+        require(temp == false, Error::AddressAlreadyMint);
 
         storage.mint_list.insert(sender, true);
         mint_to_address(storage.mint_amount, sender);
@@ -100,6 +102,7 @@ impl Token for Contract {
         balance_of(contract_id(), contract_id())
     }
 
+    #[payable]
     fn get_token_balance(asset_id: ContractId) -> u64 {
         balance_of(asset_id, contract_id())
     }
