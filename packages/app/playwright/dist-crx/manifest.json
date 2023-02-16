@@ -26,16 +26,12 @@
       "js": [
         "assets/content-script-loader.contentScript.ts-ef93dd00-169a46ee.js"
       ],
-      "matches": [
-        "<all_urls>"
-      ],
+      "matches": ["<all_urls>"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
   "permissions": [
     "alarms",
     "tabs",
@@ -50,9 +46,7 @@
   ],
   "web_accessible_resources": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
+      "matches": ["<all_urls>"],
       "resources": [
         "assets/index-82809ee4.js",
         "assets/config-12781290.js",
@@ -62,10 +56,7 @@
       "use_dynamic_url": true
     },
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
+      "matches": ["http://*/*", "https://*/*"],
       "resources": [
         "assets/contentScript.ts-ef93dd00.js",
         "assets/index-82809ee4.js",

@@ -1,6 +1,5 @@
 import '../load.envs';
 import type { BrowserContext } from '@playwright/test';
-import { sleep } from 'fuels';
 
 import { test, expect } from './fixtures';
 

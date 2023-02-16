@@ -39,7 +39,6 @@ export async function submitRemoveLiquidity(contract: Contract, amount: BN) {
       })
     )
     .call();
-  console.log('tx res: ', transactionResult);
   return transactionResult;
 }
 
