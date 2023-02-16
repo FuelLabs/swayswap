@@ -102,7 +102,7 @@ jobs:
 
       - name: Setup scripts
         run: |
-          pnpm scripts:setup
+          pnpm services:setup-test
       
       - name: Install Playwright
         run: pnpm exec playwright install --with-deps chromium
