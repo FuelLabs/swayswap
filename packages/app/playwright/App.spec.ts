@@ -142,47 +142,48 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     // go to pool page -> add liquidity page
     await appPage.locator('button').getByText('Pool').click();
-    expect(appPage.getByText('You do not have any open positions'))
-      .toBeVisible({ timeout: 15000 })
-      .then(async () => {
-        await appPage.locator('button', { hasText: 'Add Liquidity' }).click();
-      });
+    await expect(appPage.getByText('You do not have any open positions')).toBeVisible({
+      timeout: 15000,
+    });
+    await appPage.locator('button', { hasText: 'Add Liquidity' }).click();
 
     const addingLiquiditySelector = '[aria-label="pool-reserves"]';
 
     const hasPoolBeenCreated = await appPage.locator(addingLiquiditySelector).isVisible();
 
     if (hasPoolBeenCreated) {
-      expect(appPage.getByText('Enter Ether amount')).toBeVisible();
+      await expect(appPage.getByText('Enter Ether amount')).toBeVisible();
       await appPage.locator('[aria-label="Coin from input"]').fill('0.2');
-      expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
-      expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
+      await expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
+      await expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
       await appPage.locator('[aria-label="Add liquidity"]').click();
     } else {
-      expect(appPage.getByText('Enter Ether amount')).toBeVisible({ timeout: 15000 });
+      await expect(appPage.getByText('Enter Ether amount')).toBeVisible({ timeout: 15000 });
       await appPage.locator('[aria-label="Coin from input"]').fill('0.2');
       await appPage.locator('[aria-label="Coin to input"]').fill('190');
-      expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
-      expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
-      expect(appPage.locator('[aria-label="Create liquidity"]')).toBeEnabled({ timeout: 30000 });
+      await expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
+      await expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
+      await expect(appPage.locator('[aria-label="Create liquidity"]')).toBeEnabled({
+        timeout: 30000,
+      });
       await appPage.locator('button').getByText('Create liquidity').click();
     }
 
     await walletApprove(context);
 
-    expect(appPage.getByText('ETH/DAI')).toBeVisible({ timeout: 15000 });
+    await expect(appPage.getByText('ETH/DAI')).toBeVisible({ timeout: 15000 });
 
     // validate swap
     await appPage.locator('button', { hasText: 'Swap' }).click();
-    expect(appPage.getByText('Select to token')).toBeVisible({ timeout: 15000 });
+    await expect(appPage.getByText('Select to token')).toBeVisible({ timeout: 15000 });
     await appPage.locator('[aria-label="Coin selector to"]').click();
     await appPage.locator('li').first().click();
     await appPage.locator('[aria-label="Coin from input"]').fill('0.1');
 
-    expect(appPage.locator('[aria-label="Preview Value Loading"]').first()).toBeVisible({
+    await expect(appPage.locator('[aria-label="Preview Value Loading"]').first()).toBeVisible({
       timeout: 15000,
     });
-    expect(appPage.locator('[aria-label="Preview Swap Output"]').first()).toBeVisible({
+    await expect(appPage.locator('[aria-label="Preview Swap Output"]').first()).toBeVisible({
       timeout: 15000,
     });
 
@@ -193,7 +194,7 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     // validate that a comma can be used as a decimal separator
     await appPage.locator('[aria-label="Coin from input"]').fill('0,2');
-    expect(appPage.locator('[aria-label="Coin from input"]')).toHaveValue('02');
+    await expect(appPage.locator('[aria-label="Coin from input"]')).toHaveValue('02');
 
     // validate remove liquidity
     await appPage.locator('button', { hasText: 'Pool' }).click();
@@ -201,10 +202,10 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     await appPage.locator('[aria-label="Set Maximum Balance"]').click();
 
     // make sure preview output box show up
-    expect(appPage.locator('[aria-label="Preview Remove Liquidity Output"]')).toBeVisible();
+    await expect(appPage.locator('[aria-label="Preview Remove Liquidity Output"]')).toBeVisible();
 
     // make sure current positions box show up
-    expect(appPage.locator('[aria-label="Pool Current Position"]')).toBeVisible();
+    await expect(appPage.locator('[aria-label="Pool Current Position"]')).toBeVisible();
     await appPage.locator('button', { hasText: 'Remove liquidity' }).click();
     await walletApprove(context);
     const liquidityRemovedSuccess = appPage.getByText('Liquidity removed successfully');
