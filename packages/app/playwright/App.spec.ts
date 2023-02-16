@@ -142,8 +142,11 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     // go to pool page -> add liquidity page
     await appPage.locator('button').getByText('Pool').click();
-    expect(appPage.getByText('You do not have any open positions')).toBeVisible({ timeout: 15000 });
-    await appPage.locator('button', { hasText: 'Add Liquidity' }).click();
+    expect(appPage.getByText('You do not have any open positions'))
+      .toBeVisible({ timeout: 15000 })
+      .then(async () => {
+        await appPage.locator('button', { hasText: 'Add Liquidity' }).click();
+      });
 
     const addingLiquiditySelector = '[aria-label="pool-reserves"]';
 
