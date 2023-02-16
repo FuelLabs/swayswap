@@ -146,7 +146,12 @@ const _abi = {
         type: 5,
         typeArguments: null,
       },
-      attributes: null,
+      attributes: [
+        {
+          name: 'payable',
+          arguments: [],
+        },
+      ],
     },
     {
       inputs: [

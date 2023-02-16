@@ -197,6 +197,10 @@ const _abi = {
           name: 'storage',
           arguments: ['read', 'write'],
         },
+        {
+          name: 'payable',
+          arguments: [],
+        },
       ],
     },
     {
@@ -222,6 +226,10 @@ const _abi = {
         {
           name: 'storage',
           arguments: ['read'],
+        },
+        {
+          name: 'payable',
+          arguments: [],
         },
       ],
     },
@@ -353,6 +361,10 @@ const _abi = {
           name: 'storage',
           arguments: ['read', 'write'],
         },
+        {
+          name: 'payable',
+          arguments: [],
+        },
       ],
     },
     {
@@ -379,6 +391,10 @@ const _abi = {
           name: 'storage',
           arguments: ['read', 'write'],
         },
+        {
+          name: 'payable',
+          arguments: [],
+        },
       ],
     },
     {
@@ -404,6 +420,10 @@ const _abi = {
         {
           name: 'storage',
           arguments: ['read', 'write'],
+        },
+        {
+          name: 'payable',
+          arguments: [],
         },
       ],
     },
