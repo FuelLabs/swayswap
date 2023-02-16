@@ -82,7 +82,7 @@ impl Token for Contract {
 
         // Enable a address to mint only once
         let sender = get_msg_sender_address_or_panic();
-        require(storage.mint_list.get(sender) == false, Error::AddressAlreadyMint);
+        require(storage.mint_list.get(sender).unwrap() == false, Error::AddressAlreadyMint);
 
         storage.mint_list.insert(sender, true);
         mint_to_address(storage.mint_amount, sender);
