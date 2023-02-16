@@ -64,7 +64,10 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
       await walletPage
         .locator('[aria-label="Network URL"]')
         .fill(process.env.VITE_FUEL_PROVIDER_URL!);
+      await walletPage.screenshot({ path: 'temp.png', fullPage: true });
       await walletPage.locator('button', { hasText: 'Create' }).click();
+      console.log('here');
+      await walletPage.screenshot({ path: 'temp1.png', fullPage: true });
     });
 
   return { appPage, walletPage };
