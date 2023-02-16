@@ -20,8 +20,6 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
   // WALLET SETUP
   const walletPage = await context.newPage();
   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
-  appPage.on('console', (msg) => console.log(msg));
-  walletPage.on('console', (msg) => console.log(msg));
   const signupPage = await context.waitForEvent('page', {
     predicate: (page) => page.url().includes('sign-up'),
   });
@@ -64,10 +62,7 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
       await walletPage
         .locator('[aria-label="Network URL"]')
         .fill(process.env.VITE_FUEL_PROVIDER_URL!);
-      await walletPage.screenshot({ path: 'temp.png', fullPage: true });
       await walletPage.locator('button', { hasText: 'Create' }).click();
-      console.log('here');
-      await walletPage.screenshot({ path: 'temp1.png', fullPage: true });
     });
 
   return { appPage, walletPage };
