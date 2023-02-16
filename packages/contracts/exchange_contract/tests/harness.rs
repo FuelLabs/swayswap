@@ -1,18 +1,18 @@
 use std::{vec, str::FromStr};
 use fuels::prelude::*;
 use fuels::tx::{StorageSlot, AssetId, ContractId, Bytes32};
+use fuels::types::Bits256;
 
 ///////////////////////////////
-// Load the Exchange Contract abi
+// Load the Exchange and Token Contract abi
 ///////////////////////////////
-abigen!(TestExchange, "out/debug/exchange_contract-abi.json");
-
-///////////////////////////////
-// Load the Token Contract abi
-///////////////////////////////
-abigen!(
-    TestToken,
-    "../token_contract/out/debug/token_contract-abi.json"
+abigen!(Contract(
+    name = "TestExchange",
+    abi = "out/debug/exchange_contract-abi.json"),
+    Contract(
+        name = "TestToken",
+        abi = "../token_contract/out/debug/token_contract-abi.json"
+    )
 );
 
 async fn deposit_and_add_liquidity(
@@ -22,30 +22,33 @@ async fn deposit_and_add_liquidity(
     token_amount_deposit: u64,
 ) -> u64 {
     // Deposit some Native Asset
-    let _t = exchange_instance
+    let _t = exchange_instance.methods()
         .deposit()
         .call_params(CallParameters::new(Some(native_amount), None, None))
+        .unwrap()
         .call()
         .await
         .unwrap();
 
     // Deposit some Token Asset
-    let _t = exchange_instance
+    let _t = exchange_instance.methods()
         .deposit()
         .call_params(CallParameters::new(
             Some(token_amount_deposit),
             Some(token_asset_id.clone()),
             None,
         ))
+        .unwrap()
         .call()
         .await
         .unwrap();
 
     // Add liquidity for the second time. Keeping the proportion 1:2
     // It should return the same amount of LP as the amount of ETH deposited
-    let result = exchange_instance
+    let result = exchange_instance.methods()
         .add_liquidity(1, 1000)
         .call_params(CallParameters::new(Some(0), Some(token_asset_id.clone()), Some(100_000_000)))
+        .unwrap()
         .append_variable_outputs(2)
         .tx_params(TxParameters {
             gas_price: 0,
@@ -94,8 +97,8 @@ async fn exchange_contract() {
     )
     .await
     .unwrap();
-    let exchange_instance = TestExchangeBuilder::new(exchange_contract_id.to_string(), wallet.clone()).build();
-    let token_instance = TestTokenBuilder::new(token_contract_id.to_string(), wallet.clone()).build();
+    let exchange_instance = TestExchange::new(exchange_contract_id.clone(), wallet.clone());
+    let token_instance = TestToken::new(token_contract_id.clone(), wallet.clone());
 
     // Native contract id
     let native_contract_id = ContractId::new(*BASE_ASSET_ID);
@@ -115,13 +118,14 @@ async fn exchange_contract() {
 
     // Initialize token contract
     token_instance
+        .methods()
         .initialize(wallet_token_amount, Address::from(address))
         .call()
         .await
         .unwrap();
 
     // Mint some alt tokens
-    token_instance
+    token_instance.methods()
         .mint()
         .append_variable_outputs(1)
         .call()
@@ -137,22 +141,23 @@ async fn exchange_contract() {
     let native_amount = 100;
 
     // Deposit some native assets
-    exchange_instance
+    exchange_instance.methods()
         .deposit()
-        .call_params(CallParameters::new(Some(native_amount), None, None))
+        .call_params(CallParameters::new(Some(native_amount), Some(BASE_ASSET_ID), None))
+        .unwrap()
         .call()
         .await
         .unwrap();
 
     // Check contract balance
-    let response = exchange_instance
+    let response = exchange_instance.methods()
         .get_balance(native_contract_id.clone())
         .call()
         .await
         .unwrap();
     assert_eq!(response.value, native_amount);
 
-    exchange_instance
+    exchange_instance.methods()
         .withdraw(native_amount, native_contract_id.clone())
         .append_variable_outputs(1)
         .call()
@@ -160,7 +165,7 @@ async fn exchange_contract() {
         .unwrap();
 
     // Check contract balance
-    let response = exchange_instance
+    let response = exchange_instance.methods()
         .get_balance(native_contract_id)
         .call()
         .await
@@ -189,13 +194,14 @@ async fn exchange_contract() {
 
     // Remove LP tokens from liquidity it should keep proportion 1:2
     // It should return the exact amount added on the add liquidity
-    let result = exchange_instance
+    let result = exchange_instance.methods()
         .remove_liquidity(1, 1, 1000)
         .call_params(CallParameters::new(
             Some(lp_amount_received),
             Some(lp_asset_id.clone()),
             Some(100_000_000)
         ))
+        .unwrap()
         .tx_params(TxParameters {
             gas_price: 0,
             gas_limit: 100_000_000,
@@ -241,16 +247,17 @@ async fn exchange_contract() {
     ////////////////////////////////////////////////////////
 
     // Get expected swap amount ETH -> TOKEN
-    let amount_expected = exchange_instance
+    let amount_expected = exchange_instance.methods()
         .get_swap_with_minimum(amount)
         .call()
         .await
         .unwrap();
     assert!(amount_expected.value.has_liquidity);
     // Swap using expected amount ETH -> TOKEN
-    let response = exchange_instance
+    let response = exchange_instance.methods()
         .swap_with_minimum(amount_expected.value.amount, 1000)
-        .call_params(CallParameters::new(Some(amount), None, None))
+        .call_params(CallParameters::new(Some(amount), Some(BASE_ASSET_ID), None))
+        .unwrap()
         .append_variable_outputs(1)
         .call()
         .await
@@ -262,21 +269,23 @@ async fn exchange_contract() {
     ////////////////////////////////////////////////////////
 
     // Get expected swap amount TOKEN -> ETH
-    let amount_expected = exchange_instance
+    let amount_expected = exchange_instance.methods()
         .get_swap_with_minimum(amount)
         .call_params(CallParameters::new(Some(0), Some(token_asset_id.clone()), None))
+        .unwrap()
         .call()
         .await
         .unwrap();
     assert!(amount_expected.value.has_liquidity);
     // Swap using expected amount TOKEN -> ETH
-    let response = exchange_instance
+    let response = exchange_instance.methods()
         .swap_with_minimum(amount_expected.value.amount, 1000)
         .call_params(CallParameters::new(
             Some(amount),
             Some(token_asset_id.clone()),
             None
         ))
+        .unwrap()
         .append_variable_outputs(1)
         .call()
         .await
@@ -289,7 +298,7 @@ async fn exchange_contract() {
 
     // Should throw error
     // If the output is bigger them the reserve
-    let is_err = exchange_instance
+    let is_err = exchange_instance.methods()
         .get_swap_with_maximum(1000)
         .call()
         .await
@@ -302,7 +311,7 @@ async fn exchange_contract() {
 
     // Should return u64::MAX
     // If the output is equal to the reserve
-    let is_err = exchange_instance
+    let is_err = exchange_instance.methods()
         .get_swap_with_maximum(token_amount_deposit + 1)
         .call()
         .await
@@ -314,20 +323,21 @@ async fn exchange_contract() {
     ////////////////////////////////////////////////////////
 
     // Get expected swap amount ETH -> TOKEN
-    let amount_expected = exchange_instance
+    let amount_expected = exchange_instance.methods()
         .get_swap_with_maximum(amount)
         .call()
         .await
         .unwrap();
     assert!(amount_expected.value.has_liquidity);
     // Swap using expected amount ETH -> TOKEN
-    let response = exchange_instance
+    let response = exchange_instance.methods()
         .swap_with_maximum(amount, 1000)
         .call_params(CallParameters::new(
             Some(amount_expected.value.amount),
-            None,
+            Some(BASE_ASSET_ID),
             None
         ))
+        .unwrap()
         .append_variable_outputs(1)
         .call()
         .await
@@ -339,21 +349,23 @@ async fn exchange_contract() {
     ////////////////////////////////////////////////////////
 
     // Get expected swap amount TOKEN -> ETH
-    let amount_expected = exchange_instance
+    let amount_expected = exchange_instance.methods()
         .get_swap_with_maximum(amount)
         .call_params(CallParameters::new(None, Some(token_asset_id.clone()), None))
+        .unwrap()
         .call()
         .await
         .unwrap();
     assert!(amount_expected.value.has_liquidity);
     // Swap using expected amount TOKEN -> ETH
-    let response = exchange_instance
+    let response = exchange_instance.methods()
         .swap_with_maximum(amount, 1000)
         .call_params(CallParameters::new(
             Some(amount_expected.value.amount),
             Some(token_asset_id.clone()),
             None
         ))
+        .unwrap()
         .append_variable_outputs(1)
         .call()
         .await
@@ -364,13 +376,14 @@ async fn exchange_contract() {
     // Add more liquidity to the contract
     ////////////////////////////////////////////////////////
 
-    let add_liquidity_preview = exchange_instance
-        .get_add_liquidity(eth_to_add_liquidity_amount, *BASE_ASSET_ID)
+    let add_liquidity_preview = exchange_instance.methods()
+        .get_add_liquidity(eth_to_add_liquidity_amount, Bits256(*BASE_ASSET_ID))
         .call_params(CallParameters::new(
             Some(amount_expected.value.amount),
             Some(token_asset_id.clone()),
             Some(100_000_000),
         ))
+        .unwrap()
         .tx_params(TxParameters {
             gas_price: 0,
             gas_limit: 100_000_000,
@@ -397,13 +410,14 @@ async fn exchange_contract() {
     // Remove liquidity and receive assets back
     ////////////////////////////////////////////////////////
 
-    let response = exchange_instance
+    let response = exchange_instance.methods()
         .remove_liquidity(1, 1, 1000)
         .call_params(CallParameters::new(
             Some(lp_amount_received),
             Some(lp_asset_id.clone()),
             Some(100_000_000)
         ))
+        .unwrap()
         .tx_params(TxParameters {
             gas_price: 0,
             gas_limit: 100_000_000,
@@ -420,7 +434,7 @@ async fn exchange_contract() {
     // Check contract pool is zero
     ////////////////////////////////////////////////////////
 
-    let pool_info = exchange_instance.get_pool_info().call().await.unwrap();
+    let pool_info = exchange_instance.methods().get_pool_info().call().await.unwrap();
     assert_eq!(pool_info.value.eth_reserve, 0);
     assert_eq!(pool_info.value.token_reserve, 0);
     assert_eq!(pool_info.value.lp_token_supply, 0);

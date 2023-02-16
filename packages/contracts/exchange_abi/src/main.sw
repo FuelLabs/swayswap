@@ -42,7 +42,7 @@ abi Exchange {
     #[storage(read)]
     fn get_pool_info() -> PoolInfo;
     /// Get add liquidity preview
-    #[storage(read)]
+    #[storage(read), payable]
     fn get_add_liquidity(amount: u64, asset_id: b256) -> PreviewAddLiquidityInfo;
     /// Get current positions
     #[storage(read)]
@@ -51,7 +51,7 @@ abi Exchange {
     // Actions
     ////////////////////
     /// Deposit coins for later adding to liquidity pool.
-    #[storage(read, write)]
+    #[storage(read, write), payable]
     fn deposit();
     /// Withdraw coins that have not been added to a liquidity pool yet.
     #[storage(read, write)]
@@ -60,13 +60,13 @@ abi Exchange {
     #[storage(read, write)]
     fn add_liquidity(min_liquidity: u64, deadline: u64) -> u64;
     /// Burn SWAYSWAP tokens to withdraw ETH and Tokens at current ratio.
-    #[storage(read, write)]
+    #[storage(read, write), payable]
     fn remove_liquidity(min_eth: u64, min_tokens: u64, deadline: u64) -> RemoveLiquidityInfo;
     /// Swap ETH <-> Tokens and tranfers to sender.
-    #[storage(read, write)]
+    #[storage(read, write), payable]
     fn swap_with_minimum(min: u64, deadline: u64) -> u64;
     /// Swap ETH <-> Tokens and tranfers to sender.
-    #[storage(read, write)]
+    #[storage(read, write), payable]
     fn swap_with_maximum(amount: u64, deadline: u64) -> u64;
     /// Get the minimum amount of coins that will be received for a swap_with_minimum.
     #[storage(read, write)]
