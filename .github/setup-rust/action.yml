@@ -3,10 +3,13 @@ name: 'Setup Rust env'
 inputs:
   rust-version:
     description: 'Rust version'
-    default: 1.64.0
+    default: 1.67.1
   forc-version:
     description: 'Forc version'
-    default: 0.26.0
+    default: 0.33.1
+  fuel-core-version:
+    description: 'Fuel core version'
+    default: 0.17.1
 
 
 runs:
@@ -34,4 +37,4 @@ runs:
       uses: FuelLabs/action-fuel-toolchain@master
       with:
         name: swayswap-toolchain
-        components: forc@${{ inputs.forc-version }}
+        components: forc@${{ inputs.forc-version }}, fuel-core@${{ inputs.fuel-core-version }}
