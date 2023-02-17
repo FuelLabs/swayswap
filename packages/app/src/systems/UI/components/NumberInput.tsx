@@ -31,7 +31,7 @@ export function NumberInput({
         placeholder={placeholder}
         thousandSeparator={thousandSeparator}
         displayType={disabled ? "text" : "input"}
-        onValueChange={(e: any) => onChange?.(e.value)} // eslint-disable-line @typescript-eslint/no-explicit-any
+        onValueChange={(e) => onChange?.(e.value)}
         className={style.transferPropInput}
       />
     </div>
