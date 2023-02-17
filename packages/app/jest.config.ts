@@ -9,6 +9,7 @@ const config: Config.InitialOptions = {
   ...baseConfig,
   rootDir: __dirname,
   displayName: pkg.name,
+  modulePathIgnorePatterns: ['playwright'],
 };
 
 export default config;

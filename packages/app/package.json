@@ -12,7 +12,7 @@
     "contracts:init": "pnpm exec ts-node ./scripts/contracts-init",
     "postinstall": "sh ./scripts/postinstall.sh",
     "preview": "vite preview",
-    "test": "jest --verbose --runInBand",
+    "test": "NODE_ENV=test jest --verbose --runInBand",
     "test:watch": "jest --watch --runInBand --detectOpenHandles",
     "vite": "vite",
     "xstate:typegen": "xstate typegen 'src/**/*.ts?(x)'",

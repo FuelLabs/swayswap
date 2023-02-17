@@ -9,7 +9,7 @@ import { transactionRequestify, Wallet } from 'fuels';
 import { FUEL_PROVIDER_URL } from '~/config';
 
 const generateOptions = {
-  provider: process.env.PUBLIC_PROVIDER_URL!,
+  provider: FUEL_PROVIDER_URL,
 };
 export const userWallet = Wallet.generate(generateOptions);
 export const toWallet = Wallet.generate(generateOptions);
@@ -37,7 +37,7 @@ export class MockConnection extends BaseConnection {
 
   async network() {
     return {
-      url: process.env.PUBLIC_PROVIDER_URL!,
+      url: FUEL_PROVIDER_URL!,
     };
   }
 
