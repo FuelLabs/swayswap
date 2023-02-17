@@ -3,6 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 
 import { WelcomeSidebar, WelcomeDone, StepsIndicator } from "../components";
+import { WelcomeConnect } from "../components/WelcomeConnect";
 import { useWelcomeSteps, stepsSelectors } from "../hooks";
 
 import { useBreakpoint } from "~/systems/Core";
@@ -23,6 +24,7 @@ export function WelcomePage() {
       <section className="welcomePage--content">
         <AnimatePresence exitBeforeEnter>
           <Routes key={location.pathname} location={location}>
+            <Route path={Pages.connect} element={<WelcomeConnect />} />
             <Route path={Pages["welcome.done"]} element={<WelcomeDone />} />
           </Routes>
         </AnimatePresence>

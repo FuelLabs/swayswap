@@ -16,7 +16,7 @@ export function WelcomeDone() {
   }
 
   return (
-    <WelcomeStep id={0}>
+    <WelcomeStep id={1}>
       <WelcomeImage src="/illustrations/done.png" />
       {/* <h2>Wallet Created!</h2>
       <p className="mt-5">

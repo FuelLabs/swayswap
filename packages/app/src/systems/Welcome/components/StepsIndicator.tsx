@@ -14,13 +14,10 @@ export function StepsIndicator() {
 
   return (
     <ul className="stepsIndicator">
-      {/* <li className={getClasses(0, current)}>
-        <span>Create wallet</span>
+      <li className={getClasses(0, current)}>
+        <span>Download wallet</span>
       </li>
       <li className={getClasses(1, current)}>
-        <span>Add funds</span>
-      </li> */}
-      <li className={getClasses(0, current)}>
         <span>Done</span>
       </li>
     </ul>

@@ -14,8 +14,9 @@ export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
 export const LOCALSTORAGE_AGREEMENT_KEY = "fuel--agreement";
 
 export const STEPS = [
-  { id: 0, path: Pages["welcome.done"] },
-  { id: 1, path: null },
+  { id: 0, path: Pages.connect },
+  { id: 1, path: Pages["welcome.done"] },
+  { id: 2, path: null },
 ];
 
 export function getAgreement() {
@@ -87,19 +88,31 @@ const welcomeStepsMachine = createMachine<MachineContext>({
           cond: (ctx) => Boolean(ctx.wallet && !ctx.current.id),
         },
         {
-          target: "done",
-          cond: (ctx) =>
-            ctx.current.id === 0 ||
-            (ctx.current.id >= 0 && !ctx.acceptAgreement),
+          target: "connectingWallet",
+          cond: (ctx) => ctx.current.id === 0,
         },
         {
-          cond: (ctx) => ctx.current.id === 1 && ctx.acceptAgreement,
+          target: "done",
+          cond: (ctx) =>
+            ctx.current.id === 1 ||
+            (ctx.current.id >= 1 && !ctx.acceptAgreement),
+        },
+        {
+          cond: (ctx) => ctx.current.id === 2 && ctx.acceptAgreement,
           target: "finished",
         },
       ],
     },
-    done: {
+    connectingWallet: {
       entry: [assignCurrent(0), "navigateTo"],
+      on: {
+        NEXT: {
+          target: "done",
+        },
+      },
+    },
+    done: {
+      entry: [assignCurrent(1), "navigateTo"],
       on: {
         ACCEPT_AGREEMENT: {
           actions: ["acceptAgreement"],
@@ -110,7 +123,7 @@ const welcomeStepsMachine = createMachine<MachineContext>({
       },
     },
     finished: {
-      entry: assignCurrent(1),
+      entry: assignCurrent(2),
       type: "final",
     },
   },
@@ -156,7 +169,7 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
       .withConfig({
         actions: {
           navigateTo: (context) => {
-            if (context.current.id > 0) return;
+            if (context.current.id > 1) return;
             navigate(`/welcome/${context.current.path}`);
           },
           acceptAgreement: assign((context, event) => {

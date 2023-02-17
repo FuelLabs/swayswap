@@ -17,6 +17,7 @@ export enum Pages {
   'pool.addLiquidity' = 'add-liquidity',
   'pool.removeLiquidity' = 'remove-liquidity',
   'welcome' = '/welcome',
+  'connect' = 'connect',
   'welcome.done' = 'done',
 }
 
