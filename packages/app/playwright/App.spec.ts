@@ -96,17 +96,16 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     const { appPage } = getPages(context);
 
     await appPage.goto('/');
+    await appPage.reload();
 
     await appPage.locator('button', { hasText: 'Launch app' }).first().click();
 
-    await appPage.locator('[aria-label="Accept the use agreement"]').check();
+    const connectWalletButton = appPage.locator('button', { hasText: 'Connect Wallet' });
+    await expect(connectWalletButton).toBeVisible();
+    await expect(connectWalletButton).toBeEnabled();
+
     const connectPagePromise = context.waitForEvent('page');
-    await appPage.locator('button', { hasText: 'Get Swapping!' }).click();
-
-    await appPage.reload();
-
-    // Expect to be taken to swap pages
-    expect(appPage.getByText('Select to token')).toBeTruthy();
+    await appPage.locator('button', { hasText: 'Connect Wallet' }).click();
 
     // Connect to wallet
     const connectPage = await connectPagePromise;
@@ -127,6 +126,13 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     const connectButton = connectPage.locator('button').getByText('Connect');
     await connectButton.click();
+
+    await appPage.locator('[aria-label="Accept the use agreement"]').check();
+
+    await appPage.locator('button', { hasText: 'Get Swapping!' }).click();
+
+    // Expect to be taken to swap pages
+    expect(appPage.getByText('Select to token')).toBeTruthy();
 
     // mint tokens
     await appPage.goto('/mint');

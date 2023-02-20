@@ -54,7 +54,6 @@ describe("Add Liquidity", () => {
   });
 
   it("should enter amount button be disabled by default", async () => {
-    console.log("in should enter amount test");
     renderWithRouter(<App />, { route: "/pool/add-liquidity" });
     // await waitForElementToBeRemoved(() => screen.queryByText(/Connect/i));
     await waitFor(async () => {

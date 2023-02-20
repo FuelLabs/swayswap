@@ -89,18 +89,6 @@ const welcomeStepsMachine =
           /**
            * This is mainly used for tests purposes
            */
-          // {
-          //   target: "finished",
-          //   cond: (ctx) => {
-          //     console.log(
-          //       "is finsshed: ",
-          //       Boolean(ctx.wallet && !ctx.current.id)
-          //     );
-          //     console.log("wallet: ", ctx.wallet);
-          //     console.log("id: ", !ctx.current.id);
-          //     return Boolean(ctx.wallet && !ctx.current.id);
-          //   },
-          // },
           {
             target: "connectingWallet",
             cond: (ctx) => {
@@ -109,26 +97,12 @@ const welcomeStepsMachine =
           },
           {
             target: "done",
-            cond: (ctx) => {
-              console.log(
-                "is done",
-                ctx.current.id === 1 ||
-                  (ctx.current.id >= 1 && !ctx.acceptAgreement)
-              );
-              return (
-                ctx.current.id === 1 ||
-                (ctx.current.id >= 1 && !ctx.acceptAgreement)
-              );
-            },
+            cond: (ctx) =>
+              ctx.current.id === 1 ||
+              (ctx.current.id >= 1 && !ctx.acceptAgreement),
           },
           {
-            cond: (ctx) => {
-              console.log(
-                "is finished 2: ",
-                ctx.current.id === 2 && ctx.acceptAgreement
-              );
-              return ctx.current.id === 2 && ctx.acceptAgreement;
-            },
+            cond: (ctx) => ctx.current.id === 2 && ctx.acceptAgreement,
             target: "finished",
           },
         ],
