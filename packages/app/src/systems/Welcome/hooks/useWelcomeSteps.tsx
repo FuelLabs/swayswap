@@ -45,7 +45,11 @@ export function setCurrent(id: number) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function assignCurrent(id: number): any {
-  return assign({ current: (_) => setCurrent(id) });
+  return assign({
+    current: (_) => {
+      return setCurrent(id);
+    },
+  });
 }
 
 // ----------------------------------------------------------------------------
@@ -65,69 +69,95 @@ type MachineContext = {
 
 type MachineEvents = { type: "NEXT" } | { type: "SET_CURRENT"; value: number };
 
-const welcomeStepsMachine = createMachine<MachineContext>({
-  id: "welcomeSteps",
-  predictableActionArguments: true,
-  initial: "init",
-  schema: {
-    context: {} as MachineContext,
-    events: {} as MachineEvents,
-  },
-  context: {
-    current: getCurrent(),
-    acceptAgreement: getAgreement(),
-  },
-  states: {
-    init: {
-      always: [
-        /**
-         * This is mainly used for tests purposes
-         */
-        {
-          target: "finished",
-          cond: (ctx) => Boolean(ctx.wallet && !ctx.current.id),
-        },
-        {
-          target: "connectingWallet",
-          cond: (ctx) => ctx.current.id === 0,
-        },
-        {
-          target: "done",
-          cond: (ctx) =>
-            ctx.current.id === 1 ||
-            (ctx.current.id >= 1 && !ctx.acceptAgreement),
-        },
-        {
-          cond: (ctx) => ctx.current.id === 2 && ctx.acceptAgreement,
-          target: "finished",
-        },
-      ],
+const welcomeStepsMachine =
+  /** @xstate-layout N4IgpgJg5mDOIC5QHcwBsDGB7AtmAygC5gAOsAdAJYB2lhAxANoAMAuoqCVrHZVtRxAAPRAEYAzAFZyAFgCcCgOyTRc8QDZF65gCYANCACeiGeLnkAHDouiVOxXNWTxigL6uDqTLgLEyVWgZGUXYkEC4eQj4BMJEECWl5JRU1TW19IzE5HXJmRRtxC3EE9XUZd090bDwiUgoaOiYdUM5uXn5BOITZBTllVQ0tXQNjBHEZRUtrURlJPtEHdQt1CpAvat86gMbGcRbwtqiO2LEpHuSBtOHMsbUpmxllnUl5dVFV9Z9a-2xqajAMFFqFAAOoAQzQaDADAAcgBRAAaABUWPsIu0YqA4vJpFpJJJFIpbHJHqVFCMxBZzFYCopiqIdAtsh8ql8-BQIPwwPQAIIAYT5cIACkiAPo8gDiACU4XCALJwmEotiCdFHTHCRBzGTkHRJTRUuZ9CkIGzkSTMS3MUw6cR5Kws7w1dnkTn-egAMQAkjCvfgABKo1WHaKdRAFciiBaidTicSMtTZE2MizkOTOGZRmTMOPFNyrahYCBwQSfZ11YORUMnBAAWnUJvruStLdbeUdG2+9UClYxYYQMgyo3G5myDxeUmsFg7bK2v3+gJooIhUMIvfV-btOTjc2eMnUjijJts4nuElUVlEFnx5Q8a1Z5f8brA6+rWMQ2nUaaWdL6sfyObHlYaYZlINgSJa053mWmz+AAZg0sAABaQK+xzvggajSDG2YMn+khWEOiCMpM6bFIM2TMLYEzuO4QA */
+  createMachine<MachineContext>({
+    id: "welcomeSteps",
+    predictableActionArguments: true,
+    initial: "init",
+    schema: {
+      context: {} as MachineContext,
+      events: {} as MachineEvents,
     },
-    connectingWallet: {
-      entry: [assignCurrent(0), "navigateTo"],
-      on: {
-        NEXT: {
-          target: "done",
+    context: {
+      current: getCurrent(),
+      acceptAgreement: getAgreement(),
+    },
+    states: {
+      init: {
+        always: [
+          /**
+           * This is mainly used for tests purposes
+           */
+          // {
+          //   target: "finished",
+          //   cond: (ctx) => {
+          //     console.log(
+          //       "is finsshed: ",
+          //       Boolean(ctx.wallet && !ctx.current.id)
+          //     );
+          //     console.log("wallet: ", ctx.wallet);
+          //     console.log("id: ", !ctx.current.id);
+          //     return Boolean(ctx.wallet && !ctx.current.id);
+          //   },
+          // },
+          {
+            target: "connectingWallet",
+            cond: (ctx) => {
+              return ctx.current.id === 0;
+            },
+          },
+          {
+            target: "done",
+            cond: (ctx) => {
+              console.log(
+                "is done",
+                ctx.current.id === 1 ||
+                  (ctx.current.id >= 1 && !ctx.acceptAgreement)
+              );
+              return (
+                ctx.current.id === 1 ||
+                (ctx.current.id >= 1 && !ctx.acceptAgreement)
+              );
+            },
+          },
+          {
+            cond: (ctx) => {
+              console.log(
+                "is finished 2: ",
+                ctx.current.id === 2 && ctx.acceptAgreement
+              );
+              return ctx.current.id === 2 && ctx.acceptAgreement;
+            },
+            target: "finished",
+          },
+        ],
+      },
+      connectingWallet: {
+        entry: [assignCurrent(0), "navigateTo"],
+        on: {
+          NEXT: {
+            target: "done",
+          },
         },
       },
-    },
-    done: {
-      entry: [assignCurrent(1), "navigateTo"],
-      on: {
-        ACCEPT_AGREEMENT: {
-          actions: ["acceptAgreement"],
-        },
-        FINISH: {
-          target: "finished",
+      done: {
+        entry: [assignCurrent(1), "navigateTo"],
+        on: {
+          ACCEPT_AGREEMENT: {
+            actions: ["acceptAgreement"],
+          },
+          FINISH: {
+            target: "finished",
+          },
         },
       },
+      finished: {
+        entry: assignCurrent(2),
+        type: "final",
+      },
     },
-    finished: {
-      entry: assignCurrent(2),
-      type: "final",
-    },
-  },
-});
+  });
 
 // ----------------------------------------------------------------------------
 // Context & Provider

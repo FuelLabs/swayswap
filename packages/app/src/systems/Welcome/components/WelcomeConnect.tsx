@@ -68,7 +68,7 @@ export const WelcomeConnect = () => {
             className="mt-5 mx-auto"
             onPress={handleConnectWallet}
           >
-            Connect
+            Connect Wallet
           </Button>
         </>
       )}

@@ -9,8 +9,7 @@ export function WelcomeSidebarBullet() {
 
   function getVariant() {
     if (current.id === 0) return "first";
-    if (current.id === 1) return "second";
-    return "third";
+    return "second";
   }
 
   return (
@@ -20,17 +19,13 @@ export function WelcomeSidebarBullet() {
       animate={getVariant()}
       variants={{
         first: {
-          y: -65,
+          y: -32.5,
           x: 6,
         },
         second: {
-          y: 0,
+          y: 32.5,
           x: 6,
         },
-        // third: {
-        //   y: 65,
-        //   x: 6,
-        // },
       }}
       transition={{
         ease: "easeOut",

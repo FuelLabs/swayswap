@@ -4,16 +4,20 @@ import { screen, renderWithRouter } from "@swayswap/test-utils";
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
 
 import { App } from "~/App";
+import type { MockConnection } from "~/systems/Core/hooks/__mocks__/MockConnection";
 import {
   createWallet,
+  mockUseFuel,
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 
 let wallet: FuelWalletLocked;
+let fuel: MockConnection;
 
 beforeAll(async () => {
-  wallet = await createWallet();
+  ({ wallet, fuel } = await createWallet());
   mockUseWallet(wallet);
+  mockUseFuel(fuel);
 });
 
 describe("Pool List", () => {

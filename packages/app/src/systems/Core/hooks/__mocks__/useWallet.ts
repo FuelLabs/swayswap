@@ -1,14 +1,15 @@
-import type { FuelWalletLocked } from '@fuel-wallet/sdk';
+import type { Fuel, FuelWalletLocked } from '@fuel-wallet/sdk';
 
+import * as useFuel from '../useFuel';
 import * as useWallet from '../useWallet';
 
 import { MockConnection } from './MockConnection';
 
-export async function createWallet() {
-  const mockFuel = MockConnection.start();
+export async function createWallet(isConnectedOverride = true) {
+  const mockFuel = MockConnection.start(isConnectedOverride);
   const currentAccount = await mockFuel.currentAccount();
   const wallet = await mockFuel.getWallet(currentAccount);
-  return wallet;
+  return { wallet, fuel: mockFuel };
 }
 
 export function mockUseWallet(wallet: FuelWalletLocked) {
@@ -18,5 +19,11 @@ export function mockUseWallet(wallet: FuelWalletLocked) {
       isLoading: false,
       isError: false,
     };
+  });
+}
+
+export function mockUseFuel(fuel: MockConnection) {
+  return jest.spyOn(useFuel, 'useFuel').mockImplementation(() => {
+    return fuel as unknown as Fuel;
   });
 }

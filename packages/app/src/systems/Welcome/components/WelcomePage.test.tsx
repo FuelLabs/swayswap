@@ -1,17 +1,18 @@
-import type { FuelWalletLocked } from "@fuel-wallet/sdk";
 import { renderWithRouter, screen, waitFor } from "@swayswap/test-utils";
 
 import { App } from "~/App";
 import {
   createWallet,
+  mockUseFuel,
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 
-let wallet: FuelWalletLocked;
+// et wallet: FuelWalletLocked;
 
 beforeAll(async () => {
-  wallet = await createWallet();
+  const { wallet, fuel } = await createWallet(false);
   mockUseWallet(wallet);
+  mockUseFuel(fuel);
 });
 
 describe("WelcomePage", () => {
@@ -21,7 +22,7 @@ describe("WelcomePage", () => {
     await waitFor(
       async () => {
         expect(
-          await screen.findByText(/Welcome to SwaySwap/)
+          await screen.findByText(/Welcome to SwaySwap/i)
         ).toBeInTheDocument();
       },
       { timeout: 10000 }

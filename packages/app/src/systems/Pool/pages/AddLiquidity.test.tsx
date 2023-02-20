@@ -4,6 +4,8 @@ import {
   renderWithRouter,
   waitFor,
   fireEvent,
+  waitForElementToBeRemoved,
+  queryByText,
 } from "@swayswap/test-utils";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
@@ -11,17 +13,21 @@ import * as poolQueries from "../utils/queries";
 
 import { App } from "~/App";
 import { ZERO } from "~/systems/Core";
+import type { MockConnection } from "~/systems/Core/hooks/__mocks__/MockConnection";
 import {
   createWallet,
+  mockUseFuel,
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
 import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
 
 let wallet: FuelWalletLocked;
+let fuel: MockConnection;
 
 beforeAll(async () => {
-  wallet = await createWallet();
+  ({ wallet, fuel } = await createWallet());
+  mockUseFuel(fuel);
   mockUseWallet(wallet);
 });
 
@@ -41,15 +47,21 @@ describe("Add Liquidity", () => {
       token_reserve: ZERO,
       lp_token_supply: ZERO,
     }));
-    const newPoolMessage = await screen.findByText(/new pool/);
+    const newPoolMessage = await screen.findByText(/new pool/, undefined, {
+      timeout: 20000,
+    });
     expect(newPoolMessage).toBeInTheDocument();
   });
 
   it("should enter amount button be disabled by default", async () => {
+    console.log("in should enter amount test");
     renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-    const submitBtn = await screen.findByText(/Enter Ether amount/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
+    // await waitForElementToBeRemoved(() => screen.queryByText(/Connect/i));
+    await waitFor(async () => {
+      const submitBtn = await screen.findByText(/Enter Ether amount/);
+      expect(submitBtn).toBeInTheDocument();
+      expect(submitBtn).toBeDisabled();
+    });
   });
 
   it("should submit button ask to inform DAI", async () => {

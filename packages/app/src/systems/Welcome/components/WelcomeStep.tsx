@@ -14,7 +14,6 @@ type WelcomeStepProps = {
 export function WelcomeStep({ id, children }: WelcomeStepProps) {
   const { service } = useWelcomeSteps();
   const current = useSelector(service, stepsSelectors.current);
-
   if (current?.id < id) {
     return <Navigate to={`/welcome/${current.path}`} replace />;
   }

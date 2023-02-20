@@ -4,7 +4,7 @@ import type { FuelWalletConnection } from '@fuel-wallet/sdk';
 import { FuelWalletLocked, FuelWalletProvider, BaseConnection } from '@fuel-wallet/sdk';
 import EventEmitter from 'events';
 import type { AbstractAddress } from 'fuels';
-import { transactionRequestify, Wallet } from 'fuels';
+import { transactionRequestify, Wallet, Address } from 'fuels';
 
 import { FUEL_PROVIDER_URL } from '~/config';
 
@@ -16,7 +16,8 @@ export const toWallet = Wallet.generate(generateOptions);
 const events = new EventEmitter();
 
 export class MockConnection extends BaseConnection {
-  constructor() {
+  isConnectedOverride;
+  constructor(isConnected = true) {
     super();
     events.addListener('request', this.onCommunicationMessage.bind(this));
     this.externalMethods([
@@ -29,10 +30,11 @@ export class MockConnection extends BaseConnection {
       this.sendTransaction,
       this.currentAccount,
     ]);
+    this.isConnectedOverride = isConnected;
   }
 
-  static start() {
-    return new MockConnection();
+  static start(isConnectedOverride = true) {
+    return new MockConnection(isConnectedOverride);
   }
 
   async network() {
@@ -42,7 +44,7 @@ export class MockConnection extends BaseConnection {
   }
 
   async isConnected() {
-    return true;
+    return this.isConnectedOverride;
   }
 
   async connect() {
@@ -79,6 +81,34 @@ export class MockConnection extends BaseConnection {
     );
     return new FuelWalletLocked(address, provider);
   }
+
+  async getProvider() {
+    const provider = new FuelWalletProvider(
+      FUEL_PROVIDER_URL,
+      this as unknown as FuelWalletConnection
+    );
+    return provider;
+  }
+
+  readonly utils = {
+    // TODO: remove createAddress once fuels-ts replace input
+    // class address with string. The warn message is to avoid
+    // developers to use this method.
+    createAddress: (address: string) => {
+      // eslint-disable-next-line no-console
+      console.warn('Do not use this method! It will be removed in the next release.');
+      return Address.fromString(address);
+    },
+  };
+
+  // Externalize events names
+  readonly events = {
+    accounts: 'accounts',
+    currentAccount: 'currentAccount',
+    connection: 'connection',
+    network: 'network',
+    assets: 'assets',
+  };
 }
 
 global.window = {

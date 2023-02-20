@@ -4,7 +4,7 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.31.0
+  Fuels version: 0.31.1
   Forc version: 0.32.2
   Fuel-Core version: 0.17.1
 */
@@ -194,12 +194,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'storage',
-          arguments: ['read', 'write'],
-        },
-        {
           name: 'payable',
           arguments: [],
+        },
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
         },
       ],
     },
@@ -224,12 +224,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'storage',
-          arguments: ['read'],
-        },
-        {
           name: 'payable',
           arguments: [],
+        },
+        {
+          name: 'storage',
+          arguments: ['read'],
         },
       ],
     },
@@ -358,12 +358,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'payable',
-          arguments: [],
-        },
-        {
           name: 'storage',
           arguments: ['read', 'write'],
+        },
+        {
+          name: 'payable',
+          arguments: [],
         },
       ],
     },
@@ -388,12 +388,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'storage',
-          arguments: ['read', 'write'],
-        },
-        {
           name: 'payable',
           arguments: [],
+        },
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
         },
       ],
     },
