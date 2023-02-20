@@ -4,8 +4,6 @@ import {
   renderWithRouter,
   waitFor,
   fireEvent,
-  waitForElementToBeRemoved,
-  queryByText,
 } from "@swayswap/test-utils";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
@@ -55,7 +53,6 @@ describe("Add Liquidity", () => {
 
   it("should enter amount button be disabled by default", async () => {
     renderWithRouter(<App />, { route: "/pool/add-liquidity" });
-    // await waitForElementToBeRemoved(() => screen.queryByText(/Connect/i));
     await waitFor(async () => {
       const submitBtn = await screen.findByText(/Enter Ether amount/);
       expect(submitBtn).toBeInTheDocument();

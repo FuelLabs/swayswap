@@ -1,4 +1,4 @@
-import type { Fuel, FuelWalletLocked } from "@fuel-wallet/sdk";
+import type { FuelWalletLocked } from "@fuel-wallet/sdk";
 import {
   screen,
   renderWithRouter,
