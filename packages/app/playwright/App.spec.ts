@@ -19,8 +19,6 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
 
   // WALLET SETUP
   const walletPage = await context.newPage();
-  await appPage.on('console', (msg) => console.log(msg));
-  await walletPage.on('console', (msg) => console.log(msg));
   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
   const signupPage = await context.waitForEvent('page', {
     predicate: (page) => page.url().includes('sign-up'),
@@ -108,8 +106,6 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     // Connect to wallet
     const connectPage = await connectPagePromise;
     await connectPage.waitForLoadState();
-
-    // await connectPage.screenshot({ path: 'temp.png', fullPage: true });
 
     let nextButton = connectPage.locator('button').getByText('Next');
     await nextButton.click();
