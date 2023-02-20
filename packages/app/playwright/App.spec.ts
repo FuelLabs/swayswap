@@ -19,6 +19,8 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
 
   // WALLET SETUP
   const walletPage = await context.newPage();
+  await appPage.on('console', (msg) => console.log(msg));
+  await walletPage.on('console', (msg) => console.log(msg));
   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
   const signupPage = await context.waitForEvent('page', {
     predicate: (page) => page.url().includes('sign-up'),
@@ -52,18 +54,14 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
   await signupPage.getByRole('checkbox').check();
   expect(signupPage.getByRole('checkbox')).toBeChecked();
   await signupPage.locator('button').getByText('Next').click();
-  expect(signupPage.getByText('Wallet created successfully'))
-    .toBeVisible({ timeout: 15000 })
-    .then(async () => {
-      // Navigate to add network and add test network
-      await walletPage.goto(`chrome-extension://${extensionId}/popup.html#/networks/add`);
-      await walletPage.reload({ waitUntil: 'load' });
-      await walletPage.locator('[aria-label="Network name"]').fill('test');
-      await walletPage
-        .locator('[aria-label="Network URL"]')
-        .fill(process.env.VITE_FUEL_PROVIDER_URL!);
-      await walletPage.locator('button', { hasText: 'Create' }).click();
-    });
+  await expect(signupPage.getByText('Wallet created successfully')).toBeVisible({ timeout: 15000 });
+  // Navigate to add network and add test network
+  await walletPage.goto(`chrome-extension://${extensionId}/popup.html#/networks/add`);
+  await walletPage.reload({ waitUntil: 'load' });
+  await walletPage.screenshot({ path: 'temp.png', fullPage: true });
+  await walletPage.locator('[aria-label="Network name"]').fill('test');
+  await walletPage.locator('[aria-label="Network URL"]').fill(process.env.VITE_FUEL_PROVIDER_URL!);
+  await walletPage.locator('button', { hasText: 'Create' }).click();
 
   return { appPage, walletPage };
 }
@@ -110,6 +108,8 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     // Connect to wallet
     const connectPage = await connectPagePromise;
     await connectPage.waitForLoadState();
+
+    // await connectPage.screenshot({ path: 'temp.png', fullPage: true });
 
     let nextButton = connectPage.locator('button').getByText('Next');
     await nextButton.click();
