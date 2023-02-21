@@ -7,8 +7,6 @@ import {
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 
-// et wallet: FuelWalletLocked;
-
 beforeAll(async () => {
   const { wallet, fuel } = await createWallet(false);
   mockUseWallet(wallet);
@@ -41,7 +39,9 @@ describe("WelcomePage", () => {
       name: /Connect Wallet/i,
     });
     expect(connectButton).toBeInTheDocument();
-    await user.click(connectButton);
+    await waitFor(async () => {
+      await user.click(connectButton);
+    });
 
     /**
      * Second step: done
@@ -50,14 +50,18 @@ describe("WelcomePage", () => {
       /Accept the use agreement/i
     );
     expect(acceptAgreement).not.toBeChecked();
-    await user.click(acceptAgreement);
+    await waitFor(async () => {
+      await user.click(acceptAgreement);
+    });
     expect(acceptAgreement).toBeChecked();
 
     const goToSwapBtn = await screen.findByRole("button", {
       name: /Get Swapping!/i,
     });
     expect(goToSwapBtn).toBeInTheDocument();
-    await user.click(goToSwapBtn);
+    await waitFor(async () => {
+      await user.click(goToSwapBtn);
+    });
 
     /**
      * Finished: go to swap
