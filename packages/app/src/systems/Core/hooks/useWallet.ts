@@ -14,7 +14,7 @@ export const useWallet = () => {
     async () => {
       const isConnected = await fuel?.isConnected();
       if (!isConnected) {
-        await fuel?.connect();
+        // await fuel?.connect();
       }
       const currentAccount = await fuel!.currentAccount();
       const currentWallet = (await fuel?.getWallet(currentAccount))!;
