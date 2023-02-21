@@ -11,7 +11,7 @@ export async function initializeTokenContract(
 ) {
   const mintAmount = bn(MINT_AMOUNT || '0x1D1A94A2000');
   const address = {
-    value: tokenContract.wallet!.address.toB256(),
+    value: tokenContract.account!.address.toB256(),
   };
 
   try {

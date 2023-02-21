@@ -4,13 +4,13 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.31.1
+  Fuels version: 0.32.0
   Forc version: 0.32.2
-  Fuel-Core version: 0.17.1
+  Fuel-Core version: 0.17.2
 */
 
 import { Interface, Contract } from 'fuels';
-import type { Provider, BaseWalletLocked, AbstractAddress } from 'fuels';
+import type { Provider, Account, AbstractAddress } from 'fuels';
 import type { ExchangeContractAbi, ExchangeContractAbiInterface } from '../ExchangeContractAbi';
 
 const _abi = {
@@ -194,12 +194,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'payable',
-          arguments: [],
-        },
-        {
           name: 'storage',
           arguments: ['read', 'write'],
+        },
+        {
+          name: 'payable',
+          arguments: [],
         },
       ],
     },
@@ -358,12 +358,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'storage',
-          arguments: ['read', 'write'],
-        },
-        {
           name: 'payable',
           arguments: [],
+        },
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
         },
       ],
     },
@@ -418,12 +418,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'payable',
-          arguments: [],
-        },
-        {
           name: 'storage',
           arguments: ['read', 'write'],
+        },
+        {
+          name: 'payable',
+          arguments: [],
         },
       ],
     },
@@ -466,8 +466,8 @@ export class ExchangeContractAbi__factory {
   }
   static connect(
     id: string | AbstractAddress,
-    walletOrProvider: BaseWalletLocked | Provider
+    accountOrProvider: Account | Provider
   ): ExchangeContractAbi {
-    return new Contract(id, _abi, walletOrProvider) as unknown as ExchangeContractAbi;
+    return new Contract(id, _abi, accountOrProvider) as unknown as ExchangeContractAbi;
   }
 }

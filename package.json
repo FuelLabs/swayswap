@@ -93,6 +93,6 @@
     }
   },
   "dependencies": {
-    "fuels": "next"
+    "fuels": "0.32.0"
   }
 }

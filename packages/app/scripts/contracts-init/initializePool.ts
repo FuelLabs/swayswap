@@ -10,11 +10,11 @@ export async function initializePool(
   exchangeContract: ExchangeContractAbi,
   overrides: { gasPrice: BigNumberish }
 ) {
-  const wallet = tokenContract.wallet!;
+  // const wallet = tokenContract.wallet!;
   const tokenAmount = bn(TOKEN_AMOUNT || '0x44364C5BB0000');
   const ethAmount = bn(ETH_AMOUNT || '0xE8F2727500');
   const address = {
-    value: wallet.address.toB256(),
+    value: tokenContract.account!.address!.toString(),
   };
   const tokenId = {
     value: tokenContract.id.toB256(),
@@ -30,7 +30,7 @@ export async function initializePool(
     .call();
 
   process.stdout.write('Initialize pool\n');
-  const deadline = await wallet.provider.getBlockNumber();
+  const deadline = await tokenContract.provider!.getBlockNumber();
   await exchangeContract
     .multiCall([
       exchangeContract.functions.deposit().callParams({

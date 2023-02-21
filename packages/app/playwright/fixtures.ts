@@ -4,7 +4,7 @@ import type { BrowserContext } from '@playwright/test';
 import { chromium, test as base } from '@playwright/test';
 import admZip from 'adm-zip';
 import * as fs from 'fs';
-import { request } from 'https';
+import https, { request } from 'https';
 import path from 'path';
 
 const pathToExtension = path.join(__dirname, './dist-crx');
@@ -25,20 +25,23 @@ let context: BrowserContext;
 test.beforeAll(async () => {
   const extensionUrl = 'https://wallet.fuel.network/app/fuel-wallet.zip';
 
-  const zipFile = 'fuel-wallet.zip';
+  const zipFile = './packages/app/playwright/fuel-wallet.zip';
   const zipFileStream = fs.createWriteStream(zipFile);
-  request(extensionUrl, (res) => {
-    res.pipe(zipFileStream);
-    // after download completed close filestream
-    zipFileStream.on('finish', () => {
-      zipFileStream.close();
-      console.log('Download Completed');
+  https
+    .get(extensionUrl, (res) => {
+      res.pipe(zipFileStream);
+      // after download completed close filestream
+      zipFileStream.on('finish', () => {
+        zipFileStream.close();
+        console.log('Download Completed extracting zip...');
+        const zip = new admZip(zipFile);
+        zip.extractAllTo('./packages/app/playwright/dist-crx', true);
+        console.log('zip extracted');
+      });
+    })
+    .on('error', (error) => {
+      console.log('error: ', error);
     });
-    // const zip = new admZip(zipFile);
-    // zip.extractAllTo('dist-crx', true);
-  }).on('error', (error) => {
-    console.log('error: ', error);
-  });
 
   context = await chromium.launchPersistentContext('', {
     headless: false,
