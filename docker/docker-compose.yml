@@ -2,6 +2,7 @@ version: "3"
 
 services:
   swayswap-fuel-core:
+    platform: linux/amd64
     container_name: "swayswap-fuel-core-${ENVIRONMENT:-development}"
     environment:
       MIN_GAS_PRICE: ${GAS_PRICE}

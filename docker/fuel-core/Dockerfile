@@ -1,4 +1,4 @@
-FROM ghcr.io/fuellabs/fuel-core:v0.17.3
+FROM ghcr.io/fuellabs/fuel-core:v0.17.2
 
 ARG IP=0.0.0.0
 ARG PORT=4000
@@ -27,7 +27,6 @@ CMD exec ./fuel-core run \
     --vm-backtrace \
     --poa-instant=true \
     --consensus-key ${CONSENSUS_KEY} \
-    --utxo-validation \
     --chain ./chainConfig.json
 
 EXPOSE ${PORT}

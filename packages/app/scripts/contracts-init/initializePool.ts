@@ -14,10 +14,10 @@ export async function initializePool(
   const tokenAmount = bn(TOKEN_AMOUNT || '0x44364C5BB0000');
   const ethAmount = bn(ETH_AMOUNT || '0xE8F2727500');
   const address = {
-    value: tokenContract.account!.address!.toString(),
+    value: tokenContract.account!.address!.toHexString(),
   };
   const tokenId = {
-    value: tokenContract.id.toB256(),
+    value: tokenContract.id.toHexString(),
   };
 
   await tokenContract.functions.mint_coins(tokenAmount).txParams(overrides).call();
