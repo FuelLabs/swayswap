@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { NativeAssetId, Provider, Wallet } from 'fuels';
+import { Account, NativeAssetId, Provider, Wallet } from 'fuels';
 import { log } from 'src/log';
 
 export async function getWalletInstance() {
@@ -8,7 +8,10 @@ export async function getWalletInstance() {
 
   if (WALLET_SECRET) {
     log('WALLET_SECRET detected');
-    return Wallet.fromPrivateKey(WALLET_SECRET, PROVIDER_URL);
+    const wallet = Wallet.fromPrivateKey(WALLET_SECRET, PROVIDER_URL);
+    const provider = new Provider(PROVIDER_URL!);
+
+    return new Account(wallet.address, provider);
   }
   // If no WALLET_SECRET is informed we assume
   // We are on a test environment
