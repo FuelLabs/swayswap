@@ -5,3 +5,6 @@ node_modules/
 /playwright/.cache/
 /playwright/fuel-wallet.zip
 /playwright/dist-crx
+/test-results/
+/playwright-report/
+/playwright/.cache/

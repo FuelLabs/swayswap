@@ -1,4 +1,4 @@
-import type { BigNumberish } from 'fuels';
+import { BigNumberish, Wallet } from 'fuels';
 import { useQuery } from 'react-query';
 
 import { getOverrides } from '../utils/gas';
@@ -30,15 +30,20 @@ export function useTokenMethods(tokenId: string) {
           return mintAmount;
         },
         async mint(gasLimit: BigNumberish) {
+          console.log('Here');
+          const tempWallet = Wallet.fromPrivateKey(
+            '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298'
+          );
+          const tempContract = TokenContractAbi__factory.connect(tokenId, tempWallet);
           const { transactionResult } = await contract.functions
             .mint()
             .txParams(
               getOverrides({
                 variableOutputs: 1,
-                gasLimit,
               })
             )
             .call();
+          console.log('tx res: ', transactionResult);
           return transactionResult;
         },
       };
@@ -49,8 +54,4 @@ export function useTokenMethods(tokenId: string) {
   );
 
   return { methods, isLoading: isTokenMethodsLoading };
-
-  // const contract = useMemo(() => {
-  //   return TokenContractAbi__factory.connect(tokenId, wallet!);
-  // }, [wallet]);
 }

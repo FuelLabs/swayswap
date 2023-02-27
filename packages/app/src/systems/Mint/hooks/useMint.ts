@@ -24,15 +24,20 @@ export function useMint(opts: UseMintOpts = {}) {
       enabled: Boolean(methods && !isLoading),
     }
   );
+
   const { data: mintAmount } = useQuery(
     ['MintPreview--mintAmount'],
-    () => methods?.getMintAmount(),
+    () => {
+      console.log('in min amount');
+      return methods?.getMintAmount();
+    },
     { enabled: Boolean(methods && !isLoading) }
   );
 
   const mutation = useMutation(
     async () => {
-      if (txCost.total.isZero()) return;
+      console.log('in mint mutation');
+      //if (txCost.total.isZero()) return;
       return methods!.mint(txCost.total);
     },
     { onSuccess: txFeedback('Token received successfully!', handleSuccess) }

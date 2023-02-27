@@ -27,29 +27,34 @@ test.beforeAll(async () => {
 
   const zipFile = './packages/app/playwright/fuel-wallet.zip';
   const zipFileStream = fs.createWriteStream(zipFile);
-  https
-    .get(extensionUrl, (res) => {
-      res.pipe(zipFileStream);
-      // after download completed close filestream
-      zipFileStream.on('finish', () => {
-        zipFileStream.close();
-        console.log('Download Completed extracting zip...');
-        const zip = new admZip(zipFile);
-        zip.extractAllTo('./packages/app/playwright/dist-crx', true);
-        console.log('zip extracted');
+  // TODO fetch the exact version of wallet to avoid breaking ci
+  const zipPromise = new Promise((resolve, reject) => {
+    https
+      .get(extensionUrl, (res) => {
+        res.pipe(zipFileStream);
+        // after download completed close filestream
+        zipFileStream.on('finish', async () => {
+          zipFileStream.close();
+          console.log('Download Completed extracting zip...');
+          const zip = new admZip(zipFile); // eslint-disable-line new-cap
+          zip.extractAllTo('./packages/app/playwright/dist-crx', true);
+          console.log('zip extracted');
+          context = await chromium.launchPersistentContext('', {
+            headless: false,
+            args: [
+              `--disable-extensions-except=${pathToExtension}`,
+              `--load-extension=${pathToExtension},`,
+            ],
+          });
+          resolve(context);
+        });
+      })
+      .on('error', (error) => {
+        console.log('error: ', error);
+        reject(error);
       });
-    })
-    .on('error', (error) => {
-      console.log('error: ', error);
-    });
-
-  context = await chromium.launchPersistentContext('', {
-    headless: false,
-    args: [
-      `--disable-extensions-except=${pathToExtension}`,
-      `--load-extension=${pathToExtension},`,
-    ],
   });
+  await zipPromise;
 });
 
 test.use({

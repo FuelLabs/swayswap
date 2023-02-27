@@ -67,6 +67,7 @@ export async function getTransactionCost(
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
+    console.log('in catch', err);
     return emptyTransactionCost(err?.message);
   }
 }

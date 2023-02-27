@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.32.0
-  Forc version: 0.32.2
-  Fuel-Core version: 0.17.2
+  Fuels version: 0.33.0
+  Forc version: 0.35.3
+  Fuel-Core version: 0.17.3
 */
 
 import { Interface, Contract } from 'fuels';
@@ -418,12 +418,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'payable',
-          arguments: [],
-        },
-        {
           name: 'storage',
           arguments: ['read', 'write'],
+        },
+        {
+          name: 'payable',
+          arguments: [],
         },
       ],
     },

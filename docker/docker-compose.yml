@@ -19,6 +19,24 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
+  swayswap-faucet:
+    platform: linux/amd64
+    container_name: "swayswap-faucet-${ENVIRONMENT:-development}"
+    environment:
+      MIN_GAS_PRICE: ${GAS_PRICE}
+      WALLET_SECRET_KEY: ${WALLET_SECRET}
+      DISPENSE_AMOUNT: ${DISPENSE_AMOUNT}
+      FUEL_NODE_URL: http://swayswap-fuel-core-${ENVIRONMENT:-development}:4000/graphql
+    # Other configurations can be found at;
+    # https://github.com/FuelLabs/faucet#configuration
+    image: ghcr.io/fuellabs/faucet:v0.5.0
+    ports:
+      - "${FUEL_FAUCET_PORT:-4040}:3000"
+    links:
+      - swayswap-fuel-core
+    depends_on:
+      swayswap-fuel-core:
+        condition: service_healthy
 
 volumes:
   swayswap-fuel-core-db:
