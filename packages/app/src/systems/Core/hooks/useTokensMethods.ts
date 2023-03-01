@@ -1,5 +1,3 @@
-import type { BigNumberish } from 'fuels';
-import { Wallet } from 'fuels';
 import { useQuery } from 'react-query';
 
 import { getOverrides } from '../utils/gas';
@@ -30,7 +28,7 @@ export function useTokenMethods(tokenId: string) {
           const { value: mintAmount } = await contract.functions.get_mint_amount().get();
           return mintAmount;
         },
-        async mint(gasLimit: BigNumberish) {
+        async mint() {
           const { transactionResult } = await contract.functions
             .mint()
             .txParams(

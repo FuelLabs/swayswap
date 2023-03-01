@@ -21,10 +21,6 @@ export function MintPage() {
     return "Mint tokens";
   };
 
-  console.log("mint amount", mint.mintAmount.toString());
-  console.log("tx cost: ", mint.txCost.total.toString());
-  console.log("error? ", mint.txCost.error);
-
   return (
     <MainLayout>
       <Card>
