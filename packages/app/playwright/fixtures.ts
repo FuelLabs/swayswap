@@ -4,7 +4,7 @@ import type { BrowserContext } from '@playwright/test';
 import { chromium, test as base } from '@playwright/test';
 import admZip from 'adm-zip';
 import * as fs from 'fs';
-import https, { request } from 'https';
+import https from 'https';
 import path from 'path';
 
 const pathToExtension = path.join(__dirname, './dist-crx');
