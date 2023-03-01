@@ -28,7 +28,6 @@ export function useMint(opts: UseMintOpts = {}) {
   const { data: mintAmount } = useQuery(
     ['MintPreview--mintAmount'],
     () => {
-      console.log('in min amount');
       return methods?.getMintAmount();
     },
     { enabled: Boolean(methods && !isLoading) }
@@ -36,8 +35,7 @@ export function useMint(opts: UseMintOpts = {}) {
 
   const mutation = useMutation(
     async () => {
-      console.log('in mint mutation');
-      //if (txCost.total.isZero()) return;
+      if (txCost.total.isZero()) return;
       return methods!.mint(txCost.total);
     },
     { onSuccess: txFeedback('Token received successfully!', handleSuccess) }

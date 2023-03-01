@@ -12,9 +12,8 @@ import { Button, Card } from "~/systems/UI";
 
 export function MintPage() {
   const mint = useMint();
-  // const shouldDisableMint =
-  //   mint.txCost.total.lte(0) || !!mint.txCost.error || mint.mintAmount.lte(0);
-  const shouldDisableMint = mint.mintAmount.lte(0);
+  const shouldDisableMint =
+    mint.txCost.total.lte(0) || !!mint.txCost.error || mint.mintAmount.lte(0);
 
   const getTextButton = () => {
     if (!mint.mintAmount) return "Mint is closed!";
