@@ -19,8 +19,6 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
 
   // WALLET SETUP
   const walletPage = await context.newPage();
-  walletPage.on('console', (msg) => console.log(msg));
-  appPage.on('console', (msg) => console.log(msg));
   await walletPage.goto(`chrome-extension://${extensionId}/popup.html`);
   const signupPage = await context.waitForEvent('page', {
     predicate: (page) => page.url().includes('sign-up'),
@@ -47,17 +45,12 @@ async function walletSetup(context: BrowserContext, extensionId: string) {
   const confirmPassword = signupPage.locator(`[aria-label="Confirm Password"]`);
   await confirmPassword.type(WALLET_PASSWORD);
 
-  // This is needed to dismiss the password security popup
-  await signupPage.click('body');
-
-  // Agree to T&S
-  await signupPage.getByRole('checkbox').check();
-  await expect(signupPage.getByRole('checkbox')).toBeChecked();
   await signupPage.locator('button').getByText('Next').click();
   await expect(signupPage.getByText('Wallet created successfully')).toBeVisible({ timeout: 15000 });
   // Navigate to add network and add test network
-  await walletPage.goto(`chrome-extension://${extensionId}/popup.html#/networks/add`);
-  await walletPage.reload({ waitUntil: 'load' });
+  await walletPage.reload();
+  await walletPage.locator('[aria-label="Selected Network"]').click();
+  await walletPage.locator('button').getByText('Add new network').click();
   await walletPage.locator('[aria-label="Network name"]').fill('test');
   await walletPage.locator('[aria-label="Network URL"]').fill(process.env.VITE_FUEL_PROVIDER_URL!);
   await walletPage.locator('button', { hasText: 'Create' }).click();
