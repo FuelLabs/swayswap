@@ -3,21 +3,21 @@ library exchange_abi;
 use std::contract_id::ContractId;
 
 pub struct RemoveLiquidityInfo {
-    eth_amount: u64,
-    token_amount: u64,
+    token_amount1: u64,
+    token_amount2: u64,
 }
 
 pub struct PositionInfo {
-    eth_amount: u64,
-    token_amount: u64,
-    eth_reserve: u64,
-    token_reserve: u64,
+    token_amount1: u64,
+    token_amount2: u64,
+    token_reserve1: u64,
+    token_reserve2: u64,
     lp_token_supply: u64,
 }
 
 pub struct PoolInfo {
-    eth_reserve: u64,
-    token_reserve: u64,
+    token_reserve1: u64,
+    token_reserve2: u64,
     lp_token_supply: u64,
 }
 

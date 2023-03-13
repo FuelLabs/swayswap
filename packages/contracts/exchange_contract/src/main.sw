@@ -20,13 +20,15 @@ use swayswap_helpers::get_msg_sender_address_or_panic;
 // Constants
 ////////////////////////////////////////
 
-/// Token ID of Ether
-const ETH_ID = 0x0000000000000000000000000000000000000000000000000000000000000000;
+/// The token id key from storage
+/// Contract ID of the token on one side of the pool.
+/// Set of the deploy time
+const TOKEN_ID_KEY1 = 0x0000000000000000000000000000000000000000000000000000000000000001;
 
 /// The token id key from storage
 /// Contract ID of the token on the other side of the pool.
 /// Set of the deploy time
-const TOKEN_ID_KEY = 0x0000000000000000000000000000000000000000000000000000000000000001;
+const TOKEN_ID_KEY2 = 0x0000000000000000000000000000000000000000000000000000000000000002;
 
 /// Minimum ETH liquidity to open a pool.
 const MINIMUM_LIQUIDITY = 1; //A more realistic value would be 1000000000;
@@ -134,8 +136,8 @@ impl Exchange for Contract {
     #[storage(read)]
     fn get_pool_info() -> PoolInfo {
         PoolInfo {
-            eth_reserve: get_current_reserve(ETH_ID),
-            token_reserve: get_current_reserve(get::<b256>(TOKEN_ID_KEY).unwrap()),
+            token_reserve1: get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap()),
+            token_reserve2: get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap()),
             lp_token_supply: storage.lp_token_supply,
         }
     }
@@ -143,54 +145,55 @@ impl Exchange for Contract {
     #[storage(read)]
     fn get_position(amount: u64) -> PositionInfo {
         let total_liquidity = storage.lp_token_supply;
-        let eth_reserve = get_current_reserve(ETH_ID);
-        let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY).unwrap());
-        let eth_amount = mutiply_div(amount, eth_reserve, total_liquidity);
-        let token_amount = mutiply_div(amount, token_reserve, total_liquidity);
+        let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
+        let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
+        let token_amount1 = mutiply_div(amount, token_reserve1, total_liquidity);
+        let token_amount2 = mutiply_div(amount, token_reserve2, total_liquidity);
 
         PositionInfo {
             lp_token_supply: total_liquidity,
-            eth_reserve: eth_reserve,
-            token_reserve: token_reserve,
-            eth_amount: eth_amount,
-            token_amount: token_amount
+            token_reserve1: token_reserve1,
+            token_reserve2: token_reserve2,
+            token_amount1: token_amount1,
+            token_amount2: token_amount2
         }
     }
 
     #[storage(read), payable]
     fn get_add_liquidity(amount: u64, asset_id: b256) -> PreviewAddLiquidityInfo {
-        let token_id = get::<b256>(TOKEN_ID_KEY).unwrap();
+        let token_id1 = get::<b256>(TOKEN_ID_KEY1).unwrap();
+        let token_id2 = get::<b256>(TOKEN_ID_KEY2).unwrap();
         let total_liquidity = storage.lp_token_supply;
-        let eth_reserve = get_current_reserve(ETH_ID);
-        let token_reserve = get_current_reserve(token_id);
-        let mut current_eth_amount = amount;
+        let token_reserve1 = get_current_reserve(token_id1);
+        let token_reserve2 = get_current_reserve(token_id2);
+        let mut current_token_amount2 = amount;
         let mut lp_token_received = 0;
-        let mut token_amount = 0;
+        let mut token_amount1 = 0;
   
-        if (asset_id == token_id) {
-            current_eth_amount = mutiply_div(amount, eth_reserve, token_reserve);
+        if (asset_id == token_id1) {
+            current_token_amount2 = mutiply_div(amount, token_reserve2, token_reserve1);
         }
 
         if total_liquidity > 0 {
-            token_amount = mutiply_div(current_eth_amount, token_reserve, eth_reserve);
-            lp_token_received = mutiply_div(current_eth_amount, total_liquidity, eth_reserve);
+            token_amount1 = mutiply_div(current_token_amount2, token_reserve1, token_reserve2);
+            lp_token_received = mutiply_div(current_token_amount2, total_liquidity, token_reserve2);
         } else {
-            lp_token_received = current_eth_amount;
+            lp_token_received = current_token_amount2;
         };
 
-        if (asset_id == token_id) {
-            token_amount = current_eth_amount;
+        if (asset_id == token_id1) {
+            token_amount1 = current_token_amount2;
         }
 
         PreviewAddLiquidityInfo {
-            token_amount: token_amount,
+            token_amount: token_amount1,
             lp_token_received: lp_token_received,
         }
     }
 
     #[storage(read, write), payable]
     fn deposit() {
-        assert(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY).unwrap());
+        assert(msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY1).unwrap() || msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY2).unwrap());
 
         let sender = get_msg_sender_address_or_panic();
 
@@ -200,7 +203,7 @@ impl Exchange for Contract {
 
     #[storage(read, write)]
     fn withdraw(amount: u64, asset_id: ContractId) {
-        assert(asset_id.into() == ETH_ID || asset_id.into() == get::<b256>(TOKEN_ID_KEY).unwrap());
+        assert(asset_id.into() ==  get::<b256>(TOKEN_ID_KEY1).unwrap() || asset_id.into() == get::<b256>(TOKEN_ID_KEY2).unwrap());
 
         let sender = get_msg_sender_address_or_panic();
 
@@ -217,34 +220,34 @@ impl Exchange for Contract {
     fn add_liquidity(min_liquidity: u64, deadline: u64) -> u64 {
         assert(msg_amount() == 0);
         assert(deadline > height());
-        assert(msg_asset_id().into() == ETH_ID || msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY).unwrap());
+        assert(msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY1).unwrap() || msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY2).unwrap());
 
         let sender = get_msg_sender_address_or_panic();
 
         let total_liquidity = storage.lp_token_supply;
 
-        let current_eth_amount = storage.deposits.get((sender, ContractId::from(ETH_ID))).unwrap_or(0);
-        let current_token_amount = storage.deposits.get((sender, ContractId::from(get::<b256>(TOKEN_ID_KEY).unwrap()))).unwrap_or(0);
+        let current_token_amount1 = storage.deposits.get((sender, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap()))).unwrap_or(0);
+        let current_token_amount2 = storage.deposits.get((sender, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()))).unwrap_or(0);
 
-        assert(current_eth_amount > 0);
+        assert(current_token_amount1 > 0);
 
         let mut minted: u64 = 0;
         if total_liquidity > 0 {
             assert(min_liquidity > 0);
 
-            let eth_reserve = get_current_reserve(ETH_ID);
-            let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY).unwrap());
-            let token_amount = mutiply_div(current_eth_amount, token_reserve, eth_reserve);
-            let liquidity_minted = mutiply_div(current_eth_amount, total_liquidity, eth_reserve);
+            let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
+            let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
+            let token_amount = mutiply_div(current_token_amount1, token_reserve2, token_reserve1);
+            let liquidity_minted = mutiply_div(current_token_amount1, total_liquidity, token_reserve1);
 
             assert(liquidity_minted >= min_liquidity);
 
             // if token ratio is correct, proceed with liquidity operation
             // otherwise, return current user balances in contract
-            if (current_token_amount >= token_amount) {
+            if (current_token_amount2 >= token_amount) {
                 // Add fund to the reserves
-                add_reserve(get::<b256>(TOKEN_ID_KEY).unwrap(), token_amount);
-                add_reserve(ETH_ID, current_eth_amount);
+                add_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), token_amount);
+                add_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), current_token_amount1);
                 // Mint LP token
                 mint(liquidity_minted);
                 storage.lp_token_supply = total_liquidity + liquidity_minted;
@@ -252,25 +255,25 @@ impl Exchange for Contract {
                 transfer_to_address(liquidity_minted, contract_id(), sender);
 
                 // If user sent more than the correct ratio, we deposit back the extra tokens
-                let token_extra = current_token_amount - token_amount;
+                let token_extra = current_token_amount2 - token_amount;
                 if (token_extra > 0) {
-                    transfer_to_address(token_extra, ContractId::from(get::<b256>(TOKEN_ID_KEY).unwrap()), sender);
+                    transfer_to_address(token_extra, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()), sender);
                 }
 
                 minted = liquidity_minted;
             } else {
-                transfer_to_address(current_token_amount, ContractId::from(get::<b256>(TOKEN_ID_KEY).unwrap()), sender);
-                transfer_to_address(current_eth_amount, ContractId::from(ETH_ID), sender);
+                transfer_to_address(current_token_amount1, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap()), sender);
+                transfer_to_address(current_token_amount2, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()), sender);
                 minted = 0;
             }
         } else {
-            assert(current_eth_amount > MINIMUM_LIQUIDITY);
+            assert(current_token_amount1 > MINIMUM_LIQUIDITY);
 
-            let initial_liquidity = current_eth_amount;
+            let initial_liquidity = current_token_amount1;
 
             // Add fund to the reserves
-            add_reserve(get::<b256>(TOKEN_ID_KEY).unwrap(), current_token_amount);
-            add_reserve(ETH_ID, current_eth_amount);
+            add_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), current_token_amount2);
+            add_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), current_token_amount1);
 
             // Mint LP token
             mint(initial_liquidity);
@@ -282,45 +285,45 @@ impl Exchange for Contract {
         };
 
         // Clear user contract balances after finishing add/create liquidity
-        storage.deposits.insert((sender, ContractId::from(get::<b256>(TOKEN_ID_KEY).unwrap())), 0);
-        storage.deposits.insert((sender, ContractId::from(ETH_ID)), 0);
+        storage.deposits.insert((sender, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap())), 0);
+        storage.deposits.insert((sender, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap())), 0);
 
         minted
     }
 
     #[storage(read, write), payable]
-    fn remove_liquidity(min_eth: u64, min_tokens: u64, deadline: u64) -> RemoveLiquidityInfo {
+    fn remove_liquidity(min_tokens1: u64, min_tokens2: u64, deadline: u64) -> RemoveLiquidityInfo {
         assert(msg_amount() > 0);
         assert(msg_asset_id().into() == (contract_id()).into());
         assert(deadline > height());
-        assert(min_eth > 0 && min_tokens > 0);
+        assert(min_tokens1 > 0 && min_tokens2 > 0);
 
         let sender = get_msg_sender_address_or_panic();
 
         let total_liquidity = storage.lp_token_supply;
         assert(total_liquidity > 0);
 
-        let eth_reserve = get_current_reserve(ETH_ID);
-        let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY).unwrap());
-        let eth_amount = mutiply_div(msg_amount(), eth_reserve, total_liquidity);
-        let token_amount = mutiply_div(msg_amount(), token_reserve, total_liquidity);
+        let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
+        let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
+        let token_amount1 = mutiply_div(msg_amount(), token_reserve1, total_liquidity);
+        let token_amount2 = mutiply_div(msg_amount(), token_reserve2, total_liquidity);
 
-        assert((eth_amount >= min_eth) && (token_amount >= min_tokens));
+        assert((token_amount1 >= min_tokens1) && (token_amount2 >= min_tokens2));
 
         burn(msg_amount());
         storage.lp_token_supply = total_liquidity - msg_amount();
 
         // Add fund to the reserves
-        remove_reserve(get::<b256>(TOKEN_ID_KEY).unwrap(), token_amount);
-        remove_reserve(ETH_ID, eth_amount);
+        remove_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), token_amount1);
+        remove_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), token_amount2);
 
         // Send tokens back
-        transfer_to_address(eth_amount, ContractId::from(ETH_ID), sender);
-        transfer_to_address(token_amount, ContractId::from(get::<b256>(TOKEN_ID_KEY).unwrap()), sender);
+        transfer_to_address(token_amount1, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap()), sender);
+        transfer_to_address(token_amount2, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()), sender);
 
         RemoveLiquidityInfo {
-            eth_amount: eth_amount,
-            token_amount: token_amount,
+            token_amount1,
+            token_amount2,
         }
     }
 
@@ -331,30 +334,28 @@ impl Exchange for Contract {
 
         assert(deadline >= height());
         assert(forwarded_amount > 0 && min > 0);
-        assert(asset_id == ETH_ID || asset_id == get::<b256>(TOKEN_ID_KEY).unwrap());
+        assert(asset_id == get::<b256>(TOKEN_ID_KEY1).unwrap() || asset_id == get::<b256>(TOKEN_ID_KEY2).unwrap());
 
         let sender = get_msg_sender_address_or_panic();
 
-        let eth_reserve = get_current_reserve(ETH_ID);
-        let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY).unwrap());
+        let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
+        let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
 
-        let mut bought = 0;
-        if (asset_id == ETH_ID) {
-            let tokens_bought = get_input_price(forwarded_amount, eth_reserve, token_reserve);
+        let mut tokens_bought = 0;
+        if (asset_id == get::<b256>(TOKEN_ID_KEY1).unwrap()) {
+            tokens_bought = get_input_price(forwarded_amount, token_reserve1, token_reserve2);
             assert(tokens_bought >= min);
-            transfer_to_address(tokens_bought, ContractId::from(get::<b256>(TOKEN_ID_KEY).unwrap()), sender);
-            bought = tokens_bought;
+            transfer_to_address(tokens_bought, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()), sender);
             // Update reserve
-            add_reserve(ETH_ID, forwarded_amount);
-            remove_reserve(get::<b256>(TOKEN_ID_KEY).unwrap(), tokens_bought);
+            add_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), forwarded_amount);
+            remove_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), tokens_bought);
         } else {
-            let eth_bought = get_input_price(forwarded_amount, token_reserve, eth_reserve);
-            assert(eth_bought >= min);
-            transfer_to_address(eth_bought, ContractId::from(ETH_ID), sender);
-            bought = eth_bought;
+            tokens_bought = get_input_price(forwarded_amount, token_reserve2, token_reserve1);
+            assert(tokens_bought >= min);
+            transfer_to_address(tokens_bought, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap()), sender);
             // Update reserve
-            remove_reserve(ETH_ID, eth_bought);
-            add_reserve(get::<b256>(TOKEN_ID_KEY).unwrap(), bought);
+            remove_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), tokens_bought);
+            add_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), forwarded_amount);
         };
         bought
     }
@@ -366,53 +367,53 @@ impl Exchange for Contract {
 
         assert(deadline >= height());
         assert(amount > 0 && forwarded_amount > 0);
-        assert(asset_id == ETH_ID || asset_id == get::<b256>(TOKEN_ID_KEY).unwrap());
+        assert(asset_id == get::<b256>(TOKEN_ID_KEY1).unwrap() || asset_id == get::<b256>(TOKEN_ID_KEY2).unwrap());
 
         let sender = get_msg_sender_address_or_panic();
-        let eth_reserve = get_current_reserve(ETH_ID);
-        let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY).unwrap());
+        let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
+        let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
 
         let mut sold = 0;
-        if (asset_id == ETH_ID) {
-            let eth_sold = get_output_price(amount, eth_reserve, token_reserve);
-            assert(forwarded_amount >= eth_sold);
-            let refund = forwarded_amount - eth_sold;
-            if refund > 0 {
-                transfer_to_address(refund, ContractId::from(ETH_ID), sender);
-            };
-            transfer_to_address(amount, ContractId::from(get::<b256>(TOKEN_ID_KEY).unwrap()), sender);
-            sold = eth_sold;
-            // Update reserve
-            add_reserve(ETH_ID, eth_sold);
-            remove_reserve(get::<b256>(TOKEN_ID_KEY).unwrap(), amount);
-        } else {
-            let tokens_sold = get_output_price(amount, token_reserve, eth_reserve);
+        if (asset_id == get::<b256>(TOKEN_ID_KEY1).unwrap()) {
+            let tokens_sold = get_output_price(amount, token_reserve1, token_reserve2);
             assert(forwarded_amount >= tokens_sold);
             let refund = forwarded_amount - tokens_sold;
             if refund > 0 {
-                transfer_to_address(refund, ContractId::from(get::<b256>(TOKEN_ID_KEY).unwrap()), sender);
+                transfer_to_address(refund, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap()), sender);
             };
-            transfer_to_address(amount, ContractId::from(ETH_ID), sender);
+            transfer_to_address(amount, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()), sender);
             sold = tokens_sold;
             // Update reserve
-            remove_reserve(ETH_ID, amount);
-            add_reserve(get::<b256>(TOKEN_ID_KEY).unwrap(), tokens_sold);
+            add_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), tokens_sold);
+            remove_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), amount);
+        } else {
+            let tokens_sold = get_output_price(amount, token_reserve2, token_reserve1);
+            assert(forwarded_amount >= tokens_sold);
+            let refund = forwarded_amount - tokens_sold;
+            if refund > 0 {
+                transfer_to_address(refund, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()), sender);
+            };
+            transfer_to_address(amount, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap()), sender);
+            sold = tokens_sold;
+            // Update reserve
+            remove_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), amount);
+            add_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), tokens_sold);
         };
         sold
     }
 
     #[storage(read, write)]
     fn get_swap_with_minimum(amount: u64) -> PreviewInfo {
-        let eth_reserve = get_current_reserve(ETH_ID);
-        let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY).unwrap());
+        let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
+        let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
         let mut sold = 0;
         let mut has_liquidity = true;
-        if (msg_asset_id().into() == ETH_ID) {
-            sold = get_input_price(amount, eth_reserve, token_reserve);
-            has_liquidity = sold < token_reserve;
+        if (msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY1).unwrap()) {
+            sold = get_input_price(amount, token_reserve1, token_reserve2);
+            has_liquidity = sold < token_reserve2;
         } else {
-            sold = get_input_price(amount, token_reserve, eth_reserve);
-            has_liquidity = sold < eth_reserve;
+            sold = get_input_price(amount, token_reserve2, token_reserve1);
+            has_liquidity = sold < token_reserve1;
         }
         PreviewInfo {
             amount: sold,
@@ -422,18 +423,18 @@ impl Exchange for Contract {
 
     #[storage(read, write)]
     fn get_swap_with_maximum(amount: u64) -> PreviewInfo {
-        let eth_reserve = get_current_reserve(ETH_ID);
-        let token_reserve = get_current_reserve(get::<b256>(TOKEN_ID_KEY).unwrap());
+        let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
+        let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
         let mut sold = 0;
         let mut has_liquidity = true;
-        if (msg_asset_id().into() == ETH_ID) {
-            assert(amount < token_reserve);
-            sold = get_output_price(amount, eth_reserve, token_reserve);
-            has_liquidity = sold < eth_reserve;
+        if (msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY1).unwrap()) {
+            assert(amount < token_reserve2);
+            sold = get_output_price(amount, token_reserve1, token_reserve2);
+            has_liquidity = sold < token_reserve1;
         } else {
-            assert(amount < eth_reserve);
-            sold = get_output_price(amount, token_reserve, eth_reserve);
-            has_liquidity = sold < token_reserve;
+            assert(amount < token_reserve1);
+            sold = get_output_price(amount, token_reserve2, token_reserve1);
+            has_liquidity = sold < token_reserve2;
         }
         PreviewInfo {
             amount: sold,
