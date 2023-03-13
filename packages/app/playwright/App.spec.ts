@@ -66,7 +66,7 @@ async function walletApprove(context: BrowserContext) {
     });
   }
 
-  const approveButton = approvePage.locator('button').getByText('Confirm');
+  const approveButton = approvePage.locator('button').getByText('Approve');
   await approveButton.click({ timeout: 15000 });
 }
 
