@@ -56,14 +56,14 @@ function getPriceImpact(amounts: BN[], reserves: BN[]) {
 export const calculatePriceImpact = (ctx: SwapMachineContext) => {
   // If any value is 0 return 0
   const { coinFrom, poolInfo, fromAmount, toAmount } = ctx;
-  const ethReserve = poolInfo?.eth_reserve;
-  const tokenReserve = poolInfo?.token_reserve;
-  if (!fromAmount?.raw || !toAmount?.raw || !ethReserve || !tokenReserve) {
+  const tokenReserve1 = poolInfo?.token_reserve1;
+  const tokenReserve2 = poolInfo?.token_reserve2;
+  if (!fromAmount?.raw || !toAmount?.raw || !tokenReserve1 || !tokenReserve2) {
     return '0';
   }
   const isEth = isCoinEth(coinFrom);
   const amounts = [toAmount.raw, fromAmount.raw];
-  const reserves = isEth ? [tokenReserve, ethReserve] : [ethReserve, tokenReserve];
+  const reserves = isEth ? [tokenReserve2, tokenReserve1] : [tokenReserve1, tokenReserve2];
 
   return getPriceImpact(amounts, reserves);
 };
@@ -84,13 +84,13 @@ export function hasEnoughBalance(amount: Maybe<BN>, balance: Maybe<BN>) {
 // TODO: Add unit tests on this
 export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: SwapMachineContext) {
   const isFrom = direction === SwapDirection.fromTo;
-  const ethReserve = bn(poolInfo?.eth_reserve);
-  const tokenReserve = bn(poolInfo?.token_reserve);
+  const tokenReserve1 = bn(poolInfo?.token_reserve1);
+  const tokenReserve2 = bn(poolInfo?.token_reserve2);
   const toAmountRaw = bn(toAmount?.raw);
 
   if (isFrom) return true;
 
-  const reserveAmount = isCoinEth(coinTo) ? ethReserve : tokenReserve;
+  const reserveAmount = isCoinEth(coinTo) ? tokenReserve1 : tokenReserve2;
   return toAmountRaw.lte(reserveAmount);
 }
 

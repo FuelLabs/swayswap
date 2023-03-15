@@ -41,8 +41,8 @@ describe("Add Liquidity", () => {
   it("should see a 'new pool' message", async () => {
     renderWithRouter(<App />, { route: "/pool/add-liquidity" });
     jest.spyOn(poolQueries, "fetchPoolInfo").mockImplementation(async () => ({
-      eth_reserve: ZERO,
-      token_reserve: ZERO,
+      token_reserve1: ZERO,
+      token_reserve2: ZERO,
       lp_token_supply: ZERO,
     }));
     const newPoolMessage = await screen.findByText(/new pool/, undefined, {

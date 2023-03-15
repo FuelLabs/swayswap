@@ -8,10 +8,10 @@ import type { PoolInfoOutput, PositionInfoOutput } from '~/types/contracts/Excha
 
 export function getPoolRatio(info?: Maybe<PoolInfoOutput>) {
   if (!info) return new Decimal(1);
-  const tokenReserve = info.token_reserve;
-  const ethReserve = info.eth_reserve;
-  if (bn(tokenReserve).isZero()) return new Decimal(1);
-  return new Decimal(ethReserve.toHex()).div(tokenReserve.toHex());
+  const tokenReserve2 = info.token_reserve2;
+  const tokenReserve1 = info.token_reserve1;
+  if (bn(tokenReserve2).isZero()) return new Decimal(1);
+  return new Decimal(tokenReserve1.toHex()).div(tokenReserve2.toHex());
 }
 
 export type PoolInfoPreview = {
@@ -38,10 +38,10 @@ export function getPoolInfoPreview(
 ): PoolInfoPreview {
   // Amounts
   const totalLiquidity = bn(info?.lp_token_supply);
-  const tokenReserve = bn(info?.token_reserve);
-  const ethReserve = bn(info?.eth_reserve);
-  const pooledETH = bn(info?.eth_amount);
-  const pooledDAI = bn(info?.token_amount);
+  const tokenReserve = bn(info?.token_reserve2);
+  const ethReserve = bn(info?.token_reserve1);
+  const pooledETH = bn(info?.token_amount1);
+  const pooledDAI = bn(info?.token_amount2);
   const poolRatio = getPoolRatio(info);
   const poolShare = calculatePercentage(poolTokens, totalLiquidity);
   const hasPositions = poolTokens.gt(ZERO);

@@ -50,12 +50,12 @@ const _abi = {
       type: 'struct PoolInfo',
       components: [
         {
-          name: 'eth_reserve',
+          name: 'token_reserve1',
           type: 9,
           typeArguments: null,
         },
         {
-          name: 'token_reserve',
+          name: 'token_reserve2',
           type: 9,
           typeArguments: null,
         },
@@ -72,22 +72,22 @@ const _abi = {
       type: 'struct PositionInfo',
       components: [
         {
-          name: 'eth_amount',
+          name: 'token_amount1',
           type: 9,
           typeArguments: null,
         },
         {
-          name: 'token_amount',
+          name: 'token_amount2',
           type: 9,
           typeArguments: null,
         },
         {
-          name: 'eth_reserve',
+          name: 'token_reserve1',
           type: 9,
           typeArguments: null,
         },
         {
-          name: 'token_reserve',
+          name: 'token_reserve2',
           type: 9,
           typeArguments: null,
         },
@@ -138,12 +138,12 @@ const _abi = {
       type: 'struct RemoveLiquidityInfo',
       components: [
         {
-          name: 'eth_amount',
+          name: 'token_amount1',
           type: 9,
           typeArguments: null,
         },
         {
-          name: 'token_amount',
+          name: 'token_amount2',
           type: 9,
           typeArguments: null,
         },
@@ -194,12 +194,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'storage',
-          arguments: ['read', 'write'],
-        },
-        {
           name: 'payable',
           arguments: [],
+        },
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
         },
       ],
     },
@@ -335,12 +335,12 @@ const _abi = {
     {
       inputs: [
         {
-          name: 'min_eth',
+          name: 'min_tokens1',
           type: 9,
           typeArguments: null,
         },
         {
-          name: 'min_tokens',
+          name: 'min_tokens2',
           type: 9,
           typeArguments: null,
         },
@@ -388,12 +388,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'payable',
-          arguments: [],
-        },
-        {
           name: 'storage',
           arguments: ['read', 'write'],
+        },
+        {
+          name: 'payable',
+          arguments: [],
         },
       ],
     },
@@ -418,12 +418,12 @@ const _abi = {
       },
       attributes: [
         {
-          name: 'storage',
-          arguments: ['read', 'write'],
-        },
-        {
           name: 'payable',
           arguments: [],
+        },
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
         },
       ],
     },
@@ -454,7 +454,56 @@ const _abi = {
       ],
     },
   ],
-  loggedTypes: [],
+  loggedTypes: [
+    {
+      logId: 0,
+      loggedType: {
+        name: '',
+        type: 9,
+        typeArguments: null,
+      },
+    },
+    {
+      logId: 1,
+      loggedType: {
+        name: '',
+        type: 9,
+        typeArguments: null,
+      },
+    },
+    {
+      logId: 2,
+      loggedType: {
+        name: '',
+        type: 9,
+        typeArguments: null,
+      },
+    },
+    {
+      logId: 3,
+      loggedType: {
+        name: '',
+        type: 9,
+        typeArguments: null,
+      },
+    },
+    {
+      logId: 4,
+      loggedType: {
+        name: '',
+        type: 9,
+        typeArguments: null,
+      },
+    },
+    {
+      logId: 5,
+      loggedType: {
+        name: '',
+        type: 9,
+        typeArguments: null,
+      },
+    },
+  ],
   messagesTypes: [],
   configurables: [],
 };

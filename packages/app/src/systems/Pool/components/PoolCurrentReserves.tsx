@@ -38,7 +38,7 @@ export const PoolCurrentReserves = () => {
             {coinFrom?.name}
           </div>
         }
-        value={format(bn(poolInfo?.eth_reserve))}
+        value={format(bn(poolInfo?.token_reserve1))}
       />
       <PreviewItem
         loading={isLoading}
@@ -48,7 +48,7 @@ export const PoolCurrentReserves = () => {
             {coinTo?.name}
           </div>
         }
-        value={format(bn(poolInfo?.token_reserve))}
+        value={format(bn(poolInfo?.token_reserve2))}
       />
     </PreviewTable>
   );
