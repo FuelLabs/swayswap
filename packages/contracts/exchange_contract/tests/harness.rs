@@ -272,13 +272,13 @@ async fn exchange_contract() {
     // Swap amount
     let amount: u64 = 10;
     // Amount used on a second add_liquidity
-    let eth_to_add_liquidity_amount: u64 = 100;
+    let token_to_add_liquidity_amount1: u64 = 100;
     // Final balance of LP tokens
     let expected_final_lp_amount: u64 = 199;
-    // Final eth amount removed from the Pool
-    let remove_liquidity_eth_amount: u64 = 201;
-    // Final token amount removed from the Pool
-    let remove_liquidity_token_amount: u64 = 388;
+    // Final token 1 amount removed from the Pool
+    let remove_liquidity_token_amount1: u64 = 201;
+    // Final token 2 amount removed from the Pool
+    let remove_liquidity_token_amount2: u64 = 388;
 
     ////////////////////////////////////////////////////////
     // SWAP WITH MINIMUM (TOKEN1 -> TOKEN2)
@@ -359,16 +359,22 @@ async fn exchange_contract() {
     assert!(is_err);
 
     ////////////////////////////////////////////////////////
-    // SWAP WITH MAXIMUM (ETH -> TOKEN)
+    // SWAP WITH MAXIMUM (TOKEN1 -> TOKEN2)
     ////////////////////////////////////////////////////////
 
-    // Get expected swap amount ETH -> TOKEN
+    // Get expected swap amount TOKEN1 -> TOKEN2
     let amount_expected = exchange_instance.methods()
         .get_swap_with_maximum(amount)
+        .call_params(CallParameters::new(
+            Some(0),
+            Some(token_asset_id1),
+            None
+        )).unwrap()
         .call()
         .await
         .unwrap();
     assert!(amount_expected.value.has_liquidity);
+    let balance = exchange_instance.methods().get_balance(token_contract_id2.into()).call().await.unwrap().value;
     // Swap using expected amount TOKEN1 -> TOKEN2
     let response = exchange_instance.methods()
         .swap_with_maximum(amount, 1000)
@@ -397,7 +403,7 @@ async fn exchange_contract() {
         .await
         .unwrap();
     assert!(amount_expected.value.has_liquidity);
-    // Swap using expected amount TOKEN -> ETH
+    // Swap using expected amount TOKEN2 -> TOKEN1
     let response = exchange_instance.methods()
         .swap_with_maximum(amount, 1000)
         .call_params(CallParameters::new(
@@ -417,7 +423,7 @@ async fn exchange_contract() {
     ////////////////////////////////////////////////////////
 
     let add_liquidity_preview = exchange_instance.methods()
-        .get_add_liquidity(eth_to_add_liquidity_amount, Bits256(*token_asset_id1))
+        .get_add_liquidity(token_to_add_liquidity_amount1, Bits256(*token_asset_id1))
         .call_params(CallParameters::new(
             Some(amount_expected.value.amount),
             Some(token_asset_id2.clone()),
@@ -468,8 +474,8 @@ async fn exchange_contract() {
         .call()
         .await
         .unwrap();
-    assert_eq!(response.value.token_amount_1, remove_liquidity_eth_amount);
-    assert_eq!(response.value.token_amount_2, remove_liquidity_token_amount);
+    assert_eq!(response.value.token_amount_1, remove_liquidity_token_amount1);
+    assert_eq!(response.value.token_amount_2, remove_liquidity_token_amount2);
 
     ////////////////////////////////////////////////////////
     // Check contract pool is zero

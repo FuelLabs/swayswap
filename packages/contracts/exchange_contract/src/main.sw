@@ -166,27 +166,27 @@ impl Exchange for Contract {
         let total_liquidity = storage.lp_token_supply;
         let token_reserve1 = get_current_reserve(token_id1);
         let token_reserve2 = get_current_reserve(token_id2);
-        let mut current_token_amount2 = amount;
+        let mut current_token_amount1 = amount;
         let mut lp_token_received = 0;
-        let mut token_amount1 = 0;
+        let mut token_amount2 = 0;
   
-        if (asset_id == token_id1) {
-            current_token_amount2 = mutiply_div(amount, token_reserve2, token_reserve1);
+        if (asset_id == token_id2) {
+            current_token_amount1 = mutiply_div(amount, token_reserve1, token_reserve2);
         }
 
         if total_liquidity > 0 {
-            token_amount1 = mutiply_div(current_token_amount2, token_reserve1, token_reserve2);
-            lp_token_received = mutiply_div(current_token_amount2, total_liquidity, token_reserve2);
+            token_amount2 = mutiply_div(current_token_amount1, token_reserve2, token_reserve1);
+            lp_token_received = mutiply_div(current_token_amount1, total_liquidity, token_reserve1);
         } else {
-            lp_token_received = current_token_amount2;
+            lp_token_received = current_token_amount1;
         };
 
-        if (asset_id == token_id1) {
-            token_amount1 = current_token_amount2;
+        if (asset_id == token_id2) {
+            token_amount2 = current_token_amount1;
         }
 
         PreviewAddLiquidityInfo {
-            token_amount: token_amount1,
+            token_amount: token_amount2,
             lp_token_received: lp_token_received,
         }
     }
@@ -357,7 +357,7 @@ impl Exchange for Contract {
             remove_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), tokens_bought);
             add_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), forwarded_amount);
         };
-        bought
+        tokens_bought
     }
 
     #[storage(read, write), payable]
@@ -373,33 +373,35 @@ impl Exchange for Contract {
         let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
         let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
 
-        let mut sold = 0;
+        let mut tokens_sold = 0;
         if (asset_id == get::<b256>(TOKEN_ID_KEY1).unwrap()) {
-            let tokens_sold = get_output_price(amount, token_reserve1, token_reserve2);
+            tokens_sold = get_output_price(amount, token_reserve1, token_reserve2);
             assert(forwarded_amount >= tokens_sold);
+            log(token_reserve1);
+            log(token_reserve2);
+            log(forwarded_amount);
+            log(tokens_sold);
             let refund = forwarded_amount - tokens_sold;
             if refund > 0 {
                 transfer_to_address(refund, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap()), sender);
             };
             transfer_to_address(amount, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()), sender);
-            sold = tokens_sold;
             // Update reserve
             add_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), tokens_sold);
             remove_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), amount);
         } else {
-            let tokens_sold = get_output_price(amount, token_reserve2, token_reserve1);
+            tokens_sold = get_output_price(amount, token_reserve2, token_reserve1);
             assert(forwarded_amount >= tokens_sold);
             let refund = forwarded_amount - tokens_sold;
             if refund > 0 {
                 transfer_to_address(refund, ContractId::from(get::<b256>(TOKEN_ID_KEY2).unwrap()), sender);
             };
             transfer_to_address(amount, ContractId::from(get::<b256>(TOKEN_ID_KEY1).unwrap()), sender);
-            sold = tokens_sold;
             // Update reserve
             remove_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap(), amount);
             add_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap(), tokens_sold);
         };
-        sold
+        tokens_sold
     }
 
     #[storage(read, write)]
@@ -425,6 +427,8 @@ impl Exchange for Contract {
     fn get_swap_with_maximum(amount: u64) -> PreviewInfo {
         let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
         let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
+        log(token_reserve1);
+        log(token_reserve2);  
         let mut sold = 0;
         let mut has_liquidity = true;
         if (msg_asset_id().into() == get::<b256>(TOKEN_ID_KEY1).unwrap()) {
