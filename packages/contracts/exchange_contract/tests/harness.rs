@@ -212,13 +212,12 @@ async fn exchange_contract() {
     // Deposit tokens and create pool
     ////////////////////////////////////////////////////////
 
-    let native_amount_deposit = token_amount1;
     let token_amount_deposit = 200;
     // Check user position
     let lp_amount_received = deposit_and_add_liquidity(
         &exchange_instance,
         token_asset_id1,
-        native_amount_deposit,
+        token_amount1,
         token_asset_id2,
         token_amount_deposit,
     )
@@ -248,7 +247,7 @@ async fn exchange_contract() {
         .call()
         .await
         .unwrap();
-    assert_eq!(result.value.token_amount_1, native_amount_deposit);
+    assert_eq!(result.value.token_amount_1, token_amount1);
     assert_eq!(result.value.token_amount_2, token_amount_deposit);
 
     ////////////////////////////////////////////////////////
@@ -259,7 +258,7 @@ async fn exchange_contract() {
     let _t = deposit_and_add_liquidity(
         &exchange_instance,
         token_asset_id1,
-        native_amount_deposit,
+        token_amount1,
         token_asset_id2,
         token_amount_deposit,
     )
@@ -278,7 +277,7 @@ async fn exchange_contract() {
     // Final token 1 amount removed from the Pool
     let remove_liquidity_token_amount1: u64 = 201;
     // Final token 2 amount removed from the Pool
-    let remove_liquidity_token_amount2: u64 = 388;
+    let remove_liquidity_token_amount2: u64 = 400;
 
     ////////////////////////////////////////////////////////
     // SWAP WITH MINIMUM (TOKEN1 -> TOKEN2)
@@ -311,7 +310,7 @@ async fn exchange_contract() {
     // Get expected swap amount TOKEN2 -> TOKEN1
     let amount_expected = exchange_instance.methods()
         .get_swap_with_minimum(amount)
-        .call_params(CallParameters::new(Some(0), Some(token_asset_id2.clone()), None))
+        .call_params(CallParameters::new(None, Some(token_asset_id2.clone()), None))
         .unwrap()
         .call()
         .await
@@ -443,7 +442,7 @@ async fn exchange_contract() {
     let lp_amount_received = deposit_and_add_liquidity(
         &exchange_instance,
         token_asset_id1,
-        native_amount_deposit,
+        token_amount1,
         token_asset_id2,
         add_liquidity_preview.value.token_amount
     )
