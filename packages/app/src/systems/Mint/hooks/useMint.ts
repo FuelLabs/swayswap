@@ -3,7 +3,7 @@ import { bn } from 'fuels';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { TOKEN_ID } from '~/config';
+import { TOKEN_ID2 } from '~/config';
 import { useTokenMethods, useBalances } from '~/systems/Core';
 import { useTransactionCost } from '~/systems/Core/hooks/useTransactionCost';
 import { txFeedback } from '~/systems/Core/utils/feedback';
@@ -14,7 +14,7 @@ type UseMintOpts = {
 };
 
 export function useMint(opts: UseMintOpts = {}) {
-  const { methods, isLoading } = useTokenMethods(TOKEN_ID);
+  const { methods, isLoading } = useTokenMethods(TOKEN_ID2);
   const navigate = useNavigate();
   const balances = useBalances();
   const txCost = useTransactionCost(

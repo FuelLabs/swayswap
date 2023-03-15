@@ -49,22 +49,22 @@ describe('Swap Helpers', () => {
       expect(maxBalanceToSwap.value).toEqual('0.399999988');
     });
 
-    it('should not discount network fee from DAI balance when DAI is from coin', () => {
+    it('should discount network fee from DAI balance when DAI is from coin', () => {
       const maxBalanceToSwap = calculateMaxBalanceToSwap({
         direction: SwapDirection.fromTo,
         ctx: CTX_FROM_DAI_TO_ETH,
       });
 
-      expect(maxBalanceToSwap.value).toEqual('119.567935145');
+      expect(maxBalanceToSwap.value).toEqual('119.567935143');
     });
 
-    it('should not discount network fee from DAI balance when DAI is to coin', () => {
+    it('should discount network fee from DAI balance when DAI is to coin', () => {
       const maxBalanceToSwap = calculateMaxBalanceToSwap({
         direction: SwapDirection.toFrom,
         ctx: CTX_FROM_ETH_TO_DAI,
       });
 
-      expect(maxBalanceToSwap.value).toEqual('119.567935145');
+      expect(maxBalanceToSwap.value).toEqual('119.567935143');
     });
   });
 });

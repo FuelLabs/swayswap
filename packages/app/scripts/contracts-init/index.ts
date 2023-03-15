@@ -7,7 +7,8 @@ import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../../s
 import { initializePool } from './initializePool';
 import { initializeTokenContract } from './initializeTokenContract';
 
-const { WALLET_SECRET, PROVIDER_URL, GAS_PRICE, VITE_CONTRACT_ID, VITE_TOKEN_ID } = process.env;
+const { WALLET_SECRET, PROVIDER_URL, GAS_PRICE, VITE_CONTRACT_ID, VITE_TOKEN_ID1, VITE_TOKEN_ID2 } =
+  process.env;
 
 if (!WALLET_SECRET) {
   process.stdout.write('WALLET_SECRET is not detected!\n');
@@ -17,14 +18,16 @@ if (!WALLET_SECRET) {
 async function main() {
   const wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   const exchangeContract = ExchangeContractAbi__factory.connect(VITE_CONTRACT_ID!, wallet);
-  const tokenContract = TokenContractAbi__factory.connect(VITE_TOKEN_ID!, wallet);
+  const tokenContract1 = TokenContractAbi__factory.connect(VITE_TOKEN_ID1!, wallet);
+  const tokenContract2 = TokenContractAbi__factory.connect(VITE_TOKEN_ID2!, wallet);
   const overrides = {
     gasPrice: bn(GAS_PRICE || 0),
   };
 
-  await initializeTokenContract(tokenContract, overrides);
+  await initializeTokenContract(tokenContract1, overrides);
+  await initializeTokenContract(tokenContract2, overrides);
   if (process.argv.includes('--init-pool')) {
-    await initializePool(tokenContract, exchangeContract, overrides);
+    await initializePool(tokenContract1, tokenContract2, exchangeContract, overrides);
   }
 }
 

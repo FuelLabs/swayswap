@@ -9,7 +9,7 @@ export async function initializeTokenContract(
   tokenContract: TokenContractAbi,
   overrides: { gasPrice: BigNumberish }
 ) {
-  const mintAmount = bn(MINT_AMOUNT || '0x1D1A94A2000');
+  const mintAmount = bn(MINT_AMOUNT || '0x44364C5BB0000');
   const address = {
     value: tokenContract.account!.address.toB256(),
   };

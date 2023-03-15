@@ -21,9 +21,9 @@
   "dependencies": {
     "@fontsource/inter": "^4.5.15",
     "@fontsource/raleway": "^4.5.12",
-    "@fuel-ts/mnemonic": "0.33.0",
-    "@fuel-ts/wallet": "0.33.0",
-    "@fuel-ts/wallet-manager": "0.33.0",
+    "@fuel-ts/mnemonic": "0.35.0",
+    "@fuel-ts/wallet": "0.35.0",
+    "@fuel-ts/wallet-manager": "0.35.0",
     "@fuel-ui/css": "^0.12.0",
     "@fuel-ui/react": "^0.12.0",
     "@fuel-wallet/sdk": "0.7.0-next-035088c",

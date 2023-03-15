@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import dotenv from 'dotenv';
 import { createConfig, replaceEventOnEnv } from 'swayswap-scripts';
 
@@ -24,7 +25,12 @@ export default createConfig({
     {
       name: 'VITE_TOKEN_ID1',
       path: './packages/contracts/token_contract',
-      options: getDeployOptions(),
+      options: () => {
+        return {
+          ...getDeployOptions(),
+          salt: randomBytes(32),
+        };
+      },
     },
     {
       name: 'VITE_TOKEN_ID2',
@@ -32,7 +38,7 @@ export default createConfig({
       options: () => {
         return {
           ...getDeployOptions(),
-          salt: [],
+          salt: randomBytes(32),
         };
       },
     },
