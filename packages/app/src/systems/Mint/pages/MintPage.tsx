@@ -34,10 +34,10 @@ export function MintPage() {
           Mint
         </Card.Title>
         <div className="text-gray-300">
-          You can mint UNI and DAI once per address only.
+          You can mint BTC and DAI once per address only.
         </div>
         <div className="text-gray-300">
-          <div className="text-sm mr-2 mt-2">UNI Amount:</div>
+          <div className="text-sm mr-2 mt-2">BTC Amount:</div>
           <div className="font-bold text-gray-100 text-lg">
             {format(mint.mintAmount1)}
           </div>

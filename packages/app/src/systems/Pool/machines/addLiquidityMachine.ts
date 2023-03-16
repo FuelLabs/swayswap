@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import type { BN, CoinQuantity, TransactionResult } from 'fuels';
-import { bn } from 'fuels';
+import { NativeAssetId, bn } from 'fuels';
 import type { InterpreterFrom, StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
 
@@ -495,10 +495,10 @@ export const addLiquidityMachine =
           return !!ctx.transactionCost?.error;
         },
         notHasEthForNetworkFee: (ctx) => {
-          const fromAmount = bn(ctx.fromAmount);
-          const ethBalance = bn(getCoinETH(ctx.balances)?.amount);
           const networkFee = bn(ctx.transactionCost?.fee);
-          return ethBalance.lte(fromAmount.add(networkFee));
+          const ethBalance =
+            ctx.balances.find((balance) => balance.assetId === NativeAssetId)?.amount || bn(0);
+          return ethBalance.lte(networkFee);
         },
         notHasFromAmount: (ctx) => {
           return !ctx.fromAmount || bn(ctx.fromAmount).isZero();

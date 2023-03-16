@@ -5,7 +5,7 @@ import type { CoinAmount, SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 
 import { DECIMAL_UNITS } from '~/config';
-import { isCoinEth, ZERO, multiply, ONE_ASSET } from '~/systems/Core';
+import { isCoinEth, multiply, ONE_ASSET } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import type { Coin, Maybe } from '~/types';
 
@@ -95,28 +95,10 @@ export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: S
 }
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {
-  const { ethBalance, direction, coinFrom, fromAmount, txCost, amountPlusSlippage } = params;
+  const { ethBalance, txCost } = params;
   const balance = bn(ethBalance);
   const txCostTotal = bn(txCost?.fee);
-  const plusSlippage = bn(amountPlusSlippage?.raw);
-  const fromAmountRaw = bn(fromAmount?.raw);
-  const isFrom = direction === SwapDirection.fromTo;
 
-  /**
-   * When coinFrom is ETH and we wan't to buy tokens if exact amount of ETH
-   */
-  if (isCoinEth(coinFrom) && isFrom) {
-    return fromAmountRaw.add(txCostTotal).lte(balance);
-  }
-  /**
-   * When coinFrom is ETH and we wan't to buy exact amount of token
-   */
-  if (isCoinEth(coinFrom) && !isFrom) {
-    return plusSlippage.add(txCostTotal).lte(balance);
-  }
-  /**
-   * When coinFrom isn't ETH but you need to pay gas fee
-   */
   return balance.gt(txCostTotal);
 };
 
@@ -133,11 +115,7 @@ export interface CalculateMaxBalanceToSwapParams {
 
 export const calculateMaxBalanceToSwap = ({ direction, ctx }: CalculateMaxBalanceToSwapParams) => {
   const isFrom = direction === SwapDirection.fromTo;
-  const shouldUseNetworkFee =
-    (isFrom && isCoinEth(ctx.coinFrom)) || (!isFrom && isCoinEth(ctx.coinTo));
   const balance = bn(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
-  const networkFee = bn(ctx.txCost?.fee);
-  const nextValue = balance.gt(ZERO) && shouldUseNetworkFee ? balance.sub(networkFee) : balance;
 
-  return createAmount(nextValue);
+  return createAmount(balance);
 };
