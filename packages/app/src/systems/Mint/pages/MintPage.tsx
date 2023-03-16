@@ -12,11 +12,16 @@ import { Button, Card } from "~/systems/UI";
 
 export function MintPage() {
   const mint = useMint();
-  const shouldDisableMint =
-    mint.txCost.total.lte(0) || !!mint.txCost.error || mint.mintAmount.lte(0);
+  const shouldDisableMint1 =
+    mint.txCost.total.lte(0) || !!mint.txCost.error || mint.mintAmount1.lte(0);
+
+  const shouldDisableMint2 =
+    mint.txCost.total.lte(0) || !!mint.txCost.error || mint.mintAmount2.lte(0);
+
+  const shouldDisableMint = shouldDisableMint1 || shouldDisableMint2;
 
   const getTextButton = () => {
-    if (!mint.mintAmount) return "Mint is closed!";
+    if (!mint.mintAmount1 || !mint.mintAmount2) return "Mint is closed!";
     if (!mint.txCost.total) return "Not enough ETH to pay gas fee";
     return "Mint tokens";
   };
@@ -29,12 +34,16 @@ export function MintPage() {
           Mint
         </Card.Title>
         <div className="text-gray-300">
-          You can mint some DAI once per address only.
+          You can mint UNI and DAI once per address only.
         </div>
         <div className="text-gray-300">
-          <div className="text-sm mr-2 mt-2">Amount:</div>
+          <div className="text-sm mr-2 mt-2">UNI Amount:</div>
           <div className="font-bold text-gray-100 text-lg">
-            {format(mint.mintAmount)}
+            {format(mint.mintAmount1)}
+          </div>
+          <div className="text-sm mr-2 mt-2">DAI Amount:</div>
+          <div className="font-bold text-gray-100 text-lg">
+            {format(mint.mintAmount2)}
           </div>
         </div>
         {!shouldDisableMint && (

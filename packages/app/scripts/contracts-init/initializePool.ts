@@ -44,7 +44,6 @@ export async function initializePool(
 
   process.stdout.write('Initialize pool\n');
   const deadline = await tokenContract1.provider!.getBlockNumber();
-  console.log('here');
   await exchangeContract
     .multiCall([
       exchangeContract.functions.deposit().callParams({
@@ -53,7 +52,9 @@ export async function initializePool(
       exchangeContract.functions.deposit().callParams({
         forward: [tokenAmount2, tokenContract2.id.toB256()],
       }),
-      exchangeContract.functions.add_liquidity(1, bn(1000).add(deadline)),
+      exchangeContract.functions.add_liquidity(1, bn(1000).add(deadline)).callParams({
+        forward: [bn(0), tokenContract1.id.toB256()],
+      }),
     ])
     .txParams({
       ...overrides,
