@@ -1,4 +1,5 @@
 import type { BN, Contract } from 'fuels';
+import { bn } from 'fuels';
 
 import type { AddLiquidityMachineContext } from '../types';
 
@@ -59,7 +60,9 @@ export async function addLiquidity(
       contract.functions.deposit().callParams({
         forward: [toAmount, toAsset.assetId],
       }),
-      contract.functions.add_liquidity(1, deadline),
+      contract.functions.add_liquidity(1, deadline).callParams({
+        forward: [bn(0), fromAsset.assetId],
+      }),
     ])
     .txParams(
       getOverrides({

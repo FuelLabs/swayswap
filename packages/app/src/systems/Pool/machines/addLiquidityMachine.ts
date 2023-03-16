@@ -9,14 +9,7 @@ import { liquidityPreviewEmpty, AddLiquidityActive } from '../types';
 import { addLiquidity, fetchPoolInfo, getPoolRatio } from '../utils';
 
 import { CONTRACT_ID } from '~/config';
-import {
-  calculatePercentage,
-  getCoin,
-  getCoinETH,
-  handleError,
-  TOKENS,
-  ZERO,
-} from '~/systems/Core';
+import { calculatePercentage, getCoin, handleError, TOKENS, ZERO } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getTransactionCost } from '~/systems/Core/utils/gas';

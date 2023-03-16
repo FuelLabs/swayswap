@@ -31,40 +31,40 @@ const CTX_FROM_DAI_TO_ETH = {
 
 describe('Swap Helpers', () => {
   describe('calculateMaxBalanceToSwap', () => {
-    it('should discount network fee from ETH balance when ETH is from coin', () => {
+    it('should not discount network fee from BTC balance when BTC is from coin', () => {
       const maxBalanceToSwap = calculateMaxBalanceToSwap({
         direction: SwapDirection.fromTo,
         ctx: CTX_FROM_ETH_TO_DAI,
       });
 
-      expect(maxBalanceToSwap.value).toEqual('0.399999988');
+      expect(maxBalanceToSwap.value).toEqual('0.399999990');
     });
 
-    it('should discount network fee from ETH balance when ETH is to coin', () => {
+    it('should not discount network fee from BTC balance when BTC is to coin', () => {
       const maxBalanceToSwap = calculateMaxBalanceToSwap({
         direction: SwapDirection.toFrom,
         ctx: CTX_FROM_DAI_TO_ETH,
       });
 
-      expect(maxBalanceToSwap.value).toEqual('0.399999988');
+      expect(maxBalanceToSwap.value).toEqual('0.399999990');
     });
 
-    it('should discount network fee from DAI balance when DAI is from coin', () => {
+    it('should not discount network fee from DAI balance when DAI is from coin', () => {
       const maxBalanceToSwap = calculateMaxBalanceToSwap({
         direction: SwapDirection.fromTo,
         ctx: CTX_FROM_DAI_TO_ETH,
       });
 
-      expect(maxBalanceToSwap.value).toEqual('119.567935143');
+      expect(maxBalanceToSwap.value).toEqual('119.567935145');
     });
 
-    it('should discount network fee from DAI balance when DAI is to coin', () => {
+    it('should not discount network fee from DAI balance when DAI is to coin', () => {
       const maxBalanceToSwap = calculateMaxBalanceToSwap({
         direction: SwapDirection.toFrom,
         ctx: CTX_FROM_ETH_TO_DAI,
       });
 
-      expect(maxBalanceToSwap.value).toEqual('119.567935143');
+      expect(maxBalanceToSwap.value).toEqual('119.567935145');
     });
   });
 });
