@@ -73,7 +73,7 @@ async function waitFinishLoading() {
 
 async function getETHBalance() {
   const balanceLabel = await screen.findByLabelText("ETH balance");
-  const balance = balanceLabel.lastChild?.textContent || "0";
+  const balance = parseInt(balanceLabel.lastChild?.textContent || "0", 10);
   const valBalance = new Decimal(balance);
 
   return valBalance;
@@ -84,6 +84,8 @@ describe("SwapPage", () => {
 
   beforeAll(async () => {
     wallet = await createAndMockWallet();
+    await faucet(wallet, 4);
+    await mint(wallet);
   });
 
   describe("without liquidity", () => {
@@ -105,7 +107,7 @@ describe("SwapPage", () => {
       renderWithRouter(<App />, { route: "/swap" });
 
       const balances = await screen.findAllByText(/(balance:)\s([1-9])/i);
-      expect(balances[0].textContent).toMatch("Balance: 2.0");
+      expect(balances[0].textContent).toMatch("Balance: 1,200,000.000");
     });
 
     function getFirstCoinSelectTextContent() {
@@ -163,7 +165,6 @@ describe("SwapPage", () => {
   describe("with liquidity created", () => {
     beforeAll(async () => {
       await faucet(wallet, 4);
-      await mint(wallet);
       await addLiquidity(
         wallet,
         "1",
@@ -178,7 +179,7 @@ describe("SwapPage", () => {
 
       await waitFor(
         async () => {
-          await fillCoinFromWithValue("1000");
+          await fillCoinFromWithValue("1300000000");
           const submitBtn = await findSwapBtn();
           expect(submitBtn.textContent).toMatch(
             /(Insufficient)(\s\w+\s)(balance)/i
@@ -202,8 +203,8 @@ describe("SwapPage", () => {
 
     it("should show insufficient eth for gas message", async () => {
       const spy = jest
-        .spyOn(swapHelpers, "hasEnoughBalance")
-        .mockReturnValue(true);
+        .spyOn(swapHelpers, "hasEthForNetworkFee")
+        .mockReturnValue(false);
 
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
 
@@ -231,11 +232,14 @@ describe("SwapPage", () => {
 
       renderWithRouter(<App />, { route: "/swap?from=DAI&to=ETH" });
 
-      await waitFor(async () => {
-        await fillCoinToWithValue("10000000000.0");
-        const submitBtn = await findSwapBtn();
-        expect(submitBtn.textContent).toMatch(/insufficient liquidity/i);
-      });
+      await waitFor(
+        async () => {
+          await fillCoinToWithValue("10000000000.0");
+          const submitBtn = await findSwapBtn();
+          expect(submitBtn.textContent).toMatch(/insufficient liquidity/i);
+        },
+        { timeout: 10000 }
+      );
 
       spy1.mockRestore();
       spy2.mockRestore();

@@ -23,7 +23,9 @@ export async function addLiquidity(
       contract.functions.deposit().callParams({
         forward: [bn.parseUnits(toAmount), toAsset],
       }),
-      contract.functions.add_liquidity(1, deadline),
+      contract.functions.add_liquidity(1, deadline).callParams({
+        forward: [bn(0), toAsset],
+      }),
     ])
     .txParams(
       getOverrides({
@@ -32,5 +34,6 @@ export async function addLiquidity(
       })
     )
     .call();
+
   return transactionResult;
 }

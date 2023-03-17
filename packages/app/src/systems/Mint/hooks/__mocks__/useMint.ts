@@ -9,9 +9,7 @@ export async function mint(wallet: FuelWalletLocked) {
   const tokenContract2 = TokenContractAbi__factory.connect(TOKEN_ID2, wallet);
 
   return tokenContract1
-    .multiCall([
-      tokenContract1.functions.mint().txParams(getOverrides({ variableOutputs: 1 })),
-      tokenContract2.functions.mint().txParams(getOverrides({ variableOutputs: 1 })),
-    ])
+    .multiCall([tokenContract1.functions.mint(), tokenContract2.functions.mint()])
+    .txParams(getOverrides({ variableOutputs: 1 }))
     .call();
 }

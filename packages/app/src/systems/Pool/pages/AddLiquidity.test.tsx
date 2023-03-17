@@ -133,7 +133,7 @@ describe("Add Liquidity", () => {
     });
 
     it("Should be able to add liquidity", async () => {
-      renderWithRouter(<App />, {
+      const { user } = renderWithRouter(<App />, {
         route: "/pool/add-liquidity",
       });
 
@@ -147,6 +147,7 @@ describe("Add Liquidity", () => {
       waitFor(async () => {
         const submitBtn = await screen.findByText(/Add liquidity/);
         expect(submitBtn).toBeInTheDocument();
+        await user.click(submitBtn);
       });
     });
   });
