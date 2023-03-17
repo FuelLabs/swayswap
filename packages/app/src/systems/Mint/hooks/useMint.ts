@@ -42,20 +42,18 @@ export function useMint(opts: UseMintOpts = {}) {
     { enabled: Boolean(tokenMethods2 && !isLoading2) }
   );
 
-  const mutation1 = useMutation(
+  const mutation = useMutation(
     async () => {
       if (txCost.total.isZero()) return;
-      return tokenMethods1?.mint();
+      const { transactionResult } = await tokenMethods1!.contract
+        .multiCall([
+          tokenMethods1!.contract.functions.mint(),
+          tokenMethods2!.contract.functions.mint(),
+        ])
+        .call();
+      return transactionResult;
     },
-    { onSuccess: txFeedback('Token received successfully!', handleSuccess) }
-  );
-
-  const mutation2 = useMutation(
-    async () => {
-      if (txCost.total.isZero()) return;
-      return tokenMethods2?.mint();
-    },
-    { onSuccess: txFeedback('Token received successfully!', handleSuccess) }
+    { onSuccess: txFeedback('Tokens received successfully!', handleSuccess) }
   );
 
   async function handleSuccess() {
@@ -65,13 +63,11 @@ export function useMint(opts: UseMintOpts = {}) {
   }
 
   function handleMint() {
-    mutation1.mutate();
-    mutation2.mutate();
+    mutation.mutate();
   }
 
   return {
-    ...mutation1,
-    ...mutation2,
+    ...mutation,
     txCost,
     handleMint,
     mintAmount1: bn(mintAmount1),

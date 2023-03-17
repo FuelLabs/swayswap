@@ -130,7 +130,7 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     await walletApprove(context);
 
-    const mintSuccess = appPage.getByText('Token received successfully!');
+    const mintSuccess = appPage.getByText('Tokens received successfully!');
     await mintSuccess.waitFor();
 
     // wait to be redirected to swap page after minting
