@@ -27,7 +27,7 @@ export const MigrationWarning = () => {
   return (
     <Alert status="warning" direction="row">
       <Alert.Description>
-        SwaySwap is now on Fuel testnet beta-1! This network does not contain
+        SwaySwap is now on Fuel testnet beta-3! This network does not contain
         previous transactions or balances.
       </Alert.Description>
       <Alert.Actions>

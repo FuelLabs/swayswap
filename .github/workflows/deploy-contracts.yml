@@ -6,7 +6,7 @@ on:
       provider_url:
         description: 'Provider url'
         required: true
-        default: 'https://testnet-01-preview.swayswap.io/graphql'
+        default: 'https://beta-3.fuel.network/graphql'
         type: string
       wallet_secret:
         description: 'Wallet secret used to deploy and provide initial liquidity'
