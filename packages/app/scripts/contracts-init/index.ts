@@ -16,7 +16,12 @@ if (!WALLET_SECRET) {
 }
 
 async function main() {
-  const wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
+  let wallet;
+  if (WALLET_SECRET && WALLET_SECRET.indexOf(' ') >= 0) {
+    wallet = Wallet.fromMnemonic(WALLET_SECRET, PROVIDER_URL);
+  } else {
+    wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
+  }
   const exchangeContract = ExchangeContractAbi__factory.connect(VITE_CONTRACT_ID!, wallet);
   const tokenContract1 = TokenContractAbi__factory.connect(VITE_TOKEN_ID1!, wallet);
   const tokenContract2 = TokenContractAbi__factory.connect(VITE_TOKEN_ID2!, wallet);
