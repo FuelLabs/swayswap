@@ -216,7 +216,7 @@ impl Exchange for Contract {
         transfer_to_address(amount, asset_id, sender)
     }
 
-    #[storage(read, write)]
+    #[storage(read, write), payable]
     fn add_liquidity(min_liquidity: u64, deadline: u64) -> u64 {
         assert(msg_amount() == 0);
         assert(deadline > height());
@@ -404,7 +404,7 @@ impl Exchange for Contract {
         tokens_sold
     }
 
-    #[storage(read, write)]
+    #[storage(read, write), payable]
     fn get_swap_with_minimum(amount: u64) -> PreviewInfo {
         let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
         let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());
@@ -423,7 +423,7 @@ impl Exchange for Contract {
         }
     }
 
-    #[storage(read, write)]
+    #[storage(read, write), payable]
     fn get_swap_with_maximum(amount: u64) -> PreviewInfo {
         let token_reserve1 = get_current_reserve(get::<b256>(TOKEN_ID_KEY1).unwrap());
         let token_reserve2 = get_current_reserve(get::<b256>(TOKEN_ID_KEY2).unwrap());

@@ -62,12 +62,12 @@ async function fillCoinToWithValue(value: string) {
 async function waitFinishLoading() {
   await waitFor(async () => {
     const submitBtn = await findSwapBtn();
-    expect(submitBtn.textContent).toMatch(/Loading/i);
+    expect(submitBtn.textContent).toMatch("Loading...");
   });
 
   await waitFor(async () => {
     const submitBtn = await findSwapBtn();
-    expect(submitBtn.textContent).not.toMatch(/Loading/i);
+    expect(submitBtn.textContent).not.toMatch("Loading...");
   });
 }
 
