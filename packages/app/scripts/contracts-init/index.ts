@@ -1,4 +1,6 @@
-import { bn, Wallet, Provider } from 'fuels';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
+import { WalletManager } from '@fuel-ts/wallet-manager';
+import { bn, Wallet } from 'fuels';
 
 import '../../load.envs';
 import './loadDockerEnv';
@@ -16,14 +18,19 @@ if (!WALLET_SECRET) {
 }
 
 async function main() {
-  let wallet;
+  let wallet: WalletUnlocked;
   if (WALLET_SECRET && WALLET_SECRET.indexOf(' ') >= 0) {
-    wallet = Wallet.fromMnemonic(
-      WALLET_SECRET,
-      "m/44'/1179993420'/0'/0/1",
-      undefined,
-      new Provider(PROVIDER_URL!)
-    );
+    const walletManager = new WalletManager();
+    const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
+
+    await walletManager.unlock(password);
+    const config = { type: 'mnemonic', secret: WALLET_SECRET };
+    // Add a vault of type mnemonic
+    await walletManager.addVault(config);
+    await walletManager.addAccount();
+    const accounts = walletManager.getAccounts();
+    console.log('accounts', accounts);
+    wallet = walletManager.getWallet(accounts[0].address);
   } else {
     wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   }
