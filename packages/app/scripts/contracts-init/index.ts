@@ -18,7 +18,12 @@ if (!WALLET_SECRET) {
 async function main() {
   let wallet;
   if (WALLET_SECRET && WALLET_SECRET.indexOf(' ') >= 0) {
-    wallet = Wallet.fromMnemonic(WALLET_SECRET, undefined, undefined, new Provider(PROVIDER_URL!));
+    wallet = Wallet.fromMnemonic(
+      WALLET_SECRET,
+      "m/44'/1179993420'/0'/0/1",
+      undefined,
+      new Provider(PROVIDER_URL!)
+    );
   } else {
     wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   }
