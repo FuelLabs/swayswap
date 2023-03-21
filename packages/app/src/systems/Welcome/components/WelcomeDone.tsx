@@ -18,11 +18,6 @@ export function WelcomeDone() {
   return (
     <WelcomeStep id={1}>
       <WelcomeImage src="/illustrations/done.png" />
-      {/* <h2>Wallet Created!</h2>
-      <p className="mt-5">
-        Now you&apos;re ready to swap and pool <b>test assets</b> using Fuel:
-        the fastest modular execution layer.
-      </p> */}
       <p className="text-sm font-light italic my-5">
         This is running on the <b>Fuel test network</b>. No real funds are used.
         Demonstration purposes only.
