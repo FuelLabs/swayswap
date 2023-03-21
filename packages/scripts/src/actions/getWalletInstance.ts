@@ -6,6 +6,7 @@ export async function getWalletInstance() {
   // Avoid early load of process env
   const { WALLET_SECRET, GENESIS_SECRET, PROVIDER_URL } = process.env;
 
+  console.log('provider', PROVIDER_URL);
   if (WALLET_SECRET) {
     log('WALLET_SECRET detected');
     let wallet;
