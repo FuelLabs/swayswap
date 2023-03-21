@@ -8,7 +8,12 @@ export async function getWalletInstance() {
 
   if (WALLET_SECRET) {
     log('WALLET_SECRET detected');
-    const wallet = Wallet.fromPrivateKey(WALLET_SECRET, PROVIDER_URL);
+    let wallet;
+    if (WALLET_SECRET && WALLET_SECRET.indexOf(' ') >= 0) {
+      wallet = Wallet.fromMnemonic(WALLET_SECRET, PROVIDER_URL);
+    } else {
+      wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
+    }
     const provider = new Provider(PROVIDER_URL!);
 
     return new Account(wallet.address, provider);
