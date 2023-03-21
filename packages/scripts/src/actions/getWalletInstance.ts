@@ -7,6 +7,7 @@ export async function getWalletInstance() {
   const { WALLET_SECRET, GENESIS_SECRET, PROVIDER_URL } = process.env;
 
   console.log('provider', PROVIDER_URL);
+  console.log('wallet', WALLET_SECRET);
   if (WALLET_SECRET) {
     log('WALLET_SECRET detected');
     let wallet;
