@@ -29,7 +29,6 @@ async function main() {
     await walletManager.addVault(config);
     await walletManager.addAccount();
     const accounts = walletManager.getAccounts();
-    console.log('accounts', accounts);
     wallet = walletManager.getWallet(accounts[0].address);
   } else {
     wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);

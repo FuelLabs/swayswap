@@ -7,8 +7,6 @@ export async function getWalletInstance() {
   // Avoid early load of process env
   const { WALLET_SECRET, GENESIS_SECRET, PROVIDER_URL } = process.env;
 
-  console.log('provider', PROVIDER_URL);
-  console.log('wallet', WALLET_SECRET);
   if (WALLET_SECRET) {
     log('WALLET_SECRET detected');
     let wallet;
@@ -22,7 +20,6 @@ export async function getWalletInstance() {
       await walletManager.addVault(config);
       await walletManager.addAccount();
       const accounts = walletManager.getAccounts();
-      console.log('accounts', accounts);
       wallet = walletManager.getWallet(accounts[0].address);
     } else {
       wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
