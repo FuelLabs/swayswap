@@ -14,10 +14,11 @@ export const WelcomeConnect = () => {
 
   const connectWalletMutation = useMutation(
     async () => {
-      if (!fuel)
+      if (!fuel) {
         throw new Error(
           "Trying to connect wallet when fuel instance is not injected"
         );
+      }
       await fuel.connect();
     },
     {
