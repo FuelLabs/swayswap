@@ -292,6 +292,7 @@ importers:
   packages/scripts:
     specifiers:
       '@fuel-ts/wallet': 0.6.0
+      '@fuel-ts/wallet-manager': 0.35.0
       '@swayswap/config': workspace:0.1.0
       '@types/debug': ^4.1.7
       '@types/glob': ^8.0.1
@@ -307,6 +308,7 @@ importers:
       typescript: ^4.9.5
     dependencies:
       '@fuel-ts/wallet': 0.6.0
+      '@fuel-ts/wallet-manager': 0.35.0
       bundle-require: 3.1.2_esbuild@0.16.17
       commander: 10.0.0
       debug: 4.3.4
