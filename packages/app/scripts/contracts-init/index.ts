@@ -1,4 +1,4 @@
-import { bn, Wallet } from 'fuels';
+import { bn, Wallet, Provider } from 'fuels';
 
 import '../../load.envs';
 import './loadDockerEnv';
@@ -18,7 +18,7 @@ if (!WALLET_SECRET) {
 async function main() {
   let wallet;
   if (WALLET_SECRET && WALLET_SECRET.indexOf(' ') >= 0) {
-    wallet = Wallet.fromMnemonic(WALLET_SECRET, PROVIDER_URL);
+    wallet = Wallet.fromMnemonic(WALLET_SECRET, undefined, undefined, new Provider(PROVIDER_URL!));
   } else {
     wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   }
