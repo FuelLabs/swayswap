@@ -1,4 +1,4 @@
-import { Button, ButtonLink } from "@fuel-ui/react";
+import { Button } from "@fuel-ui/react";
 import { useMutation } from "react-query";
 
 import { useWelcomeSteps } from "../hooks";
@@ -45,16 +45,15 @@ export const WelcomeConnect = () => {
             Wallet extension. After you have installed and setup your wallet
             come back to this page.
           </p>
-          <ButtonLink
-            variant="ghost"
-            size="lg"
-            className="mt-5 mx-auto"
+          <a
             href="https://wallet.fuel.network/docs/install/"
             target="_blank"
-            isExternal
+            rel="noreferrer"
           >
-            Go To Wallet
-          </ButtonLink>
+            <Button variant="solid" size="lg" className="mt-5 mx-auto">
+              Install Fuel Wallet
+            </Button>
+          </a>
         </>
       ) : (
         <>
@@ -64,7 +63,7 @@ export const WelcomeConnect = () => {
             Click the button below to connect your wallet to SwaySwap.
           </p>
           <Button
-            variant="ghost"
+            variant="solid"
             size="lg"
             className="mt-5 mx-auto"
             onPress={handleConnectWallet}

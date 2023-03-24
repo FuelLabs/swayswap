@@ -1,22 +1,25 @@
 import { useMachine } from "@xstate/react";
 import type { Wallet } from "fuels";
+import { bn } from "fuels";
 import type { ReactNode } from "react";
 import { useContext, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import type { InterpreterFrom, StateFrom } from "xstate";
 import { assign, createMachine } from "xstate";
 
-import { useWallet } from "~/systems/Core";
+import { useWallet, ETH, DAI } from "~/systems/Core";
 import type { Maybe } from "~/types";
 import { Pages } from "~/types";
+import { TokenContractAbi__factory } from "~/types/contracts";
 
 export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
 export const LOCALSTORAGE_AGREEMENT_KEY = "fuel--agreement";
 
 export const STEPS = [
   { id: 0, path: Pages.connect },
-  { id: 1, path: Pages["welcome.done"] },
-  { id: 2, path: null },
+  { id: 1, path: Pages.faucet },
+  { id: 2, path: Pages["welcome.done"] },
+  { id: 3, path: null },
 ];
 
 export function getAgreement() {
@@ -96,13 +99,19 @@ const welcomeStepsMachine =
             },
           },
           {
-            target: "done",
-            cond: (ctx) =>
-              ctx.current.id === 1 ||
-              (ctx.current.id >= 1 && !ctx.acceptAgreement),
+            target: "fauceting",
+            cond: (ctx) => {
+              return ctx.current.id === 1;
+            },
           },
           {
-            cond: (ctx) => ctx.current.id === 2 && ctx.acceptAgreement,
+            target: "done",
+            cond: (ctx) =>
+              ctx.current.id === 2 ||
+              (ctx.current.id >= 2 && !ctx.acceptAgreement),
+          },
+          {
+            cond: (ctx) => ctx.current.id === 3 && ctx.acceptAgreement,
             target: "finished",
           },
         ],
@@ -111,12 +120,110 @@ const welcomeStepsMachine =
         entry: [assignCurrent(0), "navigateTo"],
         on: {
           NEXT: {
-            target: "done",
+            target: "fauceting",
+          },
+        },
+      },
+      fauceting: {
+        entry: [assignCurrent(1), "navigateTo"],
+        initial: "fecthingBalance",
+        states: {
+          fecthingBalance: {
+            invoke: {
+              src: async () => {
+                if (!window.fuel) {
+                  throw new Error("Fuel Wallet is not detected!");
+                }
+                const accounts = await window.fuel?.accounts();
+                const address = accounts?.[0];
+                if (!address) {
+                  throw Error("No account found!");
+                }
+                const wallet = await window.fuel.getWallet(address);
+                const balance = await wallet.getBalance();
+                return balance;
+              },
+              onDone: [
+                {
+                  cond: (ctx, ev) => {
+                    console.log(ev.data);
+                    return bn(ev.data).isZero();
+                  },
+                  target: "faucet",
+                },
+                {
+                  actions: [() => console.log("Go to mint")],
+                  target: "mintAssets",
+                },
+              ],
+            },
+          },
+          faucet: {
+            on: {
+              NEXT: {
+                target: "mintAssets",
+              },
+            },
+          },
+          mintAssets: {
+            invoke: {
+              src: async () => {
+                if (!window.fuel) {
+                  throw new Error("Fuel Wallet is not detected!");
+                }
+                const accounts = await window.fuel?.accounts();
+                const address = accounts?.[0];
+                if (!address) {
+                  throw Error("No account found!");
+                }
+                const wallet = await window.fuel.getWallet(address);
+                const contract1 = TokenContractAbi__factory.connect(
+                  ETH.assetId,
+                  wallet
+                );
+                const contract2 = TokenContractAbi__factory.connect(
+                  DAI.assetId,
+                  wallet
+                );
+                // const assets = [
+                //   {
+                //     assetId: ETH.assetId,
+                //     name: "sEther",
+                //     symbol: "sETH",
+                //     imageUrl: ETH.img,
+                //     isCustom: true,
+                //   },
+                //   {
+                //     assetId: DAI.assetId,
+                //     name: "Dai",
+                //     symbol: "Dai",
+                //     imageUrl: DAI.img,
+                //     isCustom: true,
+                //   },
+                // ];
+
+                // console.log(assets);
+
+                // const isAdded = await window.fuel.addAssets(assets);
+
+                // console.log(isAdded);
+
+                await contract1
+                  .multiCall([
+                    contract1.functions.mint(),
+                    contract2.functions.mint(),
+                  ])
+                  .call();
+              },
+              onDone: {
+                target: "#welcomeSteps.done",
+              },
+            },
           },
         },
       },
       done: {
-        entry: [assignCurrent(1), "navigateTo"],
+        entry: [assignCurrent(2), "navigateTo"],
         on: {
           ACCEPT_AGREEMENT: {
             actions: ["acceptAgreement"],
@@ -127,7 +234,7 @@ const welcomeStepsMachine =
         },
       },
       finished: {
-        entry: assignCurrent(2),
+        entry: assignCurrent(3),
         type: "final",
       },
     },
@@ -173,7 +280,7 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
       .withConfig({
         actions: {
           navigateTo: (context) => {
-            if (context.current.id > 1) return;
+            if (context.current.id > 2) return;
             navigate(`/welcome/${context.current.path}`);
           },
           acceptAgreement: assign((context, event) => {

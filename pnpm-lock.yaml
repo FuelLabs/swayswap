@@ -72,7 +72,7 @@ importers:
       '@fuel-ts/wallet-manager': 0.35.0
       '@fuel-ui/css': ^0.12.0
       '@fuel-ui/react': ^0.12.0
-      '@fuel-wallet/sdk': 0.7.0-next-035088c
+      '@fuel-wallet/sdk': 0.7.1
       '@headlessui/react': ^1.7.10
       '@jest/globals': ^29.4.1
       '@playwright/test': ^1.31.0
@@ -160,7 +160,7 @@ importers:
       '@fuel-ts/wallet-manager': 0.35.0
       '@fuel-ui/css': 0.12.3
       '@fuel-ui/react': 0.12.3_nl2hqtofwc3pmuk6i6rdc2vvye
-      '@fuel-wallet/sdk': 0.7.0-next-035088c_fuels@0.35.0
+      '@fuel-wallet/sdk': 0.7.1_fuels@0.35.0
       '@headlessui/react': 1.7.12_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-accordion': 1.1.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-alert-dialog': 1.0.2_zula6vjvt3wdocc4mwcxqa6nzi
@@ -2785,10 +2785,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@fuel-wallet/sdk/0.7.0-next-035088c_fuels@0.35.0:
-    resolution: {integrity: sha512-dAAUY3X6hIEeQjGFSv6bdg7Ng8iduykOuB6laGopgS+n1xc6yE15ugyUn4aHN+IJca7qXcI24RPStfjRGXKhsQ==}
+  /@fuel-wallet/sdk/0.7.1_fuels@0.35.0:
+    resolution: {integrity: sha512-uTx+BUbm8W6oqxiELt6jTERxuG9R/Owb/s5heZ3lb5ir5Cy5F/3EE2o9TVh/9MY2/paUXV1hKkM/NY+0JREeug==}
     peerDependencies:
-      fuels: '>=0.30.0'
+      fuels: '>=0.35.0'
     dependencies:
       '@types/chrome': 0.0.212
       dexie-observable: 4.0.1-beta.13

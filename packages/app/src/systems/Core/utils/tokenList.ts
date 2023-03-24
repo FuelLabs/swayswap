@@ -8,14 +8,14 @@ export const ASSET_404 = {
   img: relativeUrl('/icons/other.svg'),
 };
 
-const ETH = {
+export const ETH = {
   name: 'Ether',
   symbol: 'ETH',
   assetId: TOKEN_ID1,
   img: relativeUrl('/icons/eth.svg'),
 };
 
-const DAI = {
+export const DAI = {
   name: 'DAI',
   symbol: 'DAI',
   // TODO: Remove this when adding dynamic token insertion

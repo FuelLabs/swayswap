@@ -17,7 +17,8 @@ export function WelcomeSidebar() {
         <WelcomeSidebarBullet />
         <nav>
           <WelcomeNavItem id={0} label="Download Wallet" />
-          <WelcomeNavItem id={1} label="Done" />
+          <WelcomeNavItem id={1} label="Faucet" />
+          <WelcomeNavItem id={2} label="Done" />
         </nav>
       </div>
     </aside>

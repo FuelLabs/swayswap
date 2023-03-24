@@ -5,7 +5,11 @@ import { useFuel } from './useFuel';
 export const useWallet = () => {
   const fuel = useFuel();
 
-  const { data: isConnected } = useQuery(
+  const {
+    data: isConnected,
+    isLoading: isConnectedLoading,
+    isError: isConnectedError,
+  } = useQuery(
     ['connected'],
     async () => {
       const isFuelConnected = await fuel!.isConnected();
@@ -13,6 +17,7 @@ export const useWallet = () => {
     },
     {
       enabled: !!fuel,
+      initialData: false,
     }
   );
 
@@ -31,7 +36,7 @@ export const useWallet = () => {
       return currentWallet;
     },
     {
-      enabled: !!fuel && !!isConnected,
+      enabled: !!fuel && !!isConnected && !isConnectedLoading && !isConnectedError,
     }
   );
 

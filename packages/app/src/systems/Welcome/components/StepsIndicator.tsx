@@ -18,6 +18,9 @@ export function StepsIndicator() {
         <span>Download wallet</span>
       </li>
       <li className={getClasses(1, current)}>
+        <span>Faucet</span>
+      </li>
+      <li className={getClasses(2, current)}>
         <span>Done</span>
       </li>
     </ul>

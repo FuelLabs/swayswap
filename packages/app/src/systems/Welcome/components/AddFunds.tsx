@@ -1,3 +1,6 @@
+import { Button } from "@fuel-ui/react";
+import { useSelector } from "@xstate/react";
+
 import { useWelcomeSteps } from "../hooks";
 
 import { WelcomeImage } from "./WelcomeImage";
@@ -6,7 +9,16 @@ import { WelcomeStep } from "./WelcomeStep";
 import { FaucetApp } from "~/systems/Faucet";
 
 export function AddFunds() {
-  const { next } = useWelcomeSteps();
+  const { next, state, service } = useWelcomeSteps();
+  const isFetchingBalance = useSelector(service, (args) =>
+    args.matches("fecthingBalance")
+  );
+  const enableFacuet = useSelector(service, (args) =>
+    args.matches("fauceting.faucet")
+  );
+
+  console.log(state.value);
+
   return (
     <WelcomeStep id={1}>
       <WelcomeImage src="/illustrations/add-funds.png" />
@@ -16,7 +28,11 @@ export function AddFunds() {
         <br />
         Click &ldquo;Give me ETH&rdquo; below to get some from the faucet.
       </p>
-      <FaucetApp onSuccess={next} />
+      {enableFacuet ? (
+        <FaucetApp onSuccess={next} isLoading={isFetchingBalance} />
+      ) : (
+        <Button onPress={next}>Mint assets</Button>
+      )}
     </WelcomeStep>
   );
 }

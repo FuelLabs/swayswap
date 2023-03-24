@@ -26,7 +26,7 @@
     "@fuel-ts/wallet-manager": "0.35.0",
     "@fuel-ui/css": "^0.12.0",
     "@fuel-ui/react": "^0.12.0",
-    "@fuel-wallet/sdk": "0.7.0-next-035088c",
+    "@fuel-wallet/sdk": "0.7.1",
     "@headlessui/react": "^1.7.10",
     "@radix-ui/react-accordion": "^1.1.0",
     "@radix-ui/react-alert-dialog": "^1.0.2",

@@ -7,10 +7,15 @@ import { Button, Spinner } from "~/systems/UI";
 
 type FaucetAppProps = {
   isButtonFull?: boolean;
+  isLoading?: boolean;
   onSuccess?: () => void;
 };
 
-export function FaucetApp({ isButtonFull, onSuccess }: FaucetAppProps) {
+export function FaucetApp({
+  isButtonFull,
+  isLoading,
+  onSuccess,
+}: FaucetAppProps) {
   const faucet = useFaucet({ onSuccess });
   const captcha = useCaptcha();
 
@@ -43,7 +48,7 @@ export function FaucetApp({ isButtonFull, onSuccess }: FaucetAppProps) {
         size="lg"
         variant="primary"
         className="mt-5 mx-auto"
-        isLoading={faucet.mutation.isLoading}
+        isLoading={isLoading || faucet.mutation.isLoading}
         onPress={() => faucet.handleFaucet(captcha.value)}
         {...(captcha.needToShow && { isDisabled: !captcha.value })}
       >
