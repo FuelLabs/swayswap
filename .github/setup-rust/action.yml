@@ -6,10 +6,10 @@ inputs:
     default: 1.67.1
   forc-version:
     description: 'Forc version'
-    default: 0.35.1
+    default: 0.35.5
   fuel-core-version:
     description: 'Fuel core version'
-    default: 0.17.2
+    default: 0.17.4
 
 
 runs:
