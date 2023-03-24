@@ -1,4 +1,3 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { WalletManager } from '@fuel-ts/wallet-manager';
 import { Account, NativeAssetId, Provider, Wallet } from 'fuels';
 import { log } from 'src/log';
@@ -36,8 +35,7 @@ export async function getWalletInstance() {
   // balances configured
   if (GENESIS_SECRET) {
     log('Funding wallet with some coins');
-    const provider = new Provider(PROVIDER_URL!);
-    return generateTestWallet(provider, [[100_000_000, NativeAssetId]]);
+    return Wallet.generate();
   }
   throw new Error('You must provide a WALLET_SECRET or GENESIS_SECRET');
 }
