@@ -1,5 +1,5 @@
 import { WalletManager } from '@fuel-ts/wallet-manager';
-import { Account, NativeAssetId, Provider, Wallet } from 'fuels';
+import { Account, Provider, Wallet } from 'fuels';
 import { log } from 'src/log';
 
 export async function getWalletInstance() {
