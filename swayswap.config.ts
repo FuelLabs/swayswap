@@ -1,4 +1,3 @@
-import { randomBytes } from 'crypto';
 import dotenv from 'dotenv';
 import { createConfig, replaceEventOnEnv } from 'swayswap-scripts';
 
@@ -28,7 +27,6 @@ export default createConfig({
       options: () => {
         return {
           ...getDeployOptions(),
-          salt: randomBytes(32),
         };
       },
     },
@@ -38,7 +36,6 @@ export default createConfig({
       options: () => {
         return {
           ...getDeployOptions(),
-          salt: randomBytes(32),
         };
       },
     },

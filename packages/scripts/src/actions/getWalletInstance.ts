@@ -1,5 +1,5 @@
 import { WalletManager } from '@fuel-ts/wallet-manager';
-import { Account, Provider, Wallet } from 'fuels';
+import { Wallet } from 'fuels';
 import { log } from 'src/log';
 
 export async function getWalletInstance() {
@@ -8,7 +8,6 @@ export async function getWalletInstance() {
 
   if (WALLET_SECRET) {
     log('WALLET_SECRET detected');
-    let wallet;
     if (WALLET_SECRET && WALLET_SECRET.indexOf(' ') >= 0) {
       const walletManager = new WalletManager();
       const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
@@ -19,13 +18,11 @@ export async function getWalletInstance() {
       await walletManager.addVault(config);
       await walletManager.addAccount();
       const accounts = walletManager.getAccounts();
-      wallet = walletManager.getWallet(accounts[0].address);
-    } else {
-      wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
-    }
-    const provider = new Provider(PROVIDER_URL!);
 
-    return new Account(wallet.address, provider);
+      return walletManager.getWallet(accounts[0].address);
+    }
+
+    return Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   }
   // If no WALLET_SECRET is informed we assume
   // We are on a test environment
