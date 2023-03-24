@@ -24,6 +24,7 @@
     "@fuel-ts/mnemonic": "0.35.0",
     "@fuel-ts/wallet": "0.35.0",
     "@fuel-ts/wallet-manager": "0.35.0",
+    "@fuel-wallet/types": "0.7.1",
     "@fuel-ui/css": "^0.12.0",
     "@fuel-ui/react": "^0.12.0",
     "@fuel-wallet/sdk": "0.7.1",

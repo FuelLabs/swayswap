@@ -73,6 +73,7 @@ importers:
       '@fuel-ui/css': ^0.12.0
       '@fuel-ui/react': ^0.12.0
       '@fuel-wallet/sdk': 0.7.1
+      '@fuel-wallet/types': 0.7.1
       '@headlessui/react': ^1.7.10
       '@jest/globals': ^29.4.1
       '@playwright/test': ^1.31.0
@@ -161,6 +162,7 @@ importers:
       '@fuel-ui/css': 0.12.3
       '@fuel-ui/react': 0.12.3_nl2hqtofwc3pmuk6i6rdc2vvye
       '@fuel-wallet/sdk': 0.7.1_fuels@0.35.0
+      '@fuel-wallet/types': 0.7.1_fuels@0.35.0
       '@headlessui/react': 1.7.12_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-accordion': 1.1.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-alert-dialog': 1.0.2_zula6vjvt3wdocc4mwcxqa6nzi
@@ -2797,6 +2799,19 @@ packages:
       json-rpc-2.0: 1.5.1
       uuid: 9.0.0
       xstate: 4.37.0
+    transitivePeerDependencies:
+      - dexie
+    dev: false
+
+  /@fuel-wallet/types/0.7.1_fuels@0.35.0:
+    resolution: {integrity: sha512-ccxw1x7Y3Aw0NeIQ4povsjR87dw6FT9cpC3UlcNug0C7f6IXEsJhP7F+ngx1GZruPHX5QZZSqWy9YrLGD77c9A==}
+    peerDependencies:
+      fuels: '>=0.35.0'
+    dependencies:
+      '@types/chrome': 0.0.212
+      dexie-observable: 4.0.1-beta.13
+      fuels: 0.35.0
+      json-rpc-2.0: 1.5.1
     transitivePeerDependencies:
       - dexie
     dev: false

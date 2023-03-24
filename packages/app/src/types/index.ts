@@ -19,6 +19,7 @@ export enum Pages {
   'welcome' = '/welcome',
   'connect' = 'connect',
   'faucet' = 'faucet',
+  'addAssets' = 'add-assets',
   'welcome.done' = 'done',
 }
 

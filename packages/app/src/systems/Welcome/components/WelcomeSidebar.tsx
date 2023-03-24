@@ -18,7 +18,8 @@ export function WelcomeSidebar() {
         <nav>
           <WelcomeNavItem id={0} label="Download Wallet" />
           <WelcomeNavItem id={1} label="Faucet" />
-          <WelcomeNavItem id={2} label="Done" />
+          <WelcomeNavItem id={2} label="Add Assets" />
+          <WelcomeNavItem id={3} label="Done" />
         </nav>
       </div>
     </aside>

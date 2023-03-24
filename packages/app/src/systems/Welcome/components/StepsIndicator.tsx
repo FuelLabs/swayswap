@@ -21,6 +21,9 @@ export function StepsIndicator() {
         <span>Faucet</span>
       </li>
       <li className={getClasses(2, current)}>
+        <span>Add Assets</span>
+      </li>
+      <li className={getClasses(3, current)}>
         <span>Done</span>
       </li>
     </ul>
