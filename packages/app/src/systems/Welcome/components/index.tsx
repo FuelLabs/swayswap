@@ -1,3 +1,5 @@
+export * from "./AddAssets";
+export * from "./AddFunds";
 export * from "./StepsIndicator";
 export * from "./WelcomeDone";
 export * from "./WelcomeNavItem";

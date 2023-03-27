@@ -1,6 +1,6 @@
 import { useMachine } from "@xstate/react";
 import type { BN, CoinQuantity } from "fuels";
-import { bn } from "fuels";
+import { NativeAssetId, bn } from "fuels";
 import type { ReactNode } from "react";
 import { useContext, createContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,8 +19,9 @@ export const STEPS = [
   { id: 0, path: Pages.connect },
   { id: 1, path: Pages.faucet },
   { id: 2, path: Pages.addAssets },
-  { id: 3, path: Pages["welcome.done"] },
-  { id: 4, path: null },
+  { id: 3, path: Pages.mint },
+  { id: 4, path: Pages["welcome.done"] },
+  { id: 5, path: null },
 ];
 
 export function getAgreement() {
@@ -115,19 +116,25 @@ const welcomeStepsMachine =
               },
             },
             {
-              target: "mintingAssets",
+              target: "addingAssets",
               cond: (ctx) => {
                 return ctx.current.id === 2;
               },
             },
             {
-              target: "done",
-              cond: (ctx) =>
-                ctx.current.id === 3 ||
-                (ctx.current.id >= 3 && !ctx.acceptAgreement),
+              target: "mintingAssets",
+              cond: (ctx) => {
+                return ctx.current.id === 3;
+              },
             },
             {
-              cond: (ctx) => ctx.current.id === 4 && ctx.acceptAgreement,
+              target: "done",
+              cond: (ctx) =>
+                ctx.current.id === 4 ||
+                (ctx.current.id >= 4 && !ctx.acceptAgreement),
+            },
+            {
+              cond: (ctx) => ctx.current.id === 5 && ctx.acceptAgreement,
               target: "finished",
             },
           ],
@@ -145,13 +152,13 @@ const welcomeStepsMachine =
             src: "fetchBalances",
             onDone: [
               {
-                cond: "hasBalance",
+                cond: "hasNoBalance",
                 actions: ["assignBalances"],
                 target: "fauceting",
               },
               {
                 actions: ["assignBalances"],
-                target: "mintingAssets",
+                target: "addingAssets",
               },
             ],
             onError: {
@@ -163,11 +170,11 @@ const welcomeStepsMachine =
           entry: [assignCurrent(1), "navigateTo"],
           on: {
             NEXT: {
-              target: "#welcomeSteps.mintingAssets",
+              target: "#welcomeSteps.addingAssets",
             },
           },
         },
-        mintingAssets: {
+        addingAssets: {
           entry: [assignCurrent(2), "navigateTo"],
           initial: "addAssetsToWallet",
           states: {
@@ -182,12 +189,18 @@ const welcomeStepsMachine =
               tags: ["isLoadingMint"],
               invoke: {
                 src: "addAssets",
-                onDone: "mintAssets",
+                onDone: "#welcomeSteps.mintingAssets",
                 onError: {
                   actions: ["toastErrorMessage"],
                 },
               },
             },
+          },
+        },
+        mintingAssets: {
+          entry: [assignCurrent(3), "navigateTo"],
+          initial: "mintAssets",
+          states: {
             mintAssets: {
               on: {
                 ADD_ASSETS: {
@@ -208,7 +221,7 @@ const welcomeStepsMachine =
           },
         },
         done: {
-          entry: [assignCurrent(3), "navigateTo"],
+          entry: [assignCurrent(4), "navigateTo"],
           on: {
             ACCEPT_AGREEMENT: {
               actions: ["acceptAgreement"],
@@ -219,7 +232,7 @@ const welcomeStepsMachine =
           },
         },
         finished: {
-          entry: assignCurrent(4),
+          entry: assignCurrent(5),
           type: "final",
         },
       },
@@ -236,8 +249,11 @@ const welcomeStepsMachine =
         },
       },
       guards: {
-        hasBalance: (_, ev) => {
-          return bn(ev.data).isZero();
+        hasNoBalance: (_, ev) => {
+          const baseAsset = ev.data.find(
+            (asset: CoinQuantity) => asset.assetId === NativeAssetId
+          );
+          return bn(baseAsset ? baseAsset.amount : 0).isZero();
         },
       },
       services: {
@@ -356,7 +372,7 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
       .withConfig({
         actions: {
           navigateTo: (context) => {
-            if (context.current.id > 2) return;
+            if (context.current.id > 4) return;
             navigate(`/welcome/${context.current.path}`);
           },
           acceptAgreement: assign((context, event) => {

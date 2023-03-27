@@ -5,7 +5,7 @@ import { useWelcomeSteps } from "../hooks";
 import { WelcomeImage } from "./WelcomeImage";
 import { WelcomeStep } from "./WelcomeStep";
 
-export function AddAssets() {
+export function MintAssets() {
   const { service } = useWelcomeSteps();
 
   function handleAddAssets() {
@@ -13,16 +13,16 @@ export function AddAssets() {
   }
 
   return (
-    <WelcomeStep id={2}>
+    <WelcomeStep id={3}>
       <WelcomeImage src="/illustrations/add-funds.png" />
       <h2>Add pool assets to your wallet</h2>
       <p>
-        To see the assets in your wallet you have to add them.
+        To get started you&apos;ll need some funds.
         <br />
-        Click &ldquo;Add Assets&rdquo; below to add the pool token asset info to
-        your wallet.
+        Click &ldquo;Mint Assets&rdquo; below to get some from the token
+        contracts.
       </p>
-      <Button onPress={handleAddAssets}>Add Assets</Button>
+      <Button onPress={handleAddAssets}>Mint assets</Button>
     </WelcomeStep>
   );
 }

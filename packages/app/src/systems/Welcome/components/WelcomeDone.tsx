@@ -15,8 +15,10 @@ export function WelcomeDone() {
     send("FINISH");
   }
 
+  console.log("state", state.value);
+
   return (
-    <WelcomeStep id={1}>
+    <WelcomeStep id={4}>
       <WelcomeImage src="/illustrations/done.png" />
       <p className="text-sm font-light italic my-5">
         This is running on the <b>Fuel test network</b>. No real funds are used.

@@ -2,8 +2,14 @@ import { useSelector } from "@xstate/react";
 import { AnimatePresence } from "framer-motion";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 
-import { WelcomeSidebar, WelcomeDone, StepsIndicator } from "../components";
-import { AddFunds } from "../components/AddFunds";
+import {
+  WelcomeSidebar,
+  WelcomeDone,
+  StepsIndicator,
+  AddAssets,
+  AddFunds,
+} from "../components";
+import { MintAssets } from "../components/MintAssets";
 import { WelcomeConnect } from "../components/WelcomeConnect";
 import { useWelcomeSteps, stepsSelectors } from "../hooks";
 
@@ -27,6 +33,8 @@ export function WelcomePage() {
           <Routes key={location.pathname} location={location}>
             <Route path={Pages.connect} element={<WelcomeConnect />} />
             <Route path={Pages.faucet} element={<AddFunds />} />
+            <Route path={Pages.addAssets} element={<AddAssets />} />
+            <Route path={Pages.mint} element={<MintAssets />} />
             <Route path={Pages["welcome.done"]} element={<WelcomeDone />} />
           </Routes>
         </AnimatePresence>

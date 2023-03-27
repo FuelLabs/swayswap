@@ -24,6 +24,9 @@ export function StepsIndicator() {
         <span>Add Assets</span>
       </li>
       <li className={getClasses(3, current)}>
+        <span>Mint Assets</span>
+      </li>
+      <li className={getClasses(4, current)}>
         <span>Done</span>
       </li>
     </ul>

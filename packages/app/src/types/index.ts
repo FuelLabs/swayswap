@@ -10,7 +10,6 @@ export interface Coin {
 
 export enum Pages {
   'home' = '/',
-  'mint' = '/mint',
   'swap' = '/swap',
   'pool' = '/pool',
   'pool.list' = 'list',
@@ -20,6 +19,7 @@ export enum Pages {
   'connect' = 'connect',
   'faucet' = 'faucet',
   'addAssets' = 'add-assets',
+  'mint' = 'mint',
   'welcome.done' = 'done',
 }
 
