@@ -9,8 +9,8 @@ export const ASSET_404 = {
 };
 
 export const ETH = {
-  name: 'Ether',
-  symbol: 'ETH',
+  name: 'sEther',
+  symbol: 'sETH',
   assetId: TOKEN_ID1,
   img: relativeUrl('/icons/eth.svg'),
 };
@@ -26,12 +26,13 @@ export const DAI = {
 };
 
 export const ETH_DAI = {
-  name: 'ETH/DAI',
-  symbol: 'ETH/DAI',
+  name: 'sETH/DAI',
+  symbol: 'sETH/DAI',
   // TODO: Remove this when adding dynamic token insertion
   // Make temporarily easy to change token contract id
   // https://github.com/FuelLabs/swayswap-demo/issues/33
   assetId: CONTRACT_ID,
+  img: relativeUrl('/icons/eth_dai.svg'),
   pairOf: [ETH, DAI],
 };
 

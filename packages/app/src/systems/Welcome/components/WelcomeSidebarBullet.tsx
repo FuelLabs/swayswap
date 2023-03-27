@@ -38,7 +38,7 @@ export function WelcomeSidebarBullet() {
           x: 6,
         },
         fifth: {
-          y: 97.5,
+          y: 130,
           x: 6,
         },
       }}

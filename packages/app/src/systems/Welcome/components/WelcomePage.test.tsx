@@ -44,7 +44,27 @@ describe("WelcomePage", () => {
     });
 
     /**
-     * Second step: done
+     * Second step: faucet
+     */
+    const faucetButton = await screen.findByRole("button", {
+      name: /Give me ETH/,
+    });
+    await waitFor(async () => {
+      await user.click(faucetButton);
+    });
+
+    /**
+     * Third step: add assets
+     */
+    const addAssetsButton = await screen.findByRole("button", {
+      name: /Add Assets/,
+    });
+    await waitFor(async () => {
+      await user.click(addAssetsButton);
+    });
+
+    /**
+     * Fourth step: done
      */
     const acceptAgreement = await screen.findByLabelText(
       /Accept the use agreement/i

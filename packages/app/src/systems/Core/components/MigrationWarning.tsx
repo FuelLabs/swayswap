@@ -1,7 +1,9 @@
 import { Alert } from "@fuel-ui/react";
 import { useState } from "react";
 
-const LOCALSTORAGE_MIGRATION_WARNING = "fuel--migration-warning";
+import { LocalStorageKey } from "../utils";
+
+const LOCALSTORAGE_MIGRATION_WARNING = `${LocalStorageKey}fuel--migration-warning`;
 
 const useMigrationWarning = () => {
   const [hide, setToHide] = useState(

@@ -3,7 +3,7 @@ import { bn } from 'fuels';
 
 import type { ExchangeContractAbi, TokenContractAbi } from '../../src/types/contracts';
 
-const { TOKEN_AMOUNT1, TOKEN_AMOUNT2 } = process.env;
+const { SIZE_POOL } = process.env;
 
 export async function initializePool(
   tokenContract1: TokenContractAbi,
@@ -14,12 +14,13 @@ export async function initializePool(
   const walletAddress = {
     value: tokenContract1.account!.address!.toHexString(),
   };
-  const tokenAmount1 = bn(TOKEN_AMOUNT1 || '0xE8F2727500');
+  const sizePool = bn.parseUnits(SIZE_POOL || '0.0');
+  const tokenAmount1 = sizePool;
   const tokenId1 = {
     value: tokenContract1.id.toHexString(),
   };
 
-  const tokenAmount2 = bn(TOKEN_AMOUNT2 || '0x1D1A94A2000');
+  const tokenAmount2 = sizePool.mul(1000);
   const tokenId2 = {
     value: tokenContract2.id.toHexString(),
   };

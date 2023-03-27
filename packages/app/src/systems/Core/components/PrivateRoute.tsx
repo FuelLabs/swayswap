@@ -23,7 +23,7 @@ export function PrivateRoute({ children }: { children: ReactNode }) {
     }
   );
 
-  if ((current.id > 1 && acceptAgreement) || (isConnected && !current.id)) {
+  if ((current.id > 4 && acceptAgreement) || (isConnected && !current.id)) {
     return <>{children}</>;
   }
 

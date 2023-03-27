@@ -1,19 +1,25 @@
 import { useMachine } from "@xstate/react";
-import type { BN, CoinQuantity } from "fuels";
-import { NativeAssetId, bn } from "fuels";
+import type { BN } from "fuels";
+import { bn } from "fuels";
 import type { ReactNode } from "react";
 import { useContext, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import type { InterpreterFrom, StateFrom } from "xstate";
 import { assign, createMachine } from "xstate";
 
-import { handleError, ETH, DAI } from "~/systems/Core";
+import {
+  handleError,
+  ETH,
+  DAI,
+  ETH_DAI,
+  LocalStorageKey,
+} from "~/systems/Core";
 import type { Maybe } from "~/types";
 import { Pages } from "~/types";
 import { TokenContractAbi__factory } from "~/types/contracts";
 
-export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
-export const LOCALSTORAGE_AGREEMENT_KEY = "fuel--agreement";
+export const LOCALSTORAGE_WELCOME_KEY = `${LocalStorageKey}fuel--welcomeStep`;
+export const LOCALSTORAGE_AGREEMENT_KEY = `${LocalStorageKey}fuel--agreement`;
 
 export const STEPS = [
   { id: 0, path: Pages.connect },
@@ -69,7 +75,7 @@ export type Step = {
 type MachineContext = {
   current: Step;
   acceptAgreement: boolean;
-  balances: Array<CoinQuantity>;
+  balance: BN;
 };
 
 type MachineEvents = { type: "NEXT" } | { type: "SET_CURRENT"; value: number };
@@ -95,7 +101,7 @@ const welcomeStepsMachine =
       context: {
         current: getCurrent(),
         acceptAgreement: getAgreement(),
-        balances: [],
+        balance: bn(),
       },
       states: {
         init: {
@@ -143,13 +149,13 @@ const welcomeStepsMachine =
           entry: [assignCurrent(0), "navigateTo"],
           on: {
             NEXT: {
-              target: "fecthingBalances",
+              target: "fecthingBalance",
             },
           },
         },
-        fecthingBalances: {
+        fecthingBalance: {
           invoke: {
-            src: "fetchBalances",
+            src: "fetchBalance",
             onDone: [
               {
                 cond: "hasNoBalance",
@@ -240,7 +246,7 @@ const welcomeStepsMachine =
     {
       actions: {
         assignBalances: assign({
-          balances: (_, ev) => ev.data,
+          balance: (_, ev) => ev.data,
         }),
         toastErrorMessage(_, ev) {
           handleError(ev.data);
@@ -250,25 +256,20 @@ const welcomeStepsMachine =
       },
       guards: {
         hasNoBalance: (_, ev) => {
-          const baseAsset = ev.data.find(
-            (asset: CoinQuantity) => asset.assetId === NativeAssetId
-          );
-          return bn(baseAsset ? baseAsset.amount : 0).isZero();
+          return bn(ev.data).isZero();
         },
       },
       services: {
-        fetchBalances: async () => {
+        fetchBalance: async () => {
           if (!window.fuel) {
             throw new Error("Fuel Wallet is not detected!");
           }
-          const accounts = await window.fuel.accounts();
-          const address = accounts?.[0];
+          const [address] = await window.fuel.accounts();
           if (!address) {
             throw Error("No account found!");
           }
           const wallet = await window.fuel.getWallet(address);
-          const balances = await wallet.getBalances();
-          return balances;
+          return wallet.getBalance();
         },
         addAssets: async () => {
           if (!window.fuel) {
@@ -291,6 +292,13 @@ const welcomeStepsMachine =
               imageUrl: DAI.img,
               isCustom: true,
             },
+            {
+              assetId: ETH_DAI.assetId,
+              name: ETH_DAI.name,
+              symbol: ETH_DAI.symbol,
+              imageUrl: ETH_DAI.img,
+              isCustom: true,
+            },
           ];
           const assets = assetsToAddToWallet.filter(
             (a) => !assetsOnWalletIds.includes(a.assetId)
@@ -299,16 +307,16 @@ const welcomeStepsMachine =
             await window.fuel.addAssets(assets);
           }
         },
-        mintAssets: async (ctx) => {
+        mintAssets: async () => {
           if (!window.fuel) {
             throw new Error("Fuel Wallet is not detected!");
           }
-          const accounts = await window.fuel?.accounts();
-          const address = accounts?.[0];
+          const [address] = await window.fuel.accounts();
           if (!address) {
             throw Error("No account found!");
           }
           const wallet = await window.fuel.getWallet(address);
+          const balances = await wallet.getBalances();
           const contract1 = TokenContractAbi__factory.connect(
             ETH.assetId,
             wallet
@@ -319,12 +327,16 @@ const welcomeStepsMachine =
           );
           const calls = [];
 
-          if (!ctx.balances.find((b) => b.assetId === ETH.assetId)) {
+          if (!balances.find((b) => b.assetId === ETH.assetId)) {
             calls.push(contract1.functions.mint());
           }
 
-          if (!ctx.balances.find((b) => b.assetId === ETH.assetId)) {
+          if (!balances.find((b) => b.assetId === DAI.assetId)) {
             calls.push(contract2.functions.mint());
+          }
+
+          if (calls.length === 0) {
+            return;
           }
 
           await contract1.multiCall(calls).call();
@@ -367,7 +379,7 @@ export function StepsProvider({ children }: WelcomeStepsProviderProps) {
       .withContext({
         current: getCurrent(),
         acceptAgreement: getAgreement(),
-        balances: [],
+        balance: bn(),
       })
       .withConfig({
         actions: {

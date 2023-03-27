@@ -40,8 +40,8 @@ async function main() {
     gasPrice: bn(GAS_PRICE || 0),
   };
 
-  await initializeTokenContract(tokenContract1, overrides);
-  await initializeTokenContract(tokenContract2, overrides);
+  await initializeTokenContract(tokenContract1, overrides, '1.0');
+  await initializeTokenContract(tokenContract2, overrides, '1000.0');
   if (process.argv.includes('--init-pool')) {
     await initializePool(tokenContract1, tokenContract2, exchangeContract, overrides);
   }

@@ -15,8 +15,6 @@ export function WelcomeDone() {
     send("FINISH");
   }
 
-  console.log("state", state.value);
-
   return (
     <WelcomeStep id={4}>
       <WelcomeImage src="/illustrations/done.png" />

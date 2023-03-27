@@ -15,14 +15,15 @@ export function AddAssets() {
   return (
     <WelcomeStep id={2}>
       <WelcomeImage src="/illustrations/add-funds.png" />
-      <h2>Add pool assets to your wallet</h2>
-      <p>
-        To see the assets in your wallet you have to add them.
+      <h2>Add SwaySwap assets</h2>
+      <p className="my-5">
+        To see the SwaySwap assets in your wallet we need to add them.
         <br />
-        Click &ldquo;Add Assets&rdquo; below to add the pool token asset info to
-        your wallet.
+        Click &ldquo;Add Assets&rdquo; below and approve it.
       </p>
-      <Button onPress={handleAddAssets}>Add Assets</Button>
+      <Button className="mt-5 mx-auto" onPress={handleAddAssets}>
+        Add Assets
+      </Button>
     </WelcomeStep>
   );
 }

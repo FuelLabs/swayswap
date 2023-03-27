@@ -8,6 +8,7 @@ import { useBreakpoint } from "../hooks/useBreakpoint";
 import { relativeUrl } from "../utils";
 
 import { MigrationWarning } from "./MigrationWarning";
+import { WalletWidget } from "./WalletWidget";
 
 import type { ButtonProps } from "~/systems/UI";
 import { ButtonGroup, Button } from "~/systems/UI";
@@ -80,6 +81,9 @@ export const Header = () => {
               </HeaderNav>
             </ButtonGroup>
           </div>
+        </div>
+        <div className="header--wallet">
+          <WalletWidget />
         </div>
       </div>
     </>

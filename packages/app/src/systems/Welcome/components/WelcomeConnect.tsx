@@ -39,11 +39,9 @@ export const WelcomeConnect = () => {
       {!fuel ? (
         <>
           <p className="my-5">
-            To get started you&apos;ll need a wallet.
-            <br />
-            Click the button below to learn how to install and use the Fuel
-            Wallet extension. After you have installed and setup your wallet
-            come back to this page.
+            To get started you&apos;ll need to install
+            <br /> the <b>Fuel wallet</b>. Click the button below to learn how
+            to install. After you have installed come back to this page.
           </p>
           <a
             href="https://wallet.fuel.network/docs/install/"

@@ -1,13 +1,12 @@
 import cx from "classnames";
-import clipboard from "clipboard";
-import toast from "react-hot-toast";
-import { FaRegCopy } from "react-icons/fa";
+import { useState } from "react";
+import { FiLogOut } from "react-icons/fi";
 
-import { useAssets, useEthBalance, useWallet } from "../hooks";
+import { useWallet } from "../hooks";
 
-import { WalletInfo } from "./WalletInfo";
+import { Confirm } from "./Confirm";
 
-import { Popover, usePopover, ButtonGroup, Button } from "~/systems/UI";
+import { ButtonGroup, Button } from "~/systems/UI";
 
 const style = {
   wallet: `flex items-center gap-3 rounded-full text-gray-300 bg-gray-800 inner-shadow p-1`,
@@ -18,49 +17,35 @@ const style = {
 
 export function WalletWidget() {
   const { wallet } = useWallet();
-  const ethBalance = useEthBalance();
-  const { coins } = useAssets();
+  const [open, setOpen] = useState(false);
 
-  const popover = usePopover({
-    placement: "bottom end",
-    offset: 10,
-    crossOffset: 42,
-  });
-
-  const handleCopy = () => {
-    clipboard.copy(wallet!.address.toAddress());
-    toast("Address copied", { icon: "✨" });
-  };
+  function handleLogout() {
+    window.localStorage.clear();
+    window.location.reload();
+  }
 
   return (
-    <div
-      className={cx(style.wallet, {
-        "pl-4": Boolean(ethBalance.formatted),
-      })}
-    >
+    <div className={style.wallet}>
       <>
-        {ethBalance.formatted && <span>{ethBalance.formatted} ETH</span>}
+        <Confirm
+          open={open}
+          header="Confirm reset"
+          content="By confirming we are going to reset the state of SwaySwap. This will not affect the balances you have on your wallet or the assets you have on the pool."
+          onCancel={() => setOpen(false)}
+          onConfirm={handleLogout}
+        />
         <div className="flex items-center bg-gray-700 rounded-full">
           <ButtonGroup>
-            <Button
-              {...popover.triggerProps}
-              isDisabled={!coins.length}
-              className={cx(style.button, style.buttonLeft)}
-            >
+            <Button className={cx(style.button, style.buttonLeft)} isDisabled>
               {String(wallet?.address).slice(0, 4)}...
               {String(wallet?.address).slice(-4)}
             </Button>
-            {Boolean(coins.length) && (
-              <Popover {...popover.rootProps}>
-                <WalletInfo onClose={() => popover.close()} />
-              </Popover>
-            )}
             <Button
-              aria-label="Copy your wallet address"
-              onPress={handleCopy}
+              aria-label="Reset SwaySwap state"
+              onPress={() => setOpen(true)}
               className={cx(style.button, style.buttonRight)}
             >
-              <FaRegCopy size="1em" />
+              <FiLogOut size="1em" />
             </Button>
           </ButtonGroup>
         </div>
