@@ -2,9 +2,11 @@
 
 import type { FuelWalletConnection } from '@fuel-wallet/sdk';
 import { FuelWalletLocked, FuelWalletProvider, BaseConnection } from '@fuel-wallet/sdk';
+import { FuelProviderConfig } from '@fuel-wallet/types';
 import EventEmitter from 'events';
 import type { AbstractAddress } from 'fuels';
 import { transactionRequestify, Wallet, Address } from 'fuels';
+import { TransactionRequest } from 'fuels';
 
 import { FUEL_PROVIDER_URL } from '~/config';
 
@@ -29,6 +31,9 @@ export class MockConnection extends BaseConnection {
       this.signMessage,
       this.sendTransaction,
       this.currentAccount,
+      this.assets,
+      this.addAsset,
+      this.addAssets,
     ]);
     this.isConnectedOverride = isConnected;
   }
@@ -55,17 +60,46 @@ export class MockConnection extends BaseConnection {
     return false;
   }
 
+  acceptMessage() {
+    return true;
+  }
+
+  async ping(): Promise<boolean> {
+    return true;
+  }
+
+  async addAssets(): Promise<boolean> {
+    return true;
+  }
+
+  async addAsset(): Promise<boolean> {
+    return true;
+  }
+
+  async assets() {
+    const assets = await userWallet.getBalances();
+    return assets;
+  }
+
+  async onMessage() {}
+  async postMessage() {}
+
   async accounts() {
     return [userWallet.address.toAddress()];
   }
 
-  async signMessage(params: { account: string; message: string; address: string }) {
-    return userWallet.signMessage(params.message);
+  async signMessage(address: string, message: string) {
+    return userWallet.signMessage(message);
   }
 
-  async sendTransaction(params: { address: string; transaction: string; message: string }) {
-    const transactionInput = params.transaction ? JSON.parse(params.transaction) : params;
-    const transaction = transactionRequestify(transactionInput);
+  async sendTransaction(
+    transaction: TransactionRequest & { signer?: string | undefined },
+    providerConfig: FuelProviderConfig,
+    signer?: string | undefined
+  ) {
+    // console.log('tx: ', params.transaction);
+    // console.log('params: ', params);
+    //const transaction = transactionRequestify(JSON.parse(patransaction));
     const response = await userWallet.sendTransaction(transaction);
     return response.id;
   }
@@ -109,6 +143,7 @@ export class MockConnection extends BaseConnection {
     network: 'network',
     assets: 'assets',
   };
+  //readonly events = FuelWalletEvents;
 }
 
 global.window = {

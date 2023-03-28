@@ -6,11 +6,13 @@ import {
   mockUseFuel,
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
+import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
 
 beforeAll(async () => {
   const { wallet, fuel } = await createWallet(false);
   mockUseWallet(wallet);
   mockUseFuel(fuel);
+  //await mint(wallet);
 });
 
 describe("WelcomePage", () => {
@@ -48,9 +50,7 @@ describe("WelcomePage", () => {
       name: /Give me ETH/i,
     });
     expect(faucetButton).toBeInTheDocument();
-    await waitFor(async () => {
-      await user.click(faucetButton);
-    });
+    await user.click(faucetButton);
 
     /**
      * Third step: add assets
@@ -58,9 +58,7 @@ describe("WelcomePage", () => {
     const addAssetsButton = await screen.findByRole("button", {
       name: /Add Assets/i,
     });
-    await waitFor(async () => {
-      await user.click(addAssetsButton);
-    });
+    await user.click(addAssetsButton);
 
     /**
      * Fourth step: add assets
@@ -68,29 +66,25 @@ describe("WelcomePage", () => {
     const mintAssetsButton = await screen.findByRole("button", {
       name: /Mint Assets/i,
     });
-    await waitFor(async () => {
-      await user.click(mintAssetsButton);
-    });
+    await user.click(mintAssetsButton);
 
     /**
      * Fifth step: done
      */
     const acceptAgreement = await screen.findByLabelText(
-      /Accept the use agreement/i
+      /Accept the use agreement/i,
+      undefined,
+      { timeout: 10000 }
     );
     expect(acceptAgreement).not.toBeChecked();
-    await waitFor(async () => {
-      await user.click(acceptAgreement);
-    });
+    await user.click(acceptAgreement);
     expect(acceptAgreement).toBeChecked();
 
     const goToSwapBtn = await screen.findByRole("button", {
       name: /Get Swapping!/i,
     });
     expect(goToSwapBtn).toBeInTheDocument();
-    await waitFor(async () => {
-      await user.click(goToSwapBtn);
-    });
+    await user.click(goToSwapBtn);
 
     /**
      * Finished: go to swap

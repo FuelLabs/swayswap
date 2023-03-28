@@ -32,13 +32,10 @@ async function findMaxBalanceBtn(input: "from" | "to" = "from") {
 }
 
 async function clickOnMaxBalance(input: "from" | "to" = "from") {
-  return waitFor(
-    async () => {
-      const button = await findMaxBalanceBtn(input);
-      fireEvent.click(button);
-    },
-    { timeout: 10000 }
-  );
+  return waitFor(async () => {
+    const button = await findMaxBalanceBtn(input);
+    fireEvent.click(button);
+  });
 }
 
 async function createAndMockWallet() {
@@ -49,10 +46,13 @@ async function createAndMockWallet() {
 }
 
 async function fillCoinFromWithValue(value: string) {
-  await waitFor(async () => {
-    const coinFrom = screen.getByLabelText(/Coin from input/i);
-    fireEvent.change(coinFrom, { target: { value } });
-  });
+  await waitFor(
+    async () => {
+      const coinFrom = screen.getByLabelText(/Coin from input/i);
+      fireEvent.change(coinFrom, { target: { value } });
+    },
+    { timeout: 10000 }
+  );
 }
 
 async function fillCoinToWithValue(value: string) {
@@ -75,7 +75,7 @@ async function waitFinishLoading() {
 }
 
 async function getETHBalance() {
-  const balanceLabel = await screen.findByLabelText("ETH balance");
+  const balanceLabel = await screen.findByLabelText("sETH balance");
   const balance = parseInt(balanceLabel.lastChild?.textContent || "0", 10);
   const valBalance = new Decimal(balance);
 
@@ -117,7 +117,7 @@ describe("SwapPage", () => {
     }
 
     it("should invert coin selector when click on invert", async () => {
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
       await waitFor(() => {
         expect(
           screen.queryByTestId("fuel-wallet-loading")
@@ -139,7 +139,7 @@ describe("SwapPage", () => {
       const spy = jest
         .spyOn(poolHelpers, "getPoolRatio")
         .mockReturnValue(new Decimal(0));
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
       await waitFor(async () => {
         await fillCoinFromWithValue("0.5");
@@ -157,19 +157,19 @@ describe("SwapPage", () => {
       await faucet(wallet, 4);
       await addLiquidity(
         wallet,
-        "1",
-        "1000",
+        "0.5",
+        "500",
         TOKENS[0].assetId,
         TOKENS[1].assetId
       );
     });
 
     it("should show insufficient balance if try to input more than balance", async () => {
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
       await waitFor(
         async () => {
-          await fillCoinFromWithValue("1300000000");
+          await fillCoinFromWithValue("2");
           const submitBtn = await findSwapBtn();
           expect(submitBtn.textContent).toMatch(
             /(Insufficient)(\s\w+\s)(balance)/i
@@ -188,7 +188,7 @@ describe("SwapPage", () => {
       const valDecimal = new Decimal(inputValue || "");
       const balance = await getETHBalance();
 
-      expect(valDecimal.round().toString()).toMatch(balance.round().toString());
+      expect(valDecimal.toString()).toMatch(balance.toString());
     });
 
     it("should show insufficient eth for gas message", async () => {
@@ -198,12 +198,10 @@ describe("SwapPage", () => {
 
       renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
-      const balance = await getETHBalance();
-
-      await fillCoinFromWithValue(balance.mul(2).toString());
-      const submitBtn = await findSwapBtn();
       await waitFor(
-        () => {
+        async () => {
+          await fillCoinFromWithValue("0.5");
+          const submitBtn = await findSwapBtn();
           expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
         },
         { timeout: 10000 }
@@ -251,8 +249,8 @@ describe("SwapPage", () => {
       await clickOnMaxBalance();
 
       let pricePerToken: HTMLElement;
-      const ethToDaiRegexp = /(\d+)(\s)(ETH = )([\d,]+).((\s)|(\d+\s))DAI/i;
-      const daiToEthRegexp = /(\d+)(\s)(DAI = )([\d,]+).((\s)|(\d+\s))ETH/i;
+      const ethToDaiRegexp = /(\d+)(\s)(sETH = )([\d,]+).((\s)|(\d+\s))DAI/i;
+      const daiToEthRegexp = /(\d+)(\s)(DAI = )([\d,]+).((\s)|(\d+\s))sETH/i;
 
       pricePerToken = await screen.findByLabelText(/price per token/i);
       await waitFor(async () => {
@@ -290,7 +288,6 @@ describe("SwapPage", () => {
 
       await waitFor(async () => {
         const maxBalanceBtn = await findMaxBalanceBtn();
-        console.log("here");
         expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
       });
     });

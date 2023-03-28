@@ -361,7 +361,8 @@ export const swapMachine =
     {
       services: {
         fetchBalances: async ({ client }) => {
-          return client?.fetchQuery<CoinQuantity[]>(Queries.UserQueryBalances);
+          const balances = await client?.fetchQuery<CoinQuantity[]>(Queries.UserQueryBalances);
+          return balances;
         },
         fetchTxCost: async (ctx) => {
           const contractCall = await queryNetworkFeeOnSwap(ctx);
@@ -422,15 +423,17 @@ export const swapMachine =
             ethBalance: bn(ethBalance?.amount),
           };
         }),
-        selectCoin: assign((ctx, ev) => ({
-          ...ctx,
-          ...(ev.data.direction === FROM_TO && {
-            coinFrom: ev.data.coin,
-          }),
-          ...(ev.data.direction === TO_FROM && {
-            coinTo: ev.data.coin,
-          }),
-        })),
+        selectCoin: assign((ctx, ev) => {
+          return {
+            ...ctx,
+            ...(ev.data.direction === FROM_TO && {
+              coinFrom: ev.data.coin,
+            }),
+            ...(ev.data.direction === TO_FROM && {
+              coinTo: ev.data.coin,
+            }),
+          };
+        }),
         invertDirection: assign((ctx) => {
           const isFrom = ctx.direction === FROM_TO;
           return {

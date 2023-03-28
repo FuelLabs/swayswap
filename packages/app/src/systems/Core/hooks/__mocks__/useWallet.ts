@@ -23,6 +23,7 @@ export function mockUseWallet(wallet: FuelWalletLocked) {
 }
 
 export function mockUseFuel(fuel: MockConnection) {
+  window.fuel = fuel as unknown as Fuel;
   return jest.spyOn(useFuel, 'useFuel').mockImplementation(() => {
     return fuel as unknown as Fuel;
   });

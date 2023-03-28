@@ -14,6 +14,7 @@ import {
   ETH_DAI,
   LocalStorageKey,
 } from "~/systems/Core";
+import { getOverrides } from "~/systems/Core/utils/gas";
 import type { Maybe } from "~/types";
 import { Pages } from "~/types";
 import { TokenContractAbi__factory } from "~/types/contracts";
@@ -339,7 +340,7 @@ const welcomeStepsMachine =
             return;
           }
 
-          await contract1.multiCall(calls).call();
+          await contract1.multiCall(calls).txParams(getOverrides()).call();
         },
       },
     }
