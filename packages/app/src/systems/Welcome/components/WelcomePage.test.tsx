@@ -40,6 +40,7 @@ describe("WelcomePage", () => {
     });
     expect(connectButton).toBeInTheDocument();
     await user.click(connectButton);
+
     /**
      * Second step: faucet
      */
