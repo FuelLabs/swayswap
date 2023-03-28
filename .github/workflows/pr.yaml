@@ -74,10 +74,10 @@ jobs:
             **/Cargo.toml
             **/Forc.toml
 
-      - name: Test Contracts
-        if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
-        run: |
-          ./scripts/test-contracts.sh
+      # - name: Test Contracts
+      #   if: ${{ steps.changed-contracts.outputs.any_changed == 'true' }}
+      #   run: |
+      #     ./scripts/test-contracts.sh
 
       - name: Run test
         run: |

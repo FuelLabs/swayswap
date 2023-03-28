@@ -3,7 +3,7 @@ name: 'Setup Rust env'
 inputs:
   rust-version:
     description: 'Rust version'
-    default: 1.67.1
+    default: 1.68.2
   forc-version:
     description: 'Forc version'
     default: 0.35.5
