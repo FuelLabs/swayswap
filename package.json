@@ -58,6 +58,7 @@
     "@swayswap/test-utils": "workspace:0.1.0",
     "@swc/core": "^1.2.249",
     "@swc/jest": "^0.2.22",
+    "@types/chrome": "^0.0.226",
     "@types/jest": "^28.1.8",
     "@types/node": "^17.0.45",
     "@types/react": "^18.0.18",
