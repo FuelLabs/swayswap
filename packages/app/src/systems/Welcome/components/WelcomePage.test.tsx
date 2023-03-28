@@ -36,19 +36,17 @@ describe("WelcomePage", () => {
      * First step: connect wallet
      */
     const connectButton = await screen.findByRole("button", {
-      name: /Connect Wallet/i,
+      name: "Connect Wallet",
     });
     expect(connectButton).toBeInTheDocument();
-    await waitFor(async () => {
-      await user.click(connectButton);
-    });
-
+    await user.click(connectButton);
     /**
      * Second step: faucet
      */
     const faucetButton = await screen.findByRole("button", {
-      name: /Give me ETH/,
+      name: /Give me ETH/i,
     });
+    expect(faucetButton).toBeInTheDocument();
     await waitFor(async () => {
       await user.click(faucetButton);
     });
@@ -57,14 +55,24 @@ describe("WelcomePage", () => {
      * Third step: add assets
      */
     const addAssetsButton = await screen.findByRole("button", {
-      name: /Add Assets/,
+      name: /Add Assets/i,
     });
     await waitFor(async () => {
       await user.click(addAssetsButton);
     });
 
     /**
-     * Fourth step: done
+     * Fourth step: add assets
+     */
+    const mintAssetsButton = await screen.findByRole("button", {
+      name: /Mint Assets/i,
+    });
+    await waitFor(async () => {
+      await user.click(mintAssetsButton);
+    });
+
+    /**
+     * Fifth step: done
      */
     const acceptAgreement = await screen.findByLabelText(
       /Accept the use agreement/i

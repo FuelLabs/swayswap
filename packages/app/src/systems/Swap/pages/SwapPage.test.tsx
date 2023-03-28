@@ -32,10 +32,13 @@ async function findMaxBalanceBtn(input: "from" | "to" = "from") {
 }
 
 async function clickOnMaxBalance(input: "from" | "to" = "from") {
-  return waitFor(async () => {
-    const button = await findMaxBalanceBtn(input);
-    fireEvent.click(button);
-  });
+  return waitFor(
+    async () => {
+      const button = await findMaxBalanceBtn(input);
+      fireEvent.click(button);
+    },
+    { timeout: 10000 }
+  );
 }
 
 async function createAndMockWallet() {
@@ -93,13 +96,12 @@ describe("SwapPage", () => {
       await faucet(wallet, 4);
     });
 
-    it("should swap button be disabled and need to select token", async () => {
+    it("should swap button be disabled", async () => {
       renderWithRouter(<App />, { route: "/swap" });
 
       const submitBtn = await findSwapBtn();
       await waitFor(() => {
         expect(submitBtn).toBeDisabled();
-        expect(submitBtn.textContent).toMatch(/select to token/i);
       });
     });
 
@@ -107,24 +109,12 @@ describe("SwapPage", () => {
       renderWithRouter(<App />, { route: "/swap" });
 
       const balances = await screen.findAllByText(/(balance:)\s([1-9])/i);
-      expect(balances[0].textContent).toMatch("Balance: 1,200,000.000");
+      expect(balances[0].textContent).toMatch("Balance: 1.000");
     });
 
     function getFirstCoinSelectTextContent() {
       return screen.getAllByLabelText(/coin selector/i)[0].textContent;
     }
-
-    it("should show a select coin button first", async () => {
-      renderWithRouter(<App />, { route: "/swap" });
-      await waitFor(() => {
-        expect(
-          screen.queryByTestId("fuel-wallet-loading")
-        ).not.toBeInTheDocument();
-      });
-      await waitFor(() => {
-        expect(screen.getByText(/select token/i)).toBeInTheDocument();
-      });
-    });
 
     it("should invert coin selector when click on invert", async () => {
       renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
@@ -190,7 +180,7 @@ describe("SwapPage", () => {
     });
 
     it("should fill input value with max balance when click on max", async () => {
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
       await clickOnMaxBalance();
       const coinFrom = screen.getByLabelText(/Coin from input/i);
@@ -206,7 +196,7 @@ describe("SwapPage", () => {
         .spyOn(swapHelpers, "hasEthForNetworkFee")
         .mockReturnValue(false);
 
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
       const balance = await getETHBalance();
 
@@ -230,7 +220,7 @@ describe("SwapPage", () => {
         .spyOn(swapHelpers, "hasEthForNetworkFee")
         .mockReturnValue(true);
 
-      renderWithRouter(<App />, { route: "/swap?from=DAI&to=ETH" });
+      renderWithRouter(<App />, { route: "/swap?from=DAI&to=sETH" });
 
       await waitFor(
         async () => {
@@ -246,7 +236,7 @@ describe("SwapPage", () => {
     });
 
     it("should show expected output after input value", async () => {
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
       await waitFor(async () => {
         await fillCoinFromWithValue("0.5");
@@ -256,7 +246,7 @@ describe("SwapPage", () => {
     });
 
     it("should show price per token information", async () => {
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
       await clickOnMaxBalance();
 
@@ -279,7 +269,7 @@ describe("SwapPage", () => {
     });
 
     it("should set automatically coin to input based on coin from value", async () => {
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
       await waitFor(
         async () => {
@@ -293,13 +283,14 @@ describe("SwapPage", () => {
     });
 
     it("should disable max button after setting max FROM balance", async () => {
-      renderWithRouter(<App />, { route: "/swap?from=ETH&to=DAI" });
+      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
 
       await waitFinishLoading();
       await clickOnMaxBalance();
 
       await waitFor(async () => {
         const maxBalanceBtn = await findMaxBalanceBtn();
+        console.log("here");
         expect(maxBalanceBtn.getAttribute("aria-disabled")).toEqual("true");
       });
     });

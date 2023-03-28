@@ -54,7 +54,7 @@ describe("Add Liquidity", () => {
   it("should enter amount button be disabled by default", async () => {
     renderWithRouter(<App />, { route: "/pool/add-liquidity" });
     await waitFor(async () => {
-      const submitBtn = await screen.findByText(/Enter Ether amount/);
+      const submitBtn = await screen.findByText(/Enter sEther amount/);
       expect(submitBtn).toBeInTheDocument();
       expect(submitBtn).toBeDisabled();
     });

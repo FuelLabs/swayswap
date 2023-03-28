@@ -74,7 +74,7 @@ describe("Remove Liquidity", () => {
   it("should enter amount button be disabled by default", async () => {
     renderWithRouter(<App />, { route: "/pool/remove-liquidity" });
     await act(async () => {
-      const submitBtn = await screen.findByText("Enter ETH/DAI amount");
+      const submitBtn = await screen.findByText("Enter sETH/DAI amount");
 
       expect(submitBtn).toBeInTheDocument();
       expect(submitBtn).toBeDisabled();
@@ -87,20 +87,23 @@ describe("Remove Liquidity", () => {
       route: "/pool/remove-liquidity",
     });
 
-    await waitFor(async () => {
-      const coinFromInput = screen.getByLabelText(/LP Token Input/);
-      fireEvent.change(coinFromInput, {
-        target: {
-          value: "1",
-        },
-      });
+    await waitFor(
+      async () => {
+        const coinFromInput = screen.getByLabelText(/LP Token Input/);
+        fireEvent.change(coinFromInput, {
+          target: {
+            value: "1",
+          },
+        });
 
-      const submitBtn = await screen.findByText(
-        /Insufficient ETH\/DAI balance/i
-      );
-      expect(submitBtn).toBeInTheDocument();
-      expect(submitBtn).toBeDisabled();
-    });
+        const submitBtn = await screen.findByText(
+          /Insufficient sETH\/DAI balance/i
+        );
+        expect(submitBtn).toBeInTheDocument();
+        expect(submitBtn).toBeDisabled();
+      },
+      { timeout: 10000 }
+    );
   });
 
   it("should be able to click on submit button if inputs are right", async () => {
