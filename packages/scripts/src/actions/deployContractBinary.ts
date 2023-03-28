@@ -31,6 +31,7 @@ export async function deployContractBinary(
   const contractFactory = new ContractFactory(bytecode, abiJSON, wallet);
 
   log('deploy contract');
+  console.log(wallet.provider.url);
   const contract = await contractFactory.deployContract({
     gasLimit: 1_000_000,
     storageSlots: [],

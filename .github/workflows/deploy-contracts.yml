@@ -34,7 +34,7 @@ on:
         type: boolean
 
 env:
-  RUST_VERSION: 1.61.0
+  RUST_VERSION: 1.68.2
   NODE_VERSION: 16
   PNPM_VERSION: 7.0.0
   COMPOSE_VERSION: 2.6.0
