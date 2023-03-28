@@ -21,6 +21,7 @@ export async function getWalletInstance() {
 
       const wallet = walletManager.getWallet(accounts[0].address);
       wallet.connect(PROVIDER_URL!);
+      return wallet;
     }
 
     return Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
