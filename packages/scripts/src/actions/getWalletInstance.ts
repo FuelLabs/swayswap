@@ -9,6 +9,8 @@ export async function getWalletInstance() {
   if (WALLET_SECRET) {
     log('WALLET_SECRET detected');
     if (WALLET_SECRET && WALLET_SECRET.indexOf(' ') >= 0) {
+      console.log('in wallet provider: ', PROVIDER_URL);
+      console.log(process.env);
       const walletManager = new WalletManager();
       const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
 
