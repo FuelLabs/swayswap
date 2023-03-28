@@ -6,13 +6,11 @@ import {
   mockUseFuel,
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
-import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
 
 beforeAll(async () => {
   const { wallet, fuel } = await createWallet(false);
   mockUseWallet(wallet);
   mockUseFuel(fuel);
-  //await mint(wallet);
 });
 
 describe("WelcomePage", () => {

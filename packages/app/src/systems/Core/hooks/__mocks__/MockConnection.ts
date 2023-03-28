@@ -2,11 +2,10 @@
 
 import type { FuelWalletConnection } from '@fuel-wallet/sdk';
 import { FuelWalletLocked, FuelWalletProvider, BaseConnection } from '@fuel-wallet/sdk';
-import { FuelProviderConfig } from '@fuel-wallet/types';
+import type { FuelProviderConfig } from '@fuel-wallet/types';
 import EventEmitter from 'events';
-import type { AbstractAddress } from 'fuels';
-import { transactionRequestify, Wallet, Address } from 'fuels';
-import { TransactionRequest } from 'fuels';
+import type { AbstractAddress, TransactionRequest } from 'fuels';
+import { Wallet, Address } from 'fuels';
 
 import { FUEL_PROVIDER_URL } from '~/config';
 
@@ -81,8 +80,13 @@ export class MockConnection extends BaseConnection {
     return assets;
   }
 
-  async onMessage() {}
-  async postMessage() {}
+  async onMessage() {
+    return true;
+  }
+
+  async postMessage() {
+    return true;
+  }
 
   async accounts() {
     return [userWallet.address.toAddress()];
@@ -94,12 +98,9 @@ export class MockConnection extends BaseConnection {
 
   async sendTransaction(
     transaction: TransactionRequest & { signer?: string | undefined },
-    providerConfig: FuelProviderConfig,
-    signer?: string | undefined
+    _1: FuelProviderConfig,
+    _2?: string | undefined
   ) {
-    // console.log('tx: ', params.transaction);
-    // console.log('params: ', params);
-    //const transaction = transactionRequestify(JSON.parse(patransaction));
     const response = await userWallet.sendTransaction(transaction);
     return response.id;
   }
@@ -143,7 +144,7 @@ export class MockConnection extends BaseConnection {
     network: 'network',
     assets: 'assets',
   };
-  //readonly events = FuelWalletEvents;
+  // readonly events = FuelWalletEvents;
 }
 
 global.window = {
