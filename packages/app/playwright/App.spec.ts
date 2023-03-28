@@ -114,27 +114,26 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     nextButton = connectPage.locator('button').getByText('Next');
     await nextButton.click();
 
+    // Step 1 connect
     const connectButton = connectPage.locator('button').getByText('Connect');
     await connectButton.click();
 
-    await appPage.locator('[aria-label="Accept the use agreement"]').check();
+    // Step 2 add assets (faucet is skipped)
+    const addAssetsButton = appPage.locator('button').getByText('Add Assets');
+    const addAssetsPromise = context.waitForEvent('page');
+    await addAssetsButton.click();
+    const addAssetsPage = await addAssetsPromise;
+    const walletAddAssetsButton = addAssetsPage.locator('button').getByText('Add Assets');
+    await walletAddAssetsButton.click();
 
-    await appPage.locator('button', { hasText: 'Get Swapping!' }).click();
-
-    // Expect to be taken to swap pages
-    expect(appPage.getByText('Select to token')).toBeTruthy();
-
-    // mint tokens
-    await appPage.goto('/mint');
-    await appPage.locator('button', { hasText: 'Mint tokens' }).click();
-
+    // Step 3 mint assets
+    const mintAssetsButton = appPage.locator('button').getByText('Mint Assets');
+    await mintAssetsButton.click();
     await walletApprove(context);
 
-    const mintSuccess = appPage.getByText('Tokens received successfully!');
-    await mintSuccess.waitFor();
-
-    // wait to be redirected to swap page after minting
-    expect(appPage.getByText('Select to token')).toBeTruthy();
+    // Step 4 done
+    await appPage.locator('[aria-label="Accept the use agreement"]').check();
+    await appPage.locator('button', { hasText: 'Get Swapping!' }).click();
 
     // go to pool page -> add liquidity page
     await appPage.locator('button').getByText('Pool').click();
@@ -148,13 +147,13 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
     const hasPoolBeenCreated = await appPage.locator(addingLiquiditySelector).isVisible();
 
     if (hasPoolBeenCreated) {
-      await expect(appPage.getByText('Enter Ether amount')).toBeVisible();
+      await expect(appPage.getByText('Enter sEther amount')).toBeVisible();
       await appPage.locator('[aria-label="Coin from input"]').fill('0.2');
       await expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
       await expect(appPage.locator('[aria-label="Pool Price Box"]')).toBeVisible();
       await appPage.locator('[aria-label="Add liquidity"]').click();
     } else {
-      await expect(appPage.getByText('Enter Ether amount')).toBeVisible({ timeout: 15000 });
+      await expect(appPage.getByText('Enter sEther amount')).toBeVisible({ timeout: 15000 });
       await appPage.locator('[aria-label="Coin from input"]').fill('0.2');
       await appPage.locator('[aria-label="Coin to input"]').fill('190');
       await expect(appPage.locator('[aria-label="Preview Add Liquidity Output"]')).toBeVisible();
@@ -167,13 +166,10 @@ test.describe('End-to-end Test: 😁 Happy Path', () => {
 
     await walletApprove(context);
 
-    await expect(appPage.getByText('ETH/DAI')).toBeVisible({ timeout: 15000 });
+    await expect(appPage.getByText('sETH/DAI')).toBeVisible({ timeout: 15000 });
 
     // validate swap
     await appPage.locator('button', { hasText: 'Swap' }).click();
-    await expect(appPage.getByText('Select to token')).toBeVisible({ timeout: 15000 });
-    await appPage.locator('[aria-label="Coin selector to"]').click();
-    await appPage.locator('li').first().click();
     await appPage.locator('[aria-label="Coin from input"]').fill('0.1');
 
     await expect(appPage.locator('[aria-label="Preview Value Loading"]').first()).toBeVisible({
