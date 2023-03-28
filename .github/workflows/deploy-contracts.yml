@@ -87,6 +87,8 @@ jobs:
       - name: Deploy contracts
         run: |
           pnpm exec swayswap-scripts run
+        env:
+          NODE_ENV: production
 
       - name: Initiate token contract and liquidity pool
         if: ${{ github.event.inputs.initiate_supply }}
