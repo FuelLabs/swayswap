@@ -30,6 +30,8 @@ async function main() {
     await walletManager.addAccount();
     const accounts = walletManager.getAccounts();
     wallet = walletManager.getWallet(accounts[0].address);
+    wallet.connect(PROVIDER_URL!);
+    return wallet;
   } else {
     wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   }
