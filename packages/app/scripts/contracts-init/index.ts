@@ -32,9 +32,9 @@ async function main() {
     wallet = walletManager.getWallet(accounts[0].address);
     wallet.connect(PROVIDER_URL!);
     return wallet;
-  } else {
-    wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   }
+  wallet = Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
+
   const exchangeContract = ExchangeContractAbi__factory.connect(VITE_CONTRACT_ID!, wallet);
   const tokenContract1 = TokenContractAbi__factory.connect(VITE_TOKEN_ID1!, wallet);
   const tokenContract2 = TokenContractAbi__factory.connect(VITE_TOKEN_ID2!, wallet);
