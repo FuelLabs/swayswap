@@ -13,6 +13,7 @@ import { WalletWidget } from "./WalletWidget";
 import type { ButtonProps } from "~/systems/UI";
 import { ButtonGroup, Button } from "~/systems/UI";
 import { Pages } from "~/types";
+import { FuelLogo } from "@fuel-ui/react";
 
 type HeaderNavProps = ButtonProps & {
   onPress: () => void;
@@ -56,12 +57,7 @@ export const Header = () => {
     <>
       <MigrationWarning />
       <div className="header">
-        <img
-          onClick={() => navigate("/")}
-          src={relativeUrl("/fuel-logo-512x512.png")}
-          alt="swayswap"
-          className="cursor-pointer"
-        />
+        <FuelLogo className="cursor-pointer" size={50} />
         <div className="header--nav">
           <div className="header--navContainer">
             <ButtonGroup>
