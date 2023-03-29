@@ -1,3 +1,4 @@
+import { FuelLogo } from "@fuel-ui/react";
 import cx from "classnames";
 import type { ComponentType, ReactNode } from "react";
 import { BiDollarCircle } from "react-icons/bi";
@@ -5,7 +6,6 @@ import { MdSwapCalls } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useBreakpoint } from "../hooks/useBreakpoint";
-import { relativeUrl } from "../utils";
 
 import { MigrationWarning } from "./MigrationWarning";
 import { WalletWidget } from "./WalletWidget";
@@ -13,7 +13,6 @@ import { WalletWidget } from "./WalletWidget";
 import type { ButtonProps } from "~/systems/UI";
 import { ButtonGroup, Button } from "~/systems/UI";
 import { Pages } from "~/types";
-import { FuelLogo } from "@fuel-ui/react";
 
 type HeaderNavProps = ButtonProps & {
   onPress: () => void;

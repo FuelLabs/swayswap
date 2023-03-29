@@ -1,7 +1,7 @@
 import { FuelLogo } from "@fuel-ui/react";
 import { useNavigate } from "react-router-dom";
 
-import { relativeUrl, useBreakpoint } from "~/systems/Core";
+import { useBreakpoint } from "~/systems/Core";
 import { Button, Link } from "~/systems/UI";
 import { Pages } from "~/types";
 
