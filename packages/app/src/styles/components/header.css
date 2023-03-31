@@ -18,7 +18,7 @@
     grid-template-rows: repeat(2, 1fr);
     grid-row-gap: 10px;
   }
-  .header img {
+  .header-logo {
     grid-area: 1 / 1 / 2 / 2;
     height: 40px;
     width: 40px;
@@ -37,7 +37,7 @@
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(1, 1fr);
     }
-    .header img {
+    .header-logo {
       grid-area: 1 / 1 / 2 / 2;
       height: 46px;
       width: 46px;
@@ -58,7 +58,7 @@
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(1, 1fr);
     }
-    .header img {
+    .header-logo {
       grid-area: 1 / 1 / 2 / 2;
       height: 46px;
       width: 46px;

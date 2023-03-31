@@ -56,7 +56,9 @@ export const Header = () => {
     <>
       <MigrationWarning />
       <div className="header">
-        <FuelLogo className="cursor-pointer" size={50} />
+        <div className="header-logo">
+          <FuelLogo className="cursor-pointer" size={50} />
+        </div>
         <div className="header--nav">
           <div className="header--navContainer">
             <ButtonGroup>
