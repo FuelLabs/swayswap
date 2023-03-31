@@ -16,9 +16,6 @@ jobs:
         env:
           CI: false
           PUBLIC_URL: "/${{ github.event.repository.name }}"
-          VITE_FUEL_PROVIDER_URL: "https://beta-3.fuel.network/graphql"
-          VITE_CONTRACT_ID: "0xc9a5366c269438d294ef942bc962dd2e6c86121e3bca00192723eb7eb58fa87d"
-          VITE_TOKEN_ID: "0x6dfc0f524d3006e103fc4bd733c4f012b5a089fd09361d44833cdf653e9afe5b"
         run: |
           pnpm build
 
