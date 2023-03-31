@@ -16,6 +16,7 @@ import { getTransactionCost } from '~/systems/Core/utils/gas';
 import type { Coin, Maybe } from '~/types';
 import { Queries } from '~/types';
 import type {
+  ExchangeContractAbi,
   PoolInfoOutput,
   PreviewAddLiquidityInfoOutput,
 } from '~/types/contracts/ExchangeContractAbi';
@@ -58,6 +59,10 @@ type MachineEvents =
     }
   | {
       type: 'ADD_LIQUIDITY';
+    }
+  | {
+      type: 'START';
+      data: { contract: ExchangeContractAbi };
     };
 
 type MachineServices = {
@@ -98,9 +103,16 @@ export const addLiquidityMachine =
         services: {} as MachineServices,
       },
       id: '(AddLiquidityMachine)',
-      initial: 'fetchingBalances',
+      initial: 'idle',
       states: {
-        idle: {},
+        idle: {
+          on: {
+            START: {
+              target: 'fetchingBalances',
+              actions: ['start'],
+            },
+          },
+        },
         fetchingBalances: {
           invoke: {
             src: 'fetchBalances',
@@ -252,6 +264,7 @@ export const addLiquidityMachine =
             ],
             onError: [
               {
+                target: 'addLiquidity.readyToAddLiquidity',
                 actions: 'toastErrorMessage',
               },
             ],
@@ -470,6 +483,9 @@ export const addLiquidityMachine =
             coinTo: coin,
             toAmount: amount,
           };
+        }),
+        start: assign({
+          contract: (_, ev) => ev.data.contract,
         }),
         toastSwapSuccess(_, ev) {
           txFeedback('Add made successfully!')(ev.data.transactionResult);

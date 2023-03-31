@@ -2,7 +2,7 @@ import { useActor, useInterpret } from "@xstate/react";
 import Decimal from "decimal.js";
 import type { CoinQuantity } from "fuels";
 import type { ReactNode } from "react";
-import { useContext, createContext } from "react";
+import { useEffect, useContext, createContext } from "react";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,7 @@ import { liquidityPreviewEmpty } from "../types";
 
 import { IS_DEVELOPMENT } from "~/config";
 import { TOKENS, useContract, useSubscriber } from "~/systems/Core";
+import { useFuel } from "~/systems/Core/hooks/useFuel";
 import { AppEvents } from "~/types";
 
 const serviceMap = new Map();
@@ -42,6 +43,7 @@ export function useAddLiquidityContext() {
 }
 
 export function AddLiquidityProvider({ children }: { children: ReactNode }) {
+  const fuel = useFuel();
   const client = useQueryClient();
   const contract = useContract();
   const navigate = useNavigate();
@@ -71,6 +73,17 @@ export function AddLiquidityProvider({ children }: { children: ReactNode }) {
   if (IS_DEVELOPMENT) {
     serviceMap.set("service", service);
   }
+
+  useEffect(() => {
+    if (fuel && contract) {
+      service.send("START", {
+        data: {
+          contract,
+          fuel,
+        },
+      });
+    }
+  }, [fuel, contract]);
 
   useSubscriber<CoinQuantity[]>(
     AppEvents.updatedBalances,

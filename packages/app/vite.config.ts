@@ -10,6 +10,10 @@ const ENV_VARS = Object.entries(process.env).filter(([key]) =>
   WHITELIST.some((k) => k === key || key.match(/^VITE_/))
 );
 
+const { PORT, NODE_ENV } = process.env;
+const PORT_CONFIG = NODE_ENV === 'test' ? 3001 : 3000;
+const SERVER_PORT = PORT ? Number(PORT) : PORT_CONFIG;
+
 // https://vitejs.dev/config/
 export default defineConfig({
   base: process.env.PUBLIC_URL || '/',
@@ -24,7 +28,7 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   server: {
-    port: process.env.NODE_ENV === 'test' ? 3001 : 3000,
+    port: SERVER_PORT,
   },
   define: {
     'process.env': Object.fromEntries(ENV_VARS),

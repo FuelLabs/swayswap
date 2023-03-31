@@ -10,10 +10,11 @@ export function useBalances(opts: UseQueryOptions = {}) {
   const { wallet } = useWallet();
   const publisher = usePublisher();
 
-  return useQuery(
+  const optss = useQuery(
     Queries.UserQueryBalances,
     async () => {
-      const balances = await wallet?.getBalances();
+      if (!wallet) return [];
+      const balances = await wallet.getBalances();
       return balances;
     },
     {
@@ -23,6 +24,10 @@ export function useBalances(opts: UseQueryOptions = {}) {
         opts.onSuccess?.(data);
         publisher.emit(AppEvents.updatedBalances, data);
       },
+      initialData: [],
+      enabled: Boolean(wallet),
     }
   );
+
+  return optss;
 }

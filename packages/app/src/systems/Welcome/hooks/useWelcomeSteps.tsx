@@ -199,6 +199,7 @@ const welcomeStepsMachine =
                 onDone: "#welcomeSteps.mintingAssets",
                 onError: {
                   actions: ["toastErrorMessage"],
+                  target: "addAssetsToWallet",
                 },
               },
             },
@@ -222,6 +223,7 @@ const welcomeStepsMachine =
                 onDone: "#welcomeSteps.done",
                 onError: {
                   actions: ["toastErrorMessage"],
+                  target: "mintAssets",
                 },
               },
             },

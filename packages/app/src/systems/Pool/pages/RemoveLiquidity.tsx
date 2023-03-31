@@ -40,8 +40,11 @@ export function RemoveLiquidityPage() {
   const amount = tokenInput.amount;
 
   const txCost = useTransactionCost(
-    [PoolQueries.RemoveLiquidityNetworkFee],
-    () => prepareRemoveLiquidity(contract)
+    [PoolQueries.RemoveLiquidityNetworkFee, contract],
+    () => prepareRemoveLiquidity(contract),
+    {
+      enabled: !!contract,
+    }
   );
 
   const removeLiquidityMutation = useMutation(

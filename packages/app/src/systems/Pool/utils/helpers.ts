@@ -43,7 +43,9 @@ export function getPoolInfoPreview(
   const pooledETH = bn(info?.token_amount1);
   const pooledDAI = bn(info?.token_amount2);
   const poolRatio = getPoolRatio(info);
-  const poolShare = calculatePercentage(poolTokens, totalLiquidity);
+  const poolShare = totalLiquidity.isZero()
+    ? new Decimal(0)
+    : calculatePercentage(poolTokens, totalLiquidity);
   const hasPositions = poolTokens.gt(ZERO);
 
   // Formatted amounts

@@ -15,7 +15,7 @@ export function StepsIndicator() {
   return (
     <ul className="stepsIndicator">
       <li className={getClasses(0, current)}>
-        <span>Download wallet</span>
+        <span>Connect Wallet</span>
       </li>
       <li className={getClasses(1, current)}>
         <span>Faucet</span>

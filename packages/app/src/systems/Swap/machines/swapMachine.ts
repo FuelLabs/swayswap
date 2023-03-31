@@ -271,6 +271,7 @@ export const swapMachine =
                 onError: [
                   {
                     actions: 'toastErrorMessage',
+                    target: 'idle',
                   },
                 ],
               },
