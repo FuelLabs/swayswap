@@ -22,12 +22,6 @@ export function WalletWidget() {
     window.location.reload();
   }
 
-  function handleActions(action: string) {
-    if (action === "disconnect") {
-      handleDisconnect();
-    }
-  }
-
   return (
     <div className={style.wallet}>
       <div className="flex items-center bg-gray-700 rounded-full">
@@ -39,7 +33,14 @@ export function WalletWidget() {
           <Popover
             css={styles.menu}
             content={
-              <Menu onAction={handleActions} css={styles.menu}>
+              <Menu
+                onAction={(action) => {
+                  if (action === "disconnect") {
+                    handleDisconnect();
+                  }
+                }}
+                css={styles.menu}
+              >
                 <Menu.Item key="disconnect">
                   <FiLogOut />
                   Disconnect
