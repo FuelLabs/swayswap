@@ -20,7 +20,7 @@ export async function initializePool(
     value: tokenContract1.id.toHexString(),
   };
 
-  const tokenAmount2 = sizePool.mul(1000);
+  const tokenAmount2 = sizePool.mul(1500);
   const tokenId2 = {
     value: tokenContract2.id.toHexString(),
   };
