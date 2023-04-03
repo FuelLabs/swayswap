@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useFuel } from './useFuel';
 
 export const useWallet = () => {
-  const fuel = useFuel();
+  const { fuel } = useFuel();
 
   const {
     data: isConnected,

@@ -10,7 +10,7 @@ import { useFuel } from "~/systems/Core/hooks/useFuel";
 
 export const WelcomeConnect = () => {
   const { next } = useWelcomeSteps();
-  const fuel = useFuel();
+  const { fuel } = useFuel();
 
   const connectWalletMutation = useMutation(
     async () => {

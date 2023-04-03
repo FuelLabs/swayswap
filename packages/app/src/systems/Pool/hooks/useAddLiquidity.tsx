@@ -43,7 +43,7 @@ export function useAddLiquidityContext() {
 }
 
 export function AddLiquidityProvider({ children }: { children: ReactNode }) {
-  const fuel = useFuel();
+  const { fuel } = useFuel();
   const client = useQueryClient();
   const contract = useContract();
   const navigate = useNavigate();
