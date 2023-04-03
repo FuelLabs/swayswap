@@ -19,6 +19,7 @@ export async function initializeTokenContract(
       .txParams(overrides)
       .call();
   } catch (err) {
+    console.log(err);
     process.stdout.write('Token Contract already initialized\n');
   }
 }

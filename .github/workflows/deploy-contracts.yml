@@ -18,6 +18,7 @@ on:
         type: number
       size_pool:
         description: 'Pool size for initialization'
+        default: '1000000.0'
         type: string
       initiate_supply:
         description: 'Should initialize the pool?'

@@ -43,7 +43,7 @@ async function main() {
   };
 
   await initializeTokenContract(tokenContract1, overrides, '1.0');
-  await initializeTokenContract(tokenContract2, overrides, '1000.0');
+  await initializeTokenContract(tokenContract2, overrides, '1700.0');
   if (process.argv.includes('--init-pool')) {
     await initializePool(tokenContract1, tokenContract2, exchangeContract, overrides);
   }
