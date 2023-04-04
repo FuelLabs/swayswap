@@ -27,9 +27,8 @@ async fn token_contract() {
 
     let token_contract_id = Contract::deploy(
         "out/debug/token_contract.bin",
-        &wallet_owner,
-        TxParameters::default(),
-        StorageConfiguration::default(),
+        wallet_owner,
+        DeployConfiguration::default(),
     )
     .await
     .unwrap();
@@ -216,9 +215,9 @@ async fn token_contract() {
     let contract_native_token_balance = token_instance.methods()
         .get_token_balance(ContractId::from(*BASE_ASSET_ID))
         .call_params(CallParameters::new(
-            Some(send_native_token_amount),
-            Some(BASE_ASSET_ID),
-            None,
+            send_native_token_amount,
+            BASE_ASSET_ID,
+            100_000_000,
         )).unwrap()
         .call()
         .await
