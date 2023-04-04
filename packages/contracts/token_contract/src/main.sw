@@ -1,12 +1,6 @@
 contract;
 
-use std::{
-    call_frames::contract_id,
-    context::balance_of,
-    storage::*,
-    token::*,
-    logging::log,
-};
+use std::{call_frames::contract_id, context::balance_of, logging::log, storage::*, token::*};
 
 use token_abi::Token;
 use swayswap_helpers::get_msg_sender_address_or_panic;
@@ -14,7 +8,9 @@ use swayswap_helpers::get_msg_sender_address_or_panic;
 const ZERO_B256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
 
 storage {
-    owner: Address = Address { value: 0x0000000000000000000000000000000000000000000000000000000000000000 },
+    owner: Address = Address {
+        value: 0x0000000000000000000000000000000000000000000000000000000000000000,
+    },
     mint_amount: u64 = 0,
     mint_list: StorageMap<Address, bool> = StorageMap {},
 }
@@ -88,6 +84,11 @@ impl Token for Contract {
 
         storage.mint_list.insert(sender, true);
         mint_to_address(storage.mint_amount, sender);
+    }
+
+    #[storage(read)]
+    fn has_mint(address: Address) -> bool {
+        storage.mint_list.get(address).unwrap_or(false)
     }
 
     //////////////////////////////////////

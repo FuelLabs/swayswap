@@ -41,6 +41,7 @@ interface TokenContractAbiInterface extends Interface {
     get_balance: FunctionFragment;
     get_mint_amount: FunctionFragment;
     get_token_balance: FunctionFragment;
+    has_mint: FunctionFragment;
     initialize: FunctionFragment;
     mint: FunctionFragment;
     mint_coins: FunctionFragment;
@@ -53,6 +54,7 @@ interface TokenContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'get_balance', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'get_mint_amount', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'get_token_balance', values: [ContractIdInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'has_mint', values: [AddressInput]): Uint8Array;
   encodeFunctionData(
     functionFragment: 'initialize',
     values: [BigNumberish, AddressInput]
@@ -73,6 +75,7 @@ interface TokenContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'get_balance', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_mint_amount', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_token_balance', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'has_mint', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'initialize', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'mint', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'mint_coins', data: BytesLike): DecodedValue;
@@ -88,6 +91,7 @@ export class TokenContractAbi extends Contract {
     get_balance: InvokeFunction<[], BN>;
     get_mint_amount: InvokeFunction<[], BN>;
     get_token_balance: InvokeFunction<[asset_id: ContractIdInput], BN>;
+    has_mint: InvokeFunction<[address: AddressInput], boolean>;
     initialize: InvokeFunction<[mint_amount: BigNumberish, address: AddressInput], void>;
     mint: InvokeFunction<[], void>;
     mint_coins: InvokeFunction<[mint_amount: BigNumberish], void>;

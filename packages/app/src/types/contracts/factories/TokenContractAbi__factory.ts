@@ -29,6 +29,12 @@ const _abi = {
     },
     {
       typeId: 2,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 3,
       type: 'enum Error',
       components: [
         {
@@ -55,7 +61,7 @@ const _abi = {
       typeParameters: null,
     },
     {
-      typeId: 3,
+      typeId: 4,
       type: 'struct Address',
       components: [
         {
@@ -67,7 +73,7 @@ const _abi = {
       typeParameters: null,
     },
     {
-      typeId: 4,
+      typeId: 5,
       type: 'struct ContractId',
       components: [
         {
@@ -79,7 +85,7 @@ const _abi = {
       typeParameters: null,
     },
     {
-      typeId: 5,
+      typeId: 6,
       type: 'u64',
       components: null,
       typeParameters: null,
@@ -90,7 +96,7 @@ const _abi = {
       inputs: [
         {
           name: 'burn_amount',
-          type: 5,
+          type: 6,
           typeArguments: null,
         },
       ],
@@ -112,7 +118,7 @@ const _abi = {
       name: 'get_balance',
       output: {
         name: '',
-        type: 5,
+        type: 6,
         typeArguments: null,
       },
       attributes: null,
@@ -122,7 +128,7 @@ const _abi = {
       name: 'get_mint_amount',
       output: {
         name: '',
-        type: 5,
+        type: 6,
         typeArguments: null,
       },
       attributes: [
@@ -136,14 +142,14 @@ const _abi = {
       inputs: [
         {
           name: 'asset_id',
-          type: 4,
+          type: 5,
           typeArguments: null,
         },
       ],
       name: 'get_token_balance',
       output: {
         name: '',
-        type: 5,
+        type: 6,
         typeArguments: null,
       },
       attributes: [
@@ -156,13 +162,34 @@ const _abi = {
     {
       inputs: [
         {
+          name: 'address',
+          type: 4,
+          typeArguments: null,
+        },
+      ],
+      name: 'has_mint',
+      output: {
+        name: '',
+        type: 2,
+        typeArguments: null,
+      },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
+    },
+    {
+      inputs: [
+        {
           name: 'mint_amount',
-          type: 5,
+          type: 6,
           typeArguments: null,
         },
         {
           name: 'address',
-          type: 3,
+          type: 4,
           typeArguments: null,
         },
       ],
@@ -198,7 +225,7 @@ const _abi = {
       inputs: [
         {
           name: 'mint_amount',
-          type: 5,
+          type: 6,
           typeArguments: null,
         },
       ],
@@ -219,7 +246,7 @@ const _abi = {
       inputs: [
         {
           name: 'mint_amount',
-          type: 5,
+          type: 6,
           typeArguments: null,
         },
       ],
@@ -240,12 +267,12 @@ const _abi = {
       inputs: [
         {
           name: 'coins',
-          type: 5,
+          type: 6,
           typeArguments: null,
         },
         {
           name: 'address',
-          type: 3,
+          type: 4,
           typeArguments: null,
         },
       ],
@@ -266,17 +293,17 @@ const _abi = {
       inputs: [
         {
           name: 'coins',
-          type: 5,
+          type: 6,
           typeArguments: null,
         },
         {
           name: 'asset_id',
-          type: 4,
+          type: 5,
           typeArguments: null,
         },
         {
           name: 'address',
-          type: 3,
+          type: 4,
           typeArguments: null,
         },
       ],
@@ -299,7 +326,7 @@ const _abi = {
       logId: 0,
       loggedType: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: [],
       },
     },
@@ -307,7 +334,7 @@ const _abi = {
       logId: 1,
       loggedType: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: [],
       },
     },
@@ -315,7 +342,7 @@ const _abi = {
       logId: 2,
       loggedType: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: [],
       },
     },
@@ -323,7 +350,7 @@ const _abi = {
       logId: 3,
       loggedType: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: [],
       },
     },
@@ -331,7 +358,7 @@ const _abi = {
       logId: 4,
       loggedType: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: [],
       },
     },
@@ -339,7 +366,7 @@ const _abi = {
       logId: 5,
       loggedType: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: [],
       },
     },
@@ -347,7 +374,7 @@ const _abi = {
       logId: 6,
       loggedType: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: [],
       },
     },
@@ -355,7 +382,7 @@ const _abi = {
       logId: 7,
       loggedType: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: [],
       },
     },

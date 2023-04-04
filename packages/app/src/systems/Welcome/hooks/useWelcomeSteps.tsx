@@ -319,30 +319,31 @@ const welcomeStepsMachine =
             throw Error("No account found!");
           }
           const wallet = await window.fuel.getWallet(address);
-          const balances = await wallet.getBalances();
-          const contract1 = TokenContractAbi__factory.connect(
-            ETH.assetId,
-            wallet
-          );
-          const contract2 = TokenContractAbi__factory.connect(
-            DAI.assetId,
-            wallet
-          );
+          const token1 = TokenContractAbi__factory.connect(ETH.assetId, wallet);
+          const token2 = TokenContractAbi__factory.connect(DAI.assetId, wallet);
           const calls = [];
 
-          if (!balances.find((b) => b.assetId === ETH.assetId)) {
-            calls.push(contract1.functions.mint());
+          const addressId = {
+            value: wallet.address.toHexString(),
+          };
+          const { value: hasMint1 } = await token1.functions
+            .has_mint(addressId)
+            .get();
+          if (!hasMint1) {
+            calls.push(token1.functions.mint());
           }
-
-          if (!balances.find((b) => b.assetId === DAI.assetId)) {
-            calls.push(contract2.functions.mint());
+          const { value: hasMint2 } = await token2.functions
+            .has_mint(addressId)
+            .get();
+          if (!hasMint2) {
+            calls.push(token2.functions.mint());
           }
 
           if (calls.length === 0) {
             return;
           }
 
-          await contract1.multiCall(calls).txParams(getOverrides()).call();
+          await token1.multiCall(calls).txParams(getOverrides()).call();
         },
       },
     }

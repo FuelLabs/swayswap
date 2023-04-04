@@ -4,6 +4,8 @@ import { bn, Wallet } from 'fuels';
 
 import '../../load.envs';
 import './loadDockerEnv';
+import { setTimeout } from 'timers/promises';
+
 import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../../src/types/contracts';
 
 import { initializePool } from './initializePool';
@@ -42,8 +44,9 @@ async function main() {
     gasPrice: bn(GAS_PRICE || 0),
   };
 
-  await initializeTokenContract(tokenContract1, overrides, '1.0');
-  await initializeTokenContract(tokenContract2, overrides, '1700.0');
+  await initializeTokenContract(tokenContract1, overrides, '0.5');
+  await initializeTokenContract(tokenContract2, overrides, '500.0');
+  await setTimeout(10000);
   if (process.argv.includes('--init-pool')) {
     await initializePool(tokenContract1, tokenContract2, exchangeContract, overrides);
   }

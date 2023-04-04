@@ -32,4 +32,6 @@ abi Token {
     // Method called from address to mint coins
     #[storage(read, write)]
     fn mint();
+    #[storage(read)]
+    fn has_mint(address: Address) -> bool;
 }
