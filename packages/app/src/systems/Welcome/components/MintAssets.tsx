@@ -6,7 +6,7 @@ import { WelcomeImage } from "./WelcomeImage";
 import { WelcomeStep } from "./WelcomeStep";
 
 export function MintAssets() {
-  const { service } = useWelcomeSteps();
+  const { service, state } = useWelcomeSteps();
 
   function handleAddAssets() {
     service.send("ADD_ASSETS");
@@ -22,7 +22,11 @@ export function MintAssets() {
         Click &ldquo;Mint Assets&rdquo; below to mint some test sETH and DAI
         tokens that are the tokens used on SwaySwap.
       </p>
-      <Button className="mt-5 mx-auto" onPress={handleAddAssets}>
+      <Button
+        className="mt-5 mx-auto"
+        onPress={handleAddAssets}
+        isLoading={state.hasTag("isLoadingMint")}
+      >
         Mint assets
       </Button>
     </WelcomeStep>

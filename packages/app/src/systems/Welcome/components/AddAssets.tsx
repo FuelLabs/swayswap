@@ -6,7 +6,7 @@ import { WelcomeImage } from "./WelcomeImage";
 import { WelcomeStep } from "./WelcomeStep";
 
 export function AddAssets() {
-  const { service } = useWelcomeSteps();
+  const { service, state } = useWelcomeSteps();
 
   function handleAddAssets() {
     service.send("ADD_ASSETS");
@@ -21,7 +21,11 @@ export function AddAssets() {
         <br />
         Click &ldquo;Add Assets&rdquo; below and approve it.
       </p>
-      <Button className="mt-5 mx-auto" onPress={handleAddAssets}>
+      <Button
+        className="mt-5 mx-auto"
+        onPress={handleAddAssets}
+        isLoading={state.hasTag("isLoadingMint")}
+      >
         Add Assets
       </Button>
     </WelcomeStep>
