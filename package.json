@@ -43,6 +43,7 @@
     "services:reset": "run-s services:clean services:setup",
     "services:clean-test": "make -C docker services-clean-test",
     "services:setup-test": "NODE_ENV=test run-s scripts:setup create:test-env services:run-test contracts contracts:init",
+    "services:setup-test-init": "NODE_ENV=test run-s scripts:setup create:test-env services:run-test contracts contracts:init-pool",
     "services:run-test": "make -C docker services-run-test",
     "services:reset-test": "NODE_ENV=test run-s services:clean-test services:setup-test",
     "deps:update": "./scripts/update-deps.sh",

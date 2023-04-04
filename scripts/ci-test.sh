@@ -14,7 +14,7 @@ fi
 
 # Run setup
 export NODE_ENV=test
-pnpm services:setup-test
+pnpm services:setup-test-init
 
 echo $1
 
