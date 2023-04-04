@@ -1,10 +1,10 @@
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { WalletManager } from '@fuel-ts/wallet-manager';
 import { bn, Wallet } from 'fuels';
+import { setTimeout } from 'timers/promises';
 
 import '../../load.envs';
 import './loadDockerEnv';
-import { setTimeout } from 'timers/promises';
 
 import { ExchangeContractAbi__factory, TokenContractAbi__factory } from '../../src/types/contracts';
 
