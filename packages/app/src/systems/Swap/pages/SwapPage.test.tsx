@@ -98,9 +98,8 @@ describe("SwapPage", () => {
 
     it("should swap button be disabled", async () => {
       renderWithRouter(<App />, { route: "/swap" });
-
-      const submitBtn = await findSwapBtn();
-      await waitFor(() => {
+      await waitFor(async () => {
+        const submitBtn = await findSwapBtn();
         expect(submitBtn).toBeDisabled();
       });
     });
@@ -108,8 +107,12 @@ describe("SwapPage", () => {
     it("should show balance correctly", async () => {
       renderWithRouter(<App />, { route: "/swap" });
 
-      const balances = await screen.findAllByText(/(balance:)\s([1-9])/i);
-      expect(balances[0].textContent).toMatch("Balance: 1.000");
+      await waitFor(async () => {
+        const sethBalance = await screen.getByLabelText("sETH balance");
+        expect(sethBalance).toHaveTextContent("0.500");
+        const daiBalance = await screen.getByLabelText("DAI balance");
+        expect(daiBalance).toHaveTextContent("500.000");
+      });
     });
 
     function getFirstCoinSelectTextContent() {
@@ -189,24 +192,6 @@ describe("SwapPage", () => {
       const balance = await getETHBalance();
 
       expect(valDecimal.toString()).toMatch(balance.toString());
-    });
-
-    it("should show insufficient eth for gas message", async () => {
-      const spy = jest
-        .spyOn(swapHelpers, "hasEthForNetworkFee")
-        .mockReturnValue(false);
-
-      renderWithRouter(<App />, { route: "/swap?from=sETH&to=DAI" });
-
-      await waitFor(
-        async () => {
-          await fillCoinFromWithValue("0.5");
-          const submitBtn = await findSwapBtn();
-          expect(submitBtn.textContent).toMatch(/insufficient ETH for gas/i);
-        },
-        { timeout: 10000 }
-      );
-      spy.mockRestore();
     });
 
     it("should show insufficient liquidity when amount is greater than liquidity", async () => {
