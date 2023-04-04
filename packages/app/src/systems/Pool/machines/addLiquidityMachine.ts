@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import type { BN, CoinQuantity, TransactionResult } from 'fuels';
-import { bn } from 'fuels';
+import { NativeAssetId, bn } from 'fuels';
 import type { InterpreterFrom, StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
 
@@ -9,20 +9,14 @@ import { liquidityPreviewEmpty, AddLiquidityActive } from '../types';
 import { addLiquidity, fetchPoolInfo, getPoolRatio } from '../utils';
 
 import { CONTRACT_ID } from '~/config';
-import {
-  calculatePercentage,
-  getCoin,
-  getCoinETH,
-  handleError,
-  TOKENS,
-  ZERO,
-} from '~/systems/Core';
+import { calculatePercentage, getCoin, handleError, TOKENS, ZERO } from '~/systems/Core';
 import { txFeedback } from '~/systems/Core/utils/feedback';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getTransactionCost } from '~/systems/Core/utils/gas';
 import type { Coin, Maybe } from '~/types';
 import { Queries } from '~/types';
 import type {
+  ExchangeContractAbi,
   PoolInfoOutput,
   PreviewAddLiquidityInfoOutput,
 } from '~/types/contracts/ExchangeContractAbi';
@@ -65,6 +59,10 @@ type MachineEvents =
     }
   | {
       type: 'ADD_LIQUIDITY';
+    }
+  | {
+      type: 'START';
+      data: { contract: ExchangeContractAbi };
     };
 
 type MachineServices = {
@@ -105,9 +103,16 @@ export const addLiquidityMachine =
         services: {} as MachineServices,
       },
       id: '(AddLiquidityMachine)',
-      initial: 'fetchingBalances',
+      initial: 'idle',
       states: {
-        idle: {},
+        idle: {
+          on: {
+            START: {
+              target: 'fetchingBalances',
+              actions: ['start'],
+            },
+          },
+        },
         fetchingBalances: {
           invoke: {
             src: 'fetchBalances',
@@ -259,6 +264,7 @@ export const addLiquidityMachine =
             ],
             onError: [
               {
+                target: 'addLiquidity.readyToAddLiquidity',
                 actions: 'toastErrorMessage',
               },
             ],
@@ -478,6 +484,9 @@ export const addLiquidityMachine =
             toAmount: amount,
           };
         }),
+        start: assign({
+          contract: (_, ev) => ev.data.contract,
+        }),
         toastSwapSuccess(_, ev) {
           txFeedback('Add made successfully!')(ev.data.transactionResult);
         },
@@ -495,10 +504,10 @@ export const addLiquidityMachine =
           return !!ctx.transactionCost?.error;
         },
         notHasEthForNetworkFee: (ctx) => {
-          const fromAmount = bn(ctx.fromAmount);
-          const ethBalance = bn(getCoinETH(ctx.balances)?.amount);
           const networkFee = bn(ctx.transactionCost?.fee);
-          return ethBalance.lte(fromAmount.add(networkFee));
+          const ethBalance =
+            ctx.balances.find((balance) => balance.assetId === NativeAssetId)?.amount || bn(0);
+          return ethBalance.lte(networkFee);
         },
         notHasFromAmount: (ctx) => {
           return !ctx.fromAmount || bn(ctx.fromAmount).isZero();

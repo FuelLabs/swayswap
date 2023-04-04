@@ -25,7 +25,7 @@ const mergeCoinsWithMetadata = (coins: CoinQuantity[] = []): Array<AssetAmount> 
   });
 
 export function useAssets() {
-  const wallet = useWallet();
+  const { wallet } = useWallet();
 
   const {
     isLoading,

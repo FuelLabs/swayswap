@@ -5,5 +5,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "jest.jestCommandLine": "cd packages/app && pnpm jest"
+  "jest.jestCommandLine": "cd packages/app && pnpm jest",
+  "[xml]": {
+    "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"
+  }
 }

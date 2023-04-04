@@ -4,11 +4,13 @@ import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 
 import {
   WelcomeSidebar,
-  CreateWallet,
-  AddFunds,
   WelcomeDone,
   StepsIndicator,
+  AddAssets,
+  AddFunds,
 } from "../components";
+import { MintAssets } from "../components/MintAssets";
+import { WelcomeConnect } from "../components/WelcomeConnect";
 import { useWelcomeSteps, stepsSelectors } from "../hooks";
 
 import { useBreakpoint } from "~/systems/Core";
@@ -19,7 +21,6 @@ export function WelcomePage() {
   const isFinished = useSelector(service, stepsSelectors.isFinished);
   const location = useLocation();
   const breakpoint = useBreakpoint();
-
   if (isFinished) {
     return <Navigate to={Pages.swap} replace />;
   }
@@ -30,11 +31,10 @@ export function WelcomePage() {
       <section className="welcomePage--content">
         <AnimatePresence exitBeforeEnter>
           <Routes key={location.pathname} location={location}>
-            <Route
-              path={Pages["welcome.createWallet"]}
-              element={<CreateWallet />}
-            />
-            <Route path={Pages["welcome.addFunds"]} element={<AddFunds />} />
+            <Route path={Pages.connect} element={<WelcomeConnect />} />
+            <Route path={Pages.faucet} element={<AddFunds />} />
+            <Route path={Pages.addAssets} element={<AddAssets />} />
+            <Route path={Pages.mint} element={<MintAssets />} />
             <Route path={Pages["welcome.done"]} element={<WelcomeDone />} />
           </Routes>
         </AnimatePresence>

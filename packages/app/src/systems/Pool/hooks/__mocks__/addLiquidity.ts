@@ -1,4 +1,4 @@
-import type { Wallet } from 'fuels';
+import type { FuelWalletLocked } from '@fuel-wallet/sdk';
 import { bn } from 'fuels';
 
 import { CONTRACT_ID } from '~/config';
@@ -7,7 +7,7 @@ import { getOverrides } from '~/systems/Core/utils/gas';
 import { ExchangeContractAbi__factory } from '~/types/contracts';
 
 export async function addLiquidity(
-  wallet: Wallet,
+  wallet: FuelWalletLocked,
   fromAmount: string,
   toAmount: string,
   fromAsset: string,
@@ -23,7 +23,9 @@ export async function addLiquidity(
       contract.functions.deposit().callParams({
         forward: [bn.parseUnits(toAmount), toAsset],
       }),
-      contract.functions.add_liquidity(1, deadline),
+      contract.functions.add_liquidity(1, deadline).callParams({
+        forward: [bn(0), toAsset],
+      }),
     ])
     .txParams(
       getOverrides({
@@ -32,5 +34,6 @@ export async function addLiquidity(
       })
     )
     .call();
+
   return transactionResult;
 }

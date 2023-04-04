@@ -1,28 +1,42 @@
 import type { BigNumberish } from 'fuels';
-import { bn, NativeAssetId } from 'fuels';
+import { bn } from 'fuels';
 
 import type { ExchangeContractAbi, TokenContractAbi } from '../../src/types/contracts';
 
-const { TOKEN_AMOUNT, ETH_AMOUNT } = process.env;
+const { SIZE_POOL } = process.env;
 
 export async function initializePool(
-  tokenContract: TokenContractAbi,
+  tokenContract1: TokenContractAbi,
+  tokenContract2: TokenContractAbi,
   exchangeContract: ExchangeContractAbi,
   overrides: { gasPrice: BigNumberish }
 ) {
-  const wallet = tokenContract.wallet!;
-  const tokenAmount = bn(TOKEN_AMOUNT || '0x44364C5BB0000');
-  const ethAmount = bn(ETH_AMOUNT || '0xE8F2727500');
-  const address = {
-    value: wallet.address.toB256(),
+  const walletAddress = {
+    value: tokenContract1.account!.address!.toHexString(),
   };
-  const tokenId = {
-    value: tokenContract.id.toB256(),
+  const sizePool = bn.parseUnits(SIZE_POOL || '0.0');
+  const tokenAmount1 = sizePool;
+  const tokenId1 = {
+    value: tokenContract1.id.toHexString(),
   };
 
-  await tokenContract.functions.mint_coins(tokenAmount).txParams(overrides).call();
-  await tokenContract.functions
-    .transfer_token_to_output(tokenAmount, tokenId, address)
+  const tokenAmount2 = sizePool.mul(1500);
+  const tokenId2 = {
+    value: tokenContract2.id.toHexString(),
+  };
+
+  await tokenContract1.functions.mint_coins(tokenAmount1).txParams(overrides).call();
+  await tokenContract1.functions
+    .transfer_token_to_output(tokenAmount1, tokenId1, walletAddress)
+    .txParams({
+      ...overrides,
+      variableOutputs: 1,
+    })
+    .call();
+
+  await tokenContract2.functions.mint_coins(tokenAmount2).txParams(overrides).call();
+  await tokenContract2.functions
+    .transfer_token_to_output(tokenAmount2, tokenId2, walletAddress)
     .txParams({
       ...overrides,
       variableOutputs: 1,
@@ -30,16 +44,18 @@ export async function initializePool(
     .call();
 
   process.stdout.write('Initialize pool\n');
-  const deadline = await wallet.provider.getBlockNumber();
+  const deadline = await tokenContract1.provider!.getBlockNumber();
   await exchangeContract
     .multiCall([
       exchangeContract.functions.deposit().callParams({
-        forward: [ethAmount, NativeAssetId],
+        forward: [tokenAmount1, tokenContract1.id.toB256()],
       }),
       exchangeContract.functions.deposit().callParams({
-        forward: [tokenAmount, tokenContract.id.toB256()],
+        forward: [tokenAmount2, tokenContract2.id.toB256()],
       }),
-      exchangeContract.functions.add_liquidity(1, bn(1000).add(deadline)),
+      exchangeContract.functions.add_liquidity(1, bn(1000).add(deadline)).callParams({
+        forward: [bn(0), tokenContract1.id.toB256()],
+      }),
     ])
     .txParams({
       ...overrides,

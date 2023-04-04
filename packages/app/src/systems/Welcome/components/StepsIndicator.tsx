@@ -15,12 +15,18 @@ export function StepsIndicator() {
   return (
     <ul className="stepsIndicator">
       <li className={getClasses(0, current)}>
-        <span>Create wallet</span>
+        <span>Connect Wallet</span>
       </li>
       <li className={getClasses(1, current)}>
-        <span>Add funds</span>
+        <span>Faucet</span>
       </li>
       <li className={getClasses(2, current)}>
+        <span>Add Assets</span>
+      </li>
+      <li className={getClasses(3, current)}>
+        <span>Mint Assets</span>
+      </li>
+      <li className={getClasses(4, current)}>
         <span>Done</span>
       </li>
     </ul>

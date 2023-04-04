@@ -5,10 +5,10 @@ import type { AddLiquidityActive } from './types';
 
 export const selectors = {
   createPool: ({ context: ctx }: AddLiquidityMachineState) => {
-    return bn(ctx.poolInfo?.eth_reserve).isZero();
+    return bn(ctx.poolInfo?.token_reserve1).isZero();
   },
   addLiquidity: ({ context: ctx }: AddLiquidityMachineState) => {
-    return ctx.poolInfo?.eth_reserve.gt(0);
+    return ctx.poolInfo?.token_reserve1.gt(0);
   },
   poolShare: ({ context: ctx }: AddLiquidityMachineState) => {
     return ctx.poolShare;
@@ -29,7 +29,7 @@ export const selectors = {
     return (
       active !== state.context.active &&
       state.hasTag('loading') &&
-      !bn(state.context.poolInfo?.eth_reserve).isZero()
+      !bn(state.context.poolInfo?.token_reserve1).isZero()
     );
   },
   previewAmount: ({ context: ctx }: AddLiquidityMachineState) => {

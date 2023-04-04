@@ -1,4 +1,5 @@
 import cx from "classnames";
+import type { CoinQuantity } from "fuels";
 import { bn, format } from "fuels";
 import { useMemo } from "react";
 
@@ -18,7 +19,9 @@ export const CoinBalance = ({
   const { data: balances } = useBalances({ enabled: true });
 
   const balance = useMemo(() => {
-    const coinBalance = balances?.find((i) => i.assetId === coin?.assetId);
+    const coinBalance = balances?.find(
+      (i: CoinQuantity) => i.assetId === coin?.assetId
+    );
     return bn(coinBalance?.amount);
   }, [balances, coin?.assetId]);
 

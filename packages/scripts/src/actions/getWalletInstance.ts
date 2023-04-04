@@ -1,4 +1,5 @@
-import { NativeAssetId, Provider, TestUtils, Wallet } from 'fuels';
+import { WalletManager } from '@fuel-ts/wallet-manager';
+import { Wallet } from 'fuels';
 import { log } from 'src/log';
 
 export async function getWalletInstance() {
@@ -7,7 +8,23 @@ export async function getWalletInstance() {
 
   if (WALLET_SECRET) {
     log('WALLET_SECRET detected');
-    return new Wallet(WALLET_SECRET, PROVIDER_URL);
+    if (WALLET_SECRET && WALLET_SECRET.indexOf(' ') >= 0) {
+      const walletManager = new WalletManager();
+      const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
+
+      await walletManager.unlock(password);
+      const config = { type: 'mnemonic', secret: WALLET_SECRET };
+      // Add a vault of type mnemonic
+      await walletManager.addVault(config);
+      await walletManager.addAccount();
+      const accounts = walletManager.getAccounts();
+
+      const wallet = walletManager.getWallet(accounts[0].address);
+      wallet.connect(PROVIDER_URL!);
+      return wallet;
+    }
+
+    return Wallet.fromPrivateKey(WALLET_SECRET!, PROVIDER_URL);
   }
   // If no WALLET_SECRET is informed we assume
   // We are on a test environment
@@ -17,8 +34,7 @@ export async function getWalletInstance() {
   // balances configured
   if (GENESIS_SECRET) {
     log('Funding wallet with some coins');
-    const provider = new Provider(PROVIDER_URL!);
-    return TestUtils.generateTestWallet(provider, [[100_000_000, NativeAssetId]]);
+    return Wallet.generate();
   }
   throw new Error('You must provide a WALLET_SECRET or GENESIS_SECRET');
 }

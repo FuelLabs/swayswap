@@ -102,52 +102,23 @@ jobs:
 
       - name: Setup scripts
         run: |
-          pnpm scripts:setup
+          pnpm services:setup-test
       
-      # using same dependencies from cypress/browsers:node16.5.0-chrome97-ff96 ...
-      # not using directly the container because we still need ubuntu-latest preset
-      - name: Install Cypress Dependencies
-        run: |
-          sudo apt-get update && \
-            sudo apt-get install --no-install-recommends -y \
-            libgtk2.0-0 \
-            libgtk-3-0 \
-            libnotify-dev \
-            libgconf-2-4 \
-            libgbm-dev \
-            libnss3 \
-            libxss1 \
-            libasound2 \
-            libxtst6 \
-            xauth \
-            xvfb \
-            vim-tiny \
-            nano \
-            fonts-noto-color-emoji \
-            fonts-arphic-bkai00mp \
-            fonts-arphic-bsmi00lp \
-            fonts-arphic-gbsn00lp \
-            fonts-arphic-gkai00mp \
-            fonts-arphic-ukai \
-            fonts-arphic-uming \
-            ttf-wqy-zenhei \
-            ttf-wqy-microhei \
-            xfonts-wqy \
-            fonts-liberation \
-            libappindicator3-1 \
-            xdg-utils \
-            zip
+      - name: Install Playwright
+        run: pnpm exec playwright install --with-deps chromium
 
-      - name: "End-to-end tests"
-        uses: cypress-io/github-action@v4
-        with:
-          # skip install, as: 1 - we're doing in other step; 2 - cypress doesnt support pnpm yet https://github.com/cypress-io/github-action/issues/145
-          install: false
-          command: pnpm ci:test:e2e
-          browser: chrome
-          record: false
+      - name: End-to-end tests
+        run: xvfb-run --auto-servernum -- pnpm test:e2e
         env:
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: "test"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: playwright-report
+          path: packages/app/playwright-report/
+          retention-days: 30

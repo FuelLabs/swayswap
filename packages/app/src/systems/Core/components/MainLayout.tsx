@@ -3,12 +3,11 @@ import { Suspense, useContext } from "react";
 import { useQueryErrorResetBoundary } from "react-query";
 
 import { AppContext } from "../context";
-import { useBreakpoint, useWallet } from "../hooks";
+import { useBreakpoint } from "../hooks";
 
 import { ErrorBoundary } from "./ErrorBoundary";
 import { Header } from "./Header";
 
-import { ActionsWidget } from "~/systems/Core";
 import { SkeletonLoader } from "~/systems/UI";
 
 type MainLayoutProps = {
@@ -38,7 +37,6 @@ function MainLayoutLoader() {
 
 export function MainLayout({ children }: MainLayoutProps) {
   const { reset: resetReactQuery } = useQueryErrorResetBoundary();
-  const wallet = useWallet();
   const ctx = useContext(AppContext);
 
   return (
@@ -53,7 +51,6 @@ export function MainLayout({ children }: MainLayoutProps) {
               children
             )}
           </ErrorBoundary>
-          {wallet && !ctx?.justContent && <ActionsWidget />}
         </div>
       </main>
     </>

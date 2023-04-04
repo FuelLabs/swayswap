@@ -13,22 +13,22 @@
     "build": "tsup"
   },
   "dependencies": {
-    "bundle-require": "^3.1.0",
-    "commander": "^9.4.0",
+    "bundle-require": "^3.1.2",
+    "commander": "^10.0.0",
     "debug": "^4.3.4",
-    "esbuild": "^0.14.54",
-    "fuelchain": "^0.16.0",
-    "fuels": "0.16.0",
+    "esbuild": "^0.16.0",
+    "fuels": "0.35.0",
+    "@fuel-ts/wallet": "0.7.1",
+    "@fuel-ts/wallet-manager": "0.35.0",
     "joycon": "^3.1.1",
-    "prettier": "^2.7.1",
-    "typechain-target-fuels": "0.16.0",
-    "typescript": "^4.8.3"
+    "prettier": "^2.8.3",
+    "typescript": "^4.9.5"
   },
   "devDependencies": {
     "@swayswap/config": "workspace:0.1.0",
     "@types/debug": "^4.1.7",
-    "@types/glob": "^7.2.0",
-    "glob": "^8.0.3",
-    "tsup": "^6.2.3"
+    "@types/glob": "^8.0.1",
+    "glob": "^8.1.0",
+    "tsup": "^6.5.0"
   }
 }

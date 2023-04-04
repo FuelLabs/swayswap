@@ -14,7 +14,7 @@ type WalletInfoProps = {
 
 export function WalletInfo({ onClose }: WalletInfoProps) {
   const { coins, isLoading } = useAssets();
-  const wallet = useWallet();
+  const { wallet } = useWallet();
 
   return (
     <Card className="min-w-[350px]">

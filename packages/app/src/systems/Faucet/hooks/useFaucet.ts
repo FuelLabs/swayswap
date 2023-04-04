@@ -25,7 +25,7 @@ type UseFaucetOpts = {
 };
 
 export function useFaucet(opts: UseFaucetOpts = {}) {
-  const wallet = useWallet();
+  const { wallet } = useWallet();
   const balances = useBalances();
 
   const mutation = useMutation(

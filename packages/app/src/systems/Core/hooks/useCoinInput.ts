@@ -1,4 +1,4 @@
-import type { BN } from 'fuels';
+import type { BN, CoinQuantity } from 'fuels';
 import { bn } from 'fuels';
 import type { ReactNode } from 'react';
 import { useMemo, useEffect, useState } from 'react';
@@ -88,7 +88,7 @@ export function useCoinInput({
   const [amount, setAmount] = useState<Maybe<BN>>(null);
   const [gasFee, setGasFee] = useState<Maybe<BN>>(bn(initialGasFee));
   const { data: balances } = useBalances();
-  const coinBalance = balances?.find((item) => item.assetId === coin?.assetId);
+  const coinBalance = balances?.find((item: CoinQuantity) => item.assetId === coin?.assetId);
   const isEth = useMemo(() => isCoinEth(coin), [coin?.assetId]);
 
   // TODO: consider real gas fee, replacing GAS_FEE variable.

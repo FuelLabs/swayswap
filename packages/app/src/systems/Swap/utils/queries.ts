@@ -1,9 +1,10 @@
 import type { BN } from 'fuels';
-import { bn, NativeAssetId } from 'fuels';
+import { bn } from 'fuels';
 
 import { SwapDirection } from '../types';
 import type { SwapMachineContext } from '../types';
 
+import { TOKEN_ID1 } from '~/config';
 import { getDeadline, ZERO } from '~/systems/Core';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { ExchangeContractAbi } from '~/types/contracts';
@@ -22,7 +23,7 @@ export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
     return contract.functions
       .swap_with_maximum(1, deadline)
       .callParams({
-        forward: [2, NativeAssetId],
+        forward: [2, TOKEN_ID1],
       })
       .txParams({
         variableOutputs: 2,
@@ -32,7 +33,7 @@ export const queryNetworkFeeOnSwap = async (params: SwapMachineContext) => {
   return contract.functions
     .swap_with_minimum(1, deadline)
     .callParams({
-      forward: [2, NativeAssetId],
+      forward: [2, TOKEN_ID1],
     })
     .txParams({
       variableOutputs: 2,
@@ -119,14 +120,12 @@ export const swapTokens = async (params: SwapMachineContext) => {
       })
       .txParams(
         getOverrides({
-          gasLimit: txCost.total,
           variableOutputs: 2,
         })
       )
       .call();
     return transactionResult;
   }
-
   const { transactionResult } = await contract.functions
     .swap_with_maximum(toAmount.raw, deadline)
     .callParams({
@@ -134,7 +133,6 @@ export const swapTokens = async (params: SwapMachineContext) => {
     })
     .txParams(
       getOverrides({
-        gasLimit: txCost.total,
         variableOutputs: 2,
       })
     )

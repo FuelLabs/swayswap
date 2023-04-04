@@ -1,23 +1,34 @@
 import { useMachine } from "@xstate/react";
-import type { Wallet } from "fuels";
+import type { BN } from "fuels";
+import { bn } from "fuels";
 import type { ReactNode } from "react";
 import { useContext, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import type { InterpreterFrom, StateFrom } from "xstate";
 import { assign, createMachine } from "xstate";
 
-import { useWallet } from "~/systems/Core";
+import {
+  handleError,
+  ETH,
+  DAI,
+  ETH_DAI,
+  LocalStorageKey,
+} from "~/systems/Core";
+import { getOverrides } from "~/systems/Core/utils/gas";
 import type { Maybe } from "~/types";
 import { Pages } from "~/types";
+import { TokenContractAbi__factory } from "~/types/contracts";
 
-export const LOCALSTORAGE_WELCOME_KEY = "fuel--welcomeStep";
-export const LOCALSTORAGE_AGREEMENT_KEY = "fuel--agreement";
+export const LOCALSTORAGE_WELCOME_KEY = `${LocalStorageKey}fuel--welcomeStep`;
+export const LOCALSTORAGE_AGREEMENT_KEY = `${LocalStorageKey}fuel--agreement`;
 
 export const STEPS = [
-  { id: 0, path: Pages["welcome.createWallet"] },
-  { id: 1, path: Pages["welcome.addFunds"] },
-  { id: 2, path: Pages["welcome.done"] },
-  { id: 3, path: null },
+  { id: 0, path: Pages.connect },
+  { id: 1, path: Pages.faucet },
+  { id: 2, path: Pages.addAssets },
+  { id: 3, path: Pages.mint },
+  { id: 4, path: Pages["welcome.done"] },
+  { id: 5, path: null },
 ];
 
 export function getAgreement() {
@@ -46,7 +57,11 @@ export function setCurrent(id: number) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function assignCurrent(id: number): any {
-  return assign({ current: (_) => setCurrent(id) });
+  return assign({
+    current: (_) => {
+      return setCurrent(id);
+    },
+  });
 }
 
 // ----------------------------------------------------------------------------
@@ -61,86 +76,278 @@ export type Step = {
 type MachineContext = {
   current: Step;
   acceptAgreement: boolean;
-  wallet?: Maybe<Wallet>;
+  balance: BN;
 };
 
 type MachineEvents = { type: "NEXT" } | { type: "SET_CURRENT"; value: number };
 
-const welcomeStepsMachine = createMachine<MachineContext>({
-  id: "welcomeSteps",
-  predictableActionArguments: true,
-  initial: "init",
-  schema: {
-    context: {} as MachineContext,
-    events: {} as MachineEvents,
-  },
-  context: {
-    current: getCurrent(),
-    acceptAgreement: getAgreement(),
-  },
-  states: {
-    init: {
-      always: [
-        /**
-         * This is mainly used for tests purposes
-         */
-        {
-          target: "finished",
-          cond: (ctx) => Boolean(ctx.wallet && !ctx.current.id),
+type MachineServices = {
+  fetchBalance: {
+    data: Array<BN>;
+  };
+};
+
+const welcomeStepsMachine =
+  /** @xstate-layout N4IgpgJg5mDOIC5QHcwBsDGB7AtmAygC5gAOsAdAJYB2lhAxANoAMAuoqCVrHZVtRxAAPRAEYAzAFZyAFgCcCgOyTRc8QDZF65gCYANCACeiGeLnkAHDouiVOxXNWTxigL6uDqTLgLEyVWgZGUXYkEC4eQj4BMJEECWl5JRU1TW19IzE5HXJmRRtxC3EE9XUZd090bDwiUgoaOiYdUM5uXn5BOITZBTllVQ0tXQNjBHEZRUtrURlJPtEHdQt1CpAvat86gMbGcRbwtqiO2LEpHuSBtOHMsbUpmxllnUl5dVFV9Z9a-2xqajAMFFqFAAOoAQzQaDADAAcgBRAAaABUWPsIu0YqA4vJpFpJJJFIpbHJHqVFCMxBZzFYCopiqIdAtsh8ql8-BQIPwwPQAIIAYT5cIACkiAPo8gDiACU4XCALJwmEotiCdFHTHCRBzGTkHRJTRUuZ9CkIGzkSTMS3MUw6cR5Kws7w1dnkTn-egAMQAkjCvfgABKo1WHaKdRAFciiBaidTicSMtTZE2MizkOTOGZRmTMOPFNyrahYCBwQSfZ11YORUMnBAAWnUJvruStLdbeUdG2+9UClYxYYQMgyo3G5myDxeUmsFg7bK2v3+gJooIhUMIvfV-btOTjc2eMnUjijJts4nuElUVlEFnx5Q8a1Z5f8brA6+rWMQ2nUaaWdL6sfyObHlYaYZlINgSJa053mWmz+AAZg0sAABaQK+xzvggajSDG2YMn+khWEOiCMpM6bFIM2TMLYEzuO4QA */
+  createMachine<MachineContext>(
+    {
+      id: "welcomeSteps",
+      predictableActionArguments: true,
+      initial: "init",
+      schema: {
+        context: {} as MachineContext,
+        events: {} as MachineEvents,
+        services: {} as MachineServices,
+      },
+      context: {
+        current: getCurrent(),
+        acceptAgreement: getAgreement(),
+        balance: bn(),
+      },
+      states: {
+        init: {
+          always: [
+            /**
+             * This is mainly used for tests purposes
+             */
+            {
+              target: "connectingWallet",
+              cond: (ctx) => {
+                return ctx.current.id === 0;
+              },
+            },
+            {
+              target: "fauceting",
+              cond: (ctx) => {
+                return ctx.current.id === 1;
+              },
+            },
+            {
+              target: "addingAssets",
+              cond: (ctx) => {
+                return ctx.current.id === 2;
+              },
+            },
+            {
+              target: "mintingAssets",
+              cond: (ctx) => {
+                return ctx.current.id === 3;
+              },
+            },
+            {
+              target: "done",
+              cond: (ctx) =>
+                ctx.current.id === 4 ||
+                (ctx.current.id >= 4 && !ctx.acceptAgreement),
+            },
+            {
+              cond: (ctx) => ctx.current.id === 5 && ctx.acceptAgreement,
+              target: "finished",
+            },
+          ],
         },
-        {
-          target: "creatingWallet",
-          cond: (ctx) => ctx.current.id === 0,
+        connectingWallet: {
+          entry: [assignCurrent(0), "navigateTo"],
+          on: {
+            NEXT: {
+              target: "fecthingBalance",
+            },
+          },
         },
-        {
-          target: "addingFunds",
-          cond: (ctx) => ctx.current.id === 1,
+        fecthingBalance: {
+          invoke: {
+            src: "fetchBalance",
+            onDone: [
+              {
+                cond: "hasNoBalance",
+                actions: ["assignBalances"],
+                target: "fauceting",
+              },
+              {
+                actions: ["assignBalances"],
+                target: "addingAssets",
+              },
+            ],
+            onError: {
+              actions: ["toastErrorMessage"],
+            },
+          },
         },
-        {
-          target: "done",
-          cond: (ctx) =>
-            ctx.current.id === 2 ||
-            (ctx.current.id >= 2 && !ctx.acceptAgreement),
+        fauceting: {
+          entry: [assignCurrent(1), "navigateTo"],
+          on: {
+            NEXT: {
+              target: "#welcomeSteps.addingAssets",
+            },
+          },
         },
-        {
-          cond: (ctx) => ctx.current.id === 3 && ctx.acceptAgreement,
-          target: "finished",
+        addingAssets: {
+          entry: [assignCurrent(2), "navigateTo"],
+          initial: "addAssetsToWallet",
+          states: {
+            addAssetsToWallet: {
+              on: {
+                ADD_ASSETS: {
+                  target: "addingAssets",
+                },
+              },
+            },
+            addingAssets: {
+              tags: ["isLoadingMint"],
+              invoke: {
+                src: "addAssets",
+                onDone: "#welcomeSteps.mintingAssets",
+                onError: {
+                  actions: ["toastErrorMessage"],
+                  target: "addAssetsToWallet",
+                },
+              },
+            },
+          },
         },
-      ],
-    },
-    creatingWallet: {
-      entry: [assignCurrent(0), "navigateTo"],
-      on: {
-        NEXT: {
-          target: "addingFunds",
+        mintingAssets: {
+          entry: [assignCurrent(3), "navigateTo"],
+          initial: "mintAssets",
+          states: {
+            mintAssets: {
+              on: {
+                ADD_ASSETS: {
+                  target: "mintingAssets",
+                },
+              },
+            },
+            mintingAssets: {
+              tags: ["isLoadingMint"],
+              invoke: {
+                src: "mintAssets",
+                onDone: "#welcomeSteps.done",
+                onError: {
+                  actions: ["toastErrorMessage"],
+                  target: "mintAssets",
+                },
+              },
+            },
+          },
+        },
+        done: {
+          entry: [assignCurrent(4), "navigateTo"],
+          on: {
+            ACCEPT_AGREEMENT: {
+              actions: ["acceptAgreement"],
+            },
+            FINISH: {
+              target: "finished",
+            },
+          },
+        },
+        finished: {
+          entry: assignCurrent(5),
+          type: "final",
         },
       },
     },
-    addingFunds: {
-      entry: [assignCurrent(1), "navigateTo"],
-      on: {
-        NEXT: {
-          target: "done",
+    {
+      actions: {
+        assignBalances: assign({
+          balance: (_, ev) => ev.data,
+        }),
+        toastErrorMessage(_, ev) {
+          handleError(ev.data);
+          // eslint-disable-next-line no-console
+          console.error(ev.data);
         },
       },
-    },
-    done: {
-      entry: [assignCurrent(2), "navigateTo"],
-      on: {
-        ACCEPT_AGREEMENT: {
-          actions: ["acceptAgreement"],
-        },
-        FINISH: {
-          target: "finished",
+      guards: {
+        hasNoBalance: (_, ev) => {
+          return bn(ev.data).isZero();
         },
       },
-    },
-    finished: {
-      entry: assignCurrent(3),
-      type: "final",
-    },
-  },
-});
+      services: {
+        fetchBalance: async () => {
+          if (!window.fuel) {
+            throw new Error("Fuel Wallet is not detected!");
+          }
+          const [address] = await window.fuel.accounts();
+          if (!address) {
+            throw Error("No account found!");
+          }
+          const wallet = await window.fuel.getWallet(address);
+          return wallet.getBalance();
+        },
+        addAssets: async () => {
+          if (!window.fuel) {
+            throw new Error("Fuel Wallet is not detected!");
+          }
+          const assetsOnWallet = await window.fuel.assets();
+          const assetsOnWalletIds = assetsOnWallet.map((a) => a.assetId);
+          const assetsToAddToWallet = [
+            {
+              assetId: ETH.assetId,
+              name: "sEther",
+              symbol: "sETH",
+              imageUrl: ETH.img,
+              isCustom: true,
+            },
+            {
+              assetId: DAI.assetId,
+              name: "Dai",
+              symbol: "Dai",
+              imageUrl: DAI.img,
+              isCustom: true,
+            },
+            {
+              assetId: ETH_DAI.assetId,
+              name: ETH_DAI.name,
+              symbol: ETH_DAI.symbol,
+              imageUrl: ETH_DAI.img,
+              isCustom: true,
+            },
+          ];
+          const assets = assetsToAddToWallet.filter(
+            (a) => !assetsOnWalletIds.includes(a.assetId)
+          );
+          if (assets.length !== 0) {
+            await window.fuel.addAssets(assets);
+          }
+        },
+        mintAssets: async () => {
+          if (!window.fuel) {
+            throw new Error("Fuel Wallet is not detected!");
+          }
+          const [address] = await window.fuel.accounts();
+          if (!address) {
+            throw Error("No account found!");
+          }
+          const wallet = await window.fuel.getWallet(address);
+          const token1 = TokenContractAbi__factory.connect(ETH.assetId, wallet);
+          const token2 = TokenContractAbi__factory.connect(DAI.assetId, wallet);
+          const calls = [];
+
+          const addressId = {
+            value: wallet.address.toHexString(),
+          };
+          const { value: hasMint1 } = await token1.functions
+            .has_mint(addressId)
+            .get();
+          if (!hasMint1) {
+            calls.push(token1.functions.mint());
+          }
+          const { value: hasMint2 } = await token2.functions
+            .has_mint(addressId)
+            .get();
+          if (!hasMint2) {
+            calls.push(token2.functions.mint());
+          }
+
+          if (calls.length === 0) {
+            return;
+          }
+
+          await token1.multiCall(calls).txParams(getOverrides()).call();
+        },
+      },
+    }
+  );
 
 // ----------------------------------------------------------------------------
 // Context & Provider
@@ -170,19 +377,18 @@ export const stepsSelectors = {
 const ctx = createContext<Context>({} as Context);
 export function StepsProvider({ children }: WelcomeStepsProviderProps) {
   const navigate = useNavigate();
-  const wallet = useWallet();
 
   const [state, send, service] = useMachine<Machine>(() =>
     welcomeStepsMachine
       .withContext({
-        wallet,
         current: getCurrent(),
         acceptAgreement: getAgreement(),
+        balance: bn(),
       })
       .withConfig({
         actions: {
           navigateTo: (context) => {
-            if (context.current.id > 2) return;
+            if (context.current.id > 4) return;
             navigate(`/welcome/${context.current.path}`);
           },
           acceptAgreement: assign((context, event) => {

@@ -15,6 +15,7 @@ abi Token {
     #[storage(read)]
     fn get_mint_amount() -> u64;
     // Get balance of a specified token on contract
+    #[payable]
     fn get_token_balance(asset_id: ContractId) -> u64;
     // Mint token coins
     #[storage(read)]
@@ -31,4 +32,6 @@ abi Token {
     // Method called from address to mint coins
     #[storage(read, write)]
     fn mint();
+    #[storage(read)]
+    fn has_mint(address: Address) -> bool;
 }

@@ -22,21 +22,39 @@ export default createConfig({
   },
   contracts: [
     {
-      name: 'VITE_TOKEN_ID',
+      name: 'VITE_TOKEN_ID1',
       path: './packages/contracts/token_contract',
-      options: getDeployOptions(),
+      options: () => {
+        return {
+          ...getDeployOptions(),
+        };
+      },
+    },
+    {
+      name: 'VITE_TOKEN_ID2',
+      path: './packages/contracts/token_contract',
+      options: () => {
+        return {
+          ...getDeployOptions(),
+        };
+      },
     },
     {
       name: 'VITE_CONTRACT_ID',
       path: './packages/contracts/exchange_contract',
       options: (contracts) => {
-        const contractDeployed = contracts.find((c) => c.name === 'VITE_TOKEN_ID')!;
+        const deployedTokenContract1 = contracts.find((c) => c.name === 'VITE_TOKEN_ID1')!;
+        const deployedTokenContract2 = contracts.find((c) => c.name === 'VITE_TOKEN_ID2')!;
         return {
           ...getDeployOptions(),
           storageSlots: [
             {
               key: '0x0000000000000000000000000000000000000000000000000000000000000001',
-              value: contractDeployed.contractId,
+              value: deployedTokenContract1.contractId,
+            },
+            {
+              key: '0x0000000000000000000000000000000000000000000000000000000000000002',
+              value: deployedTokenContract2.contractId,
             },
           ],
         };

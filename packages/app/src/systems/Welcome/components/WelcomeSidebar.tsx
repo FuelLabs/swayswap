@@ -16,9 +16,11 @@ export function WelcomeSidebar() {
       <div className="welcomeSidebar--steps">
         <WelcomeSidebarBullet />
         <nav>
-          <WelcomeNavItem id={0} label="Create wallet" />
-          <WelcomeNavItem id={1} label="Add funds" />
-          <WelcomeNavItem id={2} label="Done" />
+          <WelcomeNavItem id={0} label="Connect Wallet" />
+          <WelcomeNavItem id={1} label="Faucet" />
+          <WelcomeNavItem id={2} label="Add Assets" />
+          <WelcomeNavItem id={3} label="Mint Assets" />
+          <WelcomeNavItem id={4} label="Done" />
         </nav>
       </div>
     </aside>

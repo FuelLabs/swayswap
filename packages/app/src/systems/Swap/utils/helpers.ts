@@ -5,7 +5,7 @@ import type { CoinAmount, SwapMachineContext } from '../types';
 import { SwapDirection } from '../types';
 
 import { DECIMAL_UNITS } from '~/config';
-import { isCoinEth, ZERO, multiply, ONE_ASSET } from '~/systems/Core';
+import { isCoinEth, multiply, ONE_ASSET } from '~/systems/Core';
 import type { TransactionCost } from '~/systems/Core/utils/gas';
 import type { Coin, Maybe } from '~/types';
 
@@ -56,14 +56,14 @@ function getPriceImpact(amounts: BN[], reserves: BN[]) {
 export const calculatePriceImpact = (ctx: SwapMachineContext) => {
   // If any value is 0 return 0
   const { coinFrom, poolInfo, fromAmount, toAmount } = ctx;
-  const ethReserve = poolInfo?.eth_reserve;
-  const tokenReserve = poolInfo?.token_reserve;
-  if (!fromAmount?.raw || !toAmount?.raw || !ethReserve || !tokenReserve) {
+  const tokenReserve1 = poolInfo?.token_reserve1;
+  const tokenReserve2 = poolInfo?.token_reserve2;
+  if (!fromAmount?.raw || !toAmount?.raw || !tokenReserve1 || !tokenReserve2) {
     return '0';
   }
   const isEth = isCoinEth(coinFrom);
   const amounts = [toAmount.raw, fromAmount.raw];
-  const reserves = isEth ? [tokenReserve, ethReserve] : [ethReserve, tokenReserve];
+  const reserves = isEth ? [tokenReserve2, tokenReserve1] : [tokenReserve1, tokenReserve2];
 
   return getPriceImpact(amounts, reserves);
 };
@@ -84,39 +84,21 @@ export function hasEnoughBalance(amount: Maybe<BN>, balance: Maybe<BN>) {
 // TODO: Add unit tests on this
 export function hasLiquidityForSwap({ direction, poolInfo, coinTo, toAmount }: SwapMachineContext) {
   const isFrom = direction === SwapDirection.fromTo;
-  const ethReserve = bn(poolInfo?.eth_reserve);
-  const tokenReserve = bn(poolInfo?.token_reserve);
+  const tokenReserve1 = bn(poolInfo?.token_reserve1);
+  const tokenReserve2 = bn(poolInfo?.token_reserve2);
   const toAmountRaw = bn(toAmount?.raw);
 
   if (isFrom) return true;
 
-  const reserveAmount = isCoinEth(coinTo) ? ethReserve : tokenReserve;
+  const reserveAmount = isCoinEth(coinTo) ? tokenReserve1 : tokenReserve2;
   return toAmountRaw.lte(reserveAmount);
 }
 
 export const hasEthForNetworkFee = (params: SwapMachineContext) => {
-  const { ethBalance, direction, coinFrom, fromAmount, txCost, amountPlusSlippage } = params;
+  const { ethBalance, txCost } = params;
   const balance = bn(ethBalance);
   const txCostTotal = bn(txCost?.fee);
-  const plusSlippage = bn(amountPlusSlippage?.raw);
-  const fromAmountRaw = bn(fromAmount?.raw);
-  const isFrom = direction === SwapDirection.fromTo;
 
-  /**
-   * When coinFrom is ETH and we wan't to buy tokens if exact amount of ETH
-   */
-  if (isCoinEth(coinFrom) && isFrom) {
-    return fromAmountRaw.add(txCostTotal).lte(balance);
-  }
-  /**
-   * When coinFrom is ETH and we wan't to buy exact amount of token
-   */
-  if (isCoinEth(coinFrom) && !isFrom) {
-    return plusSlippage.add(txCostTotal).lte(balance);
-  }
-  /**
-   * When coinFrom isn't ETH but you need to pay gas fee
-   */
   return balance.gt(txCostTotal);
 };
 
@@ -133,11 +115,7 @@ export interface CalculateMaxBalanceToSwapParams {
 
 export const calculateMaxBalanceToSwap = ({ direction, ctx }: CalculateMaxBalanceToSwapParams) => {
   const isFrom = direction === SwapDirection.fromTo;
-  const shouldUseNetworkFee =
-    (isFrom && isCoinEth(ctx.coinFrom)) || (!isFrom && isCoinEth(ctx.coinTo));
   const balance = bn(isFrom ? ctx.coinFromBalance : ctx.coinToBalance);
-  const networkFee = bn(ctx.txCost?.fee);
-  const nextValue = balance.gt(ZERO) && shouldUseNetworkFee ? balance.sub(networkFee) : balance;
 
-  return createAmount(nextValue);
+  return createAmount(balance);
 };

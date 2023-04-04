@@ -6,7 +6,7 @@ import { SwapDirection } from "../types";
 
 import { useSwapGlobalState } from "./useSwapGlobalState";
 
-import { TOKENS } from "~/systems/Core";
+import { TOKENS, ETH, DAI } from "~/systems/Core";
 import type { Maybe } from "~/types";
 
 function findCoin(dir: Maybe<string>) {
@@ -21,7 +21,7 @@ function findCoin(dir: Maybe<string>) {
  */
 function getParamsByContext(ctx: Partial<SwapMachineContext>) {
   if (!ctx.coinFrom && !ctx.coinTo) {
-    return { from: "ETH" };
+    return { from: ETH.symbol, to: DAI.symbol };
   }
   return {
     ...(ctx.coinFrom && { from: ctx.coinFrom.symbol }),

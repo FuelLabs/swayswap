@@ -1,13 +1,11 @@
+import { cssObj } from "@fuel-ui/css";
+import { IconButton, Icon, Menu, Popover } from "@fuel-ui/react";
 import cx from "classnames";
-import clipboard from "clipboard";
-import toast from "react-hot-toast";
-import { FaRegCopy } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 
-import { useAssets, useEthBalance, useWallet } from "../hooks";
+import { useWallet } from "../hooks";
 
-import { WalletInfo } from "./WalletInfo";
-
-import { Popover, usePopover, ButtonGroup, Button } from "~/systems/UI";
+import { ButtonGroup, Button } from "~/systems/UI";
 
 const style = {
   wallet: `flex items-center gap-3 rounded-full text-gray-300 bg-gray-800 inner-shadow p-1`,
@@ -17,54 +15,54 @@ const style = {
 };
 
 export function WalletWidget() {
-  const wallet = useWallet();
-  const ethBalance = useEthBalance();
-  const { coins } = useAssets();
+  const { wallet } = useWallet();
 
-  const popover = usePopover({
-    placement: "bottom end",
-    offset: 10,
-    crossOffset: 42,
-  });
-
-  const handleCopy = () => {
-    clipboard.copy(wallet!.address.toAddress());
-    toast("Address copied", { icon: "✨" });
-  };
+  function handleDisconnect() {
+    window.localStorage.clear();
+    window.location.reload();
+  }
 
   return (
-    <div
-      className={cx(style.wallet, {
-        "pl-4": Boolean(ethBalance.formatted),
-      })}
-    >
-      <>
-        {ethBalance.formatted && <span>{ethBalance.formatted} ETH</span>}
-        <div className="flex items-center bg-gray-700 rounded-full">
-          <ButtonGroup>
-            <Button
-              {...popover.triggerProps}
-              isDisabled={!coins.length}
-              className={cx(style.button, style.buttonLeft)}
-            >
-              {String(wallet?.address).slice(0, 4)}...
-              {String(wallet?.address).slice(-4)}
-            </Button>
-            {Boolean(coins.length) && (
-              <Popover {...popover.rootProps}>
-                <WalletInfo onClose={() => popover.close()} />
-              </Popover>
-            )}
-            <Button
-              aria-label="Copy your wallet address"
-              onPress={handleCopy}
-              className={cx(style.button, style.buttonRight)}
-            >
-              <FaRegCopy size="1em" />
-            </Button>
-          </ButtonGroup>
-        </div>
-      </>
+    <div className={style.wallet}>
+      <div className="flex items-center bg-gray-700 rounded-full">
+        <ButtonGroup>
+          <Button className={cx(style.button, style.buttonLeft)} isDisabled>
+            {String(wallet?.address).slice(0, 4)}...
+            {String(wallet?.address).slice(-4)}
+          </Button>
+          <Popover
+            css={styles.menu}
+            content={
+              <Menu
+                onAction={(action) => {
+                  if (action === "disconnect") {
+                    handleDisconnect();
+                  }
+                }}
+                css={styles.menu}
+              >
+                <Menu.Item key="disconnect">
+                  <FiLogOut />
+                  Disconnect
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            <IconButton
+              icon={Icon.is("Gear")}
+              variant="link"
+              aria-label="settings"
+              color="gray"
+            />
+          </Popover>
+        </ButtonGroup>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  menu: cssObj({
+    padding: 0,
+  }),
+};

@@ -2,9 +2,13 @@ version: "3"
 
 services:
   swayswap-fuel-core:
+    platform: linux/amd64
     container_name: "swayswap-fuel-core-${ENVIRONMENT:-development}"
     environment:
       MIN_GAS_PRICE: ${GAS_PRICE}
+      # This is the private key of the consensus.PoA.signing_key in the chainConfig.json
+      # this key is responsible for validating the transactions
+      CONSENSUS_KEY: 0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298
     build: ./fuel-core
     ports:
       - "${FUEL_CORE_PORT:-4000}:4000"
@@ -16,6 +20,7 @@ services:
       timeout: 5s
       retries: 10
   swayswap-faucet:
+    platform: linux/amd64
     container_name: "swayswap-faucet-${ENVIRONMENT:-development}"
     environment:
       MIN_GAS_PRICE: ${GAS_PRICE}
@@ -24,7 +29,7 @@ services:
       FUEL_NODE_URL: http://swayswap-fuel-core-${ENVIRONMENT:-development}:4000/graphql
     # Other configurations can be found at;
     # https://github.com/FuelLabs/faucet#configuration
-    image: ghcr.io/fuellabs/faucet:v0.1.3
+    image: ghcr.io/fuellabs/faucet:v0.5.0
     ports:
       - "${FUEL_FAUCET_PORT:-4040}:3000"
     links:

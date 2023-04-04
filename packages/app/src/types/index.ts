@@ -10,15 +10,16 @@ export interface Coin {
 
 export enum Pages {
   'home' = '/',
-  'mint' = '/mint',
   'swap' = '/swap',
   'pool' = '/pool',
   'pool.list' = 'list',
   'pool.addLiquidity' = 'add-liquidity',
   'pool.removeLiquidity' = 'remove-liquidity',
   'welcome' = '/welcome',
-  'welcome.createWallet' = 'create-wallet',
-  'welcome.addFunds' = 'add-funds',
+  'connect' = 'connect',
+  'faucet' = 'faucet',
+  'addAssets' = 'add-assets',
+  'mint' = 'mint',
   'welcome.done' = 'done',
 }
 

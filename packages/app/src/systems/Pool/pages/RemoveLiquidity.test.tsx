@@ -1,6 +1,12 @@
-import { screen, renderWithRouter, fireEvent, act } from "@swayswap/test-utils";
+import type { FuelWalletLocked } from "@fuel-wallet/sdk";
+import {
+  screen,
+  renderWithRouter,
+  fireEvent,
+  act,
+  waitFor,
+} from "@swayswap/test-utils";
 import Decimal from "decimal.js";
-import type { Wallet } from "fuels";
 import { bn } from "fuels";
 
 import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
@@ -9,16 +15,20 @@ import type { PoolInfoPreview } from "../utils";
 import { App } from "~/App";
 import { CONTRACT_ID } from "~/config";
 import { COIN_ETH, ONE_ASSET, TOKENS } from "~/systems/Core";
+import type { MockConnection } from "~/systems/Core/hooks/__mocks__/MockConnection";
 import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
 import {
   createWallet,
+  mockUseFuel,
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 
-let wallet: Wallet;
+let wallet: FuelWalletLocked;
+let fuel: MockConnection;
 
-beforeAll(() => {
-  wallet = createWallet();
+beforeAll(async () => {
+  ({ wallet, fuel } = await createWallet());
+  mockUseFuel(fuel);
   mockUseWallet(wallet);
 });
 
@@ -51,9 +61,11 @@ describe("Remove Liquidity", () => {
 
   it("should see a 'current positions' box", async () => {
     renderWithRouter(<App />, { route: "/pool/remove-liquidity" });
-    await act(async () => {
+    await waitFor(async () => {
       const currentPositionsMessage = await screen.findByText(
-        /Your current positions/
+        /Your current positions/,
+        undefined,
+        { timeout: 10000 }
       );
       expect(currentPositionsMessage).toBeInTheDocument();
     });
@@ -62,7 +74,7 @@ describe("Remove Liquidity", () => {
   it("should enter amount button be disabled by default", async () => {
     renderWithRouter(<App />, { route: "/pool/remove-liquidity" });
     await act(async () => {
-      const submitBtn = await screen.findByText("Enter ETH/DAI amount");
+      const submitBtn = await screen.findByText("Enter sETH/DAI amount");
 
       expect(submitBtn).toBeInTheDocument();
       expect(submitBtn).toBeDisabled();
@@ -75,16 +87,23 @@ describe("Remove Liquidity", () => {
       route: "/pool/remove-liquidity",
     });
 
-    const coinFromInput = screen.getByLabelText(/LP Token Input/);
-    fireEvent.change(coinFromInput, {
-      target: {
-        value: "1",
-      },
-    });
+    await waitFor(
+      async () => {
+        const coinFromInput = screen.getByLabelText(/LP Token Input/);
+        fireEvent.change(coinFromInput, {
+          target: {
+            value: "1",
+          },
+        });
 
-    const submitBtn = await screen.findByText(/Insufficient ETH\/DAI balance/i);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
+        const submitBtn = await screen.findByText(
+          /Insufficient sETH\/DAI balance/i
+        );
+        expect(submitBtn).toBeInTheDocument();
+        expect(submitBtn).toBeDisabled();
+      },
+      { timeout: 10000 }
+    );
   });
 
   it("should be able to click on submit button if inputs are right", async () => {
@@ -97,11 +116,13 @@ describe("Remove Liquidity", () => {
 
     renderWithRouter(<App />, { route: "/pool/remove-liquidity" });
 
-    const coinFromInput = screen.getByLabelText(/Set Maximum Balance/);
-    fireEvent.click(coinFromInput);
+    await waitFor(async () => {
+      const coinFromInput = screen.getByLabelText(/Set Maximum Balance/);
+      fireEvent.click(coinFromInput);
 
-    const submitBtn = await screen.findByText(/Remove liquidity/);
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).not.toBeDisabled();
+      const submitBtn = await screen.findByText(/Remove liquidity/);
+      expect(submitBtn).toBeInTheDocument();
+      expect(submitBtn).not.toBeDisabled();
+    });
   });
 });

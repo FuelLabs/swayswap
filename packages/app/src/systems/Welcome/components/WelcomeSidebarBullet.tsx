@@ -10,7 +10,9 @@ export function WelcomeSidebarBullet() {
   function getVariant() {
     if (current.id === 0) return "first";
     if (current.id === 1) return "second";
-    return "third";
+    if (current.id === 2) return "third";
+    if (current.id === 3) return "fourth";
+    return "fifth";
   }
 
   return (
@@ -20,15 +22,23 @@ export function WelcomeSidebarBullet() {
       animate={getVariant()}
       variants={{
         first: {
-          y: -65,
+          y: -130,
           x: 6,
         },
         second: {
-          y: 0,
+          y: -65,
           x: 6,
         },
         third: {
+          y: 0,
+          x: 6,
+        },
+        fourth: {
           y: 65,
+          x: 6,
+        },
+        fifth: {
+          y: 130,
           x: 6,
         },
       }}

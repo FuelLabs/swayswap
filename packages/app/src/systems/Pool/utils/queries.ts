@@ -1,10 +1,10 @@
 import type { BN, Contract } from 'fuels';
+import { bn } from 'fuels';
 
 import type { AddLiquidityMachineContext } from '../types';
 
 import { CONTRACT_ID } from '~/config';
 import { getDeadline } from '~/systems/Core';
-import type { TransactionCost } from '~/systems/Core/utils/gas';
 import { getOverrides } from '~/systems/Core/utils/gas';
 import type { Coin } from '~/types';
 import type { ExchangeContractAbi } from '~/types/contracts';
@@ -27,11 +27,7 @@ export async function prepareRemoveLiquidity(contract: Contract) {
     });
 }
 
-export async function submitRemoveLiquidity(
-  contract: Contract,
-  amount: BN,
-  txCost: TransactionCost
-) {
+export async function submitRemoveLiquidity(contract: Contract, amount: BN) {
   const deadline = await getDeadline(contract);
   const { transactionResult } = await contract.functions
     .remove_liquidity(1, 1, deadline)
@@ -41,7 +37,6 @@ export async function submitRemoveLiquidity(
     .txParams(
       getOverrides({
         variableOutputs: 2,
-        gasLimit: txCost.total,
       })
     )
     .call();
@@ -65,7 +60,9 @@ export async function addLiquidity(
       contract.functions.deposit().callParams({
         forward: [toAmount, toAsset.assetId],
       }),
-      contract.functions.add_liquidity(1, deadline),
+      contract.functions.add_liquidity(1, deadline).callParams({
+        forward: [bn(0), fromAsset.assetId],
+      }),
     ])
     .txParams(
       getOverrides({

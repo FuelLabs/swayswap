@@ -7,15 +7,27 @@ import { useWallet } from './useWallet';
 import { Queries, AppEvents } from '~/types';
 
 export function useBalances(opts: UseQueryOptions = {}) {
-  const wallet = useWallet();
+  const { wallet } = useWallet();
   const publisher = usePublisher();
 
-  return useQuery(Queries.UserQueryBalances, async () => wallet?.getBalances(), {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ...(opts as any),
-    onSuccess(data) {
-      opts.onSuccess?.(data);
-      publisher.emit(AppEvents.updatedBalances, data);
+  const optss = useQuery(
+    Queries.UserQueryBalances,
+    async () => {
+      if (!wallet) return [];
+      const balances = await wallet.getBalances();
+      return balances;
     },
-  });
+    {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...(opts as any),
+      onSuccess(data) {
+        opts.onSuccess?.(data);
+        publisher.emit(AppEvents.updatedBalances, data);
+      },
+      initialData: [],
+      enabled: Boolean(wallet),
+    }
+  );
+
+  return optss;
 }

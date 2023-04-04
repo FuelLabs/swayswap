@@ -1,3 +1,4 @@
+import { FuelLogo } from "@fuel-ui/react";
 import cx from "classnames";
 import type { ComponentType, ReactNode } from "react";
 import { BiDollarCircle } from "react-icons/bi";
@@ -5,8 +6,6 @@ import { MdSwapCalls } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useBreakpoint } from "../hooks/useBreakpoint";
-import { useWallet } from "../hooks/useWallet";
-import { relativeUrl } from "../utils";
 
 import { MigrationWarning } from "./MigrationWarning";
 import { WalletWidget } from "./WalletWidget";
@@ -50,7 +49,6 @@ const HeaderNav = ({
 };
 
 export const Header = () => {
-  const wallet = useWallet();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -58,39 +56,32 @@ export const Header = () => {
     <>
       <MigrationWarning />
       <div className="header">
-        <img
-          onClick={() => navigate("/")}
-          src={relativeUrl("/fuel-logo-512x512.png")}
-          alt="swayswap"
-          className="cursor-pointer"
-        />
-        {wallet && (
-          <div className="header--nav">
-            <div className="header--navContainer">
-              <ButtonGroup>
-                <HeaderNav
-                  icon={MdSwapCalls}
-                  onPress={() => navigate(Pages.swap)}
-                  isActive={location.pathname === Pages.swap}
-                >
-                  Swap
-                </HeaderNav>
-                <HeaderNav
-                  icon={BiDollarCircle}
-                  onPress={() => navigate(Pages.pool)}
-                  isActive={location.pathname.includes(Pages.pool)}
-                >
-                  Pool
-                </HeaderNav>
-              </ButtonGroup>
-            </div>
+        <div className="header-logo">
+          <FuelLogo className="cursor-pointer" size={50} />
+        </div>
+        <div className="header--nav">
+          <div className="header--navContainer">
+            <ButtonGroup>
+              <HeaderNav
+                icon={MdSwapCalls}
+                onPress={() => navigate(Pages.swap)}
+                isActive={location.pathname === Pages.swap}
+              >
+                Swap
+              </HeaderNav>
+              <HeaderNav
+                icon={BiDollarCircle}
+                onPress={() => navigate(Pages.pool)}
+                isActive={location.pathname.includes(Pages.pool)}
+              >
+                Pool
+              </HeaderNav>
+            </ButtonGroup>
           </div>
-        )}
-        {wallet && (
-          <div className="header--wallet">
-            <WalletWidget />
-          </div>
-        )}
+        </div>
+        <div className="header--wallet">
+          <WalletWidget />
+        </div>
       </div>
     </>
   );

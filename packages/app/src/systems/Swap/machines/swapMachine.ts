@@ -1,5 +1,5 @@
 import type Decimal from 'decimal.js';
-import type { CoinQuantity, TransactionResult } from 'fuels';
+import type { CoinQuantity, TransactionResult, WalletLocked } from 'fuels';
 import { bn } from 'fuels';
 import type { InterpreterFrom, StateFrom } from 'xstate';
 import { assign, createMachine } from 'xstate';
@@ -25,7 +25,11 @@ import { emptyTransactionCost, getTransactionCost } from '~/systems/Core/utils/g
 import { getPoolRatio } from '~/systems/Pool';
 import type { Coin, Maybe } from '~/types';
 import { Queries } from '~/types';
-import type { PoolInfoOutput, PreviewInfoOutput } from '~/types/contracts/ExchangeContractAbi';
+import type {
+  ExchangeContractAbi,
+  PoolInfoOutput,
+  PreviewInfoOutput,
+} from '~/types/contracts/ExchangeContractAbi';
 
 export const FROM_TO = SwapDirection.fromTo;
 export const TO_FROM = SwapDirection.toFrom;
@@ -35,6 +39,13 @@ export const TO_FROM = SwapDirection.toFrom;
 // ----------------------------------------------------------------------------
 
 type MachineEvents =
+  | {
+      type: 'INITIALIZE_SWAP';
+      data: {
+        wallet: WalletLocked;
+        contract: ExchangeContractAbi;
+      };
+    }
   | { type: 'INVERT_COINS' }
   | { type: 'SELECT_COIN'; data: { direction: SwapDirection; coin: Coin } }
   | { type: 'INPUT_CHANGE'; data: { direction: SwapDirection; value: string } }
@@ -114,8 +125,16 @@ export const swapMachine =
         services: {} as MachineServices,
       },
       id: '(machine)',
-      initial: 'fetchingBalances',
+      initial: 'idle',
       states: {
+        idle: {
+          on: {
+            INITIALIZE_SWAP: {
+              actions: ['initializeSwap'],
+              target: 'fetchingBalances',
+            },
+          },
+        },
         fetchingBalances: {
           invoke: {
             src: 'fetchBalances',
@@ -252,6 +271,7 @@ export const swapMachine =
                 onError: [
                   {
                     actions: 'toastErrorMessage',
+                    target: 'idle',
                   },
                 ],
               },
@@ -342,7 +362,8 @@ export const swapMachine =
     {
       services: {
         fetchBalances: async ({ client }) => {
-          return client?.fetchQuery<CoinQuantity[]>(Queries.UserQueryBalances);
+          const balances = await client?.fetchQuery<CoinQuantity[]>(Queries.UserQueryBalances);
+          return balances;
         },
         fetchTxCost: async (ctx) => {
           const contractCall = await queryNetworkFeeOnSwap(ctx);
@@ -368,6 +389,11 @@ export const swapMachine =
         },
       },
       actions: {
+        initializeSwap: assign((ctx, ev) => ({
+          ...ctx,
+          wallet: ev.data.wallet,
+          contract: ev.data.contract,
+        })),
         cleanPreviewInfo: assign((ctx) => ({
           ...ctx,
           previewInfo: null,
@@ -398,15 +424,17 @@ export const swapMachine =
             ethBalance: bn(ethBalance?.amount),
           };
         }),
-        selectCoin: assign((ctx, ev) => ({
-          ...ctx,
-          ...(ev.data.direction === FROM_TO && {
-            coinFrom: ev.data.coin,
-          }),
-          ...(ev.data.direction === TO_FROM && {
-            coinTo: ev.data.coin,
-          }),
-        })),
+        selectCoin: assign((ctx, ev) => {
+          return {
+            ...ctx,
+            ...(ev.data.direction === FROM_TO && {
+              coinFrom: ev.data.coin,
+            }),
+            ...(ev.data.direction === TO_FROM && {
+              coinTo: ev.data.coin,
+            }),
+          };
+        }),
         invertDirection: assign((ctx) => {
           const isFrom = ctx.direction === FROM_TO;
           return {

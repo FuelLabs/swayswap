@@ -1,17 +1,60 @@
 import type { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useQuery } from "react-query";
+import { Navigate, useNavigate } from "react-router-dom";
 
-import { useWallet } from "../hooks";
+import { useFuel } from "../hooks/useFuel";
 
 import { getCurrent, getAgreement } from "~/systems/Welcome";
 import { Pages } from "~/types";
 
 export function PrivateRoute({ children }: { children: ReactNode }) {
   const current = getCurrent();
+  const navigate = useNavigate();
   const acceptAgreement = getAgreement();
-  const wallet = useWallet();
-  if ((current.id > 2 && acceptAgreement) || (wallet && !current.id)) {
+  const { fuel, error } = useFuel();
+
+  const { data: isConnected, isLoading } = useQuery(
+    ["isConnected", fuel !== undefined],
+    async () => {
+      const isFuelConnected = await fuel?.isConnected();
+      return isFuelConnected;
+    },
+    {
+      enabled: Boolean(fuel),
+    }
+  );
+
+  function handleWalletConnectionError() {
+    localStorage.clear();
+    navigate(Pages.welcome);
+  }
+
+  useEffect(() => {
+    if (error !== "") {
+      handleWalletConnectionError();
+    }
+  }, [error]);
+
+  useEffect(() => {
+    const timeoutConnection = setInterval(async () => {
+      const isFuelConnected = await fuel?.isConnected();
+      if (!isFuelConnected) {
+        handleWalletConnectionError();
+      }
+    }, 1000);
+    return () => {
+      clearTimeout(timeoutConnection);
+    };
+  }, [isConnected, fuel]);
+
+  if ((current.id > 4 && acceptAgreement) || (isConnected && !current.id)) {
     return <>{children}</>;
   }
+
+  if (isLoading) {
+    return <div data-testid="fuel-wallet-loading"></div>;
+  }
+
   return <Navigate to={Pages.welcome} replace />;
 }

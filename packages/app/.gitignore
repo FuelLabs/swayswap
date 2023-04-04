@@ -1,1 +1,10 @@
 .env.test
+node_modules/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/playwright/fuel-wallet.zip
+/playwright/dist-crx
+/test-results/
+/playwright-report/
+/playwright/.cache/
