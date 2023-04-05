@@ -18,11 +18,13 @@ import {
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
 import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
+import { setAgreement } from "~/systems/Welcome";
 
 let wallet: FuelWalletLocked;
 let fuel: Fuel;
 
 beforeAll(async () => {
+  setAgreement(true);
   ({ wallet, fuel } = await createWallet());
   mockUseFuel(fuel);
   mockUseWallet(wallet);

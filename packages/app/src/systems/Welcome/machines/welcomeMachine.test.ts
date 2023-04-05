@@ -13,6 +13,10 @@ import { TokenContractAbi__factory } from '~/types/contracts';
 describe('captchaMachine', () => {
   let service: WelcomeMachineService;
 
+  beforeAll(() => {
+    setAgreement(false);
+  });
+
   beforeEach(() => {
     service = interpret(
       welcomeMachine

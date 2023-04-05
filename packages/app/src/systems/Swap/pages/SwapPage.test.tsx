@@ -21,6 +21,7 @@ import {
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
 import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
 import { addLiquidity } from "~/systems/Pool/hooks/__mocks__/addLiquidity";
+import { setAgreement } from "~/systems/Welcome";
 
 async function findSwapBtn() {
   return waitFor(() => screen.findByLabelText(/swap button/i));
@@ -39,6 +40,7 @@ async function clickOnMaxBalance(input: "from" | "to" = "from") {
 }
 
 async function createAndMockWallet() {
+  setAgreement(true);
   const { wallet, fuel } = await createWallet();
   mockUseFuel(fuel);
   mockUseWallet(wallet);

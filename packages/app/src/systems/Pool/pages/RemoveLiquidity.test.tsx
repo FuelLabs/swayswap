@@ -21,11 +21,13 @@ import {
   mockUseFuel,
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
+import { setAgreement } from "~/systems/Welcome";
 
 let wallet: FuelWalletLocked;
 let fuel: Fuel;
 
 beforeAll(async () => {
+  setAgreement(true);
   ({ wallet, fuel } = await createWallet());
   mockUseFuel(fuel);
   mockUseWallet(wallet);
