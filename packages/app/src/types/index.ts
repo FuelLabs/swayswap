@@ -16,11 +16,12 @@ export enum Pages {
   'pool.addLiquidity' = 'add-liquidity',
   'pool.removeLiquidity' = 'remove-liquidity',
   'welcome' = '/welcome',
-  'connect' = 'connect',
-  'faucet' = 'faucet',
-  'addAssets' = 'add-assets',
-  'mint' = 'mint',
-  'welcome.done' = 'done',
+  'welcomeInstall' = 'install',
+  'welcomeConnect' = 'connect',
+  'welcomeFaucet' = 'faucet',
+  'welcomeTerms' = 'terms',
+  'welcomeAddAssets' = 'add-assets',
+  'welcomeMint' = 'mint',
 }
 
 export enum Queries {

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useWelcomeSteps } from "../hooks";
 
 import { WelcomeImage } from "./WelcomeImage";
@@ -8,15 +10,16 @@ import { Button, Link } from "~/systems/UI";
 const DISCLAIMER_URL =
   "https://github.com/FuelLabs/swayswap/blob/master/docs/LEGAL_DISCLAIMER.md";
 
-export function WelcomeDone() {
-  const { send, state } = useWelcomeSteps();
+export function WelcomeTerms() {
+  const { send } = useWelcomeSteps();
+  const [agreement, setAgreement] = useState(false);
 
   function handleDone() {
-    send("FINISH");
+    send("ACCEPT_AGREEMENT");
   }
 
   return (
-    <WelcomeStep id={4}>
+    <WelcomeStep>
       <WelcomeImage src="/illustrations/done.png" />
       <p className="text-sm font-light italic my-5">
         This is running on the <b>Fuel test network</b>. No real funds are used.
@@ -27,11 +30,9 @@ export function WelcomeDone() {
           <input
             aria-label="Accept the use agreement"
             id="accept-agreement"
-            checked={state.context.acceptAgreement}
+            checked={agreement}
             onChange={(e) => {
-              send("ACCEPT_AGREEMENT", {
-                value: e.target.checked,
-              });
+              setAgreement(e.target.checked);
             }}
             className="h-5 w-5 mr-1 cursor-pointer"
             type="checkbox"
@@ -47,7 +48,7 @@ export function WelcomeDone() {
         size="lg"
         variant="primary"
         className="mt-5 mx-auto"
-        isDisabled={!state.context.acceptAgreement}
+        isDisabled={!agreement}
         onPress={handleDone}
       >
         Get Swapping!

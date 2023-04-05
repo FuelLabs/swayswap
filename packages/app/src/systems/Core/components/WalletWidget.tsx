@@ -19,6 +19,7 @@ export function WalletWidget() {
 
   function handleDisconnect() {
     window.localStorage.clear();
+    window.fuel?.disconnect();
     window.location.reload();
   }
 

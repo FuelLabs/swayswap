@@ -6,14 +6,14 @@ import { WelcomeImage } from "./WelcomeImage";
 import { WelcomeStep } from "./WelcomeStep";
 
 export function AddAssets() {
-  const { service, state } = useWelcomeSteps();
+  const { send, state } = useWelcomeSteps();
 
   function handleAddAssets() {
-    service.send("ADD_ASSETS");
+    send("ADD_ASSETS");
   }
 
   return (
-    <WelcomeStep id={2}>
+    <WelcomeStep>
       <WelcomeImage src="/illustrations/add-funds.png" />
       <h2>Add SwaySwap assets</h2>
       <p className="my-5">
@@ -24,7 +24,7 @@ export function AddAssets() {
       <Button
         className="mt-5 mx-auto"
         onPress={handleAddAssets}
-        isLoading={state.hasTag("isLoadingMint")}
+        isLoading={state.hasTag("isLoading")}
       >
         Add Assets
       </Button>

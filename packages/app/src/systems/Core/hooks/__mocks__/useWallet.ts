@@ -5,8 +5,13 @@ import * as useWallet from '../useWallet';
 
 import { MockConnection } from './MockConnection';
 
-export async function createWallet(isConnectedOverride = true) {
+export function createFuel(isConnectedOverride = true) {
   const mockFuel = MockConnection.start(isConnectedOverride);
+  return mockFuel as unknown as Fuel;
+}
+
+export async function createWallet(isConnectedOverride = true) {
+  const mockFuel = createFuel(isConnectedOverride);
   const currentAccount = await mockFuel.currentAccount();
   const wallet = await mockFuel.getWallet(currentAccount);
   return { wallet, fuel: mockFuel };
@@ -22,11 +27,11 @@ export function mockUseWallet(wallet: FuelWalletLocked) {
   });
 }
 
-export function mockUseFuel(fuel: MockConnection) {
-  window.fuel = fuel as unknown as Fuel;
+export function mockUseFuel(fuel: Fuel) {
+  window.fuel = fuel;
   return jest.spyOn(useFuel, 'useFuel').mockImplementation(() => {
     return {
-      fuel: fuel as unknown as Fuel,
+      fuel,
       isLoading: false,
       error: '',
     };

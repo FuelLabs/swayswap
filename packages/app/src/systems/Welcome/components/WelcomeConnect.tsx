@@ -1,42 +1,20 @@
 import { Button } from "@fuel-ui/react";
-import { useMutation } from "react-query";
+import { useSelector } from "@xstate/react";
 
 import { useWelcomeSteps } from "../hooks";
 
 import { WelcomeImage } from "./WelcomeImage";
 import { WelcomeStep } from "./WelcomeStep";
 
-import { useFuel } from "~/systems/Core/hooks/useFuel";
-
 export const WelcomeConnect = () => {
-  const { next } = useWelcomeSteps();
-  const { fuel } = useFuel();
-
-  const connectWalletMutation = useMutation(
-    async () => {
-      if (!fuel) {
-        throw new Error(
-          "Trying to connect wallet when fuel instance is not injected"
-        );
-      }
-      await fuel.connect();
-    },
-    {
-      onSuccess: () => {
-        next();
-      },
-    }
-  );
-
-  function handleConnectWallet() {
-    connectWalletMutation.mutate();
-  }
+  const { service, send } = useWelcomeSteps();
+  const installWallet = useSelector(service, (s) => s.matches("installWallet"));
 
   return (
-    <WelcomeStep id={0}>
+    <WelcomeStep>
       <WelcomeImage src="/illustrations/create-wallet.png" />
       <h2>Welcome to SwaySwap</h2>
-      {!fuel ? (
+      {installWallet ? (
         <>
           <p className="my-5">
             To get started you&apos;ll need to install
@@ -64,7 +42,7 @@ export const WelcomeConnect = () => {
             variant="solid"
             size="lg"
             className="mt-5 mx-auto"
-            onPress={handleConnectWallet}
+            onPress={() => send("CONNECT")}
           >
             Connect Wallet
           </Button>

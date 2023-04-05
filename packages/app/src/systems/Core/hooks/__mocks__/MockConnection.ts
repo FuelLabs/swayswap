@@ -2,9 +2,9 @@
 
 import type { FuelWalletConnection } from '@fuel-wallet/sdk';
 import { FuelWalletLocked, FuelWalletProvider, BaseConnection } from '@fuel-wallet/sdk';
-import type { FuelProviderConfig } from '@fuel-wallet/types';
+import type { Asset, FuelProviderConfig } from '@fuel-wallet/types';
 import EventEmitter from 'events';
-import type { AbstractAddress, TransactionRequest } from 'fuels';
+import type { AbstractAddress, TransactionRequest, WalletUnlocked } from 'fuels';
 import { Wallet, Address } from 'fuels';
 
 import { FUEL_PROVIDER_URL } from '~/config';
@@ -12,12 +12,14 @@ import { FUEL_PROVIDER_URL } from '~/config';
 const generateOptions = {
   provider: FUEL_PROVIDER_URL,
 };
-export const userWallet = Wallet.generate(generateOptions);
 export const toWallet = Wallet.generate(generateOptions);
 const events = new EventEmitter();
 
 export class MockConnection extends BaseConnection {
   isConnectedOverride;
+  assetsData: Asset[];
+  wallet: WalletUnlocked;
+
   constructor(isConnected = true) {
     super();
     events.addListener('request', this.onCommunicationMessage.bind(this));
@@ -34,6 +36,8 @@ export class MockConnection extends BaseConnection {
       this.addAsset,
       this.addAssets,
     ]);
+    this.assetsData = [];
+    this.wallet = Wallet.generate(generateOptions);
     this.isConnectedOverride = isConnected;
   }
 
@@ -52,7 +56,8 @@ export class MockConnection extends BaseConnection {
   }
 
   async connect() {
-    return true;
+    this.isConnectedOverride = true;
+    return this.isConnectedOverride;
   }
 
   async disconnect() {
@@ -67,7 +72,8 @@ export class MockConnection extends BaseConnection {
     return true;
   }
 
-  async addAssets(): Promise<boolean> {
+  async addAssets(assets: Asset[]): Promise<boolean> {
+    this.assetsData = assets;
     return true;
   }
 
@@ -76,8 +82,7 @@ export class MockConnection extends BaseConnection {
   }
 
   async assets() {
-    const assets = await userWallet.getBalances();
-    return assets;
+    return this.assetsData;
   }
 
   async onMessage() {
@@ -89,11 +94,11 @@ export class MockConnection extends BaseConnection {
   }
 
   async accounts() {
-    return [userWallet.address.toAddress()];
+    return [this.wallet.address.toAddress()];
   }
 
   async signMessage(address: string, message: string) {
-    return userWallet.signMessage(message);
+    return this.wallet.signMessage(message);
   }
 
   async sendTransaction(
@@ -101,12 +106,12 @@ export class MockConnection extends BaseConnection {
     _1: FuelProviderConfig,
     _2?: string | undefined
   ) {
-    const response = await userWallet.sendTransaction(transaction);
+    const response = await this.wallet.sendTransaction(transaction);
     return response.id;
   }
 
   async currentAccount() {
-    return userWallet.address.toAddress();
+    return this.wallet.address.toAddress();
   }
 
   async getWallet(address: string | AbstractAddress): Promise<FuelWalletLocked> {
