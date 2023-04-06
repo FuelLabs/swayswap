@@ -151,6 +151,7 @@ describe('captchaMachine', () => {
   });
 
   it('Should go to finish if all steps are complete', async () => {
+    setAgreement(true);
     const fuel = createFuel(true);
     const service2 = interpret(
       welcomeMachine
@@ -168,7 +169,6 @@ describe('captchaMachine', () => {
     ).start();
     const account = await fuel.currentAccount();
     const wallet = await fuel.getWallet(account);
-    setAgreement(true);
     fuel.addAssets(SWAYSWAP_ASSETS);
     await faucet(wallet);
     const token1 = TokenContractAbi__factory.connect(ETH.assetId, wallet);
