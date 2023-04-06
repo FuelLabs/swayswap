@@ -1,4 +1,5 @@
 import cx from "classnames";
+import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
 import { useCaptcha, useFaucet } from "../hooks";
@@ -16,7 +17,13 @@ export function FaucetApp({
   isLoading,
   onSuccess,
 }: FaucetAppProps) {
-  const faucet = useFaucet({ onSuccess });
+  // We need to re-render the captcha widget when it faucet
+  // endpoint fails and need to retrigger the captcha.
+  const [version, setVersion] = useState(0);
+  const faucet = useFaucet({
+    onSuccess,
+    onError: () => setVersion(version + 1),
+  });
   const captcha = useCaptcha();
 
   return (
@@ -34,7 +41,7 @@ export function FaucetApp({
               "is-hidden": captcha.isLoading,
             })}
           >
-            <ReCAPTCHA {...captcha.getProps()} />
+            <ReCAPTCHA key={version} {...captcha.getProps()} />
           </div>
           {captcha.isFailed && (
             <div className="faucetCaptcha--error">
