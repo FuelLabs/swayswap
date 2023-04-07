@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 import { FUEL_FAUCET_URL } from '~/config';
-import { useBalances, useWallet } from '~/systems/Core';
+import { handleError, useBalances, useWallet } from '~/systems/Core';
 import type { Maybe } from '~/types';
 import { Queries } from '~/types';
 
@@ -22,6 +22,7 @@ export async function fetchFaucet(input: RequestInit) {
 
 type UseFaucetOpts = {
   onSuccess?: () => void;
+  onError?: () => void;
 };
 
 export function useFaucet(opts: UseFaucetOpts = {}) {
@@ -48,6 +49,10 @@ export function useFaucet(opts: UseFaucetOpts = {}) {
         // https:// github.com/FuelLabs/swayswap-demo/issues/40
         await balances.refetch();
         opts.onSuccess?.();
+      },
+      onError: (err) => {
+        handleError(err);
+        opts.onError?.();
       },
     }
   );
