@@ -30,6 +30,10 @@ beforeAll(async () => {
   mockUseWallet(wallet);
 });
 
+afterAll(() => {
+  setAgreement(false);
+});
+
 describe("Add Liquidity", () => {
   beforeEach(() => {
     mockUseUserPosition();

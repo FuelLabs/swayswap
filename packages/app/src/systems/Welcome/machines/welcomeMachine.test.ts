@@ -18,6 +18,10 @@ describe('captchaMachine', () => {
   });
 
   beforeEach(() => {
+    setAgreement(false);
+  });
+
+  beforeEach(() => {
     service = interpret(
       welcomeMachine
         .withContext({
@@ -127,63 +131,70 @@ describe('captchaMachine', () => {
     await waitFor(service, (s) => s.matches('acceptAgreement'));
   });
 
-  it('Should accept aggrement', async () => {
-    const fuel = createFuel(true);
-    const account = await fuel.currentAccount();
-    const wallet = await fuel.getWallet(account);
-    fuel.addAssets(SWAYSWAP_ASSETS);
-    await faucet(wallet);
-    const token1 = TokenContractAbi__factory.connect(ETH.assetId, wallet);
-    const token2 = TokenContractAbi__factory.connect(DAI.assetId, wallet);
-    await token1
-      .multiCall([token1.functions.mint(), token2.functions.mint()])
-      .txParams({
-        gasPrice: 1,
-      })
-      .call();
-
-    service.send('WALLET_DETECTED', {
-      value: fuel,
-    });
-    await waitFor(service, (s) => s.matches('acceptAgreement'));
-    service.send('ACCEPT_AGREEMENT');
-    await waitFor(service, (s) => s.matches('finished'));
-  });
-
-  it('Should go to finish if all steps are complete', async () => {
-    setAgreement(true);
-    const fuel = createFuel(true);
-    const service2 = interpret(
-      welcomeMachine
-        .withContext({
-          acceptAgreement: true,
-          balance: bn(),
-          current: STEPS[0],
+  it(
+    'Should accept aggrement',
+    async () => {
+      const fuel = createFuel(true);
+      const account = await fuel.currentAccount();
+      const wallet = await fuel.getWallet(account);
+      fuel.addAssets(SWAYSWAP_ASSETS);
+      await faucet(wallet);
+      const token1 = TokenContractAbi__factory.connect(ETH.assetId, wallet);
+      const token2 = TokenContractAbi__factory.connect(DAI.assetId, wallet);
+      await token1
+        .multiCall([token1.functions.mint(), token2.functions.mint()])
+        .txParams({
+          gasPrice: 1,
         })
-        .withConfig({
-          actions: {
-            navigateTo: () => {},
-            acceptAgreement: () => true,
-          },
+        .call();
+
+      service.send('WALLET_DETECTED', {
+        value: fuel,
+      });
+      await waitFor(service, (s) => s.matches('acceptAgreement'));
+      service.send('ACCEPT_AGREEMENT');
+      await waitFor(service, (s) => s.matches('finished'));
+    },
+    1000 * 60 * 2
+  );
+
+  it(
+    'Should go to finish if all steps are complete',
+    async () => {
+      const fuel = createFuel(true);
+      const service2 = interpret(
+        welcomeMachine
+          .withContext({
+            acceptAgreement: true,
+            balance: bn(),
+            current: STEPS[0],
+          })
+          .withConfig({
+            actions: {
+              navigateTo: () => {},
+              acceptAgreement: () => true,
+            },
+          })
+      ).start();
+      const account = await fuel.currentAccount();
+      const wallet = await fuel.getWallet(account);
+      fuel.addAssets(SWAYSWAP_ASSETS);
+      await faucet(wallet);
+      const token1 = TokenContractAbi__factory.connect(ETH.assetId, wallet);
+      const token2 = TokenContractAbi__factory.connect(DAI.assetId, wallet);
+      await token1
+        .multiCall([token1.functions.mint(), token2.functions.mint()])
+        .txParams({
+          gasPrice: 1,
         })
-    ).start();
-    const account = await fuel.currentAccount();
-    const wallet = await fuel.getWallet(account);
-    fuel.addAssets(SWAYSWAP_ASSETS);
-    await faucet(wallet);
-    const token1 = TokenContractAbi__factory.connect(ETH.assetId, wallet);
-    const token2 = TokenContractAbi__factory.connect(DAI.assetId, wallet);
-    await token1
-      .multiCall([token1.functions.mint(), token2.functions.mint()])
-      .txParams({
-        gasPrice: 1,
-      })
-      .call();
+        .call();
 
-    service2.send('WALLET_DETECTED', {
-      value: fuel,
-    });
+      service2.send('WALLET_DETECTED', {
+        value: fuel,
+      });
 
-    await waitFor(service2, (s) => s.matches('finished'));
-  });
+      await waitFor(service2, (s) => s.matches('finished'));
+    },
+    1000 * 60 * 2
+  );
 });

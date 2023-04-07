@@ -1,29 +1,11 @@
-import type { Fuel, FuelWalletLocked } from "@fuel-wallet/sdk";
 import { screen, renderWithRouter } from "@swayswap/test-utils";
 
-import { mockUseUserPosition } from "../hooks/__mocks__/useUserPosition";
-
 import { App } from "~/App";
-import {
-  createWallet,
-  mockUseFuel,
-  mockUseWallet,
-} from "~/systems/Core/hooks/__mocks__/useWallet";
-import { setAgreement } from "~/systems/Welcome";
-
-let wallet: FuelWalletLocked;
-let fuel: Fuel;
-
-beforeAll(async () => {
-  setAgreement(true);
-  ({ wallet, fuel } = await createWallet());
-  mockUseWallet(wallet);
-  mockUseFuel(fuel);
-});
+import { mockUserData } from "~/systems/Core/hooks/__mocks__/useWallet";
 
 describe("Pool List", () => {
   beforeEach(() => {
-    mockUseUserPosition();
+    mockUserData();
   });
 
   afterEach(() => {

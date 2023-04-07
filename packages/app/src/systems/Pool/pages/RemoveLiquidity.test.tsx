@@ -33,6 +33,10 @@ beforeAll(async () => {
   mockUseWallet(wallet);
 });
 
+afterAll(() => {
+  setAgreement(false);
+});
+
 const USER_LIQUIDITY_POSITIONS: PoolInfoPreview = {
   ethReserve: bn("1009199438931"),
   formattedEthReserve: "1,009.199",
