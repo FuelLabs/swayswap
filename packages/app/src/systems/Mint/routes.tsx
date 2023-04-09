@@ -8,7 +8,7 @@ import { Pages } from "~/types";
 
 export const mintRoutes = (
   <Route
-    path={Pages.mint}
+    path={Pages.welcomeMint}
     element={
       <PrivateRoute>
         <MintPage />

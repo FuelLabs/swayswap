@@ -12,15 +12,11 @@ import * as poolHelpers from "../../Pool/utils/helpers";
 import * as swapHelpers from "../utils/helpers";
 
 import { App } from "~/App";
-import { TOKENS } from "~/systems/Core";
 import {
-  createWallet,
-  mockUseFuel,
-  mockUseWallet,
+  clearMockUserData,
+  mockUserData,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
-import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
-import { addLiquidity } from "~/systems/Pool/hooks/__mocks__/addLiquidity";
 
 async function findSwapBtn() {
   return waitFor(() => screen.findByLabelText(/swap button/i));
@@ -36,13 +32,6 @@ async function clickOnMaxBalance(input: "from" | "to" = "from") {
     const button = await findMaxBalanceBtn(input);
     fireEvent.click(button);
   });
-}
-
-async function createAndMockWallet() {
-  const { wallet, fuel } = await createWallet();
-  mockUseFuel(fuel);
-  mockUseWallet(wallet);
-  return wallet;
 }
 
 async function fillCoinFromWithValue(value: string) {
@@ -86,9 +75,14 @@ describe("SwapPage", () => {
   let wallet: FuelWalletLocked;
 
   beforeAll(async () => {
-    wallet = await createAndMockWallet();
-    await faucet(wallet, 4);
-    await mint(wallet);
+    const mocks = await mockUserData({
+      faucetQuantity: 4,
+    });
+    wallet = mocks.wallet;
+  }, 1000 * 60);
+
+  afterAll(() => {
+    clearMockUserData();
   });
 
   describe("without liquidity", () => {
@@ -157,14 +151,14 @@ describe("SwapPage", () => {
 
   describe("with liquidity created", () => {
     beforeAll(async () => {
-      await faucet(wallet, 4);
-      await addLiquidity(
-        wallet,
-        "0.5",
-        "500",
-        TOKENS[0].assetId,
-        TOKENS[1].assetId
-      );
+      const mocks = await mockUserData({
+        faucetQuantity: 4,
+      });
+      wallet = mocks.wallet;
+    }, 1000 * 60);
+
+    afterAll(() => {
+      clearMockUserData();
     });
 
     it("should show insufficient balance if try to input more than balance", async () => {

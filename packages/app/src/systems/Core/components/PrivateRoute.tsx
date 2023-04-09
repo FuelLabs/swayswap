@@ -5,15 +5,13 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 import { useFuel } from "../hooks/useFuel";
 
-import { getCurrent, getAgreement } from "~/systems/Welcome";
+import { getAgreement } from "~/systems/Welcome";
 import { Pages } from "~/types";
 
 export function PrivateRoute({ children }: { children: ReactNode }) {
-  const current = getCurrent();
   const navigate = useNavigate();
   const acceptAgreement = getAgreement();
   const { fuel, error } = useFuel();
-
   const { data: isConnected, isLoading } = useQuery(
     ["isConnected", fuel !== undefined],
     async () => {
@@ -48,7 +46,7 @@ export function PrivateRoute({ children }: { children: ReactNode }) {
     };
   }, [isConnected, fuel]);
 
-  if ((current.id > 4 && acceptAgreement) || (isConnected && !current.id)) {
+  if (acceptAgreement) {
     return <>{children}</>;
   }
 

@@ -14,7 +14,7 @@ export function AddFunds() {
   );
 
   return (
-    <WelcomeStep id={1}>
+    <WelcomeStep>
       <WelcomeImage src="/illustrations/add-funds.png" />
       <h2>Add some test ETH to your wallet</h2>
       <p>

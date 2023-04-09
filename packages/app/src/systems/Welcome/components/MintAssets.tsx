@@ -6,14 +6,14 @@ import { WelcomeImage } from "./WelcomeImage";
 import { WelcomeStep } from "./WelcomeStep";
 
 export function MintAssets() {
-  const { service, state } = useWelcomeSteps();
+  const { send, state } = useWelcomeSteps();
 
   function handleAddAssets() {
-    service.send("ADD_ASSETS");
+    send("MINT_ASSETS");
   }
 
   return (
-    <WelcomeStep id={3}>
+    <WelcomeStep>
       <WelcomeImage src="/illustrations/add-funds.png" />
       <h2>Add some test Assets to your wallet</h2>
       <p className="my-5">
@@ -25,7 +25,7 @@ export function MintAssets() {
       <Button
         className="mt-5 mx-auto"
         onPress={handleAddAssets}
-        isLoading={state.hasTag("isLoadingMint")}
+        isLoading={state.hasTag("isLoading")}
       >
         Mint assets
       </Button>

@@ -1,4 +1,4 @@
-import type { FuelWalletLocked } from "@fuel-wallet/sdk";
+import type { Fuel, FuelWalletLocked } from "@fuel-wallet/sdk";
 import {
   screen,
   renderWithRouter,
@@ -11,7 +11,6 @@ import * as poolQueries from "../utils/queries";
 
 import { App } from "~/App";
 import { ZERO } from "~/systems/Core";
-import type { MockConnection } from "~/systems/Core/hooks/__mocks__/MockConnection";
 import {
   createWallet,
   mockUseFuel,
@@ -19,14 +18,20 @@ import {
 } from "~/systems/Core/hooks/__mocks__/useWallet";
 import { faucet } from "~/systems/Faucet/hooks/__mocks__/useFaucet";
 import { mint } from "~/systems/Mint/hooks/__mocks__/useMint";
+import { setAgreement } from "~/systems/Welcome";
 
 let wallet: FuelWalletLocked;
-let fuel: MockConnection;
+let fuel: Fuel;
 
 beforeAll(async () => {
+  setAgreement(true);
   ({ wallet, fuel } = await createWallet());
   mockUseFuel(fuel);
   mockUseWallet(wallet);
+});
+
+afterAll(() => {
+  setAgreement(false);
 });
 
 describe("Add Liquidity", () => {

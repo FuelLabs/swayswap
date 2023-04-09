@@ -1,4 +1,4 @@
-import type { FuelWalletLocked } from "@fuel-wallet/sdk";
+import type { Fuel, FuelWalletLocked } from "@fuel-wallet/sdk";
 import {
   screen,
   renderWithRouter,
@@ -15,21 +15,26 @@ import type { PoolInfoPreview } from "../utils";
 import { App } from "~/App";
 import { CONTRACT_ID } from "~/config";
 import { COIN_ETH, ONE_ASSET, TOKENS } from "~/systems/Core";
-import type { MockConnection } from "~/systems/Core/hooks/__mocks__/MockConnection";
 import { mockUseBalances } from "~/systems/Core/hooks/__mocks__/useBalances";
 import {
   createWallet,
   mockUseFuel,
   mockUseWallet,
 } from "~/systems/Core/hooks/__mocks__/useWallet";
+import { setAgreement } from "~/systems/Welcome";
 
 let wallet: FuelWalletLocked;
-let fuel: MockConnection;
+let fuel: Fuel;
 
 beforeAll(async () => {
+  setAgreement(true);
   ({ wallet, fuel } = await createWallet());
   mockUseFuel(fuel);
   mockUseWallet(wallet);
+});
+
+afterAll(() => {
+  setAgreement(false);
 });
 
 const USER_LIQUIDITY_POSITIONS: PoolInfoPreview = {
