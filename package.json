@@ -95,6 +95,6 @@
     }
   },
   "dependencies": {
-    "fuels": "0.35.0"
+    "fuels": "^0.57.0"
   }
 }

@@ -25,7 +25,7 @@ export function useTokenMethods(tokenId: string) {
           });
         },
         async getMintAmount() {
-          const { value: mintAmount } = await contract.functions.get_mint_amount().get();
+          const { value: mintAmount } = await contract.functions.get_mint_amount().call();
           return mintAmount;
         },
         async mint() {

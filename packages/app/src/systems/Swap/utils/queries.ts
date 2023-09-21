@@ -54,7 +54,7 @@ const getSwapWithMaximumRequiredAmount = async (
     .txParams({
       gasPrice: ZERO,
     })
-    .get();
+    .call();
   return requiredAmount;
 };
 
@@ -71,7 +71,7 @@ const getSwapWithMinimumMinAmount = async (
     .txParams({
       gasPrice: ZERO,
     })
-    .get();
+    .call();
   return minAmount;
 };
 

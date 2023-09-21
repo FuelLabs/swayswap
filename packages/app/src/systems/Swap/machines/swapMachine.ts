@@ -374,7 +374,7 @@ export const swapMachine =
           if (!ctx.contract) {
             throw new Error('Contract not found');
           }
-          const { value: info } = await ctx.contract.functions.get_pool_info().get();
+          const { value: info } = await ctx.contract.functions.get_pool_info().call();
           const ratio = getPoolRatio(info);
           return {
             info,

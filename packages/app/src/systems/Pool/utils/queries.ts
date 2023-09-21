@@ -75,6 +75,6 @@ export async function addLiquidity(
 export async function fetchPoolInfo(ctx: AddLiquidityMachineContext) {
   const { contract } = ctx;
   if (!contract) return null;
-  const { value } = await contract.functions.get_pool_info().get();
+  const { value } = await contract.functions.get_pool_info().call();
   return value;
 }

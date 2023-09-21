@@ -411,8 +411,8 @@ export const welcomeMachine = createMachine(
           value: wallet.address.toHexString(),
         };
 
-        const { value: hasMint1 } = await token1.functions.has_mint(addressId).get();
-        const { value: hasMint2 } = await token2.functions.has_mint(addressId).get();
+        const { value: hasMint1 } = await token1.functions.has_mint(addressId).call();
+        const { value: hasMint2 } = await token2.functions.has_mint(addressId).call();
 
         return [hasMint1, hasMint2];
       },
@@ -432,11 +432,11 @@ export const welcomeMachine = createMachine(
         const addressId = {
           value: wallet.address.toHexString(),
         };
-        const { value: hasMint1 } = await token1.functions.has_mint(addressId).get();
+        const { value: hasMint1 } = await token1.functions.has_mint(addressId).call();
         if (!hasMint1) {
           calls.push(token1.functions.mint());
         }
-        const { value: hasMint2 } = await token2.functions.has_mint(addressId).get();
+        const { value: hasMint2 } = await token2.functions.has_mint(addressId).call();
         if (!hasMint2) {
           calls.push(token2.functions.mint());
         }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { TransactionResult } from "fuels";
+import { TransactionStatus, type TransactionResult } from "fuels";
 import toast from "react-hot-toast";
 
 import { BLOCK_EXPLORER_URL } from "~/config";
@@ -31,12 +31,12 @@ export function txFeedback(
   onSuccess?: (data: TransactionResult<any>) => void | Promise<void>
 ) {
   return async (data: Maybe<TransactionResult<any>>) => {
-    const txLink = <TxLink id={data?.transactionId} />;
+    const txLink = <TxLink id={data?.id} />; // TODO: is this correct?
 
     /**
      * Show a toast success message if status.type === 'success'
      */
-    if (data?.status.type === "success") {
+    if (data?.status === TransactionStatus.success) {
       await onSuccess?.(data);
       toast.success(
         <>
