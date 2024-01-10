@@ -3,7 +3,7 @@
   "prettier.prettierPath": "./node_modules/prettier",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "jest.jestCommandLine": "cd packages/app && pnpm jest",
   "[xml]": {

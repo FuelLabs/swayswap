@@ -2,15 +2,22 @@
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 ![twitter](https://img.shields.io/twitter/follow/SwayLang?style=social)
 
+### ⚠️ Support Notice ⚠️
+
+**SwaySwap is no longer supported** and will not function for beta-4 and later versions of fuel-core (>0.17.1). If you would like to contribute updating it, a PR will be welcome.
+
+---
+
 ## 🌴💰 SwaySwap 💰🌴
 
 SwaySwap is a blazingly fast DEX built on the fastest modular execution layer: [Fuel](https://fuel.network/).
 
 Built with an entirely new language ([Sway](https://github.com/FuelLabs/sway)), virtual machine ([FuelVM](https://github.com/FuelLabs/fuel-specs)), and UTXO-based smart contract blockchain ([Fuel](https://fuel-labs.ghost.io/introducing-fuel-the-fastest-modular-execution-layer/)), you can now experience a demonstration of the next generation of scaling beyond layer-2s and monolithic blockchain design.
 
+<!--
 [![launch app button](docs/assets/launch-button.png)](https://fuellabs.github.io/swayswap)
 
-The above button launches the latest stable version of SwaySwap. To launch the latest unstable version that includes all current changes from the master branch, click [here](https://swayswap.vercel.app/).
+The above button launches the latest stable version of SwaySwap. To launch the latest unstable version that includes all current changes from the master branch, click [here](https://swayswap.vercel.app/). -->
 
 ## 📗 Table of contents
 

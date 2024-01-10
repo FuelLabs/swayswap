@@ -6,6 +6,8 @@ on:
 
 jobs:
   deploy:
+    # Disable gh-pages deploy
+    if: false
     runs-on: ubuntu-latest
 
     steps:
