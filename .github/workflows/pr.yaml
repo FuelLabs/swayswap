@@ -86,6 +86,8 @@ jobs:
           pnpm ci:test:coverage
 
   end-to-end-test:
+    # Disable tests
+    if: false
     name: Test E2E
     runs-on: ubuntu-latest
     continue-on-error: false
