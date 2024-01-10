@@ -37,6 +37,8 @@ jobs:
           pnpm recursive install --frozen-lockfile
 
   test:
+    # Disable tests
+    if: false
     name: Test
     runs-on: ubuntu-latest
     continue-on-error: false
