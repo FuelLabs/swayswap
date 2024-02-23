@@ -62,10 +62,10 @@ abi Exchange {
     /// Burn SWAYSWAP tokens to withdraw ETH and Tokens at current ratio.
     #[storage(read, write), payable]
     fn remove_liquidity(min_eth: u64, min_tokens: u64, deadline: u64) -> RemoveLiquidityInfo;
-    /// Swap ETH <-> Tokens and tranfers to sender.
+    /// Swap ETH <-> Tokens and transfers to sender.
     #[storage(read, write), payable]
     fn swap_with_minimum(min: u64, deadline: u64) -> u64;
-    /// Swap ETH <-> Tokens and tranfers to sender.
+    /// Swap ETH <-> Tokens and transfers to sender.
     #[storage(read, write), payable]
     fn swap_with_maximum(amount: u64, deadline: u64) -> u64;
     /// Get the minimum amount of coins that will be received for a swap_with_minimum.
